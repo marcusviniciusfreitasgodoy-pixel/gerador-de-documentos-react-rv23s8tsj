@@ -1,35 +1,38 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import PizZip from 'pizzip'
-import Docxtemplater from 'docxtemplater'
-import { Loader2, Download } from 'lucide-react'
+import { Loader2, Download, Building2, FileCheck2, Users } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { maskCpf, maskCurrency } from '@/lib/utils'
-
-const formSchema = z.object({
-  nome: z.string().min(3, 'Nome é obrigatório e deve ter pelo menos 3 caracteres'),
-  cpf: z.string().length(14, 'O CPF deve ser preenchido corretamente'),
-  valor: z
-    .string()
-    .min(1, 'Valor é obrigatório')
-    .refine((val) => val !== 'R$ 0,00', 'Valor deve ser maior que zero'),
-})
-
-type FormValues = z.infer<typeof formSchema>
+import { Separator } from '@/components/ui/separator'
+import { PartyFields } from '@/components/PartyFields'
+import { maskCurrency, maskCpf } from '@/lib/utils'
+import {
+  formSchema,
+  type FormValues,
+  FORMA_PAGAMENTO_OPTIONS,
+  buildTemplateData,
+} from '@/lib/form-helpers'
+import { generateDocx } from '@/lib/docx-generator'
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -37,126 +40,46 @@ export default function Index() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      nome: '',
-      cpf: '',
-      valor: '',
+      vendedor_nome: '',
+      vendedor_nacionalidade: 'brasileiro(a)',
+      vendedor_estado_civil: '',
+      vendedor_regime_bens: '',
+      vendedor_profissao: '',
+      vendedor_rg: '',
+      vendedor_cpf: '',
+      vendedor_endereco: '',
+      comprador_nome: '',
+      comprador_nacionalidade: 'brasileiro(a)',
+      comprador_estado_civil: '',
+      comprador_regime_bens: '',
+      comprador_profissao: '',
+      comprador_rg: '',
+      comprador_cpf: '',
+      comprador_endereco: '',
+      imovel_descricao: '',
+      imovel_matricula: '',
+      imovel_ri_numero: '',
+      imovel_comarca: '',
+      imovel_iptu: '',
+      valor_sinal: '',
+      valor_total: '',
+      forma_pagamento: '',
+      natureza_arras: 'confirmatoria',
+      prazo_formalizacao_dias: '',
+      prazo_restituicao_dias: '',
+      foro_comarca: 'Rio de Janeiro/RJ',
+      testemunha1_nome: '',
+      testemunha1_cpf: '',
+      testemunha2_nome: '',
+      testemunha2_cpf: '',
     },
   })
 
-  const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    form.setValue('cpf', maskCpf(value), { shouldValidate: form.formState.isSubmitted })
-  }
-
-  const handleValorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
-    form.setValue('valor', maskCurrency(value), { shouldValidate: form.formState.isSubmitted })
-  }
-
-  const generateDocx = async (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     setIsGenerating(true)
-
     try {
-      // Simulate slight processing delay for better UX
-      await new Promise((resolve) => setTimeout(resolve, 800))
-
-      const zip = new PizZip()
-
-      zip.file(
-        '[Content_Types].xml',
-        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-        <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
-          <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
-          <Default Extension="xml" ContentType="application/xml"/>
-          <Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/>
-        </Types>`,
-      )
-
-      zip.file(
-        '_rels/.rels',
-        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-        <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
-          <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>
-        </Relationships>`,
-      )
-
-      // The template requests `{valor}`, and explicitly specifies `quantia de R$ {valor}`.
-      // So we must remove the 'R$ ' from the masked string before injecting to avoid duplicate R$ R$.
-      const cleanValor = data.valor.replace(/^R\$\s?/, '').trim()
-
-      const documentXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-        <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
-          <w:body>
-            <w:p>
-              <w:pPr>
-                <w:jc w:val="center"/>
-                <w:spacing w:after="400"/>
-              </w:pPr>
-              <w:r>
-                <w:rPr>
-                  <w:b/>
-                  <w:sz w:val="32"/>
-                  <w:szCs w:val="32"/>
-                </w:rPr>
-                <w:t>RECIBO DE SINAL</w:t>
-              </w:r>
-            </w:p>
-            <w:p>
-              <w:pPr>
-                <w:jc w:val="both"/>
-                <w:spacing w:after="400" w:line="360" w:lineRule="auto"/>
-              </w:pPr>
-              <w:r>
-                <w:rPr>
-                  <w:sz w:val="24"/>
-                  <w:szCs w:val="24"/>
-                </w:rPr>
-                <w:t xml:space="preserve">Eu, {nome}, portador do CPF {cpf}, declaro ter recebido a quantia de R$ {valor} a título de sinal e princípio de pagamento, nos termos dos arts. 417 a 420 do Código Civil, com natureza confirmatória e caráter irretratável.</w:t>
-              </w:r>
-            </w:p>
-            <w:p>
-              <w:pPr>
-                <w:jc w:val="right"/>
-                <w:spacing w:before="400"/>
-              </w:pPr>
-              <w:r>
-                <w:rPr>
-                  <w:sz w:val="24"/>
-                  <w:szCs w:val="24"/>
-                </w:rPr>
-                <w:t>Rio de Janeiro.</w:t>
-              </w:r>
-            </w:p>
-          </w:body>
-        </w:document>`
-
-      zip.file('word/document.xml', documentXml)
-
-      const doc = new Docxtemplater(zip, {
-        paragraphLoop: true,
-        linebreaks: true,
-      })
-
-      doc.render({
-        nome: data.nome,
-        cpf: data.cpf,
-        valor: cleanValor,
-      })
-
-      const out = doc.getZip().generate({
-        type: 'blob',
-        mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      })
-
-      const url = URL.createObjectURL(out)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = 'recibo-de-sinal.docx'
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
-
+      await new Promise((r) => setTimeout(r, 800))
+      generateDocx(buildTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       form.reset()
     } catch (error) {
@@ -168,80 +91,304 @@ export default function Index() {
   }
 
   return (
-    <Card className="w-full max-w-[500px] shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
+    <Card className="w-full max-w-2xl shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
       <CardHeader className="space-y-1 pb-8 text-center">
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
-          Gerar Recibo de Sinal
+          Recibo de Sinal e Princípio de Pagamento (Arras)
         </CardTitle>
-        <CardDescription className="text-sm">
-          Preencha os dados abaixo para gerar o documento automaticamente.
+        <CardDescription>
+          Preencha os dados para gerar o documento Word automaticamente.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(generateDocx)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="nome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground/90 font-medium">Nome do Vendedor</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Ex: João Silva"
-                      {...field}
-                      className="transition-colors focus-visible:ring-accent"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <PartyFields prefix="vendedor" title="Dados do Vendedor(a)" />
+            <PartyFields prefix="comprador" title="Dados do Comprador(a)" />
 
-            <FormField
-              control={form.control}
-              name="cpf"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground/90 font-medium">CPF</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="000.000.000-00"
-                      maxLength={14}
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e)
-                        handleCpfChange(e)
-                      }}
-                      className="transition-colors focus-visible:ring-accent"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Building2 className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-primary">Dados do Imóvel</h3>
+              </div>
+              <Separator />
+              <FormField
+                control={form.control}
+                name="imovel_descricao"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Descrição do Imóvel</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Ex: Apartamento nº 302, Edifício..."
+                        className="resize-none"
+                        rows={2}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="imovel_matricula"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Matrícula nº</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="imovel_ri_numero"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Registro de Imóveis (nº)</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="imovel_comarca"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Comarca</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="imovel_iptu"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>IPTU</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-            <FormField
-              control={form.control}
-              name="valor"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-foreground/90 font-medium">Valor (R$)</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="R$ 0,00"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e)
-                        handleValorChange(e)
-                      }}
-                      className="transition-colors focus-visible:ring-accent"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <FileCheck2 className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-primary">Condições e Natureza das Arras</h3>
+              </div>
+              <Separator />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="valor_sinal"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valor do Sinal (R$)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="R$ 0,00"
+                          value={field.value}
+                          onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="valor_total"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Valor Total (R$)</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="R$ 0,00"
+                          value={field.value}
+                          onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="forma_pagamento"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Forma de Pagamento</FormLabel>
+                      <Select value={field.value || undefined} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {FORMA_PAGAMENTO_OPTIONS.map((o) => (
+                            <SelectItem key={o} value={o}>
+                              {o}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="natureza_arras"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Natureza das Arras</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione..." />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="confirmatoria">Confirmatória</SelectItem>
+                          <SelectItem value="penitencial">Penitencial</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <FormField
+                  control={form.control}
+                  name="prazo_formalizacao_dias"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Prazo Formalização (dias)</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={1} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="prazo_restituicao_dias"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Prazo Restituição (dias)</FormLabel>
+                      <FormControl>
+                        <Input type="number" min={1} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="foro_comarca"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Fórum/Comarca</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-primary">Testemunhas (Opcional)</h3>
+              </div>
+              <Separator />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="testemunha1_nome"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome da 1ª Testemunha</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="testemunha1_cpf"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>CPF da 1ª Testemunha</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="000.000.000-00"
+                          maxLength={14}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(maskCpf(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="testemunha2_nome"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome da 2ª Testemunha</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="testemunha2_cpf"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>CPF da 2ª Testemunha</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="000.000.000-00"
+                          maxLength={14}
+                          value={field.value || ''}
+                          onChange={(e) => field.onChange(maskCpf(e.target.value))}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
             <Button
               type="submit"
