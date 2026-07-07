@@ -1,14 +1,27 @@
-/* General utility functions (exposes cn) */
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-/**
- * Merges multiple class names into a single string
- * @param inputs - Array of class names
- * @returns Merged class names
- */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Add any other utility functions here
+export function maskCpf(value: string) {
+  let v = value.replace(/\D/g, '')
+  if (v.length > 11) v = v.slice(0, 11)
+
+  return v
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d)/, '$1.$2')
+    .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+}
+
+export function maskCurrency(value: string) {
+  const v = value.replace(/\D/g, '')
+  if (!v) return ''
+
+  const number = parseInt(v, 10) / 100
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  }).format(number)
+}
