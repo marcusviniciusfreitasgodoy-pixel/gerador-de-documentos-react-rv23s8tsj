@@ -7,6 +7,7 @@ import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
 import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
 import { TermoChavesForm } from '@/components/TermoChavesForm'
+import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
 import { reciboMockData } from '@/lib/form-helpers'
 
@@ -43,7 +44,13 @@ import { generateDocx } from '@/lib/docx-generator'
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [docType, setDocType] = useState<
-    'recibo' | 'intermediation' | 'promise' | 'compromisso' | 'termoChaves' | 'checklist'
+    | 'recibo'
+    | 'intermediation'
+    | 'promise'
+    | 'compromisso'
+    | 'termoChaves'
+    | 'termoPosse'
+    | 'checklist'
   >('recibo')
 
   const form = useForm<FormValues>({
@@ -136,6 +143,14 @@ export default function Index() {
           </Button>
           <Button
             type="button"
+            variant={docType === 'termoPosse' ? 'default' : 'outline'}
+            onClick={() => setDocType('termoPosse')}
+            size="sm"
+          >
+            Termo de Transmissão da Posse
+          </Button>
+          <Button
+            type="button"
             variant={docType === 'checklist' ? 'default' : 'outline'}
             onClick={() => setDocType('checklist')}
             size="sm"
@@ -152,7 +167,9 @@ export default function Index() {
                 ? 'Promessa / Compromisso de Compra e Venda (à vista)'
                 : docType === 'termoChaves'
                   ? 'Termo de Entrega das Chaves'
-                  : 'Checklist Documental'}
+                  : docType === 'termoPosse'
+                    ? 'Termo de Transmissão da Posse'
+                    : 'Checklist Documental'}
         </CardTitle>
         <CardDescription>
           Preencha os dados para gerar o documento Word automaticamente.
@@ -482,6 +499,7 @@ export default function Index() {
         {docType === 'promise' && <PromiseForm />}
         {docType === 'compromisso' && <PromessaAvistaForm />}
         {docType === 'termoChaves' && <TermoChavesForm />}
+        {docType === 'termoPosse' && <TermoPosseForm />}
         {docType === 'checklist' && <ChecklistForm />}
       </CardContent>
     </Card>

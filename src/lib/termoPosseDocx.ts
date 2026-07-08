@@ -1,0 +1,14 @@
+import { renderFromUrl } from '@/lib/docx-generator'
+
+const TERMO_POSSE_TEMPLATE_URL =
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/94aabdc515aaa2ad9c775ed6f5db0cbafd82a804/termo_posse_base64.txt'
+const TERMO_POSSE_EXPECTED_BYTES = 38692
+
+export async function generateTermoPosseDocx(data: Record<string, string>): Promise<void> {
+  await renderFromUrl(
+    TERMO_POSSE_TEMPLATE_URL,
+    TERMO_POSSE_EXPECTED_BYTES,
+    data,
+    'termo-de-transmissao-da-posse.docx',
+  )
+}
