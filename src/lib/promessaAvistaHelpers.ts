@@ -5,6 +5,8 @@ export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
 export const FORMA_PAGAMENTO_OPTIONS = ['PIX', 'TED', 'Transferência'] as const
 
+export const COMISSAO_RESPONSAVEL_OPTIONS = ['vendedor', 'comprador'] as const
+
 export const promessaAvistaSchema = z
   .object({
     vendedor_nome: z.string().min(3, 'Nome obrigatório'),
@@ -72,6 +74,7 @@ export const promessaAvistaSchema = z
     comissao_creci: z.string().optional(),
     comissao_pix: z.string().optional(),
     comissao_percentual: z.string().min(1, 'Obrigatório'),
+    comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
     tipo_arras: z.enum(['confirmatoria', 'penitencial']),
     data_documento: z.string().min(1, 'Obrigatório'),
     testemunha1_nome: z.string().optional(),
@@ -151,6 +154,7 @@ export const promessaAvistaMockData: PromessaAvistaValues = {
   comissao_creci: '',
   comissao_pix: '',
   comissao_percentual: '5',
+  comissao_responsavel: 'comprador',
   tipo_arras: 'confirmatoria',
   data_documento: new Date().toISOString().split('T')[0],
   testemunha1_nome: 'Pedro Alves Lima',

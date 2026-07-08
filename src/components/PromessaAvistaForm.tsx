@@ -486,7 +486,7 @@ export function PromessaAvistaForm() {
             />
             <FormField
               control={control}
-              name="dados_pagamento"
+              name="dados_recebimento"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Dados de Pagamento</FormLabel>
@@ -617,7 +617,7 @@ export function PromessaAvistaForm() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
-              name="prazo_certificado"
+              name="prazo_certidoes_dias"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Prazo Certidões (dias)</FormLabel>
@@ -643,7 +643,7 @@ export function PromessaAvistaForm() {
             />
             <FormField
               control={control}
-              name="data_escritura"
+              name="data_limite_escritura"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Data Limite Escritura</FormLabel>
