@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { extractTextFromDocx } from '@/lib/docx-extract'
 import {
   validarMinuta,
@@ -59,6 +60,7 @@ export default function ValidarMinutaPage() {
   const [documentType, setDocumentType] = useState('Genérico/Outro')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ValidarMinutaResponse | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
 
   const uniqueConformidade = useMemo(() => {
@@ -98,12 +100,15 @@ export default function ValidarMinutaPage() {
     }
     setLoading(true)
     setResult(null)
+    setError(null)
     try {
       const res = await validarMinuta(documentText, documentType)
       setResult(res)
       toast.success('Análise concluída!')
     } catch (err) {
-      toast.error(getErrorMessage(err))
+      const msg = getErrorMessage(err)
+      setError(msg)
+      toast.error(msg)
     } finally {
       setLoading(false)
     }
@@ -198,6 +203,14 @@ export default function ValidarMinutaPage() {
           </Button>
         </CardContent>
       </Card>
+
+      {error && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Erro na análise</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
       {result && (
         <div className="space-y-4">
