@@ -14,7 +14,7 @@ function buildIntermediationDocumentXml(): string {
       after: 100,
     }),
     para('TELEFONES: {contratante_telefone}   E-MAIL: {contratante_email}', { after: 100 }),
-    para('CONTRATADO: MARCUS V F GODOY ASSESSORIA IMOBILIARIA — CNPJ: 58.409.058/0001-73', {
+    para('CONTRATADO: {broker_name} — CNPJ/CPF: {broker_document}', {
       after: 400,
     }),
     para('DESCRIÇÃO DO IMÓVEL', { bold: true, after: 200 }),
@@ -66,7 +66,7 @@ function buildIntermediationDocumentXml(): string {
     para('NOME: {contratante_nome}   CPF: {contratante_cpf}', { align: 'center', after: 400 }),
     para('_________________________________________________', { align: 'center', after: 0 }),
     para('CONTRATADO', { align: 'center', after: 0 }),
-    para('Marcus Vinícius Freitas Godoy — CRECI: 80.199 RJ', { align: 'center', after: 0 }),
+    para('{broker_name} — CRECI: {broker_creci}', { align: 'center', after: 0 }),
   ]
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">\n<w:body>\n${paras.join('\n')}\n</w:body>\n</w:document>`
 }

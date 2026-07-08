@@ -1,8 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Download, Wand2, User, Building2, DollarSign, Settings2 } from 'lucide-react'
+import {
+  Loader2,
+  Download,
+  Wand2,
+  User,
+  Building2,
+  DollarSign,
+  Settings2,
+  AlertCircle,
+} from 'lucide-react'
 import { toast } from 'sonner'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -28,11 +38,15 @@ import {
   TIPO_EXCLUSIVIDADE_OPTIONS,
   intermediationMockData,
   buildIntermediationTemplateData,
+  type BrokerInfo,
 } from '@/lib/intermediation-helpers'
 import { generateIntermediationDocx } from '@/lib/intermediation-docx'
+import { getBrokerProfile, type BrokerProfile } from '@/services/broker-profile'
 
 export function IntermediationForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [brokerProfile, setBrokerProfile] = useState<BrokerProfile | null>(null)
+  const [profileLoading, setProfileLoading] = useState(true)
 
   const form = useForm<IntermediationValues>({
     resolver: zodResolver(intermediationSchema),
@@ -60,11 +74,44 @@ export function IntermediationForm() {
 
   const { control } = form
 
+  useEffect(() => {
+    let cancelled = false
+    const loadProfile = async () => {
+      try {
+        const profile = await getBrokerProfile()
+        if (cancelled) return
+        setBrokerProfile(profile)
+        if (profile?.commission_rate) {
+          form.setValue('comissao_percentual', String(profile.commission_rate))
+        }
+      } catch {
+        if (!cancelled) setBrokerProfile(null)
+      } finally {
+        if (!cancelled) setProfileLoading(false)
+      }
+    }
+    loadProfile()
+    return () => {
+      cancelled = true
+    }
+  }, [form])
+
+  const hasProfile = !!brokerProfile?.name
+
   const onSubmit = async (data: IntermediationValues) => {
+    if (!hasProfile) {
+      toast.error('Complete seu perfil antes de gerar o documento.')
+      return
+    }
     setIsGenerating(true)
     try {
       await new Promise((r) => setTimeout(r, 800))
-      generateIntermediationDocx(buildIntermediationTemplateData(data))
+      const broker: BrokerInfo = {
+        name: brokerProfile?.name || '',
+        document: brokerProfile?.document || '',
+        creci: brokerProfile?.creci || '',
+      }
+      generateIntermediationDocx(buildIntermediationTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
       form.reset()
     } catch (error) {
@@ -78,6 +125,25 @@ export function IntermediationForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {!profileLoading && !hasProfile && (
+          <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
+            <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-semibold mb-1">Perfil não cadastrado</p>
+              <p className="mb-2">
+                Você precisa preencher seu perfil profissional para que os dados do CONTRATADO sejam
+                incluídos no documento.
+              </p>
+              <Link
+                to="/my-profile"
+                className="inline-flex items-center gap-1 font-semibold underline hover:text-yellow-900"
+              >
+                Ir para Meu Perfil
+              </Link>
+            </div>
+          </div>
+        )}
+
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <User className="h-5 w-5 text-primary" />

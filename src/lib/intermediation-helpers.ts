@@ -50,8 +50,15 @@ export const intermediationMockData: IntermediationValues = {
   comissao_percentual: '5',
 }
 
+export interface BrokerInfo {
+  name: string
+  document: string
+  creci: string
+}
+
 export function buildIntermediationTemplateData(
   data: IntermediationValues,
+  broker?: BrokerInfo | null,
 ): Record<string, string> {
   const isComExclusiva = data.tipo_exclusividade === 'COM GESTÃO EXCLUSIVA'
   return {
@@ -75,5 +82,8 @@ export function buildIntermediationTemplateData(
     prazo_vigencia_dias: data.prazo_vigencia_dias,
     comissao_percentual: data.comissao_percentual,
     data_extenso: formatDateFull(new Date()),
+    broker_name: broker?.name || '',
+    broker_document: broker?.document || '',
+    broker_creci: broker?.creci || '',
   }
 }
