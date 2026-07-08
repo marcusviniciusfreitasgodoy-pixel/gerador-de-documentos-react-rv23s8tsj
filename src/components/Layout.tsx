@@ -59,12 +59,7 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="bg-white border-t border-border/40 py-6 text-center text-sm text-muted-foreground">
-        <p>Em conformidade com os Arts. 417-420 do Código Civil Brasileiro.</p>
-        <p className="mt-1">
-          © {new Date().getFullYear()} LegalTech Solutions. Todos os direitos reservados.
-        </p>
-      </footer>
+      <footer className="bg-white border-t border-border/40 py-6" />
     </div>
   )
 }

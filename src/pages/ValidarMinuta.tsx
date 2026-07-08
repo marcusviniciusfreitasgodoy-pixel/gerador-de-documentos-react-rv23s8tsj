@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import {
   Loader2,
   FileSearch,
@@ -60,6 +60,16 @@ export default function ValidarMinutaPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ValidarMinutaResponse | null>(null)
   const [uploading, setUploading] = useState(false)
+
+  const uniqueConformidade = useMemo(() => {
+    if (!result) return []
+    const seen = new Set<string>()
+    return result.conformidade.filter((item) => {
+      if (seen.has(item.code)) return false
+      seen.add(item.code)
+      return true
+    })
+  }, [result])
 
   const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -203,7 +213,7 @@ export default function ValidarMinutaPage() {
             </CardContent>
           </Card>
 
-          {result.conformidade.length > 0 && (
+          {uniqueConformidade.length > 0 && (
             <Card className="shadow-elevation border-0 md:border md:border-border/60">
               <CardHeader>
                 <div className="flex items-center gap-2">
@@ -212,7 +222,7 @@ export default function ValidarMinutaPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.conformidade.map((item, idx) => {
+                {uniqueConformidade.map((item, idx) => {
                   const style = conformidadeStyles[item.status] || conformidadeStyles.faltando
                   return (
                     <div
@@ -302,7 +312,7 @@ export default function ValidarMinutaPage() {
             </Card>
           )}
 
-          {result.conformidade.length === 0 &&
+          {uniqueConformidade.length === 0 &&
             result.riscos.length === 0 &&
             result.recomendacoes.length === 0 && (
               <Card className="shadow-elevation border-0 md:border md:border-border/60">
