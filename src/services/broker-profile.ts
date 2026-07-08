@@ -8,6 +8,7 @@ export interface BrokerProfile {
   document?: string
   phone?: string
   email?: string
+  commission_rate?: number
   created: string
   updated: string
 }

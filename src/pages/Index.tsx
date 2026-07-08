@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Download, Building2, FileCheck2, Users, Wand2 } from 'lucide-react'
+import { Loader2, Download, Building2, FileCheck2, Users, Wand2, FileSignature } from 'lucide-react'
 import { toast } from 'sonner'
 import { IntermediationForm } from '@/components/IntermediationForm'
+import { PromiseForm } from '@/components/PromiseForm'
 import { reciboMockData } from '@/lib/form-helpers'
 
 import { Button } from '@/components/ui/button'
@@ -38,7 +39,7 @@ import { generateDocx } from '@/lib/docx-generator'
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
-  const [docType, setDocType] = useState<'recibo' | 'intermediation'>('recibo')
+  const [docType, setDocType] = useState<'recibo' | 'intermediation' | 'promise'>('recibo')
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -96,7 +97,7 @@ export default function Index() {
   return (
     <Card className="w-full max-w-2xl shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
       <CardHeader className="space-y-3 pb-8 text-center">
-        <div className="flex justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           <Button
             type="button"
             variant={docType === 'recibo' ? 'default' : 'outline'}
@@ -112,6 +113,15 @@ export default function Index() {
             size="sm"
           >
             Autorização de Intermediação
+          </Button>
+          <Button
+            type="button"
+            variant={docType === 'promise' ? 'default' : 'outline'}
+            onClick={() => setDocType('promise')}
+            size="sm"
+          >
+            <FileSignature className="mr-1 h-4 w-4" />
+            Promessa de Compra e Venda
           </Button>
         </div>
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
@@ -444,6 +454,7 @@ export default function Index() {
           </Form>
         )}
         {docType === 'intermediation' && <IntermediationForm />}
+        {docType === 'promise' && <PromiseForm />}
       </CardContent>
     </Card>
   )

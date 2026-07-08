@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T16:40:01.862Z",
+  "generatedAt": "2026-07-08T16:47:43.905Z",
   "collections": [
     {
       "name": "users",
@@ -175,6 +175,12 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onCreate", "onUpdate"]
+        },
+        {
+          "name": "commission_rate",
+          "type": "number",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": ["CREATE UNIQUE INDEX idx_broker_profile_user ON broker_profile (user)"]
