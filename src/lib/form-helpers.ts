@@ -1,6 +1,41 @@
 import { z } from 'zod'
 import { currencyToWords } from '@/lib/currency-to-words'
 
+export const reciboMockData: FormValues = {
+  vendedor_nome: 'Carlos Eduardo Ferreira',
+  vendedor_nacionalidade: 'brasileiro(a)',
+  vendedor_estado_civil: 'Casado(a)',
+  vendedor_regime_bens: 'Comunhão parcial',
+  vendedor_profissao: 'Advogado',
+  vendedor_rg: 'MG-15.234.567',
+  vendedor_cpf: '123.456.789-09',
+  vendedor_endereco: 'Rua das Palmeiras, 456, Jardim Botânico, Rio de Janeiro/RJ, CEP 22460-000',
+  comprador_nome: 'Ana Beatriz Costa Santos',
+  comprador_nacionalidade: 'brasileiro(a)',
+  comprador_estado_civil: 'Solteiro(a)',
+  comprador_regime_bens: '',
+  comprador_profissao: 'Arquiteta',
+  comprador_rg: 'RJ-20.987.654',
+  comprador_cpf: '987.654.321-00',
+  comprador_endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
+  imovel_descricao: 'Apartamento nº 1201, Edifício Vista Mar, Torre B',
+  imovel_matricula: '45.789',
+  imovel_ri_numero: '6',
+  imovel_comarca: 'Rio de Janeiro',
+  imovel_iptu: '001.234.567-8',
+  valor_sinal: 'R$ 50.000,00',
+  valor_total: 'R$ 850.000,00',
+  forma_pagamento: 'Transferência bancária (PIX)',
+  natureza_arras: 'confirmatoria',
+  prazo_formalizacao_dias: '30',
+  prazo_restituicao_dias: '15',
+  foro_comarca: 'Rio de Janeiro/RJ',
+  testemunha1_nome: 'Pedro Alves Lima',
+  testemunha1_cpf: '111.222.333-44',
+  testemunha2_nome: 'Maria Fernanda Rocha',
+  testemunha2_cpf: '555.666.777-88',
+}
+
 export const ESTADO_CIVIL_OPTIONS = [
   'Solteiro(a)',
   'Casado(a)',

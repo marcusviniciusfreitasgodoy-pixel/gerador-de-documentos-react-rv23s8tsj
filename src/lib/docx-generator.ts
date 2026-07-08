@@ -5,7 +5,7 @@ function escapeXml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-function para(
+export function para(
   text: string,
   opts?: {
     bold?: boolean
@@ -24,6 +24,46 @@ function para(
   if (sp.length) pPr.push(`<w:spacing>${sp.join('')}</w:spacing>`)
   const rPr = `<w:rPr>${opts?.bold ? '<w:b/>' : ''}<w:sz w:val="${size}"/><w:szCs w:val="${size}"/></w:rPr>`
   return `<w:p>${pPr.length ? `<w:pPr>${pPr.join('')}</w:pPr>` : ''}<w:r>${rPr}<w:t xml:space="preserve">${text}</w:t></w:r></w:p>`
+}
+
+export function downloadDocx(
+  documentXml: string,
+  data: Record<string, string>,
+  filename: string,
+): void {
+  const escaped: Record<string, string> = {}
+  for (const [k, v] of Object.entries(data)) escaped[k] = escapeXml(v)
+
+  const zip = new PizZip()
+  zip.file(
+    '[Content_Types].xml',
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
+  )
+  zip.file(
+    '_rels/.rels',
+    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
+  )
+  zip.file('word/document.xml', documentXml)
+
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    nullGetter: () => '',
+  })
+  doc.render(escaped)
+
+  const blob = doc.getZip().generate({
+    type: 'blob',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
 }
 
 function buildDocumentXml(): string {
@@ -110,37 +150,5 @@ function buildDocumentXml(): string {
 }
 
 export function generateDocx(data: Record<string, string>): void {
-  const escaped: Record<string, string> = {}
-  for (const [k, v] of Object.entries(data)) escaped[k] = escapeXml(v)
-
-  const zip = new PizZip()
-  zip.file(
-    '[Content_Types].xml',
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/></Types>',
-  )
-  zip.file(
-    '_rels/.rels',
-    '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>',
-  )
-  zip.file('word/document.xml', buildDocumentXml())
-
-  const doc = new Docxtemplater(zip, {
-    paragraphLoop: true,
-    linebreaks: true,
-    nullGetter: () => '',
-  })
-  doc.render(escaped)
-
-  const blob = doc.getZip().generate({
-    type: 'blob',
-    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = 'recibo-de-sinal-arras.docx'
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
+  downloadDocx(buildDocumentXml(), data, 'recibo-de-sinal-arras.docx')
 }
