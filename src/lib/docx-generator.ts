@@ -131,12 +131,10 @@ export function generateDocx(data: Record<string, string>): void {
   })
   doc.render(escaped)
 
-  const blob = doc
-    .getZip()
-    .generate({
-      type: 'blob',
-      mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    })
+  const blob = doc.getZip().generate({
+    type: 'blob',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  })
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url

@@ -1,15 +1,47 @@
-import { Outlet } from 'react-router-dom'
-import { FileText } from 'lucide-react'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
+import { FileText, LogOut, BookOpen, FileCheck } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function Layout() {
+  const { isAuthenticated, user, signOut } = useAuth()
+  const navigate = useNavigate()
+
+  const handleSignOut = () => {
+    signOut()
+    navigate('/login')
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-secondary/30">
       <header className="sticky top-0 z-10 bg-white shadow-subtle border-b border-border/40">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-primary">
+          <Link
+            to={isAuthenticated ? '/' : '/login'}
+            className="flex items-center gap-2 text-primary"
+          >
             <FileText className="h-6 w-6" />
             <span className="font-semibold text-lg tracking-tight">Gerador de Recibo</span>
-          </div>
+          </Link>
+          {isAuthenticated && (
+            <div className="flex items-center gap-2">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/">
+                  <FileCheck className="mr-1 h-4 w-4" /> Gerar
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/legal-knowledge">
+                  <BookOpen className="mr-1 h-4 w-4" /> Conhecimento
+                </Link>
+              </Button>
+              <span className="text-sm text-muted-foreground hidden sm:inline">{user?.email}</span>
+              <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                <LogOut className="h-4 w-4" />
+                <span className="ml-1 hidden sm:inline">Sair</span>
+              </Button>
+            </div>
+          )}
         </div>
       </header>
 
