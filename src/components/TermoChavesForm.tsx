@@ -50,13 +50,13 @@ type TermoChavesValues = z.infer<typeof termoChavesSchema>
 const mockData: TermoChavesValues = {
   entregante_nome: 'Roberto Mendes Araújo',
   entregante_qualificacao: 'brasileiro, casado, médico',
-  entregante_documento: 'CPF 456.789.123-00',
+  entregante_documento: '456.789.123-00',
   recebedor_nome: 'Fernanda Souza Lima',
   recebedor_qualificacao: 'brasileira, solteira, engenheira',
-  recebedor_documento: 'CPF 987.654.321-00',
+  recebedor_documento: '987.654.321-00',
   imovel_descricao: 'Apartamento nº 801, Edifício Solar, 8º andar, com 2 vagas de garagem',
   imovel_matricula: '78.456',
-  imovel_ri_numero: '6º Oficial de Registro de Imóveis',
+  imovel_ri_numero: '6',
   imovel_comarca: 'Rio de Janeiro',
   imovel_iptu: '001.234.567-8',
   cidade_uf: 'Rio de Janeiro/RJ',
@@ -100,8 +100,12 @@ export function TermoChavesForm() {
     }
     setIsGenerating(true)
     try {
+      const stripPrefix = (val: string) => val.replace(/^\s*(CPF|CNPJ)\s+/i, '').trim()
       const templateData: Record<string, string> = {
         ...data,
+        entregante_documento: stripPrefix(data.entregante_documento),
+        recebedor_documento: stripPrefix(data.recebedor_documento),
+        imovel_ri_numero: data.imovel_ri_numero.replace(/^\D+/, '').trim(),
         data_extenso: formatDateLower(new Date()),
         broker_nome_marca: brokerData?.nome.toUpperCase() || '',
         broker_creci_linha: brokerData?.creci || '',
@@ -162,9 +166,9 @@ export function TermoChavesForm() {
               name="entregante_documento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Documento (CPF/CNPJ) *</FormLabel>
+                  <FormLabel>Número do CPF/CNPJ *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="Ex: 456.789.123-00" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,9 +220,9 @@ export function TermoChavesForm() {
               name="recebedor_documento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Documento (CPF/CNPJ) *</FormLabel>
+                  <FormLabel>Número do CPF/CNPJ *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="Ex: 987.654.321-00" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -288,9 +292,9 @@ export function TermoChavesForm() {
               name="imovel_ri_numero"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Registro de Imóveis *</FormLabel>
+                  <FormLabel>Número do RI (ex.: 6) *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input placeholder="Ex: 6" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
