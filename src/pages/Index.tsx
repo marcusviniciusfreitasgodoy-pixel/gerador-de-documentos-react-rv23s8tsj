@@ -5,7 +5,7 @@ import { Loader2, Download, Building2, FileCheck2, Users, Wand2, FileSignature }
 import { toast } from 'sonner'
 import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
-import { CompromissoForm } from '@/components/CompromissoForm'
+import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
 import { reciboMockData } from '@/lib/form-helpers'
 
 import { Button } from '@/components/ui/button'
@@ -470,7 +470,7 @@ export default function Index() {
         )}
         {docType === 'intermediation' && <IntermediationForm />}
         {docType === 'promise' && <PromiseForm />}
-        {docType === 'compromisso' && <CompromissoForm />}
+        {docType === 'compromisso' && <PromessaAvistaForm />}
       </CardContent>
     </Card>
   )
