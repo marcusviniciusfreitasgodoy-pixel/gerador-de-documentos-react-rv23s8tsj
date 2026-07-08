@@ -66,6 +66,36 @@ export function downloadDocx(
   URL.revokeObjectURL(url)
 }
 
+export function downloadDocxFromTemplate(
+  templateBytes: Uint8Array,
+  data: Record<string, string>,
+  filename: string,
+): void {
+  const escaped: Record<string, string> = {}
+  for (const [k, v] of Object.entries(data)) escaped[k] = escapeXml(v)
+
+  const zip = new PizZip(templateBytes)
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    nullGetter: () => '',
+  })
+  doc.render(escaped)
+
+  const blob = doc.getZip().generate({
+    type: 'blob',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
+}
+
 function buildDocumentXml(): string {
   const paras = [
     para('RECIBO DE SINAL E PRINCÍPIO DE PAGAMENTO (ARRAS)', {
