@@ -30,6 +30,7 @@ import {
   type ValidarMinutaResponse,
   type ConformidadeStatus,
   type RiscoGravidade,
+  type ValidationStatus,
 } from '@/services/validar-minuta'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 
@@ -48,6 +49,30 @@ const conformidadeStyles: Record<ConformidadeStatus, { dot: string; label: strin
     fraco: { dot: 'bg-yellow-500', label: 'Fraco', text: 'text-yellow-700' },
     faltando: { dot: 'bg-red-500', label: 'Faltando', text: 'text-red-700' },
   }
+
+const statusStyles: Record<
+  ValidationStatus,
+  { bg: string; text: string; label: string; icon: typeof CheckCircle2 }
+> = {
+  green: {
+    bg: 'bg-green-50 border-green-200',
+    text: 'text-green-700',
+    label: 'Conforme',
+    icon: CheckCircle2,
+  },
+  yellow: {
+    bg: 'bg-yellow-50 border-yellow-200',
+    text: 'text-yellow-700',
+    label: 'Atenção',
+    icon: AlertTriangle,
+  },
+  red: {
+    bg: 'bg-red-50 border-red-200',
+    text: 'text-red-700',
+    label: 'Risco',
+    icon: ShieldAlert,
+  },
+}
 
 const riscoStyles: Record<RiscoGravidade, { bg: string; text: string; label: string }> = {
   alto: { bg: 'bg-red-50 border-red-200', text: 'text-red-700', label: 'Alto' },
@@ -72,6 +97,13 @@ export default function ValidarMinutaPage() {
       return true
     })
   }, [result])
+
+  const statusInfo = useMemo(() => {
+    if (!result?.status) return null
+    return statusStyles[result.status] || statusStyles.yellow
+  }, [result])
+
+  const StatusIcon = statusInfo?.icon
 
   const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -105,8 +137,18 @@ export default function ValidarMinutaPage() {
       const res = await validarMinuta(documentText, documentType)
       setResult(res)
       toast.success('Análise concluída!')
-    } catch (err) {
-      const msg = getErrorMessage(err)
+    } catch (err: unknown) {
+      const errAny = err as { response?: { error?: string; message?: string }; message?: string }
+      let msg = 'Erro ao processar a análise.'
+      if (errAny?.response?.error) {
+        msg = errAny.response.error
+      } else if (errAny?.response?.message) {
+        msg = errAny.response.message
+      } else if (errAny?.message) {
+        msg = errAny.message
+      } else {
+        msg = getErrorMessage(err)
+      }
       setError(msg)
       toast.error(msg)
     } finally {
@@ -214,6 +256,21 @@ export default function ValidarMinutaPage() {
 
       {result && (
         <div className="space-y-4">
+          {statusInfo && StatusIcon && (
+            <div
+              className={cn(
+                'flex items-center gap-3 border rounded-lg p-4 animate-fade-in',
+                statusInfo.bg,
+              )}
+            >
+              <StatusIcon className={cn('h-6 w-6 shrink-0', statusInfo.text)} />
+              <div>
+                <span className={cn('font-bold', statusInfo.text)}>{statusInfo.label}</span>
+                <span className="text-sm text-muted-foreground ml-2">Status geral da minuta</span>
+              </div>
+            </div>
+          )}
+
           <Card className="shadow-elevation border-0 md:border md:border-border/60">
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -250,7 +307,7 @@ export default function ValidarMinutaPage() {
                             {style.label}
                           </span>
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">{item.observacao}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{item.descricao}</p>
                         {item.code && (
                           <span className="inline-block mt-1 text-xs font-mono bg-secondary px-2 py-0.5 rounded text-muted-foreground">
                             {item.code}

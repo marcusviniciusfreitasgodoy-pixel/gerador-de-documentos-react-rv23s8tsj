@@ -2,12 +2,13 @@ import pb from '@/lib/pocketbase/client'
 
 export type ConformidadeStatus = 'presente' | 'faltando' | 'fraco'
 export type RiscoGravidade = 'alto' | 'medio' | 'baixo'
+export type ValidationStatus = 'green' | 'yellow' | 'red'
 
 export interface ConformidadeItem {
   code: string
   titulo: string
   status: ConformidadeStatus
-  observacao: string
+  descricao: string
 }
 
 export interface RiscoItem {
@@ -22,6 +23,7 @@ export interface RecomendacaoItem {
 }
 
 export interface ValidarMinutaResponse {
+  status: ValidationStatus
   resumo: string
   conformidade: ConformidadeItem[]
   riscos: RiscoItem[]
