@@ -148,10 +148,10 @@ export default function MyProfilePage() {
     e.preventDefault()
     setSaving(true)
     setFieldErrors({})
-    try {
+
     // Validation
     const errors: FieldErrors = {}
-    
+
     if (form.tipo_perfil === 'corretor_autonomo') {
       if (!form.nome?.trim()) errors.nome = 'Este campo é obrigatório'
       if (!form.cpf?.trim()) errors.cpf = 'Este campo é obrigatório'
@@ -206,7 +206,7 @@ export default function MyProfilePage() {
         cidade: form.cidade || '',
         uf: form.uf || '',
       }
-      
+
       if (profile) {
         await updateBrokerProfile(profile.id, payload)
         toast.success('Perfil salvo com sucesso!')
@@ -286,7 +286,9 @@ export default function MyProfilePage() {
                   id="pf-nome"
                   value={form.nome}
                   onChange={(e) => update('nome', e.target.value)}
-                  className={fieldErrors.nome ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.nome ? 'border-destructive focus-visible:ring-destructive' : ''
+                  }
                 />
                 {fieldErrors.nome && <p className="text-sm text-destructive">{fieldErrors.nome}</p>}
               </div>
@@ -298,7 +300,9 @@ export default function MyProfilePage() {
                     placeholder="000.000.000-00"
                     value={form.cpf}
                     onChange={(e) => update('cpf', maskCpfCnpj(e.target.value))}
-                    className={fieldErrors.cpf ? 'border-destructive focus-visible:ring-destructive' : ''}
+                    className={
+                      fieldErrors.cpf ? 'border-destructive focus-visible:ring-destructive' : ''
+                    }
                   />
                   {fieldErrors.cpf && <p className="text-sm text-destructive">{fieldErrors.cpf}</p>}
                 </div>
@@ -308,9 +312,13 @@ export default function MyProfilePage() {
                     id="pf-creci"
                     value={form.creci}
                     onChange={(e) => update('creci', e.target.value)}
-                    className={fieldErrors.creci ? 'border-destructive focus-visible:ring-destructive' : ''}
+                    className={
+                      fieldErrors.creci ? 'border-destructive focus-visible:ring-destructive' : ''
+                    }
                   />
-                  {fieldErrors.creci && <p className="text-sm text-destructive">{fieldErrors.creci}</p>}
+                  {fieldErrors.creci && (
+                    <p className="text-sm text-destructive">{fieldErrors.creci}</p>
+                  )}
                 </div>
               </div>
               <div className="space-y-1">
@@ -321,12 +329,15 @@ export default function MyProfilePage() {
                   maxLength={2}
                   value={form.creci_uf}
                   onChange={(e) => update('creci_uf', e.target.value.toUpperCase())}
-                  className={fieldErrors.creci_uf ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.creci_uf ? 'border-destructive focus-visible:ring-destructive' : ''
+                  }
                 />
                 {fieldErrors.creci_uf && (
                   <p className="text-sm text-destructive">{fieldErrors.creci_uf}</p>
                 )}
-              </div>            </div>
+              </div>{' '}
+            </div>
           ) : (
             <div className="space-y-4 animate-fade-in">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
@@ -338,7 +349,11 @@ export default function MyProfilePage() {
                   id="pf-razao"
                   value={form.razao_social}
                   onChange={(e) => update('razao_social', e.target.value)}
-                  className={fieldErrors.razao_social ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.razao_social
+                      ? 'border-destructive focus-visible:ring-destructive'
+                      : ''
+                  }
                 />
                 {fieldErrors.razao_social && (
                   <p className="text-sm text-destructive">{fieldErrors.razao_social}</p>
@@ -350,7 +365,11 @@ export default function MyProfilePage() {
                   id="pf-fantasia"
                   value={form.nome_fantasia}
                   onChange={(e) => update('nome_fantasia', e.target.value)}
-                  className={fieldErrors.nome_fantasia ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.nome_fantasia
+                      ? 'border-destructive focus-visible:ring-destructive'
+                      : ''
+                  }
                 />
                 {fieldErrors.nome_fantasia && (
                   <p className="text-sm text-destructive">{fieldErrors.nome_fantasia}</p>
@@ -364,9 +383,13 @@ export default function MyProfilePage() {
                     placeholder="00.000.000/0000-00"
                     value={form.cnpj}
                     onChange={(e) => update('cnpj', maskCnpj(e.target.value))}
-                    className={fieldErrors.cnpj ? 'border-destructive focus-visible:ring-destructive' : ''}
+                    className={
+                      fieldErrors.cnpj ? 'border-destructive focus-visible:ring-destructive' : ''
+                    }
                   />
-                  {fieldErrors.cnpj && <p className="text-sm text-destructive">{fieldErrors.cnpj}</p>}
+                  {fieldErrors.cnpj && (
+                    <p className="text-sm text-destructive">{fieldErrors.cnpj}</p>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="pf-creci-juridico">CRECI Jurídico *</Label>
@@ -374,7 +397,11 @@ export default function MyProfilePage() {
                     id="pf-creci-juridico"
                     value={form.creci_juridico}
                     onChange={(e) => update('creci_juridico', e.target.value)}
-                    className={fieldErrors.creci_juridico ? 'border-destructive focus-visible:ring-destructive' : ''}
+                    className={
+                      fieldErrors.creci_juridico
+                        ? 'border-destructive focus-visible:ring-destructive'
+                        : ''
+                    }
                   />
                   {fieldErrors.creci_juridico && (
                     <p className="text-sm text-destructive">{fieldErrors.creci_juridico}</p>
@@ -389,7 +416,9 @@ export default function MyProfilePage() {
                   maxLength={2}
                   value={form.creci_uf}
                   onChange={(e) => update('creci_uf', e.target.value.toUpperCase())}
-                  className={fieldErrors.creci_uf ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.creci_uf ? 'border-destructive focus-visible:ring-destructive' : ''
+                  }
                 />
                 {fieldErrors.creci_uf && (
                   <p className="text-sm text-destructive">{fieldErrors.creci_uf}</p>
@@ -406,7 +435,11 @@ export default function MyProfilePage() {
                     id="pf-resp-nome"
                     value={form.responsavel_nome}
                     onChange={(e) => update('responsavel_nome', e.target.value)}
-                    className={fieldErrors.responsavel_nome ? 'border-destructive focus-visible:ring-destructive' : ''}
+                    className={
+                      fieldErrors.responsavel_nome
+                        ? 'border-destructive focus-visible:ring-destructive'
+                        : ''
+                    }
                   />
                   {fieldErrors.responsavel_nome && (
                     <p className="text-sm text-destructive">{fieldErrors.responsavel_nome}</p>
@@ -420,7 +453,11 @@ export default function MyProfilePage() {
                       placeholder="000.000.000-00"
                       value={form.responsavel_cpf}
                       onChange={(e) => update('responsavel_cpf', maskCpfCnpj(e.target.value))}
-                      className={fieldErrors.responsavel_cpf ? 'border-destructive focus-visible:ring-destructive' : ''}
+                      className={
+                        fieldErrors.responsavel_cpf
+                          ? 'border-destructive focus-visible:ring-destructive'
+                          : ''
+                      }
                     />
                     {fieldErrors.responsavel_cpf && (
                       <p className="text-sm text-destructive">{fieldErrors.responsavel_cpf}</p>
@@ -432,7 +469,11 @@ export default function MyProfilePage() {
                       id="pf-resp-creci"
                       value={form.responsavel_creci}
                       onChange={(e) => update('responsavel_creci', e.target.value)}
-                      className={fieldErrors.responsavel_creci ? 'border-destructive focus-visible:ring-destructive' : ''}
+                      className={
+                        fieldErrors.responsavel_creci
+                          ? 'border-destructive focus-visible:ring-destructive'
+                          : ''
+                      }
                     />
                     {fieldErrors.responsavel_creci && (
                       <p className="text-sm text-destructive">{fieldErrors.responsavel_creci}</p>
@@ -454,7 +495,9 @@ export default function MyProfilePage() {
                   id="pf-pix"
                   value={form.pix}
                   onChange={(e) => update('pix', e.target.value)}
-                  className={fieldErrors.pix ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.pix ? 'border-destructive focus-visible:ring-destructive' : ''
+                  }
                 />
                 {fieldErrors.pix && <p className="text-sm text-destructive">{fieldErrors.pix}</p>}
               </div>
@@ -465,7 +508,9 @@ export default function MyProfilePage() {
                   placeholder="(21) 99999-9999"
                   value={form.telefone}
                   onChange={(e) => update('telefone', maskPhone(e.target.value))}
-                  className={fieldErrors.telefone ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.telefone ? 'border-destructive focus-visible:ring-destructive' : ''
+                  }
                 />
                 {fieldErrors.telefone && (
                   <p className="text-sm text-destructive">{fieldErrors.telefone}</p>
@@ -479,7 +524,9 @@ export default function MyProfilePage() {
                 type="email"
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
-                className={fieldErrors.email ? 'border-destructive focus-visible:ring-destructive' : ''}
+                className={
+                  fieldErrors.email ? 'border-destructive focus-visible:ring-destructive' : ''
+                }
               />
               {fieldErrors.email && <p className="text-sm text-destructive">{fieldErrors.email}</p>}
             </div>
@@ -489,7 +536,9 @@ export default function MyProfilePage() {
                 id="pf-endereco"
                 value={form.endereco}
                 onChange={(e) => update('endereco', e.target.value)}
-                className={fieldErrors.endereco ? 'border-destructive focus-visible:ring-destructive' : ''}
+                className={
+                  fieldErrors.endereco ? 'border-destructive focus-visible:ring-destructive' : ''
+                }
               />
               {fieldErrors.endereco && (
                 <p className="text-sm text-destructive">{fieldErrors.endereco}</p>
@@ -502,9 +551,13 @@ export default function MyProfilePage() {
                   id="pf-cidade"
                   value={form.cidade}
                   onChange={(e) => update('cidade', e.target.value)}
-                  className={fieldErrors.cidade ? 'border-destructive focus-visible:ring-destructive' : ''}
+                  className={
+                    fieldErrors.cidade ? 'border-destructive focus-visible:ring-destructive' : ''
+                  }
                 />
-                {fieldErrors.cidade && <p className="text-sm text-destructive">{fieldErrors.cidade}</p>}
+                {fieldErrors.cidade && (
+                  <p className="text-sm text-destructive">{fieldErrors.cidade}</p>
+                )}
               </div>
               <div className="space-y-1">
                 <Label htmlFor="pf-uf">UF *</Label>
