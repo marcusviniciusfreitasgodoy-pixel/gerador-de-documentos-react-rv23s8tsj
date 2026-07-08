@@ -6,6 +6,8 @@ import { toast } from 'sonner'
 import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
 import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
+import { TermoChavesForm } from '@/components/TermoChavesForm'
+import { ChecklistForm } from '@/components/ChecklistForm'
 import { reciboMockData } from '@/lib/form-helpers'
 
 import { Button } from '@/components/ui/button'
@@ -40,9 +42,9 @@ import { generateDocx } from '@/lib/docx-generator'
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
-  const [docType, setDocType] = useState<'recibo' | 'intermediation' | 'promise' | 'compromisso'>(
-    'recibo',
-  )
+  const [docType, setDocType] = useState<
+    'recibo' | 'intermediation' | 'promise' | 'compromisso' | 'termoChaves' | 'checklist'
+  >('recibo')
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -124,13 +126,33 @@ export default function Index() {
           >
             Promessa / Compromisso de Compra e Venda (à vista)
           </Button>
+          <Button
+            type="button"
+            variant={docType === 'termoChaves' ? 'default' : 'outline'}
+            onClick={() => setDocType('termoChaves')}
+            size="sm"
+          >
+            Termo de Entrega das Chaves
+          </Button>
+          <Button
+            type="button"
+            variant={docType === 'checklist' ? 'default' : 'outline'}
+            onClick={() => setDocType('checklist')}
+            size="sm"
+          >
+            Checklist Documental
+          </Button>
         </div>
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
           {docType === 'recibo'
             ? 'Recibo de Sinal e Princípio de Pagamento (Arras)'
             : docType === 'intermediation'
               ? 'Autorização para Divulgação e Venda de Imóvel'
-              : 'Promessa / Compromisso de Compra e Venda (à vista)'}
+              : docType === 'compromisso'
+                ? 'Promessa / Compromisso de Compra e Venda (à vista)'
+                : docType === 'termoChaves'
+                  ? 'Termo de Entrega das Chaves'
+                  : 'Checklist Documental'}
         </CardTitle>
         <CardDescription>
           Preencha os dados para gerar o documento Word automaticamente.
@@ -459,6 +481,8 @@ export default function Index() {
         {docType === 'intermediation' && <IntermediationForm />}
         {docType === 'promise' && <PromiseForm />}
         {docType === 'compromisso' && <PromessaAvistaForm />}
+        {docType === 'termoChaves' && <TermoChavesForm />}
+        {docType === 'checklist' && <ChecklistForm />}
       </CardContent>
     </Card>
   )
