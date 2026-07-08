@@ -26,7 +26,7 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Index />} />
               <Route path="/legal-knowledge" element={<LegalKnowledgePage />} />
-              <Route path="/my-profile" element={<MyProfilePage />} />
+              <Route path="/perfil" element={<MyProfilePage />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />

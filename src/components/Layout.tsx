@@ -36,7 +36,7 @@ export default function Layout() {
                 </Link>
               </Button>
               <Button asChild variant="ghost" size="sm">
-                <Link to="/my-profile">
+                <Link to="/perfil">
                   <UserCircle className="mr-1 h-4 w-4" /> Meu Perfil
                 </Link>
               </Button>
