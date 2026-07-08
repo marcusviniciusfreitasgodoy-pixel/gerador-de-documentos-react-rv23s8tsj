@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LegalKnowledgePage from './pages/LegalKnowledge'
 import MyProfilePage from './pages/MyProfile'
+import ValidarMinutaPage from './pages/ValidarMinuta'
 import Layout from './components/Layout'
 
 const App = () => (
@@ -26,6 +27,7 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Index />} />
               <Route path="/legal-knowledge" element={<LegalKnowledgePage />} />
+              <Route path="/validar" element={<ValidarMinutaPage />} />
               <Route path="/perfil" element={<MyProfilePage />} />
             </Route>
           </Route>
