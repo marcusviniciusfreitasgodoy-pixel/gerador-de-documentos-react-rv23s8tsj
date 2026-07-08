@@ -10,6 +10,7 @@ import NotFound from './pages/NotFound'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import LegalKnowledgePage from './pages/LegalKnowledge'
+import MyProfilePage from './pages/MyProfile'
 import Layout from './components/Layout'
 
 const App = () => (
@@ -25,6 +26,7 @@ const App = () => (
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Index />} />
               <Route path="/legal-knowledge" element={<LegalKnowledgePage />} />
+              <Route path="/my-profile" element={<MyProfilePage />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
