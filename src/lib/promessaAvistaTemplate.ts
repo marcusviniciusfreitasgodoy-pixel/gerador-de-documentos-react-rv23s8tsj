@@ -108,6 +108,7 @@ export function buildPromessaAvistaTemplateData(
     comissao_creci: cleanCreci(data.comissao_creci || ''),
     comissao_pix: data.comissao_pix || '',
     comissao_percentual: data.comissao_percentual || '',
+    comissao_paga_por: data.comissao_responsavel === 'comprador' ? 'COMPRADORES' : 'VENDEDORES',
     comissao_valor: fmt(comissaoValor),
     comissao_valor_extenso: extenso(comissaoValor),
     arras_confirmatoria: data.tipo_arras === 'confirmatoria',

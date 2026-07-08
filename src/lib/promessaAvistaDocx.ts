@@ -1,12 +1,34 @@
 import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
-import { promessaAvistaTemplateBytes } from '@/lib/promessaAvistaDocxBase64'
 
-export function generatePromessaAvistaDocx(data: Record<string, string | boolean>): void {
-  const templateBytes = promessaAvistaTemplateBytes()
+const TEMPLATE_URL =
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/1f5a03f8d7b53c30a41e719b16da3139dbb6628b/promessa_base64.txt'
+const EXPECTED_BYTE_COUNT = 41547
 
-  if (templateBytes.length !== 41519) {
-    throw new Error('Template corrompido: tamanho inválido')
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binaryString = atob(base64.trim())
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  return bytes
+}
+
+export async function generatePromessaAvistaDocx(
+  data: Record<string, string | boolean>,
+): Promise<void> {
+  const response = await fetch(TEMPLATE_URL)
+  if (!response.ok) {
+    throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
+  }
+
+  const base64Text = await response.text()
+  const templateBytes = base64ToUint8Array(base64Text)
+
+  if (templateBytes.length !== EXPECTED_BYTE_COUNT) {
+    throw new Error(
+      `Template corrompido: tamanho inválido (${templateBytes.length} bytes, esperado ${EXPECTED_BYTE_COUNT})`,
+    )
   }
 
   const zip = new PizZip(templateBytes)

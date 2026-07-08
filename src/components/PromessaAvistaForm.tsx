@@ -114,8 +114,7 @@ export function PromessaAvistaForm() {
     }
     setIsGenerating(true)
     try {
-      await new Promise((r) => setTimeout(r, 800))
-      generatePromessaAvistaDocx(buildPromessaAvistaTemplateData(data))
+      await generatePromessaAvistaDocx(buildPromessaAvistaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       form.reset()
     } catch (error) {

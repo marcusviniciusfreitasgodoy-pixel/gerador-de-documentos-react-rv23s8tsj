@@ -119,20 +119,11 @@ export default function Index() {
           </Button>
           <Button
             type="button"
-            variant={docType === 'promise' ? 'default' : 'outline'}
-            onClick={() => setDocType('promise')}
-            size="sm"
-          >
-            <FileSignature className="mr-1 h-4 w-4" />
-            Promessa de Compra e Venda
-          </Button>
-          <Button
-            type="button"
             variant={docType === 'compromisso' ? 'default' : 'outline'}
             onClick={() => setDocType('compromisso')}
             size="sm"
           >
-            Compromisso (à vista)
+            Promessa / Compromisso de Compra e Venda (à vista)
           </Button>
         </div>
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
@@ -140,9 +131,7 @@ export default function Index() {
             ? 'Recibo de Sinal e Princípio de Pagamento (Arras)'
             : docType === 'intermediation'
               ? 'Autorização para Divulgação e Venda de Imóvel'
-              : docType === 'promise'
-                ? 'Promessa de Compra e Venda'
-                : 'Compromisso de Compra e Venda (À Vista)'}
+              : 'Promessa / Compromisso de Compra e Venda (à vista)'}
         </CardTitle>
         <CardDescription>
           Preencha os dados para gerar o documento Word automaticamente.
