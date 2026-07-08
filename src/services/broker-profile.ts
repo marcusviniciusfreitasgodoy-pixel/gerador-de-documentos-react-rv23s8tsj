@@ -5,6 +5,7 @@ export type ProfileType = 'corretor_autonomo' | 'imobiliaria'
 export interface BrokerProfile {
   id: string
   user: string
+  name: string
   tipo_perfil: ProfileType
   nome: string
   cpf: string

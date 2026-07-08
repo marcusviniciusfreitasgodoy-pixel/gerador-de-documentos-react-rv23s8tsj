@@ -149,32 +149,70 @@ export default function MyProfilePage() {
     setSaving(true)
     setFieldErrors({})
     try {
+    // Validation
+    const errors: FieldErrors = {}
+    
+    if (form.tipo_perfil === 'corretor_autonomo') {
+      if (!form.nome?.trim()) errors.nome = 'Este campo é obrigatório'
+      if (!form.cpf?.trim()) errors.cpf = 'Este campo é obrigatório'
+      if (!form.creci?.trim()) errors.creci = 'Este campo é obrigatório'
+      if (!form.creci_uf?.trim()) errors.creci_uf = 'Este campo é obrigatório'
+      if (!form.email?.trim()) errors.email = 'Este campo é obrigatório'
+      if (!form.telefone?.trim()) errors.telefone = 'Este campo é obrigatório'
+      if (!form.endereco?.trim()) errors.endereco = 'Este campo é obrigatório'
+      if (!form.cidade?.trim()) errors.cidade = 'Este campo é obrigatório'
+      if (!form.uf?.trim()) errors.uf = 'Este campo é obrigatório'
+    } else {
+      if (!form.razao_social?.trim()) errors.razao_social = 'Este campo é obrigatório'
+      if (!form.cnpj?.trim()) errors.cnpj = 'Este campo é obrigatório'
+      if (!form.creci_juridico?.trim()) errors.creci_juridico = 'Este campo é obrigatório'
+      if (!form.creci_uf?.trim()) errors.creci_uf = 'Este campo é obrigatório'
+      if (!form.responsavel_nome?.trim()) errors.responsavel_nome = 'Este campo é obrigatório'
+      if (!form.responsavel_cpf?.trim()) errors.responsavel_cpf = 'Este campo é obrigatório'
+      if (!form.responsavel_creci?.trim()) errors.responsavel_creci = 'Este campo é obrigatório'
+      if (!form.email?.trim()) errors.email = 'Este campo é obrigatório'
+      if (!form.telefone?.trim()) errors.telefone = 'Este campo é obrigatório'
+      if (!form.endereco?.trim()) errors.endereco = 'Este campo é obrigatório'
+      if (!form.cidade?.trim()) errors.cidade = 'Este campo é obrigatório'
+      if (!form.uf?.trim()) errors.uf = 'Este campo é obrigatório'
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setSaving(false)
+      toast.error('Preencha todos os campos obrigatórios')
+      return
+    }
+
+    try {
       const payload: Partial<BrokerProfile> = {
+        name: form.tipo_perfil === 'corretor_autonomo' ? form.nome : form.razao_social,
         tipo_perfil: form.tipo_perfil,
-        nome: form.nome || undefined,
-        cpf: form.cpf || undefined,
-        creci: form.creci || undefined,
-        razao_social: form.razao_social || undefined,
-        nome_fantasia: form.nome_fantasia || undefined,
-        cnpj: form.cnpj || undefined,
-        creci_juridico: form.creci_juridico || undefined,
-        responsavel_nome: form.responsavel_nome || undefined,
-        responsavel_cpf: form.responsavel_cpf || undefined,
-        responsavel_creci: form.responsavel_creci || undefined,
-        creci_uf: form.creci_uf || undefined,
-        pix: form.pix || undefined,
-        telefone: form.telefone || undefined,
-        email: form.email || undefined,
-        endereco: form.endereco || undefined,
-        cidade: form.cidade || undefined,
-        uf: form.uf || undefined,
+        nome: form.nome || '',
+        cpf: form.cpf || '',
+        creci: form.creci || '',
+        razao_social: form.razao_social || '',
+        nome_fantasia: form.nome_fantasia || '',
+        cnpj: form.cnpj || '',
+        creci_juridico: form.creci_juridico || '',
+        responsavel_nome: form.responsavel_nome || '',
+        responsavel_cpf: form.responsavel_cpf || '',
+        responsavel_creci: form.responsavel_creci || '',
+        creci_uf: form.creci_uf || '',
+        pix: form.pix || '',
+        telefone: form.telefone || '',
+        email: form.email || '',
+        endereco: form.endereco || '',
+        cidade: form.cidade || '',
+        uf: form.uf || '',
       }
+      
       if (profile) {
         await updateBrokerProfile(profile.id, payload)
-        toast.success('Perfil atualizado com sucesso!')
+        toast.success('Perfil salvo com sucesso!')
       } else {
         await createBrokerProfile({ ...payload, user: user?.id || '' })
-        toast.success('Perfil criado com sucesso!')
+        toast.success('Perfil salvo com sucesso!')
       }
       await loadData()
     } catch (error) {
@@ -248,58 +286,62 @@ export default function MyProfilePage() {
                   id="pf-nome"
                   value={form.nome}
                   onChange={(e) => update('nome', e.target.value)}
+                  className={fieldErrors.nome ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
-                {fieldErrors.nome && <p className="text-sm text-red-500">{fieldErrors.nome}</p>}
+                {fieldErrors.nome && <p className="text-sm text-destructive">{fieldErrors.nome}</p>}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <Label htmlFor="pf-cpf">CPF</Label>
+                  <Label htmlFor="pf-cpf">CPF *</Label>
                   <Input
                     id="pf-cpf"
                     placeholder="000.000.000-00"
                     value={form.cpf}
                     onChange={(e) => update('cpf', maskCpfCnpj(e.target.value))}
+                    className={fieldErrors.cpf ? 'border-destructive focus-visible:ring-destructive' : ''}
                   />
-                  {fieldErrors.cpf && <p className="text-sm text-red-500">{fieldErrors.cpf}</p>}
+                  {fieldErrors.cpf && <p className="text-sm text-destructive">{fieldErrors.cpf}</p>}
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="pf-creci">CRECI</Label>
+                  <Label htmlFor="pf-creci">CRECI *</Label>
                   <Input
                     id="pf-creci"
                     value={form.creci}
                     onChange={(e) => update('creci', e.target.value)}
+                    className={fieldErrors.creci ? 'border-destructive focus-visible:ring-destructive' : ''}
                   />
-                  {fieldErrors.creci && <p className="text-sm text-red-500">{fieldErrors.creci}</p>}
+                  {fieldErrors.creci && <p className="text-sm text-destructive">{fieldErrors.creci}</p>}
                 </div>
               </div>
               <div className="space-y-1">
-                <Label htmlFor="pf-creci-uf">CRECI UF</Label>
+                <Label htmlFor="pf-creci-uf">CRECI UF *</Label>
                 <Input
                   id="pf-creci-uf"
                   placeholder="RJ"
                   maxLength={2}
                   value={form.creci_uf}
                   onChange={(e) => update('creci_uf', e.target.value.toUpperCase())}
+                  className={fieldErrors.creci_uf ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
                 {fieldErrors.creci_uf && (
-                  <p className="text-sm text-red-500">{fieldErrors.creci_uf}</p>
+                  <p className="text-sm text-destructive">{fieldErrors.creci_uf}</p>
                 )}
-              </div>
-            </div>
+              </div>            </div>
           ) : (
             <div className="space-y-4 animate-fade-in">
               <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                 Dados da Imobiliária
               </h3>
               <div className="space-y-1">
-                <Label htmlFor="pf-razao">Razão Social</Label>
+                <Label htmlFor="pf-razao">Razão Social *</Label>
                 <Input
                   id="pf-razao"
                   value={form.razao_social}
                   onChange={(e) => update('razao_social', e.target.value)}
+                  className={fieldErrors.razao_social ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
                 {fieldErrors.razao_social && (
-                  <p className="text-sm text-red-500">{fieldErrors.razao_social}</p>
+                  <p className="text-sm text-destructive">{fieldErrors.razao_social}</p>
                 )}
               </div>
               <div className="space-y-1">
@@ -308,45 +350,49 @@ export default function MyProfilePage() {
                   id="pf-fantasia"
                   value={form.nome_fantasia}
                   onChange={(e) => update('nome_fantasia', e.target.value)}
+                  className={fieldErrors.nome_fantasia ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
                 {fieldErrors.nome_fantasia && (
-                  <p className="text-sm text-red-500">{fieldErrors.nome_fantasia}</p>
+                  <p className="text-sm text-destructive">{fieldErrors.nome_fantasia}</p>
                 )}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <Label htmlFor="pf-cnpj">CNPJ</Label>
+                  <Label htmlFor="pf-cnpj">CNPJ *</Label>
                   <Input
                     id="pf-cnpj"
                     placeholder="00.000.000/0000-00"
                     value={form.cnpj}
                     onChange={(e) => update('cnpj', maskCnpj(e.target.value))}
+                    className={fieldErrors.cnpj ? 'border-destructive focus-visible:ring-destructive' : ''}
                   />
-                  {fieldErrors.cnpj && <p className="text-sm text-red-500">{fieldErrors.cnpj}</p>}
+                  {fieldErrors.cnpj && <p className="text-sm text-destructive">{fieldErrors.cnpj}</p>}
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="pf-creci-juridico">CRECI Jurídico</Label>
+                  <Label htmlFor="pf-creci-juridico">CRECI Jurídico *</Label>
                   <Input
                     id="pf-creci-juridico"
                     value={form.creci_juridico}
                     onChange={(e) => update('creci_juridico', e.target.value)}
+                    className={fieldErrors.creci_juridico ? 'border-destructive focus-visible:ring-destructive' : ''}
                   />
                   {fieldErrors.creci_juridico && (
-                    <p className="text-sm text-red-500">{fieldErrors.creci_juridico}</p>
+                    <p className="text-sm text-destructive">{fieldErrors.creci_juridico}</p>
                   )}
                 </div>
               </div>
               <div className="space-y-1">
-                <Label htmlFor="pf-creci-uf-j">CRECI UF</Label>
+                <Label htmlFor="pf-creci-uf-j">CRECI UF *</Label>
                 <Input
                   id="pf-creci-uf-j"
                   placeholder="RJ"
                   maxLength={2}
                   value={form.creci_uf}
                   onChange={(e) => update('creci_uf', e.target.value.toUpperCase())}
+                  className={fieldErrors.creci_uf ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
                 {fieldErrors.creci_uf && (
-                  <p className="text-sm text-red-500">{fieldErrors.creci_uf}</p>
+                  <p className="text-sm text-destructive">{fieldErrors.creci_uf}</p>
                 )}
               </div>
 
@@ -355,38 +401,41 @@ export default function MyProfilePage() {
                   Corretor Responsável
                 </h3>
                 <div className="space-y-1">
-                  <Label htmlFor="pf-resp-nome">Nome do Responsável</Label>
+                  <Label htmlFor="pf-resp-nome">Nome do Responsável *</Label>
                   <Input
                     id="pf-resp-nome"
                     value={form.responsavel_nome}
                     onChange={(e) => update('responsavel_nome', e.target.value)}
+                    className={fieldErrors.responsavel_nome ? 'border-destructive focus-visible:ring-destructive' : ''}
                   />
                   {fieldErrors.responsavel_nome && (
-                    <p className="text-sm text-red-500">{fieldErrors.responsavel_nome}</p>
+                    <p className="text-sm text-destructive">{fieldErrors.responsavel_nome}</p>
                   )}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <Label htmlFor="pf-resp-cpf">CPF do Responsável</Label>
+                    <Label htmlFor="pf-resp-cpf">CPF do Responsável *</Label>
                     <Input
                       id="pf-resp-cpf"
                       placeholder="000.000.000-00"
                       value={form.responsavel_cpf}
                       onChange={(e) => update('responsavel_cpf', maskCpfCnpj(e.target.value))}
+                      className={fieldErrors.responsavel_cpf ? 'border-destructive focus-visible:ring-destructive' : ''}
                     />
                     {fieldErrors.responsavel_cpf && (
-                      <p className="text-sm text-red-500">{fieldErrors.responsavel_cpf}</p>
+                      <p className="text-sm text-destructive">{fieldErrors.responsavel_cpf}</p>
                     )}
                   </div>
                   <div className="space-y-1">
-                    <Label htmlFor="pf-resp-creci">CRECI do Responsável</Label>
+                    <Label htmlFor="pf-resp-creci">CRECI do Responsável *</Label>
                     <Input
                       id="pf-resp-creci"
                       value={form.responsavel_creci}
                       onChange={(e) => update('responsavel_creci', e.target.value)}
+                      className={fieldErrors.responsavel_creci ? 'border-destructive focus-visible:ring-destructive' : ''}
                     />
                     {fieldErrors.responsavel_creci && (
-                      <p className="text-sm text-red-500">{fieldErrors.responsavel_creci}</p>
+                      <p className="text-sm text-destructive">{fieldErrors.responsavel_creci}</p>
                     )}
                   </div>
                 </div>
@@ -405,60 +454,65 @@ export default function MyProfilePage() {
                   id="pf-pix"
                   value={form.pix}
                   onChange={(e) => update('pix', e.target.value)}
+                  className={fieldErrors.pix ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
-                {fieldErrors.pix && <p className="text-sm text-red-500">{fieldErrors.pix}</p>}
+                {fieldErrors.pix && <p className="text-sm text-destructive">{fieldErrors.pix}</p>}
               </div>
               <div className="space-y-1">
-                <Label htmlFor="pf-telefone">Telefone</Label>
+                <Label htmlFor="pf-telefone">Telefone *</Label>
                 <Input
                   id="pf-telefone"
                   placeholder="(21) 99999-9999"
                   value={form.telefone}
                   onChange={(e) => update('telefone', maskPhone(e.target.value))}
+                  className={fieldErrors.telefone ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
                 {fieldErrors.telefone && (
-                  <p className="text-sm text-red-500">{fieldErrors.telefone}</p>
+                  <p className="text-sm text-destructive">{fieldErrors.telefone}</p>
                 )}
               </div>
             </div>
             <div className="space-y-1">
-              <Label htmlFor="pf-email">E-mail</Label>
+              <Label htmlFor="pf-email">E-mail *</Label>
               <Input
                 id="pf-email"
                 type="email"
                 value={form.email}
                 onChange={(e) => update('email', e.target.value)}
+                className={fieldErrors.email ? 'border-destructive focus-visible:ring-destructive' : ''}
               />
-              {fieldErrors.email && <p className="text-sm text-red-500">{fieldErrors.email}</p>}
+              {fieldErrors.email && <p className="text-sm text-destructive">{fieldErrors.email}</p>}
             </div>
             <div className="space-y-1">
-              <Label htmlFor="pf-endereco">Endereço</Label>
+              <Label htmlFor="pf-endereco">Endereço *</Label>
               <Input
                 id="pf-endereco"
                 value={form.endereco}
                 onChange={(e) => update('endereco', e.target.value)}
+                className={fieldErrors.endereco ? 'border-destructive focus-visible:ring-destructive' : ''}
               />
               {fieldErrors.endereco && (
-                <p className="text-sm text-red-500">{fieldErrors.endereco}</p>
+                <p className="text-sm text-destructive">{fieldErrors.endereco}</p>
               )}
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1 md:col-span-2">
-                <Label htmlFor="pf-cidade">Cidade</Label>
+                <Label htmlFor="pf-cidade">Cidade *</Label>
                 <Input
                   id="pf-cidade"
                   value={form.cidade}
                   onChange={(e) => update('cidade', e.target.value)}
+                  className={fieldErrors.cidade ? 'border-destructive focus-visible:ring-destructive' : ''}
                 />
-                {fieldErrors.cidade && <p className="text-sm text-red-500">{fieldErrors.cidade}</p>}
+                {fieldErrors.cidade && <p className="text-sm text-destructive">{fieldErrors.cidade}</p>}
               </div>
               <div className="space-y-1">
-                <Label htmlFor="pf-uf">UF</Label>
+                <Label htmlFor="pf-uf">UF *</Label>
                 <select
                   id="pf-uf"
                   value={form.uf}
                   onChange={(e) => update('uf', e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className={`flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${fieldErrors.uf ? 'border-destructive focus-visible:ring-destructive' : 'border-input'}`}
                 >
                   <option value="">--</option>
                   {UFS.map((uf) => (
@@ -467,7 +521,7 @@ export default function MyProfilePage() {
                     </option>
                   ))}
                 </select>
-                {fieldErrors.uf && <p className="text-sm text-red-500">{fieldErrors.uf}</p>}
+                {fieldErrors.uf && <p className="text-sm text-destructive">{fieldErrors.uf}</p>}
               </div>
             </div>
           </div>
@@ -485,7 +539,7 @@ export default function MyProfilePage() {
             ) : (
               <>
                 <Save className="mr-2 h-5 w-5" />
-                {profile ? 'Atualizar Perfil' : 'Criar Perfil'}
+                {profile ? 'Salvar Perfil' : 'Criar Perfil'}
               </>
             )}
           </Button>
