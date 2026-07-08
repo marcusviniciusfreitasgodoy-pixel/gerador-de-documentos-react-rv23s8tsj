@@ -3,8 +3,7 @@ import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
-export const FORMA_PAGAMENTO_OPTIONS = ['PIX', 'TED', 'Transferência Bancária'] as const
-export const COMISSAO_RESPONSAVEL_OPTIONS = ['vendedor', 'comprador'] as const
+export const FORMA_PAGAMENTO_OPTIONS = ['PIX', 'TED', 'Transferência'] as const
 
 export const promessaAvistaSchema = z
   .object({
@@ -64,18 +63,17 @@ export const promessaAvistaSchema = z
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
     valor_reforco: z.string().optional(),
     forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
-    dados_pagamento: z.string().optional(),
+    dados_recebimento: z.string().optional(),
+    prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
+    prazo_reforco: z.string().min(1, 'Obrigatório'),
+    data_limite_escritura: z.string().min(1, 'Obrigatório'),
     comissao_beneficiario: z.string().optional(),
     comissao_documento: z.string().optional(),
     comissao_creci: z.string().optional(),
     comissao_pix: z.string().optional(),
     comissao_percentual: z.string().min(1, 'Obrigatório'),
-    comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
-    prazo_certificado: z.string().min(1, 'Obrigatório'),
-    prazo_reforco: z.string().min(1, 'Obrigatório'),
-    data_escritura: z.string().min(1, 'Obrigatório'),
-    data_documento: z.string().min(1, 'Obrigatório'),
     tipo_arras: z.enum(['confirmatoria', 'penitencial']),
+    data_documento: z.string().min(1, 'Obrigatório'),
     testemunha1_nome: z.string().optional(),
     testemunha1_cpf: z.string().optional(),
     testemunha2_nome: z.string().optional(),
@@ -144,18 +142,17 @@ export const promessaAvistaMockData: PromessaAvistaValues = {
   valor_sinal: 'R$ 120.000,00',
   valor_reforco: 'R$ 480.000,00',
   forma_pagamento: 'PIX',
-  dados_pagamento: 'PIX para a chave roberto.araujo@email.com',
+  dados_recebimento: 'PIX para a chave roberto.araujo@email.com',
+  prazo_certidoes_dias: '10',
+  prazo_reforco: new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+  data_limite_escritura: new Date(Date.now() + 60 * 86400000).toISOString().split('T')[0],
   comissao_beneficiario: '',
   comissao_documento: '',
   comissao_creci: '',
   comissao_pix: '',
   comissao_percentual: '5',
-  comissao_responsavel: 'comprador',
-  prazo_certificado: '10',
-  prazo_reforco: '30',
-  data_escritura: new Date(Date.now() + 60 * 86400000).toISOString().split('T')[0],
-  data_documento: new Date().toISOString().split('T')[0],
   tipo_arras: 'confirmatoria',
+  data_documento: new Date().toISOString().split('T')[0],
   testemunha1_nome: 'Pedro Alves Lima',
   testemunha1_cpf: '111.222.333-44',
   testemunha2_nome: 'Maria Fernanda Rocha',
