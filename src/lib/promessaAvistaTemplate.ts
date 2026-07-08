@@ -14,6 +14,27 @@ function cleanCreci(creci: string): string {
   return creci.replace(/^CRECI\S*\s*/, '')
 }
 
+function limparDestino(value: string): string {
+  if (!value) return ''
+  return value.replace(/^\s*(PIX|TED|Transferência)\s*(para)?\s*/i, '')
+}
+
+function prefixarDocumento(value: string): string {
+  if (!value) return ''
+  const trimmed = value.trim()
+  if (/^CPF/i.test(trimmed) || /^CNPJ/i.test(trimmed)) {
+    return trimmed
+  }
+  const digits = trimmed.replace(/\D/g, '')
+  if (digits.length === 11) {
+    return `CPF nº ${trimmed}`
+  }
+  if (digits.length === 14) {
+    return `CNPJ nº ${trimmed}`
+  }
+  return trimmed
+}
+
 export function buildPromessaAvistaTemplateData(
   data: PromessaAvistaValues,
 ): Record<string, string | boolean> {
@@ -99,12 +120,12 @@ export function buildPromessaAvistaTemplateData(
     valor_saldo: fmt(valorSaldo),
     valor_saldo_extenso: extenso(valorSaldo),
     forma_pagamento: data.forma_pagamento || '',
-    dados_recebimento: data.dados_recebimento || '',
+    dados_recebimento: limparDestino(data.dados_recebimento || ''),
     prazo_certidoes_dias: data.prazo_certidoes_dias || '',
     prazo_reforco: formatDatePtBr(data.prazo_reforco || ''),
     data_limite_escritura: formatDatePtBr(data.data_limite_escritura || ''),
     comissao_beneficiario: data.comissao_beneficiario || '',
-    comissao_documento: data.comissao_documento || '',
+    comissao_documento: prefixarDocumento(data.comissao_documento || ''),
     comissao_creci: cleanCreci(data.comissao_creci || ''),
     comissao_pix: data.comissao_pix || '',
     comissao_percentual: data.comissao_percentual || '',
