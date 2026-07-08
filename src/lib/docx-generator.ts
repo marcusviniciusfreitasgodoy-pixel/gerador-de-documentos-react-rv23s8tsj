@@ -5,6 +5,15 @@ function escapeXml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binaryString = atob(base64.trim())
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+  return bytes
+}
+
 export function para(
   text: string,
   opts?: {
@@ -96,89 +105,60 @@ export function downloadDocxFromTemplate(
   URL.revokeObjectURL(url)
 }
 
-function buildDocumentXml(): string {
-  const paras = [
-    para('RECIBO DE SINAL E PRINCÍPIO DE PAGAMENTO (ARRAS)', {
-      bold: true,
-      align: 'center',
-      size: 28,
-      after: 0,
-    }),
-    para('Arts. 417 a 420 do Código Civil', { align: 'center', size: 22, after: 400 }),
-    para('QUALIFICAÇÃO DAS PARTES', { bold: true, after: 200 }),
-    para(
-      'VENDEDOR(A) / PROMITENTE-VENDEDOR(A): {vendedor_nome}, {vendedor_nacionalidade}, {vendedor_qualificacao_civil}, {vendedor_profissao}, portador(a) do documento de identidade nº {vendedor_rg} e inscrito(a) no CPF/MF sob o nº {vendedor_cpf}, residente e domiciliado(a) em {vendedor_endereco}.',
-      { align: 'both', after: 200 },
-    ),
-    para(
-      'COMPRADOR(A) / PROMITENTE-COMPRADOR(A): {comprador_nome}, {comprador_nacionalidade}, {comprador_qualificacao_civil}, {comprador_profissao}, portador(a) do documento de identidade nº {comprador_rg} e inscrito(a) no CPF/MF sob o nº {comprador_cpf}, residente e domiciliado(a) em {comprador_endereco}.',
-      { align: 'both', after: 400 },
-    ),
-    para('OBJETO', { bold: true, after: 200 }),
-    para(
-      'IMÓVEL: {imovel_descricao}, objeto da matrícula nº {imovel_matricula} do {imovel_ri_numero}º Registro de Imóveis de {imovel_comarca}, inscrição municipal (IPTU) nº {imovel_iptu}.',
-      { align: 'both', after: 400 },
-    ),
-    para('DECLARAÇÃO DE RECEBIMENTO', { bold: true, after: 200 }),
-    para(
-      'Pelo presente instrumento, o(a) VENDEDOR(A) declara haver RECEBIDO do(a) COMPRADOR(A) a importância de R$ {valor_sinal} ({valor_sinal_extenso}), paga por meio de {forma_pagamento_sinal}, a título de SINAL E PRINCÍPIO DE PAGAMENTO (ARRAS), nos termos dos artigos 417 a 420 do Código Civil, vinculado ao negócio de compra e venda do imóvel acima descrito, cujo preço total ajustado é de R$ {valor_total} ({valor_total_extenso}).',
-      { align: 'both', after: 400 },
-    ),
-    para('CONDIÇÕES E NATUREZA DAS ARRAS', { bold: true, after: 200 }),
-    para(
-      'CLÁUSULA 1ª — IMPUTAÇÃO NO PREÇO. O valor ora recebido a título de sinal será imputado no preço total da compra e venda, restando o saldo de R$ {valor_saldo} ({valor_saldo_extenso}) a ser pago na forma e nas datas ajustadas no contrato de compra e venda / promessa de compra e venda firmado entre as partes (CC art. 417).',
-      { align: 'both', after: 200 },
-    ),
-    para(
-      'CLÁUSULA 2ª — NATUREZA DAS ARRAS. As partes ajustam, de comum acordo, que as arras ora pactuadas têm natureza',
-      { align: 'both', after: 100 },
-    ),
-    para(
-      '{check_confirmatoria} CONFIRMATÓRIA (CC arts. 417 a 419): em caso de inexecução por quem deu as arras, poderá a parte inocente reter o sinal; se a inexecução for de quem recebeu, devolverá o sinal em dobro, podendo, em qualquer caso, a parte inocente exigir indenização suplementar se provar maior prejuízo, valendo as arras como taxa mínima, ou exigir a execução do contrato com perdas e danos.',
-      { align: 'both', after: 100 },
-    ),
-    para(
-      '{check_penitencial} PENITENCIAL (CC art. 420): havendo direito de arrependimento estipulado, as arras funcionam como pré-fixação de perdas e danos. Quem deu as arras e se arrepender as perde; quem as recebeu e se arrepender as devolve em dobro. Em ambos os casos, não haverá direito a indenização suplementar.',
-      { align: 'both', after: 100 },
-    ),
-    para(
-      'Parágrafo único. Não havendo marcação expressa de uma das opções acima, presumem-se as arras de natureza confirmatória.',
-      { align: 'both', after: 200 },
-    ),
-    para(
-      'CLÁUSULA 3ª — PRAZO PARA FORMALIZAÇÃO. As partes obrigam-se a celebrar o contrato definitivo de compra e venda / a escritura pública no prazo de {prazo_formalizacao_dias} dias contados desta data, mediante apresentação da documentação prevista no checklist documental e a verificação de regularidade do imóvel e dos vendedores.',
-      { align: 'both', after: 200 },
-    ),
-    para(
-      'CLÁUSULA 4ª — RESTITUIÇÃO POR FATO ALHEIO ÀS PARTES. Caso o negócio não se concretize por fato não imputável a qualquer das partes — notadamente impossibilidade de obtenção de financiamento previamente condicionado, existência de ônus, gravame, restrição registral ou pendência impeditiva da transmissão —, o sinal será devolvido de forma simples e integral ao(à) COMPRADOR(A), monetariamente corrigido, no prazo de {prazo_restituicao_dias} dias, sem incidência das penalidades de arras.',
-      { align: 'both', after: 200 },
-    ),
-    para(
-      'CLÁUSULA 5ª — ELEIÇÃO DE FORO. Fica eleito o foro da comarca de {foro_comarca}, com renúncia a qualquer outro, por mais privilegiado que seja, para dirimir as questões oriundas deste recibo.',
-      { align: 'both', after: 400 },
-    ),
-    para('E, por estarem assim justas e acordadas, firmam o presente em duas vias de igual teor.', {
-      align: 'both',
-      after: 200,
-    }),
-    para('{cidade_uf}, {data_extenso}.', { align: 'center', after: 600 }),
-    para('___________________________________', { align: 'center', after: 0 }),
-    para('VENDEDOR(A) — Nome: {vendedor_nome} — CPF: {vendedor_cpf}', {
-      align: 'center',
-      after: 400,
-    }),
-    para('___________________________________', { align: 'center', after: 0 }),
-    para('COMPRADOR(A) — Nome: {comprador_nome} — CPF: {comprador_cpf}', {
-      align: 'center',
-      after: 400,
-    }),
-    para('Testemunhas:', { after: 200 }),
-    para('1ª ___________________ Nome: {testemunha1_nome} CPF: {testemunha1_cpf}', { after: 100 }),
-    para('2ª ___________________ Nome: {testemunha2_nome} CPF: {testemunha2_cpf}', { after: 0 }),
-  ]
-  return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">\n<w:body>\n${paras.join('\n')}\n</w:body>\n</w:document>`
+export async function renderFromUrl(
+  templateUrl: string,
+  expectedBytes: number,
+  data: Record<string, string>,
+  filename: string,
+): Promise<void> {
+  const response = await fetch(templateUrl)
+  if (!response.ok) {
+    throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
+  }
+
+  const base64Text = await response.text()
+  const templateBytes = base64ToUint8Array(base64Text)
+
+  if (templateBytes.length !== expectedBytes) {
+    throw new Error(
+      `Template corrompido: tamanho inválido (${templateBytes.length} bytes, esperado ${expectedBytes} bytes)`,
+    )
+  }
+
+  const zip = new PizZip(templateBytes)
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    delimiters: { start: '{', end: '}' },
+    nullGetter: () => '',
+  })
+
+  doc.render(data)
+
+  const blob = doc.getZip().generate({
+    type: 'blob',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  })
+
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+  URL.revokeObjectURL(url)
 }
 
-export function generateDocx(data: Record<string, string>): void {
-  downloadDocx(buildDocumentXml(), data, 'recibo-de-sinal-arras.docx')
+const RECIBO_TEMPLATE_URL =
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/d61558ea1013a37120fac596a56d852238446e5c/recibo_base64.txt'
+const RECIBO_EXPECTED_BYTES = 38661
+
+export async function generateDocx(data: Record<string, string>): Promise<void> {
+  await renderFromUrl(
+    RECIBO_TEMPLATE_URL,
+    RECIBO_EXPECTED_BYTES,
+    data,
+    'recibo-de-sinal-arras.docx',
+  )
 }

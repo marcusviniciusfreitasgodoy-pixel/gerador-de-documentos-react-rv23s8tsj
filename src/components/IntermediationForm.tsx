@@ -105,13 +105,12 @@ export function IntermediationForm() {
     }
     setIsGenerating(true)
     try {
-      await new Promise((r) => setTimeout(r, 800))
       const broker: BrokerInfo = {
         name: brokerProfile?.name || '',
         document: brokerProfile?.document || '',
         creci: brokerProfile?.creci || '',
       }
-      generateIntermediationDocx(buildIntermediationTemplateData(data, broker))
+      await generateIntermediationDocx(buildIntermediationTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
       form.reset()
     } catch (error) {

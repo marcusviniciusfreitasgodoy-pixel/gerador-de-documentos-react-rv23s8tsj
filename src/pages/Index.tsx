@@ -85,8 +85,7 @@ export default function Index() {
   const onSubmit = async (data: FormValues) => {
     setIsGenerating(true)
     try {
-      await new Promise((r) => setTimeout(r, 800))
-      generateDocx(buildTemplateData(data))
+      await generateDocx(buildTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       form.reset()
     } catch (error) {
