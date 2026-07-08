@@ -200,7 +200,7 @@ export function buildTemplateData(data: FormValues): Record<string, string> {
     prazo_restituicao_dias: data.prazo_restituicao_dias,
     foro_comarca: data.foro_comarca,
     cidade_uf: data.foro_comarca,
-    data_extenso: formatDateFull(new Date()),
+    data_extenso: formatDateFull(new Date()).toLowerCase(),
     testemunha1_nome: data.testemunha1_nome || '',
     testemunha1_cpf: data.testemunha1_cpf || '',
     testemunha2_nome: data.testemunha2_nome || '',

@@ -81,7 +81,7 @@ export function buildIntermediationTemplateData(
     check_sem_exclusiva: !isComExclusiva ? '( X )' : '( )',
     prazo_vigencia_dias: data.prazo_vigencia_dias,
     comissao_percentual: data.comissao_percentual,
-    data_extenso: formatDateFull(new Date()),
+    data_extenso: formatDateFull(new Date()).toLowerCase(),
     broker_name: broker?.name || '',
     broker_document: broker?.document || '',
     broker_creci: broker?.creci || '',

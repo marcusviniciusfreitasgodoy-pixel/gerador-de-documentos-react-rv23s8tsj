@@ -105,10 +105,21 @@ export function IntermediationForm() {
     }
     setIsGenerating(true)
     try {
+      const isImobiliaria = brokerProfile?.tipo_perfil === 'imobiliaria'
       const broker: BrokerInfo = {
-        name: brokerProfile?.name || '',
-        document: brokerProfile?.document || '',
-        creci: brokerProfile?.creci || '',
+        name: isImobiliaria
+          ? brokerProfile?.razao_social || brokerProfile?.name || ''
+          : brokerProfile?.nome || brokerProfile?.name || '',
+        document: isImobiliaria ? brokerProfile?.cnpj || '' : brokerProfile?.cpf || '',
+        creci: [
+          isImobiliaria
+            ? brokerProfile?.creci_juridico || brokerProfile?.creci || ''
+            : brokerProfile?.creci || '',
+          brokerProfile?.creci_uf || '',
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .trim(),
       }
       await generateIntermediationDocx(buildIntermediationTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
