@@ -5,6 +5,7 @@ import { Loader2, Download, Building2, FileCheck2, Users, Wand2, FileSignature }
 import { toast } from 'sonner'
 import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
+import { CompromissoForm } from '@/components/CompromissoForm'
 import { reciboMockData } from '@/lib/form-helpers'
 
 import { Button } from '@/components/ui/button'
@@ -39,7 +40,9 @@ import { generateDocx } from '@/lib/docx-generator'
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
-  const [docType, setDocType] = useState<'recibo' | 'intermediation' | 'promise'>('recibo')
+  const [docType, setDocType] = useState<'recibo' | 'intermediation' | 'promise' | 'compromisso'>(
+    'recibo',
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -123,11 +126,23 @@ export default function Index() {
             <FileSignature className="mr-1 h-4 w-4" />
             Promessa de Compra e Venda
           </Button>
+          <Button
+            type="button"
+            variant={docType === 'compromisso' ? 'default' : 'outline'}
+            onClick={() => setDocType('compromisso')}
+            size="sm"
+          >
+            Compromisso (à vista)
+          </Button>
         </div>
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
           {docType === 'recibo'
             ? 'Recibo de Sinal e Princípio de Pagamento (Arras)'
-            : 'Autorização para Divulgação e Venda de Imóvel'}
+            : docType === 'intermediation'
+              ? 'Autorização para Divulgação e Venda de Imóvel'
+              : docType === 'promise'
+                ? 'Promessa de Compra e Venda'
+                : 'Compromisso de Compra e Venda (À Vista)'}
         </CardTitle>
         <CardDescription>
           Preencha os dados para gerar o documento Word automaticamente.
@@ -455,6 +470,7 @@ export default function Index() {
         )}
         {docType === 'intermediation' && <IntermediationForm />}
         {docType === 'promise' && <PromiseForm />}
+        {docType === 'compromisso' && <CompromissoForm />}
       </CardContent>
     </Card>
   )
