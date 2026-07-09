@@ -11,9 +11,10 @@ import {
   Building2,
   MapPin,
   AlertCircle,
+  FileSearch,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -26,7 +27,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
-import { generateTermoChavesDocx } from '@/lib/termoChavesDocx'
+import { generateTermoChavesDocx, getTermoChavesText } from '@/lib/termoChavesDocx'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 
@@ -64,9 +65,11 @@ const mockData: TermoChavesValues = {
 
 export function TermoChavesForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
   const [brokerData, setBrokerData] = useState<{ nome: string; creci: string } | null>(null)
+  const navigate = useNavigate()
 
   const form = useForm<TermoChavesValues>({
     resolver: zodResolver(termoChavesSchema),
@@ -93,6 +96,19 @@ export function TermoChavesForm() {
     }
   }, [])
 
+  const buildData = (data: TermoChavesValues): Record<string, string> => {
+    const stripPrefix = (val: string) => val.replace(/^\s*(CPF|CNPJ)\s+/i, '').trim()
+    return {
+      ...data,
+      entregante_documento: stripPrefix(data.entregante_documento),
+      recebedor_documento: stripPrefix(data.recebedor_documento),
+      imovel_ri_numero: data.imovel_ri_numero.replace(/^\D+/, '').trim(),
+      data_extenso: formatDateLower(new Date()),
+      broker_nome_marca: brokerData?.nome.toUpperCase() || '',
+      broker_creci_linha: brokerData?.creci || '',
+    }
+  }
+
   const onSubmit = async (data: TermoChavesValues) => {
     if (!hasBroker) {
       toast.error('Preencha seu Perfil em Meu Perfil')
@@ -100,23 +116,30 @@ export function TermoChavesForm() {
     }
     setIsGenerating(true)
     try {
-      const stripPrefix = (val: string) => val.replace(/^\s*(CPF|CNPJ)\s+/i, '').trim()
-      const templateData: Record<string, string> = {
-        ...data,
-        entregante_documento: stripPrefix(data.entregante_documento),
-        recebedor_documento: stripPrefix(data.recebedor_documento),
-        imovel_ri_numero: data.imovel_ri_numero.replace(/^\D+/, '').trim(),
-        data_extenso: formatDateLower(new Date()),
-        broker_nome_marca: brokerData?.nome.toUpperCase() || '',
-        broker_creci_linha: brokerData?.creci || '',
-      }
-      await generateTermoChavesDocx(templateData)
+      await generateTermoChavesDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const onValidate = async () => {
+    if (!hasBroker) {
+      toast.error('Preencha seu Perfil em Meu Perfil')
+      return
+    }
+    setIsValidating(true)
+    try {
+      const texto = await getTermoChavesText(buildData(form.getValues()))
+      navigate('/validar', { state: { texto, tipo: 'Termo de Entrega das Chaves' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
   }
 
@@ -373,6 +396,25 @@ export function TermoChavesForm() {
             <>
               <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
               Gerar documento
+            </>
+          )}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          disabled={isValidating || isGenerating}
+          onClick={onValidate}
+        >
+          {isValidating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Preparando validação...
+            </>
+          ) : (
+            <>
+              <FileSearch className="mr-2 h-4 w-4" />
+              Validar esta minuta
             </>
           )}
         </Button>
