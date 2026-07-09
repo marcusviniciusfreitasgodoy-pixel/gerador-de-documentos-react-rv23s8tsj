@@ -1,5 +1,6 @@
 import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
+import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
 function escapeXml(text: string): string {
   return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -150,6 +151,39 @@ export async function renderFromUrl(
   URL.revokeObjectURL(url)
 }
 
+// Irmão do renderFromUrl: busca o template, valida o tamanho, renderiza em
+// memória e devolve o texto plano (sem baixar) para enviar ao Validador.
+export async function extractTextFromUrl(
+  templateUrl: string,
+  expectedBytes: number,
+  data: Record<string, string>,
+): Promise<string> {
+  const response = await fetch(templateUrl)
+  if (!response.ok) {
+    throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
+  }
+
+  const base64Text = await response.text()
+  const templateBytes = base64ToUint8Array(base64Text)
+
+  if (templateBytes.length !== expectedBytes) {
+    throw new Error(
+      `Template corrompido: tamanho inválido (${templateBytes.length} bytes, esperado ${expectedBytes} bytes)`,
+    )
+  }
+
+  const zip = new PizZip(templateBytes)
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    delimiters: { start: '{', end: '}' },
+    nullGetter: () => '',
+  })
+
+  doc.render(data)
+  return extractTextFromRenderedDoc(doc)
+}
+
 const RECIBO_TEMPLATE_URL =
   'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/d61558ea1013a37120fac596a56d852238446e5c/recibo_base64.txt'
 const RECIBO_EXPECTED_BYTES = 38661
@@ -161,4 +195,8 @@ export async function generateDocx(data: Record<string, string>): Promise<void> 
     data,
     'recibo-de-sinal-arras.docx',
   )
+}
+
+export async function getReciboText(data: Record<string, string>): Promise<string> {
+  return extractTextFromUrl(RECIBO_TEMPLATE_URL, RECIBO_EXPECTED_BYTES, data)
 }
