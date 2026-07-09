@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Loader2, Download, Wand2, FileCheck2, AlertCircle } from 'lucide-react'
+import { Loader2, Download, Wand2, FileCheck2, AlertCircle, FileSearch } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -24,7 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { generateChecklistDocx } from '@/lib/checklistDocx'
+import { generateChecklistDocx, getChecklistText } from '@/lib/checklistDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 
 const checklistSchema = z.object({
@@ -53,9 +53,11 @@ function formatDDMMYYYY(date: Date): string {
 
 export function ChecklistForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
   const [brokerData, setBrokerData] = useState<{ nome: string; creci: string } | null>(null)
+  const navigate = useNavigate()
 
   const form = useForm<ChecklistValues>({
     resolver: zodResolver(checklistSchema),
@@ -82,6 +84,13 @@ export function ChecklistForm() {
     }
   }, [])
 
+  const buildData = (data: ChecklistValues): Record<string, string> => ({
+    ...data,
+    data_checklist: formatDDMMYYYY(new Date()),
+    broker_nome_marca: brokerData?.nome.toUpperCase() || '',
+    broker_creci_linha: brokerData?.creci || '',
+  })
+
   const onSubmit = async (data: ChecklistValues) => {
     if (!hasBroker) {
       toast.error('Preencha seu Perfil em Meu Perfil')
@@ -89,19 +98,30 @@ export function ChecklistForm() {
     }
     setIsGenerating(true)
     try {
-      const templateData: Record<string, string> = {
-        ...data,
-        data_checklist: formatDDMMYYYY(new Date()),
-        broker_nome_marca: brokerData?.nome.toUpperCase() || '',
-        broker_creci_linha: brokerData?.creci || '',
-      }
-      await generateChecklistDocx(templateData)
+      await generateChecklistDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const onValidate = async () => {
+    if (!hasBroker) {
+      toast.error('Preencha seu Perfil em Meu Perfil')
+      return
+    }
+    setIsValidating(true)
+    try {
+      const texto = await getChecklistText(buildData(form.getValues()))
+      navigate('/validar', { state: { texto, tipo: 'Genérico/Outro' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
   }
 
@@ -212,6 +232,25 @@ export function ChecklistForm() {
             <>
               <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
               Gerar documento
+            </>
+          )}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          disabled={isValidating || isGenerating}
+          onClick={onValidate}
+        >
+          {isValidating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Preparando validação...
+            </>
+          ) : (
+            <>
+              <FileSearch className="mr-2 h-4 w-4" />
+              Validar esta minuta
             </>
           )}
         </Button>
