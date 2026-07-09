@@ -1,8 +1,18 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, Download, Building2, FileCheck2, Users, Wand2, FileSignature } from 'lucide-react'
+import {
+  Loader2,
+  Download,
+  Building2,
+  FileCheck2,
+  Users,
+  Wand2,
+  FileSignature,
+  FileSearch,
+} from 'lucide-react'
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
 import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
@@ -39,10 +49,12 @@ import {
   FORMA_PAGAMENTO_OPTIONS,
   buildTemplateData,
 } from '@/lib/form-helpers'
-import { generateDocx } from '@/lib/docx-generator'
+import { generateDocx, getReciboText } from '@/lib/docx-generator'
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
+  const navigate = useNavigate()
   const [docType, setDocType] = useState<
     | 'recibo'
     | 'intermediation'
@@ -102,6 +114,19 @@ export default function Index() {
       toast.error('Ocorreu um erro ao gerar o documento.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const onValidateRecibo = async () => {
+    setIsValidating(true)
+    try {
+      const texto = await getReciboText(buildTemplateData(form.getValues()))
+      navigate('/validar', { state: { texto, tipo: 'Recibo de Sinal (Arras)' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
   }
 
@@ -489,6 +514,25 @@ export default function Index() {
                   <>
                     <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
                     Gerar documento
+                  </>
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                disabled={isValidating || isGenerating}
+                onClick={onValidateRecibo}
+              >
+                {isValidating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Preparando validação...
+                  </>
+                ) : (
+                  <>
+                    <FileSearch className="mr-2 h-4 w-4" />
+                    Validar esta minuta
                   </>
                 )}
               </Button>
