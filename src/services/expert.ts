@@ -28,6 +28,7 @@ export interface ExpertSupportRequest {
   status: ExpertStatus
   ai_response?: string
   ai_recommends_human?: string
+  escalated?: string
   created: string
   updated: string
   expand?: { user?: { id: string; name?: string; email?: string } }
@@ -182,3 +183,7 @@ export const consultarIA = (requestId: string) =>
     body: JSON.stringify({ request_id: requestId }),
     headers: { 'Content-Type': 'application/json' },
   })
+
+// Usuário escala a solicitação para o Especialista humano (Nível 2)
+export const escalateRequest = (id: string) =>
+  pb.collection('expert_support_requests').update<ExpertSupportRequest>(id, { escalated: 'true' })
