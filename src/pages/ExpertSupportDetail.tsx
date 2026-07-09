@@ -26,6 +26,7 @@ import {
   respondProposal,
   setRequestStatus,
   consultarIA,
+  escalateRequest,
   normalizeAttachments,
   getAttachmentUrl,
   objectiveLabels,
@@ -142,6 +143,20 @@ export default function ExpertSupportDetailPage() {
       toast.error(getErrorMessage(error))
     } finally {
       setConsulting(false)
+    }
+  }
+
+  const handleEscalate = async () => {
+    if (!request) return
+    setActing(true)
+    try {
+      await escalateRequest(request.id)
+      toast.success('Encaminhado ao especialista! Você receberá uma proposta.')
+      await loadData()
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    } finally {
+      setActing(false)
     }
   }
 
@@ -322,10 +337,15 @@ export default function ExpertSupportDetailPage() {
                 </div>
               ))}
             </div>
-            {!recommendsHuman && (
-              <p className="text-xs text-muted-foreground">
-                Assim que um especialista analisar, você recebe uma proposta aqui mesmo.
-              </p>
+            {request.escalated === 'true' ? (
+              <div className="text-sm font-medium text-green-700 bg-green-50 rounded-lg p-3 flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4" /> Encaminhado ao especialista. Você receberá uma
+                proposta aqui em breve.
+              </div>
+            ) : (
+              <Button onClick={handleEscalate} disabled={acting} className="w-full">
+                <ShieldCheck className="mr-2 h-4 w-4" /> Solicitar análise do Especialista (Nível 2)
+              </Button>
             )}
           </CardContent>
         </Card>
