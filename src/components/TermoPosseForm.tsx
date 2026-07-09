@@ -13,9 +13,10 @@ import {
   Users,
   Calendar,
   AlertCircle,
+  FileSearch,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -35,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { generateTermoPosseDocx } from '@/lib/termoPosseDocx'
+import { generateTermoPosseDocx, getTermoPosseText } from '@/lib/termoPosseDocx'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { maskCpf } from '@/lib/utils'
@@ -104,9 +105,11 @@ const stripPrefix = (val: string) => val.replace(/^\s*(RG|CPF|CNPJ)\s*n[ºo.]*\s
 
 export function TermoPosseForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
   const [brokerData, setBrokerData] = useState<{ nome: string; creci: string } | null>(null)
+  const navigate = useNavigate()
 
   const form = useForm<TermoPosseValues>({
     resolver: zodResolver(termoPosseSchema),
@@ -133,6 +136,35 @@ export function TermoPosseForm() {
     }
   }, [])
 
+  const buildData = (data: TermoPosseValues): Record<string, string> => ({
+    transmitente_nome: data.transmitente_nome,
+    transmitente_qualificacao: data.transmitente_qualificacao,
+    transmitente_rg: stripPrefix(data.transmitente_rg),
+    transmitente_cpf: stripPrefix(data.transmitente_cpf),
+    transmitente_endereco: data.transmitente_endereco,
+    recebedor_nome: data.recebedor_nome,
+    recebedor_qualificacao: data.recebedor_qualificacao,
+    recebedor_rg: stripPrefix(data.recebedor_rg),
+    recebedor_cpf: stripPrefix(data.recebedor_cpf),
+    recebedor_endereco: data.recebedor_endereco,
+    imovel_descricao: data.imovel_descricao,
+    imovel_matricula: data.imovel_matricula,
+    imovel_ri_numero: data.imovel_ri_numero.replace(/^\D+/, '').trim(),
+    imovel_comarca: data.imovel_comarca,
+    imovel_iptu: data.imovel_iptu,
+    contrato_data: data.contrato_data,
+    considerando_pagamento: data.considerando_pagamento,
+    foro_comarca: data.foro_comarca,
+    cidade_uf: data.cidade_uf,
+    testemunha1_nome: data.testemunha1_nome || '',
+    testemunha1_cpf: stripPrefix(data.testemunha1_cpf || ''),
+    testemunha2_nome: data.testemunha2_nome || '',
+    testemunha2_cpf: stripPrefix(data.testemunha2_cpf || ''),
+    data_extenso: formatDateLower(new Date()),
+    broker_nome_marca: brokerData?.nome.toUpperCase() || '',
+    broker_creci_linha: brokerData?.creci || '',
+  })
+
   const onSubmit = async (data: TermoPosseValues) => {
     if (!hasBroker) {
       toast.error('Preencha seu Perfil em Meu Perfil')
@@ -140,41 +172,30 @@ export function TermoPosseForm() {
     }
     setIsGenerating(true)
     try {
-      const templateData: Record<string, string> = {
-        transmitente_nome: data.transmitente_nome,
-        transmitente_qualificacao: data.transmitente_qualificacao,
-        transmitente_rg: stripPrefix(data.transmitente_rg),
-        transmitente_cpf: stripPrefix(data.transmitente_cpf),
-        transmitente_endereco: data.transmitente_endereco,
-        recebedor_nome: data.recebedor_nome,
-        recebedor_qualificacao: data.recebedor_qualificacao,
-        recebedor_rg: stripPrefix(data.recebedor_rg),
-        recebedor_cpf: stripPrefix(data.recebedor_cpf),
-        recebedor_endereco: data.recebedor_endereco,
-        imovel_descricao: data.imovel_descricao,
-        imovel_matricula: data.imovel_matricula,
-        imovel_ri_numero: data.imovel_ri_numero.replace(/^\D+/, '').trim(),
-        imovel_comarca: data.imovel_comarca,
-        imovel_iptu: data.imovel_iptu,
-        contrato_data: data.contrato_data,
-        considerando_pagamento: data.considerando_pagamento,
-        foro_comarca: data.foro_comarca,
-        cidade_uf: data.cidade_uf,
-        testemunha1_nome: data.testemunha1_nome || '',
-        testemunha1_cpf: stripPrefix(data.testemunha1_cpf || ''),
-        testemunha2_nome: data.testemunha2_nome || '',
-        testemunha2_cpf: stripPrefix(data.testemunha2_cpf || ''),
-        data_extenso: formatDateLower(new Date()),
-        broker_nome_marca: brokerData?.nome.toUpperCase() || '',
-        broker_creci_linha: brokerData?.creci || '',
-      }
-      await generateTermoPosseDocx(templateData)
+      await generateTermoPosseDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const onValidate = async () => {
+    if (!hasBroker) {
+      toast.error('Preencha seu Perfil em Meu Perfil')
+      return
+    }
+    setIsValidating(true)
+    try {
+      const texto = await getTermoPosseText(buildData(form.getValues()))
+      navigate('/validar', { state: { texto, tipo: 'Termo de Transmissão da Posse' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
   }
 
@@ -627,6 +648,25 @@ export function TermoPosseForm() {
             <>
               <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
               Gerar documento
+            </>
+          )}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          disabled={isValidating || isGenerating}
+          onClick={onValidate}
+        >
+          {isValidating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Preparando validação...
+            </>
+          ) : (
+            <>
+              <FileSearch className="mr-2 h-4 w-4" />
+              Validar esta minuta
             </>
           )}
         </Button>
