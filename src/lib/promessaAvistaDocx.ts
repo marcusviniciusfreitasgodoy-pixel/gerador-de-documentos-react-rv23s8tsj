@@ -1,5 +1,6 @@
 import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
+import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
 const TEMPLATE_URL =
   'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/d2a5285f6eb8b436bc5838bcfb3a62ef5a15dfe8/promessa_base64.txt'
@@ -14,9 +15,9 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes
 }
 
-export async function generatePromessaAvistaDocx(
-  data: Record<string, string | boolean>,
-): Promise<void> {
+// Busca o template do gist, valida o tamanho e renderiza — caminho único
+// compartilhado pelo download e pela extração de texto (validação).
+async function renderPromessaDoc(data: Record<string, string | boolean>): Promise<Docxtemplater> {
   const response = await fetch(TEMPLATE_URL)
   if (!response.ok) {
     throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
@@ -39,6 +40,13 @@ export async function generatePromessaAvistaDocx(
   })
 
   doc.render(data)
+  return doc
+}
+
+export async function generatePromessaAvistaDocx(
+  data: Record<string, string | boolean>,
+): Promise<void> {
+  const doc = await renderPromessaDoc(data)
 
   const blob = doc.getZip().generate({
     type: 'blob',
@@ -53,4 +61,13 @@ export async function generatePromessaAvistaDocx(
   link.click()
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
+}
+
+// Renderiza a minuta em memória e devolve o texto plano (sem baixar) para
+// enviar direto ao Validador.
+export async function getPromessaAvistaText(
+  data: Record<string, string | boolean>,
+): Promise<string> {
+  const doc = await renderPromessaDoc(data)
+  return extractTextFromRenderedDoc(doc)
 }
