@@ -9,11 +9,6 @@ import {
   CheckCircle2,
   Lightbulb,
   ShieldAlert,
-  WifiOff,
-  Clock,
-  ServerCrash,
-  FileQuestion,
-  Database,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -33,68 +28,18 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { extractTextFromDocx } from '@/lib/docx-extract'
 import {
   validarMinuta,
+  normalizeValidationResult,
   type ValidarMinutaResponse,
-  type ConformidadeStatus,
-  type RiscoGravidade,
-  type ValidationStatus,
 } from '@/services/validar-minuta'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { categorizeValidationError, type ErrorCategory } from '@/lib/validation-errors'
-
-const DOCUMENT_TYPES = [
-  { value: 'Promessa/Compromisso', label: 'Promessa/Compromisso' },
-  { value: 'Recibo de Sinal (Arras)', label: 'Recibo de Sinal (Arras)' },
-  { value: 'Autorização de Intermediação', label: 'Autorização de Intermediação' },
-  { value: 'Termo de Entrega das Chaves', label: 'Termo de Entrega das Chaves' },
-  { value: 'Termo de Transmissão da Posse', label: 'Termo de Transmissão da Posse' },
-  { value: 'Genérico/Outro', label: 'Genérico/Outro' },
-]
-
-const conformidadeStyles: Record<ConformidadeStatus, { dot: string; label: string; text: string }> =
-  {
-    presente: { dot: 'bg-green-500', label: 'Presente', text: 'text-green-700' },
-    fraco: { dot: 'bg-yellow-500', label: 'Fraco', text: 'text-yellow-700' },
-    faltando: { dot: 'bg-red-500', label: 'Faltando', text: 'text-red-700' },
-  }
-
-const statusStyles: Record<
-  ValidationStatus,
-  { bg: string; text: string; label: string; icon: typeof CheckCircle2 }
-> = {
-  green: {
-    bg: 'bg-green-50 border-green-200',
-    text: 'text-green-700',
-    label: 'Conforme',
-    icon: CheckCircle2,
-  },
-  yellow: {
-    bg: 'bg-yellow-50 border-yellow-200',
-    text: 'text-yellow-700',
-    label: 'Atenção',
-    icon: AlertTriangle,
-  },
-  red: {
-    bg: 'bg-red-50 border-red-200',
-    text: 'text-red-700',
-    label: 'Risco',
-    icon: ShieldAlert,
-  },
-}
-
-const riscoStyles: Record<RiscoGravidade, { bg: string; text: string; label: string }> = {
-  alto: { bg: 'bg-red-50 border-red-200', text: 'text-red-700', label: 'Alto' },
-  medio: { bg: 'bg-amber-50 border-amber-200', text: 'text-amber-700', label: 'Médio' },
-  baixo: { bg: 'bg-gray-50 border-gray-200', text: 'text-gray-600', label: 'Baixo' },
-}
-
-const errorDisplayConfig: Record<ErrorCategory, { title: string; icon: typeof AlertTriangle }> = {
-  connection: { title: 'Erro de Conexão', icon: WifiOff },
-  ai_timeout: { title: 'Tempo Limite Excedido', icon: Clock },
-  ai_unavailable: { title: 'Serviço Indisponível', icon: ServerCrash },
-  parsing: { title: 'Falha na Análise', icon: FileQuestion },
-  knowledge_base: { title: 'Base de Conhecimento', icon: Database },
-  generic: { title: 'Erro na Análise', icon: AlertTriangle },
-}
+import {
+  DOCUMENT_TYPES,
+  conformidadeStyles,
+  statusStyles,
+  riscoStyles,
+  errorDisplayConfig,
+} from '@/lib/validation-config'
 
 export default function ValidarMinutaPage() {
   const [documentText, setDocumentText] = useState('')
@@ -106,23 +51,28 @@ export default function ValidarMinutaPage() {
   const [uploading, setUploading] = useState(false)
   const isSubmittingRef = useRef(false)
 
+  const safeResult = useMemo(() => {
+    if (!result) return null
+    return normalizeValidationResult(result)
+  }, [result])
+
   const uniqueConformidade = useMemo(() => {
-    if (!result) return []
+    if (!safeResult?.conformidade) return []
     const seen = new Set<string>()
-    return result.conformidade.filter((item) => {
-      if (seen.has(item.code)) return false
-      seen.add(item.code)
+    return safeResult.conformidade.filter((item) => {
+      const key = item?.code || ''
+      if (key && seen.has(key)) return false
+      if (key) seen.add(key)
       return true
     })
-  }, [result])
+  }, [safeResult])
 
   const statusInfo = useMemo(() => {
-    if (!result?.status) return null
-    return statusStyles[result.status] || statusStyles.yellow
-  }, [result])
+    if (!safeResult?.status) return null
+    return statusStyles[safeResult.status] || statusStyles.yellow
+  }, [safeResult])
 
   const StatusIcon = statusInfo?.icon
-
   const errorConfig = errorCategory ? errorDisplayConfig[errorCategory] : null
   const ErrorIcon = errorConfig?.icon
 
@@ -174,7 +124,6 @@ export default function ValidarMinutaPage() {
 
   const handleValidate = () => runValidation(documentText, documentType)
 
-  // Minuta enviada por um gerador via "Validar esta minuta": pré-preenche e valida.
   const location = useLocation()
   const autoRan = useRef(false)
   useEffect(() => {
@@ -184,7 +133,6 @@ export default function ValidarMinutaPage() {
       setDocumentText(st.texto)
       const tipo = st.tipo || documentType
       if (st.tipo) setDocumentType(st.tipo)
-      // limpa o state do histórico para não revalidar em refresh/voltar
       window.history.replaceState({}, document.title)
       runValidation(st.texto, tipo)
     }
@@ -263,7 +211,7 @@ export default function ValidarMinutaPage() {
 
           <Button
             onClick={handleValidate}
-            disabled={loading || !documentText.trim()}
+            disabled={loading || uploading || !documentText.trim()}
             className="w-full"
           >
             {loading ? (
@@ -289,7 +237,7 @@ export default function ValidarMinutaPage() {
         </Alert>
       )}
 
-      {result && (
+      {safeResult && (
         <div className="space-y-4">
           {statusInfo && StatusIcon && (
             <div
@@ -314,7 +262,9 @@ export default function ValidarMinutaPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground leading-relaxed">{result.resumo}</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {safeResult.resumo || 'Sem resumo disponível.'}
+              </p>
             </CardContent>
           </Card>
 
@@ -328,7 +278,7 @@ export default function ValidarMinutaPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {uniqueConformidade.map((item, idx) => {
-                  const style = conformidadeStyles[item.status] || conformidadeStyles.faltando
+                  const style = conformidadeStyles[item?.status] || conformidadeStyles.faltando
                   return (
                     <div
                       key={idx}
@@ -337,13 +287,17 @@ export default function ValidarMinutaPage() {
                       <span className={cn('mt-1.5 h-3 w-3 rounded-full shrink-0', style.dot)} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-sm">{item.titulo}</span>
+                          <span className="font-medium text-sm">
+                            {item?.titulo || 'Sem título'}
+                          </span>
                           <span className={cn('text-xs font-semibold', style.text)}>
                             {style.label}
                           </span>
                         </div>
-                        <p className="text-sm text-muted-foreground mt-1">{item.descricao}</p>
-                        {item.code && (
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {item?.descricao || ''}
+                        </p>
+                        {item?.code && (
                           <span className="inline-block mt-1 text-xs font-mono bg-secondary px-2 py-0.5 rounded text-muted-foreground">
                             {item.code}
                           </span>
@@ -356,7 +310,7 @@ export default function ValidarMinutaPage() {
             </Card>
           )}
 
-          {result.riscos.length > 0 && (
+          {safeResult.riscos.length > 0 && (
             <Card className="shadow-elevation border-0 md:border md:border-border/60">
               <CardHeader>
                 <div className="flex items-center gap-2">
@@ -365,8 +319,8 @@ export default function ValidarMinutaPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.riscos.map((risco, idx) => {
-                  const style = riscoStyles[risco.gravidade] || riscoStyles.baixo
+                {safeResult.riscos.map((risco, idx) => {
+                  const style = riscoStyles[risco?.gravidade] || riscoStyles.baixo
                   return (
                     <div key={idx} className={cn('border rounded-lg p-3', style.bg)}>
                       <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -375,8 +329,8 @@ export default function ValidarMinutaPage() {
                           {style.label}
                         </span>
                       </div>
-                      <p className="text-sm text-foreground">{risco.descricao}</p>
-                      {risco.base_code && (
+                      <p className="text-sm text-foreground">{risco?.descricao || ''}</p>
+                      {risco?.base_code && (
                         <span className="inline-block mt-1 text-xs font-mono bg-white/60 px-2 py-0.5 rounded text-muted-foreground">
                           {risco.base_code}
                         </span>
@@ -388,7 +342,7 @@ export default function ValidarMinutaPage() {
             </Card>
           )}
 
-          {result.recomendacoes.length > 0 && (
+          {safeResult.recomendacoes.length > 0 && (
             <Card className="shadow-elevation border-0 md:border md:border-border/60">
               <CardHeader>
                 <div className="flex items-center gap-2">
@@ -397,15 +351,15 @@ export default function ValidarMinutaPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                {result.recomendacoes.map((rec, idx) => (
+                {safeResult.recomendacoes.map((rec, idx) => (
                   <div
                     key={idx}
                     className="flex items-start gap-3 border border-border/60 rounded-lg p-3 hover:bg-secondary/30 transition-colors"
                   >
                     <Lightbulb className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-foreground">{rec.texto}</p>
-                      {rec.base_code && (
+                      <p className="text-sm text-foreground">{rec?.texto || ''}</p>
+                      {rec?.base_code && (
                         <span className="inline-block mt-1 text-xs font-mono bg-secondary px-2 py-0.5 rounded text-muted-foreground">
                           {rec.base_code}
                         </span>
@@ -418,8 +372,8 @@ export default function ValidarMinutaPage() {
           )}
 
           {uniqueConformidade.length === 0 &&
-            result.riscos.length === 0 &&
-            result.recomendacoes.length === 0 && (
+            safeResult.riscos.length === 0 &&
+            safeResult.recomendacoes.length === 0 && (
               <Card className="shadow-elevation border-0 md:border md:border-border/60">
                 <CardContent className="py-8 text-center text-muted-foreground">
                   Nenhuma observação específica foi identificada para este documento.

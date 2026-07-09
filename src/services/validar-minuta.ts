@@ -44,6 +44,18 @@ export interface ValidarMinutaErrorResponse {
   code?: ValidationErrorCode
 }
 
+export function normalizeValidationResult(raw: unknown): ValidarMinutaResponse {
+  const r = (raw && typeof raw === 'object' ? raw : {}) as Partial<ValidarMinutaResponse>
+  return {
+    status:
+      r.status === 'green' || r.status === 'yellow' || r.status === 'red' ? r.status : 'yellow',
+    resumo: typeof r.resumo === 'string' ? r.resumo : '',
+    conformidade: Array.isArray(r.conformidade) ? r.conformidade : [],
+    riscos: Array.isArray(r.riscos) ? r.riscos : [],
+    recomendacoes: Array.isArray(r.recomendacoes) ? r.recomendacoes : [],
+  }
+}
+
 export const validarMinuta = (
   documentText: string,
   documentType: string,

@@ -5,6 +5,8 @@ import {
   WifiOff,
   ServerCrash,
   FileQuestion,
+  Clock,
+  Database,
 } from 'lucide-react'
 import type {
   ConformidadeStatus,
@@ -12,6 +14,7 @@ import type {
   ValidationStatus,
   ValidationErrorCode,
 } from '@/services/validar-minuta'
+import type { ErrorCategory } from '@/lib/validation-errors'
 
 export const DOCUMENT_TYPES = [
   { value: 'Promessa/Compromisso', label: 'Promessa/Compromisso' },
@@ -71,22 +74,34 @@ export const errorStateConfig: Record<
   },
   KNOWLEDGE_BASE_ERROR: {
     title: 'Base de Conhecimento Indisponível',
-    icon: ServerCrash,
+    icon: Database,
   },
   AI_CONFIG_ERROR: {
     title: 'Serviço de IA Indisponível',
     icon: ServerCrash,
   },
-  AI_CONNECTION_ERROR: {
+  AI_SERVICE_ERROR: {
     title: 'Falha na Comunicação com a IA',
     icon: WifiOff,
   },
-  PARSE_ERROR: {
+  DATA_PROCESSING_ERROR: {
     title: 'Falha ao Interpretar Resposta da IA',
     icon: FileQuestion,
   },
-  AI_RESPONSE_ERROR: {
-    title: 'Resposta da IA em Formato Inesperado',
-    icon: ServerCrash,
+  UNEXPECTED_ERROR: {
+    title: 'Erro Inesperado',
+    icon: AlertTriangle,
   },
+}
+
+export const errorDisplayConfig: Record<
+  ErrorCategory,
+  { title: string; icon: typeof AlertTriangle }
+> = {
+  connection: { title: 'Erro de Conexão', icon: WifiOff },
+  ai_timeout: { title: 'Tempo Limite Excedido', icon: Clock },
+  ai_unavailable: { title: 'Serviço Indisponível', icon: ServerCrash },
+  parsing: { title: 'Falha na Análise', icon: FileQuestion },
+  knowledge_base: { title: 'Base de Conhecimento', icon: Database },
+  generic: { title: 'Erro na Análise', icon: AlertTriangle },
 }
