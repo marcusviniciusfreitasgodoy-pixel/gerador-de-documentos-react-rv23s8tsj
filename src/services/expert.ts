@@ -123,6 +123,7 @@ export const createRequest = (
   files?: File[],
 ) => {
   const formData = new FormData()
+  formData.append('user', pb.authStore.record?.id || '')
   formData.append('document_type', data.document_type || '')
   formData.append('objective', data.objective)
   formData.append('urgency', data.urgency)

@@ -255,3 +255,114 @@ routerAdd(
   },
   $apis.requireAuth(),
 )
+
+// ROTA N1 — Consultar IA (Especialista Nível 1)
+routerAdd(
+  'POST',
+  '/backend/v1/consultar-ia',
+  (e) => {
+    const body = e.requestInfo().body || {}
+    const requestId = (body.request_id || '').trim()
+    if (!requestId) {
+      return e.badRequestError('request_id é obrigatório.')
+    }
+
+    let req
+    try {
+      req = $app.findRecordById('expert_support_requests', requestId)
+    } catch (err) {
+      return e.json(404, { error: 'Solicitação não encontrada.' })
+    }
+    const objective = req.getString('objective') || ''
+    const description = req.getString('description') || ''
+    const documentType = req.getString('document_type') || ''
+
+    let knowledgeRecords = []
+    try {
+      knowledgeRecords = $app.findRecordsByFilter('legal_knowledge', '1=1', '-priority', 500, 0)
+    } catch (err) {
+      return e.json(500, { error: 'Base de conhecimento indisponível.' })
+    }
+    let baseLines = []
+    for (let i = 0; i < knowledgeRecords.length; i++) {
+      const rec = knowledgeRecords[i]
+      let content = rec.getString('content') || ''
+      if (!content.trim()) continue
+      if (content.length > 700) content = content.substring(0, 700)
+      baseLines.push(
+        '[' +
+          (rec.getString('code') || 'SEM_CODE') +
+          '] ' +
+          (rec.getString('title') || '') +
+          ' (' +
+          (rec.getString('category') || '') +
+          '): ' +
+          content,
+      )
+    }
+    const baseStr = baseLines.join('\n')
+
+    const systemPrompt =
+      'Você é um consultor jurídico imobiliário de NÍVEL 1 que ORIENTA corretores e imobiliárias no Brasil, baseando-se EXCLUSIVAMENTE na BASE DE CONHECIMENTO (regras e cláusulas aprovadas) fornecida. Você RESPONDE a dúvida de forma clara, objetiva e prática, SEM inventar norma jurídica. Quando a dúvida for complexa, exigir análise de um documento/matrícula específico, envolver risco jurídico relevante, ou ultrapassar o que a base cobre, você RECOMENDA o Especialista humano (Nível 2).\n\nVocê recebe: OBJETIVO (tipo da dúvida), TIPO_DOCUMENTO (se houver), DÚVIDA (texto do corretor) e BASE (regras aprovadas, cada linha "[code] título (category): trecho").\n\nResponda SOMENTE com um objeto JSON válido, sem nenhum texto antes ou depois, exatamente neste formato:\n{\n  "resposta": "resposta clara e prática à dúvida, ancorada na BASE, em 2 a 5 parágrafos curtos; cite o code da base entre parênteses quando aplicável; português do Brasil",\n  "recomenda_humano": true\n}\n\nRegras:\n- Ancore a resposta na BASE; se algo não tiver respaldo na base, diga que é ponto para o especialista humano — NÃO invente.\n- "recomenda_humano" = true quando a dúvida for complexa, exigir leitura de documento específico, envolver risco/valor relevante, litígio, ou for além da base; = false para dúvidas conceituais simples que a base já resolve.\n- NÃO inclua disclaimer no texto (o aplicativo já exibe um aviso fixo).\n- NÃO copie a base literalmente; seja prático e direto.\n- Se a DÚVIDA estiver vaga, peça os detalhes que faltam na "resposta" e use recomenda_humano=false.'
+
+    const userMessage =
+      'OBJETIVO: ' +
+      objective +
+      '\nTIPO_DOCUMENTO: ' +
+      documentType +
+      '\n\nDÚVIDA:\n' +
+      description +
+      '\n\nBASE:\n' +
+      baseStr
+
+    let rawContent = ''
+    try {
+      const aiResult = $ai.chat({
+        model: 'fast',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userMessage },
+        ],
+      })
+      rawContent = aiResult.choices[0].message.content || ''
+    } catch (err) {
+      if (err instanceof SkipAiConfigError) {
+        return e.json(503, { error: 'Serviço de IA temporariamente indisponível.' })
+      }
+      return e.json(502, { error: 'Falha ao consultar a IA. Tente novamente.' })
+    }
+
+    let jsonString = rawContent
+    const mdMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)```/)
+    if (mdMatch) jsonString = mdMatch[1].trim()
+    const firstBrace = jsonString.indexOf('{')
+    const lastBrace = jsonString.lastIndexOf('}')
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+      jsonString = jsonString.substring(firstBrace, lastBrace + 1)
+    }
+    jsonString = jsonString.replace(/,(\s*[}\]])/g, '$1').replace(/[\x00-\x1F\x7F]/g, '')
+
+    let parsed
+    try {
+      parsed = JSON.parse(jsonString)
+    } catch (err) {
+      return e.json(500, {
+        error: 'Não foi possível interpretar a resposta da IA. Tente novamente.',
+      })
+    }
+
+    const resposta = String(parsed.resposta || '').trim()
+    const recomendaHumano = parsed.recomenda_humano === true
+
+    try {
+      req.set('ai_response', resposta)
+      req.set('ai_recommends_human', recomendaHumano ? 'true' : 'false')
+      $app.save(req)
+    } catch (err) {
+      $app.logger().error('consultar-ia: falha ao salvar resposta', 'error', String(err))
+    }
+
+    return e.json(200, { resposta: resposta, recomenda_humano: recomendaHumano })
+  },
+  $apis.requireAuth(),
+)
