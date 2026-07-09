@@ -1,4 +1,5 @@
-import { useState, useCallback, useMemo, useRef } from 'react'
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   Loader2,
   FileSearch,
@@ -145,9 +146,9 @@ export default function ValidarMinutaPage() {
     }
   }, [])
 
-  const handleValidate = async () => {
+  const runValidation = useCallback(async (text: string, type: string) => {
     if (isSubmittingRef.current) return
-    if (!documentText.trim()) {
+    if (!text.trim()) {
       toast.error('Cole o texto do documento ou faça upload de um arquivo .docx.')
       return
     }
@@ -157,7 +158,7 @@ export default function ValidarMinutaPage() {
     setError(null)
     setErrorCategory(null)
     try {
-      const res = await validarMinuta(documentText, documentType)
+      const res = await validarMinuta(text, type)
       setResult(res)
       toast.success('Análise concluída!')
     } catch (err: unknown) {
@@ -169,7 +170,26 @@ export default function ValidarMinutaPage() {
       setLoading(false)
       isSubmittingRef.current = false
     }
-  }
+  }, [])
+
+  const handleValidate = () => runValidation(documentText, documentType)
+
+  // Minuta enviada por um gerador via "Validar esta minuta": pré-preenche e valida.
+  const location = useLocation()
+  const autoRan = useRef(false)
+  useEffect(() => {
+    const st = location.state as { texto?: string; tipo?: string } | null
+    if (!autoRan.current && st?.texto) {
+      autoRan.current = true
+      setDocumentText(st.texto)
+      const tipo = st.tipo || documentType
+      if (st.tipo) setDocumentType(st.tipo)
+      // limpa o state do histórico para não revalidar em refresh/voltar
+      window.history.replaceState({}, document.title)
+      runValidation(st.texto, tipo)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="w-full max-w-4xl space-y-6 animate-fade-in-up">
