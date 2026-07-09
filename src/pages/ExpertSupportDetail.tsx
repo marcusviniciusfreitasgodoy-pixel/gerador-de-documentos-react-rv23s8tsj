@@ -8,6 +8,8 @@ import {
   XCircle,
   Clock,
   DollarSign,
+  Sparkles,
+  ShieldCheck,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -23,6 +25,7 @@ import {
   listProposals,
   respondProposal,
   setRequestStatus,
+  consultarIA,
   normalizeAttachments,
   getAttachmentUrl,
   objectiveLabels,
@@ -43,6 +46,28 @@ import {
 } from '@/services/expert'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 
+// Objetivos que naturalmente pedem o especialista humano (Nível 2).
+const NEEDS_HUMAN_OBJECTIVES = ['full_review', 'risk_analysis', 'doc_analysis']
+
+const ESPECIALISTA_PILARES = [
+  {
+    titulo: 'Escrevente Notarial',
+    desc: 'Vasta prática em registros públicos e análise de documentações complexas e matrículas.',
+  },
+  {
+    titulo: 'Prevenção de Riscos',
+    desc: 'Bacharelado em Direito com foco na elaboração segura de contratos e mitigação de litígios.',
+  },
+  {
+    titulo: 'Especialização',
+    desc: 'Pós-graduação em Direito Imobiliário, atualizado com as leis e normas regulamentares.',
+  },
+  {
+    titulo: 'Experiência Prática',
+    desc: 'Conhecimento profundo das práticas reais do mercado imobiliário do Rio de Janeiro.',
+  },
+]
+
 export default function ExpertSupportDetailPage() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -51,6 +76,7 @@ export default function ExpertSupportDetailPage() {
   const [proposals, setProposals] = useState<ExpertProposal[]>([])
   const [loading, setLoading] = useState(true)
   const [acting, setActing] = useState(false)
+  const [consulting, setConsulting] = useState(false)
 
   const loadData = useCallback(async () => {
     if (!id) return
@@ -105,6 +131,20 @@ export default function ExpertSupportDetailPage() {
     }
   }
 
+  const handleConsultarIA = async () => {
+    if (!request) return
+    setConsulting(true)
+    try {
+      await consultarIA(request.id)
+      toast.success('Resposta da IA gerada!')
+      await loadData()
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    } finally {
+      setConsulting(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -118,6 +158,13 @@ export default function ExpertSupportDetailPage() {
   }
 
   const attachments = normalizeAttachments(request.attachments)
+  const recommendsHuman =
+    request.ai_recommends_human === 'true' || NEEDS_HUMAN_OBJECTIVES.includes(request.objective)
+  const showEspecialista =
+    isOwner &&
+    request.status !== 'accepted' &&
+    request.status !== 'refused' &&
+    request.status !== 'completed'
 
   return (
     <div className="w-full max-w-3xl space-y-6 animate-fade-in-up">
@@ -187,6 +234,102 @@ export default function ExpertSupportDetailPage() {
           )}
         </CardContent>
       </Card>
+
+      {(isOwner || request.ai_response) && (
+        <Card className="shadow-elevation border-0 md:border md:border-border/60">
+          <CardHeader>
+            <CardTitle className="text-lg text-primary flex items-center gap-2">
+              <Sparkles className="h-5 w-5" /> Especialista IA (Nível 1)
+            </CardTitle>
+            <CardDescription>
+              Orientação imediata com base na nossa base de conhecimento jurídico.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {request.ai_response ? (
+              <>
+                <p className="text-sm whitespace-pre-wrap">{request.ai_response}</p>
+                <div className="text-xs text-muted-foreground border-l-2 border-amber-300 bg-amber-50/50 p-2 rounded">
+                  ⚠️ Orientação informativa gerada por IA com base na base de conhecimento. Não
+                  constitui parecer jurídico nem substitui a análise de um advogado/especialista.
+                  Para uma análise vinculante do seu caso, fale com o Especialista (Nível 2) abaixo.
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Clique abaixo para uma orientação imediata da IA sobre a sua dúvida.
+              </p>
+            )}
+            {isOwner && (
+              <Button
+                onClick={handleConsultarIA}
+                disabled={consulting}
+                variant="outline"
+                className="w-full"
+              >
+                {consulting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Consultando...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    {request.ai_response ? 'Consultar novamente' : 'Consultar IA (Nível 1)'}
+                  </>
+                )}
+              </Button>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {showEspecialista && (
+        <Card
+          className={
+            recommendsHuman
+              ? 'border-primary/40 bg-primary/5'
+              : 'shadow-elevation border-0 md:border md:border-border/60'
+          }
+        >
+          <CardHeader>
+            <CardTitle className="text-lg text-primary flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5" /> Fale com um Especialista (Nível 2)
+            </CardTitle>
+            <CardDescription>
+              Escalone casos complexos para nossa equipe de Escreventes Notariais e Especialistas.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {recommendsHuman && (
+              <div className="text-sm font-medium text-primary bg-primary/10 rounded-lg p-3">
+                Recomendamos um Especialista humano para este caso. Um especialista vai analisar sua
+                solicitação e enviar uma proposta (escopo, prazo e valor) aqui mesmo.
+              </div>
+            )}
+            <div>
+              <p className="text-sm font-semibold">Equipe de Especialistas e Escreventes</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                Nossos especialistas revisam seu caso para garantir a conformidade técnica,
+                registral e notarial, evitando exigências e prejuízos. Mais de 40 anos de vivência
+                no mercado imobiliário do Rio de Janeiro.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {ESPECIALISTA_PILARES.map((p) => (
+                <div key={p.titulo} className="border border-border/60 rounded-lg p-3">
+                  <p className="text-sm font-semibold text-primary">{p.titulo}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+            {!recommendsHuman && (
+              <p className="text-xs text-muted-foreground">
+                Assim que um especialista analisar, você recebe uma proposta aqui mesmo.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {canRespond && (
         <Card className="border-amber-200 bg-amber-50/50">
