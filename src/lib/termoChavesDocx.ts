@@ -1,4 +1,4 @@
-import { renderFromUrl } from '@/lib/docx-generator'
+import { renderFromUrl, extractTextFromUrl } from '@/lib/docx-generator'
 
 const TERMO_CHAVES_TEMPLATE_URL =
   'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/935c59ae029e6c52e8ceb4932ca5dbe0cbd33c4d/termo_chaves_base64.txt'
@@ -11,4 +11,8 @@ export async function generateTermoChavesDocx(data: Record<string, string>): Pro
     data,
     'termo-de-entrega-das-chaves.docx',
   )
+}
+
+export async function getTermoChavesText(data: Record<string, string>): Promise<string> {
+  return extractTextFromUrl(TERMO_CHAVES_TEMPLATE_URL, TERMO_CHAVES_EXPECTED_BYTES, data)
 }
