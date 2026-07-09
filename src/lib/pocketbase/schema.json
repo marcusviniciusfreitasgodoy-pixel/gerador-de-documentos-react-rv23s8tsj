@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T20:59:02.310Z",
+  "generatedAt": "2026-07-09T13:52:34.856Z",
   "collections": [
     {
       "name": "users",
@@ -321,6 +321,166 @@
         }
       ],
       "indexes": []
+    },
+    {
+      "name": "validation_logs",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != \"\" && user = @request.auth.id",
+        "view": "@request.auth.id != \"\" && user = @request.auth.id",
+        "create": "@request.auth.id != \"\"",
+        "update": "@request.auth.id != \"\" && user = @request.auth.id",
+        "delete": "@request.auth.id != \"\" && user = @request.auth.id"
+      },
+      "fields": [
+        {
+          "name": "user",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "document_text",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "document_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "parsed_result",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "raw_ai_response",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "error_message",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "error_code",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX idx_validation_logs_user ON validation_logs (user)",
+        "CREATE INDEX idx_validation_logs_created ON validation_logs (created DESC)"
+      ]
+    },
+    {
+      "name": "validation_audit",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != \"\" && user_id = @request.auth.id",
+        "view": "@request.auth.id != \"\" && user_id = @request.auth.id",
+        "create": "@request.auth.id != \"\"",
+        "update": null,
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "user_id",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "document_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "document_text",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "ai_raw_response",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "parsed_result",
+          "type": "json",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "error_message",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "error_code",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX idx_validation_audit_user ON validation_audit (user_id)",
+        "CREATE INDEX idx_validation_audit_created ON validation_audit (created DESC)"
+      ]
     }
   ]
 }

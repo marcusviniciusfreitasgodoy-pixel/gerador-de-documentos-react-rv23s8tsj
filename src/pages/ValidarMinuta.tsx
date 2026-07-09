@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useMemo, useRef } from 'react'
 import {
   Loader2,
   FileSearch,
@@ -8,6 +8,11 @@ import {
   CheckCircle2,
   Lightbulb,
   ShieldAlert,
+  WifiOff,
+  Clock,
+  ServerCrash,
+  FileQuestion,
+  Database,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -33,6 +38,7 @@ import {
   type ValidationStatus,
 } from '@/services/validar-minuta'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { categorizeValidationError, type ErrorCategory } from '@/lib/validation-errors'
 
 const DOCUMENT_TYPES = [
   { value: 'Promessa/Compromisso', label: 'Promessa/Compromisso' },
@@ -80,13 +86,24 @@ const riscoStyles: Record<RiscoGravidade, { bg: string; text: string; label: str
   baixo: { bg: 'bg-gray-50 border-gray-200', text: 'text-gray-600', label: 'Baixo' },
 }
 
+const errorDisplayConfig: Record<ErrorCategory, { title: string; icon: typeof AlertTriangle }> = {
+  connection: { title: 'Erro de Conexão', icon: WifiOff },
+  ai_timeout: { title: 'Tempo Limite Excedido', icon: Clock },
+  ai_unavailable: { title: 'Serviço Indisponível', icon: ServerCrash },
+  parsing: { title: 'Falha na Análise', icon: FileQuestion },
+  knowledge_base: { title: 'Base de Conhecimento', icon: Database },
+  generic: { title: 'Erro na Análise', icon: AlertTriangle },
+}
+
 export default function ValidarMinutaPage() {
   const [documentText, setDocumentText] = useState('')
   const [documentType, setDocumentType] = useState('Genérico/Outro')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ValidarMinutaResponse | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [errorCategory, setErrorCategory] = useState<ErrorCategory | null>(null)
   const [uploading, setUploading] = useState(false)
+  const isSubmittingRef = useRef(false)
 
   const uniqueConformidade = useMemo(() => {
     if (!result) return []
@@ -104,6 +121,9 @@ export default function ValidarMinutaPage() {
   }, [result])
 
   const StatusIcon = statusInfo?.icon
+
+  const errorConfig = errorCategory ? errorDisplayConfig[errorCategory] : null
+  const ErrorIcon = errorConfig?.icon
 
   const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -126,33 +146,28 @@ export default function ValidarMinutaPage() {
   }, [])
 
   const handleValidate = async () => {
+    if (isSubmittingRef.current) return
     if (!documentText.trim()) {
       toast.error('Cole o texto do documento ou faça upload de um arquivo .docx.')
       return
     }
+    isSubmittingRef.current = true
     setLoading(true)
     setResult(null)
     setError(null)
+    setErrorCategory(null)
     try {
       const res = await validarMinuta(documentText, documentType)
       setResult(res)
       toast.success('Análise concluída!')
     } catch (err: unknown) {
-      const errAny = err as { response?: { error?: string; message?: string }; message?: string }
-      let msg = 'Erro ao processar a análise.'
-      if (errAny?.response?.error) {
-        msg = errAny.response.error
-      } else if (errAny?.response?.message) {
-        msg = errAny.response.message
-      } else if (errAny?.message) {
-        msg = errAny.message
-      } else {
-        msg = getErrorMessage(err)
-      }
-      setError(msg)
-      toast.error(msg)
+      const categorized = categorizeValidationError(err)
+      setErrorCategory(categorized.category)
+      setError(categorized.message)
+      toast.error(categorized.message)
     } finally {
       setLoading(false)
+      isSubmittingRef.current = false
     }
   }
 
@@ -246,10 +261,10 @@ export default function ValidarMinutaPage() {
         </CardContent>
       </Card>
 
-      {error && (
+      {error && errorConfig && ErrorIcon && (
         <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Erro na análise</AlertTitle>
+          <ErrorIcon className="h-4 w-4" />
+          <AlertTitle>{errorConfig.title}</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}

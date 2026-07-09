@@ -58,8 +58,6 @@ export default function Layout() {
       <main className="flex-1 flex flex-col items-center p-4 md:p-8 py-8">
         <Outlet />
       </main>
-
-      <footer className="bg-white border-t border-border/40 py-6" />
     </div>
   )
 }
