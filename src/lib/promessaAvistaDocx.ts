@@ -2,8 +2,8 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/1f5a03f8d7b53c30a41e719b16da3139dbb6628b/promessa_base64.txt'
-const EXPECTED_BYTE_COUNT = 41547
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/01322faad7e4ac93391e9d21415831aeedae1de5/promessa_base64.txt'
+const EXPECTED_BYTE_COUNT = 41649
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
