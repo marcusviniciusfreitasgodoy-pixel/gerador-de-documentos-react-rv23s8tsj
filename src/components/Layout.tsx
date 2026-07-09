@@ -1,5 +1,13 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom'
-import { FileText, LogOut, BookOpen, FileCheck, UserCircle, FileSearch } from 'lucide-react'
+import {
+  FileText,
+  LogOut,
+  BookOpen,
+  FileCheck,
+  UserCircle,
+  FileSearch,
+  Headset,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/hooks/use-auth'
 
@@ -38,6 +46,11 @@ export default function Layout() {
               <Button asChild variant="ghost" size="sm">
                 <Link to="/validar">
                   <FileSearch className="mr-1 h-4 w-4" /> Validar
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/especialista">
+                  <Headset className="mr-1 h-4 w-4" /> Especialista
                 </Link>
               </Button>
               <Button asChild variant="ghost" size="sm">

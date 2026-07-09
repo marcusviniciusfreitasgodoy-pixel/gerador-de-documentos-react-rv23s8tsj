@@ -12,6 +12,9 @@ import Signup from './pages/Signup'
 import LegalKnowledgePage from './pages/LegalKnowledge'
 import MyProfilePage from './pages/MyProfile'
 import ValidarMinutaPage from './pages/ValidarMinuta'
+import ExpertSupportPage from './pages/ExpertSupport'
+import ExpertSupportNewPage from './pages/ExpertSupportNew'
+import ExpertSupportDetailPage from './pages/ExpertSupportDetail'
 import Layout from './components/Layout'
 
 const App = () => (
@@ -28,6 +31,9 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/legal-knowledge" element={<LegalKnowledgePage />} />
               <Route path="/validar" element={<ValidarMinutaPage />} />
+              <Route path="/especialista" element={<ExpertSupportPage />} />
+              <Route path="/especialista/nova" element={<ExpertSupportNewPage />} />
+              <Route path="/especialista/:id" element={<ExpertSupportDetailPage />} />
               <Route path="/perfil" element={<MyProfilePage />} />
             </Route>
           </Route>

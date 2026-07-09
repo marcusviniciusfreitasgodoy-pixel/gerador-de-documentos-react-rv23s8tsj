@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-09T15:28:32.306Z",
+  "generatedAt": "2026-07-09T19:20:58.896Z",
   "collections": [
     {
       "name": "users",
@@ -37,6 +37,12 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onCreate", "onUpdate"]
+        },
+        {
+          "name": "isAdmin",
+          "type": "bool",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": [
@@ -481,6 +487,165 @@
         "CREATE INDEX idx_validation_audit_user ON validation_audit (user_id)",
         "CREATE INDEX idx_validation_audit_created ON validation_audit (created DESC)"
       ]
+    },
+    {
+      "name": "expert_support_requests",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
+        "view": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
+        "create": "@request.auth.id != \"\"",
+        "update": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
+        "delete": "@request.auth.isAdmin = true"
+      },
+      "fields": [
+        {
+          "name": "user",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "document_type",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "objective",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": [
+            "Max select 1 · Required ✔ · Choices: technical_doubt",
+            "consultative_guidance",
+            "doc_analysis",
+            "partial_review",
+            "full_review",
+            "risk_analysis",
+            "talk_specialist"
+          ]
+        },
+        {
+          "name": "urgency",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["Max select 1 · Required ✔ · Choices: low", "medium", "high"]
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "attachments",
+          "type": "file",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": [
+            "Max select 1 · Required ✔ · Choices: received",
+            "proposal_issued",
+            "accepted",
+            "refused",
+            "completed"
+          ]
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onUpdate"]
+        }
+      ],
+      "indexes": []
+    },
+    {
+      "name": "expert_proposals",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != \"\" && (request.user = @request.auth.id || @request.auth.isAdmin = true)",
+        "view": "@request.auth.id != \"\" && (request.user = @request.auth.id || @request.auth.isAdmin = true)",
+        "create": "@request.auth.isAdmin = true",
+        "update": "@request.auth.id != \"\"",
+        "delete": "@request.auth.isAdmin = true"
+      },
+      "fields": [
+        {
+          "name": "request",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "expert_support_requests"
+        },
+        {
+          "name": "scope",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "deadline_days",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "complexity_type",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": [
+            "Max select 1 · Required ✔ · Choices: standard",
+            "adjusted",
+            "personalized"
+          ]
+        },
+        {
+          "name": "user_response",
+          "type": "select",
+          "required": false,
+          "system": false,
+          "selectValues": ["Max select 1 · Choices: none", "accepted", "refused"]
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onUpdate"]
+        }
+      ],
+      "indexes": []
     }
   ]
 }
