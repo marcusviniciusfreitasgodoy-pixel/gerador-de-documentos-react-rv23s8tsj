@@ -26,6 +26,8 @@ export interface ExpertSupportRequest {
   description: string
   attachments?: string | string[]
   status: ExpertStatus
+  ai_response?: string
+  ai_recommends_human?: string
   created: string
   updated: string
   expand?: { user?: { id: string; name?: string; email?: string } }
@@ -172,3 +174,11 @@ export const respondProposal = (
 
 export const setRequestStatus = (id: string, status: ExpertStatus) =>
   pb.collection('expert_support_requests').update<ExpertSupportRequest>(id, { status })
+
+// N1 — Consultar IA (Especialista Nível 1)
+export const consultarIA = (requestId: string) =>
+  pb.send<{ resposta: string; recomenda_humano: boolean }>('/backend/v1/consultar-ia', {
+    method: 'POST',
+    body: JSON.stringify({ request_id: requestId }),
+    headers: { 'Content-Type': 'application/json' },
+  })
