@@ -10,9 +10,10 @@ import {
   DollarSign,
   Settings2,
   AlertCircle,
+  FileSearch,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -40,13 +41,15 @@ import {
   buildIntermediationTemplateData,
   type BrokerInfo,
 } from '@/lib/intermediation-helpers'
-import { generateIntermediationDocx } from '@/lib/intermediation-docx'
+import { generateIntermediationDocx, getIntermediationText } from '@/lib/intermediation-docx'
 import { getBrokerProfile, type BrokerProfile } from '@/services/broker-profile'
 
 export function IntermediationForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
   const [brokerProfile, setBrokerProfile] = useState<BrokerProfile | null>(null)
   const [profileLoading, setProfileLoading] = useState(true)
+  const navigate = useNavigate()
 
   const form = useForm<IntermediationValues>({
     resolver: zodResolver(intermediationSchema),
@@ -98,6 +101,26 @@ export function IntermediationForm() {
 
   const hasProfile = !!brokerProfile?.name
 
+  const buildData = (data: IntermediationValues): Record<string, string> => {
+    const isImobiliaria = brokerProfile?.tipo_perfil === 'imobiliaria'
+    const broker: BrokerInfo = {
+      name: isImobiliaria
+        ? brokerProfile?.razao_social || brokerProfile?.name || ''
+        : brokerProfile?.nome || brokerProfile?.name || '',
+      document: isImobiliaria ? brokerProfile?.cnpj || '' : brokerProfile?.cpf || '',
+      creci: [
+        isImobiliaria
+          ? brokerProfile?.creci_juridico || brokerProfile?.creci || ''
+          : brokerProfile?.creci || '',
+        brokerProfile?.creci_uf || '',
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .trim(),
+    }
+    return buildIntermediationTemplateData(data, broker)
+  }
+
   const onSubmit = async (data: IntermediationValues) => {
     if (!hasProfile) {
       toast.error('Complete seu perfil antes de gerar o documento.')
@@ -105,23 +128,7 @@ export function IntermediationForm() {
     }
     setIsGenerating(true)
     try {
-      const isImobiliaria = brokerProfile?.tipo_perfil === 'imobiliaria'
-      const broker: BrokerInfo = {
-        name: isImobiliaria
-          ? brokerProfile?.razao_social || brokerProfile?.name || ''
-          : brokerProfile?.nome || brokerProfile?.name || '',
-        document: isImobiliaria ? brokerProfile?.cnpj || '' : brokerProfile?.cpf || '',
-        creci: [
-          isImobiliaria
-            ? brokerProfile?.creci_juridico || brokerProfile?.creci || ''
-            : brokerProfile?.creci || '',
-          brokerProfile?.creci_uf || '',
-        ]
-          .filter(Boolean)
-          .join(' ')
-          .trim(),
-      }
-      await generateIntermediationDocx(buildIntermediationTemplateData(data, broker))
+      await generateIntermediationDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
       form.reset()
     } catch (error) {
@@ -129,6 +136,23 @@ export function IntermediationForm() {
       toast.error('Ocorreu um erro ao gerar o documento.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const onValidate = async () => {
+    if (!hasProfile) {
+      toast.error('Complete seu perfil antes de validar o documento.')
+      return
+    }
+    setIsValidating(true)
+    try {
+      const texto = await getIntermediationText(buildData(form.getValues()))
+      navigate('/validar', { state: { texto, tipo: 'Autorização de Intermediação' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
   }
 
@@ -495,6 +519,25 @@ export function IntermediationForm() {
             <>
               <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
               Gerar documento
+            </>
+          )}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          disabled={isValidating || isGenerating}
+          onClick={onValidate}
+        >
+          {isValidating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Preparando validação...
+            </>
+          ) : (
+            <>
+              <FileSearch className="mr-2 h-4 w-4" />
+              Validar esta minuta
             </>
           )}
         </Button>
