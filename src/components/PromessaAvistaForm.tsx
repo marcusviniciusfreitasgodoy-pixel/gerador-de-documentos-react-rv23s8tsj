@@ -12,6 +12,7 @@ import {
   Settings2,
   Users,
   AlertCircle,
+  FileSearch,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
@@ -45,14 +46,16 @@ import {
   COMISSAO_RESPONSAVEL_OPTIONS,
 } from '@/lib/promessaAvistaHelpers'
 import { buildPromessaAvistaTemplateData } from '@/lib/promessaAvistaTemplate'
-import { generatePromessaAvistaDocx } from '@/lib/promessaAvistaDocx'
+import { generatePromessaAvistaDocx, getPromessaAvistaText } from '@/lib/promessaAvistaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
 
 export function PromessaAvistaForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
+  const navigate = useNavigate()
 
   const form = useForm<PromessaAvistaValues>({
     resolver: zodResolver(promessaAvistaSchema),
@@ -122,6 +125,23 @@ export function PromessaAvistaForm() {
       toast.error('Ocorreu um erro ao gerar o documento.')
     } finally {
       setIsGenerating(false)
+    }
+  }
+
+  const onValidate = async () => {
+    if (!hasBroker) {
+      toast.error('Preencha seu Perfil em Meu Perfil')
+      return
+    }
+    setIsValidating(true)
+    try {
+      const texto = await getPromessaAvistaText(buildPromessaAvistaTemplateData(form.getValues()))
+      navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
   }
 
@@ -783,6 +803,25 @@ export function PromessaAvistaForm() {
             <>
               <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
               Gerar documento
+            </>
+          )}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          disabled={isValidating || isGenerating}
+          onClick={onValidate}
+        >
+          {isValidating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Preparando validação...
+            </>
+          ) : (
+            <>
+              <FileSearch className="mr-2 h-4 w-4" />
+              Validar esta minuta
             </>
           )}
         </Button>
