@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
 import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
+import { PromessaFinanciadaForm } from '@/components/PromessaFinanciadaForm'
 import { TermoChavesForm } from '@/components/TermoChavesForm'
 import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
@@ -60,6 +61,7 @@ export default function Index() {
     | 'intermediation'
     | 'promise'
     | 'compromisso'
+    | 'compromissoFinanciado'
     | 'termoChaves'
     | 'termoPosse'
     | 'checklist'
@@ -157,6 +159,14 @@ export default function Index() {
             size="sm"
           >
             Promessa / Compromisso de Compra e Venda (à vista)
+          </Button>
+          <Button
+            type="button"
+            variant={docType === 'compromissoFinanciado' ? 'default' : 'outline'}
+            onClick={() => setDocType('compromissoFinanciado')}
+            size="sm"
+          >
+            Promessa / Compromisso de Compra e Venda (financiada)
           </Button>
           <Button
             type="button"
@@ -542,6 +552,7 @@ export default function Index() {
         {docType === 'intermediation' && <IntermediationForm />}
         {docType === 'promise' && <PromiseForm />}
         {docType === 'compromisso' && <PromessaAvistaForm />}
+        {docType === 'compromissoFinanciado' && <PromessaFinanciadaForm />}
         {docType === 'termoChaves' && <TermoChavesForm />}
         {docType === 'termoPosse' && <TermoPosseForm />}
         {docType === 'checklist' && <ChecklistForm />}
