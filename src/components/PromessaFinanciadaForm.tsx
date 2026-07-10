@@ -98,6 +98,7 @@ export function PromessaFinanciadaForm() {
   const hasInterveniente = useWatch({ control, name: 'has_interveniente' })
   const entradaParcelada = useWatch({ control, name: 'entrada_parcelada' })
   const quitaDivida = useWatch({ control, name: 'quita_divida_existente' })
+  const usaFgts = useWatch({ control, name: 'usa_fgts' })
 
   const comissaoValor = useMemo(() => {
     const t = parseCurrency(valorTotal || '')
@@ -645,6 +646,42 @@ export function PromessaFinanciadaForm() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Valor da dívida (R$) *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="R$ 0,00"
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
+          <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
+            <div>
+              <p className="text-sm font-medium">Usar FGTS na composição</p>
+              <p className="text-xs text-muted-foreground">
+                Ative se parte do preço será paga com recursos da conta vinculada do FGTS.
+              </p>
+            </div>
+            <FormField
+              control={control}
+              name="usa_fgts"
+              render={({ field }) => (
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              )}
+            />
+          </div>
+          {usaFgts && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={control}
+                name="valor_fgts"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Valor do FGTS (R$) *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="R$ 0,00"
