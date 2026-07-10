@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Loader2, BookOpen, Plus, Trash2, Pencil } from 'lucide-react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Loader2, BookOpen, Plus, Trash2, Pencil, Search, X } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -14,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { useRealtime } from '@/hooks/use-realtime'
 import {
@@ -52,6 +54,11 @@ export default function LegalKnowledgePage() {
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editForm, setEditForm] = useState<EditState>(emptyForm)
+  const [search, setSearch] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  // Código vindo da tela Validar Minuta (citação clicável): /legal-knowledge?code=XXX
+  const codeParam = searchParams.get('code')
 
   const loadData = useCallback(async () => {
     try {
@@ -70,6 +77,26 @@ export default function LegalKnowledgePage() {
   useRealtime('legal_knowledge', () => {
     loadData()
   })
+
+  // Ao chegar via citação, pré-preenche a busca com o código.
+  useEffect(() => {
+    if (codeParam) setSearch(codeParam)
+  }, [codeParam])
+
+  const query = search.trim().toLowerCase()
+  const filtered = useMemo(() => {
+    if (!query) return items
+    return items.filter((i) =>
+      [i.code, i.title, i.category, i.content].some((f) =>
+        (f || '').toString().toLowerCase().includes(query),
+      ),
+    )
+  }, [items, query])
+
+  const clearSearch = () => {
+    setSearch('')
+    if (codeParam) setSearchParams({}, { replace: true })
+  }
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -232,48 +259,92 @@ export default function LegalKnowledgePage() {
         </div>
       </CardHeader>
       <CardContent>
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por código, título, categoria ou conteúdo..."
+            className="pl-9 pr-9"
+          />
+          {search && (
+            <button
+              type="button"
+              onClick={clearSearch}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label="Limpar busca"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
+        {query && (
+          <p className="text-xs text-muted-foreground mb-3">
+            {filtered.length} resultado(s) para “{search}”.
+          </p>
+        )}
+
         {items.length === 0 ? (
           <p className="text-center text-muted-foreground py-8">
             Nenhum registro cadastrado ainda.
           </p>
+        ) : filtered.length === 0 ? (
+          <p className="text-center text-muted-foreground py-8">
+            Nenhum registro encontrado para a busca.
+          </p>
         ) : (
           <div className="space-y-3">
-            {items.map((item) => (
-              <div
-                key={item.id}
-                className="border border-border/60 rounded-lg p-4 hover:bg-secondary/40 transition-colors"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-semibold text-primary">{item.title}</h4>
-                    <div className="flex flex-wrap gap-2 mt-1 text-xs text-muted-foreground">
-                      {item.category && <span>Categoria: {item.category}</span>}
-                      {item.code && <span>Código: {item.code}</span>}
-                      {item.priority !== undefined && <span>Prioridade: {item.priority}</span>}
-                      {item.version !== undefined && <span>Versão: {item.version}</span>}
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-2 line-clamp-3">
-                      {item.content}
-                    </p>
-                    {item.trigger_logic && (
-                      <p className="text-xs text-muted-foreground mt-1 italic">
-                        Disparo: {item.trigger_logic}
+            {filtered.map((item) => {
+              const highlighted =
+                !!codeParam && (item.code || '').toLowerCase() === codeParam.toLowerCase()
+              return (
+                <div
+                  key={item.id}
+                  className={cn(
+                    'border rounded-lg p-4 transition-colors',
+                    highlighted
+                      ? 'border-primary ring-2 ring-primary/30 bg-primary/5'
+                      : 'border-border/60 hover:bg-secondary/40',
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-semibold text-primary">{item.title}</h4>
+                      <div className="flex flex-wrap gap-2 mt-1 text-xs text-muted-foreground">
+                        {item.category && <span>Categoria: {item.category}</span>}
+                        {item.code && <span>Código: {item.code}</span>}
+                        {item.priority !== undefined && <span>Prioridade: {item.priority}</span>}
+                        {item.version !== undefined && <span>Versão: {item.version}</span>}
+                      </div>
+                      <p
+                        className={cn(
+                          'text-sm text-muted-foreground mt-2',
+                          highlighted ? 'whitespace-pre-wrap' : 'line-clamp-3',
+                        )}
+                      >
+                        {item.content}
                       </p>
+                      {item.trigger_logic && (
+                        <p className="text-xs text-muted-foreground mt-1 italic">
+                          Disparo: {item.trigger_logic}
+                        </p>
+                      )}
+                    </div>
+                    {isAdmin && (
+                      <div className="flex gap-1 shrink-0">
+                        <Button size="icon" variant="ghost" onClick={() => handleEdit(item)}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button size="icon" variant="ghost" onClick={() => handleDelete(item.id)}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     )}
                   </div>
-                  {isAdmin && (
-                    <div className="flex gap-1 shrink-0">
-                      <Button size="icon" variant="ghost" onClick={() => handleEdit(item)}>
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button size="icon" variant="ghost" onClick={() => handleDelete(item.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  )}
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </CardContent>
