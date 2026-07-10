@@ -9,11 +9,11 @@ import {
   UserCheck,
   Building2,
   DollarSign,
+  Landmark,
   Settings2,
   Users,
   AlertCircle,
   FileSearch,
-  Landmark,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
@@ -94,19 +94,10 @@ export function PromessaFinanciadaForm() {
   }, [setValue])
 
   const valorTotal = useWatch({ control, name: 'valor_total' })
-  const valorSinal = useWatch({ control, name: 'valor_sinal' })
-  const valorReforco = useWatch({ control, name: 'valor_reforco' })
   const comissaoPct = useWatch({ control, name: 'comissao_percentual' })
   const hasInterveniente = useWatch({ control, name: 'has_interveniente' })
-  const hasReforco = useWatch({ control, name: 'has_reforco' })
-  const hasQuitacaoDivida = useWatch({ control, name: 'has_quitacao_divida' })
-
-  const saldo = useMemo(() => {
-    const t = parseCurrency(valorTotal || '')
-    const s = parseCurrency(valorSinal || '')
-    const r = parseCurrency(valorReforco || '')
-    return Math.max(0, t - s - r)
-  }, [valorTotal, valorSinal, valorReforco])
+  const entradaParcelada = useWatch({ control, name: 'entrada_parcelada' })
+  const quitaDivida = useWatch({ control, name: 'quita_divida_existente' })
 
   const comissaoValor = useMemo(() => {
     const t = parseCurrency(valorTotal || '')
@@ -144,7 +135,7 @@ export function PromessaFinanciadaForm() {
       const texto = await getPromessaFinanciadaText(
         buildPromessaFinanciadaTemplateData(form.getValues()),
       )
-      navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso (Financiada)' } })
+      navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso' } })
     } catch (error) {
       console.error('Erro ao preparar validação:', error)
       toast.error('Não foi possível preparar a validação.')
@@ -426,30 +417,9 @@ export function PromessaFinanciadaForm() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Preço e Pagamento</h3>
+            <h3 className="font-semibold text-primary">Preço e Entrada (recursos próprios)</h3>
           </div>
           <Separator />
-          <FormField
-            control={control}
-            name="has_reforco"
-            render={({ field }) => (
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div className="flex items-center gap-2">
-                  <DollarSign className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm font-medium">Entrada parcelada (reforço de sinal)</p>
-                    <p className="text-xs text-muted-foreground">Habilitar campo de reforço</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    {field.value ? 'Ativo' : 'Inativo'}
-                  </span>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </div>
-              </div>
-            )}
-          />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
@@ -470,10 +440,10 @@ export function PromessaFinanciadaForm() {
             />
             <FormField
               control={control}
-              name="valor_sinal"
+              name="valor_entrada"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sinal — Parte A (R$) *</FormLabel>
+                  <FormLabel>Entrada / Sinal — Parte A (R$) *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="R$ 0,00"
@@ -485,37 +455,12 @@ export function PromessaFinanciadaForm() {
                 </FormItem>
               )}
             />
-            {hasReforco && (
-              <FormField
-                control={control}
-                name="valor_reforco"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Reforço — Parte B (R$) *</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="R$ 0,00"
-                        value={field.value || ''}
-                        onChange={(e) => field.onChange(maskCurrency(e.target.value))}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-            <FormItem>
-              <FormLabel>Saldo — Parte C (Calculado)</FormLabel>
-              <FormControl>
-                <Input disabled value={fmt(saldo)} />
-              </FormControl>
-            </FormItem>
             <FormField
               control={control}
               name="forma_pagamento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Forma de Pagamento *</FormLabel>
+                  <FormLabel>Forma de Pagamento (entrada) *</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
@@ -548,60 +493,70 @@ export function PromessaFinanciadaForm() {
               )}
             />
           </div>
+          <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
+            <div>
+              <p className="text-sm font-medium">Entrada parcelada (reforço de sinal)</p>
+              <p className="text-xs text-muted-foreground">
+                Ative se houver um reforço com recursos próprios antes do financiamento.
+              </p>
+            </div>
+            <FormField
+              control={control}
+              name="entrada_parcelada"
+              render={({ field }) => (
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              )}
+            />
+          </div>
+          {entradaParcelada && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={control}
+                name="valor_reforco"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Reforço — Parte B (R$) *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="R$ 0,00"
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="prazo_reforco"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Data do Reforço *</FormLabel>
+                    <FormControl>
+                      <Input type="date" value={field.value || ''} onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
         </div>
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Landmark className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Dados do Financiamento</h3>
+            <h3 className="font-semibold text-primary">Financiamento (saldo)</h3>
           </div>
           <Separator />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
-              name="banco_nome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Banco/Instituição *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Caixa Econômica Federal" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="banco_agencia"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Agência *</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="banco_conta"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Conta *</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
               name="valor_financiamento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Valor do Financiamento (R$) *</FormLabel>
+                  <FormLabel>Saldo Financiado (R$) *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="R$ 0,00"
@@ -615,10 +570,23 @@ export function PromessaFinanciadaForm() {
             />
             <FormField
               control={control}
-              name="prazo_financiamento_meses"
+              name="instituicao_financeira"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prazo do Financiamento (meses) *</FormLabel>
+                  <FormLabel>Instituição Financeira *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Banco Itaú Unibanco S.A." {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="prazo_financiamento"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Prazo p/ obter o crédito (dias) *</FormLabel>
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
@@ -628,62 +596,44 @@ export function PromessaFinanciadaForm() {
             />
             <FormField
               control={control}
-              name="data_aprovacao_financiamento"
+              name="prazo_liberacao"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data Aprovação do Financiamento *</FormLabel>
+                  <FormLabel>Prazo p/ liberação/depósito (dias) *</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="prazo_liberacao_recursos"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Prazo Liberação de Recursos *</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
+                    <Input type="number" min={1} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <FormField
-            control={control}
-            name="has_quitacao_divida"
-            render={({ field }) => (
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div className="flex items-center gap-2">
-                  <Landmark className="h-4 w-4 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm font-medium">Quitar dívida existente</p>
-                    <p className="text-xs text-muted-foreground">Banco quita dívida do vendedor</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    {field.value ? 'Ativo' : 'Inativo'}
-                  </span>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
-                </div>
-              </div>
-            )}
-          />
-          {hasQuitacaoDivida && (
+          <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
+            <div>
+              <p className="text-sm font-medium">Quitar dívida existente pelo banco</p>
+              <p className="text-xs text-muted-foreground">
+                Ative se há gravame/saldo devedor (alienação fiduciária, consórcio) que o agente
+                financeiro quitará diretamente.
+              </p>
+            </div>
+            <FormField
+              control={control}
+              name="quita_divida_existente"
+              render={({ field }) => (
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              )}
+            />
+          </div>
+          {quitaDivida && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={control}
-                name="divida_credor"
+                name="credor_divida"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Credor *</FormLabel>
+                    <FormLabel>Credor da dívida *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Banco Itaú Unibanco S.A." {...field} />
+                      <Input placeholder="Ex: Itaú Adm. de Consórcios Ltda" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -691,10 +641,10 @@ export function PromessaFinanciadaForm() {
               />
               <FormField
                 control={control}
-                name="divida_valor"
+                name="valor_divida"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Valor da Dívida (R$) *</FormLabel>
+                    <FormLabel>Valor da dívida (R$) *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="R$ 0,00"
@@ -833,34 +783,6 @@ export function PromessaFinanciadaForm() {
                   <FormLabel>Prazo Certidões (dias)</FormLabel>
                   <FormControl>
                     <Input type="number" min={1} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            {hasReforco && (
-              <FormField
-                control={control}
-                name="prazo_reforco"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Prazo Reforço *</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-            <FormField
-              control={control}
-              name="data_limite_escritura"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data Limite Escritura</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
