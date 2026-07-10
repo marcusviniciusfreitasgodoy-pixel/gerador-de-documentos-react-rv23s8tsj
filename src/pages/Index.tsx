@@ -20,6 +20,7 @@ import { PromessaFinanciadaForm } from '@/components/PromessaFinanciadaForm'
 import { TermoChavesForm } from '@/components/TermoChavesForm'
 import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
+import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { reciboMockData } from '@/lib/form-helpers'
 
 import { Button } from '@/components/ui/button'
@@ -62,6 +63,7 @@ export default function Index() {
     | 'promise'
     | 'compromisso'
     | 'compromissoFinanciado'
+    | 'compromissoFgts'
     | 'termoChaves'
     | 'termoPosse'
     | 'checklist'
@@ -170,6 +172,14 @@ export default function Index() {
           </Button>
           <Button
             type="button"
+            variant={docType === 'compromissoFgts' ? 'default' : 'outline'}
+            onClick={() => setDocType('compromissoFgts')}
+            size="sm"
+          >
+            Promessa com FGTS (sem financiamento)
+          </Button>
+          <Button
+            type="button"
             variant={docType === 'termoChaves' ? 'default' : 'outline'}
             onClick={() => setDocType('termoChaves')}
             size="sm"
@@ -200,11 +210,13 @@ export default function Index() {
               ? 'Autorização para Divulgação e Venda de Imóvel'
               : docType === 'compromisso'
                 ? 'Promessa / Compromisso de Compra e Venda (à vista)'
-                : docType === 'termoChaves'
-                  ? 'Termo de Entrega das Chaves'
-                  : docType === 'termoPosse'
-                    ? 'Termo de Transmissão da Posse'
-                    : 'Checklist Documental'}
+                : docType === 'compromissoFgts'
+                  ? 'Promessa com FGTS (sem financiamento)'
+                  : docType === 'termoChaves'
+                    ? 'Termo de Entrega das Chaves'
+                    : docType === 'termoPosse'
+                      ? 'Termo de Transmissão da Posse'
+                      : 'Checklist Documental'}
         </CardTitle>
         <CardDescription>
           Preencha os dados para gerar o documento Word automaticamente.
@@ -553,6 +565,7 @@ export default function Index() {
         {docType === 'promise' && <PromiseForm />}
         {docType === 'compromisso' && <PromessaAvistaForm />}
         {docType === 'compromissoFinanciado' && <PromessaFinanciadaForm />}
+        {docType === 'compromissoFgts' && <PromessaFgtsForm />}
         {docType === 'termoChaves' && <TermoChavesForm />}
         {docType === 'termoPosse' && <TermoPosseForm />}
         {docType === 'checklist' && <ChecklistForm />}
