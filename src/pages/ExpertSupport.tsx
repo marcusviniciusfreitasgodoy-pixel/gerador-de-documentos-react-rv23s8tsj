@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Plus, Headset, Clock } from 'lucide-react'
+import { Loader2, Plus, Headset, Clock, ShieldAlert } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -31,7 +31,12 @@ export default function ExpertSupportPage() {
   const loadData = useCallback(async () => {
     try {
       const data = await listRequests(isAdmin)
-      setRequests(data)
+      // Escalados primeiro (para o especialista/admin priorizar quem pediu análise).
+      // Array.sort é estável, então dentro de cada grupo a ordem por -created é preservada.
+      const sorted = [...data].sort(
+        (a, b) => (b.escalated === 'true' ? 1 : 0) - (a.escalated === 'true' ? 1 : 0),
+      )
+      setRequests(sorted)
     } catch (error) {
       toast.error(getErrorMessage(error))
     } finally {
@@ -78,7 +83,11 @@ export default function ExpertSupportPage() {
           {requests.map((req) => (
             <Card
               key={req.id}
-              className="shadow-sm border-0 md:border md:border-border/60 hover:shadow-elevation transition-shadow cursor-pointer"
+              className={`shadow-sm border-0 md:border hover:shadow-elevation transition-shadow cursor-pointer ${
+                req.escalated === 'true'
+                  ? 'md:border-amber-300 bg-amber-50/30'
+                  : 'md:border-border/60'
+              }`}
               onClick={() => navigate(`/especialista/${req.id}`)}
             >
               <CardContent className="p-4">
@@ -94,6 +103,11 @@ export default function ExpertSupportPage() {
                       {req.description}
                     </p>
                     <div className="flex flex-wrap items-center gap-2 mt-2">
+                      {req.escalated === 'true' && (
+                        <Badge className="bg-amber-100 text-amber-800 border border-amber-300 hover:bg-amber-100">
+                          <ShieldAlert className="h-3 w-3 mr-1" /> Escalado
+                        </Badge>
+                      )}
                       <Badge
                         variant="outline"
                         className={urgencyBadgeClasses[req.urgency as ExpertUrgency] || ''}

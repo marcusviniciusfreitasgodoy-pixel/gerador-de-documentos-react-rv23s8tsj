@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, ArrowLeft, Upload, X, FileText } from 'lucide-react'
+import { Loader2, ArrowLeft, Upload, X, FileText, ShieldCheck } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/select'
 import {
   createRequest,
+  escalateRequest,
   objectiveLabels,
   urgencyLabels,
   type ExpertObjective,
@@ -43,19 +44,44 @@ export default function ExpertSupportNewPage() {
   const [files, setFiles] = useState<File[]>([])
   const [saving, setSaving] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const validate = () => {
     if (!objective || !urgency || !description.trim()) {
       toast.error('Preencha todos os campos obrigatórios.')
-      return
+      return false
     }
+    return true
+  }
+
+  const doCreate = () =>
+    createRequest(
+      { document_type: documentType || undefined, objective, urgency, description },
+      files.length > 0 ? files : undefined,
+    )
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!validate()) return
     setSaving(true)
     try {
-      const created = await createRequest(
-        { document_type: documentType || undefined, objective, urgency, description },
-        files.length > 0 ? files : undefined,
-      )
+      const created = await doCreate()
       toast.success('Solicitação criada com sucesso!')
+      navigate(`/especialista/${created.id}`)
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // Atalho: cria a solicitação e já encaminha ao Especialista humano (Nível 2),
+  // pulando a etapa de orientação da IA. A Descrição serve de contexto ao especialista.
+  const handleDirectToSpecialist = async () => {
+    if (!validate()) return
+    setSaving(true)
+    try {
+      const created = await doCreate()
+      await escalateRequest(created.id)
+      toast.success('Enviado direto ao Especialista (Nível 2)!')
       navigate(`/especialista/${created.id}`)
     } catch (error) {
       toast.error(getErrorMessage(error))
@@ -189,15 +215,29 @@ export default function ExpertSupportNewPage() {
                 </div>
               )}
             </div>
-            <Button type="submit" disabled={saving} className="w-full">
-              {saving ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...
-                </>
-              ) : (
-                'Enviar Solicitação'
-              )}
-            </Button>
+            <div className="space-y-2 pt-2">
+              <Button type="submit" disabled={saving} className="w-full">
+                {saving ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...
+                  </>
+                ) : (
+                  'Enviar Solicitação'
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={saving}
+                className="w-full"
+                onClick={handleDirectToSpecialist}
+              >
+                <ShieldCheck className="mr-2 h-4 w-4" /> Falar direto com o Especialista (Nível 2)
+              </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                Encaminha diretamente à equipe de especialistas, sem passar pela orientação da IA.
+              </p>
+            </div>
           </form>
         </CardContent>
       </Card>

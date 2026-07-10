@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import {
   Loader2,
   FileSearch,
@@ -40,6 +40,19 @@ import {
   riscoStyles,
   errorDisplayConfig,
 } from '@/lib/validation-config'
+
+// Código de citação clicável → abre a Base de Conhecimento filtrada por esse code.
+function CitationCode({ code }: { code: string }) {
+  return (
+    <Link
+      to={`/legal-knowledge?code=${encodeURIComponent(code)}`}
+      title="Ver na Base de Conhecimento"
+      className="inline-block mt-1 text-xs font-mono bg-secondary px-2 py-0.5 rounded text-primary hover:bg-primary/10 hover:underline transition-colors"
+    >
+      {code}
+    </Link>
+  )
+}
 
 export default function ValidarMinutaPage() {
   const [documentText, setDocumentText] = useState('')
@@ -297,11 +310,7 @@ export default function ValidarMinutaPage() {
                         <p className="text-sm text-muted-foreground mt-1">
                           {item?.descricao || ''}
                         </p>
-                        {item?.code && (
-                          <span className="inline-block mt-1 text-xs font-mono bg-secondary px-2 py-0.5 rounded text-muted-foreground">
-                            {item.code}
-                          </span>
-                        )}
+                        {item?.code && <CitationCode code={item.code} />}
                       </div>
                     </div>
                   )
@@ -330,11 +339,7 @@ export default function ValidarMinutaPage() {
                         </span>
                       </div>
                       <p className="text-sm text-foreground">{risco?.descricao || ''}</p>
-                      {risco?.base_code && (
-                        <span className="inline-block mt-1 text-xs font-mono bg-white/60 px-2 py-0.5 rounded text-muted-foreground">
-                          {risco.base_code}
-                        </span>
-                      )}
+                      {risco?.base_code && <CitationCode code={risco.base_code} />}
                     </div>
                   )
                 })}
@@ -359,11 +364,7 @@ export default function ValidarMinutaPage() {
                     <Lightbulb className="h-4 w-4 text-primary mt-0.5 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-foreground">{rec?.texto || ''}</p>
-                      {rec?.base_code && (
-                        <span className="inline-block mt-1 text-xs font-mono bg-secondary px-2 py-0.5 rounded text-muted-foreground">
-                          {rec.base_code}
-                        </span>
-                      )}
+                      {rec?.base_code && <CitationCode code={rec.base_code} />}
                     </div>
                   </div>
                 ))}
