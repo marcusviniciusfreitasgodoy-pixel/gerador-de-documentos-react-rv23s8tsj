@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import {
   Loader2,
@@ -10,6 +10,10 @@ import {
   DollarSign,
   Sparkles,
   ShieldCheck,
+  MessageSquare,
+  Upload,
+  FileText,
+  X,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -17,6 +21,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 import { useAuth } from '@/hooks/use-auth'
 import { useRealtime } from '@/hooks/use-realtime'
 import { ProposalForm } from '@/components/ProposalForm'
@@ -78,6 +84,9 @@ export default function ExpertSupportDetailPage() {
   const [loading, setLoading] = useState(true)
   const [acting, setActing] = useState(false)
   const [consulting, setConsulting] = useState(false)
+  const [escalationMessage, setEscalationMessage] = useState('')
+  const [escalationFiles, setEscalationFiles] = useState<File[]>([])
+  const escFileRef = useRef<HTMLInputElement>(null)
 
   const loadData = useCallback(async () => {
     if (!id) return
@@ -146,12 +155,32 @@ export default function ExpertSupportDetailPage() {
     }
   }
 
+  const handleEscFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = Array.from(e.target.files || [])
+    if (escalationFiles.length + selected.length > 5) {
+      toast.error('Máximo de 5 arquivos na escalação.')
+      return
+    }
+    setEscalationFiles((prev) => [...prev, ...selected])
+    if (escFileRef.current) escFileRef.current.value = ''
+  }
+
+  const removeEscFile = (index: number) => {
+    setEscalationFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
   const handleEscalate = async () => {
     if (!request) return
     setActing(true)
     try {
-      await escalateRequest(request.id)
+      await escalateRequest(
+        request.id,
+        escalationMessage,
+        escalationFiles.length > 0 ? escalationFiles : undefined,
+      )
       toast.success('Encaminhado ao especialista! Você receberá uma proposta.')
+      setEscalationMessage('')
+      setEscalationFiles([])
       await loadData()
     } catch (error) {
       toast.error(getErrorMessage(error))
@@ -180,6 +209,8 @@ export default function ExpertSupportDetailPage() {
     request.status !== 'accepted' &&
     request.status !== 'refused' &&
     request.status !== 'completed'
+  const hasEscalationMessage =
+    !!request.escalation_message && request.escalation_message.trim() !== ''
 
   return (
     <div className="w-full max-w-3xl space-y-6 animate-fade-in-up">
@@ -226,6 +257,19 @@ export default function ExpertSupportDetailPage() {
               {request.description}
             </p>
           </div>
+          {hasEscalationMessage && (
+            <>
+              <Separator />
+              <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+                <h4 className="text-sm font-semibold mb-1 flex items-center gap-1.5 text-primary">
+                  <MessageSquare className="h-4 w-4" /> Mensagem ao especialista (escalação)
+                </h4>
+                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                  {request.escalation_message}
+                </p>
+              </div>
+            </>
+          )}
           {attachments.length > 0 && (
             <>
               <Separator />
@@ -343,9 +387,74 @@ export default function ExpertSupportDetailPage() {
                 proposta aqui em breve.
               </div>
             ) : (
-              <Button onClick={handleEscalate} disabled={acting} className="w-full">
-                <ShieldCheck className="mr-2 h-4 w-4" /> Solicitar análise do Especialista (Nível 2)
-              </Button>
+              <div className="space-y-4">
+                <Separator />
+                <div className="space-y-1.5">
+                  <Label htmlFor="escalation-message" className="flex items-center gap-1.5">
+                    <MessageSquare className="h-4 w-4" /> Mensagem ao especialista (opcional)
+                  </Label>
+                  <Textarea
+                    id="escalation-message"
+                    rows={4}
+                    value={escalationMessage}
+                    onChange={(e) => setEscalationMessage(e.target.value)}
+                    placeholder="Explique o contexto, dúvidas específicas ou o que precisa que o especialista analise. Você também pode anexar documentos abaixo."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Documentos adicionais (opcional, máx. 5)</Label>
+                  <input
+                    ref={escFileRef}
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={handleEscFileChange}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => escFileRef.current?.click()}
+                  >
+                    <Upload className="mr-1 h-4 w-4" /> Anexar documentos
+                  </Button>
+                  {escalationFiles.length > 0 && (
+                    <div className="space-y-1">
+                      {escalationFiles.map((file, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center justify-between bg-secondary/40 rounded-md px-3 py-1.5 text-sm"
+                        >
+                          <span className="flex items-center gap-2 truncate">
+                            <FileText className="h-3 w-3 shrink-0" /> {file.name}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 shrink-0"
+                            onClick={() => removeEscFile(i)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <Button onClick={handleEscalate} disabled={acting} className="w-full">
+                  {acting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...
+                    </>
+                  ) : (
+                    <>
+                      <ShieldCheck className="mr-2 h-4 w-4" /> Solicitar análise do Especialista
+                      (Nível 2)
+                    </>
+                  )}
+                </Button>
+              </div>
             )}
           </CardContent>
         </Card>
