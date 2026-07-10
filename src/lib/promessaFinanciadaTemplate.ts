@@ -43,6 +43,7 @@ export function buildPromessaFinanciadaTemplateData(
   const valorReforco = parseCurrency(data.valor_reforco || '0')
   const valorFinanciamento = parseCurrency(data.valor_financiamento || '0')
   const valorDivida = parseCurrency(data.valor_divida || '0')
+  const valorFgts = parseCurrency(data.valor_fgts || '0')
 
   const comissaoPct = parseFloat(data.comissao_percentual || '0') || 0
   const comissaoValor = valorTotal * (comissaoPct / 100)
@@ -127,6 +128,9 @@ export function buildPromessaFinanciadaTemplateData(
     credor_divida: data.credor_divida || '',
     valor_divida: fmt(valorDivida),
     valor_divida_extenso: extenso(valorDivida),
+    usa_fgts: data.usa_fgts,
+    valor_fgts: fmt(valorFgts),
+    valor_fgts_extenso: extenso(valorFgts),
     forma_pagamento: data.forma_pagamento || '',
     dados_recebimento: limparDestino(data.dados_recebimento || ''),
     prazo_certidoes_dias: data.prazo_certidoes_dias || '',
