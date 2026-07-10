@@ -76,6 +76,8 @@ export const promessaFinanciadaSchema = z
     quita_divida_existente: z.boolean(),
     credor_divida: z.string().optional(),
     valor_divida: z.string().optional(),
+    usa_fgts: z.boolean(),
+    valor_fgts: z.string().optional(),
     forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
     dados_recebimento: z.string().optional(),
     prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
@@ -115,6 +117,10 @@ export const promessaFinanciadaSchema = z
   .refine((d) => !d.quita_divida_existente || parseCurrency(d.valor_divida || '') > 0, {
     message: 'Informe o valor da dívida',
     path: ['valor_divida'],
+  })
+  .refine((d) => !d.usa_fgts || parseCurrency(d.valor_fgts || '') > 0, {
+    message: 'Informe o valor do FGTS',
+    path: ['valor_fgts'],
   })
 
 export type PromessaFinanciadaValues = z.infer<typeof promessaFinanciadaSchema>
@@ -178,6 +184,8 @@ export const promessaFinanciadaMockData: PromessaFinanciadaValues = {
   quita_divida_existente: false,
   credor_divida: '',
   valor_divida: '',
+  usa_fgts: false,
+  valor_fgts: '',
   forma_pagamento: 'PIX',
   dados_recebimento: 'PIX para a chave roberto.araujo@email.com',
   prazo_certidoes_dias: '10',
