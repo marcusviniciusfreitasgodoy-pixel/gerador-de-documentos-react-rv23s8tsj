@@ -1,7 +1,7 @@
 import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
 import { buildRegimeSuffix, formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
-import type { PromessaFinanciadaValues } from '@/lib/promessaFinanciadaHelpers'
+import type { PromessaAvistaValues } from '@/lib/promessaAvistaHelpers'
 
 function formatDatePtBr(isoDate: string): string {
   if (!isoDate) return ''
@@ -35,14 +35,13 @@ function prefixarDocumento(value: string): string {
   return trimmed
 }
 
-export function buildPromessaFinanciadaTemplateData(
-  data: PromessaFinanciadaValues,
+export function buildPromessaAvistaTemplateData(
+  data: PromessaAvistaValues,
 ): Record<string, string | boolean> {
   const valorTotal = parseCurrency(data.valor_total || '0')
-  const valorEntrada = parseCurrency(data.valor_entrada || '0')
+  const valorSinal = parseCurrency(data.valor_sinal || '0')
   const valorReforco = parseCurrency(data.valor_reforco || '0')
-  const valorFinanciamento = parseCurrency(data.valor_financiamento || '0')
-  const valorDivida = parseCurrency(data.valor_divida || '0')
+  const valorSaldo = Math.max(0, valorTotal - valorSinal - valorReforco)
 
   const comissaoPct = parseFloat(data.comissao_percentual || '0') || 0
   const comissaoValor = valorTotal * (comissaoPct / 100)
@@ -55,6 +54,8 @@ export function buildPromessaFinanciadaTemplateData(
     data.interveniente_estado_civil || '',
     data.interveniente_regime_bens,
   )
+
+  const cidadeUf = `${data.imovel_cidade}/${data.imovel_uf}`
 
   const docDate = new Date(data.data_documento + 'T00:00:00')
   const dataExtenso = formatDateLower(docDate)
@@ -112,24 +113,17 @@ export function buildPromessaFinanciadaTemplateData(
     imovel_origem_registro: data.imovel_origem_registro || '',
     valor_total: fmt(valorTotal),
     valor_total_extenso: extenso(valorTotal),
-    valor_entrada: fmt(valorEntrada),
-    valor_entrada_extenso: extenso(valorEntrada),
-    entrada_parcelada: data.entrada_parcelada,
+    valor_sinal: fmt(valorSinal),
+    valor_sinal_extenso: extenso(valorSinal),
     valor_reforco: fmt(valorReforco),
     valor_reforco_extenso: extenso(valorReforco),
-    prazo_reforco: formatDatePtBr(data.prazo_reforco || ''),
-    valor_financiamento: fmt(valorFinanciamento),
-    valor_financiamento_extenso: extenso(valorFinanciamento),
-    instituicao_financeira: data.instituicao_financeira || '',
-    prazo_financiamento: data.prazo_financiamento || '',
-    prazo_liberacao: data.prazo_liberacao || '',
-    quita_divida_existente: data.quita_divida_existente,
-    credor_divida: data.credor_divida || '',
-    valor_divida: fmt(valorDivida),
-    valor_divida_extenso: extenso(valorDivida),
+    valor_saldo: fmt(valorSaldo),
+    valor_saldo_extenso: extenso(valorSaldo),
     forma_pagamento: data.forma_pagamento || '',
     dados_recebimento: limparDestino(data.dados_recebimento || ''),
     prazo_certidoes_dias: data.prazo_certidoes_dias || '',
+    prazo_reforco: formatDatePtBr(data.prazo_reforco || ''),
+    data_limite_escritura: formatDatePtBr(data.data_limite_escritura || ''),
     comissao_beneficiario: data.comissao_beneficiario || '',
     comissao_documento: prefixarDocumento(data.comissao_documento || ''),
     comissao_creci: cleanCreci(data.comissao_creci || ''),
@@ -141,6 +135,7 @@ export function buildPromessaFinanciadaTemplateData(
     arras_confirmatoria: data.tipo_arras === 'confirmatoria',
     arras_penitencial: data.tipo_arras === 'penitencial',
     data_extenso: dataExtenso,
+    cidade_uf: cidadeUf,
     testemunha1_nome: data.testemunha1_nome || '',
     testemunha1_cpf: data.testemunha1_cpf || '',
     testemunha2_nome: data.testemunha2_nome || '',
