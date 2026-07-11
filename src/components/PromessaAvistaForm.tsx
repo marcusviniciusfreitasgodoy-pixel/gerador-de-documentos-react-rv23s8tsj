@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
@@ -13,6 +13,9 @@ import {
   Users,
   AlertCircle,
   FileSearch,
+  Plus,
+  Trash2,
+  HeartHandshake,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
@@ -35,13 +38,13 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { Switch } from '@/components/ui/switch'
 import { maskCurrency, maskCpfCnpj, maskCep } from '@/lib/utils'
 import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
 import {
   promessaAvistaSchema,
   type PromessaAvistaValues,
   promessaAvistaMockData,
+  emptyParty,
   FORMA_PAGAMENTO_OPTIONS,
   COMISSAO_RESPONSAVEL_OPTIONS,
 } from '@/lib/promessaAvistaHelpers'
@@ -49,6 +52,16 @@ import { buildPromessaAvistaTemplateData } from '@/lib/promessaAvistaTemplate'
 import { generatePromessaAvistaDocx, getPromessaAvistaText } from '@/lib/promessaAvistaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
+
+function sugerirPapel(regime?: string): string {
+  if (regime === 'Comunhão universal')
+    return 'Sugerido: CO-VENDEDOR (comunhão universal — o cônjuge é meeiro do imóvel).'
+  if (regime === 'Separação total')
+    return 'Separação total: em regra dispensa a outorga (art. 1.647). Inclua o cônjuge só se quiser reforço.'
+  if (regime === 'Comunhão parcial')
+    return 'Comunhão parcial: imóvel adquirido DEPOIS do casamento → co-vendedor; adquirido ANTES (bem particular) → anuente.'
+  return 'Selecione o regime de bens para a sugestão. Na dúvida, inclua o cônjuge como anuente.'
+}
 
 export function PromessaAvistaForm() {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -61,7 +74,24 @@ export function PromessaAvistaForm() {
     resolver: zodResolver(promessaAvistaSchema),
     defaultValues: promessaAvistaMockData,
   })
-  const { control, setValue } = form
+  const { control, setValue, getValues } = form
+  const ctrl = control as any
+
+  const {
+    fields: vendedorFields,
+    append: appendVendedor,
+    remove: removeVendedor,
+  } = useFieldArray({ control, name: 'vendedores' })
+  const {
+    fields: anuenteFields,
+    append: appendAnuente,
+    remove: removeAnuente,
+  } = useFieldArray({ control, name: 'anuentes' })
+  const {
+    fields: compradorFields,
+    append: appendComprador,
+    remove: removeComprador,
+  } = useFieldArray({ control, name: 'compradores' })
 
   useEffect(() => {
     let cancelled = false
@@ -93,7 +123,8 @@ export function PromessaAvistaForm() {
   const valorSinal = useWatch({ control, name: 'valor_sinal' })
   const valorReforco = useWatch({ control, name: 'valor_reforco' })
   const comissaoPct = useWatch({ control, name: 'comissao_percentual' })
-  const hasInterveniente = useWatch({ control, name: 'has_interveniente' })
+  const vendedoresW =
+    (useWatch({ control, name: 'vendedores' }) as PromessaAvistaValues['vendedores']) || []
 
   const saldo = useMemo(() => {
     const t = parseCurrency(valorTotal || '')
@@ -109,6 +140,31 @@ export function PromessaAvistaForm() {
   }, [valorTotal, comissaoPct])
 
   const fmt = (v: number) => cleanCurrencyMask(formatCurrency(v))
+
+  const addConjugeCoVendedor = (i: number) => {
+    const v = getValues(`vendedores.${i}`)
+    appendVendedor({
+      ...emptyParty,
+      estado_civil: 'Casado(a)',
+      regime_bens: v?.regime_bens || '',
+      nacionalidade: v?.nacionalidade || 'brasileiro(a)',
+      endereco: v?.endereco || '',
+    })
+    toast.success('Cônjuge adicionado como co-vendedor. Preencha os dados dele(a).')
+  }
+
+  const addConjugeAnuente = (i: number) => {
+    const v = getValues(`vendedores.${i}`)
+    appendAnuente({
+      ...emptyParty,
+      conjuge_de: v?.nome || '',
+      estado_civil: 'Casado(a)',
+      regime_bens: v?.regime_bens || '',
+      nacionalidade: v?.nacionalidade || 'brasileiro(a)',
+      endereco: v?.endereco || '',
+    })
+    toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
+  }
 
   const onSubmit = async (data: PromessaAvistaValues) => {
     if (!hasBroker) {
@@ -135,7 +191,7 @@ export function PromessaAvistaForm() {
     }
     setIsValidating(true)
     try {
-      const texto = await getPromessaAvistaText(buildPromessaAvistaTemplateData(form.getValues()))
+      const texto = await getPromessaAvistaText(buildPromessaAvistaTemplateData(getValues()))
       navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso' } })
     } catch (error) {
       console.error('Erro ao preparar validação:', error)
@@ -144,8 +200,6 @@ export function PromessaAvistaForm() {
       setIsValidating(false)
     }
   }
-
-  const ctrl = control as any
 
   return (
     <Form {...form}>
@@ -169,51 +223,159 @@ export function PromessaAvistaForm() {
           </div>
         )}
 
-        <CompromissoPartySection
-          control={ctrl}
-          prefix="vendedor"
-          title="Vendedor(a)"
-          icon={<User className="h-5 w-5 text-primary" />}
-        />
-
+        {/* VENDEDORES */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <UserCheck className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-primary">Interveniente Anuente</h3>
-            </div>
-            <FormField
-              control={control}
-              name="has_interveniente"
-              render={({ field }) => (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    {field.value ? 'Ativo' : 'Inativo'}
-                  </span>
-                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+          {vendedorFields.map((f, i) => (
+            <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-muted-foreground">
+                  Vendedor(a) {i + 1}
+                </span>
+                {vendedorFields.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeVendedor(i)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              <CompromissoPartySection
+                control={ctrl}
+                prefix={`vendedores.${i}`}
+                sep="."
+                title={`Dados do Vendedor(a) ${i + 1}`}
+                icon={<User className="h-5 w-5 text-primary" />}
+              />
+              {vendedoresW[i]?.estado_civil === 'Casado(a)' && (
+                <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
+                  <p className="text-sm font-medium text-primary flex items-center gap-1.5">
+                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge deste vendedor
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {sugerirPapel(vendedoresW[i]?.regime_bens)}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addConjugeCoVendedor(i)}
+                    >
+                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como co-vendedor
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => addConjugeAnuente(i)}
+                    >
+                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
+                    </Button>
+                  </div>
                 </div>
               )}
-            />
-          </div>
-          <Separator />
-          {hasInterveniente && (
-            <CompromissoPartySection
-              control={ctrl}
-              prefix="interveniente"
-              title="Dados do Interveniente"
-              icon={<UserCheck className="h-5 w-5 text-primary" />}
-              showRelacao
-            />
-          )}
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => appendVendedor({ ...emptyParty })}
+          >
+            <Plus className="mr-1 h-4 w-4" /> Adicionar vendedor
+          </Button>
         </div>
 
-        <CompromissoPartySection
-          control={ctrl}
-          prefix="comprador"
-          title="Comprador(a)"
-          icon={<User className="h-5 w-5 text-primary" />}
-        />
+        {/* ANUENTES */}
+        {anuenteFields.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <HeartHandshake className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-primary">Anuentes (cônjuges que consentem)</h3>
+            </div>
+            <Separator />
+            {anuenteFields.map((f, i) => (
+              <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-muted-foreground">
+                    Anuente {i + 1}
+                  </span>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeAnuente(i)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <FormField
+                  control={control}
+                  name={`anuentes.${i}.conjuge_de`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cônjuge de qual vendedor?</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome do vendedor" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <CompromissoPartySection
+                  control={ctrl}
+                  prefix={`anuentes.${i}`}
+                  sep="."
+                  title={`Dados do Anuente ${i + 1}`}
+                  icon={<UserCheck className="h-5 w-5 text-primary" />}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
+        {/* COMPRADORES */}
+        <div className="space-y-4">
+          {compradorFields.map((f, i) => (
+            <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-muted-foreground">
+                  Comprador(a) {i + 1}
+                </span>
+                {compradorFields.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeComprador(i)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              <CompromissoPartySection
+                control={ctrl}
+                prefix={`compradores.${i}`}
+                sep="."
+                title={`Dados do Comprador(a) ${i + 1}`}
+                icon={<User className="h-5 w-5 text-primary" />}
+              />
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => appendComprador({ ...emptyParty })}
+          >
+            <Plus className="mr-1 h-4 w-4" /> Adicionar comprador
+          </Button>
+        </div>
+
+        {/* IMÓVEL */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Building2 className="h-5 w-5 text-primary" />
@@ -415,6 +577,7 @@ export function PromessaAvistaForm() {
           />
         </div>
 
+        {/* PREÇO */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
@@ -519,6 +682,7 @@ export function PromessaAvistaForm() {
           </div>
         </div>
 
+        {/* COMISSÃO */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
@@ -627,6 +791,7 @@ export function PromessaAvistaForm() {
           </div>
         </div>
 
+        {/* PRAZOS */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Settings2 className="h-5 w-5 text-primary" />
@@ -652,9 +817,9 @@ export function PromessaAvistaForm() {
               name="prazo_reforco"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prazo Reforço (dias)</FormLabel>
+                  <FormLabel>Prazo Reforço</FormLabel>
                   <FormControl>
-                    <Input type="number" min={1} {...field} />
+                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -710,6 +875,7 @@ export function PromessaAvistaForm() {
           </div>
         </div>
 
+        {/* TESTEMUNHAS */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Users className="h-5 w-5 text-primary" />
