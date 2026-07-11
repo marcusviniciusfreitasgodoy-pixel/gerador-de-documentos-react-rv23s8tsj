@@ -42,9 +42,8 @@ export function categorizeValidationError(err: unknown): CategorizedError {
     return {
       category: 'parsing',
       message:
-        errAny?.response?.detail ||
         errAny?.response?.error ||
-        'Falha ao interpretar a resposta da IA. Tente novamente.',
+        'Ocorreu um erro ao processar a resposta da análise. Por favor, tente gerar a validação novamente.',
     }
   }
 

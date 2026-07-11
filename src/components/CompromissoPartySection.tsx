@@ -23,10 +23,20 @@ interface Props {
   title: string
   icon: ReactNode
   showRelacao?: boolean
+  /** Separador entre prefix e campo. '_' (default) para prefixos flat (vendedor_nome);
+   *  '.' para prefixos indexados de useFieldArray (vendedores.0.nome). */
+  sep?: string
 }
 
-export function CompromissoPartySection({ control, prefix, title, icon, showRelacao }: Props) {
-  const f = (field: string) => `${prefix}_${field}` as any
+export function CompromissoPartySection({
+  control,
+  prefix,
+  title,
+  icon,
+  showRelacao,
+  sep = '_',
+}: Props) {
+  const f = (field: string) => `${prefix}${sep}${field}` as any
   const estadoCivil = useWatch({ control, name: f('estado_civil') }) as string
 
   return (
