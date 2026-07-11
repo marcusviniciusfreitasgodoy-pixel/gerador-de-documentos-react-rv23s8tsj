@@ -3,8 +3,8 @@ import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/3b5a81d85b444ba0008f24f298fb66b4f686c7ca/promessa_base64.txt'
-const EXPECTED_BYTE_COUNT = 41840
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/fdfc812322876aaf8dd2e3a03b9e9b1ea256a7a7/promessa_base64.txt'
+const EXPECTED_BYTE_COUNT = 41696
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
@@ -17,7 +17,7 @@ function base64ToUint8Array(base64: string): Uint8Array {
 
 // Busca o template do gist, valida o tamanho e renderiza — caminho único
 // compartilhado pelo download e pela extração de texto (validação).
-async function renderPromessaDoc(data: Record<string, string | boolean>): Promise<Docxtemplater> {
+async function renderPromessaDoc(data: Record<string, unknown>): Promise<Docxtemplater> {
   const response = await fetch(TEMPLATE_URL)
   if (!response.ok) {
     throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
@@ -43,9 +43,7 @@ async function renderPromessaDoc(data: Record<string, string | boolean>): Promis
   return doc
 }
 
-export async function generatePromessaAvistaDocx(
-  data: Record<string, string | boolean>,
-): Promise<void> {
+export async function generatePromessaAvistaDocx(data: Record<string, unknown>): Promise<void> {
   const doc = await renderPromessaDoc(data)
 
   const blob = doc.getZip().generate({
@@ -65,9 +63,7 @@ export async function generatePromessaAvistaDocx(
 
 // Renderiza a minuta em memória e devolve o texto plano (sem baixar) para
 // enviar direto ao Validador.
-export async function getPromessaAvistaText(
-  data: Record<string, string | boolean>,
-): Promise<string> {
+export async function getPromessaAvistaText(data: Record<string, unknown>): Promise<string> {
   const doc = await renderPromessaDoc(data)
   return extractTextFromRenderedDoc(doc)
 }
