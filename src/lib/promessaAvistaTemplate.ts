@@ -1,7 +1,7 @@
 import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
-import { buildRegimeSuffix, formatDateLower } from '@/lib/compromisso-helpers'
+import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
-import type { PromessaAvistaValues } from '@/lib/promessaAvistaHelpers'
+import type { PromessaAvistaValues, PartyValues, AnuenteValues } from '@/lib/promessaAvistaHelpers'
 
 function formatDatePtBr(isoDate: string): string {
   if (!isoDate) return ''
@@ -35,9 +35,33 @@ function prefixarDocumento(value: string): string {
   return trimmed
 }
 
+// Monta tudo o que vem APÓS o nome na qualificação de uma parte.
+function montarQualificacao(p: PartyValues): string {
+  const regime =
+    p.estado_civil === 'Casado(a)' && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
+  return (
+    `${p.nacionalidade || ''}, ${p.estado_civil || ''}${regime}, ${p.profissao || ''}, ` +
+    `portador(a) do documento de identidade nº ${p.rg || ''}, expedido por ${p.orgao_emissor || ''}, ` +
+    `inscrito(a) no CPF sob o nº ${p.cpf || ''}, residente e domiciliado(a) em ${p.endereco || ''}`
+  )
+}
+
+function parteToItem(p: PartyValues) {
+  return { nome: p.nome || '', qualificacao: montarQualificacao(p), cpf: p.cpf || '' }
+}
+
+function anuenteToItem(a: AnuenteValues) {
+  return {
+    conjuge_de: a.conjuge_de || '',
+    nome: a.nome || '',
+    qualificacao: montarQualificacao(a),
+    cpf: a.cpf || '',
+  }
+}
+
 export function buildPromessaAvistaTemplateData(
   data: PromessaAvistaValues,
-): Record<string, string | boolean> {
+): Record<string, unknown> {
   const valorTotal = parseCurrency(data.valor_total || '0')
   const valorSinal = parseCurrency(data.valor_sinal || '0')
   const valorReforco = parseCurrency(data.valor_reforco || '0')
@@ -46,17 +70,6 @@ export function buildPromessaAvistaTemplateData(
   const comissaoPct = parseFloat(data.comissao_percentual || '0') || 0
   const comissaoValor = valorTotal * (comissaoPct / 100)
 
-  const compradorRegimeSufixo = buildRegimeSuffix(
-    data.comprador_estado_civil,
-    data.comprador_regime_bens,
-  )
-  const intervenienteRegimeSufixo = buildRegimeSuffix(
-    data.interveniente_estado_civil || '',
-    data.interveniente_regime_bens,
-  )
-
-  const cidadeUf = `${data.imovel_cidade}/${data.imovel_uf}`
-
   const docDate = new Date(data.data_documento + 'T00:00:00')
   const dataExtenso = formatDateLower(docDate)
 
@@ -64,39 +77,9 @@ export function buildPromessaAvistaTemplateData(
   const extenso = (v: number) => currencyToWords(v)
 
   return {
-    vendedor_nome: data.vendedor_nome || '',
-    vendedor_nacionalidade: data.vendedor_nacionalidade || '',
-    vendedor_estado_civil: data.vendedor_estado_civil || '',
-    vendedor_regime_bens: data.vendedor_regime_bens || '',
-    vendedor_profissao: data.vendedor_profissao || '',
-    vendedor_rg: data.vendedor_rg || '',
-    vendedor_orgao_emissor: data.vendedor_orgao_emissor || '',
-    vendedor_cpf: data.vendedor_cpf || '',
-    vendedor_endereco: data.vendedor_endereco || '',
-    vendedor_email: data.vendedor_email || '',
-    vendedor_casado: data.vendedor_estado_civil === 'Casado(a)',
-    tem_interveniente: data.has_interveniente,
-    interveniente_nome: data.interveniente_nome || '',
-    interveniente_nacionalidade: data.interveniente_nacionalidade || '',
-    interveniente_estado_civil: data.interveniente_estado_civil || '',
-    interveniente_regime_sufixo: intervenienteRegimeSufixo,
-    interveniente_profissao: data.interveniente_profissao || '',
-    interveniente_rg: data.interveniente_rg || '',
-    interveniente_orgao_emissor: data.interveniente_orgao_emissor || '',
-    interveniente_cpf: data.interveniente_cpf || '',
-    interveniente_endereco: data.interveniente_endereco || '',
-    interveniente_email: data.interveniente_email || '',
-    interveniente_relacao: data.interveniente_relacao || '',
-    comprador_nome: data.comprador_nome || '',
-    comprador_nacionalidade: data.comprador_nacionalidade || '',
-    comprador_estado_civil: data.comprador_estado_civil || '',
-    comprador_regime_sufixo: compradorRegimeSufixo,
-    comprador_profissao: data.comprador_profissao || '',
-    comprador_rg: data.comprador_rg || '',
-    comprador_orgao_emissor: data.comprador_orgao_emissor || '',
-    comprador_cpf: data.comprador_cpf || '',
-    comprador_endereco: data.comprador_endereco || '',
-    comprador_email: data.comprador_email || '',
+    vendedores: (data.vendedores || []).map(parteToItem),
+    anuentes: (data.anuentes || []).map(anuenteToItem),
+    compradores: (data.compradores || []).map(parteToItem),
     imovel_descricao: data.imovel_descricao || '',
     imovel_endereco: data.imovel_endereco || '',
     imovel_bairro: data.imovel_bairro || '',
@@ -135,7 +118,6 @@ export function buildPromessaAvistaTemplateData(
     arras_confirmatoria: data.tipo_arras === 'confirmatoria',
     arras_penitencial: data.tipo_arras === 'penitencial',
     data_extenso: dataExtenso,
-    cidade_uf: cidadeUf,
     testemunha1_nome: data.testemunha1_nome || '',
     testemunha1_cpf: data.testemunha1_cpf || '',
     testemunha2_nome: data.testemunha2_nome || '',
