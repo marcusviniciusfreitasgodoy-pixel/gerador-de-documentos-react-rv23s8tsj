@@ -3,6 +3,30 @@ import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import type { DistratoValues, PartyValues, AnuenteValues } from '@/lib/distratoHelpers'
 
+const ORDINAIS = [
+  '',
+  'PRIMEIRA',
+  'SEGUNDA',
+  'TERCEIRA',
+  'QUARTA',
+  'QUINTA',
+  'SEXTA',
+  'SÉTIMA',
+  'OITAVA',
+  'NONA',
+  'DÉCIMA',
+  'DÉCIMA PRIMEIRA',
+  'DÉCIMA SEGUNDA',
+  'DÉCIMA TERCEIRA',
+  'DÉCIMA QUARTA',
+  'DÉCIMA QUINTA',
+]
+
+function ordinalExtenso(n: number): string {
+  return ORDINAIS[n] || `${n}ª`
+}
+
+// Monta tudo o que vem APÓS o nome na qualificação de uma parte.
 function montarQualificacao(p: PartyValues): string {
   const regime =
     p.estado_civil === 'Casado(a)' && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
@@ -26,79 +50,103 @@ function anuenteToItem(a: AnuenteValues) {
   }
 }
 
-const COMISSAO_DESTINO_TEXTO: Record<string, string> = {
-  retida_corretor:
-    'A comissão imobiliária já paga será retida pelo corretor intermediador, não havendo devolução',
-  devolvida_pagador:
-    'A comissão imobiliária será integralmente devolvida a quem a pagou, no prazo estabelecido',
-  paga_especifico: 'A comissão imobiliária será paga pela parte especificada neste instrumento',
-}
-
 export function buildDistratoTemplateData(data: DistratoValues): Record<string, unknown> {
-  const valorPago = data.sem_valores ? 0 : parseCurrency(data.valor_pago || '0')
-  const retencao = data.sem_valores ? 0 : parseCurrency(data.retencao_valor || '0')
-  const valorDevolucao = Math.max(0, valorPago - retencao)
-
-  const docDate = new Date(data.data_documento + 'T00:00:00')
-  const dataExtenso = formatDateLower(docDate)
-
-  const contratoDate = new Date(data.contrato_originario_data + 'T00:00:00')
-  const contratoDataExtenso = formatDateLower(contratoDate)
-
   const fmt = (v: number) => cleanCurrencyMask(formatCurrency(v))
   const extenso = (v: number) => currencyToWords(v)
 
-  let clauseNum = 2
-  const numClausulaDevolucaoValores = data.sem_valores ? null : clauseNum++
-  const numClausulaDevolucaoImovel = data.tem_devolucao_imovel ? clauseNum++ : null
-  const numClausulaComissao = data.tem_comissao ? clauseNum++ : null
-  const numClausulaRgi = data.tem_rgi_cancelamento ? clauseNum++ : null
-  const numClausulaRenuncia = data.tem_renuncia_perdas ? clauseNum++ : null
-  const numClausulaDisposicoes = clauseNum
+  const semValores = !!data.sem_valores
+  const temRetencao = !semValores && !!data.tem_retencao
+
+  const valorPago = parseCurrency(data.valor_pago || '0')
+  const valorRetido = temRetencao ? parseCurrency(data.retencao_valor || '0') : 0
+  const valorDevolver = Math.max(valorPago - valorRetido, 0)
+
+  const comissaoValor = parseCurrency(data.comissao_valor || '0')
+
+  // Numeração dinâmica: 3 cláusulas fixas antes; a partir daí conta só as ativas.
+  let n = 3
+  const num = (active: boolean) => {
+    if (active) {
+      n += 1
+      return ordinalExtenso(n)
+    }
+    return ''
+  }
+  const n_imovel = num(!!data.devolve_imovel)
+  const n_comissao = num(!!data.trata_comissao)
+  const n_baixa = num(!!data.baixa_averbacao)
+  const n_quitacao = num(true)
+  const n_renuncia = num(!!data.renuncia_perdas)
+  const n_despesas = num(true)
+  const n_lgpd = num(true)
+  const n_foro = num(true)
+
+  const docDate = new Date(data.data_documento + 'T00:00:00')
+  const dataExtenso = formatDateLower(docDate)
 
   return {
     vendedores: (data.vendedores || []).map(parteToItem),
     compradores: (data.compradores || []).map(parteToItem),
     anuentes: (data.anuentes || []).map(anuenteToItem),
+
     contrato_originario_tipo: data.contrato_originario_tipo || '',
-    contrato_originario_data_extenso: contratoDataExtenso,
-    contrato_originario_registro: data.contrato_originario_registro || '',
-    imovel_descricao: data.imovel_descricao || '',
-    imovel_endereco: data.imovel_endereco || '',
-    imovel_bairro: data.imovel_bairro || '',
-    imovel_cidade: data.imovel_cidade || '',
-    imovel_uf: data.imovel_uf || '',
-    imovel_cep: data.imovel_cep || '',
-    imovel_matricula: data.imovel_matricula || '',
-    imovel_rgi: data.imovel_rgi || '',
-    imovel_iptu: data.imovel_iptu || '',
-    sem_valores: !!data.sem_valores,
+    contrato_originario_data: data.contrato_originario_data || '',
+    contrato_originario_objeto: data.contrato_originario_objeto || '',
+
+    // Acerto de valores
+    sem_valores: semValores,
     valor_pago: fmt(valorPago),
     valor_pago_extenso: extenso(valorPago),
-    retencao_valor: fmt(retencao),
-    retencao_valor_extenso: extenso(retencao),
-    valor_devolucao: fmt(valorDevolucao),
-    valor_devolucao_extenso: extenso(valorDevolucao),
-    forma_devolucao: data.forma_devolucao || '',
-    tem_devolucao_imovel: !!data.tem_devolucao_imovel,
-    tem_comissao: !!data.tem_comissao,
-    tem_rgi_cancelamento: !!data.tem_rgi_cancelamento,
-    tem_renuncia_perdas: !!data.tem_renuncia_perdas,
-    num_clausula_devolucao_valores: numClausulaDevolucaoValores,
-    num_clausula_devolucao_imovel: numClausulaDevolucaoImovel,
-    num_clausula_comissao: numClausulaComissao,
-    num_clausula_rgi: numClausulaRgi,
-    num_clausula_renuncia: numClausulaRenuncia,
-    num_clausula_disposicoes: numClausulaDisposicoes,
-    comissao_destino: data.comissao_destino || 'retida_corretor',
-    comissao_destino_texto:
-      COMISSAO_DESTINO_TEXTO[data.comissao_destino] || COMISSAO_DESTINO_TEXTO.retida_corretor,
-    comissao_beneficiario: data.comissao_beneficiario || '',
-    comissao_creci: data.comissao_creci || '',
-    comissao_documento: data.comissao_documento || '',
-    comissao_pix: data.comissao_pix || '',
+    tem_retencao: temRetencao,
+    retencao_titulo: data.retencao_titulo || '',
+    retencao_valor: fmt(valorRetido),
+    retencao_valor_extenso: extenso(valorRetido),
+    valor_devolver: fmt(valorDevolver),
+    valor_devolver_extenso: extenso(valorDevolver),
+    devolucao_prazo: data.devolucao_prazo || '',
+    devolucao_forma: data.devolucao_forma || '',
+
+    // Devolução do imóvel
+    devolve_imovel: !!data.devolve_imovel,
+    imovel_devolucao_descricao: data.imovel_devolucao_descricao || '',
+    imovel_desocupacao_prazo: data.imovel_desocupacao_prazo || '',
+
+    // Comissão
+    trata_comissao: !!data.trata_comissao,
+    comissao_retida: !!data.trata_comissao && data.comissao_destino === 'retida',
+    comissao_devolvida: !!data.trata_comissao && data.comissao_destino === 'devolvida',
+    comissao_por_conta: !!data.trata_comissao && data.comissao_destino === 'por_conta',
+    comissao_valor: fmt(comissaoValor),
+    comissao_valor_extenso: extenso(comissaoValor),
+    comissao_corretor: data.comissao_corretor || '',
+    comissao_prazo: data.comissao_prazo || '',
+    comissao_responsavel: data.comissao_responsavel || '',
+
+    // Baixa de averbação
+    baixa_averbacao: !!data.baixa_averbacao,
+    matricula_numero: data.matricula_numero || '',
+    rgi_numero: data.rgi_numero || '',
+    averbacao_custas: data.averbacao_custas || '',
+
+    // Renúncia
+    renuncia_perdas: !!data.renuncia_perdas,
+
+    // Ordinais dinâmicos
+    n_imovel,
+    n_comissao,
+    n_baixa,
+    n_quitacao,
+    n_renuncia,
+    n_despesas,
+    n_lgpd,
+    n_foro,
+
+    // Foro / fecho
     foro_comarca: data.foro_comarca || '',
+    vias_qtd: (data.vias_qtd || '').trim() || '2 (duas)',
+    cidade: data.cidade || '',
     data_extenso: dataExtenso,
+
     testemunha1_nome: data.testemunha1_nome || '',
     testemunha1_cpf: data.testemunha1_cpf || '',
     testemunha2_nome: data.testemunha2_nome || '',
