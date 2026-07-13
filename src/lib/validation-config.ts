@@ -23,6 +23,7 @@ export const DOCUMENT_TYPES = [
   { value: 'Termo de Entrega das Chaves', label: 'Termo de Entrega das Chaves' },
   { value: 'Termo de Transmissão da Posse', label: 'Termo de Transmissão da Posse' },
   { value: 'Proposta/Reserva', label: 'Proposta/Reserva' },
+  { value: 'Distrato', label: 'Distrato' },
   { value: 'Genérico/Outro', label: 'Genérico/Outro' },
 ]
 

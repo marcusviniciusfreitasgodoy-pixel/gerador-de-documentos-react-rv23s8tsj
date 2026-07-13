@@ -17,6 +17,7 @@ import ExpertSupportNewPage from './pages/ExpertSupportNew'
 import ExpertSupportDetailPage from './pages/ExpertSupportDetail'
 import Layout from './components/Layout'
 import PropostaReservaPage from './pages/PropostaReserva'
+import DistratoPage from './pages/Distrato'
 
 const App = () => (
   <BrowserRouter>
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="/especialista/:id" element={<ExpertSupportDetailPage />} />
               <Route path="/perfil" element={<MyProfilePage />} />
               <Route path="/proposta-reserva" element={<PropostaReservaPage />} />
+              <Route path="/distrato" element={<DistratoPage />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
