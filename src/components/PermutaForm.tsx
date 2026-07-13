@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import { useState, useEffect } from 'react'
+import { useForm, useFieldArray, useWatch, type Control } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
@@ -7,19 +7,19 @@ import {
   Wand2,
   User,
   UserCheck,
-  FileText,
-  DollarSign,
+  Building2,
   Home,
-  ArrowLeftRight,
+  DollarSign,
+  Repeat,
+  Scale,
   Settings2,
   FileSearch,
   Plus,
   Trash2,
   HeartHandshake,
-  Building2,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -39,20 +39,17 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { maskCurrency, maskCpfCnpj } from '@/lib/utils'
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import { maskCurrency, maskCpfCnpj, maskCep } from '@/lib/utils'
 import {
   permutaSchema,
   type PermutaValues,
   permutaMockData,
   emptyParty,
-  TORNA_DEVEDOR_OPTIONS,
-  TORNA_FORMA_OPTIONS,
 } from '@/lib/permutaHelpers'
 import { buildPermutaTemplateData } from '@/lib/permutaTemplate'
 import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
+import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { getBrokerProfile } from '@/services/broker-profile'
 
 const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
   <input
@@ -63,35 +60,34 @@ const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boole
   />
 )
 
-function PropertySection({
+function ImovelSection({
   control,
   prefix,
-  title,
-  icon,
+  titulo,
 }: {
-  control: any
-  prefix: string
-  title: string
-  icon: React.ReactNode
+  control: Control<PermutaValues>
+  prefix: 'imovel_a' | 'imovel_b'
+  titulo: string
 }) {
+  const f = (n: string) => `${prefix}.${n}` as any
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
-        {icon}
-        <h3 className="font-semibold text-primary">{title}</h3>
+        <Home className="h-5 w-5 text-primary" />
+        <h3 className="font-semibold text-primary">{titulo}</h3>
       </div>
       <Separator />
       <FormField
         control={control}
-        name={`${prefix}_descricao`}
+        name={f('descricao')}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Descrição do Imóvel *</FormLabel>
+            <FormLabel>Descrição *</FormLabel>
             <FormControl>
               <Textarea
                 rows={2}
                 className="resize-none"
-                placeholder="Ex: Apartamento nº 801..."
+                placeholder="Ex: Apartamento nº 101 do Edifício Solar"
                 {...field}
               />
             </FormControl>
@@ -99,26 +95,13 @@ function PropertySection({
           </FormItem>
         )}
       />
-      <FormField
-        control={control}
-        name={`${prefix}_endereco`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Endereço Completo *</FormLabel>
-            <FormControl>
-              <Input placeholder="Rua, nº, Bairro, Cidade/UF, CEP" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={control}
-          name={`${prefix}_matricula`}
+          name={f('endereco')}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Matrícula nº *</FormLabel>
+              <FormLabel>Endereço *</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -128,10 +111,10 @@ function PropertySection({
         />
         <FormField
           control={control}
-          name={`${prefix}_rgi`}
+          name={f('bairro')}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>RGI *</FormLabel>
+              <FormLabel>Bairro</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -141,7 +124,115 @@ function PropertySection({
         />
         <FormField
           control={control}
-          name={`${prefix}_iptu`}
+          name={f('cidade')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cidade *</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('uf')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>UF *</FormLabel>
+              <FormControl>
+                <Input maxLength={2} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('cep')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>CEP</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="00000-000"
+                  value={field.value || ''}
+                  onChange={(e) => field.onChange(maskCep(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('fracao_ideal')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Fração Ideal</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('vagas_qtd')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Qtd. Vagas</FormLabel>
+              <FormControl>
+                <Input type="number" min={0} {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('vagas_descricao')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Desc. Vagas</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('rgi')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>RGI (Cartório)</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('matricula')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Matrícula *</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={f('iptu')}
           render={({ field }) => (
             <FormItem>
               <FormLabel>IPTU</FormLabel>
@@ -153,23 +244,6 @@ function PropertySection({
           )}
         />
       </div>
-      <FormField
-        control={control}
-        name={`${prefix}`.replace('imovel', 'valor')}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Valor do Imóvel (R$) *</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="R$ 0,00"
-                value={field.value || ''}
-                onChange={(e) => field.onChange(maskCurrency(e.target.value))}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
     </div>
   )
 }
@@ -177,62 +251,60 @@ function PropertySection({
 export function PermutaForm() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
+  const [brokerLoaded, setBrokerLoaded] = useState(false)
+  const [hasBroker, setHasBroker] = useState(false)
   const navigate = useNavigate()
 
   const form = useForm<PermutaValues>({
     resolver: zodResolver(permutaSchema),
     defaultValues: permutaMockData,
   })
-  const { control, getValues, setValue } = form
+  const { control, setValue, getValues } = form
   const ctrl = control as any
 
-  const {
-    fields: primeiroFields,
-    append: appendPrimeiro,
-    remove: removePrimeiro,
-  } = useFieldArray({ control, name: 'primeiros' })
-  const {
-    fields: segundoFields,
-    append: appendSegundo,
-    remove: removeSegundo,
-  } = useFieldArray({ control, name: 'segundos' })
-  const {
-    fields: anuenteFields,
-    append: appendAnuente,
-    remove: removeAnuente,
-  } = useFieldArray({ control, name: 'anuentes' })
-
-  const hasTorna = useWatch({ control, name: 'has_torna' })
-  const valorA = useWatch({ control, name: 'valor_a' })
-  const valorB = useWatch({ control, name: 'valor_b' })
-  const comissaoPercentual = useWatch({ control, name: 'comissao_percentual' })
-
-  const comissaoCalc = useMemo(() => {
-    const total = parseCurrency(valorA || '0') + parseCurrency(valorB || '0')
-    const pct = parseFloat(comissaoPercentual || '0') || 0
-    return { total, comissao: (total * pct) / 100 }
-  }, [valorA, valorB, comissaoPercentual])
+  const primeiroFA = useFieldArray({ control, name: 'primeiros' })
+  const segundoFA = useFieldArray({ control, name: 'segundos' })
+  const anuenteFA = useFieldArray({ control, name: 'anuentes' })
 
   useEffect(() => {
+    let cancelled = false
     getBrokerProfile()
       .then((profile) => {
-        if (!profile) return
-        setValue(
-          'comissao_beneficiario',
-          profile.tipo_perfil === 'imobiliaria' ? profile.razao_social : profile.nome,
-        )
-        setValue(
-          'comissao_documento',
-          profile.tipo_perfil === 'imobiliaria' ? profile.cnpj : profile.cpf,
-        )
-        setValue(
-          'comissao_creci',
-          profile.tipo_perfil === 'imobiliaria' ? profile.creci_juridico : profile.creci,
-        )
-        setValue('comissao_pix', profile.pix || '')
+        if (cancelled) return
+        const display = getBrokerDisplay(profile)
+        if (display) {
+          setHasBroker(true)
+          setValue('comissao_beneficiario', display.nome)
+          setValue('comissao_documento', display.documento)
+          setValue('comissao_creci', display.creci)
+          setValue('comissao_pix', display.pix)
+        }
       })
       .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setBrokerLoaded(true)
+      })
+    return () => {
+      cancelled = true
+    }
   }, [setValue])
+
+  const primeirosW = (useWatch({ control, name: 'primeiros' }) as PermutaValues['primeiros']) || []
+  const segundosW = (useWatch({ control, name: 'segundos' }) as PermutaValues['segundos']) || []
+  const temTorna = useWatch({ control, name: 'tem_torna' })
+  const tornaAPrazo = useWatch({ control, name: 'torna_a_prazo' })
+
+  const addConjugeAnuente = (nome: string, regime?: string, nac?: string, end?: string) => {
+    anuenteFA.append({
+      ...emptyParty,
+      conjuge_de: nome || '',
+      estado_civil: 'Casado(a)',
+      regime_bens: regime || '',
+      nacionalidade: nac || 'brasileiro(a)',
+      endereco: end || '',
+    })
+    toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
+  }
 
   const onSubmit = async (data: PermutaValues) => {
     setIsGenerating(true)
@@ -261,137 +333,104 @@ export function PermutaForm() {
     }
   }
 
-  const addConjugeAnuente = (party: 'primeiros' | 'segundos', i: number) => {
-    const p = getValues(`${party}.${i}`)
-    appendAnuente({
-      ...emptyParty,
-      conjuge_de: p?.nome || '',
-      estado_civil: 'Casado(a)',
-      regime_bens: p?.regime_bens || '',
-      nacionalidade: p?.nacionalidade || 'brasileiro(a)',
-      endereco: p?.endereco || '',
-    })
-    toast.success('Cônjuge adicionado como anuente.')
-  }
+  const renderParty = (
+    which: 'primeiros' | 'segundos',
+    fa: typeof primeiroFA,
+    watched: PermutaValues['primeiros'],
+    label: string,
+  ) => (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <User className="h-5 w-5 text-primary" />
+        <h3 className="font-semibold text-primary">{label}</h3>
+      </div>
+      <Separator />
+      {fa.fields.map((f, i) => (
+        <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold text-muted-foreground">
+              {label} {i + 1}
+            </span>
+            {fa.fields.length > 1 && (
+              <Button type="button" variant="ghost" size="icon" onClick={() => fa.remove(i)}>
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+          <CompromissoPartySection
+            control={ctrl}
+            prefix={`${which}.${i}`}
+            sep="."
+            title={`Dados — ${label} ${i + 1}`}
+            icon={<User className="h-5 w-5 text-primary" />}
+          />
+          {watched[i]?.estado_civil === 'Casado(a)' && (
+            <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
+              <p className="text-sm font-medium text-primary flex items-center gap-1.5">
+                <HeartHandshake className="h-4 w-4" /> Participação do cônjuge
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Como transmite um imóvel, a anuência do cônjuge costuma ser exigida. Inclua-o como
+                co-permutante (na lista) ou como anuente.
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  addConjugeAnuente(
+                    watched[i]?.nome,
+                    watched[i]?.regime_bens,
+                    watched[i]?.nacionalidade,
+                    watched[i]?.endereco,
+                  )
+                }
+              >
+                <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
+              </Button>
+            </div>
+          )}
+        </div>
+      ))}
+      <Button
+        type="button"
+        variant="outline"
+        className="w-full"
+        onClick={() => fa.append({ ...emptyParty })}
+      >
+        <Plus className="mr-1 h-4 w-4" /> Adicionar {label.toLowerCase()}
+      </Button>
+    </div>
+  )
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* PRIMEIROS PERMUTANTES */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <User className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Primeiros Permutantes</h3>
-          </div>
-          <Separator />
-          {primeiroFields.map((f, i) => (
-            <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-muted-foreground">
-                  Permutante {i + 1}
-                </span>
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => addConjugeAnuente('primeiros', i)}
-                  >
-                    <HeartHandshake className="mr-1 h-3 w-3" /> Cônjuge anuente
-                  </Button>
-                  {primeiroFields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removePrimeiro(i)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <CompromissoPartySection
-                control={ctrl}
-                prefix={`primeiros.${i}`}
-                sep="."
-                title={`Dados do Permutante ${i + 1}`}
-                icon={<User className="h-5 w-5 text-primary" />}
-              />
+        {brokerLoaded && !hasBroker && (
+          <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800">
+            <div className="text-sm">
+              <p className="font-semibold mb-1">Perfil não cadastrado</p>
+              <p className="mb-2">
+                Preencha seu Perfil em Meu Perfil para preencher a comissão automaticamente.
+              </p>
+              <Link to="/perfil" className="inline-flex items-center gap-1 font-semibold underline">
+                Ir para Meu Perfil
+              </Link>
             </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => appendPrimeiro({ ...emptyParty })}
-          >
-            <Plus className="mr-1 h-4 w-4" /> Adicionar permutante
-          </Button>
-        </div>
-
-        {/* SEGUNDOS PERMUTANTES */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <UserCheck className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Segundos Permutantes</h3>
           </div>
-          <Separator />
-          {segundoFields.map((f, i) => (
-            <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-muted-foreground">
-                  Permutante {i + 1}
-                </span>
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => addConjugeAnuente('segundos', i)}
-                  >
-                    <HeartHandshake className="mr-1 h-3 w-3" /> Cônjuge anuente
-                  </Button>
-                  {segundoFields.length > 1 && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeSegundo(i)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-              <CompromissoPartySection
-                control={ctrl}
-                prefix={`segundos.${i}`}
-                sep="."
-                title={`Dados do Permutante ${i + 1}`}
-                icon={<UserCheck className="h-5 w-5 text-primary" />}
-              />
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => appendSegundo({ ...emptyParty })}
-          >
-            <Plus className="mr-1 h-4 w-4" /> Adicionar permutante
-          </Button>
-        </div>
+        )}
 
-        {/* ANUENTES */}
-        {anuenteFields.length > 0 && (
+        {renderParty('primeiros', primeiroFA, primeirosW, 'Primeiro(s) Permutante(s)')}
+        {renderParty('segundos', segundoFA, segundosW, 'Segundo(s) Permutante(s)')}
+
+        {anuenteFA.fields.length > 0 && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <HeartHandshake className="h-5 w-5 text-primary" />
               <h3 className="font-semibold text-primary">Anuentes (cônjuges que consentem)</h3>
             </div>
             <Separator />
-            {anuenteFields.map((f, i) => (
+            {anuenteFA.fields.map((f, i) => (
               <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-muted-foreground">
@@ -401,7 +440,7 @@ export function PermutaForm() {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    onClick={() => removeAnuente(i)}
+                    onClick={() => anuenteFA.remove(i)}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -431,52 +470,111 @@ export function PermutaForm() {
           </div>
         )}
 
-        {/* IMÓVEL A */}
-        <PropertySection
+        <ImovelSection
           control={control}
           prefix="imovel_a"
-          title="Imóvel A (dos Primeiros Permutantes)"
-          icon={<Building2 className="h-5 w-5 text-primary" />}
+          titulo="Imóvel A — do Primeiro Permutante"
         />
-
-        {/* IMÓVEL B */}
-        <PropertySection
+        <ImovelSection
           control={control}
           prefix="imovel_b"
-          title="Imóvel B (dos Segundos Permutantes)"
-          icon={<Home className="h-5 w-5 text-primary" />}
+          titulo="Imóvel B — do Segundo Permutante"
         />
 
-        {/* TORNA */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <ArrowLeftRight className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Torna (Compensação Monetária)</h3>
+            <Building2 className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Valores dos Imóveis</h3>
+          </div>
+          <Separator />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={control}
+              name="valor_a"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Valor do Imóvel A (R$) *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="R$ 0,00"
+                      value={field.value}
+                      onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="valor_b"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Valor do Imóvel B (R$) *</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="R$ 0,00"
+                      value={field.value}
+                      onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Repeat className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Torna (diferença em dinheiro)</h3>
           </div>
           <Separator />
           <FormField
             control={control}
-            name="has_torna"
+            name="tem_torna"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center gap-2 space-y-0">
                 <FormControl>
                   <Checkbox checked={!!field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormLabel className="!mt-0 cursor-pointer">
-                  Haverá torna (diferença em dinheiro entre os imóveis)
+                  Há torna (imóveis de valores distintos)
                 </FormLabel>
               </FormItem>
             )}
           />
-          {hasTorna && (
+          {temTorna && (
             <div className="rounded-lg border border-border/60 p-4 space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={control}
+                  name="torna_pagador"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Quem paga a torna *</FormLabel>
+                      <Select value={field.value} onValueChange={field.onChange}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="primeiro">Primeiro(s) Permutante(s)</SelectItem>
+                          <SelectItem value="segundo">Segundo(s) Permutante(s)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={control}
                   name="torna_valor"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Valor da Torna (R$) *</FormLabel>
+                      <FormLabel>Valor da torna (R$) *</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="R$ 0,00"
@@ -488,139 +586,113 @@ export function PermutaForm() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={control}
-                  name="torna_devedor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Devedor da Torna *</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {TORNA_DEVEDOR_OPTIONS.map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {o}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={control}
-                  name="torna_forma_pagamento"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Forma de Pagamento *</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {TORNA_FORMA_OPTIONS.map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {o}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name="torna_prazo"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Prazo de Pagamento *</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Ex: 30 (trinta) dias" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
               <FormField
                 control={control}
-                name="torna_garantia"
+                name="torna_a_prazo"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                    <FormControl>
+                      <Checkbox checked={!!field.value} onChange={field.onChange} />
+                    </FormControl>
+                    <FormLabel className="!mt-0 cursor-pointer">
+                      Torna a prazo (parcelada)
+                    </FormLabel>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="torna_forma"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Garantia (opcional)</FormLabel>
+                    <FormLabel>
+                      {tornaAPrazo ? 'Forma / parcelas *' : 'Forma de pagamento *'}
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Hipoteca sobre o imóvel B" {...field} />
+                      <Input
+                        placeholder={
+                          tornaAPrazo
+                            ? 'Ex: 3 parcelas mensais de R$ 50.000,00'
+                            : 'Ex: transferência PIX no ato'
+                        }
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+              {tornaAPrazo && (
+                <FormField
+                  control={control}
+                  name="torna_garantia"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Garantia da torna (opcional)</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          rows={2}
+                          className="resize-none"
+                          placeholder="Ex: a escritura do IMÓVEL A só será outorgada após a quitação integral da torna"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
           )}
         </div>
 
-        {/* COMISSÃO */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Scale className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Arras</h3>
+          </div>
+          <Separator />
+          <FormField
+            control={control}
+            name="arras_tipo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Natureza das arras</FormLabel>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="confirmatoria">
+                      Confirmatória (sem arrependimento — arts. 417-419)
+                    </SelectItem>
+                    <SelectItem value="penitencial">
+                      Penitencial (com arrependimento — art. 420)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
             <h3 className="font-semibold text-primary">Comissão de Corretagem</h3>
           </div>
           <Separator />
-          <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 text-sm text-muted-foreground">
-            Total dos imóveis:{' '}
-            <strong className="text-primary">
-              {cleanCurrencyMask(formatCurrency(comissaoCalc.total))}
-            </strong>{' '}
-            &middot; Comissão ({comissaoPercentual || 0}%):{' '}
-            <strong className="text-primary">
-              {cleanCurrencyMask(formatCurrency(comissaoCalc.comissao))}
-            </strong>
-          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={control}
-              name="comissao_percentual"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Percentual da Comissão (%) *</FormLabel>
-                  <FormControl>
-                    <Input type="number" min={0} placeholder="Ex: 5" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={control}
               name="comissao_beneficiario"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Beneficiário (Corretor/Imobiliária)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Auto-preenchido pelo perfil" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <FormField
-              control={control}
-              name="comissao_documento"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CPF/CNPJ</FormLabel>
+                  <FormLabel>Corretor(a)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -643,28 +715,52 @@ export function PermutaForm() {
             />
             <FormField
               control={control}
-              name="comissao_pix"
+              name="comissao_percentual"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Chave PIX</FormLabel>
+                  <FormLabel>Comissão (%)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="number" min={0} step="0.1" placeholder="Ex: 6" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormField
+              control={control}
+              name="comissao_responsavel"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Comissão a cargo de *</FormLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="primeiro">Primeiro(s) Permutante(s)</SelectItem>
+                      <SelectItem value="segundo">Segundo(s) Permutante(s)</SelectItem>
+                      <SelectItem value="ambos">Ambos (em partes iguais)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+          <p className="text-xs text-muted-foreground">
+            A comissão em R$ é calculada automaticamente (% sobre a soma dos valores dos imóveis).
+          </p>
         </div>
 
-        {/* FORO / FECHO */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Settings2 className="h-5 w-5 text-primary" />
             <h3 className="font-semibold text-primary">Foro, Local e Data</h3>
           </div>
           <Separator />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
               name="foro_comarca"
@@ -683,7 +779,7 @@ export function PermutaForm() {
               name="cidade"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cidade *</FormLabel>
+                  <FormLabel>Cidade (local da assinatura) *</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
                   </FormControl>
@@ -696,7 +792,7 @@ export function PermutaForm() {
               name="data_documento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data *</FormLabel>
+                  <FormLabel>Data do Documento *</FormLabel>
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
@@ -707,7 +803,6 @@ export function PermutaForm() {
           </div>
         </div>
 
-        {/* TESTEMUNHAS */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <UserCheck className="h-5 w-5 text-primary" />
