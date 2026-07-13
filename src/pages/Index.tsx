@@ -235,6 +235,15 @@ export default function Index() {
             Desfazimento consensual de contrato — devolução de valores e quitação recíproca
           </p>
         </Link>
+        <Link
+          to="/permuta"
+          className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"
+        >
+          <h3 className="font-semibold text-primary group-hover:text-primary/90 transition-colors">
+            Promessa de Permuta
+          </h3>
+          <p className="text-sm text-muted-foreground mt-1">Troca de imóveis com torna opcional</p>
+        </Link>
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
           {docType === 'recibo'
             ? 'Recibo de Sinal e Princípio de Pagamento (Arras)'

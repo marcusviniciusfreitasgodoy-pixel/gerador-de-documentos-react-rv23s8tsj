@@ -25,6 +25,7 @@ export const DOCUMENT_TYPES = [
   { value: 'Proposta/Reserva', label: 'Proposta/Reserva' },
   { value: 'Distrato', label: 'Distrato' },
   { value: 'Genérico/Outro', label: 'Genérico/Outro' },
+  { value: 'Permuta', label: 'Permuta' },
 ]
 
 export const conformidadeStyles: Record<
