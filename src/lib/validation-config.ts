@@ -22,6 +22,7 @@ export const DOCUMENT_TYPES = [
   { value: 'Autorização de Intermediação', label: 'Autorização de Intermediação' },
   { value: 'Termo de Entrega das Chaves', label: 'Termo de Entrega das Chaves' },
   { value: 'Termo de Transmissão da Posse', label: 'Termo de Transmissão da Posse' },
+  { value: 'Proposta/Reserva', label: 'Proposta/Reserva' },
   { value: 'Genérico/Outro', label: 'Genérico/Outro' },
 ]
 

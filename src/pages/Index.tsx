@@ -12,7 +12,7 @@ import {
   FileSearch,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { IntermediationForm } from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
 import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
@@ -213,6 +213,14 @@ export default function Index() {
             Checklist Documental
           </Button>
         </div>
+        <Link to="/proposta-reserva" className="block w-full max-w-md mx-auto mt-2">
+          <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors cursor-pointer text-left">
+            <h3 className="font-semibold text-primary">Proposta de Compra e Reserva</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Oferta de compra com sinal/reserva — passo antes da promessa
+            </p>
+          </div>
+        </Link>
         <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
           {docType === 'recibo'
             ? 'Recibo de Sinal e Princípio de Pagamento (Arras)'
