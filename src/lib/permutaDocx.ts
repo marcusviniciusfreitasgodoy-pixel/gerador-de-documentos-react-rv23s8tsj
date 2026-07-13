@@ -3,8 +3,8 @@ import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/af27a510bc283556f12159a11724e83105f267cf/permuta_base64.txt'
-const EXPECTED_BYTE_COUNT = 41159
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/26c8fb38a017ad753004ce84c81dbe642fde7405/permuta_base64.txt'
+const EXPECTED_BYTE_COUNT = 41229
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
