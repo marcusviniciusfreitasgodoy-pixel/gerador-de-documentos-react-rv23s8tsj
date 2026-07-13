@@ -3,8 +3,8 @@ import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/a813b97b59d65522bc0fca278903366f51ef7e44/proposta_reserva_base64.txt'
-const EXPECTED_BYTE_COUNT = 39037
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/2deb3fdcd891958276143d330d4ed30557e79e18/proposta_reserva_base64.txt'
+const EXPECTED_BYTE_COUNT = 39324
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
