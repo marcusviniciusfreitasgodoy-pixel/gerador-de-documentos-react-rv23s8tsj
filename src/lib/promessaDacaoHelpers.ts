@@ -7,40 +7,31 @@ export const FORMA_PAGAMENTO_OPTIONS = ['PIX', 'TED', 'Transferência'] as const
 
 export const COMISSAO_RESPONSAVEL_OPTIONS = ['vendedor', 'comprador'] as const
 
+const partySchema = z.object({
+  nome: z.string().min(3, 'Nome obrigatório'),
+  nacionalidade: z.string().min(1, 'Obrigatório'),
+  estado_civil: z.string().min(1, 'Selecione'),
+  regime_bens: z.string().optional(),
+  profissao: z.string().min(1, 'Obrigatório'),
+  rg: z.string().min(1, 'Obrigatório'),
+  orgao_emissor: z.string().min(1, 'Obrigatório'),
+  cpf: z.string().min(1, 'Obrigatório'),
+  endereco: z.string().min(1, 'Obrigatório'),
+  email: z.string().optional(),
+})
+
+const anuenteSchema = partySchema.extend({
+  conjuge_de: z.string().optional(),
+})
+
+export type PartyValues = z.infer<typeof partySchema>
+export type AnuenteValues = z.infer<typeof anuenteSchema>
+
 export const promessaDacaoSchema = z
   .object({
-    vendedor_nome: z.string().min(3, 'Nome obrigatório'),
-    vendedor_nacionalidade: z.string().min(1, 'Obrigatório'),
-    vendedor_estado_civil: z.string().min(1, 'Selecione'),
-    vendedor_regime_bens: z.string().optional(),
-    vendedor_profissao: z.string().min(1, 'Obrigatório'),
-    vendedor_rg: z.string().min(1, 'Obrigatório'),
-    vendedor_orgao_emissor: z.string().min(1, 'Obrigatório'),
-    vendedor_cpf: z.string().min(1, 'Obrigatório'),
-    vendedor_endereco: z.string().min(1, 'Obrigatório'),
-    vendedor_email: z.string().optional(),
-    has_interveniente: z.boolean(),
-    interveniente_nome: z.string().optional(),
-    interveniente_nacionalidade: z.string().optional(),
-    interveniente_estado_civil: z.string().optional(),
-    interveniente_regime_bens: z.string().optional(),
-    interveniente_profissao: z.string().optional(),
-    interveniente_rg: z.string().optional(),
-    interveniente_orgao_emissor: z.string().optional(),
-    interveniente_cpf: z.string().optional(),
-    interveniente_endereco: z.string().optional(),
-    interveniente_email: z.string().optional(),
-    interveniente_relacao: z.string().optional(),
-    comprador_nome: z.string().min(3, 'Nome obrigatório'),
-    comprador_nacionalidade: z.string().min(1, 'Obrigatório'),
-    comprador_estado_civil: z.string().min(1, 'Selecione'),
-    comprador_regime_bens: z.string().optional(),
-    comprador_profissao: z.string().min(1, 'Obrigatório'),
-    comprador_rg: z.string().min(1, 'Obrigatório'),
-    comprador_orgao_emissor: z.string().min(1, 'Obrigatório'),
-    comprador_cpf: z.string().min(1, 'Obrigatório'),
-    comprador_endereco: z.string().min(1, 'Obrigatório'),
-    comprador_email: z.string().optional(),
+    vendedores: z.array(partySchema).min(1, 'Ao menos um vendedor'),
+    anuentes: z.array(anuenteSchema),
+    compradores: z.array(partySchema).min(1, 'Ao menos um comprador'),
     imovel_descricao: z.string().min(1, 'Obrigatório'),
     imovel_endereco: z.string().min(1, 'Obrigatório'),
     imovel_bairro: z.string().optional(),
@@ -70,11 +61,11 @@ export const promessaDacaoSchema = z
       .string()
       .min(1, 'Obrigatório')
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
-    bem_dacao_descricao: z.string().min(3, 'Descrição obrigatória'),
+    bem_dacao_descricao: z.string().min(1, 'Descreva o bem dado em pagamento'),
+    data_limite_escritura: z.string().min(1, 'Obrigatório'),
     forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
     dados_recebimento: z.string().optional(),
     prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
-    data_limite_escritura: z.string().min(1, 'Obrigatório'),
     comissao_beneficiario: z.string().optional(),
     comissao_documento: z.string().optional(),
     comissao_creci: z.string().optional(),
@@ -88,14 +79,6 @@ export const promessaDacaoSchema = z
     testemunha2_nome: z.string().optional(),
     testemunha2_cpf: z.string().optional(),
   })
-  .refine(
-    (d) => !d.has_interveniente || (d.interveniente_nome && d.interveniente_nome.length >= 3),
-    { message: 'Nome obrigatório', path: ['interveniente_nome'] },
-  )
-  .refine((d) => !d.has_interveniente || !!d.interveniente_cpf, {
-    message: 'CPF obrigatório',
-    path: ['interveniente_cpf'],
-  })
   .refine((d) => !d.entrada_parcelada || parseCurrency(d.valor_reforco || '') > 0, {
     message: 'Informe o reforço',
     path: ['valor_reforco'],
@@ -107,39 +90,49 @@ export const promessaDacaoSchema = z
 
 export type PromessaDacaoValues = z.infer<typeof promessaDacaoSchema>
 
+export const emptyParty: PartyValues = {
+  nome: '',
+  nacionalidade: 'brasileiro(a)',
+  estado_civil: '',
+  regime_bens: '',
+  profissao: '',
+  rg: '',
+  orgao_emissor: '',
+  cpf: '',
+  endereco: '',
+  email: '',
+}
+
 export const promessaDacaoMockData: PromessaDacaoValues = {
-  vendedor_nome: 'Roberto Mendes Araújo',
-  vendedor_nacionalidade: 'brasileiro',
-  vendedor_estado_civil: 'Casado(a)',
-  vendedor_regime_bens: 'Comunhão parcial',
-  vendedor_profissao: 'Médico',
-  vendedor_rg: 'MG-15.234.567',
-  vendedor_orgao_emissor: 'SSP/MG',
-  vendedor_cpf: '456.789.123-00',
-  vendedor_endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
-  vendedor_email: 'roberto.araujo@email.com',
-  has_interveniente: false,
-  interveniente_nome: '',
-  interveniente_nacionalidade: '',
-  interveniente_estado_civil: '',
-  interveniente_regime_bens: '',
-  interveniente_profissao: '',
-  interveniente_rg: '',
-  interveniente_orgao_emissor: '',
-  interveniente_cpf: '',
-  interveniente_endereco: '',
-  interveniente_email: '',
-  interveniente_relacao: '',
-  comprador_nome: 'Fernanda Souza Lima',
-  comprador_nacionalidade: 'brasileira',
-  comprador_estado_civil: 'Solteiro(a)',
-  comprador_regime_bens: '',
-  comprador_profissao: 'Engenheira',
-  comprador_rg: 'RJ-20.987.654',
-  comprador_orgao_emissor: 'SSP/RJ',
-  comprador_cpf: '987.654.321-00',
-  comprador_endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
-  comprador_email: 'fernanda.lima@email.com',
+  vendedores: [
+    {
+      nome: 'Roberto Mendes Araújo',
+      nacionalidade: 'brasileiro',
+      estado_civil: 'Casado(a)',
+      regime_bens: 'Comunhão parcial',
+      profissao: 'Médico',
+      rg: 'MG-15.234.567',
+      orgao_emissor: 'SSP/MG',
+      cpf: '456.789.123-00',
+      endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
+      email: 'roberto.araujo@email.com',
+    },
+  ],
+  anuentes: [],
+  compradores: [
+    {
+      nome: 'Fernanda Souza Lima',
+      nacionalidade: 'brasileira',
+      estado_civil: 'Solteiro(a)',
+      regime_bens: '',
+      profissao: 'Engenheira',
+      rg: 'RJ-20.987.654',
+      orgao_emissor: 'SSP/RJ',
+      cpf: '987.654.321-00',
+      endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
+      email: 'fernanda.lima@email.com',
+    },
+  ],
   imovel_descricao: 'Apartamento nº 801, Edifício Solar, 8º andar',
   imovel_endereco: 'Rua das Acácias, 150',
   imovel_bairro: 'Jacarepaguá',
@@ -154,18 +147,18 @@ export const promessaDacaoMockData: PromessaDacaoValues = {
   imovel_iptu: '001.234.567-8',
   imovel_origem_aquisicao: 'compra e venda',
   imovel_origem_registro: 'escritura pública lavrada em 15/03/2018',
-  valor_total: 'R$ 1.200.000,00',
-  valor_entrada: 'R$ 300.000,00',
+  valor_total: 'R$ 900.000,00',
+  valor_entrada: 'R$ 200.000,00',
   entrada_parcelada: false,
   valor_reforco: '',
   prazo_reforco: '',
-  valor_dacao: 'R$ 200.000,00',
+  valor_dacao: 'R$ 500.000,00',
   bem_dacao_descricao:
-    'Veículo Toyota Corolla XEI, placa ABC-1234, ano 2022, cor prata, RENAVAM 12345678901',
+    'imóvel residencial situado na Av. Tim Maia nº 7285, apto 101, bloco 5, objeto da matrícula 406458 do 9º Ofício de Registro de Imóveis do Rio de Janeiro',
+  data_limite_escritura: new Date(Date.now() + 60 * 86400000).toISOString().split('T')[0],
   forma_pagamento: 'PIX',
   dados_recebimento: 'PIX para a chave roberto.araujo@email.com',
   prazo_certidoes_dias: '10',
-  data_limite_escritura: new Date(Date.now() + 60 * 86400000).toISOString().split('T')[0],
   comissao_beneficiario: '',
   comissao_documento: '',
   comissao_creci: '',
