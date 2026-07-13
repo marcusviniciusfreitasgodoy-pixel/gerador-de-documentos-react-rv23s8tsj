@@ -2,12 +2,12 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
-// TEMPLATE PARTES FLEXÍVEIS: após subir o novo promessa_financiada_base64.txt
-// (gerado de TEMPLATE_promessa_financiada_PF.docx) no gist, atualize o hash do
-// commit abaixo. O byte-count já corresponde ao template PF.
+// TEMPLATE v3 (FGTS + partes flexíveis): commit pinado a8c872b6 = 42367 bytes.
+// Re-inclui os blocos {#usa_fgts} (Parte FGTS + autorização FIN003) que o rebuild
+// da partes-flexíveis havia derrubado.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/promessa_financiada_base64.txt'
-const EXPECTED_BYTE_COUNT = 42170
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/a8c872b64cc42ea55e639d20d74fc2199e496a51/promessa_financiada_base64.txt'
+const EXPECTED_BYTE_COUNT = 42367
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
