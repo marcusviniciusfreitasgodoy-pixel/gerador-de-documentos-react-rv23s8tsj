@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm, useFieldArray, useWatch, type Control } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -294,7 +294,15 @@ export function PermutaForm() {
   const temTorna = useWatch({ control, name: 'tem_torna' })
   const tornaAPrazo = useWatch({ control, name: 'torna_a_prazo' })
 
+  const requiresConsent = (regime?: string) =>
+    regime === 'Comunhão parcial' || regime === 'Comunhão universal'
+
   const addConjugeAnuente = (nome: string, regime?: string, nac?: string, end?: string) => {
+    const anuentesNow = (getValues('anuentes') || []) as { conjuge_de?: string }[]
+    if (nome && anuentesNow.some((a) => a.conjuge_de === nome)) {
+      toast.info('Este cônjuge já está listado como anuente.')
+      return
+    }
     anuenteFA.append({
       ...emptyParty,
       conjuge_de: nome || '',
@@ -305,6 +313,41 @@ export function PermutaForm() {
     })
     toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
   }
+
+  // Outorga conjugal automática (CAS002): quando um permutante fica Casado em regime de
+  // comunhão e tem nome preenchido, cria o bloco do cônjuge-anuente automaticamente.
+  // O ref-guard garante que só adiciona 1x por parte (não re-adiciona se você remover).
+  const autoLinkedRef = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    const anuentesNow = (getValues('anuentes') || []) as { conjuge_de?: string }[]
+    const groups: [string, PermutaValues['primeiros']][] = [
+      ['primeiros', primeirosW],
+      ['segundos', segundosW],
+    ]
+    for (const [which, list] of groups) {
+      list.forEach((p, i) => {
+        const key = `${which}.${i}:${p?.nome || ''}`
+        if (
+          p?.estado_civil === 'Casado(a)' &&
+          requiresConsent(p?.regime_bens) &&
+          p?.nome &&
+          !autoLinkedRef.current.has(key) &&
+          !anuentesNow.some((a) => a.conjuge_de === p.nome)
+        ) {
+          autoLinkedRef.current.add(key)
+          anuenteFA.append({
+            ...emptyParty,
+            conjuge_de: p.nome,
+            estado_civil: 'Casado(a)',
+            regime_bens: p.regime_bens || '',
+            nacionalidade: p.nacionalidade || 'brasileiro(a)',
+            endereco: p.endereco || '',
+          })
+        }
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [primeirosW, segundosW])
 
   const onSubmit = async (data: PermutaValues) => {
     setIsGenerating(true)
@@ -370,8 +413,9 @@ export function PermutaForm() {
                 <HeartHandshake className="h-4 w-4" /> Participação do cônjuge
               </p>
               <p className="text-xs text-muted-foreground">
-                Como transmite um imóvel, a anuência do cônjuge costuma ser exigida. Inclua-o como
-                co-permutante (na lista) ou como anuente.
+                {requiresConsent(watched[i]?.regime_bens)
+                  ? 'Regime de comunhão: o cônjuge foi adicionado automaticamente como ANUENTE abaixo (basta preencher os dados dele[a]). Se preferir, inclua-o como co-permutante na lista.'
+                  : 'A anuência do cônjuge pode ser exigida. Se aplicável, inclua-o como anuente.'}
               </p>
               <Button
                 type="button"
