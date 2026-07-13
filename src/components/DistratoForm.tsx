@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -7,16 +7,16 @@ import {
   Wand2,
   User,
   UserCheck,
-  Building2,
+  FileText,
   DollarSign,
+  Home,
+  Landmark,
+  Scale,
   Settings2,
   FileSearch,
   Plus,
   Trash2,
   HeartHandshake,
-  FileText,
-  ClipboardCheck,
-  ShieldOff,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
@@ -39,34 +39,33 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { maskCurrency, maskCpfCnpj, maskCep } from '@/lib/utils'
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import { maskCurrency, maskCpfCnpj } from '@/lib/utils'
 import {
   distratoSchema,
   type DistratoValues,
   distratoMockData,
   emptyParty,
-  COMISSAO_DESTINO_OPTIONS,
 } from '@/lib/distratoHelpers'
 import { buildDistratoTemplateData } from '@/lib/distratoTemplate'
 import { generateDistratoDocx, getDistratoText } from '@/lib/distratoDocx'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
 
-const COMISSAO_DESTINO_LABELS: Record<string, string> = {
-  retida_corretor: 'Retida pelo corretor',
-  devolvida_pagador: 'Devolvida ao pagador',
-  paga_especifico: 'Paga por parte específica',
+function sugerirPapelVendedor(regime?: string, estadoCivil?: string): string {
+  if (estadoCivil !== 'Casado(a)')
+    return 'Casado(a)? A anuência do cônjuge pode ser exigida para o desfazimento do negócio.'
+  if (regime === 'Separação total')
+    return 'Separação total: em regra dispensa anuência, mas inclua o cônjuge se ele participou do contrato original.'
+  return 'Comunhão de bens: inclua o cônjuge como CO-VENDEDOR (se era parte) ou como ANUENTE (para consentir no distrato).'
 }
 
-function sugerirPapelConjuge(regime?: string, estadoCivil?: string): string {
-  if (estadoCivil !== 'Casado(a)')
-    return 'Casado(a) em comunhão de bens? Considere incluir o cônjuge como co-vendedor/co-comprador ou anuente.'
-  if (regime === 'Comunhão universal' || regime === 'Comunhão parcial')
-    return 'Comunhão de bens: o imóvel integra o patrimônio comum — inclua o cônjuge como co-vendedor ou anuente.'
-  if (regime === 'Separação total')
-    return 'Separação total: a alienação não exige anuência do cônjuge, mas pode ser incluído como anuente.'
-  return 'Na dúvida, se ambos participam do contrato, inclua o cônjuge como anuente.'
-}
+const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
+  <input
+    type="checkbox"
+    className="h-4 w-4 accent-[var(--primary)]"
+    checked={checked}
+    onChange={(e) => onChange(e.target.checked)}
+  />
+)
 
 export function DistratoForm() {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -77,7 +76,7 @@ export function DistratoForm() {
     resolver: zodResolver(distratoSchema),
     defaultValues: distratoMockData,
   })
-  const { control, setValue, getValues } = form
+  const { control, getValues } = form
   const ctrl = control as any
 
   const {
@@ -98,26 +97,14 @@ export function DistratoForm() {
 
   const vendedoresW =
     (useWatch({ control, name: 'vendedores' }) as DistratoValues['vendedores']) || []
-  const compradoresW =
-    (useWatch({ control, name: 'compradores' }) as DistratoValues['compradores']) || []
   const semValores = useWatch({ control, name: 'sem_valores' })
-  const valorPago = useWatch({ control, name: 'valor_pago' })
-  const retencaoValor = useWatch({ control, name: 'retencao_valor' })
-  const temComissao = useWatch({ control, name: 'tem_comissao' })
-  const temDevolucaoImovel = useWatch({ control, name: 'tem_devolucao_imovel' })
-  const temRgiCancelamento = useWatch({ control, name: 'tem_rgi_cancelamento' })
-  const temRenunciaPerdas = useWatch({ control, name: 'tem_renuncia_perdas' })
+  const temRetencao = useWatch({ control, name: 'tem_retencao' })
+  const devolveImovel = useWatch({ control, name: 'devolve_imovel' })
+  const trataComissao = useWatch({ control, name: 'trata_comissao' })
+  const comissaoDestino = useWatch({ control, name: 'comissao_destino' })
+  const baixaAverbacao = useWatch({ control, name: 'baixa_averbacao' })
 
-  const valorDevolucao = useMemo(() => {
-    if (semValores) return 0
-    const pago = parseCurrency(valorPago || '0')
-    const retencao = parseCurrency(retencaoValor || '0')
-    return Math.max(0, pago - retencao)
-  }, [semValores, valorPago, retencaoValor])
-
-  const fmt = (v: number) => cleanCurrencyMask(formatCurrency(v))
-
-  const addConjugeVendedor = (i: number) => {
+  const addConjugeCoVendedor = (i: number) => {
     const v = getValues(`vendedores.${i}`)
     appendVendedor({
       ...emptyParty,
@@ -129,33 +116,8 @@ export function DistratoForm() {
     toast.success('Cônjuge adicionado como co-vendedor. Preencha os dados dele(a).')
   }
 
-  const addConjugeAnuenteVendedor = (i: number) => {
+  const addConjugeAnuente = (i: number) => {
     const v = getValues(`vendedores.${i}`)
-    appendAnuente({
-      ...emptyParty,
-      conjuge_de: v?.nome || '',
-      estado_civil: 'Casado(a)',
-      regime_bens: v?.regime_bens || '',
-      nacionalidade: v?.nacionalidade || 'brasileiro(a)',
-      endereco: v?.endereco || '',
-    })
-    toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
-  }
-
-  const addConjugeComprador = (i: number) => {
-    const v = getValues(`compradores.${i}`)
-    appendComprador({
-      ...emptyParty,
-      estado_civil: 'Casado(a)',
-      regime_bens: v?.regime_bens || '',
-      nacionalidade: v?.nacionalidade || 'brasileiro(a)',
-      endereco: v?.endereco || '',
-    })
-    toast.success('Cônjuge adicionado como co-comprador. Preencha os dados dele(a).')
-  }
-
-  const addConjugeAnuenteComprador = (i: number) => {
-    const v = getValues(`compradores.${i}`)
     appendAnuente({
       ...emptyParty,
       conjuge_de: v?.nome || '',
@@ -197,11 +159,11 @@ export function DistratoForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* VENDEDORES */}
+        {/* PROMITENTES VENDEDORES */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <User className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Vendedor(es)</h3>
+            <h3 className="font-semibold text-primary">Promitente(s) Vendedor(es)</h3>
           </div>
           <Separator />
           {vendedorFields.map((f, i) => (
@@ -231,17 +193,20 @@ export function DistratoForm() {
               {vendedoresW[i]?.estado_civil === 'Casado(a)' && (
                 <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
                   <p className="text-sm font-medium text-primary flex items-center gap-1.5">
-                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge
+                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge deste vendedor
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {sugerirPapelConjuge(vendedoresW[i]?.regime_bens, vendedoresW[i]?.estado_civil)}
+                    {sugerirPapelVendedor(
+                      vendedoresW[i]?.regime_bens,
+                      vendedoresW[i]?.estado_civil,
+                    )}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Button
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => addConjugeVendedor(i)}
+                      onClick={() => addConjugeCoVendedor(i)}
                     >
                       <Plus className="mr-1 h-3 w-3" /> Cônjuge como co-vendedor
                     </Button>
@@ -249,7 +214,7 @@ export function DistratoForm() {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => addConjugeAnuenteVendedor(i)}
+                      onClick={() => addConjugeAnuente(i)}
                     >
                       <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
                     </Button>
@@ -265,6 +230,49 @@ export function DistratoForm() {
             onClick={() => appendVendedor({ ...emptyParty })}
           >
             <Plus className="mr-1 h-4 w-4" /> Adicionar vendedor
+          </Button>
+        </div>
+
+        {/* PROMITENTES COMPRADORES */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <UserCheck className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Promitente(s) Comprador(es)</h3>
+          </div>
+          <Separator />
+          {compradorFields.map((f, i) => (
+            <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-semibold text-muted-foreground">
+                  Comprador {i + 1}
+                </span>
+                {compradorFields.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeComprador(i)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+              <CompromissoPartySection
+                control={ctrl}
+                prefix={`compradores.${i}`}
+                sep="."
+                title={`Dados do Comprador ${i + 1}`}
+                icon={<UserCheck className="h-5 w-5 text-primary" />}
+              />
+            </div>
+          ))}
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full"
+            onClick={() => appendComprador({ ...emptyParty })}
+          >
+            <Plus className="mr-1 h-4 w-4" /> Adicionar comprador
           </Button>
         </div>
 
@@ -296,9 +304,9 @@ export function DistratoForm() {
                   name={`anuentes.${i}.conjuge_de`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cônjuge de qual parte?</FormLabel>
+                      <FormLabel>Cônjuge de qual vendedor?</FormLabel>
                       <FormControl>
-                        <Input placeholder="Nome da parte" {...field} />
+                        <Input placeholder="Nome do vendedor" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -316,85 +324,11 @@ export function DistratoForm() {
           </div>
         )}
 
-        {/* COMPRADORES */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <UserCheck className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Comprador(es)</h3>
-          </div>
-          <Separator />
-          {compradorFields.map((f, i) => (
-            <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-muted-foreground">
-                  Comprador {i + 1}
-                </span>
-                {compradorFields.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeComprador(i)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-              <CompromissoPartySection
-                control={ctrl}
-                prefix={`compradores.${i}`}
-                sep="."
-                title={`Dados do Comprador ${i + 1}`}
-                icon={<UserCheck className="h-5 w-5 text-primary" />}
-              />
-              {compradoresW[i]?.estado_civil === 'Casado(a)' && (
-                <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
-                  <p className="text-sm font-medium text-primary flex items-center gap-1.5">
-                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {sugerirPapelConjuge(
-                      compradoresW[i]?.regime_bens,
-                      compradoresW[i]?.estado_civil,
-                    )}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addConjugeComprador(i)}
-                    >
-                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como co-comprador
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => addConjugeAnuenteComprador(i)}
-                    >
-                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() => appendComprador({ ...emptyParty })}
-          >
-            <Plus className="mr-1 h-4 w-4" /> Adicionar comprador
-          </Button>
-        </div>
-
         {/* CONTRATO ORIGINÁRIO */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Contrato Originário</h3>
+            <h3 className="font-semibold text-primary">Contrato Originário (que será desfeito)</h3>
           </div>
           <Separator />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -403,9 +337,12 @@ export function DistratoForm() {
               name="contrato_originario_tipo"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tipo do Contrato Originário *</FormLabel>
+                  <FormLabel>Tipo do contrato *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Promessa de Compra e Venda" {...field} />
+                    <Input
+                      placeholder="Ex: Instrumento Particular de Promessa de Compra e Venda"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -416,9 +353,9 @@ export function DistratoForm() {
               name="contrato_originario_data"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data do Contrato Originário *</FormLabel>
+                  <FormLabel>Data do contrato original *</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input placeholder="Ex: 10 de janeiro de 2026" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -427,37 +364,15 @@ export function DistratoForm() {
           </div>
           <FormField
             control={control}
-            name="contrato_originario_registro"
+            name="contrato_originario_objeto"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Registro / Referência</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ex: Escritura pública lavrada no..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* IMÓVEL */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Dados do Imóvel</h3>
-          </div>
-          <Separator />
-          <FormField
-            control={control}
-            name="imovel_descricao"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Descrição *</FormLabel>
+                <FormLabel>Objeto do contrato (imóvel / descrição) *</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Ex: Apartamento nº 801..."
-                    className="resize-none"
                     rows={2}
+                    className="resize-none"
+                    placeholder="Ex: o Apartamento nº 801..., matrícula nº 78.456 do 6º RGI"
                     {...field}
                   />
                 </FormControl>
@@ -465,123 +380,13 @@ export function DistratoForm() {
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={control}
-              name="imovel_endereco"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Endereço *</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_bairro"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Bairro</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_cidade"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cidade *</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_uf"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>UF *</FormLabel>
-                  <FormControl>
-                    <Input maxLength={2} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_cep"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CEP</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="00000-000"
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(maskCep(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_matricula"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Matrícula *</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_rgi"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>RGI (Cartório)</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="imovel_iptu"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>IPTU</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
         </div>
 
-        {/* LIQUIDAÇÃO FINANCEIRA */}
+        {/* ACERTO DE VALORES */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Liquidação Financeira</h3>
+            <h3 className="font-semibold text-primary">Acerto de Valores</h3>
           </div>
           <Separator />
           <FormField
@@ -590,34 +395,22 @@ export function DistratoForm() {
             render={({ field }) => (
               <FormItem className="flex flex-row items-center gap-2 space-y-0">
                 <FormControl>
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 accent-[var(--primary)]"
-                    checked={!!field.value}
-                    onChange={(e) => {
-                      field.onChange(e.target.checked)
-                      if (e.target.checked) {
-                        setValue('valor_pago', '')
-                        setValue('retencao_valor', '')
-                        setValue('forma_devolucao', '')
-                      }
-                    }}
-                  />
+                  <Checkbox checked={!!field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormLabel className="!mt-0 cursor-pointer">
-                  Nenhum valor foi pago — sem devolução
+                  Não houve pagamento de valores (nada a devolver)
                 </FormLabel>
               </FormItem>
             )}
           />
           {!semValores && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="rounded-lg border border-border/60 p-4 space-y-4">
               <FormField
                 control={control}
                 name="valor_pago"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Valor Pago (R$) *</FormLabel>
+                    <FormLabel>Valor já pago pelo comprador (R$) *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="R$ 0,00"
@@ -631,35 +424,136 @@ export function DistratoForm() {
               />
               <FormField
                 control={control}
-                name="retencao_valor"
+                name="tem_retencao"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Retenção (R$) *</FormLabel>
+                  <FormItem className="flex flex-row items-center gap-2 space-y-0">
                     <FormControl>
-                      <Input
-                        placeholder="R$ 0,00"
-                        value={field.value || ''}
-                        onChange={(e) => field.onChange(maskCurrency(e.target.value))}
-                      />
+                      <Checkbox checked={!!field.value} onChange={field.onChange} />
                     </FormControl>
-                    <FormMessage />
+                    <FormLabel className="!mt-0 cursor-pointer">
+                      Haverá retenção de parte do valor
+                    </FormLabel>
                   </FormItem>
                 )}
               />
-              <FormItem>
-                <FormLabel>Valor a Devolver (Calculado)</FormLabel>
+              {temRetencao && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={control}
+                    name="retencao_valor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Valor retido (R$) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="R$ 0,00"
+                            value={field.value || ''}
+                            onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name="retencao_titulo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>A título de *</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Ex: arras, a título de perdas e danos" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={control}
+                  name="devolucao_prazo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Prazo de devolução *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: 10 (dez) dias" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={control}
+                  name="devolucao_forma"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Forma de devolução *</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Ex: transferência via PIX" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <p className="text-xs text-muted-foreground">
+                O valor a devolver é calculado automaticamente (valor pago − retenção).
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* DEVOLUÇÃO DO IMÓVEL */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Home className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Devolução do Imóvel (se houve posse)</h3>
+          </div>
+          <Separator />
+          <FormField
+            control={control}
+            name="devolve_imovel"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center gap-2 space-y-0">
                 <FormControl>
-                  <Input disabled value={fmt(valorDevolucao)} />
+                  <Checkbox checked={!!field.value} onChange={field.onChange} />
                 </FormControl>
+                <FormLabel className="!mt-0 cursor-pointer">
+                  Incluir cláusula de devolução do imóvel
+                </FormLabel>
               </FormItem>
+            )}
+          />
+          {devolveImovel && (
+            <div className="rounded-lg border border-border/60 p-4 space-y-4">
               <FormField
                 control={control}
-                name="forma_devolucao"
+                name="imovel_devolucao_descricao"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Forma de Devolução *</FormLabel>
+                    <FormLabel>Descrição do imóvel a restituir *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: PIX em até 30 dias" {...field} />
+                      <Textarea
+                        rows={2}
+                        className="resize-none"
+                        placeholder="Ex: o Apartamento nº 801 do Edifício Solar"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="imovel_desocupacao_prazo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Prazo para desocupação *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: 15 (quinze) dias" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -671,201 +565,224 @@ export function DistratoForm() {
 
         {/* COMISSÃO */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-primary">Comissão</h3>
-            </div>
-            <FormField
-              control={control}
-              name="tem_comissao"
-              render={({ field }) => (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground">
-                    {field.value ? 'Ativo' : 'Inativo'}
-                  </span>
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 accent-[var(--primary)]"
-                    checked={!!field.value}
-                    onChange={(e) => field.onChange(e.target.checked)}
+          <div className="flex items-center gap-2">
+            <DollarSign className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Comissão de Intermediação</h3>
+          </div>
+          <Separator />
+          <FormField
+            control={control}
+            name="trata_comissao"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox checked={!!field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormLabel className="!mt-0 cursor-pointer">
+                  Incluir cláusula sobre a comissão
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+          {trataComissao && (
+            <div className="rounded-lg border border-border/60 p-4 space-y-4">
+              <FormField
+                control={control}
+                name="comissao_destino"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Destino da comissão *</FormLabel>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="retida">
+                          Retida pelo corretor (serviço prestado)
+                        </SelectItem>
+                        <SelectItem value="devolvida">Devolvida a quem pagou</SelectItem>
+                        <SelectItem value="por_conta">Por conta de uma das partes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {(comissaoDestino === 'retida' || comissaoDestino === 'devolvida') && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={control}
+                    name="comissao_valor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Valor da comissão (R$) *</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="R$ 0,00"
+                            value={field.value || ''}
+                            onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={control}
+                    name="comissao_corretor"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Corretor / imobiliária</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Nome do corretor" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
               )}
-            />
-          </div>
-          {temComissao && (
-            <>
-              <Separator />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {comissaoDestino === 'devolvida' && (
                 <FormField
                   control={control}
-                  name="comissao_destino"
+                  name="comissao_prazo"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Destino da Comissão *</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {COMISSAO_DESTINO_OPTIONS.map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {COMISSAO_DESTINO_LABELS[o]}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name="comissao_beneficiario"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Beneficiário</FormLabel>
+                      <FormLabel>Prazo da devolução *</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Ex: 10 (dez) dias" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              )}
+              {comissaoDestino === 'por_conta' && (
                 <FormField
                   control={control}
-                  name="comissao_creci"
+                  name="comissao_responsavel"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>CRECI</FormLabel>
+                      <FormLabel>Por conta de quem? *</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Ex: PROMITENTES VENDEDORES" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={control}
-                  name="comissao_documento"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Documento (CPF/CNPJ)</FormLabel>
-                      <FormControl>
-                        <Input
-                          value={field.value || ''}
-                          onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name="comissao_pix"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>PIX</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </>
+              )}
+            </div>
           )}
         </div>
 
-        {/* CLÁUSULAS OPCIONAIS */}
+        {/* BAIXA DE AVERBAÇÃO */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Settings2 className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Cláusulas Adicionais</h3>
+            <Landmark className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Baixa da Averbação no RGI</h3>
           </div>
           <Separator />
-          <div className="space-y-3">
-            <FormField
-              control={control}
-              name="tem_devolucao_imovel"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                  <FormControl>
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 accent-[var(--primary)]"
-                      checked={!!field.value}
-                      onChange={(e) => field.onChange(e.target.checked)}
-                    />
-                  </FormControl>
-                  <FormLabel className="!mt-0 cursor-pointer flex items-center gap-1.5">
-                    <ClipboardCheck className="h-4 w-4" /> Devolução do Imóvel
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="tem_rgi_cancelamento"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                  <FormControl>
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 accent-[var(--primary)]"
-                      checked={!!field.value}
-                      onChange={(e) => field.onChange(e.target.checked)}
-                    />
-                  </FormControl>
-                  <FormLabel className="!mt-0 cursor-pointer flex items-center gap-1.5">
-                    <FileText className="h-4 w-4" /> Cancelamento no RGI
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="tem_renuncia_perdas"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                  <FormControl>
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 accent-[var(--primary)]"
-                      checked={!!field.value}
-                      onChange={(e) => field.onChange(e.target.checked)}
-                    />
-                  </FormControl>
-                  <FormLabel className="!mt-0 cursor-pointer flex items-center gap-1.5">
-                    <ShieldOff className="h-4 w-4" /> Renúncia a Perdas e Danos
-                  </FormLabel>
-                </FormItem>
-              )}
-            />
-          </div>
+          <FormField
+            control={control}
+            name="baixa_averbacao"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox checked={!!field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormLabel className="!mt-0 cursor-pointer">
+                  O contrato original foi registrado/averbado na matrícula
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+          {baixaAverbacao && (
+            <div className="rounded-lg border border-border/60 p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <FormField
+                control={control}
+                name="matricula_numero"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Matrícula nº *</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="rgi_numero"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>RGI *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: 6º RGI" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="averbacao_custas"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Custas por conta de *</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: ambas as partes" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          )}
         </div>
 
-        {/* PRAZOS E FORO */}
+        {/* RENÚNCIA */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Scale className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Renúncia a Perdas e Danos</h3>
+          </div>
+          <Separator />
+          <FormField
+            control={control}
+            name="renuncia_perdas"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox checked={!!field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormLabel className="!mt-0 cursor-pointer">
+                  Incluir renúncia expressa a indenização / perdas e danos
+                </FormLabel>
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* FORO / FECHO */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Settings2 className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Datas e Foro</h3>
+            <h3 className="font-semibold text-primary">Foro, Local e Data</h3>
           </div>
           <Separator />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
-              name="data_documento"
+              name="foro_comarca"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Data do Distrato *</FormLabel>
+                  <FormLabel>Comarca do foro *</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -873,12 +790,38 @@ export function DistratoForm() {
             />
             <FormField
               control={control}
-              name="foro_comarca"
+              name="vias_qtd"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fórum/Comarca *</FormLabel>
+                  <FormLabel>Nº de vias</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: 2 (duas)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="cidade"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cidade (local da assinatura) *</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="data_documento"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Data do Documento *</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
