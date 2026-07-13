@@ -148,7 +148,21 @@ export const permutaMockData: PermutaValues = {
       email: '',
     },
   ],
-  anuentes: [],
+  anuentes: [
+    {
+      nome: 'Maria da Silva',
+      nacionalidade: 'brasileira',
+      estado_civil: 'Casado(a)',
+      regime_bens: 'Comunhão parcial',
+      profissao: 'Médica',
+      rg: 'RJ-22.222.222',
+      orgao_emissor: 'SSP/RJ',
+      cpf: '222.222.222-22',
+      endereco: 'Rua das Acácias, 10, Centro, Rio de Janeiro/RJ',
+      email: '',
+      conjuge_de: 'João da Silva',
+    },
+  ],
   imovel_a: {
     descricao: 'Apartamento nº 101 do Edifício Solar',
     endereco: 'Rua das Acácias, 10',
