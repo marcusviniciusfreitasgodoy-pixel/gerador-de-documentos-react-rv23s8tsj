@@ -2,8 +2,12 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
+// TEMPLATE PARTES FLEXÍVEIS: após subir o novo promessa_fgts_base64.txt
+// (gerado de TEMPLATE_promessa_fgts_PF.docx) no gist, atualize o hash do
+// commit abaixo. O byte-count já corresponde ao template PF.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/e591f02892d0935d467f83169740a78344e2b308/promessa_fgts_base64.txt'
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/promessa_fgts_base64.txt'
+const EXPECTED_BYTE_COUNT = 41948
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
@@ -14,9 +18,9 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes
 }
 
-async function renderPromessaFgtsDoc(
-  data: Record<string, string | boolean>,
-): Promise<Docxtemplater> {
+// Busca o template do gist, valida o tamanho e renderiza — caminho único
+// compartilhado pelo download e pela extração de texto (validação).
+async function renderPromessaFgtsDoc(data: Record<string, unknown>): Promise<Docxtemplater> {
   const response = await fetch(TEMPLATE_URL)
   if (!response.ok) {
     throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
@@ -25,21 +29,24 @@ async function renderPromessaFgtsDoc(
   const base64Text = await response.text()
   const templateBytes = base64ToUint8Array(base64Text)
 
+  if (templateBytes.length !== EXPECTED_BYTE_COUNT) {
+    throw new Error(
+      `Template corrompido: tamanho inválido (${templateBytes.length} bytes, esperado ${EXPECTED_BYTE_COUNT})`,
+    )
+  }
+
   const zip = new PizZip(templateBytes)
   const doc = new Docxtemplater(zip, {
     paragraphLoop: true,
     linebreaks: true,
     delimiters: { start: '{', end: '}' },
-    nullGetter: () => '',
   })
 
   doc.render(data)
   return doc
 }
 
-export async function generatePromessaFgtsDocx(
-  data: Record<string, string | boolean>,
-): Promise<void> {
+export async function generatePromessaFgtsDocx(data: Record<string, unknown>): Promise<void> {
   const doc = await renderPromessaFgtsDoc(data)
 
   const blob = doc.getZip().generate({
@@ -57,7 +64,9 @@ export async function generatePromessaFgtsDocx(
   URL.revokeObjectURL(url)
 }
 
-export async function getPromessaFgtsText(data: Record<string, string | boolean>): Promise<string> {
+// Renderiza a minuta em memória e devolve o texto plano (sem baixar) para
+// enviar direto ao Validador.
+export async function getPromessaFgtsText(data: Record<string, unknown>): Promise<string> {
   const doc = await renderPromessaFgtsDoc(data)
   return extractTextFromRenderedDoc(doc)
 }
