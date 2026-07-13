@@ -1,7 +1,7 @@
 import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
-import { buildRegimeSuffix, formatDateLower } from '@/lib/compromisso-helpers'
+import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
-import type { PromessaDacaoValues } from '@/lib/promessaDacaoHelpers'
+import type { PromessaDacaoValues, PartyValues, AnuenteValues } from '@/lib/promessaDacaoHelpers'
 
 function formatDatePtBr(isoDate: string): string {
   if (!isoDate) return ''
@@ -35,9 +35,33 @@ function prefixarDocumento(value: string): string {
   return trimmed
 }
 
-export function buildPromessaDacaoTemplateData(
-  data: PromessaDacaoValues,
-): Record<string, string | boolean> {
+// Monta tudo o que vem APÓS o nome na qualificação de uma parte (inclui e-mail quando houver).
+// O sufixo "doravante denominado(a) VENDEDOR/COMPRADOR" fica no template (texto fixo do loop).
+function montarQualificacao(p: PartyValues): string {
+  const regime =
+    p.estado_civil === 'Casado(a)' && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
+  const email = p.email ? `, e-mail ${p.email}` : ''
+  return (
+    `${p.nacionalidade || ''}, ${p.estado_civil || ''}${regime}, ${p.profissao || ''}, ` +
+    `portador(a) do documento de identidade nº ${p.rg || ''}, expedido por ${p.orgao_emissor || ''}, ` +
+    `inscrito(a) no CPF sob o nº ${p.cpf || ''}, residente e domiciliado(a) em ${p.endereco || ''}${email}`
+  )
+}
+
+function parteToItem(p: PartyValues) {
+  return { nome: p.nome || '', qualificacao: montarQualificacao(p), cpf: p.cpf || '' }
+}
+
+function anuenteToItem(a: AnuenteValues) {
+  return {
+    conjuge_de: a.conjuge_de || '',
+    nome: a.nome || '',
+    qualificacao: montarQualificacao(a),
+    cpf: a.cpf || '',
+  }
+}
+
+export function buildPromessaDacaoTemplateData(data: PromessaDacaoValues): Record<string, unknown> {
   const valorTotal = parseCurrency(data.valor_total || '0')
   const valorEntrada = parseCurrency(data.valor_entrada || '0')
   const valorReforco = parseCurrency(data.valor_reforco || '0')
@@ -47,15 +71,6 @@ export function buildPromessaDacaoTemplateData(
   const comissaoPct = parseFloat(data.comissao_percentual || '0') || 0
   const comissaoValor = valorTotal * (comissaoPct / 100)
 
-  const compradorRegimeSufixo = buildRegimeSuffix(
-    data.comprador_estado_civil,
-    data.comprador_regime_bens,
-  )
-  const intervenienteRegimeSufixo = buildRegimeSuffix(
-    data.interveniente_estado_civil || '',
-    data.interveniente_regime_bens,
-  )
-
   const docDate = new Date(data.data_documento + 'T00:00:00')
   const dataExtenso = formatDateLower(docDate)
 
@@ -63,39 +78,9 @@ export function buildPromessaDacaoTemplateData(
   const extenso = (v: number) => currencyToWords(v)
 
   return {
-    vendedor_nome: data.vendedor_nome || '',
-    vendedor_nacionalidade: data.vendedor_nacionalidade || '',
-    vendedor_estado_civil: data.vendedor_estado_civil || '',
-    vendedor_regime_bens: data.vendedor_regime_bens || '',
-    vendedor_profissao: data.vendedor_profissao || '',
-    vendedor_rg: data.vendedor_rg || '',
-    vendedor_orgao_emissor: data.vendedor_orgao_emissor || '',
-    vendedor_cpf: data.vendedor_cpf || '',
-    vendedor_endereco: data.vendedor_endereco || '',
-    vendedor_email: data.vendedor_email || '',
-    vendedor_casado: data.vendedor_estado_civil === 'Casado(a)',
-    tem_interveniente: data.has_interveniente,
-    interveniente_nome: data.interveniente_nome || '',
-    interveniente_nacionalidade: data.interveniente_nacionalidade || '',
-    interveniente_estado_civil: data.interveniente_estado_civil || '',
-    interveniente_regime_sufixo: intervenienteRegimeSufixo,
-    interveniente_profissao: data.interveniente_profissao || '',
-    interveniente_rg: data.interveniente_rg || '',
-    interveniente_orgao_emissor: data.interveniente_orgao_emissor || '',
-    interveniente_cpf: data.interveniente_cpf || '',
-    interveniente_endereco: data.interveniente_endereco || '',
-    interveniente_email: data.interveniente_email || '',
-    interveniente_relacao: data.interveniente_relacao || '',
-    comprador_nome: data.comprador_nome || '',
-    comprador_nacionalidade: data.comprador_nacionalidade || '',
-    comprador_estado_civil: data.comprador_estado_civil || '',
-    comprador_regime_sufixo: compradorRegimeSufixo,
-    comprador_profissao: data.comprador_profissao || '',
-    comprador_rg: data.comprador_rg || '',
-    comprador_orgao_emissor: data.comprador_orgao_emissor || '',
-    comprador_cpf: data.comprador_cpf || '',
-    comprador_endereco: data.comprador_endereco || '',
-    comprador_email: data.comprador_email || '',
+    vendedores: (data.vendedores || []).map(parteToItem),
+    anuentes: (data.anuentes || []).map(anuenteToItem),
+    compradores: (data.compradores || []).map(parteToItem),
     imovel_descricao: data.imovel_descricao || '',
     imovel_endereco: data.imovel_endereco || '',
     imovel_bairro: data.imovel_bairro || '',
@@ -123,10 +108,10 @@ export function buildPromessaDacaoTemplateData(
     bem_dacao_descricao: data.bem_dacao_descricao || '',
     valor_saldo: fmt(valorSaldo),
     valor_saldo_extenso: extenso(valorSaldo),
+    data_limite_escritura: formatDatePtBr(data.data_limite_escritura || ''),
     forma_pagamento: data.forma_pagamento || '',
     dados_recebimento: limparDestino(data.dados_recebimento || ''),
     prazo_certidoes_dias: data.prazo_certidoes_dias || '',
-    data_limite_escritura: formatDatePtBr(data.data_limite_escritura || ''),
     comissao_beneficiario: data.comissao_beneficiario || '',
     comissao_documento: prefixarDocumento(data.comissao_documento || ''),
     comissao_creci: cleanCreci(data.comissao_creci || ''),
