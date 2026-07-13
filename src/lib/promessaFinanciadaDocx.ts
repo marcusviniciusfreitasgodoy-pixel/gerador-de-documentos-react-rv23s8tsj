@@ -2,9 +2,12 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
+// TEMPLATE PARTES FLEXÍVEIS: após subir o novo promessa_financiada_base64.txt
+// (gerado de TEMPLATE_promessa_financiada_PF.docx) no gist, atualize o hash do
+// commit abaixo. O byte-count já corresponde ao template PF.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/81822f861c1f423f0749afd1c02aa83605dfedee/promessa_financiada_base64.txt'
-const EXPECTED_BYTE_COUNT = 42491
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/promessa_financiada_base64.txt'
+const EXPECTED_BYTE_COUNT = 42170
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
@@ -15,9 +18,9 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes
 }
 
-async function renderPromessaFinanciadaDoc(
-  data: Record<string, string | boolean>,
-): Promise<Docxtemplater> {
+// Busca o template do gist, valida o tamanho e renderiza — caminho único
+// compartilhado pelo download e pela extração de texto (validação).
+async function renderPromessaFinanciadaDoc(data: Record<string, unknown>): Promise<Docxtemplater> {
   const response = await fetch(TEMPLATE_URL)
   if (!response.ok) {
     throw new Error(`Falha ao buscar template: ${response.status} ${response.statusText}`)
@@ -43,9 +46,7 @@ async function renderPromessaFinanciadaDoc(
   return doc
 }
 
-export async function generatePromessaFinanciadaDocx(
-  data: Record<string, string | boolean>,
-): Promise<void> {
+export async function generatePromessaFinanciadaDocx(data: Record<string, unknown>): Promise<void> {
   const doc = await renderPromessaFinanciadaDoc(data)
 
   const blob = doc.getZip().generate({
@@ -63,9 +64,9 @@ export async function generatePromessaFinanciadaDocx(
   URL.revokeObjectURL(url)
 }
 
-export async function getPromessaFinanciadaText(
-  data: Record<string, string | boolean>,
-): Promise<string> {
+// Renderiza a minuta em memória e devolve o texto plano (sem baixar) para
+// enviar direto ao Validador.
+export async function getPromessaFinanciadaText(data: Record<string, unknown>): Promise<string> {
   const doc = await renderPromessaFinanciadaDoc(data)
   return extractTextFromRenderedDoc(doc)
 }
