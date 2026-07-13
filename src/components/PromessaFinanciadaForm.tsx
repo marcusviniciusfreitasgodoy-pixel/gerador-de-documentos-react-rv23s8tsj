@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -59,13 +59,13 @@ import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
 
 function sugerirPapel(regime?: string): string {
-  if (regime === 'Comunhão universal')
-    return 'Sugerido: CO-VENDEDOR (comunhão universal — o cônjuge é meeiro do imóvel).'
-  if (regime === 'Separação total')
-    return 'Separação total: em regra dispensa a outorga (art. 1.647). Inclua o cônjuge só se quiser reforço.'
-  if (regime === 'Comunhão parcial')
-    return 'Comunhão parcial: imóvel adquirido DEPOIS do casamento → co-vendedor; adquirido ANTES (bem particular) → anuente.'
-  return 'Selecione o regime de bens para a sugestão. Na dúvida, inclua o cônjuge como anuente.'
+  if (regime === 'Comunh√£o universal')
+    return 'Sugerido: CO-VENDEDOR (comunh√£o universal ‚Äî o c√¥njuge √© meeiro do im√≥vel).'
+  if (regime === 'Separa√ß√£o total')
+    return 'Separa√ß√£o total: em regra dispensa a outorga (art. 1.647). Inclua o c√¥njuge s√≥ se quiser refor√ßo.'
+  if (regime === 'Comunh√£o parcial')
+    return 'Comunh√£o parcial: im√≥vel adquirido DEPOIS do casamento ‚Üí co-vendedor; adquirido ANTES (bem particular) ‚Üí anuente.'
+  return 'Selecione o regime de bens para a sugest√£o. Na d√∫vida, inclua o c√¥njuge como anuente.'
 }
 
 export function PromessaFinanciadaForm() {
@@ -149,7 +149,7 @@ export function PromessaFinanciadaForm() {
       nacionalidade: v?.nacionalidade || 'brasileiro(a)',
       endereco: v?.endereco || '',
     })
-    toast.success('Cônjuge adicionado como co-vendedor. Preencha os dados dele(a).')
+    toast.success('C√¥njuge adicionado como co-vendedor. Preencha os dados dele(a).')
   }
 
   const addConjugeAnuente = (i: number) => {
@@ -162,8 +162,36 @@ export function PromessaFinanciadaForm() {
       nacionalidade: v?.nacionalidade || 'brasileiro(a)',
       endereco: v?.endereco || '',
     })
-    toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
+    toast.success('C√¥njuge adicionado como anuente. Preencha os dados dele(a).')
   }
+
+  // Outorga conjugal autom√°tica (CAS002): vendedor Casado em regime de comunh√£o + com nome
+  // preenchido -> cria o bloco do c√¥njuge-anuente automaticamente (1x por parte, via ref-guard).
+  const autoLinkedRef = useRef<Set<string>>(new Set())
+  useEffect(() => {
+    const anuentesNow = (getValues('anuentes') || []) as { conjuge_de?: string }[]
+    vendedoresW.forEach((v, i) => {
+      const key = `${i}:${v?.nome || ''}`
+      if (
+        v?.estado_civil === 'Casado(a)' &&
+        (v?.regime_bens === 'Comunh√£o parcial' || v?.regime_bens === 'Comunh√£o universal') &&
+        v?.nome &&
+        !autoLinkedRef.current.has(key) &&
+        !anuentesNow.some((a) => a.conjuge_de === v.nome)
+      ) {
+        autoLinkedRef.current.add(key)
+        appendAnuente({
+          ...emptyParty,
+          conjuge_de: v.nome,
+          estado_civil: 'Casado(a)',
+          regime_bens: v.regime_bens || '',
+          nacionalidade: v.nacionalidade || 'brasileiro(a)',
+          endereco: v.endereco || '',
+        })
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vendedoresW])
 
   const onSubmit = async (data: PromessaFinanciadaValues) => {
     if (!hasBroker) {
@@ -195,8 +223,8 @@ export function PromessaFinanciadaForm() {
       )
       navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso' } })
     } catch (error) {
-      console.error('Erro ao preparar validação:', error)
-      toast.error('Não foi possível preparar a validação.')
+      console.error('Erro ao preparar valida√ß√£o:', error)
+      toast.error('N√£o foi poss√≠vel preparar a valida√ß√£o.')
     } finally {
       setIsValidating(false)
     }
@@ -209,10 +237,10 @@ export function PromessaFinanciadaForm() {
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
             <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
             <div className="text-sm">
-              <p className="font-semibold mb-1">Perfil não cadastrado</p>
+              <p className="font-semibold mb-1">Perfil n√£o cadastrado</p>
               <p className="mb-2">
                 Preencha seu Perfil em Meu Perfil para preencher automaticamente os dados de
-                comissão.
+                comiss√£o.
               </p>
               <Link
                 to="/perfil"
@@ -253,7 +281,7 @@ export function PromessaFinanciadaForm() {
               {vendedoresW[i]?.estado_civil === 'Casado(a)' && (
                 <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
                   <p className="text-sm font-medium text-primary flex items-center gap-1.5">
-                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge deste vendedor
+                    <HeartHandshake className="h-4 w-4" /> Participa√ß√£o do c√¥njuge deste vendedor
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {sugerirPapel(vendedoresW[i]?.regime_bens)}
@@ -265,7 +293,7 @@ export function PromessaFinanciadaForm() {
                       size="sm"
                       onClick={() => addConjugeCoVendedor(i)}
                     >
-                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como co-vendedor
+                      <Plus className="mr-1 h-3 w-3" /> C√¥njuge como co-vendedor
                     </Button>
                     <Button
                       type="button"
@@ -273,7 +301,7 @@ export function PromessaFinanciadaForm() {
                       size="sm"
                       onClick={() => addConjugeAnuente(i)}
                     >
-                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
+                      <Plus className="mr-1 h-3 w-3" /> C√¥njuge como anuente
                     </Button>
                   </div>
                 </div>
@@ -295,7 +323,7 @@ export function PromessaFinanciadaForm() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <HeartHandshake className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-primary">Anuentes (cônjuges que consentem)</h3>
+              <h3 className="font-semibold text-primary">Anuentes (c√¥njuges que consentem)</h3>
             </div>
             <Separator />
             {anuenteFields.map((f, i) => (
@@ -318,7 +346,7 @@ export function PromessaFinanciadaForm() {
                   name={`anuentes.${i}.conjuge_de`}
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Cônjuge de qual vendedor?</FormLabel>
+                      <FormLabel>C√¥njuge de qual vendedor?</FormLabel>
                       <FormControl>
                         <Input placeholder="Nome do vendedor" {...field} />
                       </FormControl>
@@ -379,7 +407,7 @@ export function PromessaFinanciadaForm() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <Building2 className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Dados do Imóvel</h3>
+            <h3 className="font-semibold text-primary">Dados do Im√≥vel</h3>
           </div>
           <Separator />
           <FormField
@@ -387,10 +415,10 @@ export function PromessaFinanciadaForm() {
             name="imovel_descricao"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Descrição *</FormLabel>
+                <FormLabel>Descri√ß√£o *</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Ex: Apartamento nº 801..."
+                    placeholder="Ex: Apartamento n¬∫ 801..."
                     className="resize-none"
                     rows={2}
                     {...field}
@@ -406,7 +434,7 @@ export function PromessaFinanciadaForm() {
               name="imovel_endereco"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Endereço *</FormLabel>
+                  <FormLabel>Endere√ßo *</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -475,7 +503,7 @@ export function PromessaFinanciadaForm() {
               name="imovel_fracao_ideal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Fração Ideal</FormLabel>
+                  <FormLabel>Fra√ß√£o Ideal</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -514,7 +542,7 @@ export function PromessaFinanciadaForm() {
               name="imovel_rgi"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>RGI (Cartório)</FormLabel>
+                  <FormLabel>RGI (Cart√≥rio)</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -527,7 +555,7 @@ export function PromessaFinanciadaForm() {
               name="imovel_matricula"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Matrícula *</FormLabel>
+                  <FormLabel>Matr√≠cula *</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -553,7 +581,7 @@ export function PromessaFinanciadaForm() {
               name="imovel_origem_aquisicao"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Origem da Aquisição</FormLabel>
+                  <FormLabel>Origem da Aquisi√ß√£o</FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: compra e venda" {...field} />
                   </FormControl>
@@ -569,7 +597,7 @@ export function PromessaFinanciadaForm() {
               <FormItem>
                 <FormLabel>Registro de Origem</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: escritura pública..." {...field} />
+                  <Input placeholder="Ex: escritura p√∫blica..." {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -580,7 +608,7 @@ export function PromessaFinanciadaForm() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Preço e Entrada (recursos próprios)</h3>
+            <h3 className="font-semibold text-primary">Pre√ßo e Entrada (recursos pr√≥prios)</h3>
           </div>
           <Separator />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -606,7 +634,7 @@ export function PromessaFinanciadaForm() {
               name="valor_entrada"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Entrada / Sinal — Parte A (R$) *</FormLabel>
+                  <FormLabel>Entrada / Sinal ‚Äî Parte A (R$) *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="R$ 0,00"
@@ -658,9 +686,9 @@ export function PromessaFinanciadaForm() {
           </div>
           <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
             <div>
-              <p className="text-sm font-medium">Entrada parcelada (reforço de sinal)</p>
+              <p className="text-sm font-medium">Entrada parcelada (refor√ßo de sinal)</p>
               <p className="text-xs text-muted-foreground">
-                Ative se houver um reforço com recursos próprios antes do financiamento.
+                Ative se houver um refor√ßo com recursos pr√≥prios antes do financiamento.
               </p>
             </div>
             <FormField
@@ -678,7 +706,7 @@ export function PromessaFinanciadaForm() {
                 name="valor_reforco"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Reforço — Parte B (R$) *</FormLabel>
+                    <FormLabel>Refor√ßo ‚Äî Parte B (R$) *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="R$ 0,00"
@@ -695,7 +723,7 @@ export function PromessaFinanciadaForm() {
                 name="prazo_reforco"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Data do Reforço *</FormLabel>
+                    <FormLabel>Data do Refor√ßo *</FormLabel>
                     <FormControl>
                       <Input type="date" value={field.value || ''} onChange={field.onChange} />
                     </FormControl>
@@ -736,9 +764,9 @@ export function PromessaFinanciadaForm() {
               name="instituicao_financeira"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Instituição Financeira *</FormLabel>
+                  <FormLabel>Institui√ß√£o Financeira *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Banco Itaú Unibanco S.A." {...field} />
+                    <Input placeholder="Ex: Banco Ita√∫ Unibanco S.A." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -749,7 +777,7 @@ export function PromessaFinanciadaForm() {
               name="prazo_financiamento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prazo p/ obter o crédito (dias) *</FormLabel>
+                  <FormLabel>Prazo p/ obter o cr√©dito (dias) *</FormLabel>
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
@@ -762,7 +790,7 @@ export function PromessaFinanciadaForm() {
               name="prazo_liberacao"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prazo p/ liberação/depósito (dias) *</FormLabel>
+                  <FormLabel>Prazo p/ libera√ß√£o/dep√≥sito (dias) *</FormLabel>
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
@@ -773,10 +801,10 @@ export function PromessaFinanciadaForm() {
           </div>
           <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
             <div>
-              <p className="text-sm font-medium">Quitar dívida existente pelo banco</p>
+              <p className="text-sm font-medium">Quitar d√≠vida existente pelo banco</p>
               <p className="text-xs text-muted-foreground">
-                Ative se há gravame/saldo devedor (alienação fiduciária, consórcio) que o agente
-                financeiro quitará diretamente.
+                Ative se h√° gravame/saldo devedor (aliena√ß√£o fiduci√°ria, cons√≥rcio) que o
+                agente financeiro quitar√° diretamente.
               </p>
             </div>
             <FormField
@@ -794,9 +822,9 @@ export function PromessaFinanciadaForm() {
                 name="credor_divida"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Credor da dívida *</FormLabel>
+                    <FormLabel>Credor da d√≠vida *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Itaú Adm. de Consórcios Ltda" {...field} />
+                      <Input placeholder="Ex: Ita√∫ Adm. de Cons√≥rcios Ltda" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -807,7 +835,7 @@ export function PromessaFinanciadaForm() {
                 name="valor_divida"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Valor da dívida (R$) *</FormLabel>
+                    <FormLabel>Valor da d√≠vida (R$) *</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="R$ 0,00"
@@ -823,9 +851,9 @@ export function PromessaFinanciadaForm() {
           )}
           <div className="flex items-center justify-between rounded-lg border border-border/60 p-3">
             <div>
-              <p className="text-sm font-medium">Usar FGTS na composição</p>
+              <p className="text-sm font-medium">Usar FGTS na composi√ß√£o</p>
               <p className="text-xs text-muted-foreground">
-                Ative se parte do preço será paga com recursos da conta vinculada do FGTS.
+                Ative se parte do pre√ßo ser√° paga com recursos da conta vinculada do FGTS.
               </p>
             </div>
             <FormField
@@ -862,7 +890,7 @@ export function PromessaFinanciadaForm() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Comissão</h3>
+            <h3 className="font-semibold text-primary">Comiss√£o</h3>
           </div>
           <Separator />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -871,7 +899,7 @@ export function PromessaFinanciadaForm() {
               name="comissao_beneficiario"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Beneficiário</FormLabel>
+                  <FormLabel>Benefici√°rio</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -926,7 +954,7 @@ export function PromessaFinanciadaForm() {
               name="comissao_percentual"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Comissão (%)</FormLabel>
+                  <FormLabel>Comiss√£o (%)</FormLabel>
                   <FormControl>
                     <Input type="number" min={0} step="0.1" {...field} />
                   </FormControl>
@@ -935,7 +963,7 @@ export function PromessaFinanciadaForm() {
               )}
             />
             <FormItem>
-              <FormLabel>Comissão (Calculado)</FormLabel>
+              <FormLabel>Comiss√£o (Calculado)</FormLabel>
               <FormControl>
                 <Input disabled value={fmt(comissaoValor)} />
               </FormControl>
@@ -945,7 +973,7 @@ export function PromessaFinanciadaForm() {
               name="comissao_responsavel"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Responsável pelo Pagamento *</FormLabel>
+                  <FormLabel>Respons√°vel pelo Pagamento *</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
@@ -979,7 +1007,7 @@ export function PromessaFinanciadaForm() {
               name="prazo_certidoes_dias"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prazo Certidões (dias)</FormLabel>
+                  <FormLabel>Prazo Certid√µes (dias)</FormLabel>
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
@@ -1013,7 +1041,7 @@ export function PromessaFinanciadaForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="confirmatoria">Confirmatórias (arts. 417-419)</SelectItem>
+                      <SelectItem value="confirmatoria">Confirmat√≥rias (arts. 417-419)</SelectItem>
                       <SelectItem value="penitencial">Penitenciais (art. 420)</SelectItem>
                     </SelectContent>
                   </Select>
@@ -1036,7 +1064,7 @@ export function PromessaFinanciadaForm() {
               name="testemunha1_nome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome 1ª Testemunha</FormLabel>
+                  <FormLabel>Nome 1¬™ Testemunha</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1049,7 +1077,7 @@ export function PromessaFinanciadaForm() {
               name="testemunha1_cpf"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CPF 1ª Testemunha</FormLabel>
+                  <FormLabel>CPF 1¬™ Testemunha</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="000.000.000-00"
@@ -1066,7 +1094,7 @@ export function PromessaFinanciadaForm() {
               name="testemunha2_nome"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nome 2ª Testemunha</FormLabel>
+                  <FormLabel>Nome 2¬™ Testemunha</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -1079,7 +1107,7 @@ export function PromessaFinanciadaForm() {
               name="testemunha2_cpf"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CPF 2ª Testemunha</FormLabel>
+                  <FormLabel>CPF 2¬™ Testemunha</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="000.000.000-00"
@@ -1130,7 +1158,7 @@ export function PromessaFinanciadaForm() {
           {isValidating ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Preparando validação...
+              Preparando valida√ß√£o...
             </>
           ) : (
             <>
