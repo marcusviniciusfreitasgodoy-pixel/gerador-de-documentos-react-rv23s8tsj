@@ -15,6 +15,8 @@ function base64ToUint8Array(base64: string): Uint8Array {
   return bytes
 }
 
+// Busca o template do gist, valida o tamanho e renderiza — caminho único
+// compartilhado pelo download e pela extração de texto (validação).
 async function renderDistratoDoc(data: Record<string, unknown>): Promise<Docxtemplater> {
   const response = await fetch(TEMPLATE_URL)
   if (!response.ok) {
@@ -26,7 +28,7 @@ async function renderDistratoDoc(data: Record<string, unknown>): Promise<Docxtem
 
   if (templateBytes.length !== EXPECTED_BYTE_COUNT) {
     throw new Error(
-      `Template corrompido: tamanho inválido (${templateBytes.length} bytes, esperado ${EXPECTED_BYTE_COUNT} bytes)`,
+      `Template corrompido: tamanho inválido (${templateBytes.length} bytes, esperado ${EXPECTED_BYTE_COUNT})`,
     )
   }
 
@@ -35,7 +37,6 @@ async function renderDistratoDoc(data: Record<string, unknown>): Promise<Docxtem
     paragraphLoop: true,
     linebreaks: true,
     delimiters: { start: '{', end: '}' },
-    nullGetter: () => '',
   })
 
   doc.render(data)
@@ -60,6 +61,8 @@ export async function generateDistratoDocx(data: Record<string, unknown>): Promi
   URL.revokeObjectURL(url)
 }
 
+// Renderiza a minuta em memória e devolve o texto plano (sem baixar) para
+// enviar direto ao Validador.
 export async function getDistratoText(data: Record<string, unknown>): Promise<string> {
   const doc = await renderDistratoDoc(data)
   return extractTextFromRenderedDoc(doc)
