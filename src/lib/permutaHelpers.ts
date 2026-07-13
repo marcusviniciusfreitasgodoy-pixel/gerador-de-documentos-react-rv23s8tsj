@@ -3,8 +3,9 @@ import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
-export const TORNA_FORMA_OPTIONS = ['À vista', 'Parcelada'] as const
-export const TORNA_DEVEDOR_OPTIONS = ['Primeiros Permutantes', 'Segundos Permutantes'] as const
+export const TORNA_PAGADOR_OPTIONS = ['primeiro', 'segundo'] as const
+export const COMISSAO_RESP_OPTIONS = ['primeiro', 'segundo', 'ambos'] as const
+export const ARRAS_TIPO_OPTIONS = ['confirmatoria', 'penitencial'] as const
 
 const partySchema = z.object({
   nome: z.string().min(3, 'Nome obrigatório'),
@@ -18,13 +19,25 @@ const partySchema = z.object({
   endereco: z.string().min(1, 'Obrigatório'),
   email: z.string().optional(),
 })
-
-const anuenteSchema = partySchema.extend({
-  conjuge_de: z.string().optional(),
-})
+const anuenteSchema = partySchema.extend({ conjuge_de: z.string().optional() })
 
 export type PartyValues = z.infer<typeof partySchema>
 export type AnuenteValues = z.infer<typeof anuenteSchema>
+
+const imovelFields = (req: string) => ({
+  descricao: z.string().min(1, req),
+  endereco: z.string().min(1, req),
+  bairro: z.string().optional(),
+  cidade: z.string().min(1, req),
+  uf: z.string().min(1, req),
+  cep: z.string().optional(),
+  vagas_qtd: z.string().optional(),
+  vagas_descricao: z.string().optional(),
+  fracao_ideal: z.string().optional(),
+  rgi: z.string().optional(),
+  matricula: z.string().min(1, req),
+  iptu: z.string().optional(),
+})
 
 export const permutaSchema = z
   .object({
@@ -32,38 +45,32 @@ export const permutaSchema = z
     segundos: z.array(partySchema).min(1, 'Ao menos um segundo permutante'),
     anuentes: z.array(anuenteSchema),
 
-    imovel_a_descricao: z.string().min(1, 'Obrigatório'),
-    imovel_a_endereco: z.string().min(1, 'Obrigatório'),
-    imovel_a_matricula: z.string().min(1, 'Obrigatório'),
-    imovel_a_rgi: z.string().min(1, 'Obrigatório'),
-    imovel_a_iptu: z.string().optional(),
+    imovel_a: z.object(imovelFields('Obrigatório')),
     valor_a: z
       .string()
       .min(1, 'Obrigatório')
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
-
-    imovel_b_descricao: z.string().min(1, 'Obrigatório'),
-    imovel_b_endereco: z.string().min(1, 'Obrigatório'),
-    imovel_b_matricula: z.string().min(1, 'Obrigatório'),
-    imovel_b_rgi: z.string().min(1, 'Obrigatório'),
-    imovel_b_iptu: z.string().optional(),
+    imovel_b: z.object(imovelFields('Obrigatório')),
     valor_b: z
       .string()
       .min(1, 'Obrigatório')
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
 
-    has_torna: z.boolean(),
+    tem_torna: z.boolean(),
+    torna_pagador: z.enum(TORNA_PAGADOR_OPTIONS).optional(),
     torna_valor: z.string().optional(),
-    torna_devedor: z.string().optional(),
-    torna_forma_pagamento: z.string().optional(),
-    torna_prazo: z.string().optional(),
+    torna_a_prazo: z.boolean(),
+    torna_forma: z.string().optional(),
     torna_garantia: z.string().optional(),
 
-    comissao_percentual: z.string().min(1, 'Obrigatório'),
+    arras_tipo: z.enum(ARRAS_TIPO_OPTIONS),
+
     comissao_beneficiario: z.string().optional(),
     comissao_documento: z.string().optional(),
     comissao_creci: z.string().optional(),
     comissao_pix: z.string().optional(),
+    comissao_percentual: z.string().optional(),
+    comissao_responsavel: z.enum(COMISSAO_RESP_OPTIONS),
 
     foro_comarca: z.string().min(1, 'Obrigatório'),
     cidade: z.string().min(1, 'Obrigatório'),
@@ -75,30 +82,24 @@ export const permutaSchema = z
     testemunha2_cpf: z.string().optional(),
   })
   .superRefine((v, ctx) => {
-    if (v.has_torna) {
+    if (v.tem_torna) {
+      if (!v.torna_pagador)
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['torna_pagador'],
+          message: 'Quem paga a torna?',
+        })
       if (!v.torna_valor || parseCurrency(v.torna_valor) <= 0)
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['torna_valor'],
-          message: 'Informe o valor da torna',
+          message: 'Valor da torna',
         })
-      if (!v.torna_devedor)
+      if (!v.torna_forma)
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          path: ['torna_devedor'],
-          message: 'Informe o devedor',
-        })
-      if (!v.torna_forma_pagamento)
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['torna_forma_pagamento'],
-          message: 'Informe a forma de pagamento',
-        })
-      if (!v.torna_prazo)
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['torna_prazo'],
-          message: 'Informe o prazo',
+          path: ['torna_forma'],
+          message: 'Forma de pagamento da torna',
         })
     }
   })
@@ -121,61 +122,81 @@ export const emptyParty: PartyValues = {
 export const permutaMockData: PermutaValues = {
   primeiros: [
     {
-      nome: 'Roberto Mendes Araújo',
+      nome: 'João da Silva',
       nacionalidade: 'brasileiro',
       estado_civil: 'Casado(a)',
       regime_bens: 'Comunhão parcial',
-      profissao: 'Médico',
-      rg: 'MG-15.234.567',
-      orgao_emissor: 'SSP/MG',
-      cpf: '456.789.123-00',
-      endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
-      email: 'roberto.araujo@email.com',
+      profissao: 'Empresário',
+      rg: 'RJ-11.111.111',
+      orgao_emissor: 'SSP/RJ',
+      cpf: '111.111.111-11',
+      endereco: 'Rua das Acácias, 10, Centro, Rio de Janeiro/RJ',
+      email: '',
     },
   ],
   segundos: [
     {
-      nome: 'Fernanda Souza Lima',
-      nacionalidade: 'brasileira',
+      nome: 'Pedro Souza',
+      nacionalidade: 'brasileiro',
       estado_civil: 'Solteiro(a)',
       regime_bens: '',
-      profissao: 'Engenheira',
-      rg: 'RJ-20.987.654',
+      profissao: 'Engenheiro',
+      rg: 'RJ-33.333.333',
       orgao_emissor: 'SSP/RJ',
-      cpf: '987.654.321-00',
-      endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
-      email: 'fernanda.lima@email.com',
+      cpf: '333.333.333-33',
+      endereco: 'Av. das Américas, 200, Barra da Tijuca, Rio de Janeiro/RJ',
+      email: '',
     },
   ],
   anuentes: [],
-  imovel_a_descricao: 'Apartamento nº 801, Edifício Solar, 8º andar',
-  imovel_a_endereco: 'Rua das Acácias, 150, Jacarepaguá, Rio de Janeiro/RJ',
-  imovel_a_matricula: '78.456',
-  imovel_a_rgi: '6º Oficial de Registro de Imóveis',
-  imovel_a_iptu: '001.234.567-8',
-  valor_a: 'R$ 1.200.000,00',
-  imovel_b_descricao: 'Casa nº 45, Vila Mariana',
-  imovel_b_endereco: 'Rua dos Eucaliptos, 45, Vila Mariana, São Paulo/SP',
-  imovel_b_matricula: '123.789',
-  imovel_b_rgi: '1º Cartório de Registro de Imóveis',
-  imovel_b_iptu: '098.765.432-1',
-  valor_b: 'R$ 950.000,00',
-  has_torna: true,
-  torna_valor: 'R$ 250.000,00',
-  torna_devedor: 'Segundos Permutantes',
-  torna_forma_pagamento: 'À vista',
-  torna_prazo: '30 (trinta) dias contados da assinatura do instrumento',
-  torna_garantia: 'Hipoteca sobre o imóvel B',
-  comissao_percentual: '5',
+  imovel_a: {
+    descricao: 'Apartamento nº 101 do Edifício Solar',
+    endereco: 'Rua das Acácias, 10',
+    bairro: 'Centro',
+    cidade: 'Rio de Janeiro',
+    uf: 'RJ',
+    cep: '20000-000',
+    vagas_qtd: '1',
+    vagas_descricao: 'subsolo',
+    fracao_ideal: '0,010',
+    rgi: '9º RGI',
+    matricula: '78.111',
+    iptu: '1.111.111-1',
+  },
+  valor_a: 'R$ 500.000,00',
+  imovel_b: {
+    descricao: 'Casa nº 22 da Rua das Palmeiras',
+    endereco: 'Rua das Palmeiras, 22',
+    bairro: 'Barra da Tijuca',
+    cidade: 'Rio de Janeiro',
+    uf: 'RJ',
+    cep: '22600-000',
+    vagas_qtd: '2',
+    vagas_descricao: 'garagem coberta',
+    fracao_ideal: '',
+    rgi: '9º RGI',
+    matricula: '78.222',
+    iptu: '2.222.222-2',
+  },
+  valor_b: 'R$ 650.000,00',
+  tem_torna: true,
+  torna_pagador: 'segundo',
+  torna_valor: 'R$ 150.000,00',
+  torna_a_prazo: false,
+  torna_forma: 'transferência via PIX no ato',
+  torna_garantia: '',
+  arras_tipo: 'confirmatoria',
   comissao_beneficiario: '',
   comissao_documento: '',
   comissao_creci: '',
   comissao_pix: '',
+  comissao_percentual: '6',
+  comissao_responsavel: 'ambos',
   foro_comarca: 'Rio de Janeiro/RJ',
   cidade: 'Rio de Janeiro/RJ',
   data_documento: new Date().toISOString().split('T')[0],
-  testemunha1_nome: 'Pedro Alves Lima',
-  testemunha1_cpf: '111.222.333-44',
-  testemunha2_nome: 'Maria Fernanda Rocha',
-  testemunha2_cpf: '555.666.777-88',
+  testemunha1_nome: 'Ana Lima',
+  testemunha1_cpf: '444.444.444-44',
+  testemunha2_nome: 'Carlos Dias',
+  testemunha2_cpf: '555.555.555-55',
 }
