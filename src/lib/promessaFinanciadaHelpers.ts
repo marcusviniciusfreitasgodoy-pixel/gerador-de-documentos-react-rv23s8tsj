@@ -7,40 +7,31 @@ export const FORMA_PAGAMENTO_OPTIONS = ['PIX', 'TED', 'Transferência'] as const
 
 export const COMISSAO_RESPONSAVEL_OPTIONS = ['vendedor', 'comprador'] as const
 
+const partySchema = z.object({
+  nome: z.string().min(3, 'Nome obrigatório'),
+  nacionalidade: z.string().min(1, 'Obrigatório'),
+  estado_civil: z.string().min(1, 'Selecione'),
+  regime_bens: z.string().optional(),
+  profissao: z.string().min(1, 'Obrigatório'),
+  rg: z.string().min(1, 'Obrigatório'),
+  orgao_emissor: z.string().min(1, 'Obrigatório'),
+  cpf: z.string().min(1, 'Obrigatório'),
+  endereco: z.string().min(1, 'Obrigatório'),
+  email: z.string().optional(),
+})
+
+const anuenteSchema = partySchema.extend({
+  conjuge_de: z.string().optional(),
+})
+
+export type PartyValues = z.infer<typeof partySchema>
+export type AnuenteValues = z.infer<typeof anuenteSchema>
+
 export const promessaFinanciadaSchema = z
   .object({
-    vendedor_nome: z.string().min(3, 'Nome obrigatório'),
-    vendedor_nacionalidade: z.string().min(1, 'Obrigatório'),
-    vendedor_estado_civil: z.string().min(1, 'Selecione'),
-    vendedor_regime_bens: z.string().optional(),
-    vendedor_profissao: z.string().min(1, 'Obrigatório'),
-    vendedor_rg: z.string().min(1, 'Obrigatório'),
-    vendedor_orgao_emissor: z.string().min(1, 'Obrigatório'),
-    vendedor_cpf: z.string().min(1, 'Obrigatório'),
-    vendedor_endereco: z.string().min(1, 'Obrigatório'),
-    vendedor_email: z.string().optional(),
-    has_interveniente: z.boolean(),
-    interveniente_nome: z.string().optional(),
-    interveniente_nacionalidade: z.string().optional(),
-    interveniente_estado_civil: z.string().optional(),
-    interveniente_regime_bens: z.string().optional(),
-    interveniente_profissao: z.string().optional(),
-    interveniente_rg: z.string().optional(),
-    interveniente_orgao_emissor: z.string().optional(),
-    interveniente_cpf: z.string().optional(),
-    interveniente_endereco: z.string().optional(),
-    interveniente_email: z.string().optional(),
-    interveniente_relacao: z.string().optional(),
-    comprador_nome: z.string().min(3, 'Nome obrigatório'),
-    comprador_nacionalidade: z.string().min(1, 'Obrigatório'),
-    comprador_estado_civil: z.string().min(1, 'Selecione'),
-    comprador_regime_bens: z.string().optional(),
-    comprador_profissao: z.string().min(1, 'Obrigatório'),
-    comprador_rg: z.string().min(1, 'Obrigatório'),
-    comprador_orgao_emissor: z.string().min(1, 'Obrigatório'),
-    comprador_cpf: z.string().min(1, 'Obrigatório'),
-    comprador_endereco: z.string().min(1, 'Obrigatório'),
-    comprador_email: z.string().optional(),
+    vendedores: z.array(partySchema).min(1, 'Ao menos um vendedor'),
+    anuentes: z.array(anuenteSchema),
+    compradores: z.array(partySchema).min(1, 'Ao menos um comprador'),
     imovel_descricao: z.string().min(1, 'Obrigatório'),
     imovel_endereco: z.string().min(1, 'Obrigatório'),
     imovel_bairro: z.string().optional(),
@@ -94,14 +85,6 @@ export const promessaFinanciadaSchema = z
     testemunha2_nome: z.string().optional(),
     testemunha2_cpf: z.string().optional(),
   })
-  .refine(
-    (d) => !d.has_interveniente || (d.interveniente_nome && d.interveniente_nome.length >= 3),
-    { message: 'Nome obrigatório', path: ['interveniente_nome'] },
-  )
-  .refine((d) => !d.has_interveniente || !!d.interveniente_cpf, {
-    message: 'CPF obrigatório',
-    path: ['interveniente_cpf'],
-  })
   .refine((d) => !d.entrada_parcelada || parseCurrency(d.valor_reforco || '') > 0, {
     message: 'Informe o reforço',
     path: ['valor_reforco'],
@@ -125,39 +108,49 @@ export const promessaFinanciadaSchema = z
 
 export type PromessaFinanciadaValues = z.infer<typeof promessaFinanciadaSchema>
 
+export const emptyParty: PartyValues = {
+  nome: '',
+  nacionalidade: 'brasileiro(a)',
+  estado_civil: '',
+  regime_bens: '',
+  profissao: '',
+  rg: '',
+  orgao_emissor: '',
+  cpf: '',
+  endereco: '',
+  email: '',
+}
+
 export const promessaFinanciadaMockData: PromessaFinanciadaValues = {
-  vendedor_nome: 'Roberto Mendes Araújo',
-  vendedor_nacionalidade: 'brasileiro',
-  vendedor_estado_civil: 'Casado(a)',
-  vendedor_regime_bens: 'Comunhão parcial',
-  vendedor_profissao: 'Médico',
-  vendedor_rg: 'MG-15.234.567',
-  vendedor_orgao_emissor: 'SSP/MG',
-  vendedor_cpf: '456.789.123-00',
-  vendedor_endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
-  vendedor_email: 'roberto.araujo@email.com',
-  has_interveniente: false,
-  interveniente_nome: '',
-  interveniente_nacionalidade: '',
-  interveniente_estado_civil: '',
-  interveniente_regime_bens: '',
-  interveniente_profissao: '',
-  interveniente_rg: '',
-  interveniente_orgao_emissor: '',
-  interveniente_cpf: '',
-  interveniente_endereco: '',
-  interveniente_email: '',
-  interveniente_relacao: '',
-  comprador_nome: 'Fernanda Souza Lima',
-  comprador_nacionalidade: 'brasileira',
-  comprador_estado_civil: 'Solteiro(a)',
-  comprador_regime_bens: '',
-  comprador_profissao: 'Engenheira',
-  comprador_rg: 'RJ-20.987.654',
-  comprador_orgao_emissor: 'SSP/RJ',
-  comprador_cpf: '987.654.321-00',
-  comprador_endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
-  comprador_email: 'fernanda.lima@email.com',
+  vendedores: [
+    {
+      nome: 'Roberto Mendes Araújo',
+      nacionalidade: 'brasileiro',
+      estado_civil: 'Casado(a)',
+      regime_bens: 'Comunhão parcial',
+      profissao: 'Médico',
+      rg: 'MG-15.234.567',
+      orgao_emissor: 'SSP/MG',
+      cpf: '456.789.123-00',
+      endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
+      email: 'roberto.araujo@email.com',
+    },
+  ],
+  anuentes: [],
+  compradores: [
+    {
+      nome: 'Fernanda Souza Lima',
+      nacionalidade: 'brasileira',
+      estado_civil: 'Solteiro(a)',
+      regime_bens: '',
+      profissao: 'Engenheira',
+      rg: 'RJ-20.987.654',
+      orgao_emissor: 'SSP/RJ',
+      cpf: '987.654.321-00',
+      endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
+      email: 'fernanda.lima@email.com',
+    },
+  ],
   imovel_descricao: 'Apartamento nº 801, Edifício Solar, 8º andar',
   imovel_endereco: 'Rua das Acácias, 150',
   imovel_bairro: 'Jacarepaguá',
