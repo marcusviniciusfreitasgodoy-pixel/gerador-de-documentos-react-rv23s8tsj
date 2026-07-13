@@ -807,6 +807,19 @@ export function ReservaPropostaForm() {
             />
             <FormField
               control={control}
+              name="comissao_percentual"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Comissão (%)</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={0} step="0.1" placeholder="Ex: 5" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
               name="comissao_responsavel"
               render={({ field }) => (
                 <FormItem>
