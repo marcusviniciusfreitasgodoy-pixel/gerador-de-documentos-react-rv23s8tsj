@@ -79,6 +79,7 @@ export function buildReservaPropostaTemplateData(
     cont_vistoria: !!data.tem_contingencias && !!data.cont_vistoria,
     comissao_beneficiario: data.comissao_beneficiario || '',
     comissao_creci: cleanCreci(data.comissao_creci || ''),
+    comissao_percentual: (data.comissao_percentual || '').trim(),
     comissao_paga_por: data.comissao_responsavel === 'proponente' ? 'PROPONENTES' : 'PROPRIETÁRIOS',
     comarca: data.imovel_cidade || '',
     data_extenso: dataExtenso,
