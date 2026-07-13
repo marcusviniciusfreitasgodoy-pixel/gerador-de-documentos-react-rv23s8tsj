@@ -6,15 +6,15 @@ export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 export const COMISSAO_DESTINO_OPTIONS = ['retida', 'devolvida', 'por_conta'] as const
 
 const partySchema = z.object({
-  nome: z.string().min(3, 'Nome obrigat√≥rio'),
-  nacionalidade: z.string().min(1, 'Obrigat√≥rio'),
+  nome: z.string().min(3, 'Nome obrigatório'),
+  nacionalidade: z.string().min(1, 'Obrigatório'),
   estado_civil: z.string().min(1, 'Selecione'),
   regime_bens: z.string().optional(),
-  profissao: z.string().min(1, 'Obrigat√≥rio'),
-  rg: z.string().min(1, 'Obrigat√≥rio'),
-  orgao_emissor: z.string().min(1, 'Obrigat√≥rio'),
-  cpf: z.string().min(1, 'Obrigat√≥rio'),
-  endereco: z.string().min(1, 'Obrigat√≥rio'),
+  profissao: z.string().min(1, 'Obrigatório'),
+  rg: z.string().min(1, 'Obrigatório'),
+  orgao_emissor: z.string().min(1, 'Obrigatório'),
+  cpf: z.string().min(1, 'Obrigatório'),
+  endereco: z.string().min(1, 'Obrigatório'),
   email: z.string().optional(),
 })
 
@@ -31,10 +31,10 @@ export const distratoSchema = z
     compradores: z.array(partySchema).min(1, 'Ao menos um promitente comprador'),
     anuentes: z.array(anuenteSchema),
 
-    // Contrato origin√°rio (campo livre ‚Äî distrato gen√©rico)
-    contrato_originario_tipo: z.string().min(1, 'Obrigat√≥rio'),
-    contrato_originario_data: z.string().min(1, 'Obrigat√≥rio'),
-    contrato_originario_objeto: z.string().min(1, 'Obrigat√≥rio'),
+    // Contrato originário (campo livre — distrato genérico)
+    contrato_originario_tipo: z.string().min(1, 'Obrigatório'),
+    contrato_originario_data: z.string().min(1, 'Obrigatório'),
+    contrato_originario_objeto: z.string().min(1, 'Obrigatório'),
 
     // Acerto de valores
     sem_valores: z.boolean(),
@@ -45,12 +45,12 @@ export const distratoSchema = z
     devolucao_prazo: z.string().optional(),
     devolucao_forma: z.string().optional(),
 
-    // Toggle: devolu√ß√£o do im√≥vel
+    // Toggle: devolução do imóvel
     devolve_imovel: z.boolean(),
     imovel_devolucao_descricao: z.string().optional(),
     imovel_desocupacao_prazo: z.string().optional(),
 
-    // Toggle: comiss√£o
+    // Toggle: comissão
     trata_comissao: z.boolean(),
     comissao_destino: z.enum(COMISSAO_DESTINO_OPTIONS).optional(),
     comissao_valor: z.string().optional(),
@@ -58,20 +58,20 @@ export const distratoSchema = z
     comissao_prazo: z.string().optional(),
     comissao_responsavel: z.string().optional(),
 
-    // Toggle: baixa de averba√ß√£o
+    // Toggle: baixa de averbação
     baixa_averbacao: z.boolean(),
     matricula_numero: z.string().optional(),
     rgi_numero: z.string().optional(),
     averbacao_custas: z.string().optional(),
 
-    // Toggle: ren√∫ncia a perdas e danos
+    // Toggle: renúncia a perdas e danos
     renuncia_perdas: z.boolean(),
 
     // Foro / fecho
-    foro_comarca: z.string().min(1, 'Obrigat√≥rio'),
+    foro_comarca: z.string().min(1, 'Obrigatório'),
     vias_qtd: z.string().optional(),
-    cidade: z.string().min(1, 'Obrigat√≥rio'),
-    data_documento: z.string().min(1, 'Obrigat√≥rio'),
+    cidade: z.string().min(1, 'Obrigatório'),
+    data_documento: z.string().min(1, 'Obrigatório'),
 
     testemunha1_nome: z.string().optional(),
     testemunha1_cpf: z.string().optional(),
@@ -103,13 +103,13 @@ export const distratoSchema = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ['retencao_titulo'],
-            message: 'A que t√≠tulo?',
+            message: 'A que título?',
           })
         if (!v.retencao_valor || parseCurrency(v.retencao_valor) <= 0)
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ['retencao_valor'],
-            message: 'Valor da reten√ß√£o',
+            message: 'Valor da retenção',
           })
         if (
           v.valor_pago &&
@@ -119,7 +119,7 @@ export const distratoSchema = z
           ctx.addIssue({
             code: z.ZodIssueCode.custom,
             path: ['retencao_valor'],
-            message: 'Reten√ß√£o maior que o valor pago',
+            message: 'Retenção maior que o valor pago',
           })
       }
     }
@@ -128,7 +128,7 @@ export const distratoSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['imovel_devolucao_descricao'],
-          message: 'Descreva o im√≥vel',
+          message: 'Descreva o imóvel',
         })
       if (!v.imovel_desocupacao_prazo)
         ctx.addIssue({
@@ -151,13 +151,13 @@ export const distratoSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['comissao_valor'],
-          message: 'Valor da comiss√£o',
+          message: 'Valor da comissão',
         })
       if (v.comissao_destino === 'devolvida' && !v.comissao_prazo)
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['comissao_prazo'],
-          message: 'Prazo da devolu√ß√£o',
+          message: 'Prazo da devolução',
         })
       if (v.comissao_destino === 'por_conta' && !v.comissao_responsavel)
         ctx.addIssue({
@@ -171,7 +171,7 @@ export const distratoSchema = z
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
           path: ['matricula_numero'],
-          message: 'N¬∫ da matr√≠cula',
+          message: 'Nº da matrícula',
         })
       if (!v.rgi_numero)
         ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['rgi_numero'], message: 'RGI' })
@@ -202,15 +202,15 @@ export const emptyParty: PartyValues = {
 export const distratoMockData: DistratoValues = {
   vendedores: [
     {
-      nome: 'Roberto Mendes Ara√∫jo',
+      nome: 'Roberto Mendes Araújo',
       nacionalidade: 'brasileiro',
       estado_civil: 'Casado(a)',
-      regime_bens: 'Comunh√£o parcial',
-      profissao: 'M√©dico',
+      regime_bens: 'Comunhão parcial',
+      profissao: 'Médico',
       rg: 'MG-15.234.567',
       orgao_emissor: 'SSP/MG',
       cpf: '456.789.123-00',
-      endereco: 'Rua Volunt√°rios da P√°tria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
+      endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
       email: '',
     },
   ],
@@ -224,7 +224,7 @@ export const distratoMockData: DistratoValues = {
       rg: 'RJ-20.987.654',
       orgao_emissor: 'SSP/RJ',
       cpf: '987.654.321-00',
-      endereco: 'Av. das Am√©ricas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
+      endereco: 'Av. das Américas, 789, Barra da Tijuca, Rio de Janeiro/RJ, CEP 22640-100',
       email: '',
     },
   ],
@@ -232,15 +232,15 @@ export const distratoMockData: DistratoValues = {
   contrato_originario_tipo: 'Instrumento Particular de Promessa de Compra e Venda',
   contrato_originario_data: '10 de janeiro de 2026',
   contrato_originario_objeto:
-    'o Apartamento n¬∫ 801 do Edif√≠cio Solar, situado √† Rua das Ac√°cias, 150, Jacarepagu√°, Rio de Janeiro/RJ, matr√≠cula n¬∫ 78.456 do 6¬∫ RGI',
+    'o Apartamento nº 801 do Edifício Solar, situado à Rua das Acácias, 150, Jacarepaguá, Rio de Janeiro/RJ, matrícula nº 78.456 do 6º RGI',
   sem_valores: false,
   valor_pago: 'R$ 50.000,00',
   tem_retencao: true,
-  retencao_titulo: 'arras, a t√≠tulo de perdas e danos',
+  retencao_titulo: 'arras, a título de perdas e danos',
   retencao_valor: 'R$ 5.000,00',
   devolucao_prazo: '10 (dez) dias',
   devolucao_forma:
-    'transfer√™ncia via PIX para a chave informada pelo(s) PROMITENTE(S) COMPRADOR(ES)',
+    'transferência via PIX para a chave informada pelo(s) PROMITENTE(S) COMPRADOR(ES)',
   devolve_imovel: false,
   imovel_devolucao_descricao: '',
   imovel_desocupacao_prazo: '',
