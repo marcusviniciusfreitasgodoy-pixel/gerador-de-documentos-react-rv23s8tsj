@@ -52,8 +52,8 @@ function guessRole(fonte: string): PessoaRole {
 
 // Custo transparente (estimativa em R$). Tesseract é local/grátis → sem meta.
 const PRECOS_USD_POR_MILHAO: Record<string, { in: number; out: number }> = {
-  'claude-3-5-sonnet': { in: 3, out: 15 },
-  'gemini-1.5-flash': { in: 0.075, out: 0.3 },
+  'claude-sonnet-5': { in: 3, out: 15 },
+  'gemini-3.1-flash-lite': { in: 0.25, out: 1.5 },
 }
 const USD_BRL = 5.5
 
