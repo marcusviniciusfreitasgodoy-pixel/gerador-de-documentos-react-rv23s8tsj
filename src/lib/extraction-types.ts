@@ -33,9 +33,21 @@ export interface ImovelExtraido {
   _confianca: 'alta' | 'media' | 'baixa'
 }
 
+export interface ExtracaoUsage {
+  in: number
+  out: number
+  modelo: string
+}
+
+export interface ExtracaoMeta {
+  motor: string
+  usage: ExtracaoUsage | null
+}
+
 export interface ExtracaoResult {
   pessoas: PessoaExtraida[]
   imovel: ImovelExtraido
+  meta?: ExtracaoMeta
 }
 
 export type PessoaRole = 'vendedor' | 'comprador' | 'anuente' | 'ignorar'
@@ -88,8 +100,23 @@ const CONFIDENCE_RANK: Record<string, number> = { alta: 3, media: 2, baixa: 1 }
 export function mergeResults(results: ExtracaoResult[]): ExtracaoResult {
   const pessoas: PessoaExtraida[] = []
   const imovel: ImovelExtraido = { ...emptyImovel }
+  let meta: ExtracaoMeta | undefined
 
   for (const result of results) {
+    if (result.meta) {
+      if (!meta) {
+        meta = {
+          motor: result.meta.motor,
+          usage: result.meta.usage ? { ...result.meta.usage } : null,
+        }
+      } else if (result.meta.usage) {
+        if (!meta.usage) meta.usage = { ...result.meta.usage }
+        else {
+          meta.usage.in += result.meta.usage.in
+          meta.usage.out += result.meta.usage.out
+        }
+      }
+    }
     for (const p of result.pessoas) {
       const isDup = p.cpf
         ? pessoas.some((x) => x.cpf === p.cpf)
@@ -110,5 +137,5 @@ export function mergeResults(results: ExtracaoResult[]): ExtracaoResult {
     }
   }
 
-  return { pessoas, imovel }
+  return { pessoas, imovel, meta }
 }
