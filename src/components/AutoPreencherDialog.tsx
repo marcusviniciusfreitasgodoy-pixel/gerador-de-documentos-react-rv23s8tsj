@@ -50,6 +50,22 @@ function guessRole(fonte: string): PessoaRole {
   return 'ignorar'
 }
 
+// Custo transparente (estimativa em R$). Tesseract é local/grátis → sem meta.
+const PRECOS_USD_POR_MILHAO: Record<string, { in: number; out: number }> = {
+  'claude-3-5-sonnet': { in: 3, out: 15 },
+  'gemini-1.5-flash': { in: 0.075, out: 0.3 },
+}
+const USD_BRL = 5.5
+
+function formatCusto(meta?: ExtracaoResult['meta']): string | null {
+  if (!meta || !meta.usage) return null
+  const { in: tin, out: tout, modelo } = meta.usage
+  const rate = PRECOS_USD_POR_MILHAO[modelo] || { in: 0, out: 0 }
+  const brl = ((tin / 1e6) * rate.in + (tout / 1e6) * rate.out) * USD_BRL
+  const custo = brl < 0.01 ? '< R$ 0,01' : `~R$ ${brl.toFixed(2).replace('.', ',')}`
+  return `${modelo} · ${tin.toLocaleString('pt-BR')} tok entrada / ${tout.toLocaleString('pt-BR')} tok saída · ${custo}`
+}
+
 export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreencherDialogProps) {
   const [motor, setMotor] = useState<ExtractionMotor>('claude')
   const [files, setFiles] = useState<File[]>([])
@@ -59,6 +75,21 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
   const [roles, setRoles] = useState<Record<number, PessoaRole>>({})
   const [pessoas, setPessoas] = useState<PessoaExtraida[]>([])
   const [imovel, setImovel] = useState<ImovelExtraido>(emptyImovel)
+
+  // Acumula seleções (anexa + deduplica por nome+tamanho) — permite adicionar
+  // escritura, CNH e outros um a um sem que uma seleção apague a anterior.
+  const handleFilesSelected = (novos: File[]) => {
+    setFiles((prev) => {
+      const combinados = [...prev]
+      for (const f of novos) {
+        if (!combinados.some((x) => x.name === f.name && x.size === f.size)) combinados.push(f)
+      }
+      return combinados
+    })
+    // nova seleção invalida um lote/resultado anterior
+    setBatchItems(null)
+    setResult(null)
+  }
 
   const handleExtract = async () => {
     if (!files.length) {
@@ -168,11 +199,14 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
             </div>
             <FileDropZone
               multiple
-              onFilesSelect={setFiles}
+              onFilesSelect={handleFilesSelected}
               selectedFiles={files}
               loading={loading}
               loadingText="Processando documentos..."
             />
+            <p className="text-xs text-muted-foreground -mt-2">
+              Você pode adicionar vários documentos (escritura, CNH, RG…) — de uma vez ou um a um.
+            </p>
             {files.length > 0 && !batchItems && (
               <div className="space-y-1">
                 {files.map((f, i) => (
@@ -210,6 +244,11 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
           </div>
         ) : (
           <div className="space-y-6">
+            {formatCusto(result?.meta) && (
+              <p className="text-xs text-muted-foreground rounded-md bg-secondary/40 px-3 py-1.5">
+                Custo estimado: {formatCusto(result?.meta)}
+              </p>
+            )}
             {showBatchList && (
               <div>
                 <h3 className="text-sm font-semibold mb-2">Status do Processamento</h3>
