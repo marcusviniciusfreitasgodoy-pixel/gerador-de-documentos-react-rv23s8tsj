@@ -63,6 +63,49 @@ export async function extractTextFromImage(file: File): Promise<string> {
   }
 }
 
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(String(reader.result))
+    reader.onerror = () => reject(new Error('Falha ao ler o arquivo.'))
+    reader.readAsDataURL(file)
+  })
+}
+
+// Renderiza o documento em imagens (dataURL base64) para a IA de VISÃO ler diretamente.
+// PDF → páginas rasterizadas (até maxPages); PNG/JPG → a própria imagem; DOCX → sem imagem (só texto).
+export async function renderDocumentToImages(file: File, maxPages = 5): Promise<string[]> {
+  const ext = file.name.toLowerCase().split('.').pop() || ''
+
+  if (['png', 'jpg', 'jpeg'].includes(ext)) {
+    return [await fileToDataUrl(file)]
+  }
+
+  if (ext === 'pdf') {
+    const arrayBuffer = await file.arrayBuffer()
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
+    const images: string[] = []
+    const n = Math.min(pdf.numPages, maxPages)
+    for (let i = 1; i <= n; i++) {
+      const page = await pdf.getPage(i)
+      const base = page.getViewport({ scale: 1 })
+      // limita o lado maior a ~1500px (modelos de visão reduzem imagens grandes de qualquer forma)
+      const scale = Math.min(2, 1500 / Math.max(base.width, base.height))
+      const viewport = page.getViewport({ scale })
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      if (!ctx) continue
+      canvas.width = viewport.width
+      canvas.height = viewport.height
+      await page.render({ canvasContext: ctx, viewport }).promise
+      images.push(canvas.toDataURL('image/jpeg', 0.85))
+    }
+    return images
+  }
+
+  return []
+}
+
 export async function extractTextFromDocument(file: File): Promise<string> {
   const ext = file.name.toLowerCase().split('.').pop() || ''
   switch (ext) {
