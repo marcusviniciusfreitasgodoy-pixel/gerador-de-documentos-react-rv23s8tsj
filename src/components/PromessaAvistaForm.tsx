@@ -16,6 +16,7 @@ import {
   Plus,
   Trash2,
   HeartHandshake,
+  Sparkles,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
@@ -52,6 +53,9 @@ import { buildPromessaAvistaTemplateData } from '@/lib/promessaAvistaTemplate'
 import { generatePromessaAvistaDocx, getPromessaAvistaText } from '@/lib/promessaAvistaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
+import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
+import type { ExtracaoResult, PessoaRole } from '@/lib/extraction-types'
+import type { PartyValues, AnuenteValues } from '@/lib/promessaAvistaHelpers'
 
 function sugerirPapel(regime?: string): string {
   if (regime === 'Comunhão universal')
@@ -68,6 +72,7 @@ export function PromessaAvistaForm() {
   const [isValidating, setIsValidating] = useState(false)
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
+  const [autoPreencherOpen, setAutoPreencherOpen] = useState(false)
   const navigate = useNavigate()
 
   const form = useForm<PromessaAvistaValues>({
@@ -81,16 +86,19 @@ export function PromessaAvistaForm() {
     fields: vendedorFields,
     append: appendVendedor,
     remove: removeVendedor,
+    replace: replaceVendedores,
   } = useFieldArray({ control, name: 'vendedores' })
   const {
     fields: anuenteFields,
     append: appendAnuente,
     remove: removeAnuente,
+    replace: replaceAnuentes,
   } = useFieldArray({ control, name: 'anuentes' })
   const {
     fields: compradorFields,
     append: appendComprador,
     remove: removeComprador,
+    replace: replaceCompradores,
   } = useFieldArray({ control, name: 'compradores' })
 
   useEffect(() => {
@@ -164,6 +172,48 @@ export function PromessaAvistaForm() {
       endereco: v?.endereco || '',
     })
     toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
+  }
+
+  const aplicarExtracao = (data: ExtracaoResult, roles: Record<number, PessoaRole>) => {
+    const toParty = (p: ExtracaoResult['pessoas'][0]): PartyValues => ({
+      nome: p.nome || '',
+      nacionalidade: p.nacionalidade || 'brasileiro(a)',
+      estado_civil: p.estado_civil || '',
+      regime_bens: p.regime_bens || '',
+      profissao: p.profissao || '',
+      rg: p.rg || '',
+      orgao_emissor: p.orgao_emissor || '',
+      cpf: p.cpf || '',
+      endereco: p.endereco || '',
+      email: p.email || '',
+    })
+    const toAnuente = (p: ExtracaoResult['pessoas'][0]): AnuenteValues => ({
+      ...toParty(p),
+      conjuge_de: '',
+    })
+    const vendedores = data.pessoas.filter((_, i) => roles[i] === 'vendedor').map(toParty)
+    const compradores = data.pessoas.filter((_, i) => roles[i] === 'comprador').map(toParty)
+    const anuentes = data.pessoas.filter((_, i) => roles[i] === 'anuente').map(toAnuente)
+    replaceVendedores(vendedores.length ? vendedores : [{ ...emptyParty }])
+    replaceCompradores(compradores.length ? compradores : [{ ...emptyParty }])
+    replaceAnuentes(anuentes)
+    const im = data.imovel
+    setValue('imovel_descricao', im.descricao)
+    setValue('imovel_endereco', im.endereco)
+    setValue('imovel_bairro', im.bairro)
+    setValue('imovel_cidade', im.cidade)
+    setValue('imovel_uf', im.uf)
+    setValue('imovel_cep', im.cep)
+    setValue('imovel_matricula', im.matricula)
+    setValue('imovel_rgi', im.rgi)
+    setValue('imovel_iptu', im.iptu)
+    setValue('imovel_fracao_ideal', im.fracao_ideal)
+    setValue('imovel_vagas_qtd', im.vagas_qtd)
+    setValue('imovel_vagas_descricao', im.vagas_descricao)
+    setValue('imovel_origem_aquisicao', im.origem_aquisicao)
+    setValue('imovel_origem_registro', im.origem_registro)
+    setAutoPreencherOpen(false)
+    toast.success('Dados preenchidos a partir do documento.')
   }
 
   const onSubmit = async (data: PromessaAvistaValues) => {
@@ -950,11 +1000,25 @@ export function PromessaAvistaForm() {
           type="button"
           variant="outline"
           className="w-full"
+          onClick={() => setAutoPreencherOpen(true)}
+        >
+          <Sparkles className="mr-2 h-4 w-4" />
+          Preencher a partir de documentos
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
           onClick={() => form.reset(promessaAvistaMockData)}
         >
           <Wand2 className="mr-2 h-4 w-4" />
           Preencher dados de teste
         </Button>
+        <AutoPreencherDialog
+          open={autoPreencherOpen}
+          onOpenChange={setAutoPreencherOpen}
+          onApply={aplicarExtracao}
+        />
         <Button
           type="submit"
           disabled={isGenerating}
