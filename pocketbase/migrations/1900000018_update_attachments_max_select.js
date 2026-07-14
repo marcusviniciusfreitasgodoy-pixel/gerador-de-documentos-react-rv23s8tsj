@@ -1,10 +1,7 @@
 migrate(
   (app) => {
     var col = app.findCollectionByNameOrId('expert_support_requests')
-    var existing = col.fields.getByName('attachments')
-    if (existing) {
-      col.fields.remove(existing)
-    }
+    col.fields.removeByName('attachments')
     col.fields.add(
       new FileField({
         name: 'attachments',
@@ -22,10 +19,7 @@ migrate(
   },
   (app) => {
     var col = app.findCollectionByNameOrId('expert_support_requests')
-    var existing = col.fields.getByName('attachments')
-    if (existing) {
-      col.fields.remove(existing)
-    }
+    col.fields.removeByName('attachments')
     col.fields.add(new FileField({ name: 'attachments', maxSelect: 1 }))
     app.save(col)
   },
