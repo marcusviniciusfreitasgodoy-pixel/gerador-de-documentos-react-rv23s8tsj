@@ -64,7 +64,10 @@ routerAdd(
             'content-type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'claude-3-5-sonnet-latest',
+            model: 'claude-sonnet-5',
+            // Sonnet 5 liga raciocinio adaptativo quando o campo e omitido; numa extracao
+            // estruturada isso so consome o teto de tokens e trunca o JSON.
+            thinking: { type: 'disabled' },
             max_tokens: 2048,
             system: SYSTEM,
             messages: [{ role: 'user', content: parts }],
@@ -76,7 +79,7 @@ routerAdd(
           usage = {
             in: res.json.usage.input_tokens,
             out: res.json.usage.output_tokens,
-            modelo: 'claude-3-5-sonnet',
+            modelo: 'claude-sonnet-5',
           }
         return res.json.content[0].text
       }
@@ -91,7 +94,7 @@ routerAdd(
         parts.push({ text: 'Extraia os dados conforme o formato JSON.' })
         var res = $http.send({
           url:
-            'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' +
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=' +
             geminiKey,
           method: 'POST',
           headers: { 'content-type': 'application/json' },
@@ -108,7 +111,7 @@ routerAdd(
           usage = {
             in: res.json.usageMetadata.promptTokenCount,
             out: res.json.usageMetadata.candidatesTokenCount,
-            modelo: 'gemini-1.5-flash',
+            modelo: 'gemini-3.1-flash-lite',
           }
         return c ? c.content.parts[0].text : ''
       }
