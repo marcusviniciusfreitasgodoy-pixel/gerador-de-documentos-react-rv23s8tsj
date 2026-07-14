@@ -3,7 +3,6 @@ import { useLocation, Link } from 'react-router-dom'
 import {
   Loader2,
   FileSearch,
-  Upload,
   FileText,
   AlertTriangle,
   CheckCircle2,
@@ -25,7 +24,8 @@ import {
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { extractTextFromDocx } from '@/lib/docx-extract'
+import { extractTextFromDocument } from '@/lib/document-extract'
+import { FileDropZone } from '@/components/FileDropZone'
 import {
   validarMinuta,
   normalizeValidationResult,
@@ -89,23 +89,22 @@ export default function ValidarMinutaPage() {
   const errorConfig = errorCategory ? errorDisplayConfig[errorCategory] : null
   const ErrorIcon = errorConfig?.icon
 
-  const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    if (!file.name.toLowerCase().endsWith('.docx')) {
-      toast.error('Apenas arquivos .docx são suportados.')
+  const handleFileUpload = useCallback(async (file: File) => {
+    const ext = file.name.toLowerCase().split('.').pop() || ''
+    const supported = ['pdf', 'png', 'jpg', 'jpeg', 'docx']
+    if (!supported.includes(ext)) {
+      toast.error('Formato não suportado. Use PDF, PNG, JPG ou DOCX.')
       return
     }
     setUploading(true)
     try {
-      const text = await extractTextFromDocx(file)
+      const text = await extractTextFromDocument(file)
       setDocumentText(text)
-      toast.success('Documento carregado com sucesso!')
+      toast.success('Texto extraído com sucesso!')
     } catch (err) {
       toast.error(getErrorMessage(err))
     } finally {
       setUploading(false)
-      e.target.value = ''
     }
   }, [])
 
@@ -183,36 +182,18 @@ export default function ValidarMinutaPage() {
             </Select>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="doc-text">Texto do Documento</Label>
-              <div>
-                <input
-                  type="file"
-                  accept=".docx"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                  id="docx-upload"
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={uploading}
-                  onClick={() => document.getElementById('docx-upload')?.click()}
-                >
-                  {uploading ? (
-                    <Loader2 className="mr-1 h-4 w-4 animate-spin" />
-                  ) : (
-                    <Upload className="mr-1 h-4 w-4" />
-                  )}
-                  Upload .docx
-                </Button>
-              </div>
-            </div>
+          <div className="space-y-3">
+            <Label>Texto do Documento</Label>
+            <FileDropZone
+              onFileSelect={handleFileUpload}
+              disabled={uploading || loading}
+              loading={uploading}
+              loadingText="Extraindo texto do documento..."
+            />
             <Textarea
               id="doc-text"
               rows={10}
-              placeholder="Cole aqui o texto da minuta ou faça upload de um arquivo .docx..."
+              placeholder="Cole aqui o texto da minuta ou faça upload de um documento..."
               value={documentText}
               onChange={(e) => setDocumentText(e.target.value)}
               className="resize-y"
