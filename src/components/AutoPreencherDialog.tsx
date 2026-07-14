@@ -75,7 +75,7 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
       if (!res.pessoas.length)
         toast.info('Nenhuma pessoa encontrada. Verifique os dados do imóvel.')
     } catch (err: any) {
-      toast.error(err?.message || 'Falha ao extrair dados.')
+      toast.error(err instanceof Error ? err.message : err?.message || 'Falha ao extrair dados.')
     } finally {
       setLoading(false)
     }

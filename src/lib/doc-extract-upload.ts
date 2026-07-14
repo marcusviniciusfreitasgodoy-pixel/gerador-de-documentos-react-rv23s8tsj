@@ -2,7 +2,6 @@ import * as pdfjsLib from 'pdfjs-dist'
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?worker'
 import pb from '@/lib/pocketbase/client'
 import { extractTextFromDocument } from '@/lib/document-extract'
-import { extractTextFromDocx } from '@/lib/docx-extract'
 import type {
   ExtractionMotor,
   ExtracaoResult,
@@ -11,43 +10,8 @@ import type {
 } from '@/lib/extraction-types'
 import { emptyPessoa, emptyImovel } from '@/lib/extraction-types'
 
+// Configura o worker do PDF.js para extração local
 pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker()
-
-async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = () => reject(new Error('Falha ao converter arquivo.'))
-    reader.readAsDataURL(file)
-  })
-}
-
-async function pdfToImages(file: File, maxPages = 5): Promise<string[]> {
-  const arrayBuffer = await file.arrayBuffer()
-  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
-  const images: string[] = []
-  const pages = Math.min(pdf.numPages, maxPages)
-  for (let i = 1; i <= pages; i++) {
-    const page = await pdf.getPage(i)
-    const viewport = page.getViewport({ scale: 1.5 })
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    if (!ctx) continue
-    canvas.width = viewport.width
-    canvas.height = viewport.height
-    await page.render({ canvasContext: ctx, viewport }).promise
-    images.push(canvas.toDataURL('image/jpeg', 0.85))
-  }
-  return images
-}
-
-async function fileToBase64Images(file: File): Promise<{ images: string[]; text: string }> {
-  const ext = file.name.toLowerCase().split('.').pop() || ''
-  if (ext === 'pdf') return { images: await pdfToImages(file), text: '' }
-  if (['png', 'jpg', 'jpeg'].includes(ext)) return { images: [await fileToBase64(file)], text: '' }
-  if (ext === 'docx') return { images: [], text: await extractTextFromDocx(file) }
-  throw new Error('Formato não suportado. Use PDF, PNG, JPG ou DOCX.')
-}
 
 function normalizePessoa(raw: any): PessoaExtraida {
   return {
@@ -135,19 +99,35 @@ function parseTextHeuristics(text: string): ExtracaoResult {
 }
 
 export async function extractDocument(file: File, motor: ExtractionMotor): Promise<ExtracaoResult> {
+  // Worker Validation: garante extração do texto no cliente
+  const text = await extractTextFromDocument(file)
+
+  if (!text || text.trim().length === 0) {
+    throw new Error(
+      'Não foi possível extrair texto do documento. O arquivo pode estar vazio, criptografado ou ilegível.',
+    )
+  }
+
   if (motor === 'tesseract') {
-    const text = await extractTextFromDocument(file)
     return parseTextHeuristics(text)
   }
-  const { images, text } = await fileToBase64Images(file)
+
   try {
+    // Data transmission optimization: enviando apenas o texto extraído invés de grandes arrays base64
+    // O SDK do PocketBase processará e converterá este objeto como JSON sem precisar de stringify duplo
     const result = await pb.send('/backend/v1/extrair-dados', {
       method: 'POST',
-      body: JSON.stringify({ motor, images, text }),
-      headers: { 'Content-Type': 'application/json' },
+      body: {
+        model: motor,
+        document_text: text,
+        schema: 'promessa_avista',
+      },
     })
     return normalizeResult(result)
   } catch (err: any) {
-    throw new Error(err?.message || 'Falha ao extrair dados do documento.')
+    // Extrai mensagem real reportada pelo backend em caso de erro 400 ou 422
+    const backendMessage =
+      err?.response?.error || err?.message || 'Falha ao extrair dados do documento.'
+    throw new Error(backendMessage)
   }
 }
