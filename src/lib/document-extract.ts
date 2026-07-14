@@ -1,10 +1,8 @@
 import * as pdfjsLib from 'pdfjs-dist'
+import PdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?worker'
 import { extractTextFromDocx } from '@/lib/docx-extract'
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).href
+pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker()
 
 export function isSupportedFile(file: File): boolean {
   const ext = file.name.toLowerCase().split('.').pop() || ''

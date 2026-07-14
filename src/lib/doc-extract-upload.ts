@@ -1,4 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist'
+import PdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?worker'
 import pb from '@/lib/pocketbase/client'
 import { extractTextFromDocument } from '@/lib/document-extract'
 import { extractTextFromDocx } from '@/lib/docx-extract'
@@ -10,10 +11,7 @@ import type {
 } from '@/lib/extraction-types'
 import { emptyPessoa, emptyImovel } from '@/lib/extraction-types'
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.mjs',
-  import.meta.url,
-).href
+pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker()
 
 async function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
