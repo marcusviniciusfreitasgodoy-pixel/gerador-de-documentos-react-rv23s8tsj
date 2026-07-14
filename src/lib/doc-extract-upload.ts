@@ -1,7 +1,7 @@
 import * as pdfjsLib from 'pdfjs-dist'
 import PdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?worker'
 import pb from '@/lib/pocketbase/client'
-import { extractTextFromDocument } from '@/lib/document-extract'
+import { extractTextFromDocument, renderDocumentToImages } from '@/lib/document-extract'
 import type {
   ExtractionMotor,
   ExtracaoResult,
@@ -51,6 +51,18 @@ function normalizeImovel(raw: any): ImovelExtraido {
   }
 }
 
+function normalizeMeta(raw: any): ExtracaoResult['meta'] {
+  if (!raw || typeof raw !== 'object') return undefined
+  const u = raw.usage
+  return {
+    motor: String(raw.motor || ''),
+    usage:
+      u && typeof u === 'object'
+        ? { in: Number(u.in) || 0, out: Number(u.out) || 0, modelo: String(u.modelo || '') }
+        : null,
+  }
+}
+
 function normalizeResult(raw: unknown): ExtracaoResult {
   const r = (raw && typeof raw === 'object' ? raw : {}) as Record<string, any>
   return {
@@ -58,6 +70,29 @@ function normalizeResult(raw: unknown): ExtracaoResult {
       ? r.pessoas.filter((p: any) => p && typeof p === 'object').map(normalizePessoa)
       : [],
     imovel: normalizeImovel(r.imovel),
+    meta: normalizeMeta(r.meta),
+  }
+}
+
+// Extração por IA de VISÃO (Claude/Gemini): renderiza imagens + texto (dica) e chama o hook direto.
+async function extractViaVisao(file: File, motor: ExtractionMotor): Promise<ExtracaoResult> {
+  const [text, images] = await Promise.all([
+    extractTextFromDocument(file).catch(() => ''),
+    renderDocumentToImages(file).catch(() => [] as string[]),
+  ])
+  if (!images.length && !text.trim()) {
+    throw new Error('Documento vazio, criptografado ou ilegível.')
+  }
+  try {
+    const result = await pb.send('/backend/v1/extrair-dados', {
+      method: 'POST',
+      body: { motor, images, text },
+    })
+    return normalizeResult(result)
+  } catch (err: any) {
+    const backendMessage =
+      err?.response?.error || err?.message || 'Falha ao extrair dados do documento.'
+    throw new Error(backendMessage)
   }
 }
 
@@ -99,33 +134,19 @@ function parseTextHeuristics(text: string): ExtracaoResult {
 }
 
 export async function extractDocument(file: File, motor: ExtractionMotor): Promise<ExtracaoResult> {
-  const text = await extractTextFromDocument(file)
-
-  if (!text || text.trim().length === 0) {
-    throw new Error(
-      'Não foi possível extrair texto do documento. O arquivo pode estar vazio, criptografado ou ilegível.',
-    )
-  }
-
+  // Tesseract: OCR local (grátis), sem IA — heurística sobre o texto.
   if (motor === 'tesseract') {
+    const text = await extractTextFromDocument(file)
+    if (!text || text.trim().length === 0) {
+      throw new Error(
+        'Não foi possível extrair texto do documento. O arquivo pode estar vazio, criptografado ou ilegível.',
+      )
+    }
     return parseTextHeuristics(text)
   }
 
-  try {
-    const result = await pb.send('/backend/v1/extrair-dados', {
-      method: 'POST',
-      body: {
-        model: motor,
-        document_text: text,
-        schema: 'promessa_avista',
-      },
-    })
-    return normalizeResult(result)
-  } catch (err: any) {
-    const backendMessage =
-      err?.response?.error || err?.message || 'Falha ao extrair dados do documento.'
-    throw new Error(backendMessage)
-  }
+  // Claude/Gemini: IA de visão (imagem do documento + texto como dica).
+  return extractViaVisao(file, motor)
 }
 
 export async function extractDocumentsBatch(
@@ -141,46 +162,37 @@ export async function extractDocumentsBatch(
   onProgress(items.map((i) => ({ ...i })))
 
   for (let i = 0; i < items.length; i++) {
-    items[i].status = 'extracting'
-    items[i].statusLabel = 'Extraindo texto...'
-    onProgress(items.map((x) => ({ ...x })))
-
     try {
-      const text = await extractTextFromDocument(items[i].file)
-      if (!text || text.trim().length === 0) {
-        throw new Error('Documento vazio, criptografado ou ilegível.')
-      }
-
       if (motor === 'tesseract') {
+        // OCR local (grátis): só texto + heurística.
+        items[i].status = 'extracting'
+        items[i].statusLabel = 'Lendo (OCR local)...'
+        onProgress(items.map((x) => ({ ...x })))
+
+        const text = await extractTextFromDocument(items[i].file)
+        if (!text || text.trim().length === 0) {
+          throw new Error('Documento vazio, criptografado ou ilegível.')
+        }
         items[i].result = parseTextHeuristics(text)
         items[i].status = 'completed'
         items[i].statusLabel = 'Concluído'
       } else {
-        items[i].status = 'sending'
-        items[i].statusLabel = 'Enviando para IA...'
+        // Claude/Gemini: IA de visão (imagem + texto como dica).
+        items[i].status = 'extracting'
+        items[i].statusLabel = 'Preparando documento...'
         onProgress(items.map((x) => ({ ...x })))
 
-        try {
-          const result = await pb.send('/backend/v1/extrair-dados', {
-            method: 'POST',
-            body: {
-              model: motor,
-              document_text: text,
-              schema: 'promessa_avista',
-            },
-          })
-          items[i].result = normalizeResult(result)
-          items[i].status = 'completed'
-          items[i].statusLabel = 'Concluído'
-        } catch (err: any) {
-          items[i].status = 'error'
-          items[i].error = err?.response?.error || err?.message || 'Falha na extração por IA.'
-          items[i].statusLabel = 'Falhou'
-        }
+        items[i].status = 'sending'
+        items[i].statusLabel = 'Enviando para IA de visão...'
+        onProgress(items.map((x) => ({ ...x })))
+
+        items[i].result = await extractViaVisao(items[i].file, motor)
+        items[i].status = 'completed'
+        items[i].statusLabel = 'Concluído'
       }
     } catch (err: any) {
       items[i].status = 'error'
-      items[i].error = err instanceof Error ? err.message : 'Falha ao extrair texto.'
+      items[i].error = err instanceof Error ? err.message : 'Falha ao processar o documento.'
       items[i].statusLabel = 'Falhou'
     }
     onProgress(items.map((x) => ({ ...x })))
