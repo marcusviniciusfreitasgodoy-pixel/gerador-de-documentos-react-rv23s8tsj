@@ -40,6 +40,16 @@ export interface ExtracaoResult {
 
 export type PessoaRole = 'vendedor' | 'comprador' | 'anuente' | 'ignorar'
 
+export type BatchFileStatus = 'pending' | 'extracting' | 'sending' | 'completed' | 'error'
+
+export interface BatchFileItem {
+  file: File
+  status: BatchFileStatus
+  statusLabel: string
+  error?: string
+  result?: ExtracaoResult
+}
+
 export const emptyPessoa: PessoaExtraida = {
   nome: '',
   cpf: '',
@@ -71,4 +81,34 @@ export const emptyImovel: ImovelExtraido = {
   origem_aquisicao: '',
   origem_registro: '',
   _confianca: 'baixa',
+}
+
+const CONFIDENCE_RANK: Record<string, number> = { alta: 3, media: 2, baixa: 1 }
+
+export function mergeResults(results: ExtracaoResult[]): ExtracaoResult {
+  const pessoas: PessoaExtraida[] = []
+  const imovel: ImovelExtraido = { ...emptyImovel }
+
+  for (const result of results) {
+    for (const p of result.pessoas) {
+      const isDup = p.cpf
+        ? pessoas.some((x) => x.cpf === p.cpf)
+        : p.nome
+          ? pessoas.some((x) => x.nome === p.nome)
+          : false
+      if (!isDup) pessoas.push(p)
+    }
+    const keys = Object.keys(imovel) as (keyof ImovelExtraido)[]
+    for (const key of keys) {
+      if (key === '_confianca') {
+        if (CONFIDENCE_RANK[result.imovel._confianca] > CONFIDENCE_RANK[imovel._confianca]) {
+          imovel._confianca = result.imovel._confianca
+        }
+      } else if (!imovel[key] && result.imovel[key]) {
+        imovel[key] = result.imovel[key]
+      }
+    }
+  }
+
+  return { pessoas, imovel }
 }

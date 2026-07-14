@@ -7,10 +7,10 @@ import type {
   ExtracaoResult,
   PessoaExtraida,
   ImovelExtraido,
+  BatchFileItem,
 } from '@/lib/extraction-types'
 import { emptyPessoa, emptyImovel } from '@/lib/extraction-types'
 
-// Configura o worker do PDF.js para extração local
 pdfjsLib.GlobalWorkerOptions.workerPort = new PdfWorker()
 
 function normalizePessoa(raw: any): PessoaExtraida {
@@ -99,7 +99,6 @@ function parseTextHeuristics(text: string): ExtracaoResult {
 }
 
 export async function extractDocument(file: File, motor: ExtractionMotor): Promise<ExtracaoResult> {
-  // Worker Validation: garante extração do texto no cliente
   const text = await extractTextFromDocument(file)
 
   if (!text || text.trim().length === 0) {
@@ -113,8 +112,6 @@ export async function extractDocument(file: File, motor: ExtractionMotor): Promi
   }
 
   try {
-    // Data transmission optimization: enviando apenas o texto extraído invés de grandes arrays base64
-    // O SDK do PocketBase processará e converterá este objeto como JSON sem precisar de stringify duplo
     const result = await pb.send('/backend/v1/extrair-dados', {
       method: 'POST',
       body: {
@@ -125,9 +122,69 @@ export async function extractDocument(file: File, motor: ExtractionMotor): Promi
     })
     return normalizeResult(result)
   } catch (err: any) {
-    // Extrai mensagem real reportada pelo backend em caso de erro 400 ou 422
     const backendMessage =
       err?.response?.error || err?.message || 'Falha ao extrair dados do documento.'
     throw new Error(backendMessage)
   }
+}
+
+export async function extractDocumentsBatch(
+  files: File[],
+  motor: ExtractionMotor,
+  onProgress: (items: BatchFileItem[]) => void,
+): Promise<BatchFileItem[]> {
+  const items: BatchFileItem[] = files.map((file) => ({
+    file,
+    status: 'pending',
+    statusLabel: 'Aguardando...',
+  }))
+  onProgress(items.map((i) => ({ ...i })))
+
+  for (let i = 0; i < items.length; i++) {
+    items[i].status = 'extracting'
+    items[i].statusLabel = 'Extraindo texto...'
+    onProgress(items.map((x) => ({ ...x })))
+
+    try {
+      const text = await extractTextFromDocument(items[i].file)
+      if (!text || text.trim().length === 0) {
+        throw new Error('Documento vazio, criptografado ou ilegível.')
+      }
+
+      if (motor === 'tesseract') {
+        items[i].result = parseTextHeuristics(text)
+        items[i].status = 'completed'
+        items[i].statusLabel = 'Concluído'
+      } else {
+        items[i].status = 'sending'
+        items[i].statusLabel = 'Enviando para IA...'
+        onProgress(items.map((x) => ({ ...x })))
+
+        try {
+          const result = await pb.send('/backend/v1/extrair-dados', {
+            method: 'POST',
+            body: {
+              model: motor,
+              document_text: text,
+              schema: 'promessa_avista',
+            },
+          })
+          items[i].result = normalizeResult(result)
+          items[i].status = 'completed'
+          items[i].statusLabel = 'Concluído'
+        } catch (err: any) {
+          items[i].status = 'error'
+          items[i].error = err?.response?.error || err?.message || 'Falha na extração por IA.'
+          items[i].statusLabel = 'Falhou'
+        }
+      }
+    } catch (err: any) {
+      items[i].status = 'error'
+      items[i].error = err instanceof Error ? err.message : 'Falha ao extrair texto.'
+      items[i].statusLabel = 'Falhou'
+    }
+    onProgress(items.map((x) => ({ ...x })))
+  }
+
+  return items
 }

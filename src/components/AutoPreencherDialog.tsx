@@ -16,15 +16,18 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FileDropZone } from '@/components/FileDropZone'
-import { Loader2, Sparkles, Check, ArrowLeft, User, Building2 } from 'lucide-react'
+import { BatchFileList } from '@/components/BatchFileList'
+import { Loader2, Sparkles, Check, ArrowLeft, User, Building2, X } from 'lucide-react'
 import { toast } from 'sonner'
-import { extractDocument } from '@/lib/doc-extract-upload'
+import { extractDocumentsBatch } from '@/lib/doc-extract-upload'
+import { mergeResults } from '@/lib/extraction-types'
 import type {
   ExtractionMotor,
   ExtracaoResult,
   PessoaRole,
   PessoaExtraida,
   ImovelExtraido,
+  BatchFileItem,
 } from '@/lib/extraction-types'
 import { emptyImovel } from '@/lib/extraction-types'
 
@@ -49,7 +52,8 @@ function guessRole(fonte: string): PessoaRole {
 
 export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreencherDialogProps) {
   const [motor, setMotor] = useState<ExtractionMotor>('claude')
-  const [file, setFile] = useState<File | null>(null)
+  const [files, setFiles] = useState<File[]>([])
+  const [batchItems, setBatchItems] = useState<BatchFileItem[] | null>(null)
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ExtracaoResult | null>(null)
   const [roles, setRoles] = useState<Record<number, PessoaRole>>({})
@@ -57,25 +61,43 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
   const [imovel, setImovel] = useState<ImovelExtraido>(emptyImovel)
 
   const handleExtract = async () => {
-    if (!file) {
-      toast.error('Selecione um arquivo.')
+    if (!files.length) {
+      toast.error('Selecione pelo menos um arquivo.')
       return
     }
     setLoading(true)
+    setBatchItems(
+      files.map((f) => ({ file: f, status: 'pending' as const, statusLabel: 'Aguardando...' })),
+    )
     try {
-      const res = await extractDocument(file, motor)
-      setResult(res)
-      setPessoas(res.pessoas)
-      setImovel(res.imovel)
-      const initialRoles: Record<number, PessoaRole> = {}
-      res.pessoas.forEach((p, i) => {
-        initialRoles[i] = guessRole(p._fonte)
+      const items = await extractDocumentsBatch(files, motor, (updated) => {
+        setBatchItems(updated.map((x) => ({ ...x })))
       })
-      setRoles(initialRoles)
-      if (!res.pessoas.length)
-        toast.info('Nenhuma pessoa encontrada. Verifique os dados do imóvel.')
+      const successResults = items
+        .filter((i) => i.status === 'completed' && i.result)
+        .map((i) => i.result!)
+      const hasErrors = items.some((i) => i.status === 'error')
+      if (successResults.length === 0) {
+        toast.error('Nenhum documento pôde ser processado com sucesso.')
+      } else {
+        const merged = mergeResults(successResults)
+        setResult(merged)
+        setPessoas(merged.pessoas)
+        setImovel(merged.imovel)
+        const initialRoles: Record<number, PessoaRole> = {}
+        merged.pessoas.forEach((p, i) => {
+          initialRoles[i] = guessRole(p._fonte)
+        })
+        setRoles(initialRoles)
+        if (!merged.pessoas.length)
+          toast.info('Nenhuma pessoa encontrada. Verifique os dados do imóvel.')
+        if (hasErrors)
+          toast.info(
+            'Alguns documentos falharam. Os dados dos documentos bem-sucedidos foram mesclados.',
+          )
+      }
     } catch (err: any) {
-      toast.error(err instanceof Error ? err.message : err?.message || 'Falha ao extrair dados.')
+      toast.error(err instanceof Error ? err.message : 'Falha ao extrair dados.')
     } finally {
       setLoading(false)
     }
@@ -97,11 +119,18 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
 
   const reset = () => {
     setResult(null)
-    setFile(null)
+    setFiles([])
+    setBatchItems(null)
     setPessoas([])
     setRoles({})
     setImovel(emptyImovel)
   }
+
+  const removeFile = (index: number) => {
+    setFiles((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const showBatchList = batchItems && (!result || batchItems.some((i) => i.status === 'error'))
 
   return (
     <Dialog
@@ -115,10 +144,10 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            Auto-Preencher a partir de Documento
+            Auto-Preencher a partir de Documentos
           </DialogTitle>
           <DialogDescription>
-            Faça upload de um documento para extrair dados automaticamente.
+            Faça upload de um ou mais documentos para extrair dados automaticamente.
           </DialogDescription>
         </DialogHeader>
 
@@ -138,25 +167,55 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
               </Select>
             </div>
             <FileDropZone
-              onFileSelect={setFile}
+              multiple
+              onFilesSelect={setFiles}
+              selectedFiles={files}
               loading={loading}
-              loadingText="Extraindo dados..."
+              loadingText="Processando documentos..."
             />
-            {file && <p className="text-sm text-muted-foreground">Arquivo: {file.name}</p>}
-            <Button onClick={handleExtract} disabled={loading || !file} className="w-full">
+            {files.length > 0 && !batchItems && (
+              <div className="space-y-1">
+                {files.map((f, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between bg-secondary/40 rounded-md px-3 py-1.5 text-sm"
+                  >
+                    <span className="truncate">{f.name}</span>
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      className="h-6 w-6"
+                      onClick={() => removeFile(i)}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {showBatchList && <BatchFileList items={batchItems!} />}
+            <Button onClick={handleExtract} disabled={loading || !files.length} className="w-full">
               {loading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Extraindo...
                 </>
               ) : (
                 <>
-                  <Sparkles className="mr-2 h-4 w-4" /> Extrair dados
+                  <Sparkles className="mr-2 h-4 w-4" /> Extrair dados ({files.length}{' '}
+                  {files.length === 1 ? 'arquivo' : 'arquivos'})
                 </>
               )}
             </Button>
           </div>
         ) : (
           <div className="space-y-6">
+            {showBatchList && (
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Status do Processamento</h3>
+                <BatchFileList items={batchItems!} />
+              </div>
+            )}
             {pessoas.length > 0 && (
               <div className="space-y-3">
                 <h3 className="font-semibold flex items-center gap-2">

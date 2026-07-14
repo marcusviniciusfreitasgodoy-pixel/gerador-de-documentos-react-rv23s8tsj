@@ -3,7 +3,10 @@ import { Upload, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface FileDropZoneProps {
-  onFileSelect: (file: File) => void
+  onFileSelect?: (file: File) => void
+  onFilesSelect?: (files: File[]) => void
+  multiple?: boolean
+  selectedFiles?: File[]
   disabled?: boolean
   loading?: boolean
   loadingText?: string
@@ -14,6 +17,9 @@ const ACCEPTED_MIME =
 
 export function FileDropZone({
   onFileSelect,
+  onFilesSelect,
+  multiple = false,
+  selectedFiles,
   disabled = false,
   loading = false,
   loadingText = 'Processando...',
@@ -26,10 +32,15 @@ export function FileDropZone({
       e.preventDefault()
       setIsDragging(false)
       if (disabled || loading) return
-      const file = e.dataTransfer.files?.[0]
-      if (file) onFileSelect(file)
+      if (multiple) {
+        const dropped = Array.from(e.dataTransfer.files || [])
+        if (dropped.length) onFilesSelect?.(dropped)
+      } else {
+        const file = e.dataTransfer.files?.[0]
+        if (file) onFileSelect?.(file)
+      }
     },
-    [disabled, loading, onFileSelect],
+    [disabled, loading, multiple, onFileSelect, onFilesSelect],
   )
 
   const handleDragOver = useCallback(
@@ -48,6 +59,8 @@ export function FileDropZone({
   const handleClick = useCallback(() => {
     if (!disabled && !loading) inputRef.current?.click()
   }, [disabled, loading])
+
+  const fileCount = selectedFiles?.length || 0
 
   return (
     <div
@@ -72,10 +85,16 @@ export function FileDropZone({
         ref={inputRef}
         type="file"
         accept={ACCEPTED_MIME}
+        multiple={multiple}
         className="hidden"
         onChange={(e) => {
-          const file = e.target.files?.[0]
-          if (file) onFileSelect(file)
+          if (multiple) {
+            const selected = Array.from(e.target.files || [])
+            if (selected.length) onFilesSelect?.(selected)
+          } else {
+            const file = e.target.files?.[0]
+            if (file) onFileSelect?.(file)
+          }
           e.target.value = ''
         }}
       />
@@ -90,11 +109,18 @@ export function FileDropZone({
             <Upload className="h-6 w-6" />
           </div>
           <p className="text-sm font-medium text-foreground text-center">
-            Arraste um arquivo ou clique para selecionar
+            {multiple
+              ? 'Arraste arquivos ou clique para selecionar'
+              : 'Arraste um arquivo ou clique para selecionar'}
           </p>
           <p className="text-xs text-muted-foreground text-center">
             Formatos suportados: PDF, PNG, JPG, DOCX
           </p>
+          {multiple && fileCount > 0 && (
+            <p className="text-xs font-medium text-primary text-center">
+              {fileCount} {fileCount === 1 ? 'arquivo selecionado' : 'arquivos selecionados'}
+            </p>
+          )}
         </>
       )}
     </div>
