@@ -44,6 +44,13 @@ const mockData: ChecklistValues = {
   responsavel: 'Roberto Mendes Araújo',
 }
 
+// Form abre vazio: mantem o select de transacao, esvazia os dados.
+const emptyData: ChecklistValues = {
+  ...mockData,
+  imovel_resumo: '',
+  responsavel: '',
+}
+
 function formatDDMMYYYY(date: Date): string {
   const dd = String(date.getDate()).padStart(2, '0')
   const mm = String(date.getMonth() + 1).padStart(2, '0')
@@ -61,7 +68,7 @@ export function ChecklistForm() {
 
   const form = useForm<ChecklistValues>({
     resolver: zodResolver(checklistSchema),
-    defaultValues: mockData,
+    defaultValues: emptyData,
   })
 
   useEffect(() => {
