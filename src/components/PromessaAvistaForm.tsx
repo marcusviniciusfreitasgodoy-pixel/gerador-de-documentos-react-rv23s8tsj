@@ -53,6 +53,7 @@ import { buildPromessaAvistaTemplateData } from '@/lib/promessaAvistaTemplate'
 import { generatePromessaAvistaDocx, getPromessaAvistaText } from '@/lib/promessaAvistaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
 import type { ExtracaoResult, PessoaRole } from '@/lib/extraction-types'
 import type { PartyValues, AnuenteValues } from '@/lib/promessaAvistaHelpers'
@@ -254,6 +255,13 @@ export function PromessaAvistaForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <CarregarDeNegocio
+          form={form}
+          imovel={true}
+          replaceVendedores={replaceVendedores}
+          replaceCompradores={replaceCompradores}
+          replaceAnuentes={replaceAnuentes}
+        />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
             <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
