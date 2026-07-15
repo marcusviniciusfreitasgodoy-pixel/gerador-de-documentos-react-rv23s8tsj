@@ -44,6 +44,7 @@ import {
   permutaSchema,
   type PermutaValues,
   permutaMockData,
+  permutaEmptyData,
   emptyParty,
 } from '@/lib/permutaHelpers'
 import { buildPermutaTemplateData } from '@/lib/permutaTemplate'
@@ -257,7 +258,7 @@ export function PermutaForm() {
 
   const form = useForm<PermutaValues>({
     resolver: zodResolver(permutaSchema),
-    defaultValues: permutaMockData,
+    defaultValues: permutaEmptyData,
   })
   const { control, setValue, getValues } = form
   const ctrl = control as any
