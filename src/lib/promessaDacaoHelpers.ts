@@ -172,3 +172,36 @@ export const promessaDacaoMockData: PromessaDacaoValues = {
   testemunha2_nome: 'Maria Fernanda Rocha',
   testemunha2_cpf: '555.666.777-88',
 }
+
+// Form abre vazio: mesma shape do mock, sem dados fictícios.
+// Mantém (via spread) nacionalidade, enums, comissão do perfil, datas (data_limite_escritura) e toggles em false.
+export const promessaDacaoEmptyData: PromessaDacaoValues = {
+  ...promessaDacaoMockData,
+  vendedores: [{ ...emptyParty }],
+  compradores: [{ ...emptyParty }],
+  anuentes: [],
+  imovel_descricao: '',
+  imovel_endereco: '',
+  imovel_bairro: '',
+  imovel_cidade: '',
+  imovel_uf: '',
+  imovel_cep: '',
+  imovel_vagas_qtd: '',
+  imovel_vagas_descricao: '',
+  imovel_fracao_ideal: '',
+  imovel_rgi: '',
+  imovel_matricula: '',
+  imovel_iptu: '',
+  imovel_origem_aquisicao: '',
+  imovel_origem_registro: '',
+  valor_total: '',
+  valor_entrada: '',
+  valor_dacao: '',
+  bem_dacao_descricao: '',
+  dados_recebimento: '',
+  prazo_certidoes_dias: '',
+  testemunha1_nome: '',
+  testemunha1_cpf: '',
+  testemunha2_nome: '',
+  testemunha2_cpf: '',
+}
