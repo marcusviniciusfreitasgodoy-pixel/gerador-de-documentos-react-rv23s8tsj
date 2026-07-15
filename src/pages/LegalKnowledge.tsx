@@ -1,6 +1,17 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Loader2, BookOpen, Plus, Trash2, Pencil, Search, X } from 'lucide-react'
+import {
+  Loader2,
+  BookOpen,
+  Plus,
+  Trash2,
+  Pencil,
+  Search,
+  X,
+  Upload,
+  Sparkles,
+  FileText,
+} from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -26,6 +37,8 @@ import {
   type LegalKnowledge,
 } from '@/services/legal-knowledge'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+import pb from '@/lib/pocketbase/client'
+import { extractTextFromDocument, isSupportedFile } from '@/lib/document-extract'
 
 interface EditState {
   id?: string
@@ -48,6 +61,30 @@ const emptyForm: EditState = {
   version: '',
 }
 
+// Gera um code ÚNICO (anti-colisão): prefixo de 3 letras da categoria (ou KB) + nº
+// incremental, garantido não repetir contra os codes já usados na base.
+function gerarCode(category: string, usados: Set<string>): string {
+  const base = (category || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Za-z]/g, '')
+    .toUpperCase()
+  const prefixo = (base.slice(0, 3) || 'KB').padEnd(3, 'X')
+  let max = 0
+  usados.forEach((c) => {
+    const m = c.match(new RegExp('^' + prefixo + '(\\d+)$'))
+    if (m) max = Math.max(max, parseInt(m[1], 10))
+  })
+  let n = max + 1
+  let code = prefixo + String(n).padStart(3, '0')
+  while (usados.has(code)) {
+    n++
+    code = prefixo + String(n).padStart(3, '0')
+  }
+  usados.add(code)
+  return code
+}
+
 export default function LegalKnowledgePage() {
   const { isAdmin } = useAuth()
   const [items, setItems] = useState<LegalKnowledge[]>([])
@@ -56,6 +93,16 @@ export default function LegalKnowledgePage() {
   const [editForm, setEditForm] = useState<EditState>(emptyForm)
   const [search, setSearch] = useState('')
   const [searchParams, setSearchParams] = useSearchParams()
+
+  // Importação por documento (contrato-modelo / cláusula / norma) -> registros.
+  const [importOpen, setImportOpen] = useState(false)
+  const [importMode, setImportMode] = useState<'documento' | 'unico'>('documento')
+  const [importText, setImportText] = useState('')
+  const [importFileName, setImportFileName] = useState('')
+  const [importBusy, setImportBusy] = useState(false)
+  // Reforço do admin: seleção em lote + filtro "recém-adicionados".
+  const [selected, setSelected] = useState<Set<string>>(new Set())
+  const [onlyRecent, setOnlyRecent] = useState(false)
 
   // Código vindo da tela Validar Minuta (citação clicável): /legal-knowledge?code=XXX
   const codeParam = searchParams.get('code')
@@ -85,13 +132,21 @@ export default function LegalKnowledgePage() {
 
   const query = search.trim().toLowerCase()
   const filtered = useMemo(() => {
-    if (!query) return items
-    return items.filter((i) =>
+    let list = items
+    if (onlyRecent) {
+      const cutoff = Date.now() - 60 * 60 * 1000
+      list = list.filter((i) => {
+        const c = (i as { created?: string }).created
+        return c ? new Date(c).getTime() > cutoff : false
+      })
+    }
+    if (!query) return list
+    return list.filter((i) =>
       [i.code, i.title, i.category, i.content].some((f) =>
         (f || '').toString().toLowerCase().includes(query),
       ),
     )
-  }, [items, query])
+  }, [items, query, onlyRecent])
 
   const clearSearch = () => {
     setSearch('')
@@ -147,6 +202,98 @@ export default function LegalKnowledgePage() {
     }
   }
 
+  // ---- Importação por documento ----
+  const handleFile = async (file: File | undefined) => {
+    if (!file) return
+    if (!isSupportedFile(file)) {
+      toast.error('Formato não suportado. Use PDF, DOCX ou imagem (converta .doc em PDF).')
+      return
+    }
+    setImportBusy(true)
+    setImportFileName(file.name)
+    try {
+      const texto = await extractTextFromDocument(file)
+      setImportText(texto)
+      toast.success('Texto extraído. Revise e clique em Importar.')
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally {
+      setImportBusy(false)
+    }
+  }
+
+  const handleImport = async () => {
+    const texto = importText.trim()
+    if (!texto) {
+      toast.error('Suba um arquivo ou cole o texto.')
+      return
+    }
+    setImportBusy(true)
+    try {
+      const result = (await pb.send('/backend/v1/extrair-conhecimento', {
+        method: 'POST',
+        body: { texto, modo: importMode },
+      })) as { registros?: { title?: string; category?: string; content?: string }[] }
+      const registros = result?.registros || []
+      if (!registros.length) {
+        toast.error('A IA não encontrou regras no documento.')
+        return
+      }
+      const usados = new Set(
+        items.map((i) => (i.code || '').toUpperCase()).filter(Boolean) as string[],
+      )
+      let ok = 0
+      for (const r of registros) {
+        if (!r.content?.trim()) continue
+        const code = gerarCode(r.category || '', usados)
+        await createLegalKnowledge({
+          title: r.title || code,
+          category: r.category || undefined,
+          code,
+          content: r.content,
+          priority: 50,
+          version: 1,
+        })
+        ok++
+      }
+      toast.success(`${ok} registro(s) adicionado(s) à base.`)
+      setImportOpen(false)
+      setImportText('')
+      setImportFileName('')
+      loadData()
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally {
+      setImportBusy(false)
+    }
+  }
+
+  // ---- Seleção / exclusão em lote ----
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  const handleBulkDelete = async () => {
+    const ids = Array.from(selected)
+    if (!ids.length) return
+    setImportBusy(true)
+    try {
+      for (const id of ids) await deleteLegalKnowledge(id)
+      toast.success(`${ids.length} registro(s) removido(s).`)
+      setSelected(new Set())
+      loadData()
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally {
+      setImportBusy(false)
+    }
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -158,7 +305,7 @@ export default function LegalKnowledgePage() {
   return (
     <Card className="w-full max-w-4xl shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <BookOpen className="h-6 w-6 text-primary" />
             <div>
@@ -167,94 +314,189 @@ export default function LegalKnowledgePage() {
             </div>
           </div>
           {isAdmin && (
-            <Dialog
-              open={dialogOpen}
-              onOpenChange={(open) => {
-                setDialogOpen(open)
-                if (!open) setEditForm(emptyForm)
-              }}
-            >
-              <DialogTrigger asChild>
-                <Button size="sm">
-                  <Plus className="mr-1 h-4 w-4" /> Novo
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>{editForm.id ? 'Editar' : 'Novo'} Registro</DialogTitle>
-                </DialogHeader>
-                <form onSubmit={handleSave} className="space-y-3">
-                  <div className="space-y-1">
-                    <Label htmlFor="lk-title">Título *</Label>
-                    <Input
-                      id="lk-title"
-                      value={editForm.title}
-                      onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <Label htmlFor="lk-category">Categoria</Label>
-                      <Input
-                        id="lk-category"
-                        value={editForm.category}
-                        onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="lk-code">Código</Label>
-                      <Input
-                        id="lk-code"
-                        value={editForm.code}
-                        onChange={(e) => setEditForm({ ...editForm, code: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="lk-trigger">Lógica de Disparo</Label>
-                    <Input
-                      id="lk-trigger"
-                      value={editForm.trigger_logic}
-                      onChange={(e) => setEditForm({ ...editForm, trigger_logic: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="lk-content">Conteúdo *</Label>
-                    <Textarea
-                      id="lk-content"
-                      rows={4}
-                      value={editForm.content}
-                      onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
-                      required
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1">
-                      <Label htmlFor="lk-priority">Prioridade</Label>
-                      <Input
-                        id="lk-priority"
-                        type="number"
-                        value={editForm.priority}
-                        onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="lk-version">Versão</Label>
-                      <Input
-                        id="lk-version"
-                        type="number"
-                        value={editForm.version}
-                        onChange={(e) => setEditForm({ ...editForm, version: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                  <Button type="submit" className="w-full">
-                    Salvar
+            <div className="flex items-center gap-2 shrink-0">
+              {/* Importar de documento */}
+              <Dialog
+                open={importOpen}
+                onOpenChange={(open) => {
+                  setImportOpen(open)
+                  if (!open) {
+                    setImportText('')
+                    setImportFileName('')
+                  }
+                }}
+              >
+                <DialogTrigger asChild>
+                  <Button size="sm" variant="outline">
+                    <Upload className="mr-1 h-4 w-4" /> Importar
                   </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
+                </DialogTrigger>
+                <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Importar de documento</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground">
+                      Suba um contrato-modelo, uma cláusula, ou uma norma (lei, deliberação,
+                      orientação). A IA extrai e adiciona os registros à base.
+                    </p>
+                    {/* Modo */}
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant={importMode === 'documento' ? 'default' : 'outline'}
+                        onClick={() => setImportMode('documento')}
+                      >
+                        Documento → várias regras
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant={importMode === 'unico' ? 'default' : 'outline'}
+                        onClick={() => setImportMode('unico')}
+                      >
+                        Item único
+                      </Button>
+                    </div>
+                    {/* Upload */}
+                    <div className="space-y-1">
+                      <Label>Arquivo (PDF, DOCX ou imagem)</Label>
+                      <Input
+                        type="file"
+                        accept=".pdf,.docx,.png,.jpg,.jpeg"
+                        disabled={importBusy}
+                        onChange={(e) => handleFile(e.target.files?.[0])}
+                      />
+                      {importFileName && (
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <FileText className="h-3 w-3" /> {importFileName}
+                        </p>
+                      )}
+                      <p className="text-xs text-muted-foreground">
+                        .doc antigo não é suportado — converta em PDF.
+                      </p>
+                    </div>
+                    {/* Texto (colar ou revisar o extraído) */}
+                    <div className="space-y-1">
+                      <Label htmlFor="imp-text">Texto (cole aqui ou revise o extraído)</Label>
+                      <Textarea
+                        id="imp-text"
+                        rows={8}
+                        value={importText}
+                        onChange={(e) => setImportText(e.target.value)}
+                        placeholder="Cole o texto do documento/cláusula, ou suba um arquivo acima."
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      className="w-full"
+                      disabled={importBusy || !importText.trim()}
+                      onClick={handleImport}
+                    >
+                      {importBusy ? (
+                        <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="mr-1 h-4 w-4" />
+                      )}
+                      Extrair e adicionar à base
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              {/* Novo (manual) */}
+              <Dialog
+                open={dialogOpen}
+                onOpenChange={(open) => {
+                  setDialogOpen(open)
+                  if (!open) setEditForm(emptyForm)
+                }}
+              >
+                <DialogTrigger asChild>
+                  <Button size="sm">
+                    <Plus className="mr-1 h-4 w-4" /> Novo
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>{editForm.id ? 'Editar' : 'Novo'} Registro</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handleSave} className="space-y-3">
+                    <div className="space-y-1">
+                      <Label htmlFor="lk-title">Título *</Label>
+                      <Input
+                        id="lk-title"
+                        value={editForm.title}
+                        onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label htmlFor="lk-category">Categoria</Label>
+                        <Input
+                          id="lk-category"
+                          value={editForm.category}
+                          onChange={(e) => setEditForm({ ...editForm, category: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="lk-code">Código</Label>
+                        <Input
+                          id="lk-code"
+                          value={editForm.code}
+                          onChange={(e) => setEditForm({ ...editForm, code: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="lk-trigger">Lógica de Disparo</Label>
+                      <Input
+                        id="lk-trigger"
+                        value={editForm.trigger_logic}
+                        onChange={(e) =>
+                          setEditForm({ ...editForm, trigger_logic: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="lk-content">Conteúdo *</Label>
+                      <Textarea
+                        id="lk-content"
+                        rows={4}
+                        value={editForm.content}
+                        onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label htmlFor="lk-priority">Prioridade</Label>
+                        <Input
+                          id="lk-priority"
+                          type="number"
+                          value={editForm.priority}
+                          onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="lk-version">Versão</Label>
+                        <Input
+                          id="lk-version"
+                          type="number"
+                          value={editForm.version}
+                          onChange={(e) => setEditForm({ ...editForm, version: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                    <Button type="submit" className="w-full">
+                      Salvar
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
+            </div>
           )}
         </div>
       </CardHeader>
@@ -278,6 +520,30 @@ export default function LegalKnowledgePage() {
             </button>
           )}
         </div>
+
+        {isAdmin && (
+          <div className="flex flex-wrap items-center gap-3 mb-3">
+            <label className="flex items-center gap-1.5 text-sm cursor-pointer select-none">
+              <input
+                type="checkbox"
+                className="h-4 w-4 accent-[var(--primary)]"
+                checked={onlyRecent}
+                onChange={(e) => setOnlyRecent(e.target.checked)}
+              />
+              Só recém-adicionados (última hora)
+            </label>
+            {selected.size > 0 && (
+              <Button
+                size="sm"
+                variant="destructive"
+                disabled={importBusy}
+                onClick={handleBulkDelete}
+              >
+                <Trash2 className="mr-1 h-4 w-4" /> Excluir selecionados ({selected.size})
+              </Button>
+            )}
+          </div>
+        )}
 
         {query && (
           <p className="text-xs text-muted-foreground mb-3">
@@ -309,6 +575,15 @@ export default function LegalKnowledgePage() {
                   )}
                 >
                   <div className="flex items-start justify-between gap-2">
+                    {isAdmin && (
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4 mt-1 accent-[var(--primary)] shrink-0"
+                        checked={selected.has(item.id)}
+                        onChange={() => toggleSelect(item.id)}
+                        aria-label="Selecionar registro"
+                      />
+                    )}
                     <div className="flex-1 min-w-0">
                       <h4 className="font-semibold text-primary">{item.title}</h4>
                       <div className="flex flex-wrap gap-2 mt-1 text-xs text-muted-foreground">
