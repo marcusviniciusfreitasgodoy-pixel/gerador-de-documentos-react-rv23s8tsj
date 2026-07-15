@@ -49,6 +49,7 @@ import {
 import { buildDistratoTemplateData } from '@/lib/distratoTemplate'
 import { generateDistratoDocx, getDistratoText } from '@/lib/distratoDocx'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
 
 function sugerirPapelVendedor(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
@@ -83,16 +84,19 @@ export function DistratoForm() {
     fields: vendedorFields,
     append: appendVendedor,
     remove: removeVendedor,
+    replace: replaceVendedores,
   } = useFieldArray({ control, name: 'vendedores' })
   const {
     fields: compradorFields,
     append: appendComprador,
     remove: removeComprador,
+    replace: replaceCompradores,
   } = useFieldArray({ control, name: 'compradores' })
   const {
     fields: anuenteFields,
     append: appendAnuente,
     remove: removeAnuente,
+    replace: replaceAnuentes,
   } = useFieldArray({ control, name: 'anuentes' })
 
   const vendedoresW =
@@ -159,6 +163,13 @@ export function DistratoForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <CarregarDeNegocio
+          form={form}
+          imovel={false}
+          replaceVendedores={replaceVendedores}
+          replaceCompradores={replaceCompradores}
+          replaceAnuentes={replaceAnuentes}
+        />
         {/* PROMITENTES VENDEDORES */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
