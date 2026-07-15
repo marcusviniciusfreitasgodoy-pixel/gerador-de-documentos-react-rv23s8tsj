@@ -17,9 +17,16 @@ import { aplicarNegocio } from '@/lib/aplicar-negocio'
 interface CarregarDeNegocioProps {
   form: UseFormReturn<any>
   imovel: boolean
+  // Permuta: dois imóveis (A/B). Mostra o radio para o corretor escolher em qual
+  // slot o imóvel do negócio entra.
+  imovelDuplo?: boolean
+  // Proposta: não carrega anuentes (o anuente do dossiê é cônjuge do vendedor,
+  // que não encaixa no anuente da proposta). Default: carrega.
+  incluirAnuentes?: boolean
   // `replace` do useFieldArray de cada array de partes do formulário que está
   // montando este componente. `setValue` não re-renderiza essas linhas — ver
-  // aplicarNegocio em @/lib/aplicar-negocio.
+  // aplicarNegocio em @/lib/aplicar-negocio. São o "lado vendedor / lado
+  // comprador": a proposta passa proprietarios/proponentes; a permuta, primeiros/segundos.
   replaceVendedores: (v: any[]) => void
   replaceCompradores: (v: any[]) => void
   replaceAnuentes: (v: any[]) => void
@@ -28,6 +35,8 @@ interface CarregarDeNegocioProps {
 export function CarregarDeNegocio({
   form,
   imovel,
+  imovelDuplo,
+  incluirAnuentes,
   replaceVendedores,
   replaceCompradores,
   replaceAnuentes,
@@ -35,6 +44,7 @@ export function CarregarDeNegocio({
   const [negocios, setNegocios] = useState<Negocio[]>([])
   const [selecionado, setSelecionado] = useState('')
   const [loading, setLoading] = useState(false)
+  const [slot, setSlot] = useState<'a' | 'b'>('a')
 
   useEffect(() => {
     listNegocios()
@@ -60,7 +70,7 @@ export function CarregarDeNegocio({
       aplicarNegocio(
         { setValue: form.setValue, replaceVendedores, replaceCompradores, replaceAnuentes },
         negocio,
-        { imovel },
+        { imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
       )
       toast.success(`Dados de "${negocio.titulo}" carregados.`)
     } catch (err) {
@@ -92,6 +102,29 @@ export function CarregarDeNegocio({
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Carregar'}
         </Button>
       </div>
+      {imovelDuplo && (
+        <div className="mt-2 flex items-center gap-4 text-sm">
+          <span className="text-muted-foreground">Imóvel do negócio vai para:</span>
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="slot-imovel-negocio"
+              checked={slot === 'a'}
+              onChange={() => setSlot('a')}
+            />
+            Imóvel A
+          </label>
+          <label className="flex items-center gap-1 cursor-pointer">
+            <input
+              type="radio"
+              name="slot-imovel-negocio"
+              checked={slot === 'b'}
+              onChange={() => setSlot('b')}
+            />
+            Imóvel B
+          </label>
+        </div>
+      )}
     </div>
   )
 }
