@@ -16,7 +16,7 @@ import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
-import { aplicarAutorizacao } from '@/lib/aplicar-negocio-plano'
+import { aplicarAutorizacao } from '@/lib/aplicar-negocio'
 import {
   Form,
   FormField,
