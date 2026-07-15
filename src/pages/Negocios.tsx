@@ -1,182 +1,119 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Plus, Trash2, FolderOpen, Building2, Users, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { listNegocios, createNegocio, deleteNegocio, type Negocio } from '@/lib/negocios'
-import { useRealtime } from '@/hooks/use-realtime'
+import { Card } from '@/components/ui/card'
+import { Plus, FolderOpen, Trash2, Users, Home, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { listNegocios, createNegocio, deleteNegocio } from '@/lib/negocios'
+import type { Negocio } from '@/lib/negocios'
 
 export default function NegociosPage() {
   const [negocios, setNegocios] = useState<Negocio[]>([])
+  const [titulo, setTitulo] = useState('')
   const [loading, setLoading] = useState(true)
-  const [novoTitulo, setNovoTitulo] = useState('')
-  const [creating, setCreating] = useState(false)
-  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [criando, setCriando] = useState(false)
   const navigate = useNavigate()
 
-  const loadData = async () => {
-    try {
-      const data = await listNegocios()
-      setNegocios(data)
-    } catch {
-      toast.error('Erro ao carregar negócios.')
-    } finally {
-      setLoading(false)
-    }
+  const carregar = () => {
+    setLoading(true)
+    listNegocios()
+      .then(setNegocios)
+      .catch((err) =>
+        toast.error(err instanceof Error ? err.message : 'Não foi possível carregar os negócios.'),
+      )
+      .finally(() => setLoading(false))
   }
 
-  useEffect(() => {
-    loadData()
-  }, [])
+  useEffect(carregar, [])
 
-  useRealtime('negocios', () => {
-    loadData()
-  })
-
-  const handleCreate = async () => {
-    if (!novoTitulo.trim()) {
-      toast.error('Digite um título para o negócio.')
+  const handleCriar = async () => {
+    if (titulo.trim().length < 3) {
+      toast.error('Dê um nome ao negócio (ex.: "Apto Barra — João vende pra Maria").')
       return
     }
-    setCreating(true)
+    setCriando(true)
     try {
-      const novo = await createNegocio({ titulo: novoTitulo.trim() })
-      toast.success('Negócio criado!')
-      setNovoTitulo('')
+      const novo = await createNegocio(titulo.trim())
       navigate(`/negocios/${novo.id}`)
-    } catch {
-      toast.error('Erro ao criar negócio.')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Não foi possível criar o negócio.')
     } finally {
-      setCreating(false)
+      setCriando(false)
     }
   }
 
-  const handleDelete = async () => {
-    if (!deleteId) return
+  const handleExcluir = async (n: Negocio) => {
+    if (!confirm(`Excluir o negócio "${n.titulo}"? Os dados salvos nele serão perdidos.`)) return
     try {
-      await deleteNegocio(deleteId)
+      await deleteNegocio(n.id)
       toast.success('Negócio excluído.')
-      setDeleteId(null)
-    } catch {
-      toast.error('Erro ao excluir negócio.')
+      carregar()
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Não foi possível excluir.')
     }
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 animate-fade-in-up">
-      <div className="flex items-center gap-2">
-        <FolderOpen className="h-6 w-6 text-primary" />
-        <h1 className="text-2xl font-semibold text-primary">Negócios</h1>
+    <div className="w-full max-w-4xl space-y-4 animate-fade-in-up">
+      <div>
+        <h1 className="text-2xl font-bold flex items-center gap-2">
+          <FolderOpen className="h-6 w-6 text-primary" /> Negócios
+        </h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Suba os documentos de um negócio uma vez. Todos os documentos daquele negócio passam a
+          puxar os dados daqui.
+        </p>
       </div>
 
-      <Card className="border-border/60">
-        <CardHeader>
-          <CardTitle className="text-lg">Criar Novo Negócio</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Título do negócio (ex: Apartamento 801 - Centro)"
-              value={novoTitulo}
-              onChange={(e) => setNovoTitulo(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
-            />
-            <Button onClick={handleCreate} disabled={creating}>
-              {creating ? (
-                <Loader2 className="mr-1 h-4 w-4 animate-spin" />
-              ) : (
-                <Plus className="mr-1 h-4 w-4" />
-              )}
-              Novo
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex gap-2">
+        <Input
+          placeholder="Nome do negócio (ex.: Apto Barra — João vende pra Maria)"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleCriar()}
+        />
+        <Button onClick={handleCriar} disabled={criando}>
+          {criando ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              <Plus className="mr-2 h-4 w-4" /> Novo
+            </>
+          )}
+        </Button>
+      </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      ) : negocios.length === 0 ? (
-        <Card className="border-dashed">
-          <CardContent className="py-12 text-center text-muted-foreground">
-            <FolderOpen className="mx-auto h-12 w-12 mb-3 opacity-50" />
-            <p>Nenhum negócio cadastrado ainda.</p>
-            <p className="text-sm">Crie um novo negócio acima para começar.</p>
-          </CardContent>
+        <p className="text-sm text-muted-foreground">Carregando...</p>
+      ) : !negocios.length ? (
+        <Card className="p-8 text-center text-sm text-muted-foreground">
+          Nenhum negócio ainda. Crie o primeiro acima.
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2">
           {negocios.map((n) => (
-            <Card
-              key={n.id}
-              className="border-border/60 hover:border-primary/40 transition-colors cursor-pointer group"
-            >
-              <CardContent
-                className="flex items-center justify-between p-4"
-                onClick={() => navigate(`/negocios/${n.id}`)}
-              >
-                <div className="space-y-1">
-                  <h3 className="font-semibold text-primary group-hover:text-primary/90">
-                    {n.titulo}
-                  </h3>
-                  <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Users className="h-3.5 w-3.5" />
-                      {n.partes.length} {n.partes.length === 1 ? 'parte' : 'partes'}
-                    </span>
-                    {n.imovel.matricula && (
-                      <span className="flex items-center gap-1">
-                        <Building2 className="h-3.5 w-3.5" />
-                        Matrícula: {n.imovel.matricula}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setDeleteId(n.id)
-                  }}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </CardContent>
+            <Card key={n.id} className="p-4 flex items-center justify-between">
+              <Link to={`/negocios/${n.id}`} className="flex-1 min-w-0">
+                <p className="font-medium truncate">{n.titulo}</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-3 mt-1">
+                  <span className="flex items-center gap-1">
+                    <Users className="h-3 w-3" /> {n.partes.length}{' '}
+                    {n.partes.length === 1 ? 'parte' : 'partes'}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Home className="h-3 w-3" />
+                    {n.imovel.matricula ? `Matrícula ${n.imovel.matricula}` : 'Sem imóvel'}
+                  </span>
+                </p>
+              </Link>
+              <Button size="icon" variant="ghost" onClick={() => handleExcluir(n)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
             </Card>
           ))}
         </div>
       )}
-
-      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Excluir negócio?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta ação não pode ser desfeita. Todos os dados salvos neste negócio serão perdidos.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Excluir</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   )
 }
