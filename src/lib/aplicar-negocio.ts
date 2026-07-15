@@ -1,6 +1,6 @@
 import type { UseFormReturn } from 'react-hook-form'
 import type { Negocio } from '@/lib/negocios'
-import type { PessoaExtraida } from '@/lib/extraction-types'
+import type { PessoaExtraida, ImovelExtraido } from '@/lib/extraction-types'
 import { normalizarEstadoCivil, normalizarRegime } from '@/lib/form-helpers'
 
 // `replaceVendedores`/`replaceCompradores` significam "lado vendedor / lado
@@ -136,4 +136,171 @@ export function aplicarNegocio(
   setValue('imovel_vagas_descricao', im.vagas_descricao || '')
   setValue('imovel_origem_aquisicao', im.origem_aquisicao || '')
   setValue('imovel_origem_registro', im.origem_registro || '')
+}
+
+// ============================================================================
+// Documentos de partes PLANAS (um campo por lado, sem useFieldArray): recibo,
+// autorização, promise, termo de chaves, termo de posse e checklist. Cada função
+// pega a primeira parte de cada papel e escreve os campos via setValue. Passadas
+// ao CarregarDeNegocio pela prop `aplicar`.
+// ============================================================================
+
+type SetValue = UseFormReturn<any>['setValue']
+
+// Um campo por lado: se o negócio tiver 2 vendedores, entra o primeiro; o
+// corretor edita o segundo na mão (esses documentos não têm partes múltiplas).
+function primeiraParte(
+  negocio: Negocio,
+  papel: 'vendedor' | 'comprador',
+): PessoaExtraida | undefined {
+  return negocio.partes.find((p) => p.papel === papel)
+}
+
+// Qualificação em texto corrido: "brasileiro(a), casado(a), médico".
+function montarQualificacaoPlana(p: PessoaExtraida): string {
+  return [p.nacionalidade, normalizarEstadoCivil(p.estado_civil), p.profissao]
+    .map((s) => (s || '').trim())
+    .filter(Boolean)
+    .join(', ')
+}
+
+// Resumo do imóvel numa linha (para o Checklist).
+function resumoImovel(im: ImovelExtraido): string {
+  return [
+    im.descricao,
+    im.endereco,
+    [im.cidade, im.uf].filter(Boolean).join('/'),
+    im.matricula ? `matrícula ${im.matricula}` : '',
+  ]
+    .map((s) => (s || '').trim())
+    .filter(Boolean)
+    .join(', ')
+}
+
+export function aplicarRecibo(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const c = primeiraParte(negocio, 'comprador')
+  const im = negocio.imovel
+  if (v) {
+    setValue('vendedor_nome', v.nome || '')
+    setValue('vendedor_nacionalidade', v.nacionalidade || 'brasileiro(a)')
+    setValue('vendedor_estado_civil', normalizarEstadoCivil(v.estado_civil))
+    setValue('vendedor_regime_bens', normalizarRegime(v.regime_bens))
+    setValue('vendedor_profissao', v.profissao || '')
+    setValue('vendedor_rg', v.rg || '')
+    setValue('vendedor_cpf', v.cpf || '')
+    setValue('vendedor_endereco', v.endereco || '')
+  }
+  if (c) {
+    setValue('comprador_nome', c.nome || '')
+    setValue('comprador_nacionalidade', c.nacionalidade || 'brasileiro(a)')
+    setValue('comprador_estado_civil', normalizarEstadoCivil(c.estado_civil))
+    setValue('comprador_regime_bens', normalizarRegime(c.regime_bens))
+    setValue('comprador_profissao', c.profissao || '')
+    setValue('comprador_rg', c.rg || '')
+    setValue('comprador_cpf', c.cpf || '')
+    setValue('comprador_endereco', c.endereco || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_ri_numero', im.rgi || '')
+  setValue('imovel_comarca', im.cidade || '')
+  setValue('imovel_iptu', im.iptu || '')
+}
+
+export function aplicarPromise(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const c = primeiraParte(negocio, 'comprador')
+  const im = negocio.imovel
+  if (v) {
+    setValue('vendedor_nome', v.nome || '')
+    setValue('vendedor_nacionalidade', v.nacionalidade || 'brasileiro(a)')
+    setValue('vendedor_estado_civil', normalizarEstadoCivil(v.estado_civil))
+    setValue('vendedor_profissao', v.profissao || '')
+    setValue('vendedor_cpf', v.cpf || '')
+    setValue('vendedor_endereco', v.endereco || '')
+  }
+  if (c) {
+    setValue('comprador_nome', c.nome || '')
+    setValue('comprador_nacionalidade', c.nacionalidade || 'brasileiro(a)')
+    setValue('comprador_estado_civil', normalizarEstadoCivil(c.estado_civil))
+    setValue('comprador_profissao', c.profissao || '')
+    setValue('comprador_cpf', c.cpf || '')
+    setValue('comprador_endereco', c.endereco || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_endereco', im.endereco || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_cidade', im.cidade || '')
+  setValue('imovel_estado', im.uf || '')
+}
+
+export function aplicarAutorizacao(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const im = negocio.imovel
+  if (v) {
+    setValue('contratante_nome', v.nome || '')
+    setValue('contratante_cpf', v.cpf || '')
+    setValue('contratante_orgao_emissor', v.orgao_emissor || '')
+    if (v.email) setValue('contratante_email', v.email)
+  }
+  setValue('imovel_endereco', im.endereco || '')
+  setValue('imovel_bairro', im.bairro || '')
+  setValue('imovel_cidade', im.cidade || 'Rio de Janeiro')
+  setValue('imovel_cep', im.cep || '')
+  setValue('imovel_iptu', im.iptu || '')
+  setValue('imovel_vagas', im.vagas_qtd || '')
+  // condominio, quartos, telefone: o negócio não guarda — o corretor preenche.
+}
+
+export function aplicarChaves(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const c = primeiraParte(negocio, 'comprador')
+  const im = negocio.imovel
+  if (v) {
+    setValue('entregante_nome', v.nome || '')
+    setValue('entregante_qualificacao', montarQualificacaoPlana(v))
+    setValue('entregante_documento', v.cpf || '')
+  }
+  if (c) {
+    setValue('recebedor_nome', c.nome || '')
+    setValue('recebedor_qualificacao', montarQualificacaoPlana(c))
+    setValue('recebedor_documento', c.cpf || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_ri_numero', im.rgi || '')
+  setValue('imovel_comarca', im.cidade || '')
+  setValue('imovel_iptu', im.iptu || '')
+}
+
+export function aplicarPosse(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const c = primeiraParte(negocio, 'comprador')
+  const im = negocio.imovel
+  if (v) {
+    setValue('transmitente_nome', v.nome || '')
+    setValue('transmitente_qualificacao', montarQualificacaoPlana(v))
+    setValue('transmitente_rg', v.rg || '')
+    setValue('transmitente_cpf', v.cpf || '')
+    setValue('transmitente_endereco', v.endereco || '')
+  }
+  if (c) {
+    setValue('recebedor_nome', c.nome || '')
+    setValue('recebedor_qualificacao', montarQualificacaoPlana(c))
+    setValue('recebedor_rg', c.rg || '')
+    setValue('recebedor_cpf', c.cpf || '')
+    setValue('recebedor_endereco', c.endereco || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_ri_numero', im.rgi || '')
+  setValue('imovel_comarca', im.cidade || '')
+  setValue('imovel_iptu', im.iptu || '')
+}
+
+export function aplicarChecklist(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  if (v) setValue('responsavel', v.nome || '')
+  setValue('imovel_resumo', resumoImovel(negocio.imovel))
 }
