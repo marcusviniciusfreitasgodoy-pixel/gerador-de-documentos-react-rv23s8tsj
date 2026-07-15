@@ -21,6 +21,8 @@ import { PromessaFinanciadaForm } from '@/components/PromessaFinanciadaForm'
 import { TermoChavesForm } from '@/components/TermoChavesForm'
 import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { aplicarRecibo } from '@/lib/aplicar-negocio'
 import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { PromessaDacaoForm } from '@/components/PromessaDacaoForm'
 import { reciboMockData } from '@/lib/form-helpers'
@@ -282,6 +284,7 @@ export default function Index() {
         {docType === 'recibo' && (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <CarregarDeNegocio form={form} aplicar={(n) => aplicarRecibo(form.setValue, n)} />
               <PartyFields prefix="vendedor" title="Dados do Vendedor(a)" />
               <PartyFields prefix="comprador" title="Dados do Comprador(a)" />
 
