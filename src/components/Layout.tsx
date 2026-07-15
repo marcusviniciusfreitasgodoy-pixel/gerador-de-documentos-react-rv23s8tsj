@@ -1,15 +1,42 @@
-import { Outlet, Link, useNavigate } from 'react-router-dom'
+import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
 import {
-  FileText,
   LogOut,
   BookOpen,
   FileCheck,
   UserCircle,
   FileSearch,
   Headset,
+  Briefcase,
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+
+// Connection Mark — símbolo oficial Prime Circle (dois círculos + ponto de acordo).
+// Regra da marca: um círculo ouro + um marfim, ambos vazados; nunca preencher os dois.
+function ConnectionMark({ className }: { className?: string }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 100 100"
+      role="img"
+      aria-label="Prime Circle"
+      className={className}
+    >
+      <circle cx="36" cy="50" r="30" stroke="#C9A84C" strokeWidth="4" fill="none" />
+      <circle cx="64" cy="50" r="30" stroke="#F5F1E6" strokeWidth="4" fill="none" />
+      <circle cx="50" cy="50" r="4" fill="#C9A84C" />
+    </svg>
+  )
+}
+
+const NAV_ITEMS = [
+  { to: '/', label: 'Documentos', icon: FileCheck, end: true },
+  { to: '/negocios', label: 'Negócios', icon: Briefcase },
+  { to: '/validar', label: 'Validar', icon: FileSearch },
+  { to: '/legal-knowledge', label: 'Conhecimento', icon: BookOpen },
+  { to: '/especialista', label: 'Especialista', icon: Headset },
+  { to: '/perfil', label: 'Perfil', icon: UserCircle },
+]
 
 export default function Layout() {
   const { isAuthenticated, user, signOut } = useAuth()
@@ -21,49 +48,56 @@ export default function Layout() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-secondary/30">
-      <header className="sticky top-0 z-10 bg-white shadow-subtle border-b border-border/40">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+    <div className="flex flex-col min-h-screen bg-background">
+      {/* Casca Ink — a marca mora aqui; o miolo (main) fica no Marfim. */}
+      <header className="sticky top-0 z-10 bg-[#0E0E0E] border-b border-white/10">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-3">
           <Link
             to={isAuthenticated ? '/' : '/login'}
-            className="flex items-center gap-2 text-primary"
+            className="flex items-center gap-2.5 shrink-0"
           >
-            <FileText className="h-6 w-6" />
-            <span className="font-semibold text-lg tracking-tight">Gerador de Recibo</span>
+            <ConnectionMark className="h-8 w-8" />
+            <span className="flex flex-col leading-none">
+              <span className="font-bold text-[15px] tracking-tight text-[#F5F1E6]">
+                Prime Circle
+              </span>
+              <span className="font-mono text-[9px] tracking-[0.35em] uppercase text-[#C9A84C] mt-1">
+                Documentos
+              </span>
+            </span>
           </Link>
           {isAuthenticated && (
-            <div className="flex items-center gap-2">
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/">
-                  <FileCheck className="mr-1 h-4 w-4" /> Gerar
-                </Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/legal-knowledge">
-                  <BookOpen className="mr-1 h-4 w-4" /> Conhecimento
-                </Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/validar">
-                  <FileSearch className="mr-1 h-4 w-4" /> Validar
-                </Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/especialista">
-                  <Headset className="mr-1 h-4 w-4" /> Especialista
-                </Link>
-              </Button>
-              <Button asChild variant="ghost" size="sm">
-                <Link to="/perfil">
-                  <UserCircle className="mr-1 h-4 w-4" /> Meu Perfil
-                </Link>
-              </Button>
-              <span className="text-sm text-muted-foreground hidden sm:inline">{user?.email}</span>
-              <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4" />
-                <span className="ml-1 hidden sm:inline">Sair</span>
-              </Button>
-            </div>
+            <nav className="flex items-center gap-0.5 sm:gap-1 min-w-0">
+              {NAV_ITEMS.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.end}
+                  className={({ isActive }) =>
+                    cn(
+                      'flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors',
+                      isActive
+                        ? 'text-[#C9A84C] bg-white/[0.06]'
+                        : 'text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5',
+                    )
+                  }
+                >
+                  <item.icon className="h-4 w-4 shrink-0" />
+                  <span className="hidden lg:inline">{item.label}</span>
+                </NavLink>
+              ))}
+              <span className="hidden xl:inline text-xs text-[#E8E0CC]/50 px-2 truncate max-w-[180px]">
+                {user?.email}
+              </span>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5 transition-colors"
+              >
+                <LogOut className="h-4 w-4 shrink-0" />
+                <span className="hidden lg:inline">Sair</span>
+              </button>
+            </nav>
           )}
         </div>
       </header>
