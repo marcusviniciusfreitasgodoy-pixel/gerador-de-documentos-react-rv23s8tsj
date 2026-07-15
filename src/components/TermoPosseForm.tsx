@@ -18,6 +18,8 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { aplicarPosse } from '@/lib/aplicar-negocio'
 import {
   Form,
   FormField,
@@ -226,6 +228,7 @@ export function TermoPosseForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <CarregarDeNegocio form={form} aplicar={(n) => aplicarPosse(form.setValue, n)} />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
             <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
