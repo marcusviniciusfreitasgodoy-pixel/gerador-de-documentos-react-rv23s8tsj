@@ -3,12 +3,17 @@ import type { Negocio } from '@/lib/negocios'
 import type { PessoaExtraida } from '@/lib/extraction-types'
 import { normalizarEstadoCivil, normalizarRegime } from '@/lib/form-helpers'
 
-// Os 4 formulários de promessa têm exatamente os mesmos arrays de partes e os
-// mesmos 14 campos imovel_*. O distrato tem as mesmas partes, mas NÃO tem os
-// campos do imóvel (só imovel_devolucao_descricao / imovel_desocupacao_prazo,
-// que são da cláusula de devolução) — por isso a opção `imovel`.
+// `replaceVendedores`/`replaceCompradores` significam "lado vendedor / lado
+// comprador" — cada form decide qual array recebe (promessa: vendedores/
+// compradores; proposta: proprietarios/proponentes; permuta: primeiros/segundos).
+//   imovel      : promessas/proposta = 14 campos planos imovel_*; distrato = false.
+//   imovelSlot  : permuta = escreve nos campos aninhados imovel_a.*/imovel_b.*.
+//   incluirAnuentes : default true; proposta passa false (o anuente do dossiê é
+//                     cônjuge do vendedor, que não encaixa no anuente da proposta).
 export interface AplicarNegocioOpts {
   imovel: boolean
+  imovelSlot?: 'a' | 'b'
+  incluirAnuentes?: boolean
 }
 
 interface PartyValues {
@@ -92,11 +97,31 @@ export function aplicarNegocio(
   // aparece quando `anuenteFields.length > 0`, nunca apareceria).
   replaceVendedores(vendedores.length ? vendedores : [{ ...emptyParty }])
   replaceCompradores(compradores.length ? compradores : [{ ...emptyParty }])
-  replaceAnuentes(anuentes)
+  if (opts.incluirAnuentes !== false) replaceAnuentes(anuentes)
 
   if (!opts.imovel) return
 
   const im = negocio.imovel
+
+  // Permuta: dois imóveis aninhados. O corretor escolhe o slot (A ou B); o imóvel
+  // do negócio entra ali e o outro fica em branco (o negócio só traz um imóvel).
+  if (opts.imovelSlot) {
+    const p = `imovel_${opts.imovelSlot}`
+    setValue(`${p}.descricao`, im.descricao || '')
+    setValue(`${p}.endereco`, im.endereco || '')
+    setValue(`${p}.bairro`, im.bairro || '')
+    setValue(`${p}.cidade`, im.cidade || '')
+    setValue(`${p}.uf`, im.uf || '')
+    setValue(`${p}.cep`, im.cep || '')
+    setValue(`${p}.matricula`, im.matricula || '')
+    setValue(`${p}.rgi`, im.rgi || '')
+    setValue(`${p}.iptu`, im.iptu || '')
+    setValue(`${p}.fracao_ideal`, im.fracao_ideal || '')
+    setValue(`${p}.vagas_qtd`, im.vagas_qtd || '')
+    setValue(`${p}.vagas_descricao`, im.vagas_descricao || '')
+    return
+  }
+
   setValue('imovel_descricao', im.descricao || '')
   setValue('imovel_endereco', im.endereco || '')
   setValue('imovel_bairro', im.bairro || '')
