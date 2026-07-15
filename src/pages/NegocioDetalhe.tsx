@@ -1,11 +1,8 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
+import { useEffect, useState } from 'react'
+import { useParams, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
+import { Card } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -13,327 +10,344 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ArrowLeft, Save, Sparkles, Plus, Trash2, Building2, User, Loader2 } from 'lucide-react'
-import {
-  getNegocio,
-  updateNegocio,
-  mesclarPartes,
-  genId,
-  type Negocio,
-  type NegocioParte,
-} from '@/lib/negocios'
+import { ArrowLeft, Plus, Save, Trash2, User, Building2, Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
-import type { ExtracaoResult, PessoaRole } from '@/lib/extraction-types'
-import { emptyImovel } from '@/lib/extraction-types'
+import { getNegocio, updateNegocio, mesclarPartes } from '@/lib/negocios'
+import type { Negocio, ParteNegocio, PapelParte } from '@/lib/negocios'
+import { mergeResults, emptyImovel } from '@/lib/extraction-types'
+import type {
+  ExtracaoResult,
+  PessoaRole,
+  PessoaExtraida,
+  ImovelExtraido,
+} from '@/lib/extraction-types'
 
-const ROLE_LABELS: Record<PessoaRole, string> = {
+const PAPEL_LABELS: Record<PapelParte, string> = {
   vendedor: 'Vendedor(a)',
   comprador: 'Comprador(a)',
-  anuente: 'Anuente',
-  ignorar: 'Ignorar',
+  anuente: 'Anuente (cônjuge)',
 }
 
 export default function NegocioDetalhePage() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
-
   const [negocio, setNegocio] = useState<Negocio | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [autoOpen, setAutoOpen] = useState(false)
-  const [titulo, setTitulo] = useState('')
+  const [partes, setPartes] = useState<ParteNegocio[]>([])
+  const [imovel, setImovel] = useState<ImovelExtraido>({ ...emptyImovel })
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [salvando, setSalvando] = useState(false)
 
   useEffect(() => {
     if (!id) return
+    let cancelled = false
     getNegocio(id)
       .then((n) => {
+        if (cancelled) return
         setNegocio(n)
-        setTitulo(n.titulo)
+        setPartes(n.partes)
+        setImovel(n.imovel)
       })
       .catch(() => {
-        toast.error('Negócio não encontrado.')
-        navigate('/negocios')
+        if (!cancelled) toast.error('Negócio não encontrado.')
       })
-      .finally(() => setLoading(false))
-  }, [id, navigate])
+    return () => {
+      cancelled = true
+    }
+  }, [id])
 
-  const updateImovel = (field: string, value: string) => {
-    setNegocio((prev) => (prev ? { ...prev, imovel: { ...prev.imovel, [field]: value } } : null))
+  // O AutoPreencherDialog devolve { pessoas, imovel } + os papéis escolhidos.
+  // As pessoas são mescladas por mesclarPartes (que reusa a MESMA regra de
+  // identidade do mergeResults) — o papel e o conjuge_de de cada parte já
+  // existente viajam no próprio registro através da fusão, não são
+  // reatribuídos por chave depois. O imóvel continua fundido por mergeResults.
+  const handleAplicarExtracao = (data: ExtracaoResult, roles: Record<number, PessoaRole>) => {
+    if (!negocio) return
+
+    const novas = data.pessoas
+      .map((p, i) => ({ pessoa: p, papel: roles[i] }))
+      .filter((x): x is { pessoa: PessoaExtraida; papel: PapelParte } => x.papel !== 'ignorar')
+
+    const imovelMerged = mergeResults([
+      { pessoas: [], imovel },
+      { pessoas: [], imovel: data.imovel },
+    ]).imovel
+
+    const { partes: partesMescladas, conflitosDePapel } = mesclarPartes(partes, novas)
+    setPartes(partesMescladas)
+    setImovel(imovelMerged)
+    setDialogOpen(false)
+
+    for (const c of conflitosDePapel) {
+      toast.info(
+        `${c.nome} já estava no dossiê como ${PAPEL_LABELS[c.papelMantido]}; o papel foi mantido. Troque no seletor se quiser mudar.`,
+      )
+    }
+    toast.success('Documentos processados. Revise os dados abaixo e salve.')
   }
 
-  const updateParte = (idx: number, field: keyof NegocioParte, value: string) => {
-    setNegocio((prev) => {
-      if (!prev) return null
-      const partes = [...prev.partes]
-      partes[idx] = { ...partes[idx], [field]: value }
-      return { ...prev, partes }
+  const updateParte = (i: number, campo: keyof ParteNegocio, valor: string) => {
+    setPartes((prev) =>
+      prev.map((p, idx) => (idx === i ? ({ ...p, [campo]: valor } as ParteNegocio) : p)),
+    )
+  }
+
+  const removerParte = (i: number) =>
+    setPartes((prev) => {
+      const removidoId = prev[i]?._id
+      return prev
+        .filter((_, idx) => idx !== i)
+        .map((p) => (p.conjuge_de === removidoId ? { ...p, conjuge_de: undefined } : p))
     })
-  }
 
-  const updateParteRole = (idx: number, role: PessoaRole) => {
-    setNegocio((prev) => {
-      if (!prev) return null
-      const partes = [...prev.partes]
-      partes[idx] = { ...partes[idx], role }
-      return { ...prev, partes }
-    })
-  }
+  const updateImovel = (campo: keyof ImovelExtraido, valor: string) =>
+    setImovel((prev) => ({ ...prev, [campo]: valor }))
 
-  const addParte = () => {
-    setNegocio((prev) => {
-      if (!prev) return null
-      const novaParte: NegocioParte = {
-        id: genId(),
-        role: 'ignorar',
-        nome: '',
-        cpf: '',
-        rg: '',
-        orgao_emissor: '',
-        nacionalidade: 'brasileiro(a)',
-        estado_civil: '',
-        regime_bens: '',
-        profissao: '',
-        endereco: '',
-        email: '',
-        _confianca: 'baixa',
-        _fonte: 'manual',
-        conjuge_de: '',
-      }
-      return { ...prev, partes: [...prev.partes, novaParte] }
-    })
-  }
-
-  const removeParte = (idx: number) => {
-    setNegocio((prev) => {
-      if (!prev) return null
-      return { ...prev, partes: prev.partes.filter((_, i) => i !== idx) }
-    })
-  }
-
-  const handleAutoApply = (data: ExtracaoResult, roles: Record<number, PessoaRole>) => {
-    setNegocio((prev) => {
-      if (!prev) return null
-      const novasPartes = mesclarPartes(prev.partes, data.pessoas, roles)
-      const imovel = { ...prev.imovel }
-      const imovelKeys = Object.keys(emptyImovel) as (keyof typeof emptyImovel)[]
-      for (const key of imovelKeys) {
-        if (key === '_confianca') continue
-        if (!imovel[key] && data.imovel[key]) {
-          ;(imovel as any)[key] = (data.imovel as any)[key]
-        }
-      }
-      return { ...prev, partes: novasPartes, imovel }
-    })
-    toast.success('Dados extraídos integrados ao negócio.')
-  }
-
-  const handleSave = async () => {
-    if (!negocio || !id) return
-    setSaving(true)
+  const handleSalvar = async () => {
+    if (!id) return
+    setSalvando(true)
     try {
-      await updateNegocio(id, {
-        titulo,
-        partes: negocio.partes,
-        imovel: negocio.imovel,
-      })
-      toast.success('Negócio salvo!')
-    } catch {
-      toast.error('Erro ao salvar negócio.')
+      await updateNegocio(id, { partes, imovel })
+      toast.success('Negócio salvo.')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Não foi possível salvar.')
     } finally {
-      setSaving(false)
+      setSalvando(false)
     }
   }
 
-  if (loading) {
+  if (!negocio) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex items-center justify-center py-12">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     )
   }
 
-  if (!negocio) return null
-
-  const imovelFields: { key: string; label: string; full?: boolean }[] = [
-    { key: 'endereco', label: 'Endereço', full: true },
-    { key: 'bairro', label: 'Bairro' },
-    { key: 'cidade', label: 'Cidade' },
-    { key: 'uf', label: 'UF' },
-    { key: 'cep', label: 'CEP' },
-    { key: 'matricula', label: 'Matrícula' },
-    { key: 'rgi', label: 'RGI' },
-    { key: 'iptu', label: 'IPTU' },
-    { key: 'fracao_ideal', label: 'Fração Ideal' },
-    { key: 'vagas_qtd', label: 'Qtd. Vagas' },
-    { key: 'vagas_descricao', label: 'Desc. Vagas' },
-    { key: 'origem_aquisicao', label: 'Origem da Aquisição' },
-    { key: 'origem_registro', label: 'Registro de Origem', full: true },
-  ]
-
-  const parteFields: { key: keyof NegocioParte; label: string; full?: boolean }[] = [
-    { key: 'nome', label: 'Nome' },
-    { key: 'cpf', label: 'CPF' },
-    { key: 'rg', label: 'RG' },
-    { key: 'nacionalidade', label: 'Nacionalidade' },
-    { key: 'estado_civil', label: 'Estado Civil' },
-    { key: 'regime_bens', label: 'Regime de Bens' },
-    { key: 'profissao', label: 'Profissão' },
-    { key: 'email', label: 'E-mail' },
-    { key: 'endereco', label: 'Endereço', full: true },
-  ]
+  const vendedores = partes.filter((p) => p.papel === 'vendedor')
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6 animate-fade-in-up">
+    <div className="w-full max-w-3xl space-y-6">
       <div className="flex items-center justify-between">
-        <Button variant="ghost" size="sm" onClick={() => navigate('/negocios')}>
-          <ArrowLeft className="mr-1 h-4 w-4" /> Voltar
-        </Button>
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? (
-            <>
-              <Loader2 className="mr-1 h-4 w-4 animate-spin" /> Salvando...
-            </>
+        <div>
+          <Link
+            to="/negocios"
+            className="text-sm text-muted-foreground flex items-center gap-1 mb-1"
+          >
+            <ArrowLeft className="h-3 w-3" /> Negócios
+          </Link>
+          <h1 className="text-2xl font-bold">{negocio.titulo}</h1>
+        </div>
+        <Button onClick={handleSalvar} disabled={salvando}>
+          {salvando ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
           ) : (
-            <>
-              <Save className="mr-1 h-4 w-4" /> Salvar
-            </>
+            <Save className="mr-2 h-4 w-4" />
           )}
+          Salvar
         </Button>
       </div>
 
-      <Card className="border-border/60">
-        <CardHeader>
-          <CardTitle className="text-lg">Título do Negócio</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Input value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-        </CardContent>
-      </Card>
-
-      <Button variant="outline" className="w-full" onClick={() => setAutoOpen(true)}>
-        <Sparkles className="mr-2 h-4 w-4" /> Auto-Preencher a partir de Documentos
+      <Button variant="outline" onClick={() => setDialogOpen(true)} className="w-full">
+        <Plus className="mr-2 h-4 w-4" /> Adicionar documentos (escritura, RG, CNH...)
       </Button>
+      <p className="text-xs text-muted-foreground -mt-4">
+        Os arquivos são lidos e descartados. Só os dados extraídos e revisados ficam salvos.
+      </p>
 
-      <Card className="border-border/60">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" /> Dados do Imóvel
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Textarea
-            placeholder="Descrição do imóvel"
-            className="resize-none"
-            rows={2}
-            value={negocio.imovel.descricao}
-            onChange={(e) => updateImovel('descricao', e.target.value)}
-          />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {imovelFields.map((f) => (
-              <Input
-                key={f.key}
-                placeholder={f.label}
-                value={(negocio.imovel as any)[f.key] || ''}
-                onChange={(e) => updateImovel(f.key, e.target.value)}
-                className={f.full ? 'md:col-span-2' : ''}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="space-y-3">
+        <h2 className="font-semibold flex items-center gap-2">
+          <User className="h-4 w-4 text-primary" /> Partes ({partes.length})
+        </h2>
+        {!partes.length && (
+          <Card className="p-6 text-center text-sm text-muted-foreground">
+            Nenhuma parte ainda. Adicione documentos acima.
+          </Card>
+        )}
+        {partes.map((p, i) => (
+          <Card key={p._id} className="p-3 space-y-2">
+            <div className="flex items-center gap-2">
+              <Select value={p.papel} onValueChange={(v) => updateParte(i, 'papel', v)}>
+                <SelectTrigger className="w-44 h-8">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(PAPEL_LABELS).map(([val, label]) => (
+                    <SelectItem key={val} value={val}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-      <Card className="border-border/60">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <User className="h-5 w-5 text-primary" /> Partes Envolvidas
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {negocio.partes.map((p, i) => (
-            <div key={p.id} className="rounded-lg border border-border/60 p-4 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-muted-foreground">Parte {i + 1}</span>
-                <div className="flex items-center gap-2">
-                  <Select value={p.role} onValueChange={(v) => updateParteRole(i, v as PessoaRole)}>
-                    <SelectTrigger className="w-36 h-8">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(ROLE_LABELS).map(([val, label]) => (
-                        <SelectItem key={val} value={val}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-8 w-8 text-destructive hover:text-destructive hover:bg-destructive/10"
-                    onClick={() => removeParte(i)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {parteFields.map((f) => (
-                  <Input
-                    key={f.key}
-                    placeholder={f.label}
-                    value={(p as any)[f.key] || ''}
-                    onChange={(e) => updateParte(i, f.key, e.target.value)}
-                    className={f.full ? 'md:col-span-2' : ''}
-                  />
-                ))}
-              </div>
-              {p.role === 'anuente' && (
+              {p.papel === 'anuente' && (
                 <Select
-                  value={p.conjuge_de || 'none'}
-                  onValueChange={(v) => updateParte(i, 'conjuge_de', v === 'none' ? '' : v)}
+                  value={p.conjuge_de || ''}
+                  onValueChange={(v) => updateParte(i, 'conjuge_de', v)}
                 >
-                  <SelectTrigger className="w-full h-8">
-                    <SelectValue placeholder="Cônjuge de qual parte?" />
+                  <SelectTrigger className="flex-1 h-8">
+                    <SelectValue placeholder="Cônjuge de..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="none">Nenhum</SelectItem>
-                    {negocio.partes
-                      .filter((other) => other.id !== p.id && other.role !== 'ignorar')
-                      .map((other) => (
-                        <SelectItem key={other.id} value={other.id}>
-                          {other.nome || `Parte ${negocio.partes.indexOf(other) + 1}`}
-                        </SelectItem>
-                      ))}
+                    {vendedores.map((v) => (
+                      <SelectItem key={v._id} value={v._id}>
+                        {v.nome || '(sem nome)'}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               )}
+
+              <Button
+                size="icon"
+                variant="ghost"
+                className="ml-auto"
+                onClick={() => removerParte(i)}
+              >
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
             </div>
-          ))}
-          <Button variant="outline" className="w-full" onClick={addParte}>
-            <Plus className="mr-1 h-4 w-4" /> Adicionar parte
-          </Button>
-        </CardContent>
-      </Card>
 
-      <Button
-        onClick={handleSave}
-        disabled={saving}
-        className="w-full h-12 text-base font-medium shadow-sm transition-all active:scale-[0.98] group"
-      >
-        {saving ? (
-          <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Salvando...
-          </>
-        ) : (
-          <>
-            <Save className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-            Salvar Negócio
-          </>
-        )}
-      </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <Input
+                placeholder="Nome"
+                value={p.nome}
+                onChange={(e) => updateParte(i, 'nome', e.target.value)}
+              />
+              <Input
+                placeholder="CPF"
+                value={p.cpf}
+                onChange={(e) => updateParte(i, 'cpf', e.target.value)}
+              />
+              <Input
+                placeholder="RG"
+                value={p.rg}
+                onChange={(e) => updateParte(i, 'rg', e.target.value)}
+              />
+              <Input
+                placeholder="Órgão emissor"
+                value={p.orgao_emissor}
+                onChange={(e) => updateParte(i, 'orgao_emissor', e.target.value)}
+              />
+              <Input
+                placeholder="Nacionalidade"
+                value={p.nacionalidade}
+                onChange={(e) => updateParte(i, 'nacionalidade', e.target.value)}
+              />
+              <Input
+                placeholder="Profissão"
+                value={p.profissao}
+                onChange={(e) => updateParte(i, 'profissao', e.target.value)}
+              />
+              <Input
+                placeholder="Estado civil"
+                value={p.estado_civil}
+                onChange={(e) => updateParte(i, 'estado_civil', e.target.value)}
+              />
+              <Input
+                placeholder="Regime de bens"
+                value={p.regime_bens}
+                onChange={(e) => updateParte(i, 'regime_bens', e.target.value)}
+              />
+              <Input
+                placeholder="Endereço"
+                value={p.endereco}
+                onChange={(e) => updateParte(i, 'endereco', e.target.value)}
+                className="md:col-span-2"
+              />
+            </div>
+          </Card>
+        ))}
+      </div>
 
-      <AutoPreencherDialog open={autoOpen} onOpenChange={setAutoOpen} onApply={handleAutoApply} />
+      <div className="space-y-3">
+        <h2 className="font-semibold flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-primary" /> Imóvel
+        </h2>
+        <Card className="p-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <Input
+              placeholder="Descrição"
+              value={imovel.descricao}
+              onChange={(e) => updateImovel('descricao', e.target.value)}
+              className="md:col-span-2"
+            />
+            <Input
+              placeholder="Endereço"
+              value={imovel.endereco}
+              onChange={(e) => updateImovel('endereco', e.target.value)}
+              className="md:col-span-2"
+            />
+            <Input
+              placeholder="Bairro"
+              value={imovel.bairro}
+              onChange={(e) => updateImovel('bairro', e.target.value)}
+            />
+            <Input
+              placeholder="Cidade"
+              value={imovel.cidade}
+              onChange={(e) => updateImovel('cidade', e.target.value)}
+            />
+            <Input
+              placeholder="UF"
+              value={imovel.uf}
+              onChange={(e) => updateImovel('uf', e.target.value)}
+            />
+            <Input
+              placeholder="CEP"
+              value={imovel.cep}
+              onChange={(e) => updateImovel('cep', e.target.value)}
+            />
+            <Input
+              placeholder="Matrícula"
+              value={imovel.matricula}
+              onChange={(e) => updateImovel('matricula', e.target.value)}
+            />
+            <Input
+              placeholder="RGI"
+              value={imovel.rgi}
+              onChange={(e) => updateImovel('rgi', e.target.value)}
+            />
+            <Input
+              placeholder="IPTU"
+              value={imovel.iptu}
+              onChange={(e) => updateImovel('iptu', e.target.value)}
+            />
+            <Input
+              placeholder="Fração ideal"
+              value={imovel.fracao_ideal}
+              onChange={(e) => updateImovel('fracao_ideal', e.target.value)}
+            />
+            <Input
+              placeholder="Vagas (qtd)"
+              value={imovel.vagas_qtd}
+              onChange={(e) => updateImovel('vagas_qtd', e.target.value)}
+            />
+            <Input
+              placeholder="Vagas (descrição)"
+              value={imovel.vagas_descricao}
+              onChange={(e) => updateImovel('vagas_descricao', e.target.value)}
+            />
+            <Input
+              placeholder="Origem da aquisição"
+              value={imovel.origem_aquisicao}
+              onChange={(e) => updateImovel('origem_aquisicao', e.target.value)}
+              className="md:col-span-2"
+            />
+            <Input
+              placeholder="Origem do registro"
+              value={imovel.origem_registro}
+              onChange={(e) => updateImovel('origem_registro', e.target.value)}
+              className="md:col-span-2"
+            />
+          </div>
+        </Card>
+      </div>
+
+      <AutoPreencherDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onApply={handleAplicarExtracao}
+      />
     </div>
   )
 }
