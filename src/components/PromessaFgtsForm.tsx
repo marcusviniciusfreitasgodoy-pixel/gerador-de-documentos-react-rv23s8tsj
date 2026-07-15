@@ -54,6 +54,7 @@ import { buildPromessaFgtsTemplateData } from '@/lib/promessaFgtsTemplate'
 import { generatePromessaFgtsDocx, getPromessaFgtsText } from '@/lib/promessaFgtsDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
 
 function sugerirPapel(regime?: string): string {
   if (regime === 'Comunhão universal')
@@ -83,16 +84,19 @@ export function PromessaFgtsForm() {
     fields: vendedorFields,
     append: appendVendedor,
     remove: removeVendedor,
+    replace: replaceVendedores,
   } = useFieldArray({ control, name: 'vendedores' })
   const {
     fields: anuenteFields,
     append: appendAnuente,
     remove: removeAnuente,
+    replace: replaceAnuentes,
   } = useFieldArray({ control, name: 'anuentes' })
   const {
     fields: compradorFields,
     append: appendComprador,
     remove: removeComprador,
+    replace: replaceCompradores,
   } = useFieldArray({ control, name: 'compradores' })
 
   useEffect(() => {
@@ -210,6 +214,13 @@ export function PromessaFgtsForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <CarregarDeNegocio
+          form={form}
+          imovel={true}
+          replaceVendedores={replaceVendedores}
+          replaceCompradores={replaceCompradores}
+          replaceAnuentes={replaceAnuentes}
+        />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
             <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
