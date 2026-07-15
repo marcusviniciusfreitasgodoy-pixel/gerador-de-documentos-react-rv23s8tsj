@@ -207,3 +207,29 @@ export function buildTemplateData(data: FormValues): Record<string, string> {
     testemunha2_cpf: data.testemunha2_cpf || '',
   }
 }
+
+// A IA de visao extrai texto livre da escritura ("casado", "comunhao parcial de
+// bens na vigencia da lei 6515/77"). Os campos do formulario sao <Select> com
+// opcoes FIXAS (ESTADO_CIVIL_OPTIONS / REGIME_BENS_OPTIONS). Se o valor nao bate
+// exatamente com uma opcao, o Select fica vazio. Estas funcoes mapeiam o texto
+// livre para a opcao correta; valor nao reconhecido volta '' (corretor escolhe).
+// Usadas pelo auto-preencher (AutoPreencherDialog -> form) e pelo Dossie
+// (aplicar-negocio.ts) — fonte unica de verdade.
+export function normalizarEstadoCivil(v: string): string {
+  const s = (v || '').toLowerCase()
+  if (s.includes('casad')) return 'Casado(a)'
+  if (s.includes('solteir')) return 'Solteiro(a)'
+  if (s.includes('divorc')) return 'Divorciado(a)'
+  if (s.includes('viúv') || s.includes('viuv')) return 'Viúvo(a)'
+  if (s.includes('união') || s.includes('uniao') || s.includes('estável') || s.includes('estavel'))
+    return 'União estável'
+  return ''
+}
+
+export function normalizarRegime(v: string): string {
+  const s = (v || '').toLowerCase()
+  if (s.includes('universal')) return 'Comunhão universal'
+  if (s.includes('parcial')) return 'Comunhão parcial'
+  if (s.includes('separa') || s.includes('total')) return 'Separação total'
+  return ''
+}
