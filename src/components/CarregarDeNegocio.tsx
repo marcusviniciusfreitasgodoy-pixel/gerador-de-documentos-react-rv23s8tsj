@@ -50,8 +50,10 @@ export function CarregarDeNegocio({
 
   const handleCarregar = async () => {
     if (!selecionado) return
-    const jaTemDados = (form.getValues('vendedores') || []).some((v: any) => v?.nome)
-    if (jaTemDados && !confirm('Isto vai substituir as partes já preenchidas. Continuar?')) return
+    // Sem window.confirm: ele trava quando o navegador suprime o diálogo
+    // ("não perguntar novamente") e, com os formulários abrindo vazios, não há
+    // dados de exemplo para proteger. O corretor escolheu o negócio e clicou
+    // Carregar — a ação já é explícita.
     setLoading(true)
     try {
       const negocio = await getNegocio(selecionado)
