@@ -1,73 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-
+/* Prime Circle — tokens do app (fontes carregadas no index.html) */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Primary: #1e40af (Deep Blue) */
-    /* Secondary: #f8fafc (Slate Gray) */
-    /* Accent: #3b82f6 (Bright Blue) */
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    /* Prime Circle · tema claro (miolo Marfim)
+       Ink #0E0E0E · Ouro #C9A84C · Ouro Antigo #8B7340 · Marfim #F5F1E6 · Areia #E8E0CC */
+    --background: 44 43% 93%; /* Marfim — papel */
+    --foreground: 0 0% 5%; /* Ink */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 0 0% 5%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 5%;
 
-    --primary: 226 71% 40%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 41 37% 40%; /* Ouro Antigo — o ouro certo sobre fundo claro */
+    --primary-foreground: 44 43% 96%;
 
-    --secondary: 210 40% 98%;
-    --secondary-foreground: 222.2 84% 4.9%;
+    --secondary: 43 38% 89%; /* Areia suave */
+    --secondary-foreground: 0 0% 9%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 43 30% 88%;
+    --muted-foreground: 30 6% 32%;
 
-    --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 43 38% 85%; /* Areia #E8E0CC — superfícies de hover */
+    --accent-foreground: 0 0% 9%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 44 43% 96%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 226 71% 40%;
+    --border: 40 16% 82%;
+    --input: 40 16% 78%;
+    --ring: 41 37% 40%;
 
-    --radius: 0.75rem;
+    --radius: 0.625rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Prime Circle · tema escuro (Ink) */
+    --background: 0 0% 5%;
+    --foreground: 44 43% 93%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 11%;
+    --card-foreground: 44 43% 93%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 11%;
+    --popover-foreground: 44 43% 93%;
 
-    --primary: 217 91% 60%;
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary: 44 54% 54%; /* Ouro vivo sobre escuro */
+    --primary-foreground: 0 0% 5%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 44 43% 93%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 0 0% 14%;
+    --muted-foreground: 43 22% 70%;
 
-    --accent: 217 91% 60%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 44 43% 93%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 44 43% 93%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 217 91% 60%;
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 44 54% 54%;
   }
 
   * {
