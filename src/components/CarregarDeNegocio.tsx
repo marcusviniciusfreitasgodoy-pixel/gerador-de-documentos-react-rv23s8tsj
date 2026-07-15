@@ -91,10 +91,16 @@ export function CarregarDeNegocio({
   }
 
   return (
-    <div className="rounded-lg border border-border/60 bg-secondary/30 p-3 mb-4">
-      <label className="text-sm font-medium mb-2 flex items-center gap-2">
-        <FolderOpen className="h-4 w-4 text-primary" /> Carregar dados de um negócio
-      </label>
+    <div className="rounded-xl border border-primary/25 bg-primary/[0.04] p-4 mb-5 shadow-subtle">
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="rounded-md bg-primary/12 p-1.5 shrink-0">
+          <FolderOpen className="h-4 w-4 text-primary" />
+        </div>
+        <div className="leading-tight">
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-primary">Dossiê</p>
+          <p className="text-sm font-semibold text-foreground">Carregar dados de um negócio</p>
+        </div>
+      </div>
       <div className="flex gap-2">
         <Select value={selecionado} onValueChange={setSelecionado}>
           <SelectTrigger className="flex-1">
