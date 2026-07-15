@@ -101,6 +101,30 @@ const mockData: TermoPosseValues = {
   testemunha2_cpf: '555.666.777-88',
 }
 
+// Form abre vazio: mantem contrato_data (hoje), considerando_pagamento, foro/cidade; esvazia partes e imovel.
+const emptyData: TermoPosseValues = {
+  ...mockData,
+  transmitente_nome: '',
+  transmitente_qualificacao: '',
+  transmitente_rg: '',
+  transmitente_cpf: '',
+  transmitente_endereco: '',
+  recebedor_nome: '',
+  recebedor_qualificacao: '',
+  recebedor_rg: '',
+  recebedor_cpf: '',
+  recebedor_endereco: '',
+  imovel_descricao: '',
+  imovel_matricula: '',
+  imovel_ri_numero: '',
+  imovel_comarca: '',
+  imovel_iptu: '',
+  testemunha1_nome: '',
+  testemunha1_cpf: '',
+  testemunha2_nome: '',
+  testemunha2_cpf: '',
+}
+
 const stripPrefix = (val: string) => val.replace(/^\s*(RG|CPF|CNPJ)\s*n[ºo.]*\s*/i, '').trim()
 
 export function TermoPosseForm() {
@@ -113,7 +137,7 @@ export function TermoPosseForm() {
 
   const form = useForm<TermoPosseValues>({
     resolver: zodResolver(termoPosseSchema),
-    defaultValues: mockData,
+    defaultValues: emptyData,
   })
 
   useEffect(() => {
