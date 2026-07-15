@@ -51,6 +51,7 @@ import { buildPermutaTemplateData } from '@/lib/permutaTemplate'
 import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
 
 const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
   <input
@@ -451,6 +452,14 @@ export function PermutaForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <CarregarDeNegocio
+          form={form}
+          imovel
+          imovelDuplo
+          replaceVendedores={primeiroFA.replace}
+          replaceCompradores={segundoFA.replace}
+          replaceAnuentes={anuenteFA.replace}
+        />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800">
             <div className="text-sm">
