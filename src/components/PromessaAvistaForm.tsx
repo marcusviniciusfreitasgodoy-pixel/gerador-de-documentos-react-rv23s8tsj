@@ -40,11 +40,18 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { maskCurrency, maskCpfCnpj, maskCep } from '@/lib/utils'
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  normalizarEstadoCivil,
+  normalizarRegime,
+} from '@/lib/form-helpers'
 import {
   promessaAvistaSchema,
   type PromessaAvistaValues,
   promessaAvistaMockData,
+  promessaAvistaEmptyData,
   emptyParty,
   FORMA_PAGAMENTO_OPTIONS,
   COMISSAO_RESPONSAVEL_OPTIONS,
@@ -78,7 +85,7 @@ export function PromessaAvistaForm() {
 
   const form = useForm<PromessaAvistaValues>({
     resolver: zodResolver(promessaAvistaSchema),
-    defaultValues: promessaAvistaMockData,
+    defaultValues: promessaAvistaEmptyData,
   })
   const { control, setValue, getValues } = form
   const ctrl = control as any
@@ -179,8 +186,8 @@ export function PromessaAvistaForm() {
     const toParty = (p: ExtracaoResult['pessoas'][0]): PartyValues => ({
       nome: p.nome || '',
       nacionalidade: p.nacionalidade || 'brasileiro(a)',
-      estado_civil: p.estado_civil || '',
-      regime_bens: p.regime_bens || '',
+      estado_civil: normalizarEstadoCivil(p.estado_civil || ''),
+      regime_bens: normalizarRegime(p.regime_bens || ''),
       profissao: p.profissao || '',
       rg: p.rg || '',
       orgao_emissor: p.orgao_emissor || '',
