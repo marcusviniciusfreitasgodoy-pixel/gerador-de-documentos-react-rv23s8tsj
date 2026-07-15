@@ -44,6 +44,7 @@ import {
   distratoSchema,
   type DistratoValues,
   distratoMockData,
+  distratoEmptyData,
   emptyParty,
 } from '@/lib/distratoHelpers'
 import { buildDistratoTemplateData } from '@/lib/distratoTemplate'
@@ -75,7 +76,7 @@ export function DistratoForm() {
 
   const form = useForm<DistratoValues>({
     resolver: zodResolver(distratoSchema),
-    defaultValues: distratoMockData,
+    defaultValues: distratoEmptyData,
   })
   const { control, getValues } = form
   const ctrl = control as any
