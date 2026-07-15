@@ -13,6 +13,8 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
+import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { aplicarPromise } from '@/lib/aplicar-negocio'
 import {
   Form,
   FormField,
@@ -129,6 +131,7 @@ export function PromiseForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <CarregarDeNegocio form={form} aplicar={(n) => aplicarPromise(form.setValue, n)} />
         <PartySection
           control={control}
           prefix="vendedor"
