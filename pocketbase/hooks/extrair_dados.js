@@ -155,3 +155,101 @@ routerAdd(
   },
   $apis.requireAuth(),
 )
+
+// Hook de extração de CONHECIMENTO — texto de um documento (contrato-modelo, cláusula
+// avulsa, lei, deliberação, orientação de entidade) -> registros para a Base de Conhecimento.
+// Payload: { texto: '', modo: 'documento'|'unico' }
+// Retorno: { registros: [{ title, category, content }] } (SEM code; o cliente gera anti-colisão).
+routerAdd(
+  'POST',
+  '/backend/v1/extrair-conhecimento',
+  (e) => {
+    var body = e.requestInfo().body || {}
+    var texto = (body.texto || body.text || '').trim()
+    var modo = (body.modo || 'documento').trim().toLowerCase()
+    if (!texto) return e.badRequestError('Forneça o texto do documento.')
+
+    try {
+      var anthropicKey = ($secrets.get('ANTHROPIC_API_KEY') || '').replace(/[^\x21-\x7E]/g, '')
+      if (!anthropicKey)
+        return e.json(503, { error: 'Chave Anthropic não configurada nos secrets.' })
+
+      var SYSTEM =
+        'Você é um curador da BASE DE CONHECIMENTO jurídica de uma imobiliária no Brasil. Recebe o TEXTO de um ' +
+        'documento — pode ser um CONTRATO-MODELO (minuta), uma CLÁUSULA avulsa, ou um DOCUMENTO NORMATIVO ' +
+        '(lei, deliberação COFECI/CRECI, orientação de entidade). Transforme-o em REGISTROS de regra/cláusula ' +
+        'para a base, que serve de régua para revisar minutas.\n\n' +
+        'DEVOLVA SOMENTE um objeto JSON válido, sem markdown, sem texto antes ou depois, exatamente assim:\n' +
+        '{"registros":[{"title":"","category":"","content":""}]}\n\n' +
+        'REGRAS:\n' +
+        '- MODO "documento": SEGMENTE em regras/cláusulas — UM registro por cláusula (contrato) ou por regra/' +
+        'obrigação distinta (normativo). Não misture assuntos diferentes num só registro.\n' +
+        '- MODO "unico": produza EXATAMENTE UM registro com o texto relevante.\n' +
+        '- "title": nome curto e claro (ex.: "Outorga Conjugal", "Comissão de Corretagem", "Prazo de Vigência").\n' +
+        '- "content": o TEXTO da regra/cláusula, fiel ao documento (pode enxugar o supérfluo, mas preserve a ' +
+        'obrigação/condição). Se for norma, CITE A FONTE no início (ex.: "Deliberação COFECI nº 1.234/2023: ...", ' +
+        '"Lei 6.530/1978, art. 20: ...", "Orientação CRECI-RJ: ...").\n' +
+        '- "category": categoria curta (ex.: "Comissão", "Compliance", "Prazos", "Legislação", "Deliberação COFECI", ' +
+        '"Orientação de entidade", "Garantias").\n' +
+        '- NÃO invente code — não inclua esse campo.\n' +
+        '- Só itens com valor normativo/contratual. Ignore preâmbulo, assinaturas e dados de exemplo.\n' +
+        '- Português do Brasil. Comece com { e termine com }.'
+
+      var res = $http.send({
+        url: 'https://api.anthropic.com/v1/messages',
+        method: 'POST',
+        headers: {
+          'x-api-key': anthropicKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-5',
+          thinking: { type: 'disabled' },
+          max_tokens: 8192,
+          system: SYSTEM,
+          messages: [
+            { role: 'user', content: 'MODO: ' + modo + '\n\nTEXTO DO DOCUMENTO:\n' + texto },
+          ],
+        }),
+        timeout: 120,
+      })
+      if (res.statusCode !== 200) throw new Error('Anthropic ' + res.statusCode)
+      var raw = res.json.content[0].text
+
+      var s = String(raw || '')
+        .replace(/```json/gi, '')
+        .replace(/```/g, '')
+        .trim()
+      var a = s.indexOf('{')
+      var b = s.lastIndexOf('}')
+      if (a === -1 || b === -1 || b < a)
+        return e.json(500, { error: 'Não foi possível interpretar a resposta da IA.' })
+      s = s.substring(a, b + 1).replace(/,(\s*[}\]])/g, '$1')
+
+      var parsed
+      try {
+        parsed = JSON.parse(s)
+      } catch (perr) {
+        $app
+          .logger()
+          .error('extrair_conhecimento: JSON parse falhou', 'raw', String(raw).substring(0, 400))
+        return e.json(500, { error: 'Não foi possível interpretar a resposta da IA.' })
+      }
+      if (!parsed || !Array.isArray(parsed.registros)) parsed = { registros: [] }
+      parsed.registros = parsed.registros
+        .filter((r) => r && String(r.content || '').trim())
+        .map((r) => ({
+          title: String(r.title || '').trim(),
+          category: String(r.category || '').trim(),
+          content: String(r.content || '').trim(),
+        }))
+
+      return e.json(200, parsed)
+    } catch (err) {
+      $app.logger().error('extrair_conhecimento: falha', 'error', String(err))
+      return e.json(500, { error: 'Erro ao processar o documento.', detail: String(err) })
+    }
+  },
+  $apis.requireAuth(),
+)
