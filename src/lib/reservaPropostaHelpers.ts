@@ -152,3 +152,40 @@ export const reservaPropostaMockData: ReservaPropostaValues = {
   testemunha2_nome: 'Maria Fernanda Rocha',
   testemunha2_cpf: '555.666.777-88',
 }
+
+// Form abre vazio: mesma shape do mock, sem dados fictícios.
+// Mantém (via spread) nacionalidade, enum comissao_responsavel, comissão do perfil, data_documento.
+// Zera as contingências de demonstração (vinham ligadas no mock).
+export const reservaPropostaEmptyData: ReservaPropostaValues = {
+  ...reservaPropostaMockData,
+  proponentes: [{ ...emptyParty }],
+  proprietarios: [{ ...emptyParty }],
+  anuentes: [],
+  imovel_descricao: '',
+  imovel_endereco: '',
+  imovel_bairro: '',
+  imovel_cidade: '',
+  imovel_uf: '',
+  imovel_cep: '',
+  imovel_vagas_qtd: '',
+  imovel_vagas_descricao: '',
+  imovel_fracao_ideal: '',
+  imovel_rgi: '',
+  imovel_matricula: '',
+  imovel_iptu: '',
+  valor_proposto: '',
+  forma_pagamento: '',
+  valor_sinal: '',
+  dados_recebimento: '',
+  prazo_devolucao_dias: '',
+  prazo_validade_dias: '',
+  prazo_promessa_dias: '',
+  tem_contingencias: false,
+  cont_financiamento: false,
+  cont_certidoes: false,
+  cont_vistoria: false,
+  testemunha1_nome: '',
+  testemunha1_cpf: '',
+  testemunha2_nome: '',
+  testemunha2_cpf: '',
+}
