@@ -43,6 +43,7 @@ import {
   reservaPropostaSchema,
   type ReservaPropostaValues,
   reservaPropostaMockData,
+  reservaPropostaEmptyData,
   emptyParty,
   COMISSAO_RESPONSAVEL_OPTIONS,
 } from '@/lib/reservaPropostaHelpers'
@@ -70,7 +71,7 @@ export function ReservaPropostaForm() {
 
   const form = useForm<ReservaPropostaValues>({
     resolver: zodResolver(reservaPropostaSchema),
-    defaultValues: reservaPropostaMockData,
+    defaultValues: reservaPropostaEmptyData,
   })
   const { control, setValue, getValues } = form
   const ctrl = control as any
