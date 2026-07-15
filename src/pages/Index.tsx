@@ -10,6 +10,7 @@ import {
   Wand2,
   FileSignature,
   FileSearch,
+  Briefcase,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useNavigate, Link } from 'react-router-dom'
@@ -213,6 +214,18 @@ export default function Index() {
             Checklist Documental
           </Button>
         </div>
+        <Link
+          to="/negocios"
+          className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"
+        >
+          <h3 className="font-semibold text-primary group-hover:text-primary/90 transition-colors flex items-center gap-2">
+            <Briefcase className="h-5 w-5" />
+            Negócios
+          </h3>
+          <p className="text-sm text-muted-foreground mt-1">
+            Cadastre partes e imóveis uma vez e reutilize em todos os documentos
+          </p>
+        </Link>
         <Link
           to="/proposta-reserva"
           className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"

@@ -19,6 +19,8 @@ import Layout from './components/Layout'
 import PropostaReservaPage from './pages/PropostaReserva'
 import DistratoPage from './pages/Distrato'
 import PermutaPage from './pages/Permuta'
+import NegociosPage from './pages/Negocios'
+import NegocioDetalhePage from './pages/NegocioDetalhe'
 
 const App = () => (
   <BrowserRouter>
@@ -41,6 +43,8 @@ const App = () => (
               <Route path="/proposta-reserva" element={<PropostaReservaPage />} />
               <Route path="/distrato" element={<DistratoPage />} />
               <Route path="/permuta" element={<PermutaPage />} />
+              <Route path="/negocios" element={<NegociosPage />} />
+              <Route path="/negocios/:id" element={<NegocioDetalhePage />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
