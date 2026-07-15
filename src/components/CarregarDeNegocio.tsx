@@ -16,7 +16,11 @@ import { aplicarNegocio } from '@/lib/aplicar-negocio'
 
 interface CarregarDeNegocioProps {
   form: UseFormReturn<any>
-  imovel: boolean
+  // Documentos de partes PLANAS (recibo, autorização, promise, chaves, posse,
+  // checklist) passam sua própria função de aplicar (ver @/lib/aplicar-negocio-plano);
+  // quando presente, ela é usada e as props de array abaixo são ignoradas.
+  aplicar?: (negocio: Negocio) => void
+  imovel?: boolean
   // Permuta: dois imóveis (A/B). Mostra o radio para o corretor escolher em qual
   // slot o imóvel do negócio entra.
   imovelDuplo?: boolean
@@ -27,13 +31,14 @@ interface CarregarDeNegocioProps {
   // montando este componente. `setValue` não re-renderiza essas linhas — ver
   // aplicarNegocio em @/lib/aplicar-negocio. São o "lado vendedor / lado
   // comprador": a proposta passa proprietarios/proponentes; a permuta, primeiros/segundos.
-  replaceVendedores: (v: any[]) => void
-  replaceCompradores: (v: any[]) => void
-  replaceAnuentes: (v: any[]) => void
+  replaceVendedores?: (v: any[]) => void
+  replaceCompradores?: (v: any[]) => void
+  replaceAnuentes?: (v: any[]) => void
 }
 
 export function CarregarDeNegocio({
   form,
+  aplicar,
   imovel,
   imovelDuplo,
   incluirAnuentes,
@@ -67,11 +72,16 @@ export function CarregarDeNegocio({
     setLoading(true)
     try {
       const negocio = await getNegocio(selecionado)
-      aplicarNegocio(
-        { setValue: form.setValue, replaceVendedores, replaceCompradores, replaceAnuentes },
-        negocio,
-        { imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
-      )
+      if (aplicar) {
+        // Documento de partes planas: usa a função de mapeamento do próprio form.
+        aplicar(negocio)
+      } else if (replaceVendedores && replaceCompradores && replaceAnuentes) {
+        aplicarNegocio(
+          { setValue: form.setValue, replaceVendedores, replaceCompradores, replaceAnuentes },
+          negocio,
+          { imovel: !!imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
+        )
+      }
       toast.success(`Dados de "${negocio.titulo}" carregados.`)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Não foi possível carregar o negócio.')
