@@ -63,6 +63,22 @@ const mockData: TermoChavesValues = {
   cidade_uf: 'Rio de Janeiro/RJ',
 }
 
+// Form abre vazio: mantem a cidade/UF do fecho, esvazia partes e imovel.
+const emptyData: TermoChavesValues = {
+  ...mockData,
+  entregante_nome: '',
+  entregante_qualificacao: '',
+  entregante_documento: '',
+  recebedor_nome: '',
+  recebedor_qualificacao: '',
+  recebedor_documento: '',
+  imovel_descricao: '',
+  imovel_matricula: '',
+  imovel_ri_numero: '',
+  imovel_comarca: '',
+  imovel_iptu: '',
+}
+
 export function TermoChavesForm() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
@@ -73,7 +89,7 @@ export function TermoChavesForm() {
 
   const form = useForm<TermoChavesValues>({
     resolver: zodResolver(termoChavesSchema),
-    defaultValues: mockData,
+    defaultValues: emptyData,
   })
 
   useEffect(() => {
