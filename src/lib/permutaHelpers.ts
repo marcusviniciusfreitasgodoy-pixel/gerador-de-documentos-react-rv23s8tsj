@@ -214,3 +214,40 @@ export const permutaMockData: PermutaValues = {
   testemunha2_nome: 'Carlos Dias',
   testemunha2_cpf: '555.555.555-55',
 }
+
+const emptyImovel = {
+  descricao: '',
+  endereco: '',
+  bairro: '',
+  cidade: '',
+  uf: '',
+  cep: '',
+  vagas_qtd: '',
+  vagas_descricao: '',
+  fracao_ideal: '',
+  rgi: '',
+  matricula: '',
+  iptu: '',
+}
+
+// Form abre vazio: mesma shape do mock, sem dados fictícios.
+// Mantém (via spread) nacionalidade, enums (arras_tipo/comissao_responsavel), comissão do perfil, foro/cidade, data_documento.
+// Zera tem_torna (vinha true no mock) para não exigir valor da torna num form recém-aberto.
+export const permutaEmptyData: PermutaValues = {
+  ...permutaMockData,
+  primeiros: [{ ...emptyParty }],
+  segundos: [{ ...emptyParty }],
+  anuentes: [],
+  imovel_a: { ...emptyImovel },
+  imovel_b: { ...emptyImovel },
+  valor_a: '',
+  valor_b: '',
+  tem_torna: false,
+  torna_valor: '',
+  torna_forma: '',
+  torna_garantia: '',
+  testemunha1_nome: '',
+  testemunha1_cpf: '',
+  testemunha2_nome: '',
+  testemunha2_cpf: '',
+}
