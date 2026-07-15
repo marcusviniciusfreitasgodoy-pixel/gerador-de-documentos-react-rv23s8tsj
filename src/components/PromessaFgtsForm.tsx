@@ -46,6 +46,7 @@ import {
   promessaFgtsSchema,
   type PromessaFgtsValues,
   promessaFgtsMockData,
+  promessaFgtsEmptyData,
   emptyParty,
   FORMA_PAGAMENTO_OPTIONS,
   COMISSAO_RESPONSAVEL_OPTIONS,
@@ -75,7 +76,7 @@ export function PromessaFgtsForm() {
 
   const form = useForm<PromessaFgtsValues>({
     resolver: zodResolver(promessaFgtsSchema),
-    defaultValues: promessaFgtsMockData,
+    defaultValues: promessaFgtsEmptyData,
   })
   const { control, setValue, getValues } = form
   const ctrl = control as any
