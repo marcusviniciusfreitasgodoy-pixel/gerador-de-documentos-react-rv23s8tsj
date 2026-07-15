@@ -264,3 +264,26 @@ export const distratoMockData: DistratoValues = {
   testemunha2_nome: 'Maria Fernanda Rocha',
   testemunha2_cpf: '555.666.777-88',
 }
+
+// Form abre vazio: mesma shape do mock, sem dados fictícios.
+// Mantém (via spread) nacionalidade, foro/cidade/vias defaults, data_documento.
+// Zera os toggles de demonstração (tem_retencao vinha true no mock) para não disparar validação.
+export const distratoEmptyData: DistratoValues = {
+  ...distratoMockData,
+  vendedores: [{ ...emptyParty }],
+  compradores: [{ ...emptyParty }],
+  anuentes: [],
+  contrato_originario_tipo: '',
+  contrato_originario_data: '',
+  contrato_originario_objeto: '',
+  valor_pago: '',
+  tem_retencao: false,
+  retencao_titulo: '',
+  retencao_valor: '',
+  devolucao_prazo: '',
+  devolucao_forma: '',
+  testemunha1_nome: '',
+  testemunha1_cpf: '',
+  testemunha2_nome: '',
+  testemunha2_cpf: '',
+}
