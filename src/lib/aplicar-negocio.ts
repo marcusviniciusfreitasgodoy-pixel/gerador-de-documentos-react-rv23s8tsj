@@ -36,12 +36,36 @@ const emptyParty: PartyValues = {
   email: '',
 }
 
+// A IA extrai o texto livre da escritura ("casado", "comunhão parcial de bens
+// na vigência da lei 6515/77"). Os campos do formulário são <Select> com opções
+// FIXAS ('Casado(a)', 'Comunhão parcial'). Se o valor não bate exatamente com
+// uma opção, o Select fica vazio. Estas duas funções mapeiam o texto livre para
+// a opção correta; valor não reconhecido volta '' (o corretor escolhe na mão).
+function normalizarEstadoCivil(v: string): string {
+  const s = (v || '').toLowerCase()
+  if (s.includes('casad')) return 'Casado(a)'
+  if (s.includes('solteir')) return 'Solteiro(a)'
+  if (s.includes('divorc')) return 'Divorciado(a)'
+  if (s.includes('viúv') || s.includes('viuv')) return 'Viúvo(a)'
+  if (s.includes('união') || s.includes('uniao') || s.includes('estável') || s.includes('estavel'))
+    return 'União estável'
+  return ''
+}
+
+function normalizarRegime(v: string): string {
+  const s = (v || '').toLowerCase()
+  if (s.includes('universal')) return 'Comunhão universal'
+  if (s.includes('parcial')) return 'Comunhão parcial'
+  if (s.includes('separa') || s.includes('total')) return 'Separação total'
+  return ''
+}
+
 function toParty(p: PessoaExtraida): PartyValues {
   return {
     nome: p.nome || '',
     nacionalidade: p.nacionalidade || 'brasileiro(a)',
-    estado_civil: p.estado_civil || '',
-    regime_bens: p.regime_bens || '',
+    estado_civil: normalizarEstadoCivil(p.estado_civil),
+    regime_bens: normalizarRegime(p.regime_bens),
     profissao: p.profissao || '',
     rg: p.rg || '',
     orgao_emissor: p.orgao_emissor || '',
