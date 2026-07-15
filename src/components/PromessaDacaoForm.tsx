@@ -46,6 +46,7 @@ import {
   promessaDacaoSchema,
   type PromessaDacaoValues,
   promessaDacaoMockData,
+  promessaDacaoEmptyData,
   emptyParty,
   FORMA_PAGAMENTO_OPTIONS,
   COMISSAO_RESPONSAVEL_OPTIONS,
@@ -75,7 +76,7 @@ export function PromessaDacaoForm() {
 
   const form = useForm<PromessaDacaoValues>({
     resolver: zodResolver(promessaDacaoSchema),
-    defaultValues: promessaDacaoMockData,
+    defaultValues: promessaDacaoEmptyData,
   })
   const { control, setValue, getValues } = form
   const ctrl = control as any
