@@ -1,6 +1,7 @@
 import type { UseFormReturn } from 'react-hook-form'
 import type { Negocio } from '@/lib/negocios'
 import type { PessoaExtraida } from '@/lib/extraction-types'
+import { normalizarEstadoCivil, normalizarRegime } from '@/lib/form-helpers'
 
 // Os 4 formulários de promessa têm exatamente os mesmos arrays de partes e os
 // mesmos 14 campos imovel_*. O distrato tem as mesmas partes, mas NÃO tem os
@@ -36,29 +37,8 @@ const emptyParty: PartyValues = {
   email: '',
 }
 
-// A IA extrai o texto livre da escritura ("casado", "comunhão parcial de bens
-// na vigência da lei 6515/77"). Os campos do formulário são <Select> com opções
-// FIXAS ('Casado(a)', 'Comunhão parcial'). Se o valor não bate exatamente com
-// uma opção, o Select fica vazio. Estas duas funções mapeiam o texto livre para
-// a opção correta; valor não reconhecido volta '' (o corretor escolhe na mão).
-function normalizarEstadoCivil(v: string): string {
-  const s = (v || '').toLowerCase()
-  if (s.includes('casad')) return 'Casado(a)'
-  if (s.includes('solteir')) return 'Solteiro(a)'
-  if (s.includes('divorc')) return 'Divorciado(a)'
-  if (s.includes('viúv') || s.includes('viuv')) return 'Viúvo(a)'
-  if (s.includes('união') || s.includes('uniao') || s.includes('estável') || s.includes('estavel'))
-    return 'União estável'
-  return ''
-}
-
-function normalizarRegime(v: string): string {
-  const s = (v || '').toLowerCase()
-  if (s.includes('universal')) return 'Comunhão universal'
-  if (s.includes('parcial')) return 'Comunhão parcial'
-  if (s.includes('separa') || s.includes('total')) return 'Separação total'
-  return ''
-}
+// normalizarEstadoCivil / normalizarRegime agora vivem em @/lib/form-helpers
+// (fonte única, compartilhada com o auto-preencher da à vista).
 
 function toParty(p: PessoaExtraida): PartyValues {
   return {
