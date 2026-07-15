@@ -153,3 +153,36 @@ export const promessaAvistaMockData: PromessaAvistaValues = {
   testemunha2_nome: 'Maria Fernanda Rocha',
   testemunha2_cpf: '555.666.777-88',
 }
+
+// Form abre vazio: mesma shape do mock, mas sem dados fictícios.
+// Mantém (via spread) nacionalidade, enums (forma_pagamento/tipo_arras/comissao_responsavel),
+// comissão do perfil e as datas (prazo_reforco/data_limite_escritura/data_documento).
+export const promessaAvistaEmptyData: PromessaAvistaValues = {
+  ...promessaAvistaMockData,
+  vendedores: [{ ...emptyParty }],
+  compradores: [{ ...emptyParty }],
+  anuentes: [],
+  imovel_descricao: '',
+  imovel_endereco: '',
+  imovel_bairro: '',
+  imovel_cidade: '',
+  imovel_uf: '',
+  imovel_cep: '',
+  imovel_vagas_qtd: '',
+  imovel_vagas_descricao: '',
+  imovel_fracao_ideal: '',
+  imovel_rgi: '',
+  imovel_matricula: '',
+  imovel_iptu: '',
+  imovel_origem_aquisicao: '',
+  imovel_origem_registro: '',
+  valor_total: '',
+  valor_sinal: '',
+  valor_reforco: '',
+  dados_recebimento: '',
+  prazo_certidoes_dias: '',
+  testemunha1_nome: '',
+  testemunha1_cpf: '',
+  testemunha2_nome: '',
+  testemunha2_cpf: '',
+}
