@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   LogOut,
@@ -7,6 +8,8 @@ import {
   FileSearch,
   Headset,
   Briefcase,
+  Sun,
+  Moon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
@@ -41,6 +44,14 @@ const NAV_ITEMS = [
 export default function Layout() {
   const { isAuthenticated, user, signOut } = useAuth()
   const navigate = useNavigate()
+
+  const [dark, setDark] = useState(
+    () => typeof window !== 'undefined' && localStorage.getItem('pc-theme') === 'dark',
+  )
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark)
+    localStorage.setItem('pc-theme', dark ? 'dark' : 'light')
+  }, [dark])
 
   const handleSignOut = () => {
     signOut()
@@ -89,6 +100,14 @@ export default function Layout() {
               <span className="hidden xl:inline text-xs text-[#E8E0CC]/50 px-2 truncate max-w-[180px]">
                 {user?.email}
               </span>
+              <button
+                type="button"
+                onClick={() => setDark((v) => !v)}
+                aria-label={dark ? 'Tema claro' : 'Tema escuro'}
+                className="flex items-center rounded-md p-1.5 text-[#E8E0CC]/75 hover:text-[#C9A84C] hover:bg-white/5 transition-colors"
+              >
+                {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+              </button>
               <button
                 type="button"
                 onClick={handleSignOut}
