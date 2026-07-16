@@ -1024,7 +1024,9 @@ export function PromessaAvistaForm() {
         </div>
 
         {/* Auxiliares de preenchimento — o "dados de teste" fica discreto para não
-            competir com as ações reais do documento. */}
+            competir com as ações reais do documento. Rótulo curto de propósito: é o
+            único form com o botão de OCR ao lado, e "Preencher... / Preencher..."
+            lado a lado lê mal. Nos outros 12 o rótulo é "Preencher dados de teste". */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-2">
           <Button
             type="button"
@@ -1082,12 +1084,12 @@ export function PromessaAvistaForm() {
             {isValidating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Preparando...
+                Preparando validação...
               </>
             ) : (
               <>
                 <FileSearch className="mr-2 h-4 w-4" />
-                Validar minuta
+                Validar esta minuta
               </>
             )}
           </Button>
