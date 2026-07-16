@@ -108,6 +108,7 @@ export function PromiseForm() {
       valor_venda: '',
       valor_sinal: '',
       comissao_percentual: '5',
+      prazo_certidoes_dias: '10',
       tipo_arras: 'confirmatoria',
       saldo_pagamento: 'Recursos Próprios',
     },
@@ -451,6 +452,19 @@ export function PromiseForm() {
             />
             <FormField
               control={control}
+              name="prazo_certidoes_dias"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Prazo p/ apresentar certidões (dias) *</FormLabel>
+                  <FormControl>
+                    <Input type="number" min={1} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
               name="saldo_pagamento"
               render={({ field }) => (
                 <FormItem>
@@ -752,7 +766,7 @@ function ConjugeSection({
               name={fName('nacionalidade')}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nacionalidade</FormLabel>
+                  <FormLabel>Nacionalidade *</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -765,7 +779,7 @@ function ConjugeSection({
               name={fName('profissao')}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Profissão</FormLabel>
+                  <FormLabel>Profissão *</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
