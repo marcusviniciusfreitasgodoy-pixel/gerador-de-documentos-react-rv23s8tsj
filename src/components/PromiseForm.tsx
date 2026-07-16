@@ -36,7 +36,13 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { maskCurrency, maskCpfCnpj } from '@/lib/utils'
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  ARRAS_OPTIONS,
+  getArrasResumo,
+} from '@/lib/form-helpers'
 import {
   promiseSchema,
   type PromiseValues,
@@ -383,10 +389,20 @@ export function PromiseForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="confirmatoria">Arras Confirmatória</SelectItem>
-                      <SelectItem value="penitencial">Arras Penitencial</SelectItem>
+                      {ARRAS_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  {/* A consequência da escolha fica na tela: as arras são a
+                      engenharia de risco do contrato, não uma formalidade. */}
+                  {field.value && (
+                    <p className="text-xs leading-relaxed text-muted-foreground pt-1">
+                      {getArrasResumo(field.value)}
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
