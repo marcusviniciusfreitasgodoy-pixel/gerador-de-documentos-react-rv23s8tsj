@@ -93,6 +93,7 @@ export function buildPromessaFinanciadaTemplateData(
     imovel_bairro: data.imovel_bairro || '',
     imovel_cidade: data.imovel_cidade || '',
     imovel_uf: data.imovel_uf || '',
+    foro_comarca: data.foro_comarca || data.imovel_cidade || '',
     imovel_cep: data.imovel_cep || '',
     imovel_vagas_qtd: data.imovel_vagas_qtd || '',
     imovel_vagas_descricao: data.imovel_vagas_descricao || '',
