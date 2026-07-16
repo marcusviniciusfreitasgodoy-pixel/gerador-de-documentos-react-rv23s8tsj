@@ -71,6 +71,13 @@ function montarClausulas(d: Record<string, string>): Clausula[] {
         'O PROMITENTE COMPRADOR obriga-se a pagar o saldo do preço na forma e prazo ajustados, bem como a arcar com as despesas de escritura e registro, salvo estipulação em contrário.',
     },
     {
+      // Verbatim da À vista (cláusula OITAVA). INA001 e RES001 são UMA cláusula lá:
+      // rescisão após notificação (DL 745/1969) + multa 2% + juros 1% ao mês.
+      titulo: 'DO INADIMPLEMENTO E DA RESCISÃO',
+      texto:
+        'O não pagamento pontual de qualquer parcela por culpa do PROMITENTE COMPRADOR, cumpridas pelo PROMITENTE VENDEDOR suas obrigações, acarretará a rescisão de pleno direito após 15 (quinze) dias contados do recebimento da notificação extrajudicial para purga da mora, nos termos do Decreto-Lei nº 745/1969. A impontualidade aceita pelo PROMITENTE VENDEDOR não importará novação, incidindo multa moratória de 2% (dois por cento) e juros de mora de 1% (um por cento) ao mês. Rescisão por culpa do PROMITENTE COMPRADOR: perda do sinal, a título de multa compensatória. Rescisão por culpa do PROMITENTE VENDEDOR ou por impedimento documental: devolução dos valores pagos, corrigidos pelo IPCA/IBGE desde cada desembolso, no prazo de 5 (cinco) dias úteis.',
+    },
+    {
       titulo: 'DA TRADIÇÃO E POSSE',
       texto:
         'A tradição e posse do imóvel serão entregues ao PROMITENTE COMPRADOR no ato da assinatura da escritura definitiva, ou em data acordada entre as partes, em conformidade com o disposto no Código Civil.',
@@ -91,19 +98,36 @@ function montarClausulas(d: Record<string, string>): Clausula[] {
         'O PROMITENTE VENDEDOR responde pela evicção e pelos vícios redibitórios nos termos da legislação civil em vigor, garantindo ao PROMITENTE COMPRADOR a propriedade pacífica e útil do imóvel.',
     },
     {
-      titulo: 'DA NATUREZA DAS ARRAS',
+      // Verbatim da À vista (cláusula DÉCIMA SEGUNDA). A anterior só ROTULAVA a natureza
+      // ("têm natureza CONFIRMATÓRIA") sem dizer o efeito — e não trazia FIX004, que o
+      // validador cobra em confirmatórias. Aqui o texto MUDA com o regime, porque os dois
+      // se excluem: confirmatórias = irrevogável; penitenciais = há arrependimento.
+      titulo: 'DA IRREVOGABILIDADE E DAS ARRAS',
       texto:
-        'As partes ajustam que as arras ora pactuadas têm natureza {tipo_arras}, nos termos dos artigos 417 a 420 do Código Civil, com os efeitos jurídicos ali previstos.',
+        d.tipo_arras === 'PENITENCIAL'
+          ? 'É facultado às partes o direito de arrependimento até a assinatura da escritura definitiva, tendo as arras natureza penitencial, nos termos do art. 420 do Código Civil, hipótese em que, arrependendo-se quem as deu, perdê-las-á em favor da outra parte; e, arrependendo-se quem as recebeu, restituí-las-á mais o equivalente, não cabendo indenização suplementar.'
+          : 'O presente contrato é celebrado em caráter irrevogável e irretratável, obrigando as partes, seus herdeiros e sucessores. As arras ora entregues têm natureza confirmatória, incidindo o disposto nos artigos 417 a 419 do Código Civil, não havendo direito de arrependimento.',
     },
     {
-      titulo: 'DAS DECLARAÇÕES E GARANTIAS',
+      // Verbatim da À vista (cláusula SEGUNDA). A redação anterior — "sem ônus, dívidas
+      // ou pendências" — era genérica demais e o validador cobrava TRI001. Esta enumera
+      // e obriga a apresentar as certidões, que é o que a régua do Marcus (minuta Lopes)
+      // faz. Menciona evicção, que também tem cláusula própria aqui: redundância em
+      // contrato é reforço, não erro.
+      titulo: 'DA SITUAÇÃO E DA DOCUMENTAÇÃO',
       texto:
-        'O PROMITENTE VENDEDOR declara e garante que o imóvel objeto deste instrumento se encontra em condições de habitabilidade, sem ônus, dívidas ou pendências judiciais ou extrajudiciais que possam afetar a transmissão da propriedade.',
+        'O PROMITENTE VENDEDOR declara, sob as penas da lei, que não tem conhecimento de qualquer impedimento para o negócio e que o imóvel se encontra livre e desembaraçado, sem nenhum ônus de responsabilidade judicial ou extrajudicial, dúvidas, dívidas, litígios, despesas de contribuição de melhorias em atraso, arresto ou sequestro, execução ou executivo fiscal, foro ou pensão, ações reais ou pessoais, impostos, taxas e contribuições, respondendo civil e penalmente pela evicção de direito, nos termos dos artigos 447 a 457 do Código Civil, comprometendo-se a apresentar, no prazo de até {prazo_certidoes_dias} dias corridos, as Certidões Negativas pessoais, de pessoa jurídica (se houver) e do imóvel.',
     },
     {
       titulo: 'DO PRAZO DE VALIDADE',
       texto:
         'O presente instrumento tem validade de 60 (sessenta) dias para a lavratura da escritura definitiva, prazo esse que pode ser prorrogado por mútuo acordo entre as partes, formalizado por escrito.',
+    },
+    {
+      // Verbatim da À vista (cláusula DÉCIMA QUINTA).
+      titulo: 'DA PROTEÇÃO DE DADOS (LGPD)',
+      texto:
+        'As partes autorizam o tratamento de seus dados pessoais estritamente para os fins desta transação e para o cumprimento de obrigações legais e regulatórias, nos termos da Lei nº 13.709/2018 (LGPD).',
     },
     {
       titulo: 'DO FORO',
