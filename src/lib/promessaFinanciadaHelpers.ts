@@ -136,7 +136,24 @@ export const promessaFinanciadaMockData: PromessaFinanciadaValues = {
       email: 'roberto.araujo@email.com',
     },
   ],
-  anuentes: [],
+  // Cônjuge do Roberto (Casado/Comunhão parcial): sem ele, o "Preencher dados de
+  // teste" dispara a outorga automática (CAS002) e entrega um bloco de anuente com
+  // o nome EM BRANCO — demo pela metade. Mesmo padrão do mock da Permuta.
+  anuentes: [
+    {
+      nome: 'Cláudia Mendes Araújo',
+      nacionalidade: 'brasileira',
+      estado_civil: 'Casado(a)',
+      regime_bens: 'Comunhão parcial',
+      profissao: 'Professora',
+      rg: 'MG-15.234.568',
+      orgao_emissor: 'SSP/MG',
+      cpf: '456.789.124-91',
+      endereco: 'Rua Voluntários da Pátria, 200, Botafogo, Rio de Janeiro/RJ, CEP 22270-010',
+      email: 'claudia.araujo@email.com',
+      conjuge_de: 'Roberto Mendes Araújo',
+    },
+  ],
   compradores: [
     {
       nome: 'Fernanda Souza Lima',
