@@ -36,11 +36,10 @@ export function para(
   return `<w:p>${pPr.length ? `<w:pPr>${pPr.join('')}</w:pPr>` : ''}<w:r>${rPr}<w:t xml:space="preserve">${text}</w:t></w:r></w:p>`
 }
 
-export function downloadDocx(
-  documentXml: string,
-  data: Record<string, string>,
-  filename: string,
-): void {
+// Monta o .docx em memória a partir de um XML construído em código e renderiza os
+// placeholders. Compartilhado por downloadDocx (baixa) e getTextFromDocumentXml
+// (devolve texto para o Validador).
+function renderDocumentXml(documentXml: string, data: Record<string, string>): Docxtemplater {
   const escaped: Record<string, string> = {}
   for (const [k, v] of Object.entries(data)) escaped[k] = escapeXml(v)
 
@@ -61,6 +60,15 @@ export function downloadDocx(
     nullGetter: () => '',
   })
   doc.render(escaped)
+  return doc
+}
+
+export function downloadDocx(
+  documentXml: string,
+  data: Record<string, string>,
+  filename: string,
+): void {
+  const doc = renderDocumentXml(documentXml, data)
 
   const blob = doc.getZip().generate({
     type: 'blob',
@@ -74,6 +82,11 @@ export function downloadDocx(
   link.click()
   document.body.removeChild(link)
   URL.revokeObjectURL(url)
+}
+
+// Mesma minuta renderizada em memória, em texto plano, sem baixar — para o Validador.
+export function getTextFromDocumentXml(documentXml: string, data: Record<string, string>): string {
+  return extractTextFromRenderedDoc(renderDocumentXml(documentXml, data))
 }
 
 export function downloadDocxFromTemplate(
