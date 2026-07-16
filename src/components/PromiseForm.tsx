@@ -499,7 +499,7 @@ function PartySection({
           <FormItem>
             <FormLabel>Nome Completo *</FormLabel>
             <FormControl>
-              <Input {...field} />
+              <Input placeholder="Ex: João Silva" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -524,7 +524,7 @@ function PartySection({
           name={fName('profissao')}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Profissão *</FormLabel>
+              <FormLabel>Profissão</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -532,6 +532,8 @@ function PartySection({
             </FormItem>
           )}
         />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={control}
           name={fName('estado_civil')}
@@ -564,7 +566,7 @@ function PartySection({
               <FormLabel>CPF/CNPJ *</FormLabel>
               <FormControl>
                 <Input
-                  value={field.value || ''}
+                  value={field.value}
                   onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
                 />
               </FormControl>
