@@ -11,6 +11,7 @@ import {
   DollarSign,
   Settings2,
   UserCheck,
+  HeartHandshake,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
@@ -47,9 +48,14 @@ import {
   promiseSchema,
   type PromiseValues,
   ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
   SALDO_PAGAMENTO_OPTIONS,
+  PAPEL_CONJUGE_VENDEDOR,
+  PAPEL_CONJUGE_COMPRADOR,
   promiseMockData,
   buildPromiseTemplateData,
+  sugerirPapelConjuge,
+  sugerirPapelConjugeComprador,
 } from '@/lib/promise-helpers'
 import { generatePromiseDocx, getPromiseText } from '@/lib/promise-docx'
 import { getBrokerProfile, type BrokerProfile } from '@/services/broker-profile'
@@ -68,15 +74,29 @@ export function PromiseForm() {
       vendedor_nome: '',
       vendedor_nacionalidade: 'brasileiro(a)',
       vendedor_estado_civil: '',
+      vendedor_regime_bens: '',
       vendedor_profissao: '',
       vendedor_cpf: '',
       vendedor_endereco: '',
+      conjuge_vendedor_papel: 'nenhum',
+      conjuge_vendedor_nome: '',
+      conjuge_vendedor_nacionalidade: 'brasileiro(a)',
+      conjuge_vendedor_profissao: '',
+      conjuge_vendedor_cpf: '',
+      conjuge_vendedor_endereco: '',
       comprador_nome: '',
       comprador_nacionalidade: 'brasileiro(a)',
       comprador_estado_civil: '',
+      comprador_regime_bens: '',
       comprador_profissao: '',
       comprador_cpf: '',
       comprador_endereco: '',
+      conjuge_comprador_papel: 'nenhum',
+      conjuge_comprador_nome: '',
+      conjuge_comprador_nacionalidade: 'brasileiro(a)',
+      conjuge_comprador_profissao: '',
+      conjuge_comprador_cpf: '',
+      conjuge_comprador_endereco: '',
       has_interveniente: false,
       interveniente_nome: '',
       interveniente_cpf: '',
@@ -110,6 +130,10 @@ export function PromiseForm() {
   const valorSinal = useWatch({ control, name: 'valor_sinal' })
   const comissaoPct = useWatch({ control, name: 'comissao_percentual' })
   const hasInterveniente = useWatch({ control, name: 'has_interveniente' })
+  const vendedorEstadoCivil = useWatch({ control, name: 'vendedor_estado_civil' })
+  const vendedorRegime = useWatch({ control, name: 'vendedor_regime_bens' })
+  const compradorEstadoCivil = useWatch({ control, name: 'comprador_estado_civil' })
+  const compradorRegime = useWatch({ control, name: 'comprador_regime_bens' })
 
   const saldo = useMemo(() => {
     const venda = parseCurrency(valorVenda || '')
@@ -163,12 +187,30 @@ export function PromiseForm() {
           title="Promitente Vendedor(a)"
           icon={<User className="h-5 w-5 text-primary" />}
         />
+        {vendedorEstadoCivil === 'Casado(a)' && (
+          <ConjugeSection
+            control={control}
+            lado="vendedor"
+            titulo="Cônjuge do Promitente Vendedor(a)"
+            dica={sugerirPapelConjuge(vendedorRegime)}
+            papeis={PAPEL_CONJUGE_VENDEDOR}
+          />
+        )}
         <PartySection
           control={control}
           prefix="comprador"
           title="Promitente Comprador(a)"
           icon={<User className="h-5 w-5 text-primary" />}
         />
+        {compradorEstadoCivil === 'Casado(a)' && (
+          <ConjugeSection
+            control={control}
+            lado="comprador"
+            titulo="Cônjuge do Promitente Comprador(a)"
+            dica={sugerirPapelConjugeComprador(compradorRegime)}
+            papeis={PAPEL_CONJUGE_COMPRADOR}
+          />
+        )}
 
         <div className="space-y-4">
           <div className="flex items-center justify-between">
@@ -442,7 +484,7 @@ export function PromiseForm() {
           onClick={() => form.reset(promiseMockData)}
         >
           <Wand2 className="mr-1.5 h-3.5 w-3.5" />
-          Dados de teste
+          Preencher dados de teste
         </Button>
 
         {/* Barra de ação FIXA: Gerar/Validar sempre alcançáveis no formulário longo. */}
@@ -474,12 +516,12 @@ export function PromiseForm() {
             {isValidating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Preparando...
+                Preparando validação...
               </>
             ) : (
               <>
                 <FileSearch className="mr-2 h-4 w-4" />
-                Validar minuta
+                Validar esta minuta
               </>
             )}
           </Button>
@@ -501,6 +543,7 @@ function PartySection({
   icon: React.ReactNode
 }) {
   const fName = (f: string) => `${prefix}_${f}` as any
+  const estadoCivil = useWatch({ control, name: fName('estado_civil') })
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -576,6 +619,30 @@ function PartySection({
         />
         <FormField
           control={control}
+          name={fName('regime_bens')}
+          render={({ field }) => (
+            <FormItem className={estadoCivil === 'Casado(a)' ? '' : 'hidden'}>
+              <FormLabel>Regime de Bens *</FormLabel>
+              <Select value={field.value || undefined} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione..." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {REGIME_BENS_OPTIONS.map((o) => (
+                    <SelectItem key={o} value={o}>
+                      {o}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
           name={fName('cpf')}
           render={({ field }) => (
             <FormItem>
@@ -604,6 +671,140 @@ function PartySection({
           </FormItem>
         )}
       />
+    </div>
+  )
+}
+
+// Bloco do cônjuge. Aparece só quando a parte é Casada. O PAPEL importa juridicamente:
+// co-vendedor/co-comprador = o cônjuge É parte; anuente = não é parte, só autoriza a
+// alienação (art. 1.647, I). O regime NÃO é perguntado aqui: é o mesmo casamento, então
+// herda o da parte — perguntar duas vezes convidaria a divergência.
+function ConjugeSection({
+  control,
+  lado,
+  titulo,
+  dica,
+  papeis,
+}: {
+  control: any
+  lado: 'vendedor' | 'comprador'
+  titulo: string
+  dica: string
+  papeis: readonly string[]
+}) {
+  const fName = (f: string) => `conjuge_${lado}_${f}` as any
+  const papel = useWatch({ control, name: fName('papel') })
+  const ROTULO: Record<string, string> = {
+    nenhum: 'Não participa do documento',
+    co_vendedor: 'Co-vendedor(a) — é parte e aliena junto',
+    anuente: 'Anuente — não é parte, apenas autoriza a venda',
+    co_comprador: 'Co-comprador(a) — adquire junto',
+  }
+  return (
+    <div className="space-y-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <div className="flex items-center gap-2">
+        <HeartHandshake className="h-5 w-5 text-primary" />
+        <h3 className="font-semibold text-primary">{titulo}</h3>
+      </div>
+      <p className="text-xs text-muted-foreground">{dica}</p>
+      <FormField
+        control={control}
+        name={fName('papel')}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Participação no documento *</FormLabel>
+            <Select value={field.value} onValueChange={field.onChange}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {papeis.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {ROTULO[p]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      {papel !== 'nenhum' && (
+        <>
+          <FormField
+            control={control}
+            name={fName('nome')}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome Completo *</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={control}
+              name={fName('nacionalidade')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nacionalidade</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={fName('profissao')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Profissão</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={fName('cpf')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CPF *</FormLabel>
+                  <FormControl>
+                    <Input
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={fName('endereco')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Endereço Completo *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Rua, nº, Bairro, Cidade/UF, CEP" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </>
+      )}
     </div>
   )
 }
