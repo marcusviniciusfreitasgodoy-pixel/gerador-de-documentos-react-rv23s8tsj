@@ -88,6 +88,15 @@ export function PromessaFinanciadaForm() {
     defaultValues: promessaFinanciadaEmptyData,
   })
   const { control, setValue, getValues } = form
+
+  // Foro acompanha a cidade do imóvel — e para de acompanhar assim que o corretor digita
+  // nele. `dirtyFields` é o sinal: setValue sem shouldDirty não suja o campo, então o
+  // auto-preenchimento nunca se confunde com uma escolha deliberada.
+  const imovelCidadeForo = useWatch({ control, name: 'imovel_cidade' })
+  const foroEditadoNaMao = !!form.formState.dirtyFields.foro_comarca
+  useEffect(() => {
+    if (!foroEditadoNaMao) setValue('foro_comarca', imovelCidadeForo || '')
+  }, [imovelCidadeForo, foroEditadoNaMao, setValue])
   const ctrl = control as any
 
   const {
@@ -1073,6 +1082,22 @@ export function PromessaFinanciadaForm() {
                       {getArrasResumo(field.value)}
                     </p>
                   )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="foro_comarca"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Comarca do foro *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Rio de Janeiro" {...field} />
+                  </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Segue a cidade do imóvel. Edite se quiser outro foro.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
