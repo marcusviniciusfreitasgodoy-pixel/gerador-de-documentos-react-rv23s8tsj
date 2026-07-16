@@ -76,7 +76,7 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
   const [pessoas, setPessoas] = useState<PessoaExtraida[]>([])
   const [imovel, setImovel] = useState<ImovelExtraido>(emptyImovel)
 
-  // Acumula seleções (anexa + deduplica por nome+tamanho) — permite adicionar
+  // Acumula seleções (anexa + deduplica por nome+tamanho), permite adicionar
   // escritura, CNH e outros um a um sem que uma seleção apague a anterior.
   const handleFilesSelected = (novos: File[]) => {
     setFiles((prev) => {
@@ -205,7 +205,7 @@ export function AutoPreencherDialog({ open, onOpenChange, onApply }: AutoPreench
               loadingText="Processando documentos..."
             />
             <p className="text-xs text-muted-foreground -mt-2">
-              Você pode adicionar vários documentos (escritura, CNH, RG…) — de uma vez ou um a um.
+              Você pode adicionar vários documentos (escritura, CNH, RG…), de uma vez ou um a um.
             </p>
             {files.length > 0 && !batchItems && (
               <div className="space-y-1">

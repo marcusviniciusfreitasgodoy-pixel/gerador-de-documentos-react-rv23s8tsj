@@ -20,7 +20,7 @@ export default function DistratoPage() {
           Distrato
         </CardTitle>
         <CardDescription>
-          Desfazimento consensual de contrato — devolução de valores e quitação recíproca
+          Desfazimento consensual de contrato, devolução de valores e quitação recíproca
         </CardDescription>
       </CardHeader>
       <CardContent>

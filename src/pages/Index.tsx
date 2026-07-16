@@ -80,7 +80,7 @@ interface DocDef {
 }
 
 // Registro único dos documentos: alimenta o hub E o título do formulário.
-// Fonte única de verdade — substitui o ternário de títulos (que errava a
+// Fonte única de verdade, substitui o ternário de títulos (que errava a
 // financiada) e garante que todo documento tenha entrada no hub.
 const DOC_GROUPS: { label: string; docs: DocDef[] }[] = [
   {
@@ -104,7 +104,7 @@ const DOC_GROUPS: { label: string; docs: DocDef[] }[] = [
       {
         href: '/proposta-reserva',
         title: 'Proposta e Reserva',
-        desc: 'Oferta com sinal — o passo antes da promessa',
+        desc: 'Oferta com sinal, o passo antes da promessa',
       },
       {
         key: 'intermediation',
@@ -119,7 +119,7 @@ const DOC_GROUPS: { label: string; docs: DocDef[] }[] = [
       {
         key: 'recibo',
         title: 'Recibo de Sinal (Arras)',
-        desc: 'Princípio de pagamento — arts. 417 a 420',
+        desc: 'Princípio de pagamento, arts. 417 a 420',
       },
       {
         key: 'termoChaves',
@@ -240,7 +240,7 @@ export default function Index() {
             Documentos
           </h1>
           <p className="text-muted-foreground max-w-xl">
-            Gere, valide e gerencie os instrumentos da operação imobiliária — do primeiro contato à
+            Gere, valide e gerencie os instrumentos da operação imobiliária, do primeiro contato à
             entrega das chaves.
           </p>
         </div>
@@ -257,7 +257,7 @@ export default function Index() {
               <div>
                 <h2 className="text-lg font-semibold text-[#F5F1E6]">Negócios</h2>
                 <p className="text-sm text-[#E8E0CC]/70 mt-1 max-w-lg">
-                  O dossiê da operação: cadastre as partes e o imóvel uma única vez — todos os
+                  O dossiê da operação: cadastre as partes e o imóvel uma única vez. Todos os
                   documentos carregam de lá.
                 </p>
               </div>

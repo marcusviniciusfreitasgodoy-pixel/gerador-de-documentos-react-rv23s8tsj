@@ -29,7 +29,7 @@ export default function NegociosPage() {
 
   const handleCriar = async () => {
     if (titulo.trim().length < 3) {
-      toast.error('Dê um nome ao negócio (ex.: "Apto Barra — João vende pra Maria").')
+      toast.error('Dê um nome ao negócio (ex.: "Apto Barra, João vende pra Maria").')
       return
     }
     setCriando(true)
@@ -68,7 +68,7 @@ export default function NegociosPage() {
 
       <div className="flex gap-2">
         <Input
-          placeholder="Nome do negócio (ex.: Apto Barra — João vende pra Maria)"
+          placeholder="Nome do negócio (ex.: Apto Barra, João vende pra Maria)"
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleCriar()}

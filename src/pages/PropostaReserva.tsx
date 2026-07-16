@@ -20,7 +20,7 @@ export default function PropostaReservaPage() {
           Proposta de Compra e Reserva
         </CardTitle>
         <CardDescription>
-          Oferta de compra com sinal/reserva — passo antes da promessa
+          Oferta de compra com sinal/reserva, passo antes da promessa
         </CardDescription>
       </CardHeader>
       <CardContent>
