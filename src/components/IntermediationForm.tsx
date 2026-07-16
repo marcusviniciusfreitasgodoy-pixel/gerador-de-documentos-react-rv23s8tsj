@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
@@ -74,10 +74,20 @@ export function IntermediationForm() {
       tipo_exclusividade: 'COM GESTÃO EXCLUSIVA',
       prazo_vigencia_dias: '90',
       comissao_percentual: '5',
+      foro_comarca: 'Rio de Janeiro',
     },
   })
 
   const { control } = form
+
+  // Foro acompanha a cidade do imóvel — mas para de acompanhar assim que o usuário
+  // digita nele. `dirtyFields` é o sinal: setValue sem shouldDirty não suja o campo,
+  // então o auto-preenchimento nunca se confunde com uma escolha do corretor.
+  const imovelCidade = useWatch({ control, name: 'imovel_cidade' })
+  const foroEditadoNaMao = !!form.formState.dirtyFields.foro_comarca
+  useEffect(() => {
+    if (!foroEditadoNaMao) form.setValue('foro_comarca', imovelCidade || '')
+  }, [imovelCidade, foroEditadoNaMao, form])
 
   useEffect(() => {
     let cancelled = false
@@ -491,6 +501,22 @@ export function IntermediationForm() {
                   <FormControl>
                     <Input type="number" min={0} step="0.1" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="foro_comarca"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Comarca do foro *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: Rio de Janeiro" {...field} />
+                  </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Segue a cidade do imóvel. Edite se quiser outro foro.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
