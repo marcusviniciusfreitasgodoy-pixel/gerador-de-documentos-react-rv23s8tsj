@@ -25,6 +25,11 @@ export const intermediationSchema = z.object({
   tipo_exclusividade: z.enum(TIPO_EXCLUSIVIDADE_OPTIONS),
   prazo_vigencia_dias: z.string().min(1, 'Obrigatório'),
   comissao_percentual: z.string().min(1, 'Obrigatório'),
+  // Antes: o template dizia "Comarca do Rio de Janeiro, RJ" LITERAL, embora já existisse
+  // {imovel_cidade}. Autorização de imóvel em Niterói saía elegendo foro do Rio — e o
+  // validador nunca pegaria: o imóvel de teste é no Rio, então o texto fixo e o certo
+  // coincidem. Mesmo nome/regra dos outros 4 docs (Permuta, Distrato, Posse, Recibo).
+  foro_comarca: z.string().min(1, 'Obrigatório'),
 })
 
 export type IntermediationValues = z.infer<typeof intermediationSchema>
@@ -48,6 +53,7 @@ export const intermediationMockData: IntermediationValues = {
   tipo_exclusividade: 'COM GESTÃO EXCLUSIVA',
   prazo_vigencia_dias: '90',
   comissao_percentual: '5',
+  foro_comarca: 'Rio de Janeiro',
 }
 
 export interface BrokerInfo {
@@ -81,6 +87,9 @@ export function buildIntermediationTemplateData(
     check_sem_exclusiva: !isComExclusiva ? '( X )' : '( )',
     prazo_vigencia_dias: data.prazo_vigencia_dias,
     comissao_percentual: data.comissao_percentual,
+    // Fallback pra cidade do imóvel: o template tem {foro_comarca} no texto do foro, e
+    // string vazia sairia como "foro da comarca de ." em silêncio (nullGetter: () => '').
+    foro_comarca: data.foro_comarca || data.imovel_cidade || 'Rio de Janeiro',
     data_extenso: formatDateFull(new Date()).toLowerCase(),
     broker_name: broker?.name || '',
     broker_document: broker?.document || '',
