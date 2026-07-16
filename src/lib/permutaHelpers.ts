@@ -235,6 +235,7 @@ const emptyImovel = {
 // Zera tem_torna (vinha true no mock) para não exigir valor da torna num form recém-aberto.
 export const permutaEmptyData: PermutaValues = {
   ...permutaMockData,
+  foro_comarca: '',
   primeiros: [{ ...emptyParty }],
   segundos: [{ ...emptyParty }],
   anuentes: [],
