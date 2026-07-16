@@ -1,4 +1,4 @@
-import { para, downloadDocx } from '@/lib/docx-generator'
+import { para, downloadDocx, getTextFromDocumentXml } from '@/lib/docx-generator'
 
 function buildPromiseDocumentXml(): string {
   const paras = [
@@ -105,4 +105,9 @@ function buildPromiseDocumentXml(): string {
 
 export function generatePromiseDocx(data: Record<string, string>): void {
   downloadDocx(buildPromiseDocumentXml(), data, 'promessa-de-compra-e-venda.docx')
+}
+
+// Mesma minuta em texto plano, para o Validador.
+export function getPromiseText(data: Record<string, string>): string {
+  return getTextFromDocumentXml(buildPromiseDocumentXml(), data)
 }
