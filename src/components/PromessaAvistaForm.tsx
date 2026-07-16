@@ -46,6 +46,8 @@ import {
   cleanCurrencyMask,
   normalizarEstadoCivil,
   normalizarRegime,
+  ARRAS_OPTIONS,
+  getArrasResumo,
 } from '@/lib/form-helpers'
 import {
   promessaAvistaSchema,
@@ -929,10 +931,20 @@ export function PromessaAvistaForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="confirmatoria">Confirmatórias (arts. 417-419)</SelectItem>
-                      <SelectItem value="penitencial">Penitenciais (art. 420)</SelectItem>
+                      {ARRAS_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  {/* A consequência da escolha fica na tela: as arras são a
+                      engenharia de risco do contrato, não uma formalidade. */}
+                  {field.value && (
+                    <p className="text-xs leading-relaxed text-muted-foreground pt-1">
+                      {getArrasResumo(field.value)}
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
