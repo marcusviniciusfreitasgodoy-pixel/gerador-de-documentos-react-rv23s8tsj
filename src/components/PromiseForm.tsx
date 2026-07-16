@@ -5,6 +5,7 @@ import {
   Loader2,
   Download,
   Wand2,
+  FileSearch,
   User,
   Building2,
   DollarSign,
@@ -12,6 +13,7 @@ import {
   UserCheck,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
 import { aplicarPromise } from '@/lib/aplicar-negocio'
@@ -43,13 +45,15 @@ import {
   promiseMockData,
   buildPromiseTemplateData,
 } from '@/lib/promise-helpers'
-import { generatePromiseDocx } from '@/lib/promise-docx'
+import { generatePromiseDocx, getPromiseText } from '@/lib/promise-docx'
 import { getBrokerProfile, type BrokerProfile } from '@/services/broker-profile'
 
 const fmtCurrency = (v: number) => cleanCurrencyMask(formatCurrency(v))
 
 export function PromiseForm() {
   const [isGenerating, setIsGenerating] = useState(false)
+  const [isValidating, setIsValidating] = useState(false)
+  const navigate = useNavigate()
   const [broker, setBroker] = useState<BrokerProfile | null>(null)
 
   const form = useForm<PromiseValues>({
@@ -112,6 +116,21 @@ export function PromiseForm() {
     const pct = parseFloat(comissaoPct || '0') || 0
     return venda * (pct / 100)
   }, [valorVenda, comissaoPct])
+
+  // Mesma minuta que seria baixada, renderizada em memória e enviada ao Validador.
+  // Tipo "Promessa/Compromisso": a régua da promessa se aplica a esta minuta.
+  const onValidate = async () => {
+    setIsValidating(true)
+    try {
+      const texto = getPromiseText(buildPromiseTemplateData(form.getValues(), broker))
+      navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
+    }
+  }
 
   const onSubmit = async (data: PromiseValues) => {
     setIsGenerating(true)
@@ -401,30 +420,54 @@ export function PromiseForm() {
 
         <Button
           type="button"
-          variant="outline"
-          className="w-full"
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-foreground shrink-0 w-fit"
           onClick={() => form.reset(promiseMockData)}
         >
-          <Wand2 className="mr-2 h-4 w-4" />
-          Preencher dados de teste
+          <Wand2 className="mr-1.5 h-3.5 w-3.5" />
+          Dados de teste
         </Button>
-        <Button
-          type="submit"
-          disabled={isGenerating}
-          className="w-full h-12 text-base font-medium shadow-sm transition-all active:scale-[0.98] group"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Processando...
-            </>
-          ) : (
-            <>
-              <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-              Gerar documento
-            </>
-          )}
-        </Button>
+
+        {/* Barra de ação FIXA: Gerar/Validar sempre alcançáveis no formulário longo. */}
+        <div className="sticky bottom-0 z-10 -mx-6 flex flex-col sm:flex-row gap-2 border-t border-border bg-card/95 px-6 py-3 backdrop-blur-sm">
+          <Button
+            type="submit"
+            disabled={isGenerating}
+            className="flex-1 h-11 text-base font-medium shadow-sm transition-all active:scale-[0.98] group"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Processando...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                Gerar documento
+              </>
+            )}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 sm:w-auto"
+            disabled={isValidating || isGenerating}
+            onClick={onValidate}
+          >
+            {isValidating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Preparando...
+              </>
+            ) : (
+              <>
+                <FileSearch className="mr-2 h-4 w-4" />
+                Validar minuta
+              </>
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   )
@@ -456,7 +499,7 @@ function PartySection({
           <FormItem>
             <FormLabel>Nome Completo *</FormLabel>
             <FormControl>
-              <Input placeholder="Ex: João Silva" {...field} />
+              <Input {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -481,7 +524,7 @@ function PartySection({
           name={fName('profissao')}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Profissão</FormLabel>
+              <FormLabel>Profissão *</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -489,8 +532,6 @@ function PartySection({
             </FormItem>
           )}
         />
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={control}
           name={fName('estado_civil')}
@@ -523,7 +564,7 @@ function PartySection({
               <FormLabel>CPF/CNPJ *</FormLabel>
               <FormControl>
                 <Input
-                  value={field.value}
+                  value={field.value || ''}
                   onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
                 />
               </FormControl>
