@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import {
@@ -103,9 +103,12 @@ const mockData: TermoPosseValues = {
   testemunha2_cpf: '555.666.777-88',
 }
 
-// Form abre vazio: mantem contrato_data (hoje), considerando_pagamento, foro/cidade; esvazia partes e imovel.
+// Form abre vazio: mantem contrato_data (hoje), considerando_pagamento e cidade_uf; esvazia partes, imovel e foro.
 const emptyData: TermoPosseValues = {
   ...mockData,
+  // Antes herdava 'Rio de Janeiro/RJ' do spread e ninguém reparava: com a comarca do
+  // imóvel em Niterói, o termo saía com foro no Rio parecendo intencional.
+  foro_comarca: '',
   transmitente_nome: '',
   transmitente_qualificacao: '',
   transmitente_rg: '',
@@ -141,6 +144,14 @@ export function TermoPosseForm() {
     resolver: zodResolver(termoPosseSchema),
     defaultValues: emptyData,
   })
+
+  // Foro acompanha a comarca do IMÓVEL — e para de acompanhar assim que o corretor digita
+  // nele. setValue sem shouldDirty não suja o campo, então auto ≠ escolha deliberada.
+  const imovelComarcaForo = useWatch({ control: form.control, name: 'imovel_comarca' })
+  const foroEditadoNaMao = !!form.formState.dirtyFields.foro_comarca
+  useEffect(() => {
+    if (!foroEditadoNaMao) form.setValue('foro_comarca', imovelComarcaForo || '')
+  }, [imovelComarcaForo, foroEditadoNaMao, form])
 
   useEffect(() => {
     let cancelled = false
@@ -561,6 +572,9 @@ export function TermoPosseForm() {
                   <FormControl>
                     <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Segue a comarca do imóvel. Edite se quiser outro foro.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
