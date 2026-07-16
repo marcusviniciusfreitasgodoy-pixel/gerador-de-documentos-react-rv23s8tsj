@@ -6,8 +6,8 @@ import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 // Re-inclui os blocos {#usa_fgts} (Parte FGTS + autorização FIN003) que o rebuild
 // da partes-flexíveis havia derrubado.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/a3af858c05dbb0298189efa16c4e7b254e5c97f0/promessa_financiada_base64.txt'
-const EXPECTED_BYTE_COUNT = 42361
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/defd51fd783c1739e3da36dbf647df42f1a2cec7/promessa_financiada_base64.txt'
+const EXPECTED_BYTE_COUNT = 42351
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
