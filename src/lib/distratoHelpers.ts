@@ -270,6 +270,8 @@ export const distratoMockData: DistratoValues = {
 // Zera os toggles de demonstração (tem_retencao vinha true no mock) para não disparar validação.
 export const distratoEmptyData: DistratoValues = {
   ...distratoMockData,
+  foro_comarca: '',
+  vendedores: [{ ...emptyParty }],
   vendedores: [{ ...emptyParty }],
   compradores: [{ ...emptyParty }],
   anuentes: [],
