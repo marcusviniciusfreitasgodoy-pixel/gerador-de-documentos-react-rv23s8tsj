@@ -41,7 +41,13 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { maskCurrency, maskCpfCnpj, maskCep } from '@/lib/utils'
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  ARRAS_OPTIONS,
+  getArrasResumo,
+} from '@/lib/form-helpers'
 import {
   promessaFinanciadaSchema,
   type PromessaFinanciadaValues,
@@ -1053,10 +1059,20 @@ export function PromessaFinanciadaForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="confirmatoria">Confirmatórias (arts. 417-419)</SelectItem>
-                      <SelectItem value="penitencial">Penitenciais (art. 420)</SelectItem>
+                      {ARRAS_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  {/* A consequência da escolha fica na tela: as arras são a
+                      engenharia de risco do contrato, não uma formalidade. */}
+                  {field.value && (
+                    <p className="text-xs leading-relaxed text-muted-foreground pt-1">
+                      {getArrasResumo(field.value)}
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
