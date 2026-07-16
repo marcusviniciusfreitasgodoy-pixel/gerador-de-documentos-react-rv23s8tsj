@@ -233,3 +233,28 @@ export function normalizarRegime(v: string): string {
   if (s.includes('separa') || s.includes('total')) return 'Separação total'
   return ''
 }
+
+// ── ARRAS ──────────────────────────────────────────────────────────────────
+// A natureza das arras não é formalidade: é a engenharia de risco do contrato.
+// Penitenciais limitam o prejuízo ao valor do sinal e permitem sair do negócio.
+// Confirmatórias tiram o direito de arrependimento e abrem perdas e danos
+// suplementares (art. 419) + execução específica — exposição sem teto.
+// Por isso a consequência vai pra tela: o corretor escolhe sabendo o que troca.
+export const ARRAS_OPTIONS = [
+  {
+    value: 'confirmatoria',
+    label: 'Confirmatórias — ninguém pode desistir',
+    resumo:
+      'Não há direito de arrependimento. Quem descumprir pode ser obrigado na Justiça a cumprir o contrato e ainda pagar perdas e danos ALÉM do sinal, se a outra parte provar prejuízo maior. Aqui o sinal é o mínimo, não o teto. Arts. 417 a 419 do Código Civil.',
+  },
+  {
+    value: 'penitencial',
+    label: 'Penitenciais — as partes podem desistir',
+    resumo:
+      'Qualquer das partes pode desistir, e quem desiste paga por isso: o comprador perde o sinal; o vendedor devolve o sinal em dobro. Esse é o limite do prejuízo — não cabe cobrar mais nada nem obrigar ninguém a assinar a escritura. Art. 420 do Código Civil.',
+  },
+] as const
+
+export function getArrasResumo(value?: string): string {
+  return ARRAS_OPTIONS.find((o) => o.value === value)?.resumo ?? ''
+}
