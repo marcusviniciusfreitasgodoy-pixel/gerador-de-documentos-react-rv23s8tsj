@@ -200,6 +200,7 @@ export function TermoPosseForm() {
     try {
       await generateTermoPosseDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
+      form.reset()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
