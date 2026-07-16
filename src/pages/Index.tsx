@@ -55,6 +55,8 @@ import {
   type FormValues,
   FORMA_PAGAMENTO_OPTIONS,
   buildTemplateData,
+  ARRAS_OPTIONS,
+  getArrasResumo,
 } from '@/lib/form-helpers'
 import { generateDocx, getReciboText } from '@/lib/docx-generator'
 
@@ -479,14 +481,24 @@ export default function Index() {
                         <Select value={field.value} onValueChange={field.onChange}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Selecione..." />
+                              <SelectValue />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="confirmatoria">Confirmatória</SelectItem>
-                            <SelectItem value="penitencial">Penitencial</SelectItem>
+                            {ARRAS_OPTIONS.map((o) => (
+                              <SelectItem key={o.value} value={o.value}>
+                                {o.label}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
+                        {/* A consequência da escolha fica na tela: as arras são a
+                            engenharia de risco do contrato, não uma formalidade. */}
+                        {field.value && (
+                          <p className="text-xs leading-relaxed text-muted-foreground pt-1">
+                            {getArrasResumo(field.value)}
+                          </p>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
