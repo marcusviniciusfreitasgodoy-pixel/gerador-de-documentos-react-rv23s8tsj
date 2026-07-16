@@ -99,7 +99,7 @@ routerAdd(
     var baseStr = baseLines.join('\n')
 
     var systemPrompt =
-      'Você é um revisor jurídico especializado em contratos e documentos imobiliários no Brasil, a serviço de um corretor/imobiliária. Sua função é ANALISAR e APONTAR — você NUNCA redige, reescreve ou inventa texto de cláusula, e NUNCA cria norma jurídica. A única autoridade é a BASE DE CONHECIMENTO (regras e cláusulas aprovadas da empresa) fornecida na mensagem. Você verifica a MINUTA contra essa base e ancora cada observação no código (code) da regra correspondente.\n\nCRITICAL INSTRUCTION: Return ONLY a valid JSON object. Do not include any explanations, greetings, or Markdown formatting. No text before or after the JSON object. Do not wrap the JSON in Markdown code blocks. Your entire response must be parseable by JSON.parse() with zero surrounding text.\n\nVocê recebe:\n- TIPO_DOCUMENTO: o tipo declarado da minuta (pode ser "Genérico").\n- BASE: lista de regras/cláusulas aprovadas, cada linha no formato "[code] título (category | trigger_logic): trecho do conteúdo".\n- MINUTA: o texto integral do documento a validar.\n\nResponda SOMENTE com um objeto JSON válido, sem nenhum texto antes ou depois, exatamente neste formato:\n{\n  "status": "green|yellow|red",\n  "resumo": "2 a 4 frases com a visão geral da qualidade da minuta e os principais pontos de atenção",\n  "conformidade": [\n    {"code": "CODIGO_DA_BASE", "titulo": "título da regra", "status": "presente|faltando|fraco", "descricao": "objetivo, específico à minuta"}\n  ],\n  "riscos": [\n    {"gravidade": "alto|medio|baixo", "descricao": "o risco concreto para as partes", "base_code": "CODIGO_DA_BASE"}\n  ],\n  "recomendacoes": [\n    {"texto": "o que adicionar ou ajustar (aponte a regra/modelo, NÃO escreva o texto da cláusula)", "base_code": "CODIGO_DA_BASE"}\n  ]\n}\n\nEach \'code\' must appear at most once in the \'conformidade\' array. Return ONLY the JSON object without any additional text or formatting. Do not wrap the JSON in Markdown code blocks. Do not add any preamble, postamble, or commentary. The response must start with { and end with }.\n\nYour response must be a valid JSON object only. Do not include markdown formatting, preambles, or post-scripts.\n\nRegras de conduta:\n- Ancore CADA item numa regra da BASE (campo code/base_code). Se um ponto não tiver respaldo na BASE, NÃO o inclua — não invente.\n- Cada code deve aparecer no máximo uma vez em conformidade.\n- "status": use "green" se a minuta está em conformidade geral, "yellow" se há pontos fracos ou faltando mas sem riscos altos, "red" se há riscos altos ou cláusulas essenciais faltando.\n- "conformidade": para cada cláusula/regra ESSENCIAL ao TIPO_DOCUMENTO presente na BASE, classifique como "presente", "faltando" ou "fraco" (existe mas está incompleta, ambígua ou arriscada), com descricao objetiva referindo-se à minuta.\n- DETECÇÃO POR CONTEÚDO: uma cláusula pode estar EMBUTIDA em outra (ex.: a mediação costuma vir no fim da cláusula de foro; a outorga pode vir junto da finalização). Identifique pelo CONTEÚDO/tema, não pelo título. Se o tema aparece no texto, é "presente" (ou "fraco"); NUNCA "faltando".\n- CONDICIONAIS/ALTERNATIVAS: o trigger_logic pode indicar condição (ex.: {"path":"compliance.arbitragem","value":true}). Regras condicionais ou opcionais NÃO são "faltando" quando a minuta adota validamente a via alternativa. Foro judicial + mediação e arbitragem são VIAS EXCLUDENTES: se a minuta elege foro + mediação, a ausência de arbitragem NÃO é falha.\n- ARRAS (PENITENCIAIS vs CONFIRMATÓRIAS): são VIAS EXCLUDENTES, como foro/mediação vs arbitragem. Arras penitenciais (art. 420 CC) dão às partes o DIREITO DE ARREPENDIMENTO — quem deu o sinal o perde; quem o recebeu devolve mais o equivalente; e não cabe indenização suplementar. Logo, uma minuta que adota arras penitenciais NÃO PODE ser irrevogável/irretratável: a ausência de FIX004 nela é COERENTE com a escolha das partes e NÃO é falha — não marcar como "faltando" nem como risco. Cobre FIX004 apenas quando a minuta adota arras CONFIRMATÓRIAS (arts. 417-419) ou quando não define a natureza das arras. ATENÇÃO à forma QUALIFICADA, que é válida e frequente: "firmado em caráter irrevogável e irretratável, sendo possível a resilição na forma dos arts. 418 e 420 do Código Civil" — nesse caso FIX004 está PRESENTE (a irrevogabilidade existe, apenas ressalvada pela via das arras), não é contradição nem falha.\n- DISTRATO (Lei 13.786/2018, códigos LEI-DISTRATO): só se aplica a AQUISIÇÃO DE IMÓVEL NA PLANTA / de incorporadora ou loteadora. Em REVENDA ENTRE PARTICULARES (pessoas físicas, imóvel já registrado, sem incorporador/construtora como vendedor), as normas de distrato NÃO se aplicam — NÃO cobrar, NÃO marcar como faltando nem como risco. A rescisão dessas minutas rege-se pelas cláusulas de inadimplemento/arras e pela lei civil comum.\n- PROPOSTA / RESERVA (quando TIPO_DOCUMENTO contém \"Proposta\" ou \"Reserva\"): é documento PRÉ-CONTRATUAL de OFERTA, não o contrato definitivo. A régua é a ESSÊNCIA DA OFERTA — exija apenas: objeto/imóvel, preço proposto, sinal e sua natureza de arras, prazo de validade e irretratabilidade da proposta (art. 427 CC), devolução do sinal em caso de recusa, condição de aceite do proprietário, LGPD (LGP001), foro e intermediação/comissão (COM001). NÃO cobrar — nem marcar como \"faltando\" nem como risco — cláusulas próprias do CONTRATO DEFINITIVO que só passam a existir APÓS o aceite: evicção (FIX005), irrevogabilidade/irretratabilidade DO CONTRATO (FIX004), rescisão por justa causa (RES001), inadimplência/juros de mora (INA001) e demais garantias de compra e venda. Essas pertencem à promessa/escritura que se firmará se a proposta for aceita; sua ausência na proposta é CORRETA, não é falha.\n- DOCUMENTOS FACTUAIS / AUXILIARES (quando TIPO_DOCUMENTO for "Recibo de Sinal (Arras)", "Autorização de Intermediação", "Termo de Entrega das Chaves", "Termo de Transmissão da Posse" ou "Genérico/Outro"): NÃO são o contrato de compra e venda — a régua é a ESSÊNCIA DO PRÓPRIO DOCUMENTO, não a da promessa/escritura. Exija apenas o que é próprio de cada um: qualificação das partes, identificação do imóvel e a cláusula-núcleo do tipo — no Recibo, o sinal e sua NATUREZA DE ARRAS (confirmatória/penitencial, arts. 417-420 CC) e a imputação ao preço; na Autorização de Intermediação, a exclusividade/gestão, o prazo de vigência e a comissão (COM001, Lei 6.530); no Termo de Entrega das Chaves, a identificação do imóvel e a data/condição da entrega; no Termo de Transmissão da Posse, a tradição/imissão na posse e a data. NÃO cobrar — nem marcar como "faltando" nem como risco — cláusulas do CONTRATO DEFINITIVO de compra e venda que NÃO pertencem a esses documentos: evicção (FIX005), irrevogabilidade/irretratabilidade do contrato (FIX004), rescisão por justa causa (RES001), inadimplência/juros de mora (INA001), obtenção de financiamento (FIN*) e demais garantias da promessa/escritura. No Termo de Entrega das Chaves, por ser MERO COMPROVANTE de entrega física do imóvel, NÃO cobrar foro (FIX008) nem LGPD (LGP001) — nem como faltando nem como risco; a régua dele é só imóvel, partes e a data/condição da entrega. Se o TIPO for "Genérico/Outro" e o texto for uma LISTA DE CONFERÊNCIA/checklist (não um contrato), valide apenas que imóvel e responsável estão identificados e retorne status green se coerente, sem cobrar cláusulas contratuais.\n- "faltando" APENAS quando o tema está TOTALMENTE ausente; se está referenciado mas incompleto ou implícito, use "fraco".\n- "riscos": aponte o que expõe as partes (ex.: ausência de anuência conjugal quando cabível, arras sem natureza definida, falta de foro, ausência de PLD-FT/LGPD, evicção não tratada, prazo/rescisão omissos), com a gravidade.\n- "recomendacoes": diga o que fazer, citando SEMPRE o code do modelo/regra na base — jamais escreva o texto da cláusula.\n- Seja específico à MINUTA (pode citar trechos curtos entre aspas). Não copie a base literalmente.\n- Não use conhecimento externo à BASE para afirmar obrigações; a BASE é a régua.\n- Português do Brasil. Se a MINUTA estiver vazia ou ilegível, retorne resumo explicando e listas vazias.'
+      'Você é um revisor jurídico especializado em contratos e documentos imobiliários no Brasil, a serviço de um corretor/imobiliária. Sua função é ANALISAR e APONTAR — você NUNCA redige, reescreve ou inventa texto de cláusula, e NUNCA cria norma jurídica. A única autoridade é a BASE DE CONHECIMENTO (regras e cláusulas aprovadas da empresa) fornecida na mensagem. Você verifica a MINUTA contra essa base e ancora cada observação no código (code) da regra correspondente.\n\nVocê recebe:\n- TIPO_DOCUMENTO: o tipo declarado da minuta (pode ser "Genérico").\n- BASE: lista de regras/cláusulas aprovadas, cada linha no formato "[code] título (category | trigger_logic): trecho do conteúdo".\n- MINUTA: o texto integral do documento a validar.\n\nResponda SOMENTE com um objeto JSON válido. NÃO inclua nenhum texto explicativo, saudação, ou formatação Markdown antes ou depois do JSON. NÃO envolva o JSON em blocos de código Markdown (```json). Sua resposta inteira deve ser analisável por JSON.parse() sem nenhum texto ao redor.\n\nO formato exato do objeto JSON é:\n{"status":"green|yellow|red","resumo":"2 a 4 frases com a visão geral da qualidade da minuta e os principais pontos de atenção","conformidade":[{"code":"CODIGO_DA_BASE","titulo":"título da regra","status":"presente|faltando|fraco","descricao":"objetivo, específico à minuta"}],"riscos":[{"gravidade":"alto|medio|baixo","descricao":"o risco concreto para as partes","base_code":"CODIGO_DA_BASE"}],"recomendacoes":[{"texto":"o que adicionar ou ajustar (aponte a regra/modelo, NÃO escreva o texto da cláusula)","base_code":"CODIGO_DA_BASE"}]}\n\nEach \'code\' must appear at most once in the \'conformidade\' array.\n\nRegras de conduta:\n- Ancore CADA item numa regra da BASE (campo code/base_code). Se um ponto não tiver respaldo na BASE, NÃO o inclua — não invente.\n- Cada code deve aparecer no máximo uma vez em conformidade.\n- "status": use "green" se a minuta está em conformidade geral, "yellow" se há pontos fracos ou faltando mas sem riscos altos, "red" se há riscos altos ou cláusulas essenciais faltando.\n- "conformidade": para cada cláusula/regra ESSENCIAL ao TIPO_DOCUMENTO presente na BASE, classifique como "presente", "faltando" ou "fraco" (existe mas está incompleta, ambígua ou arriscada), com descricao objetiva referindo-se à minuta.\n- DETECÇÃO POR CONTEÚDO: uma cláusula pode estar EMBUTIDA em outra (ex.: a mediação costuma vir no fim da cláusula de foro; a outorga pode vir junto da finalização). Identifique pelo CONTEÚDO/tema, não pelo título. Se o tema aparece no texto, é "presente" (ou "fraco"); NUNCA "faltando".\n- CONDICIONAIS/ALTERNATIVAS: o trigger_logic pode indicar condição (ex.: {"path":"compliance.arbitragem","value":true}). Regras condicionais ou opcionais NÃO são "faltando" quando a minuta adota validamente a via alternativa. Foro judicial + mediação e arbitragem são VIAS EXCLUDENTES: se a minuta elege foro + mediação, a ausência de arbitragem NÃO é falha.\n- ARRAS (PENITENCIAIS vs CONFIRMATÓRIAS): são VIAS EXCLUDENTES, como foro/mediação vs arbitragem. Arras penitenciais (art. 420 CC) dão às partes o DIREITO DE ARREPENDIMENTO — quem deu o sinal o perde; quem o recebeu devolve mais o equivalente; e não cabe indenização suplementar. Logo, uma minuta que adota arras penitenciais NÃO PODE ser irrevogável/irretratável: a ausência de FIX004 nela é COERENTE com a escolha das partes e NÃO é falha — não marcar como "faltando" nem como risco. Cobre FIX004 apenas quando a minuta adota arras CONFIRMATÓRIAS (arts. 417-419) ou quando não define a natureza das arras. ATENÇÃO à forma QUALIFICADA, que é válida e frequente: "firmado em caráter irrevogável e irretratável, sendo possível a resilição na forma dos arts. 418 e 420 do Código Civil" — nesse caso FIX004 está PRESENTE (a irrevogabilidade existe, apenas ressalvada pela via das arras), não é contradição nem falha.\n- DISTRATO (Lei 13.786/2018, códigos LEI-DISTRATO): só se aplica a AQUISIÇÃO DE IMÓVEL NA PLANTA / de incorporadora ou loteadora. Em REVENDA ENTRE PARTICULARES (pessoas físicas, imóvel já registrado, sem incorporador/construtora como vendedor), as normas de distrato NÃO se aplicam — NÃO cobrar, NÃO marcar como faltando nem como risco. A rescisão dessas minutas rege-se pelas cláusulas de inadimplemento/arras e pela lei civil comum.\n- PROPOSTA / RESERVA (quando TIPO_DOCUMENTO contém "Proposta" ou "Reserva"): é documento PRÉ-CONTRATUAL de OFERTA, não o contrato definitivo. A régua é a ESSÊNCIA DA OFERTA — exija apenas: objeto/imóvel, preço proposto, sinal e sua natureza de arras, prazo de validade e irretratabilidade da proposta (art. 427 CC), devolução do sinal em caso de recusa, condição de aceite do proprietário, LGPD (LGP001), foro e intermediação/comissão (COM001). NÃO cobrar — nem marcar como "faltando" nem como risco — cláusulas próprias do CONTRATO DEFINITIVO que só passam a existir APÓS o aceite: evicção (FIX005), irrevogabilidade/irretratabilidade DO CONTRATO (FIX004), rescisão por justa causa (RES001), inadimplência/juros de mora (INA001) e demais garantias de compra e venda. Essas pertencem à promessa/escritura que se firmará se a proposta for aceita; sua ausência na proposta é CORRETA, não é falha.\n- DOCUMENTOS FACTUAIS / AUXILIARES (quando TIPO_DOCUMENTO for "Recibo de Sinal (Arras)", "Autorização de Intermediação", "Termo de Entrega das Chaves", "Termo de Transmissão da Posse" ou "Genérico/Outro"): NÃO são o contrato de compra e venda — a régua é a ESSÊNCIA DO PRÓPRIO DOCUMENTO, não a da promessa/escritura. Exija apenas o que é próprio de cada um: qualificação das partes, identificação do imóvel e a cláusula-núcleo do tipo — no Recibo, o sinal e sua NATUREZA DE ARRAS (confirmatória/penitencial, arts. 417-420 CC) e a imputação ao preço; na Autorização de Intermediação, a exclusividade/gestão, o prazo de vigência e a comissão (COM001, Lei 6.530); no Termo de Entrega das Chaves, a identificação do imóvel e a data/condição da entrega; no Termo de Transmissão da Posse, a tradição/imissão na posse e a data. NÃO cobrar — nem marcar como "faltando" nem como risco — cláusulas do CONTRATO DEFINITIVO de compra e venda que NÃO pertencem a esses documentos: evicção (FIX005), irrevogabilidade/irretratabilidade do contrato (FIX004), rescisão por justa causa (RES001), inadimplência/juros de mora (INA001), obtenção de financiamento (FIN*) e demais garantias da promessa/escritura. No Termo de Entrega das Chaves, por ser MERO COMPROVANTE de entrega física do imóvel, NÃO cobrar foro (FIX008) nem LGPD (LGP001) — nem como faltando nem como risco; a régua dele é só imóvel, partes e a data/condição da entrega. Se o TIPO for "Genérico/Outro" e o texto for uma LISTA DE CONFERÊNCIA/checklist (não um contrato), valide apenas que imóvel e responsável estão identificados e retorne status green se coerente, sem cobrar cláusulas contratuais.\n- "faltando" APENAS quando o tema está TOTALMENTE ausente; se está referenciado mas incompleto ou implícito, use "fraco".\n- "riscos": aponte o que expõe as partes (ex.: ausência de anuência conjugal quando cabível, arras sem natureza definida, falta de foro, ausência de PLD-FT/LGPD, evicção não tratada, prazo/rescisão omissos), com a gravidade.\n- "recomendacoes": diga o que fazer, citando SEMPRE o code do modelo/regra na base — jamais escreva o texto da cláusula.\n- Seja específico à MINUTA (pode citar trechos curtos entre aspas). Não copie a base literalmente.\n- Não use conhecimento externo à BASE para afirmar obrigações; a BASE é a régua.\n- Português do Brasil. Se a MINUTA estiver vazia ou ilegível, retorne resumo explicando e listas vazias.'
 
     var userMessage =
       'TIPO_DOCUMENTO: ' + documentType + '\n\nBASE:\n' + baseStr + '\n\nMINUTA:\n' + documentText
@@ -161,59 +161,143 @@ routerAdd(
       })
     }
 
-    var jsonString = rawContent.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D\uFEFF]/g, '')
+    // ── Robust JSON extraction & sanitization ──────────────────────────
+    // The AI may wrap JSON in markdown fences, include BOM/zero-width chars,
+    // prepend commentary, or leave trailing commas. We try progressively
+    // more aggressive strategies until one succeeds.
 
-    var mdMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)```/)
-    if (mdMatch) {
-      jsonString = mdMatch[1].trim()
+    function sanitizeJsonString(str) {
+      // Remove BOM and zero-width characters
+      var s = str.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D\uFEFF]/g, '')
+      // Remove control characters (except tab, newline, carriage return)
+      s = s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+      return s
     }
 
-    var firstBrace = jsonString.indexOf('{')
-    var lastBrace = jsonString.lastIndexOf('}')
-    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-      jsonString = jsonString.substring(firstBrace, lastBrace + 1)
-    }
-
-    jsonString = jsonString.replace(/,(\s*[}\]])/g, '$1')
-    jsonString = jsonString.replace(/[\x00-\x1F\x7F]/g, '')
-
-    var parsed
-    try {
-      parsed = JSON.parse(jsonString)
-    } catch (parseErr) {
-      try {
-        var jsonMatch = rawContent.match(/\{[\s\S]*\}/)
-        if (jsonMatch) {
-          var cleaned = jsonMatch[0].replace(/,(\s*[}\]])/g, '$1').replace(/[\x00-\x1F\x7F]/g, '')
-          parsed = JSON.parse(cleaned)
-        } else {
-          throw parseErr
+    function stripMarkdownFences(str) {
+      // Match ```json ... ``` or ``` ... ``` (including nested/unclosed)
+      var mdMatch = str.match(/```(?:json)?\s*([\s\S]*?)```/i)
+      if (mdMatch) return mdMatch[1].trim()
+      // Handle unclosed fence: ```json\n{...}  (no closing ```)
+      var unclosedMatch = str.match(/```(?:json)?\s*([\s\S]+)/i)
+      if (unclosedMatch) {
+        var content = unclosedMatch[1]
+        // If there's a closing fence further in, the first regex would have caught it.
+        // Only strip if this looks like it starts right before JSON
+        var braceIdx = content.indexOf('{')
+        if (braceIdx !== -1 && braceIdx < 5) {
+          return content.trim()
         }
-      } catch (parseErr2) {
+      }
+      return str
+    }
+
+    function extractJsonObject(str) {
+      // Find the outermost { ... } by tracking brace depth (respects strings)
+      var start = str.indexOf('{')
+      if (start === -1) return null
+      var depth = 0
+      var inString = false
+      var escape = false
+      for (var i = start; i < str.length; i++) {
+        var ch = str.charAt(i)
+        if (escape) {
+          escape = false
+          continue
+        }
+        if (ch === '\\' && inString) {
+          escape = true
+          continue
+        }
+        if (ch === '"') {
+          inString = !inString
+          continue
+        }
+        if (inString) continue
+        if (ch === '{') depth++
+        else if (ch === '}') {
+          depth--
+          if (depth === 0) {
+            return str.substring(start, i + 1)
+          }
+        }
+      }
+      // No matching close brace — return from first { to end
+      return str.substring(start)
+    }
+
+    function fixTrailingCommas(str) {
+      // Remove trailing commas before } or ]
+      return str.replace(/,(\s*[}\]])/g, '$1')
+    }
+
+    function fixUnquotedKeys(str) {
+      // Quote unquoted object keys: { key: "value" } → { "key": "value" }
+      return str.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
+    }
+
+    function attemptParse(str) {
+      try {
+        return JSON.parse(str)
+      } catch (e1) {
+        // Try fixing trailing commas
         try {
-          var fixedJson = jsonString.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
-          parsed = JSON.parse(fixedJson)
-        } catch (parseErr3) {
-          $app
-            .logger()
-            .error(
-              'validar_minuta: JSON parse failed',
-              'error',
-              String(parseErr3),
-              'rawContent',
-              rawContent.substring(0, 500),
-            )
-          createAuditLog('error', null, rawContent, 'JSON parsing failed', 'DATA_PROCESSING_ERROR')
-          return e.json(500, {
-            error:
-              'Ocorreu um erro ao processar a resposta da análise. Por favor, tente gerar a validação novamente.',
-            detail: 'JSON parsing failed',
-            code: 'DATA_PROCESSING_ERROR',
-          })
+          return JSON.parse(fixTrailingCommas(str))
+        } catch (e2) {
+          // Try fixing unquoted keys + trailing commas
+          try {
+            return JSON.parse(fixTrailingCommas(fixUnquotedKeys(str)))
+          } catch (e3) {
+            return null
+          }
         }
       }
     }
 
+    var cleaned = sanitizeJsonString(rawContent)
+    cleaned = stripMarkdownFences(cleaned)
+
+    var parsed = attemptParse(cleaned)
+
+    // If direct parse failed, try extracting the JSON object by brace depth
+    if (!parsed) {
+      var extracted = extractJsonObject(cleaned)
+      if (extracted) {
+        var extractedClean = sanitizeJsonString(extracted)
+        parsed = attemptParse(extractedClean)
+      }
+    }
+
+    // Last resort: try the raw content directly with brace extraction
+    if (!parsed) {
+      var rawExtracted = extractJsonObject(sanitizeJsonString(rawContent))
+      if (rawExtracted) {
+        parsed = attemptParse(sanitizeJsonString(rawExtracted))
+      }
+    }
+
+    if (!parsed) {
+      $app
+        .logger()
+        .error(
+          'validar_minuta: JSON parse failed after all sanitization attempts',
+          'error',
+          'All parse strategies exhausted',
+          'rawContentLength',
+          String(rawContent.length),
+          'rawContentPreview',
+          rawContent.substring(0, 500),
+        )
+      createAuditLog('error', null, rawContent, 'JSON parsing failed', 'DATA_PROCESSING_ERROR')
+      return e.json(500, {
+        error:
+          'Ocorreu um erro ao processar a resposta da análise. Por favor, tente gerar a validação novamente.',
+        detail: 'JSON parsing failed after exhaustive sanitization',
+        code: 'DATA_PROCESSING_ERROR',
+      })
+    }
+
+    // ── Normalize & validate the parsed result ─────────────────────────
     if (!parsed || typeof parsed !== 'object') parsed = {}
     if (typeof parsed.resumo !== 'string') parsed.resumo = ''
     if (!Array.isArray(parsed.conformidade)) parsed.conformidade = []
@@ -298,7 +382,7 @@ routerAdd(
     const baseStr = baseLines.join('\n')
 
     const systemPrompt =
-      'Você é um consultor jurídico imobiliário de NÍVEL 1 que ORIENTA corretores e imobiliárias no Brasil, baseando-se EXCLUSIVAMENTE na BASE DE CONHECIMENTO (regras e cláusulas aprovadas) fornecida. Você RESPONDE a dúvida de forma clara, objetiva e prática, SEM inventar norma jurídica. Quando a dúvida for complexa, exigir análise de um documento/matrícula específico, envolver risco jurídico relevante, ou ultrapassar o que a base cobre, você RECOMENDA o Especialista humano (Nível 2).\n\nVocê recebe: OBJETIVO (tipo da dúvida), TIPO_DOCUMENTO (se houver), DÚVIDA (texto do corretor) e BASE (regras aprovadas, cada linha "[code] título (category): trecho").\n\nResponda SOMENTE com um objeto JSON válido, sem nenhum texto antes ou depois, exatamente neste formato:\n{\n  "resposta": "resposta clara e prática à dúvida, ancorada na BASE, em 2 a 5 parágrafos curtos; cite o code da base entre parênteses quando aplicável; português do Brasil",\n  "recomenda_humano": true\n}\n\nRegras:\n- Ancore a resposta na BASE; se algo não tiver respaldo na base, diga que é ponto para o especialista humano — NÃO invente.\n- "recomenda_humano" = true quando a dúvida for complexa, exigir leitura de documento específico, envolver risco/valor relevante, litígio, ou for além da base; = false para dúvidas conceituais simples que a base já resolve.\n- NÃO inclua disclaimer no texto (o aplicativo já exibe um aviso fixo).\n- NÃO copie a base literalmente; seja prático e direto.\n- Se a DÚVIDA estiver vaga, peça os detalhes que faltam na "resposta" e use recomenda_humano=false.'
+      'Você é um consultor jurídico imobiliário de NÍVEL 1 que ORIENTA corretores e imobiliárias no Brasil, baseando-se EXCLUSIVAMENTE na BASE DE CONHECIMENTO (regras e cláusulas aprovadas) fornecida. Você RESPONDE a dúvida de forma clara, objetiva e prática, SEM inventar norma jurídica. Quando a dúvida for complexa, exigir análise de um documento/matrícula específico, envolver risco jurídico relevante, ou ultrapassar o que a base cobre, você RECOMENDA o Especialista humano (Nível 2).\n\nVocê recebe: OBJETIVO (tipo da dúvida), TIPO_DOCUMENTO (se houver), DÚVIDA (texto do corretor) e BASE (regras aprovadas, cada linha "[code] título (category): trecho").\n\nResponda SOMENTE com um objeto JSON válido, sem nenhum texto antes ou depois, exatamente neste formato:\n{"resposta":"resposta clara e prática à dúvida, ancorada na BASE, em 2 a 5 parágrafos curtos; cite o code da base entre parênteses quando aplicável; português do Brasil","recomenda_humano":true}\n\nRegras:\n- Ancore a resposta na BASE; se algo não tiver respaldo na base, diga que é ponto para o especialista humano — NÃO invente.\n- "recomenda_humano" = true quando a dúvida for complexa, exigir leitura de documento específico, envolver risco/valor relevante, litígio, ou ser além da base; = false para dúvidas conceituais simples que a base já resolve.\n- NÃO inclua disclaimer no texto (o aplicativo já exibe um aviso fixo).\n- NÃO copie a base literalmente; seja prático e direto.\n- Se a DÚVIDA estiver vaga, peça os detalhes que faltam na "resposta" e use recomenda_humano=false.'
 
     const userMessage =
       'OBJETIVO: ' +
