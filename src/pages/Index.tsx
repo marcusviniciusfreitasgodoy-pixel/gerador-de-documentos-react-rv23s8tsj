@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
+  ArrowLeft,
   Download,
   Building2,
   FileCheck2,
@@ -57,22 +58,108 @@ import {
 } from '@/lib/form-helpers'
 import { generateDocx, getReciboText } from '@/lib/docx-generator'
 
+type DocKey =
+  | 'recibo'
+  | 'intermediation'
+  | 'promise'
+  | 'compromisso'
+  | 'compromissoFinanciado'
+  | 'compromissoFgts'
+  | 'compromissoDacao'
+  | 'termoChaves'
+  | 'termoPosse'
+  | 'checklist'
+
+interface DocDef {
+  key?: DocKey
+  href?: string
+  title: string
+  desc: string
+}
+
+// Registro único dos documentos: alimenta o hub E o título do formulário.
+// Fonte única de verdade — substitui o ternário de títulos (que errava a
+// financiada) e garante que todo documento tenha entrada no hub.
+const DOC_GROUPS: { label: string; docs: DocDef[] }[] = [
+  {
+    label: 'Promessas de compra e venda',
+    docs: [
+      { key: 'compromisso', title: 'À vista', desc: 'Pagamento integral com sinal e reforço' },
+      { key: 'compromissoFinanciado', title: 'Financiada', desc: 'Com financiamento bancário' },
+      { key: 'compromissoFgts', title: 'Com FGTS', desc: 'Recursos do FGTS sem financiamento' },
+      {
+        key: 'compromissoDacao',
+        title: 'Com dação em pagamento',
+        desc: 'Outro bem compõe o preço',
+      },
+      { key: 'promise', title: 'Simplificada', desc: 'Modelo enxuto de promessa' },
+      { href: '/permuta', title: 'Permuta', desc: 'Troca de imóveis com torna opcional' },
+    ],
+  },
+  {
+    label: 'Pré-contratual e intermediação',
+    docs: [
+      {
+        href: '/proposta-reserva',
+        title: 'Proposta e Reserva',
+        desc: 'Oferta com sinal — o passo antes da promessa',
+      },
+      {
+        key: 'intermediation',
+        title: 'Autorização de Venda',
+        desc: 'Intermediação com ou sem exclusividade',
+      },
+    ],
+  },
+  {
+    label: 'Execução e encerramento',
+    docs: [
+      {
+        key: 'recibo',
+        title: 'Recibo de Sinal (Arras)',
+        desc: 'Princípio de pagamento — arts. 417 a 420',
+      },
+      {
+        key: 'termoChaves',
+        title: 'Entrega das Chaves',
+        desc: 'Comprovação da disponibilização do imóvel',
+      },
+      { key: 'termoPosse', title: 'Transmissão da Posse', desc: 'Tradição e imissão na posse' },
+      {
+        key: 'checklist',
+        title: 'Checklist Documental',
+        desc: 'Conferência dos documentos da operação',
+      },
+      {
+        href: '/distrato',
+        title: 'Distrato',
+        desc: 'Desfazimento consensual com quitação recíproca',
+      },
+    ],
+  },
+]
+
+const DOC_TITLES: Record<DocKey, string> = {
+  recibo: 'Recibo de Sinal e Princípio de Pagamento (Arras)',
+  intermediation: 'Autorização para Divulgação e Venda de Imóvel',
+  promise: 'Promessa de Compra e Venda (Simplificada)',
+  compromisso: 'Promessa / Compromisso de Compra e Venda (à vista)',
+  compromissoFinanciado: 'Promessa / Compromisso de Compra e Venda (financiada)',
+  compromissoFgts: 'Promessa com FGTS (sem financiamento)',
+  compromissoDacao: 'Promessa com Dação em Pagamento',
+  termoChaves: 'Termo de Entrega das Chaves',
+  termoPosse: 'Termo de Transmissão da Posse',
+  checklist: 'Checklist Documental',
+}
+
+const DOC_CARD_CLASS =
+  'rounded-lg border border-border bg-card p-4 text-left shadow-subtle hover:border-primary/60 hover:shadow-elevation transition-all duration-200'
+
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
   const navigate = useNavigate()
-  const [docType, setDocType] = useState<
-    | 'recibo'
-    | 'intermediation'
-    | 'promise'
-    | 'compromisso'
-    | 'compromissoFinanciado'
-    | 'compromissoFgts'
-    | 'compromissoDacao'
-    | 'termoChaves'
-    | 'termoPosse'
-    | 'checklist'
-  >('recibo')
+  const [docType, setDocType] = useState<DocKey | null>(null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -139,142 +226,90 @@ export default function Index() {
     }
   }
 
-  return (
-    <Card className="w-full max-w-2xl shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
-      <CardHeader className="space-y-3 pb-8 text-center">
-        <div className="flex flex-wrap justify-center gap-2">
-          <Button
-            type="button"
-            variant={docType === 'recibo' ? 'default' : 'outline'}
-            onClick={() => setDocType('recibo')}
-            size="sm"
-          >
-            Recibo de Sinal
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'intermediation' ? 'default' : 'outline'}
-            onClick={() => setDocType('intermediation')}
-            size="sm"
-          >
-            Autorização de Intermediação
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'compromisso' ? 'default' : 'outline'}
-            onClick={() => setDocType('compromisso')}
-            size="sm"
-          >
-            Promessa / Compromisso de Compra e Venda (à vista)
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'compromissoFinanciado' ? 'default' : 'outline'}
-            onClick={() => setDocType('compromissoFinanciado')}
-            size="sm"
-          >
-            Promessa / Compromisso de Compra e Venda (financiada)
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'compromissoFgts' ? 'default' : 'outline'}
-            onClick={() => setDocType('compromissoFgts')}
-            size="sm"
-          >
-            Promessa com FGTS (sem financiamento)
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'compromissoDacao' ? 'default' : 'outline'}
-            onClick={() => setDocType('compromissoDacao')}
-            size="sm"
-          >
-            Promessa com Dação em Pagamento
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'termoChaves' ? 'default' : 'outline'}
-            onClick={() => setDocType('termoChaves')}
-            size="sm"
-          >
-            Termo de Entrega das Chaves
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'termoPosse' ? 'default' : 'outline'}
-            onClick={() => setDocType('termoPosse')}
-            size="sm"
-          >
-            Termo de Transmissão da Posse
-          </Button>
-          <Button
-            type="button"
-            variant={docType === 'checklist' ? 'default' : 'outline'}
-            onClick={() => setDocType('checklist')}
-            size="sm"
-          >
-            Checklist Documental
-          </Button>
+  // Hub: nenhum documento selecionado -> grade de documentos por categoria.
+  if (docType === null) {
+    return (
+      <div className="w-full max-w-4xl space-y-10 animate-fade-in-up">
+        <div className="space-y-3">
+          <p className="font-mono text-[11px] tracking-[0.35em] uppercase text-primary">
+            Prime Circle
+          </p>
+          <h1 className="font-display text-4xl md:text-5xl font-medium text-foreground">
+            Documentos
+          </h1>
+          <p className="text-muted-foreground max-w-xl">
+            Gere, valide e gerencie os instrumentos da operação imobiliária — do primeiro contato à
+            entrega das chaves.
+          </p>
         </div>
+
         <Link
           to="/negocios"
-          className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"
+          className="block rounded-xl bg-[#0E0E0E] p-6 border border-transparent hover:border-[#C9A84C]/60 transition-colors group"
         >
-          <h3 className="font-semibold text-primary group-hover:text-primary/90 transition-colors flex items-center gap-2">
-            <Briefcase className="h-5 w-5" />
-            Negócios
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Cadastre partes e imóveis uma vez e reutilize em todos os documentos
-          </p>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              <div className="rounded-lg bg-[#C9A84C]/15 p-3 shrink-0">
+                <Briefcase className="h-6 w-6 text-[#C9A84C]" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-[#F5F1E6]">Negócios</h2>
+                <p className="text-sm text-[#E8E0CC]/70 mt-1 max-w-lg">
+                  O dossiê da operação: cadastre as partes e o imóvel uma única vez — todos os
+                  documentos carregam de lá.
+                </p>
+              </div>
+            </div>
+            <span className="hidden sm:inline font-mono text-[10px] tracking-[0.3em] uppercase text-[#C9A84C] mt-2 shrink-0 group-hover:translate-x-0.5 transition-transform">
+              Abrir →
+            </span>
+          </div>
         </Link>
-        <Link
-          to="/proposta-reserva"
-          className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"
+
+        {DOC_GROUPS.map((group) => (
+          <div key={group.label} className="space-y-3">
+            <p className="font-mono text-[11px] tracking-[0.35em] uppercase text-muted-foreground">
+              {group.label}
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {group.docs.map((doc) =>
+                doc.href ? (
+                  <Link key={doc.href} to={doc.href} className={DOC_CARD_CLASS}>
+                    <h3 className="font-semibold text-foreground">{doc.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{doc.desc}</p>
+                  </Link>
+                ) : (
+                  <button
+                    key={doc.key}
+                    type="button"
+                    onClick={() => setDocType(doc.key!)}
+                    className={DOC_CARD_CLASS}
+                  >
+                    <h3 className="font-semibold text-foreground">{doc.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{doc.desc}</p>
+                  </button>
+                ),
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <Card className="w-full max-w-2xl shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
+      <CardHeader className="space-y-3 pb-6">
+        <button
+          type="button"
+          onClick={() => setDocType(null)}
+          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors w-fit"
         >
-          <h3 className="font-semibold text-primary group-hover:text-primary/90 transition-colors">
-            Proposta de Compra e Reserva
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Oferta de compra com sinal/reserva — passo antes da promessa
-          </p>
-        </Link>
-        <Link
-          to="/distrato"
-          className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"
-        >
-          <h3 className="font-semibold text-primary group-hover:text-primary/90 transition-colors">
-            Distrato
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">
-            Desfazimento consensual de contrato — devolução de valores e quitação recíproca
-          </p>
-        </Link>
-        <Link
-          to="/permuta"
-          className="block w-full max-w-md mx-auto mt-2 rounded-lg border border-primary/30 bg-primary/5 p-4 hover:bg-primary/10 transition-colors duration-200 cursor-pointer text-left group"
-        >
-          <h3 className="font-semibold text-primary group-hover:text-primary/90 transition-colors">
-            Promessa de Permuta
-          </h3>
-          <p className="text-sm text-muted-foreground mt-1">Troca de imóveis com torna opcional</p>
-        </Link>
-        <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
-          {docType === 'recibo'
-            ? 'Recibo de Sinal e Princípio de Pagamento (Arras)'
-            : docType === 'intermediation'
-              ? 'Autorização para Divulgação e Venda de Imóvel'
-              : docType === 'compromisso'
-                ? 'Promessa / Compromisso de Compra e Venda (à vista)'
-                : docType === 'compromissoFgts'
-                  ? 'Promessa com FGTS (sem financiamento)'
-                  : docType === 'compromissoDacao'
-                    ? 'Promessa com Dação em Pagamento'
-                    : docType === 'termoChaves'
-                      ? 'Termo de Entrega das Chaves'
-                      : docType === 'termoPosse'
-                        ? 'Termo de Transmissão da Posse'
-                        : 'Checklist Documental'}
+          <ArrowLeft className="h-4 w-4" /> Todos os documentos
+        </button>
+        <p className="font-mono text-[10px] tracking-[0.35em] uppercase text-primary">Documento</p>
+        <CardTitle className="font-display text-3xl font-medium text-foreground">
+          {DOC_TITLES[docType]}
         </CardTitle>
         <CardDescription>
           Preencha os dados para gerar o documento Word automaticamente.
