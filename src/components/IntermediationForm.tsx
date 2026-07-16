@@ -172,7 +172,7 @@ export function IntermediationForm() {
                 incluídos no documento.
               </p>
               <Link
-                to="/my-profile"
+                to="/perfil"
                 className="inline-flex items-center gap-1 font-semibold underline hover:text-yellow-900"
               >
                 Ir para Meu Perfil
