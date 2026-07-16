@@ -1011,65 +1011,75 @@ export function PromessaAvistaForm() {
           </div>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={() => setAutoPreencherOpen(true)}
-        >
-          <Sparkles className="mr-2 h-4 w-4" />
-          Preencher a partir de documentos
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          onClick={() => form.reset(promessaAvistaMockData)}
-        >
-          <Wand2 className="mr-2 h-4 w-4" />
-          Preencher dados de teste
-        </Button>
+        {/* Auxiliares de preenchimento — o "dados de teste" fica discreto para não
+            competir com as ações reais do documento. */}
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1"
+            onClick={() => setAutoPreencherOpen(true)}
+          >
+            <Sparkles className="mr-2 h-4 w-4" />
+            Preencher a partir de documentos
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            className="text-muted-foreground hover:text-foreground shrink-0"
+            onClick={() => form.reset(promessaAvistaMockData)}
+          >
+            <Wand2 className="mr-1.5 h-3.5 w-3.5" />
+            Dados de teste
+          </Button>
+        </div>
         <AutoPreencherDialog
           open={autoPreencherOpen}
           onOpenChange={setAutoPreencherOpen}
           onApply={aplicarExtracao}
         />
-        <Button
-          type="submit"
-          disabled={isGenerating}
-          className="w-full h-12 text-base font-medium shadow-sm transition-all active:scale-[0.98] group"
-        >
-          {isGenerating ? (
-            <>
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              Processando...
-            </>
-          ) : (
-            <>
-              <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
-              Gerar documento
-            </>
-          )}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
-          disabled={isValidating || isGenerating}
-          onClick={onValidate}
-        >
-          {isValidating ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Preparando validação...
-            </>
-          ) : (
-            <>
-              <FileSearch className="mr-2 h-4 w-4" />
-              Validar esta minuta
-            </>
-          )}
-        </Button>
+
+        {/* Barra de ação FIXA: num formulário longo, Gerar/Validar ficam sempre
+            alcançáveis. -mx-6/px-6 acompanham o padding do CardContent. */}
+        <div className="sticky bottom-0 z-10 -mx-6 flex flex-col sm:flex-row gap-2 border-t border-border bg-card/95 px-6 py-3 backdrop-blur-sm">
+          <Button
+            type="submit"
+            disabled={isGenerating}
+            className="flex-1 h-11 text-base font-medium shadow-sm transition-all active:scale-[0.98] group"
+          >
+            {isGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Processando...
+              </>
+            ) : (
+              <>
+                <Download className="mr-2 h-5 w-5 group-hover:animate-bounce" />
+                Gerar documento
+              </>
+            )}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11 sm:w-auto"
+            disabled={isValidating || isGenerating}
+            onClick={onValidate}
+          >
+            {isValidating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Preparando...
+              </>
+            ) : (
+              <>
+                <FileSearch className="mr-2 h-4 w-4" />
+                Validar minuta
+              </>
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   )
