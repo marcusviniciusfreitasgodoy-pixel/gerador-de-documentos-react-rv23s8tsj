@@ -73,6 +73,10 @@ export const promiseSchema = z
       .min(1, 'Obrigatório')
       .refine((v) => parseCurrency(v) > 0, 'Valor deve ser maior que zero'),
     comissao_percentual: z.string().min(1, 'Obrigatório'),
+    prazo_certidoes_dias: z
+      .string()
+      .min(1, 'Obrigatório')
+      .refine((v) => /^\d+$/.test(v), 'Apenas números'),
     tipo_arras: z.enum(['confirmatoria', 'penitencial']),
     saldo_pagamento: z.enum(SALDO_PAGAMENTO_OPTIONS),
   })
@@ -100,6 +104,20 @@ export const promiseSchema = z
     message: 'CPF do cônjuge obrigatório',
     path: ['conjuge_vendedor_cpf'],
   })
+  // Todos estes entram na QUALIFICAÇÃO do preâmbulo. Vazio não dá erro — dá vírgula
+  // solta no contrato ("Fulano, , casado(a)..."), que é pior porque passa despercebido.
+  .refine((d) => d.conjuge_vendedor_papel === 'nenhum' || !!d.conjuge_vendedor_nacionalidade, {
+    message: 'Obrigatório',
+    path: ['conjuge_vendedor_nacionalidade'],
+  })
+  .refine((d) => d.conjuge_vendedor_papel === 'nenhum' || !!d.conjuge_vendedor_profissao, {
+    message: 'Obrigatório',
+    path: ['conjuge_vendedor_profissao'],
+  })
+  .refine((d) => d.conjuge_vendedor_papel === 'nenhum' || !!d.conjuge_vendedor_endereco, {
+    message: 'Obrigatório',
+    path: ['conjuge_vendedor_endereco'],
+  })
   .refine(
     (d) =>
       d.conjuge_comprador_papel === 'nenhum' ||
@@ -109,6 +127,18 @@ export const promiseSchema = z
   .refine((d) => d.conjuge_comprador_papel === 'nenhum' || !!d.conjuge_comprador_cpf, {
     message: 'CPF do cônjuge obrigatório',
     path: ['conjuge_comprador_cpf'],
+  })
+  .refine((d) => d.conjuge_comprador_papel === 'nenhum' || !!d.conjuge_comprador_nacionalidade, {
+    message: 'Obrigatório',
+    path: ['conjuge_comprador_nacionalidade'],
+  })
+  .refine((d) => d.conjuge_comprador_papel === 'nenhum' || !!d.conjuge_comprador_profissao, {
+    message: 'Obrigatório',
+    path: ['conjuge_comprador_profissao'],
+  })
+  .refine((d) => d.conjuge_comprador_papel === 'nenhum' || !!d.conjuge_comprador_endereco, {
+    message: 'Obrigatório',
+    path: ['conjuge_comprador_endereco'],
   })
   .refine(
     (d) => !d.has_interveniente || (d.interveniente_nome && d.interveniente_nome.length >= 3),
@@ -183,6 +213,7 @@ export const promiseMockData: PromiseValues = {
   valor_venda: 'R$ 1.200.000,00',
   valor_sinal: 'R$ 120.000,00',
   comissao_percentual: '5',
+  prazo_certidoes_dias: '10',
   tipo_arras: 'confirmatoria',
   saldo_pagamento: 'Financiamento Bancário',
 }
@@ -259,6 +290,7 @@ export function buildPromiseTemplateData(
     valor_saldo: fmt(saldo),
     valor_comissao: fmt(comissao),
     comissao_percentual: data.comissao_percentual,
+    prazo_certidoes_dias: data.prazo_certidoes_dias,
     tipo_arras: tipoArras,
     saldo_pagamento: data.saldo_pagamento,
     contratado_nome: broker?.name || 'Marcus Vinícius Freitas Godoy',
