@@ -49,6 +49,7 @@ import {
 } from '@/lib/permutaHelpers'
 import { buildPermutaTemplateData } from '@/lib/permutaTemplate'
 import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
+import { ARRAS_OPTIONS, getArrasResumo } from '@/lib/form-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
 import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
@@ -720,14 +721,20 @@ export function PermutaForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="confirmatoria">
-                      Confirmatória (sem arrependimento — arts. 417-419)
-                    </SelectItem>
-                    <SelectItem value="penitencial">
-                      Penitencial (com arrependimento — art. 420)
-                    </SelectItem>
+                    {ARRAS_OPTIONS.map((o) => (
+                      <SelectItem key={o.value} value={o.value}>
+                        {o.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
+                {/* A consequência da escolha fica na tela: as arras são a
+                    engenharia de risco do contrato, não uma formalidade. */}
+                {field.value && (
+                  <p className="text-xs leading-relaxed text-muted-foreground pt-1">
+                    {getArrasResumo(field.value)}
+                  </p>
+                )}
                 <FormMessage />
               </FormItem>
             )}
