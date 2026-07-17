@@ -6,8 +6,8 @@ import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 // (gerado de TEMPLATE_promessa_dacao_PF.docx) no gist, atualize o hash do
 // commit abaixo. O byte-count já corresponde ao template PF.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/promessa_dacao_base64.txt'
-const EXPECTED_BYTE_COUNT = 41978
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/defd51fd783c1739e3da36dbf647df42f1a2cec7/promessa_dacao_base64.txt'
+const EXPECTED_BYTE_COUNT = 41946
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
