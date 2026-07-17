@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
-import { FolderOpen, Loader2 } from 'lucide-react'
+import { FolderOpen, Loader2, CheckCircle2, FileSearch, FilePlus2, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
 import { listNegocios, getNegocio } from '@/lib/negocios'
 import type { Negocio } from '@/lib/negocios'
@@ -34,6 +34,11 @@ interface CarregarDeNegocioProps {
   replaceVendedores?: (v: any[]) => void
   replaceCompradores?: (v: any[]) => void
   replaceAnuentes?: (v: any[]) => void
+  // Fase 4 ("Gerar outro deste negócio"): quando um negócio é carregado, entrega
+  // ao form uma função que RE-APLICA exatamente o mesmo negócio (com o slot da
+  // permuta e as opções já capturados). O form guarda essa função e a chama
+  // depois do reset. Se nenhum negócio for carregado, ela nunca é chamada.
+  onNegocioAplicado?: (reaplicar: () => void) => void
 }
 
 export function CarregarDeNegocio({
@@ -45,6 +50,7 @@ export function CarregarDeNegocio({
   replaceVendedores,
   replaceCompradores,
   replaceAnuentes,
+  onNegocioAplicado,
 }: CarregarDeNegocioProps) {
   const [negocios, setNegocios] = useState<Negocio[]>([])
   const [selecionado, setSelecionado] = useState('')
@@ -72,16 +78,23 @@ export function CarregarDeNegocio({
     setLoading(true)
     try {
       const negocio = await getNegocio(selecionado)
-      if (aplicar) {
-        // Documento de partes planas: usa a função de mapeamento do próprio form.
-        aplicar(negocio)
-      } else if (replaceVendedores && replaceCompradores && replaceAnuentes) {
-        aplicarNegocio(
-          { setValue: form.setValue, replaceVendedores, replaceCompradores, replaceAnuentes },
-          negocio,
-          { imovel: !!imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
-        )
+      // Aplica o negócio ao form. Extraído numa função para que o "Gerar outro
+      // deste negócio" (Fase 4) possa RE-APLICAR exatamente o mesmo — com o slot
+      // e as opções já capturados neste closure.
+      const aplicarNoForm = () => {
+        if (aplicar) {
+          // Documento de partes planas: usa a função de mapeamento do próprio form.
+          aplicar(negocio)
+        } else if (replaceVendedores && replaceCompradores && replaceAnuentes) {
+          aplicarNegocio(
+            { setValue: form.setValue, replaceVendedores, replaceCompradores, replaceAnuentes },
+            negocio,
+            { imovel: !!imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
+          )
+        }
       }
+      aplicarNoForm()
+      onNegocioAplicado?.(aplicarNoForm)
       toast.success(`Dados de "${negocio.titulo}" carregados.`)
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Não foi possível carregar o negócio.')
@@ -140,6 +153,78 @@ export function CarregarDeNegocio({
             Imóvel B
           </label>
         </div>
+      )}
+    </div>
+  )
+}
+
+// ── Fase 4: momento de sucesso pós-geração ─────────────────────────────
+// Fica neste arquivo (e não num .tsx próprio) porque o editor do Skip não cria
+// arquivos novos; todos os forms já importam deste módulo. Só apresentação —
+// a lógica (validar, resetar, re-aplicar negócio) vem do form via callbacks.
+interface DocumentoGeradoProps {
+  // Nome do arquivo baixado, ex.: "recibo-de-sinal-arras.docx". Opcional.
+  nomeArquivo?: string
+  // Envia a minuta recém-gerada ao Validador. Se ausente, o botão não aparece.
+  onValidar?: () => void
+  // Reseta o formulário (e re-aplica o negócio carregado, se houver).
+  onGerarOutro: () => void
+  // Volta ao hub. Só os documentos que são rota própria passam isto; os que
+  // abrem dentro do hub já têm o "← Todos os documentos" no cabeçalho acima.
+  onVoltar?: () => void
+  // Estado de carregamento do botão Validar.
+  validando?: boolean
+}
+
+export function DocumentoGerado({
+  nomeArquivo,
+  onValidar,
+  onGerarOutro,
+  onVoltar,
+  validando,
+}: DocumentoGeradoProps) {
+  return (
+    <div className="flex flex-col items-center text-center py-10 px-4 animate-fade-in-up">
+      <div className="rounded-full bg-primary/10 p-4 mb-5">
+        <CheckCircle2 className="h-10 w-10 text-primary" />
+      </div>
+      <h2 className="font-display text-2xl font-medium text-foreground">Documento gerado!</h2>
+      <p className="text-sm text-muted-foreground mt-2 max-w-sm">
+        {nomeArquivo ? (
+          <>
+            Baixado como <span className="font-mono text-foreground">{nomeArquivo}</span>. Confira
+            sua pasta de downloads.
+          </>
+        ) : (
+          'O arquivo foi baixado. Confira sua pasta de downloads.'
+        )}
+      </p>
+      <div className="flex flex-col sm:flex-row gap-2 mt-8 w-full max-w-sm">
+        {onValidar && (
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1 h-11"
+            onClick={onValidar}
+            disabled={validando}
+          >
+            <FileSearch className="mr-2 h-4 w-4" />
+            {validando ? 'Preparando...' : 'Validar esta minuta'}
+          </Button>
+        )}
+        <Button type="button" className="flex-1 h-11" onClick={onGerarOutro}>
+          <FilePlus2 className="mr-2 h-4 w-4" />
+          Gerar outro documento
+        </Button>
+      </div>
+      {onVoltar && (
+        <button
+          type="button"
+          onClick={onVoltar}
+          className="mt-5 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" /> Voltar aos documentos
+        </button>
       )}
     </div>
   )
