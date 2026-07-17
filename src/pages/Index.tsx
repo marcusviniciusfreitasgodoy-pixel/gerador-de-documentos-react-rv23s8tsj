@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useState, useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
@@ -193,13 +193,22 @@ export default function Index() {
       natureza_arras: 'confirmatoria',
       prazo_formalizacao_dias: '',
       prazo_restituicao_dias: '',
-      foro_comarca: 'Rio de Janeiro/RJ',
+      foro_comarca: '',
       testemunha1_nome: '',
       testemunha1_cpf: '',
       testemunha2_nome: '',
       testemunha2_cpf: '',
     },
   })
+
+  // Foro/assinatura do recibo acompanham a comarca do imóvel — e param de acompanhar
+  // assim que o corretor digita no campo. cidade_uf (local da assinatura) deriva de
+  // foro_comarca no buildTemplateData, então os dois seguem a comarca.
+  const foroImovelComarca = useWatch({ control: form.control, name: 'imovel_comarca' })
+  const foroReciboEditado = !!form.formState.dirtyFields.foro_comarca
+  useEffect(() => {
+    if (!foroReciboEditado) form.setValue('foro_comarca', foroImovelComarca || '')
+  }, [foroImovelComarca, foroReciboEditado, form])
 
   const onSubmit = async (data: FormValues) => {
     setIsGenerating(true)
