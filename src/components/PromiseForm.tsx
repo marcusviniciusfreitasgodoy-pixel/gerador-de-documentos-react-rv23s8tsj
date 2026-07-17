@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 import { aplicarPromise } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -66,6 +66,9 @@ export function PromiseForm() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
   const navigate = useNavigate()
+  // Fase 4: tela de sucesso + re-aplicar negócio no "Gerar outro deste negócio".
+  const [gerado, setGerado] = useState(false)
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
   const [broker, setBroker] = useState<BrokerProfile | null>(null)
 
   const form = useForm<PromiseValues>({
@@ -169,7 +172,7 @@ export function PromiseForm() {
       await new Promise((r) => setTimeout(r, 800))
       generatePromiseDocx(buildPromiseTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado(true)
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -178,10 +181,32 @@ export function PromiseForm() {
     }
   }
 
+  const handleGerarOutro = () => {
+    form.reset()
+    reaplicarNegocioRef.current?.()
+    setGerado(false)
+  }
+
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <CarregarDeNegocio form={form} aplicar={(n) => aplicarPromise(form.setValue, n)} />
+        <CarregarDeNegocio
+          form={form}
+          aplicar={(n) => aplicarPromise(form.setValue, n)}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
+        />
         <PartySection
           control={control}
           prefix="vendedor"
