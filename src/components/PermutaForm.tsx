@@ -52,7 +52,7 @@ import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
 import { ARRAS_OPTIONS, getArrasResumo } from '@/lib/form-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 
 const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
   <input
@@ -257,6 +257,9 @@ export function PermutaForm() {
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
   const navigate = useNavigate()
+  // Fase 4: tela de sucesso + re-aplicar negócio no "Gerar outro deste negócio".
+  const [gerado, setGerado] = useState(false)
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
 
   const form = useForm<PermutaValues>({
     resolver: zodResolver(permutaSchema),
@@ -357,7 +360,7 @@ export function PermutaForm() {
     try {
       await generatePermutaDocx(buildPermutaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado(true)
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -450,6 +453,23 @@ export function PermutaForm() {
     </div>
   )
 
+  const handleGerarOutro = () => {
+    form.reset()
+    reaplicarNegocioRef.current?.()
+    setGerado(false)
+  }
+
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+        onVoltar={() => navigate('/')}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -460,6 +480,9 @@ export function PermutaForm() {
           replaceVendedores={primeiroFA.replace}
           replaceCompradores={segundoFA.replace}
           replaceAnuentes={anuenteFA.replace}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
         />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800">
