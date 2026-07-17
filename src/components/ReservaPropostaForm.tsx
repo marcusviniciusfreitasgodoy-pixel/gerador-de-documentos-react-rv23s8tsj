@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -51,7 +51,7 @@ import { buildReservaPropostaTemplateData } from '@/lib/reservaPropostaTemplate'
 import { generateReservaPropostaDocx, getReservaPropostaText } from '@/lib/reservaPropostaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 
 function sugerirPapelProponente(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
@@ -69,6 +69,9 @@ export function ReservaPropostaForm() {
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
   const navigate = useNavigate()
+  // Fase 4: tela de sucesso + re-aplicar negócio no "Gerar outro deste negócio".
+  const [gerado, setGerado] = useState(false)
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
 
   const form = useForm<ReservaPropostaValues>({
     resolver: zodResolver(reservaPropostaSchema),
@@ -157,7 +160,7 @@ export function ReservaPropostaForm() {
     try {
       await generateReservaPropostaDocx(buildReservaPropostaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado(true)
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -183,6 +186,23 @@ export function ReservaPropostaForm() {
     }
   }
 
+  const handleGerarOutro = () => {
+    form.reset()
+    reaplicarNegocioRef.current?.()
+    setGerado(false)
+  }
+
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+        onVoltar={() => navigate('/')}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -193,6 +213,9 @@ export function ReservaPropostaForm() {
           replaceVendedores={replaceProprietarios}
           replaceCompradores={replaceProponentes}
           replaceAnuentes={replaceAnuentes}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
         />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
