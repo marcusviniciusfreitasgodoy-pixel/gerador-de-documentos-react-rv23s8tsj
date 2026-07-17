@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 import { aplicarChaves } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -88,6 +88,9 @@ export function TermoChavesForm() {
   const [hasBroker, setHasBroker] = useState(false)
   const [brokerData, setBrokerData] = useState<{ nome: string; creci: string } | null>(null)
   const navigate = useNavigate()
+  // Fase 4: tela de sucesso + re-aplicar negócio no "Gerar outro deste negócio".
+  const [gerado, setGerado] = useState(false)
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
 
   const form = useForm<TermoChavesValues>({
     resolver: zodResolver(termoChavesSchema),
@@ -136,7 +139,7 @@ export function TermoChavesForm() {
     try {
       await generateTermoChavesDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado(true)
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -162,10 +165,32 @@ export function TermoChavesForm() {
     }
   }
 
+  const handleGerarOutro = () => {
+    form.reset()
+    reaplicarNegocioRef.current?.()
+    setGerado(false)
+  }
+
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <CarregarDeNegocio form={form} aplicar={(n) => aplicarChaves(form.setValue, n)} />
+        <CarregarDeNegocio
+          form={form}
+          aplicar={(n) => aplicarChaves(form.setValue, n)}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
+        />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
             <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
