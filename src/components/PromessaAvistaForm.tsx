@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -62,7 +62,7 @@ import { buildPromessaAvistaTemplateData } from '@/lib/promessaAvistaTemplate'
 import { generatePromessaAvistaDocx, getPromessaAvistaText } from '@/lib/promessaAvistaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
 import type { ExtracaoResult, PessoaRole } from '@/lib/extraction-types'
 import type { PartyValues, AnuenteValues } from '@/lib/promessaAvistaHelpers'
@@ -83,6 +83,10 @@ export function PromessaAvistaForm() {
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
   const [autoPreencherOpen, setAutoPreencherOpen] = useState(false)
+  // Fase 4: quando != null, mostra a tela de sucesso (guarda o nome do arquivo baixado).
+  const [gerado, setGerado] = useState<string | null>(null)
+  // Guarda a função que re-aplica o negócio carregado (para "Gerar outro deste negócio").
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
   const navigate = useNavigate()
 
   const form = useForm<PromessaAvistaValues>({
@@ -244,7 +248,7 @@ export function PromessaAvistaForm() {
     try {
       await generatePromessaAvistaDocx(buildPromessaAvistaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado('promessa-de-compra-e-venda-avista.docx')
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -270,6 +274,26 @@ export function PromessaAvistaForm() {
     }
   }
 
+  const handleGerarOutro = () => {
+    form.reset(promessaAvistaEmptyData)
+    reaplicarNegocioRef.current?.()
+    setGerado(null)
+  }
+
+  // Fase 4: documento gerado → tela de sucesso no lugar do form. O
+  // "← Todos os documentos" do cabeçalho do hub (Index) segue acima desta tela,
+  // então não precisa de "Voltar" aqui.
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        nomeArquivo={gerado}
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -279,6 +303,9 @@ export function PromessaAvistaForm() {
           replaceVendedores={replaceVendedores}
           replaceCompradores={replaceCompradores}
           replaceAnuentes={replaceAnuentes}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
         />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
