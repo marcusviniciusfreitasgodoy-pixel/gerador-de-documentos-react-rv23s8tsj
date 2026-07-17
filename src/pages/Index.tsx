@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -22,7 +22,7 @@ import { PromessaFinanciadaForm } from '@/components/PromessaFinanciadaForm'
 import { TermoChavesForm } from '@/components/TermoChavesForm'
 import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 import { aplicarRecibo } from '@/lib/aplicar-negocio'
 import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { PromessaDacaoForm } from '@/components/PromessaDacaoForm'
@@ -162,6 +162,9 @@ export default function Index() {
   const [isValidating, setIsValidating] = useState(false)
   const navigate = useNavigate()
   const [docType, setDocType] = useState<DocKey | null>(null)
+  // Fase 4 (Recibo): tela de sucesso + re-aplicar negócio no "Gerar outro".
+  const [gerado, setGerado] = useState(false)
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -215,7 +218,7 @@ export default function Index() {
     try {
       await generateDocx(buildTemplateData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado(true)
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -235,6 +238,12 @@ export default function Index() {
     } finally {
       setIsValidating(false)
     }
+  }
+
+  const handleGerarOutro = () => {
+    form.reset()
+    reaplicarNegocioRef.current?.()
+    setGerado(false)
   }
 
   // Hub: nenhum documento selecionado -> grade de documentos por categoria.
@@ -327,10 +336,23 @@ export default function Index() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {docType === 'recibo' && (
+        {docType === 'recibo' && gerado && (
+          <DocumentoGerado
+            onValidar={onValidateRecibo}
+            onGerarOutro={handleGerarOutro}
+            validando={isValidating}
+          />
+        )}
+        {docType === 'recibo' && !gerado && (
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-              <CarregarDeNegocio form={form} aplicar={(n) => aplicarRecibo(form.setValue, n)} />
+              <CarregarDeNegocio
+                form={form}
+                aplicar={(n) => aplicarRecibo(form.setValue, n)}
+                onNegocioAplicado={(fn) => {
+                  reaplicarNegocioRef.current = fn
+                }}
+              />
               <PartyFields prefix="vendedor" title="Dados do Vendedor(a)" />
               <PartyFields prefix="comprador" title="Dados do Comprador(a)" />
 
