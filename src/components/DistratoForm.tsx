@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -50,7 +50,7 @@ import {
 import { buildDistratoTemplateData } from '@/lib/distratoTemplate'
 import { generateDistratoDocx, getDistratoText } from '@/lib/distratoDocx'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 
 function sugerirPapelVendedor(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
@@ -73,6 +73,9 @@ export function DistratoForm() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
   const navigate = useNavigate()
+  // Fase 4: tela de sucesso + re-aplicar negócio no "Gerar outro deste negócio".
+  const [gerado, setGerado] = useState(false)
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
 
   const form = useForm<DistratoValues>({
     resolver: zodResolver(distratoSchema),
@@ -139,7 +142,7 @@ export function DistratoForm() {
     try {
       await generateDistratoDocx(buildDistratoTemplateData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado(true)
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -161,6 +164,23 @@ export function DistratoForm() {
     }
   }
 
+  const handleGerarOutro = () => {
+    form.reset()
+    reaplicarNegocioRef.current?.()
+    setGerado(false)
+  }
+
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+        onVoltar={() => navigate('/')}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -170,6 +190,9 @@ export function DistratoForm() {
           replaceVendedores={replaceVendedores}
           replaceCompradores={replaceCompradores}
           replaceAnuentes={replaceAnuentes}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
         />
         {/* PROMITENTES VENDEDORES */}
         <div className="space-y-4">
