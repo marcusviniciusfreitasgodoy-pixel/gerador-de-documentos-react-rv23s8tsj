@@ -2,9 +2,12 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
+// TEMPLATE "qualquer cidade" (foro_comarca + RI/ITBI/assinatura por {imovel_cidade}):
+// pin defd51fd = 41661 bytes, zero literal de cidade. Substitui o pin antigo
+// fdfc8123 (41696), que tinha "Rio de Janeiro" hardcoded em 5 pontos.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/fdfc812322876aaf8dd2e3a03b9e9b1ea256a7a7/promessa_base64.txt'
-const EXPECTED_BYTE_COUNT = 41696
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/defd51fd783c1739e3da36dbf647df42f1a2cec7/promessa_base64.txt'
+const EXPECTED_BYTE_COUNT = 41661
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
@@ -54,7 +57,7 @@ export async function generatePromessaAvistaDocx(data: Record<string, unknown>):
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = 'promessa-de-compra-e-venda.docx'
+  link.download = 'promessa-de-compra-e-venda-avista.docx'
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
