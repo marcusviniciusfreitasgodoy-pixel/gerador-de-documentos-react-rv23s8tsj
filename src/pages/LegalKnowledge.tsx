@@ -9,6 +9,7 @@ import {
   Search,
   X,
   Upload,
+  Download,
   Sparkles,
   FileText,
 } from 'lucide-react'
