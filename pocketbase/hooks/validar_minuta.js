@@ -236,19 +236,84 @@ routerAdd(
       return str.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
     }
 
+    function repairJsonString(str) {
+      var result = []
+      var inString = false
+      var escape = false
+      for (var i = 0; i < str.length; i++) {
+        var ch = str.charAt(i)
+        if (escape) {
+          result.push(ch)
+          escape = false
+          continue
+        }
+        if (ch === '\\' && inString) {
+          result.push(ch)
+          escape = true
+          continue
+        }
+        if (ch === '"') {
+          inString = !inString
+          result.push(ch)
+          continue
+        }
+        if (inString) {
+          if (ch === '\n') {
+            result.push('\\n')
+            continue
+          }
+          if (ch === '\r') {
+            result.push('\\r')
+            continue
+          }
+          if (ch === '\t') {
+            result.push('\\t')
+            continue
+          }
+          if (ch.charCodeAt(0) < 32) {
+            result.push('\\u' + ('0000' + ch.charCodeAt(0).toString(16)).slice(-4))
+            continue
+          }
+          result.push(ch)
+          continue
+        }
+        if (ch === '/' && i + 1 < str.length) {
+          var nc = str.charAt(i + 1)
+          if (nc === '/') {
+            while (i < str.length && str.charAt(i) !== '\n') i++
+            continue
+          }
+          if (nc === '*') {
+            i += 2
+            while (i < str.length - 1 && !(str.charAt(i) === '*' && str.charAt(i + 1) === '/')) i++
+            i++
+            continue
+          }
+        }
+        result.push(ch)
+      }
+      return result.join('')
+    }
+
     function attemptParse(str) {
       try {
         return JSON.parse(str)
       } catch (e1) {
-        // Try fixing trailing commas
         try {
           return JSON.parse(fixTrailingCommas(str))
         } catch (e2) {
-          // Try fixing unquoted keys + trailing commas
           try {
             return JSON.parse(fixTrailingCommas(fixUnquotedKeys(str)))
           } catch (e3) {
-            return null
+            try {
+              return JSON.parse(fixTrailingCommas(repairJsonString(str)))
+            } catch (e4) {
+              try {
+                return JSON.parse(fixTrailingCommas(fixUnquotedKeys(repairJsonString(str))))
+              } catch (e5) {
+                return null
+              }
+            }
           }
         }
       }
@@ -273,6 +338,17 @@ routerAdd(
       var rawExtracted = extractJsonObject(sanitizeJsonString(rawContent))
       if (rawExtracted) {
         parsed = attemptParse(sanitizeJsonString(rawExtracted))
+      }
+    }
+
+    // Ultimate fallback: repair unescaped control chars, then re-extract and parse
+    if (!parsed) {
+      var rawRepaired = repairJsonString(sanitizeJsonString(stripMarkdownFences(rawContent)))
+      var repairedExtracted = extractJsonObject(rawRepaired)
+      if (repairedExtracted) {
+        parsed = attemptParse(repairedExtracted)
+      } else {
+        parsed = attemptParse(rawRepaired)
       }
     }
 
@@ -411,23 +487,125 @@ routerAdd(
       return e.json(502, { error: 'Falha ao consultar a IA. Tente novamente.' })
     }
 
-    let jsonString = rawContent
-    const mdMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)```/)
-    if (mdMatch) jsonString = mdMatch[1].trim()
-    const firstBrace = jsonString.indexOf('{')
-    const lastBrace = jsonString.lastIndexOf('}')
-    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
-      jsonString = jsonString.substring(firstBrace, lastBrace + 1)
+    var jsonString = rawContent
+    var mdMatch = jsonString.match(/```(?:json)?\s*([\s\S]*?)```/i)
+    if (mdMatch) {
+      jsonString = mdMatch[1].trim()
+    } else {
+      var unclosedFence = jsonString.match(/```(?:json)?\s*([\s\S]+)/i)
+      if (unclosedFence) {
+        var ucBraceIdx = unclosedFence[1].indexOf('{')
+        if (ucBraceIdx !== -1 && ucBraceIdx < 5) jsonString = unclosedFence[1].trim()
+      }
     }
-    jsonString = jsonString.replace(/,(\s*[}\]])/g, '$1').replace(/[\x00-\x1F\x7F]/g, '')
+    jsonString = jsonString.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D\uFEFF]/g, '')
+    var fbIdx = jsonString.indexOf('{')
+    if (fbIdx !== -1) {
+      var fbDepth = 0
+      var fbInStr = false
+      var fbEsc = false
+      var fbEnd = -1
+      for (var fbi = fbIdx; fbi < jsonString.length; fbi++) {
+        var fbc = jsonString.charAt(fbi)
+        if (fbEsc) {
+          fbEsc = false
+          continue
+        }
+        if (fbc === '\\' && fbInStr) {
+          fbEsc = true
+          continue
+        }
+        if (fbc === '"') {
+          fbInStr = !fbInStr
+          continue
+        }
+        if (fbInStr) continue
+        if (fbc === '{') fbDepth++
+        else if (fbc === '}') {
+          fbDepth--
+          if (fbDepth === 0) {
+            fbEnd = fbi
+            break
+          }
+        }
+      }
+      if (fbEnd !== -1) jsonString = jsonString.substring(fbIdx, fbEnd + 1)
+      else jsonString = jsonString.substring(fbIdx)
+    }
+    jsonString = jsonString.replace(/,(\s*[}\]])/g, '$1')
+    jsonString = jsonString.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
+    var ciRepaired = []
+    var ciInStr = false
+    var ciEsc = false
+    for (var cir = 0; cir < jsonString.length; cir++) {
+      var cich = jsonString.charAt(cir)
+      if (ciEsc) {
+        ciRepaired.push(cich)
+        ciEsc = false
+        continue
+      }
+      if (cich === '\\' && ciInStr) {
+        ciRepaired.push(cich)
+        ciEsc = true
+        continue
+      }
+      if (cich === '"') {
+        ciInStr = !ciInStr
+        ciRepaired.push(cich)
+        continue
+      }
+      if (ciInStr) {
+        if (cich === '\n') {
+          ciRepaired.push('\\n')
+          continue
+        }
+        if (cich === '\r') {
+          ciRepaired.push('\\r')
+          continue
+        }
+        if (cich === '\t') {
+          ciRepaired.push('\\t')
+          continue
+        }
+        if (cich.charCodeAt(0) < 32) {
+          ciRepaired.push(' ')
+          continue
+        }
+        ciRepaired.push(cich)
+        continue
+      }
+      if (cich === '/' && cir + 1 < jsonString.length) {
+        var cinc = jsonString.charAt(cir + 1)
+        if (cinc === '/') {
+          while (cir < jsonString.length && jsonString.charAt(cir) !== '\n') cir++
+          continue
+        }
+        if (cinc === '*') {
+          cir += 2
+          while (
+            cir < jsonString.length - 1 &&
+            !(jsonString.charAt(cir) === '*' && jsonString.charAt(cir + 1) === '/')
+          )
+            cir++
+          cir++
+          continue
+        }
+      }
+      ciRepaired.push(cich)
+    }
+    jsonString = ciRepaired.join('')
 
-    let parsed
+    var parsed
     try {
       parsed = JSON.parse(jsonString)
     } catch (err) {
-      return e.json(500, {
-        error: 'Não foi possível interpretar a resposta da IA. Tente novamente.',
-      })
+      try {
+        parsed = JSON.parse(jsonString.replace(/,(\s*[}\]])/g, '$1'))
+      } catch (err2) {
+        return e.json(500, {
+          error: 'Não foi possível interpretar a resposta da IA. Tente novamente.',
+        })
+      }
     }
 
     const resposta = String(parsed.resposta || '').trim()
