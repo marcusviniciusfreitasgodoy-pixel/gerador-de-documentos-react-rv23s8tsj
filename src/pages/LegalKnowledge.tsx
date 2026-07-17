@@ -122,6 +122,35 @@ export default function LegalKnowledgePage() {
   useEffect(() => {
     loadData()
   }, [loadData])
+  // Exporta a base COMPLETA. Busca do servidor de novo em vez de usar o `items` da tela:
+  // se um dia essa lista passar a ser filtrada, o backup sairia pela metade em silencio.
+  const [exportBusy, setExportBusy] = useState(false)
+  const exportarJson = async () => {
+    setExportBusy(true)
+    try {
+      const todos = await getLegalKnowledge()
+      const payload = {
+        exportado_em: new Date().toISOString(),
+        total: todos.length,
+        registros: todos,
+      }
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {
+        type: 'application/json',
+      })
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `legal_knowledge_${new Date().toISOString().slice(0, 10)}.json`
+      a.click()
+      URL.revokeObjectURL(url)
+      toast.success(`${todos.length} registros exportados.`)
+    } catch (err) {
+      toast.error(getErrorMessage(err))
+    } finally {
+      setExportBusy(false)
+    }
+  }
+
   useRealtime('legal_knowledge', () => {
     loadData()
   })
@@ -316,6 +345,14 @@ export default function LegalKnowledgePage() {
           </div>
           {isAdmin && (
             <div className="flex items-center gap-2 shrink-0">
+              <Button size="sm" variant="outline" onClick={exportarJson} disabled={exportBusy}>
+                {exportBusy ? (
+                  <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                ) : (
+                  <Download className="mr-1 h-4 w-4" />
+                )}
+                Exportar
+              </Button>
               {/* Importar de documento */}
               <Dialog
                 open={importOpen}
