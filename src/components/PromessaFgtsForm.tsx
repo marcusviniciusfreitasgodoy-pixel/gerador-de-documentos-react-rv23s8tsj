@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useForm, useFieldArray, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -61,7 +61,7 @@ import { buildPromessaFgtsTemplateData } from '@/lib/promessaFgtsTemplate'
 import { generatePromessaFgtsDocx, getPromessaFgtsText } from '@/lib/promessaFgtsDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
 
 function sugerirPapel(regime?: string): string {
   if (regime === 'Comunhão universal')
@@ -78,6 +78,10 @@ export function PromessaFgtsForm() {
   const [isValidating, setIsValidating] = useState(false)
   const [brokerLoaded, setBrokerLoaded] = useState(false)
   const [hasBroker, setHasBroker] = useState(false)
+  // Fase 4: tela de sucesso (guarda o nome do arquivo baixado).
+  const [gerado, setGerado] = useState<string | null>(null)
+  // Re-aplica o negócio carregado no "Gerar outro deste negócio".
+  const reaplicarNegocioRef = useRef<(() => void) | null>(null)
   const navigate = useNavigate()
 
   const form = useForm<PromessaFgtsValues>({
@@ -201,7 +205,7 @@ export function PromessaFgtsForm() {
     try {
       await generatePromessaFgtsDocx(buildPromessaFgtsTemplateData(data))
       toast.success('Documento gerado com sucesso!')
-      form.reset()
+      setGerado('promessa-de-compra-e-venda-fgts.docx')
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -227,6 +231,23 @@ export function PromessaFgtsForm() {
     }
   }
 
+  const handleGerarOutro = () => {
+    form.reset(promessaFgtsEmptyData)
+    reaplicarNegocioRef.current?.()
+    setGerado(null)
+  }
+
+  if (gerado) {
+    return (
+      <DocumentoGerado
+        nomeArquivo={gerado}
+        onValidar={onValidate}
+        onGerarOutro={handleGerarOutro}
+        validando={isValidating}
+      />
+    )
+  }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -236,6 +257,9 @@ export function PromessaFgtsForm() {
           replaceVendedores={replaceVendedores}
           replaceCompradores={replaceCompradores}
           replaceAnuentes={replaceAnuentes}
+          onNegocioAplicado={(fn) => {
+            reaplicarNegocioRef.current = fn
+          }}
         />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
