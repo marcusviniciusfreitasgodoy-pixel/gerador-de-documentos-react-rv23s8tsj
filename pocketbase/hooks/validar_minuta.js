@@ -104,61 +104,122 @@ routerAdd(
     var userMessage =
       'TIPO_DOCUMENTO: ' + documentType + '\n\nBASE:\n' + baseStr + '\n\nMINUTA:\n' + documentText
 
-    var aiResult
+    var MAX_ATTEMPTS = 3
     var rawContent = ''
-    try {
-      aiResult = $ai.chat({
-        model: 'fast',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userMessage },
-        ],
-      })
-      if (!aiResult || !aiResult.choices || !aiResult.choices[0]) {
-        createAuditLog(
-          'fail',
-          null,
-          '',
-          'Resposta da IA em formato inesperado',
-          'DATA_PROCESSING_ERROR',
-        )
-        return e.json(500, {
-          error: 'Erro de Processamento de Dados',
-          detail: 'Resposta da IA em formato inesperado.',
-          code: 'DATA_PROCESSING_ERROR',
+    var lastFailureStatus = 500
+    var lastFailureBody = {
+      error: 'Erro inesperado ao processar a análise.',
+      code: 'UNEXPECTED_ERROR',
+    }
+    var lastFailureErrorMessage = 'Erro inesperado'
+    var lastFailureErrorCode = 'UNEXPECTED_ERROR'
+    var lastFailureRawResponse = ''
+    var success = false
+
+    for (var attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      var aiResult = null
+      try {
+        $app.logger().info('validar_minuta: AI attempt ' + attempt + '/' + MAX_ATTEMPTS)
+        aiResult = $ai.chat({
+          model: 'fast',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage },
+          ],
         })
+
+        if (!aiResult || !aiResult.choices || !aiResult.choices[0]) {
+          lastFailureStatus = 500
+          lastFailureBody = {
+            error: 'Erro de Processamento de Dados',
+            detail: 'Resposta da IA em formato inesperado.',
+            code: 'DATA_PROCESSING_ERROR',
+          }
+          lastFailureErrorMessage = 'Resposta da IA em formato inesperado'
+          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
+          lastFailureRawResponse = ''
+          $app
+            .logger()
+            .error(
+              'validar_minuta: AI attempt ' + attempt + ' returned malformed response',
+              'error',
+              'Missing aiResult.choices[0]',
+            )
+          continue
+        }
+
+        rawContent = aiResult.choices[0].message.content || ''
+
+        if (!rawContent.trim()) {
+          lastFailureStatus = 500
+          lastFailureBody = {
+            error: 'A IA retornou uma resposta vazia. Tente novamente.',
+            detail: 'Empty AI response',
+            code: 'DATA_PROCESSING_ERROR',
+          }
+          lastFailureErrorMessage = 'Resposta da IA vazia'
+          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
+          lastFailureRawResponse = rawContent
+          $app.logger().error('validar_minuta: AI attempt ' + attempt + ' returned empty content')
+          continue
+        }
+
+        success = true
+        $app
+          .logger()
+          .info(
+            'validar_minuta: AI attempt ' +
+              attempt +
+              ' succeeded, content length: ' +
+              rawContent.length,
+          )
+        break
+      } catch (err) {
+        $app
+          .logger()
+          .error('validar_minuta: AI attempt ' + attempt + ' failed', 'error', String(err))
+
+        if (err instanceof SkipAiConfigError) {
+          createAuditLog('fail', null, '', 'Serviço de IA indisponível', 'AI_CONFIG_ERROR')
+          return e.json(503, {
+            error: 'Serviço de IA temporariamente indisponível.',
+            code: 'AI_CONFIG_ERROR',
+          })
+        }
+
+        if (err instanceof SkipAiError) {
+          lastFailureStatus = 502
+          lastFailureBody = {
+            error: 'Falha na comunicação com o serviço de IA. Tente novamente.',
+            code: 'AI_SERVICE_ERROR',
+          }
+          lastFailureErrorMessage = 'Falha na comunicação com IA'
+          lastFailureErrorCode = 'AI_SERVICE_ERROR'
+          lastFailureRawResponse = ''
+          continue
+        }
+
+        lastFailureStatus = 500
+        lastFailureBody = {
+          error: 'Erro inesperado ao processar a análise.',
+          code: 'UNEXPECTED_ERROR',
+        }
+        lastFailureErrorMessage = 'Erro inesperado: ' + String(err)
+        lastFailureErrorCode = 'UNEXPECTED_ERROR'
+        lastFailureRawResponse = ''
+        continue
       }
-      rawContent = aiResult.choices[0].message.content || ''
-    } catch (err) {
-      $app.logger().error('validar_minuta: AI call failed', 'error', String(err))
-      if (err instanceof SkipAiConfigError) {
-        createAuditLog('fail', null, '', 'Serviço de IA indisponível', 'AI_CONFIG_ERROR')
-        return e.json(503, {
-          error: 'Serviço de IA temporariamente indisponível.',
-          code: 'AI_CONFIG_ERROR',
-        })
-      }
-      if (err instanceof SkipAiError) {
-        createAuditLog('fail', null, '', 'Falha na comunicação com IA', 'AI_SERVICE_ERROR')
-        return e.json(502, {
-          error: 'Falha na comunicação com o serviço de IA. Tente novamente.',
-          code: 'AI_SERVICE_ERROR',
-        })
-      }
-      createAuditLog('fail', null, '', 'Erro inesperado', 'UNEXPECTED_ERROR')
-      return e.json(500, {
-        error: 'Erro inesperado ao processar a análise.',
-        code: 'UNEXPECTED_ERROR',
-      })
     }
 
-    if (!rawContent.trim()) {
-      createAuditLog('fail', null, rawContent, 'Resposta da IA vazia', 'DATA_PROCESSING_ERROR')
-      return e.json(500, {
-        error: 'A IA retornou uma resposta vazia. Tente novamente.',
-        detail: 'Empty AI response',
-        code: 'DATA_PROCESSING_ERROR',
-      })
+    if (!success) {
+      createAuditLog(
+        'fail',
+        null,
+        lastFailureRawResponse,
+        lastFailureErrorMessage,
+        lastFailureErrorCode,
+      )
+      return e.json(lastFailureStatus, lastFailureBody)
     }
 
     // ── Robust JSON extraction & sanitization ──────────────────────────
