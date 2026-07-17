@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   Lightbulb,
   ShieldAlert,
+  Info,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -222,6 +223,24 @@ export default function ValidarMinutaPage() {
           </Button>
         </CardContent>
       </Card>
+
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertTitle>Esta é uma análise de apoio, não um parecer jurídico.</AlertTitle>
+        <AlertDescription className="space-y-2">
+          <p>
+            A ferramenta compara sua minuta com uma base de cláusulas de referência e aponta
+            possíveis pontos de atenção. Ela não substitui a revisão de um profissional habilitado.
+          </p>
+          <p>
+            Confira no seu documento cada item marcado como <strong>Faltando</strong> ou{' '}
+            <strong>Fraco</strong>, pois a análise pode sinalizar como ausente uma cláusula que já
+            está no texto. Para uma leitura complementar, você pode validar a mesma minuta mais de
+            uma vez.
+          </p>
+          <p>A decisão final e a responsabilidade pelo documento são sempre suas.</p>
+        </AlertDescription>
+      </Alert>
 
       {error && errorConfig && ErrorIcon && (
         <Alert variant="destructive">

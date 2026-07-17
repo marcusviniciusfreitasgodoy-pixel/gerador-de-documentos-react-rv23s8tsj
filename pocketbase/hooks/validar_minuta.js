@@ -104,147 +104,20 @@ routerAdd(
     var userMessage =
       'TIPO_DOCUMENTO: ' + documentType + '\n\nBASE:\n' + baseStr + '\n\nMINUTA:\n' + documentText
 
-    var MAX_ATTEMPTS = 3
-    var rawContent = ''
-    var lastFailureStatus = 500
-    var lastFailureBody = {
-      error: 'Erro inesperado ao processar a análise.',
-      code: 'UNEXPECTED_ERROR',
-    }
-    var lastFailureErrorMessage = 'Erro inesperado'
-    var lastFailureErrorCode = 'UNEXPECTED_ERROR'
-    var lastFailureRawResponse = ''
-    var success = false
-
-    for (var attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
-      var aiResult = null
-      try {
-        $app.logger().info('validar_minuta: AI attempt ' + attempt + '/' + MAX_ATTEMPTS)
-        aiResult = $ai.chat({
-          model: 'fast',
-          messages: [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: userMessage },
-          ],
-        })
-
-        if (!aiResult || !aiResult.choices || !aiResult.choices[0]) {
-          lastFailureStatus = 500
-          lastFailureBody = {
-            error: 'Erro de Processamento de Dados',
-            detail: 'Resposta da IA em formato inesperado.',
-            code: 'DATA_PROCESSING_ERROR',
-          }
-          lastFailureErrorMessage = 'Resposta da IA em formato inesperado'
-          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
-          lastFailureRawResponse = ''
-          $app
-            .logger()
-            .error(
-              'validar_minuta: AI attempt ' + attempt + ' returned malformed response',
-              'error',
-              'Missing aiResult.choices[0]',
-            )
-          continue
-        }
-
-        rawContent = aiResult.choices[0].message.content || ''
-
-        if (!rawContent.trim()) {
-          lastFailureStatus = 500
-          lastFailureBody = {
-            error: 'A IA retornou uma resposta vazia. Tente novamente.',
-            detail: 'Empty AI response',
-            code: 'DATA_PROCESSING_ERROR',
-          }
-          lastFailureErrorMessage = 'Resposta da IA vazia'
-          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
-          lastFailureRawResponse = rawContent
-          $app.logger().error('validar_minuta: AI attempt ' + attempt + ' returned empty content')
-          continue
-        }
-
-        success = true
-        $app
-          .logger()
-          .info(
-            'validar_minuta: AI attempt ' +
-              attempt +
-              ' succeeded, content length: ' +
-              rawContent.length,
-          )
-        break
-      } catch (err) {
-        $app
-          .logger()
-          .error('validar_minuta: AI attempt ' + attempt + ' failed', 'error', String(err))
-
-        if (err instanceof SkipAiConfigError) {
-          createAuditLog('fail', null, '', 'Serviço de IA indisponível', 'AI_CONFIG_ERROR')
-          return e.json(503, {
-            error: 'Serviço de IA temporariamente indisponível.',
-            code: 'AI_CONFIG_ERROR',
-          })
-        }
-
-        if (err instanceof SkipAiError) {
-          lastFailureStatus = 502
-          lastFailureBody = {
-            error: 'Falha na comunicação com o serviço de IA. Tente novamente.',
-            code: 'AI_SERVICE_ERROR',
-          }
-          lastFailureErrorMessage = 'Falha na comunicação com IA'
-          lastFailureErrorCode = 'AI_SERVICE_ERROR'
-          lastFailureRawResponse = ''
-          continue
-        }
-
-        lastFailureStatus = 500
-        lastFailureBody = {
-          error: 'Erro inesperado ao processar a análise.',
-          code: 'UNEXPECTED_ERROR',
-        }
-        lastFailureErrorMessage = 'Erro inesperado: ' + String(err)
-        lastFailureErrorCode = 'UNEXPECTED_ERROR'
-        lastFailureRawResponse = ''
-        continue
-      }
-    }
-
-    if (!success) {
-      createAuditLog(
-        'fail',
-        null,
-        lastFailureRawResponse,
-        lastFailureErrorMessage,
-        lastFailureErrorCode,
-      )
-      return e.json(lastFailureStatus, lastFailureBody)
-    }
-
-    // ── Robust JSON extraction & sanitization ──────────────────────────
-    // The AI may wrap JSON in markdown fences, include BOM/zero-width chars,
-    // prepend commentary, or leave trailing commas. We try progressively
-    // more aggressive strategies until one succeeds.
+    // ── JSON sanitization helpers ──────────────────────────────────────
 
     function sanitizeJsonString(str) {
-      // Remove BOM and zero-width characters
       var s = str.replace(/^\uFEFF/, '').replace(/[\u200B-\u200D\uFEFF]/g, '')
-      // Remove control characters (except tab, newline, carriage return)
       s = s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
       return s
     }
 
     function stripMarkdownFences(str) {
-      // Match ```json ... ``` or ``` ... ``` (including nested/unclosed)
       var mdMatch = str.match(/```(?:json)?\s*([\s\S]*?)```/i)
       if (mdMatch) return mdMatch[1].trim()
-      // Handle unclosed fence: ```json\n{...}  (no closing ```)
       var unclosedMatch = str.match(/```(?:json)?\s*([\s\S]+)/i)
       if (unclosedMatch) {
         var content = unclosedMatch[1]
-        // If there's a closing fence further in, the first regex would have caught it.
-        // Only strip if this looks like it starts right before JSON
         var braceIdx = content.indexOf('{')
         if (braceIdx !== -1 && braceIdx < 5) {
           return content.trim()
@@ -254,7 +127,6 @@ routerAdd(
     }
 
     function extractJsonObject(str) {
-      // Find the outermost { ... } by tracking brace depth (respects strings)
       var start = str.indexOf('{')
       if (start === -1) return null
       var depth = 0
@@ -283,17 +155,14 @@ routerAdd(
           }
         }
       }
-      // No matching close brace — return from first { to end
       return str.substring(start)
     }
 
     function fixTrailingCommas(str) {
-      // Remove trailing commas before } or ]
       return str.replace(/,(\s*[}\]])/g, '$1')
     }
 
     function fixUnquotedKeys(str) {
-      // Quote unquoted object keys: { key: "value" } → { "key": "value" }
       return str.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
     }
 
@@ -380,61 +249,193 @@ routerAdd(
       }
     }
 
-    var cleaned = sanitizeJsonString(rawContent)
-    cleaned = stripMarkdownFences(cleaned)
+    function parseAiResponse(rawContent) {
+      var cleaned = sanitizeJsonString(rawContent)
+      cleaned = stripMarkdownFences(cleaned)
 
-    var parsed = attemptParse(cleaned)
+      var parsed = attemptParse(cleaned)
 
-    // If direct parse failed, try extracting the JSON object by brace depth
-    if (!parsed) {
-      var extracted = extractJsonObject(cleaned)
-      if (extracted) {
-        var extractedClean = sanitizeJsonString(extracted)
-        parsed = attemptParse(extractedClean)
+      if (!parsed) {
+        var extracted = extractJsonObject(cleaned)
+        if (extracted) {
+          parsed = attemptParse(sanitizeJsonString(extracted))
+        }
+      }
+
+      if (!parsed) {
+        var rawExtracted = extractJsonObject(sanitizeJsonString(rawContent))
+        if (rawExtracted) {
+          parsed = attemptParse(sanitizeJsonString(rawExtracted))
+        }
+      }
+
+      if (!parsed) {
+        var rawRepaired = repairJsonString(sanitizeJsonString(stripMarkdownFences(rawContent)))
+        var repairedExtracted = extractJsonObject(rawRepaired)
+        if (repairedExtracted) {
+          parsed = attemptParse(repairedExtracted)
+        } else {
+          parsed = attemptParse(rawRepaired)
+        }
+      }
+
+      return parsed
+    }
+
+    // ── Integrated retry loop: AI call + JSON parsing ──────────────────
+
+    var MAX_ATTEMPTS = 3
+    var parsed = null
+    var rawContent = ''
+    var lastFailureStatus = 500
+    var lastFailureBody = {
+      error: 'Erro inesperado ao processar a análise.',
+      code: 'UNEXPECTED_ERROR',
+    }
+    var lastFailureErrorMessage = 'Erro inesperado'
+    var lastFailureErrorCode = 'UNEXPECTED_ERROR'
+    var lastFailureRawResponse = ''
+    var success = false
+
+    for (var attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      var aiResult = null
+      try {
+        $app.logger().info('validar_minuta: AI attempt ' + attempt + '/' + MAX_ATTEMPTS)
+        aiResult = $ai.chat({
+          model: 'fast',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userMessage },
+          ],
+        })
+
+        if (!aiResult || !aiResult.choices || !aiResult.choices[0]) {
+          lastFailureStatus = 500
+          lastFailureBody = {
+            error: 'Erro de Processamento de Dados',
+            detail: 'Resposta da IA em formato inesperado.',
+            code: 'DATA_PROCESSING_ERROR',
+          }
+          lastFailureErrorMessage = 'Resposta da IA em formato inesperado'
+          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
+          lastFailureRawResponse = ''
+          $app
+            .logger()
+            .error(
+              'validar_minuta: AI attempt ' + attempt + ' returned malformed response',
+              'error',
+              'Missing aiResult.choices[0]',
+            )
+          continue
+        }
+
+        rawContent = aiResult.choices[0].message.content || ''
+
+        if (!rawContent.trim()) {
+          lastFailureStatus = 500
+          lastFailureBody = {
+            error: 'A IA retornou uma resposta vazia. Tente novamente.',
+            detail: 'Empty AI response',
+            code: 'DATA_PROCESSING_ERROR',
+          }
+          lastFailureErrorMessage = 'Resposta da IA vazia'
+          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
+          lastFailureRawResponse = rawContent
+          $app.logger().error('validar_minuta: AI attempt ' + attempt + ' returned empty content')
+          continue
+        }
+
+        $app
+          .logger()
+          .info(
+            'validar_minuta: AI attempt ' +
+              attempt +
+              ' received content, length: ' +
+              rawContent.length +
+              ', attempting parse',
+          )
+
+        var parseResult = parseAiResponse(rawContent)
+
+        if (!parseResult) {
+          lastFailureStatus = 500
+          lastFailureBody = {
+            error:
+              'Ocorreu um erro ao processar a resposta da análise. Por favor, tente gerar a validação novamente.',
+            detail: 'JSON parsing failed after exhaustive sanitization',
+            code: 'DATA_PROCESSING_ERROR',
+          }
+          lastFailureErrorMessage = 'JSON parsing failed'
+          lastFailureErrorCode = 'DATA_PROCESSING_ERROR'
+          lastFailureRawResponse = rawContent
+          $app
+            .logger()
+            .error(
+              'validar_minuta: AI attempt ' + attempt + ' JSON parse failed',
+              'error',
+              'All parse strategies exhausted',
+              'rawContentPreview',
+              rawContent.substring(0, 500),
+            )
+          continue
+        }
+
+        parsed = parseResult
+        success = true
+        $app
+          .logger()
+          .info('validar_minuta: AI attempt ' + attempt + ' succeeded, content parsed successfully')
+        break
+      } catch (err) {
+        $app
+          .logger()
+          .error('validar_minuta: AI attempt ' + attempt + ' failed', 'error', String(err))
+
+        if (err instanceof SkipAiConfigError) {
+          createAuditLog('fail', null, '', 'Serviço de IA indisponível', 'AI_CONFIG_ERROR')
+          return e.json(503, {
+            error: 'Serviço de IA temporariamente indisponível.',
+            code: 'AI_CONFIG_ERROR',
+          })
+        }
+
+        if (err instanceof SkipAiError) {
+          lastFailureStatus = 502
+          lastFailureBody = {
+            error: 'Falha na comunicação com o serviço de IA. Tente novamente.',
+            code: 'AI_SERVICE_ERROR',
+          }
+          lastFailureErrorMessage = 'Falha na comunicação com IA'
+          lastFailureErrorCode = 'AI_SERVICE_ERROR'
+          lastFailureRawResponse = ''
+          continue
+        }
+
+        lastFailureStatus = 500
+        lastFailureBody = {
+          error: 'Erro inesperado ao processar a análise.',
+          code: 'UNEXPECTED_ERROR',
+        }
+        lastFailureErrorMessage = 'Erro inesperado: ' + String(err)
+        lastFailureErrorCode = 'UNEXPECTED_ERROR'
+        lastFailureRawResponse = ''
+        continue
       }
     }
 
-    // Last resort: try the raw content directly with brace extraction
-    if (!parsed) {
-      var rawExtracted = extractJsonObject(sanitizeJsonString(rawContent))
-      if (rawExtracted) {
-        parsed = attemptParse(sanitizeJsonString(rawExtracted))
-      }
-    }
-
-    // Ultimate fallback: repair unescaped control chars, then re-extract and parse
-    if (!parsed) {
-      var rawRepaired = repairJsonString(sanitizeJsonString(stripMarkdownFences(rawContent)))
-      var repairedExtracted = extractJsonObject(rawRepaired)
-      if (repairedExtracted) {
-        parsed = attemptParse(repairedExtracted)
-      } else {
-        parsed = attemptParse(rawRepaired)
-      }
-    }
-
-    if (!parsed) {
-      $app
-        .logger()
-        .error(
-          'validar_minuta: JSON parse failed after all sanitization attempts',
-          'error',
-          'All parse strategies exhausted',
-          'rawContentLength',
-          String(rawContent.length),
-          'rawContentPreview',
-          rawContent.substring(0, 500),
-        )
-      createAuditLog('error', null, rawContent, 'JSON parsing failed', 'DATA_PROCESSING_ERROR')
-      return e.json(500, {
-        error:
-          'Ocorreu um erro ao processar a resposta da análise. Por favor, tente gerar a validação novamente.',
-        detail: 'JSON parsing failed after exhaustive sanitization',
-        code: 'DATA_PROCESSING_ERROR',
-      })
+    if (!success) {
+      createAuditLog(
+        'fail',
+        null,
+        lastFailureRawResponse,
+        lastFailureErrorMessage,
+        lastFailureErrorCode,
+      )
+      return e.json(lastFailureStatus, lastFailureBody)
     }
 
     // ── Normalize & validate the parsed result ─────────────────────────
+
     if (!parsed || typeof parsed !== 'object') parsed = {}
     if (typeof parsed.resumo !== 'string') parsed.resumo = ''
     if (!Array.isArray(parsed.conformidade)) parsed.conformidade = []
