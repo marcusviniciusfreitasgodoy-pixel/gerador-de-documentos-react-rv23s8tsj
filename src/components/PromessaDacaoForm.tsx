@@ -61,7 +61,7 @@ import { buildPromessaDacaoTemplateData } from '@/lib/promessaDacaoTemplate'
 import { generatePromessaDacaoDocx, getPromessaDacaoText } from '@/lib/promessaDacaoDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 
 function sugerirPapel(regime?: string): string {
   if (regime === 'Comunhão universal')
@@ -89,6 +89,9 @@ export function PromessaDacaoForm() {
     defaultValues: promessaDacaoEmptyData,
   })
   const { control, setValue, getValues } = form
+
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'dacao')
 
   // Foro acompanha a cidade do imóvel — e para de acompanhar assim que o corretor digita
   // nele. `dirtyFields` é o sinal: setValue sem shouldDirty não suja o campo, então o
@@ -222,6 +225,7 @@ export function PromessaDacaoForm() {
       await generatePromessaDacaoDocx(buildPromessaDacaoTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado('promessa-de-compra-e-venda-dacao.docx')
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -251,6 +255,7 @@ export function PromessaDacaoForm() {
     form.reset(promessaDacaoEmptyData)
     reaplicarNegocioRef.current?.()
     aplicarBroker()
+    limparRascunho()
     setGerado(null)
   }
 
