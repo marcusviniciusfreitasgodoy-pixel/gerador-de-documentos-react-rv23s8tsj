@@ -90,7 +90,9 @@ export function buildPromessaFinanciadaTemplateData(
   const valorDivida = parseCurrency(data.valor_divida || '0')
   const valorFgts = parseCurrency(data.valor_fgts || '0')
 
-  const comissaoPct = parseFloat(data.comissao_percentual || '0') || 0
+  // A2: o corretor digita "5,5" e o parseFloat parava na virgula -> 5 (perdia
+  // 0,5% de comissao). Normaliza a virgula decimal BR antes de converter.
+  const comissaoPct = parseFloat(String(data.comissao_percentual || '0').replace(',', '.')) || 0
   const comissaoValor = valorTotal * (comissaoPct / 100)
 
   const docDate = new Date(data.data_documento + 'T00:00:00')
