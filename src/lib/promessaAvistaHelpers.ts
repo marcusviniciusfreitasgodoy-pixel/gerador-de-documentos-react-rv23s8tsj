@@ -27,52 +27,62 @@ const anuenteSchema = partySchema.extend({
 export type PartyValues = z.infer<typeof partySchema>
 export type AnuenteValues = z.infer<typeof anuenteSchema>
 
-export const promessaAvistaSchema = z.object({
-  vendedores: z.array(partySchema).min(1, 'Ao menos um vendedor'),
-  anuentes: z.array(anuenteSchema),
-  compradores: z.array(partySchema).min(1, 'Ao menos um comprador'),
-  imovel_descricao: z.string().min(1, 'Obrigatório'),
-  imovel_endereco: z.string().min(1, 'Obrigatório'),
-  imovel_bairro: z.string().optional(),
-  imovel_cidade: z.string().min(1, 'Obrigatório'),
-  imovel_uf: z.string().min(1, 'Obrigatório'),
-  foro_comarca: z.string().min(1, 'Obrigatório'),
-  imovel_cep: z.string().optional(),
-  imovel_vagas_qtd: z.string().optional(),
-  imovel_vagas_descricao: z.string().optional(),
-  imovel_fracao_ideal: z.string().optional(),
-  imovel_rgi: z.string().optional(),
-  imovel_matricula: z.string().min(1, 'Obrigatório'),
-  imovel_iptu: z.string().optional(),
-  imovel_origem_aquisicao: z.string().optional(),
-  imovel_origem_registro: z.string().optional(),
-  valor_total: z
-    .string()
-    .min(1, 'Obrigatório')
-    .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
-  valor_sinal: z
-    .string()
-    .min(1, 'Obrigatório')
-    .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
-  valor_reforco: z.string().optional(),
-  forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
-  dados_recebimento: z.string().optional(),
-  prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
-  prazo_reforco: z.string().min(1, 'Obrigatório'),
-  data_limite_escritura: z.string().min(1, 'Obrigatório'),
-  comissao_beneficiario: z.string().optional(),
-  comissao_documento: z.string().optional(),
-  comissao_creci: z.string().optional(),
-  comissao_pix: z.string().optional(),
-  comissao_percentual: z.string().min(1, 'Obrigatório'),
-  comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
-  tipo_arras: z.enum(['confirmatoria', 'penitencial']),
-  data_documento: z.string().min(1, 'Obrigatório'),
-  testemunha1_nome: z.string().optional(),
-  testemunha1_cpf: z.string().optional(),
-  testemunha2_nome: z.string().optional(),
-  testemunha2_cpf: z.string().optional(),
-})
+export const promessaAvistaSchema = z
+  .object({
+    vendedores: z.array(partySchema).min(1, 'Ao menos um vendedor'),
+    anuentes: z.array(anuenteSchema),
+    compradores: z.array(partySchema).min(1, 'Ao menos um comprador'),
+    imovel_descricao: z.string().min(1, 'Obrigatório'),
+    imovel_endereco: z.string().min(1, 'Obrigatório'),
+    imovel_bairro: z.string().optional(),
+    imovel_cidade: z.string().min(1, 'Obrigatório'),
+    imovel_uf: z.string().min(1, 'Obrigatório'),
+    foro_comarca: z.string().min(1, 'Obrigatório'),
+    imovel_cep: z.string().optional(),
+    imovel_vagas_qtd: z.string().optional(),
+    imovel_vagas_descricao: z.string().optional(),
+    imovel_fracao_ideal: z.string().optional(),
+    imovel_rgi: z.string().optional(),
+    imovel_matricula: z.string().min(1, 'Obrigatório'),
+    imovel_iptu: z.string().optional(),
+    imovel_origem_aquisicao: z.string().optional(),
+    imovel_origem_registro: z.string().optional(),
+    valor_total: z
+      .string()
+      .min(1, 'Obrigatório')
+      .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
+    valor_sinal: z
+      .string()
+      .min(1, 'Obrigatório')
+      .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
+    valor_reforco: z.string().optional(),
+    forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
+    dados_recebimento: z.string().optional(),
+    prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
+    prazo_reforco: z.string().min(1, 'Obrigatório'),
+    data_limite_escritura: z.string().min(1, 'Obrigatório'),
+    comissao_beneficiario: z.string().optional(),
+    comissao_documento: z.string().optional(),
+    comissao_creci: z.string().optional(),
+    comissao_pix: z.string().optional(),
+    comissao_percentual: z.string().min(1, 'Obrigatório'),
+    comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
+    tipo_arras: z.enum(['confirmatoria', 'penitencial']),
+    data_documento: z.string().min(1, 'Obrigatório'),
+    testemunha1_nome: z.string().optional(),
+    testemunha1_cpf: z.string().optional(),
+    testemunha2_nome: z.string().optional(),
+    testemunha2_cpf: z.string().optional(),
+  })
+  // C1: sem esta trava, sinal+reforco MAIORES que o total faziam o
+  // buildPromessaAvistaTemplateData cair no Math.max(0, ...) e imprimir
+  // "saldo R$ 0,00" no contrato, silenciosamente. Espelha a conta do template.
+  .refine(
+    (d) =>
+      parseCurrency(d.valor_sinal || '0') + parseCurrency(d.valor_reforco || '0') <=
+      parseCurrency(d.valor_total || '0'),
+    { message: 'Sinal + reforço não podem exceder o valor total', path: ['valor_sinal'] },
+  )
 
 export type PromessaAvistaValues = z.infer<typeof promessaAvistaSchema>
 
