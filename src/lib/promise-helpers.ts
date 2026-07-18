@@ -305,7 +305,9 @@ export function buildPromiseTemplateData(
     valor_sinal: fmt(sinal),
     valor_saldo: fmt(saldo),
     valor_comissao: fmt(comissao),
-    comissao_percentual: data.comissao_percentual,
+    // Bonus Onda 1: decimal com virgula no documento (o input type=number
+    // guarda "5.5" com ponto e o contrato saia "5.5%").
+    comissao_percentual: String(data.comissao_percentual || '').replace('.', ','),
     prazo_certidoes_dias: data.prazo_certidoes_dias,
     tipo_arras: tipoArras,
     saldo_pagamento: data.saldo_pagamento,
