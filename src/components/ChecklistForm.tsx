@@ -6,7 +6,7 @@ import { Loader2, Download, Wand2, FileCheck2, AlertCircle, FileSearch } from 'l
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarChecklist } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -76,6 +76,9 @@ export function ChecklistForm() {
     defaultValues: emptyData,
   })
 
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'checklist')
+
   useEffect(() => {
     let cancelled = false
     getBrokerProfile()
@@ -113,6 +116,7 @@ export function ChecklistForm() {
       await generateChecklistDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -141,6 +145,7 @@ export function ChecklistForm() {
   const handleGerarOutro = () => {
     form.reset()
     reaplicarNegocioRef.current?.()
+    limparRascunho()
     setGerado(false)
   }
 
