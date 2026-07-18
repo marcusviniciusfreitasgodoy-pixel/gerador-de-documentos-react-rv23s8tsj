@@ -245,7 +245,8 @@ export function buildPromiseTemplateData(
   const venda = parseCurrency(data.valor_venda)
   const sinal = parseCurrency(data.valor_sinal)
   const saldo = venda - sinal
-  const comissaoPct = parseFloat(data.comissao_percentual) || 0
+  // A2: "5,5" parava na virgula no parseFloat -> 5. Normaliza a virgula BR.
+  const comissaoPct = parseFloat(String(data.comissao_percentual || '0').replace(',', '.')) || 0
   const comissao = venda * (comissaoPct / 100)
   const tipoArras = data.tipo_arras === 'confirmatoria' ? 'CONFIRMATÓRIA' : 'PENITENCIAL'
 
