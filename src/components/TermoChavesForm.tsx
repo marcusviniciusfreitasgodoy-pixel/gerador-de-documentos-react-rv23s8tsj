@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarChaves } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -97,6 +97,9 @@ export function TermoChavesForm() {
     defaultValues: emptyData,
   })
 
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'chaves')
+
   useEffect(() => {
     let cancelled = false
     getBrokerProfile()
@@ -140,6 +143,7 @@ export function TermoChavesForm() {
       await generateTermoChavesDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -168,6 +172,7 @@ export function TermoChavesForm() {
   const handleGerarOutro = () => {
     form.reset()
     reaplicarNegocioRef.current?.()
+    limparRascunho()
     setGerado(false)
   }
 
