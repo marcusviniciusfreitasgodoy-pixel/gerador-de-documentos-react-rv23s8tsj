@@ -92,6 +92,15 @@ export function IntermediationForm() {
     if (!foroEditadoNaMao) form.setValue('foro_comarca', imovelCidade || '')
   }, [imovelCidade, foroEditadoNaMao, form])
 
+  // C3: guarda a taxa do corretor para RE-APLICAR depois de cada reset — o
+  // form.reset() zerava o percentual carregado do perfil e ele nunca voltava.
+  const brokerRateRef = useRef<number | null>(null)
+  const aplicarBroker = () => {
+    if (brokerRateRef.current) {
+      form.setValue('comissao_percentual', String(brokerRateRef.current))
+    }
+  }
+
   useEffect(() => {
     let cancelled = false
     const loadProfile = async () => {
@@ -100,7 +109,8 @@ export function IntermediationForm() {
         if (cancelled) return
         setBrokerProfile(profile)
         if (profile?.commission_rate) {
-          form.setValue('comissao_percentual', String(profile.commission_rate))
+          brokerRateRef.current = profile.commission_rate
+          aplicarBroker()
         }
       } catch {
         if (!cancelled) setBrokerProfile(null)
@@ -174,6 +184,7 @@ export function IntermediationForm() {
   const handleGerarOutro = () => {
     form.reset()
     reaplicarNegocioRef.current?.()
+    aplicarBroker()
     setGerado(false)
   }
 
@@ -554,7 +565,10 @@ export function IntermediationForm() {
           variant="ghost"
           size="sm"
           className="text-muted-foreground hover:text-foreground"
-          onClick={() => form.reset(intermediationMockData)}
+          onClick={() => {
+            form.reset(intermediationMockData)
+            aplicarBroker()
+          }}
         >
           <Wand2 className="mr-1.5 h-3.5 w-3.5" />
           Preencher dados de teste
