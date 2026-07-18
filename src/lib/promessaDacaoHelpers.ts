@@ -88,6 +88,20 @@ export const promessaDacaoSchema = z
     message: 'Informe o prazo do reforço',
     path: ['prazo_reforco'],
   })
+  // C1: sem esta trava, entrada+reforco+dacao MAIORES que o total faziam o
+  // template cair no Math.max(0, ...) e imprimir "saldo R$ 0,00" no contrato,
+  // silenciosamente. Espelha a conta do buildPromessaDacaoTemplateData.
+  .refine(
+    (d) =>
+      parseCurrency(d.valor_entrada || '0') +
+        parseCurrency(d.valor_reforco || '0') +
+        parseCurrency(d.valor_dacao || '0') <=
+      parseCurrency(d.valor_total || '0'),
+    {
+      message: 'Entrada + reforço + dação não podem exceder o valor total',
+      path: ['valor_entrada'],
+    },
+  )
 
 export type PromessaDacaoValues = z.infer<typeof promessaDacaoSchema>
 
