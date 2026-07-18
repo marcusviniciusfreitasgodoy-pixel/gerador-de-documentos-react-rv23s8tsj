@@ -82,7 +82,9 @@ export function buildPromessaAvistaTemplateData(
   const valorReforco = parseCurrency(data.valor_reforco || '0')
   const valorSaldo = Math.max(0, valorTotal - valorSinal - valorReforco)
 
-  const comissaoPct = parseFloat(data.comissao_percentual || '0') || 0
+  // A2: o corretor digita "5,5" e o parseFloat parava na virgula -> 5 (perdia
+  // 0,5% de comissao). Normaliza a virgula decimal BR antes de converter.
+  const comissaoPct = parseFloat(String(data.comissao_percentual || '0').replace(',', '.')) || 0
   const comissaoValor = valorTotal * (comissaoPct / 100)
 
   const docDate = new Date(data.data_documento + 'T00:00:00')
