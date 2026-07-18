@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import {
   Select,
@@ -228,4 +228,140 @@ export function DocumentoGerado({
       )}
     </div>
   )
+}
+
+// ── Fase 2b: autosave de rascunho ──────────────────────────────────────
+// Vive neste arquivo (e não num hook .ts próprio) porque o editor do Skip não
+// cria arquivos novos; todos os forms já importam deste módulo. O trabalho do
+// corretor é sagrado: F5 / fechar aba / voltar da validação não pode apagar o
+// formulário inteiro (600+ campos).
+
+// "Vale a pena oferecer recuperação?" — true se há QUALQUER texto preenchido,
+// em qualquer profundidade (campos planos ou dentro dos arrays de partes).
+// Booleanos/números vindos dos defaults não contam como trabalho do usuário.
+function temConteudo(v: unknown): boolean {
+  if (typeof v === 'string') return v.trim() !== ''
+  if (Array.isArray(v)) return v.some(temConteudo)
+  if (v && typeof v === 'object') return Object.values(v).some(temConteudo)
+  return false
+}
+
+/**
+ * Autosalva o formulário em localStorage e, ao voltar, OFERECE recuperar via
+ * toast — nunca restaura sozinho (ressuscitar dado velho sem o usuário pedir é
+ * pior que a tela vazia; o toast é reversível).
+ *
+ * @param form  o UseFormReturn do formulário
+ * @param chave identificador único do documento (vira `localStorage['draft:'+chave]`)
+ * @returns `limparRascunho` — chame no submit bem-sucedido e no "Gerar outro".
+ */
+export function useFormDraft(form: UseFormReturn<any>, chave: string) {
+  const key = 'draft:' + chave
+  const jaOfereceu = useRef(false)
+  // Enquanto o toast "Recuperar?" está na tela, o autosave NÃO grava: o rascunho
+  // existente é sagrado até o corretor decidir. Evita que uma edição feita antes
+  // de decidir (ou uma reidratação) sobrescreva o que ele ainda pode querer.
+  const ofertaPendente = useRef(false)
+
+  // (b) No mount: se há rascunho com conteúdo, oferece recuperar. Roda 1x.
+  useEffect(() => {
+    if (jaOfereceu.current) return
+    jaOfereceu.current = true
+    let raw: string | null = null
+    try {
+      raw = localStorage.getItem(key)
+    } catch {
+      return
+    }
+    if (!raw) return
+    let saved: any
+    try {
+      saved = JSON.parse(raw)
+    } catch {
+      try {
+        localStorage.removeItem(key)
+      } catch {
+        /* modo privado / quota — ignora */
+      }
+      return
+    }
+    if (!temConteudo(saved)) {
+      try {
+        localStorage.removeItem(key)
+      } catch {
+        /* ignora */
+      }
+      return
+    }
+    ofertaPendente.current = true
+    // `saved` fica capturado neste closure — "Recuperar" restaura ele mesmo que
+    // o localStorage seja sobrescrito depois.
+    toast('Recuperar rascunho não salvo?', {
+      description: 'Você tinha um formulário em andamento nesta tela.',
+      duration: Infinity,
+      action: {
+        label: 'Recuperar',
+        onClick: () => {
+          form.reset(saved)
+          ofertaPendente.current = false
+        },
+      },
+      cancel: {
+        label: 'Descartar',
+        onClick: () => {
+          try {
+            localStorage.removeItem(key)
+          } catch {
+            /* ignora */
+          }
+          ofertaPendente.current = false
+        },
+      },
+      onDismiss: () => {
+        ofertaPendente.current = false
+      },
+      onAutoClose: () => {
+        ofertaPendente.current = false
+      },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // (a) Autosave com debounce ~800ms — SÓ em edição real do usuário.
+  // form.watch entrega `type === 'change'` apenas para input do usuário; os
+  // setValue/reset/replace programáticos (carga do corretor, "Carregar negócio",
+  // "Preencher dados de teste") vêm com `type === undefined` e são ignorados —
+  // senão a carga do corretor no F5 sobrescreveria o rascunho bom com um form
+  // quase-vazio. O negócio carregado é capturado junto no 1º toque real.
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout> | undefined
+    const sub = form.watch((_values, info) => {
+      if (info?.type !== 'change') return
+      if (t) clearTimeout(t)
+      t = setTimeout(() => {
+        if (ofertaPendente.current) return
+        try {
+          localStorage.setItem(key, JSON.stringify(form.getValues()))
+        } catch {
+          /* quota cheia / modo privado — nunca derruba o form */
+        }
+      }, 800)
+    })
+    return () => {
+      if (t) clearTimeout(t)
+      sub.unsubscribe()
+    }
+  }, [form, key])
+
+  // (c) Limpeza — o form chama no submit bem-sucedido (rascunho cumpriu o papel)
+  // e no "Gerar outro documento" (novo doc não deve ressuscitar rascunho velho).
+  const limparRascunho = useCallback(() => {
+    try {
+      localStorage.removeItem(key)
+    } catch {
+      /* ignora */
+    }
+  }, [key])
+
+  return { limparRascunho }
 }
