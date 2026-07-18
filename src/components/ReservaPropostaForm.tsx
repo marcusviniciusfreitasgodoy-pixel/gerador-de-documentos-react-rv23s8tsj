@@ -99,6 +99,27 @@ export function ReservaPropostaForm() {
     replace: replaceProprietarios,
   } = useFieldArray({ control, name: 'proprietarios' })
 
+  // C3: guarda o perfil do corretor para RE-APLICAR depois de cada reset. Antes,
+  // o broker era escrito uma unica vez no useEffect de carga e qualquer
+  // form.reset() o apagava para sempre — o contrato saia com a clausula de
+  // corretagem em branco ("devida a , inscrito(a) no , CRECI ,").
+  const brokerRef = useRef<{
+    nome: string
+    documento: string
+    creci: string
+    pix: string
+    rate?: number
+  } | null>(null)
+  const aplicarBroker = () => {
+    const b = brokerRef.current
+    if (!b) return
+    setValue('comissao_beneficiario', b.nome)
+    setValue('comissao_documento', b.documento)
+    setValue('comissao_creci', b.creci)
+    setValue('comissao_pix', b.pix)
+    if (b.rate) setValue('comissao_percentual', String(b.rate))
+  }
+
   useEffect(() => {
     let cancelled = false
     getBrokerProfile()
@@ -107,10 +128,8 @@ export function ReservaPropostaForm() {
         const display = getBrokerDisplay(profile)
         if (display) {
           setHasBroker(true)
-          setValue('comissao_beneficiario', display.nome)
-          setValue('comissao_documento', display.documento)
-          setValue('comissao_creci', display.creci)
-          setValue('comissao_pix', display.pix)
+          brokerRef.current = { ...display }
+          aplicarBroker()
         }
       })
       .catch(() => {})
@@ -189,6 +208,7 @@ export function ReservaPropostaForm() {
   const handleGerarOutro = () => {
     form.reset()
     reaplicarNegocioRef.current?.()
+    aplicarBroker()
     setGerado(false)
   }
 
@@ -957,7 +977,10 @@ export function ReservaPropostaForm() {
           variant="ghost"
           size="sm"
           className="text-muted-foreground hover:text-foreground"
-          onClick={() => form.reset(reservaPropostaMockData)}
+          onClick={() => {
+            form.reset(reservaPropostaMockData)
+            aplicarBroker()
+          }}
         >
           <Wand2 className="mr-1.5 h-3.5 w-3.5" />
           Preencher dados de teste
