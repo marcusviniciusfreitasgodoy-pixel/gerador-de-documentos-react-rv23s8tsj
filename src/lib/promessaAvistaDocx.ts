@@ -2,12 +2,12 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
-// TEMPLATE "qualquer cidade" (foro_comarca + RI/ITBI/assinatura por {imovel_cidade}):
-// pin defd51fd = 41661 bytes, zero literal de cidade. Substitui o pin antigo
-// fdfc8123 (41696), que tinha "Rio de Janeiro" hardcoded em 5 pontos.
+// TEMPLATE IPTU-RJ: pin bc95bb9b = 41895 bytes. Além do "qualquer cidade"
+// (defd51fd), a cláusula de atualização cadastral do IPTU agora é condicional:
+// {#iptu_rj} versão reforçada (60d + Lei 5.400/2012 + multa) / {^iptu_rj} 30d.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/defd51fd783c1739e3da36dbf647df42f1a2cec7/promessa_base64.txt'
-const EXPECTED_BYTE_COUNT = 41661
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/bc95bb9bbcfac1671a394a0a22243ee95bc13339/promessa_base64.txt'
+const EXPECTED_BYTE_COUNT = 41895
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
