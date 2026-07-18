@@ -52,7 +52,7 @@ import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
 import { ARRAS_OPTIONS, getArrasResumo } from '@/lib/form-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 
 const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
   <input
@@ -266,6 +266,9 @@ export function PermutaForm() {
     defaultValues: permutaEmptyData,
   })
   const { control, setValue, getValues } = form
+
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'permuta')
   const ctrl = control as any
 
   const primeiroFA = useFieldArray({ control, name: 'primeiros' })
@@ -380,6 +383,7 @@ export function PermutaForm() {
       await generatePermutaDocx(buildPermutaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -476,6 +480,7 @@ export function PermutaForm() {
     form.reset()
     reaplicarNegocioRef.current?.()
     aplicarBroker()
+    limparRascunho()
     setGerado(false)
   }
 
