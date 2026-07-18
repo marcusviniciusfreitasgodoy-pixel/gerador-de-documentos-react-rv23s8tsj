@@ -149,7 +149,10 @@ export function buildPromessaFinanciadaTemplateData(
     comissao_documento: prefixarDocumento(data.comissao_documento || ''),
     comissao_creci: cleanCreci(data.comissao_creci || ''),
     comissao_pix: data.comissao_pix || '',
-    comissao_percentual: data.comissao_percentual || '',
+    // Bonus Onda 1: o campo e <Input type="number">, entao o browser guarda
+    // "5.5" com PONTO e o contrato saia "no percentual de 5.5%". Em documento
+    // brasileiro o decimal e virgula.
+    comissao_percentual: String(data.comissao_percentual || '').replace('.', ','),
     comissao_paga_por: data.comissao_responsavel === 'comprador' ? 'COMPRADORES' : 'VENDEDORES',
     comissao_valor: fmt(comissaoValor),
     comissao_valor_extenso: extenso(comissaoValor),
