@@ -50,7 +50,7 @@ import {
 import { buildDistratoTemplateData } from '@/lib/distratoTemplate'
 import { generateDistratoDocx, getDistratoText } from '@/lib/distratoDocx'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 
 function sugerirPapelVendedor(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
@@ -82,6 +82,9 @@ export function DistratoForm() {
     defaultValues: distratoEmptyData,
   })
   const { control, getValues } = form
+
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'distrato')
   const ctrl = control as any
 
   const {
@@ -143,6 +146,7 @@ export function DistratoForm() {
       await generateDistratoDocx(buildDistratoTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -167,6 +171,7 @@ export function DistratoForm() {
   const handleGerarOutro = () => {
     form.reset()
     reaplicarNegocioRef.current?.()
+    limparRascunho()
     setGerado(false)
   }
 
