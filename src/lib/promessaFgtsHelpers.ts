@@ -87,6 +87,20 @@ export const promessaFgtsSchema = z
     message: 'Informe o prazo do reforço',
     path: ['prazo_reforco'],
   })
+  // C1: sem esta trava, entrada+reforco+FGTS MAIORES que o total faziam o
+  // template cair no Math.max(0, ...) e imprimir "saldo R$ 0,00" no contrato,
+  // silenciosamente. Espelha a conta do buildPromessaFgtsTemplateData.
+  .refine(
+    (d) =>
+      parseCurrency(d.valor_entrada || '0') +
+        parseCurrency(d.valor_reforco || '0') +
+        parseCurrency(d.valor_fgts || '0') <=
+      parseCurrency(d.valor_total || '0'),
+    {
+      message: 'Entrada + reforço + FGTS não podem exceder o valor total',
+      path: ['valor_entrada'],
+    },
+  )
 
 export type PromessaFgtsValues = z.infer<typeof promessaFgtsSchema>
 
