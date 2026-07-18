@@ -1,26 +1,23 @@
-import { useState, useEffect, useRef } from 'react'
-import { useForm, useFieldArray, useWatch, type Control } from 'react-hook-form'
+import { useState, useEffect, useMemo, useRef } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
   Download,
   Wand2,
-  User,
-  UserCheck,
-  Building2,
-  Home,
-  DollarSign,
-  Repeat,
-  Scale,
-  Settings2,
   FileSearch,
-  Plus,
-  Trash2,
+  User,
+  Building2,
+  DollarSign,
+  Settings2,
+  UserCheck,
   HeartHandshake,
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { aplicarPromise } from '@/lib/aplicar-negocio'
 import {
   Form,
   FormField,
@@ -30,7 +27,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import {
   Select,
   SelectContent,
@@ -39,345 +35,152 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import { maskCurrency, maskCpfCnpj, maskCep } from '@/lib/utils'
+import { Switch } from '@/components/ui/switch'
+import { maskCurrency, maskCpfCnpj } from '@/lib/utils'
 import {
-  permutaSchema,
-  type PermutaValues,
-  permutaMockData,
-  permutaEmptyData,
-  emptyParty,
-} from '@/lib/permutaHelpers'
-import { buildPermutaTemplateData } from '@/lib/permutaTemplate'
-import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
-import { ARRAS_OPTIONS, getArrasResumo } from '@/lib/form-helpers'
-import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
-import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  ARRAS_OPTIONS,
+  getArrasResumo,
+} from '@/lib/form-helpers'
+import {
+  promiseSchema,
+  type PromiseValues,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+  SALDO_PAGAMENTO_OPTIONS,
+  PAPEL_CONJUGE_VENDEDOR,
+  PAPEL_CONJUGE_COMPRADOR,
+  promiseMockData,
+  buildPromiseTemplateData,
+  sugerirPapelConjuge,
+  sugerirPapelConjugeComprador,
+} from '@/lib/promise-helpers'
+import { generatePromiseDocx, getPromiseText } from '@/lib/promise-docx'
+import { getBrokerProfile, type BrokerProfile } from '@/services/broker-profile'
 
-const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
-  <input
-    type="checkbox"
-    className="h-4 w-4 accent-[var(--primary)]"
-    checked={checked}
-    onChange={(e) => onChange(e.target.checked)}
-  />
-)
+const fmtCurrency = (v: number) => cleanCurrencyMask(formatCurrency(v))
 
-function ImovelSection({
-  control,
-  prefix,
-  titulo,
-}: {
-  control: Control<PermutaValues>
-  prefix: 'imovel_a' | 'imovel_b'
-  titulo: string
-}) {
-  const f = (n: string) => `${prefix}.${n}` as any
-  return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Home className="h-5 w-5 text-primary" />
-        <h3 className="font-semibold text-primary">{titulo}</h3>
-      </div>
-      <Separator />
-      <FormField
-        control={control}
-        name={f('descricao')}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Descrição *</FormLabel>
-            <FormControl>
-              <Textarea
-                rows={2}
-                className="resize-none"
-                placeholder="Ex: Apartamento nº 101 do Edifício Solar"
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField
-          control={control}
-          name={f('endereco')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Endereço *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('bairro')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Bairro</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('cidade')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cidade *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('uf')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>UF *</FormLabel>
-              <FormControl>
-                <Input maxLength={2} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('cep')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>CEP</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="00000-000"
-                  value={field.value || ''}
-                  onChange={(e) => field.onChange(maskCep(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('fracao_ideal')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Fração Ideal</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('vagas_qtd')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Qtd. Vagas</FormLabel>
-              <FormControl>
-                <Input type="number" min={0} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('vagas_descricao')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Desc. Vagas</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('rgi')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>RGI (Cartório)</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('matricula')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Matrícula *</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={control}
-          name={f('iptu')}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>IPTU</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
-    </div>
-  )
-}
-
-export function PermutaForm() {
+export function PromiseForm() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isValidating, setIsValidating] = useState(false)
-  const [brokerLoaded, setBrokerLoaded] = useState(false)
-  const [hasBroker, setHasBroker] = useState(false)
   const navigate = useNavigate()
   // Fase 4: tela de sucesso + re-aplicar negócio no "Gerar outro deste negócio".
   const [gerado, setGerado] = useState(false)
   const reaplicarNegocioRef = useRef<(() => void) | null>(null)
+  const [broker, setBroker] = useState<BrokerProfile | null>(null)
 
-  const form = useForm<PermutaValues>({
-    resolver: zodResolver(permutaSchema),
-    defaultValues: permutaEmptyData,
+  const form = useForm<PromiseValues>({
+    resolver: zodResolver(promiseSchema),
+    defaultValues: {
+      vendedor_nome: '',
+      vendedor_nacionalidade: 'brasileiro(a)',
+      vendedor_estado_civil: '',
+      vendedor_regime_bens: '',
+      vendedor_profissao: '',
+      vendedor_cpf: '',
+      vendedor_endereco: '',
+      conjuge_vendedor_papel: 'nenhum',
+      conjuge_vendedor_nome: '',
+      conjuge_vendedor_nacionalidade: 'brasileiro(a)',
+      conjuge_vendedor_profissao: '',
+      conjuge_vendedor_cpf: '',
+      conjuge_vendedor_endereco: '',
+      comprador_nome: '',
+      comprador_nacionalidade: 'brasileiro(a)',
+      comprador_estado_civil: '',
+      comprador_regime_bens: '',
+      comprador_profissao: '',
+      comprador_cpf: '',
+      comprador_endereco: '',
+      conjuge_comprador_papel: 'nenhum',
+      conjuge_comprador_nome: '',
+      conjuge_comprador_nacionalidade: 'brasileiro(a)',
+      conjuge_comprador_profissao: '',
+      conjuge_comprador_cpf: '',
+      conjuge_comprador_endereco: '',
+      has_interveniente: false,
+      interveniente_nome: '',
+      interveniente_cpf: '',
+      imovel_descricao: '',
+      imovel_endereco: '',
+      imovel_matricula: '',
+      imovel_cidade: '',
+      imovel_estado: '',
+      valor_venda: '',
+      valor_sinal: '',
+      comissao_percentual: '5',
+      prazo_certidoes_dias: '10',
+      tipo_arras: 'confirmatoria',
+      saldo_pagamento: 'Recursos Próprios',
+    },
   })
-  const { control, setValue, getValues } = form
-  const ctrl = control as any
 
-  const primeiroFA = useFieldArray({ control, name: 'primeiros' })
-  const segundoFA = useFieldArray({ control, name: 'segundos' })
-  const anuenteFA = useFieldArray({ control, name: 'anuentes' })
+  const { control, setValue } = form
 
-  // C3: guarda o perfil do corretor para RE-APLICAR depois de cada reset. Antes,
-  // o broker era escrito uma unica vez no useEffect de carga e qualquer
-  // form.reset() o apagava para sempre — o contrato saia com a clausula de
-  // corretagem em branco ("devida a , inscrito(a) no , CRECI ,").
-  const brokerRef = useRef<{
-    nome: string
-    documento: string
-    creci: string
-    pix: string
-    rate?: number
-  } | null>(null)
+  // C3: guarda a taxa do corretor para RE-APLICAR depois de cada reset — o
+  // form.reset() zerava o percentual carregado do perfil e ele nunca voltava.
+  const brokerRateRef = useRef<number | null>(null)
   const aplicarBroker = () => {
-    const b = brokerRef.current
-    if (!b) return
-    setValue('comissao_beneficiario', b.nome)
-    setValue('comissao_documento', b.documento)
-    setValue('comissao_creci', b.creci)
-    setValue('comissao_pix', b.pix)
-    if (b.rate) setValue('comissao_percentual', String(b.rate))
+    if (brokerRateRef.current) {
+      setValue('comissao_percentual', String(brokerRateRef.current))
+    }
   }
 
   useEffect(() => {
-    let cancelled = false
     getBrokerProfile()
       .then((profile) => {
-        if (cancelled) return
-        const display = getBrokerDisplay(profile)
-        if (display) {
-          setHasBroker(true)
-          brokerRef.current = { ...display }
+        setBroker(profile)
+        if (profile?.commission_rate) {
+          brokerRateRef.current = profile.commission_rate
           aplicarBroker()
         }
       })
       .catch(() => {})
-      .finally(() => {
-        if (!cancelled) setBrokerLoaded(true)
-      })
-    return () => {
-      cancelled = true
-    }
   }, [setValue])
 
-  const primeirosW = (useWatch({ control, name: 'primeiros' }) as PermutaValues['primeiros']) || []
-  const segundosW = (useWatch({ control, name: 'segundos' }) as PermutaValues['segundos']) || []
-  const temTorna = useWatch({ control, name: 'tem_torna' })
-  const tornaAPrazo = useWatch({ control, name: 'torna_a_prazo' })
+  const valorVenda = useWatch({ control, name: 'valor_venda' })
+  const valorSinal = useWatch({ control, name: 'valor_sinal' })
+  const comissaoPct = useWatch({ control, name: 'comissao_percentual' })
+  const hasInterveniente = useWatch({ control, name: 'has_interveniente' })
+  const vendedorEstadoCivil = useWatch({ control, name: 'vendedor_estado_civil' })
+  const vendedorRegime = useWatch({ control, name: 'vendedor_regime_bens' })
+  const compradorEstadoCivil = useWatch({ control, name: 'comprador_estado_civil' })
+  const compradorRegime = useWatch({ control, name: 'comprador_regime_bens' })
 
-  const requiresConsent = (regime?: string) =>
-    regime === 'Comunhão parcial' || regime === 'Comunhão universal'
+  const saldo = useMemo(() => {
+    const venda = parseCurrency(valorVenda || '')
+    const sinal = parseCurrency(valorSinal || '')
+    return Math.max(0, venda - sinal)
+  }, [valorVenda, valorSinal])
 
-  const addConjugeAnuente = (nome: string, regime?: string, nac?: string, end?: string) => {
-    const anuentesNow = (getValues('anuentes') || []) as { conjuge_de?: string }[]
-    if (nome && anuentesNow.some((a) => a.conjuge_de === nome)) {
-      toast.info('Este cônjuge já está listado como anuente.')
-      return
+  const comissao = useMemo(() => {
+    const venda = parseCurrency(valorVenda || '')
+    const pct = parseFloat(comissaoPct || '0') || 0
+    return venda * (pct / 100)
+  }, [valorVenda, comissaoPct])
+
+  // Mesma minuta que seria baixada, renderizada em memória e enviada ao Validador.
+  // Tipo "Promessa/Compromisso": a régua da promessa se aplica a esta minuta.
+  const onValidate = async () => {
+    setIsValidating(true)
+    try {
+      const texto = getPromiseText(buildPromiseTemplateData(form.getValues(), broker))
+      navigate('/validar', { state: { texto, tipo: 'Promessa/Compromisso' } })
+    } catch (error) {
+      console.error('Erro ao preparar validação:', error)
+      toast.error('Não foi possível preparar a validação.')
+    } finally {
+      setIsValidating(false)
     }
-    anuenteFA.append({
-      ...emptyParty,
-      conjuge_de: nome || '',
-      estado_civil: 'Casado(a)',
-      regime_bens: regime || '',
-      nacionalidade: nac || 'brasileiro(a)',
-      endereco: end || '',
-    })
-    toast.success('Cônjuge adicionado como anuente. Preencha os dados dele(a).')
   }
 
-  // Outorga conjugal automática (CAS002): quando um permutante fica Casado em regime de
-  // comunhão e tem nome preenchido, cria o bloco do cônjuge-anuente automaticamente.
-  // O ref-guard garante que só adiciona 1x por parte (não re-adiciona se você remover).
-  const autoLinkedRef = useRef<Set<string>>(new Set())
-  useEffect(() => {
-    const anuentesNow = (getValues('anuentes') || []) as { conjuge_de?: string }[]
-    const groups: [string, PermutaValues['primeiros']][] = [
-      ['primeiros', primeirosW],
-      ['segundos', segundosW],
-    ]
-    for (const [which, list] of groups) {
-      list.forEach((p, i) => {
-        const key = `${which}.${i}:${p?.nome || ''}`
-        if (
-          p?.estado_civil === 'Casado(a)' &&
-          requiresConsent(p?.regime_bens) &&
-          p?.nome &&
-          !autoLinkedRef.current.has(key) &&
-          !anuentesNow.some((a) => a.conjuge_de === p.nome)
-        ) {
-          autoLinkedRef.current.add(key)
-          anuenteFA.append({
-            ...emptyParty,
-            conjuge_de: p.nome,
-            estado_civil: 'Casado(a)',
-            regime_bens: p.regime_bens || '',
-            nacionalidade: p.nacionalidade || 'brasileiro(a)',
-            endereco: p.endereco || '',
-          })
-        }
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primeirosW, segundosW])
-
-  const onSubmit = async (data: PermutaValues) => {
+  const onSubmit = async (data: PromiseValues) => {
     setIsGenerating(true)
     try {
-      await generatePermutaDocx(buildPermutaTemplateData(data))
+      await new Promise((r) => setTimeout(r, 800))
+      generatePromiseDocx(buildPromiseTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
     } catch (error) {
@@ -387,90 +190,6 @@ export function PermutaForm() {
       setIsGenerating(false)
     }
   }
-
-  const onValidate = async () => {
-    setIsValidating(true)
-    try {
-      const texto = await getPermutaText(buildPermutaTemplateData(getValues()))
-      navigate('/validar', { state: { texto, tipo: 'Permuta' } })
-    } catch (error) {
-      console.error('Erro ao preparar validação:', error)
-      toast.error('Não foi possível preparar a validação.')
-    } finally {
-      setIsValidating(false)
-    }
-  }
-
-  const renderParty = (
-    which: 'primeiros' | 'segundos',
-    fa: typeof primeiroFA,
-    watched: PermutaValues['primeiros'],
-    label: string,
-  ) => (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <User className="h-5 w-5 text-primary" />
-        <h3 className="font-semibold text-primary">{label}</h3>
-      </div>
-      <Separator />
-      {fa.fields.map((f, i) => (
-        <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-muted-foreground">
-              {label} {i + 1}
-            </span>
-            {fa.fields.length > 1 && (
-              <Button type="button" variant="ghost" size="icon" onClick={() => fa.remove(i)}>
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            )}
-          </div>
-          <CompromissoPartySection
-            control={ctrl}
-            prefix={`${which}.${i}`}
-            sep="."
-            title={`Dados — ${label} ${i + 1}`}
-            icon={<User className="h-5 w-5 text-primary" />}
-          />
-          {watched[i]?.estado_civil === 'Casado(a)' && (
-            <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
-              <p className="text-sm font-medium text-primary flex items-center gap-1.5">
-                <HeartHandshake className="h-4 w-4" /> Participação do cônjuge
-              </p>
-              <p className="text-xs text-muted-foreground">
-                {requiresConsent(watched[i]?.regime_bens)
-                  ? 'Regime de comunhão: o cônjuge foi adicionado automaticamente como ANUENTE abaixo (basta preencher os dados dele[a]). Se preferir, inclua-o como co-permutante na lista.'
-                  : 'A anuência do cônjuge pode ser exigida. Se aplicável, inclua-o como anuente.'}
-              </p>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  addConjugeAnuente(
-                    watched[i]?.nome,
-                    watched[i]?.regime_bens,
-                    watched[i]?.nacionalidade,
-                    watched[i]?.endereco,
-                  )
-                }
-              >
-                <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
-              </Button>
-            </div>
-          )}
-        </div>
-      ))}
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full"
-        onClick={() => fa.append({ ...emptyParty })}
-      >
-        <Plus className="mr-1 h-4 w-4" /> Adicionar {label.toLowerCase()}
-      </Button>
-    </div>
-  )
 
   const handleGerarOutro = () => {
     form.reset()
@@ -485,7 +204,6 @@ export function PermutaForm() {
         onValidar={onValidate}
         onGerarOutro={handleGerarOutro}
         validando={isValidating}
-        onVoltar={() => navigate('/')}
       />
     )
   }
@@ -495,310 +213,191 @@ export function PermutaForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <CarregarDeNegocio
           form={form}
-          imovel
-          imovelDuplo
-          replaceVendedores={primeiroFA.replace}
-          replaceCompradores={segundoFA.replace}
-          replaceAnuentes={anuenteFA.replace}
+          aplicar={(n) => aplicarPromise(form.setValue, n)}
           onNegocioAplicado={(fn) => {
             reaplicarNegocioRef.current = fn
           }}
         />
-        {brokerLoaded && !hasBroker && (
-          <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800">
-            <div className="text-sm">
-              <p className="font-semibold mb-1">Perfil não cadastrado</p>
-              <p className="mb-2">
-                Preencha seu Perfil em Meu Perfil para preencher a comissão automaticamente.
-              </p>
-              <Link to="/perfil" className="inline-flex items-center gap-1 font-semibold underline">
-                Ir para Meu Perfil
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {renderParty('primeiros', primeiroFA, primeirosW, 'Primeiro(s) Permutante(s)')}
-        {renderParty('segundos', segundoFA, segundosW, 'Segundo(s) Permutante(s)')}
-
-        {anuenteFA.fields.length > 0 && (
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <HeartHandshake className="h-5 w-5 text-primary" />
-              <h3 className="font-semibold text-primary">Anuentes (cônjuges que consentem)</h3>
-            </div>
-            <Separator />
-            {anuenteFA.fields.map((f, i) => (
-              <div key={f.id} className="rounded-lg border border-border/60 p-4 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-muted-foreground">
-                    Anuente {i + 1}
-                  </span>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => anuenteFA.remove(i)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-                <FormField
-                  control={control}
-                  name={`anuentes.${i}.conjuge_de`}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Cônjuge de qual permutante?</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nome do permutante" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <CompromissoPartySection
-                  control={ctrl}
-                  prefix={`anuentes.${i}`}
-                  sep="."
-                  title={`Dados do Anuente ${i + 1}`}
-                  icon={<UserCheck className="h-5 w-5 text-primary" />}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        <ImovelSection
+        <PartySection
           control={control}
-          prefix="imovel_a"
-          titulo="Imóvel A — do Primeiro Permutante"
+          prefix="vendedor"
+          title="Promitente Vendedor(a)"
+          icon={<User className="h-5 w-5 text-primary" />}
         />
-        <ImovelSection
-          control={control}
-          prefix="imovel_b"
-          titulo="Imóvel B — do Segundo Permutante"
-        />
-
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Valores dos Imóveis</h3>
-          </div>
-          <Separator />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={control}
-              name="valor_a"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Valor do Imóvel A (R$) *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="R$ 0,00"
-                      value={field.value}
-                      onChange={(e) => field.onChange(maskCurrency(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="valor_b"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Valor do Imóvel B (R$) *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="R$ 0,00"
-                      value={field.value}
-                      onChange={(e) => field.onChange(maskCurrency(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Repeat className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Torna (diferença em dinheiro)</h3>
-          </div>
-          <Separator />
-          <FormField
+        {vendedorEstadoCivil === 'Casado(a)' && (
+          <ConjugeSection
             control={control}
-            name="tem_torna"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center gap-2 space-y-0">
-                <FormControl>
-                  <Checkbox checked={!!field.value} onChange={field.onChange} />
-                </FormControl>
-                <FormLabel className="!mt-0 cursor-pointer">
-                  Há torna (imóveis de valores distintos)
-                </FormLabel>
-              </FormItem>
-            )}
+            lado="vendedor"
+            titulo="Cônjuge do Promitente Vendedor(a)"
+            dica={sugerirPapelConjuge(vendedorRegime)}
+            papeis={PAPEL_CONJUGE_VENDEDOR}
           />
-          {temTorna && (
-            <div className="rounded-lg border border-border/60 p-4 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={control}
-                  name="torna_pagador"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quem paga a torna *</FormLabel>
-                      <Select value={field.value} onValueChange={field.onChange}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="primeiro">Primeiro(s) Permutante(s)</SelectItem>
-                          <SelectItem value="segundo">Segundo(s) Permutante(s)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={control}
-                  name="torna_valor"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Valor da torna (R$) *</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="R$ 0,00"
-                          value={field.value || ''}
-                          onChange={(e) => field.onChange(maskCurrency(e.target.value))}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+        )}
+        <PartySection
+          control={control}
+          prefix="comprador"
+          title="Promitente Comprador(a)"
+          icon={<User className="h-5 w-5 text-primary" />}
+        />
+        {compradorEstadoCivil === 'Casado(a)' && (
+          <ConjugeSection
+            control={control}
+            lado="comprador"
+            titulo="Cônjuge do Promitente Comprador(a)"
+            dica={sugerirPapelConjugeComprador(compradorRegime)}
+            papeis={PAPEL_CONJUGE_COMPRADOR}
+          />
+        )}
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <UserCheck className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-primary">Interveniente Anuente</h3>
+            </div>
+            <FormField
+              control={control}
+              name="has_interveniente"
+              render={({ field }) => (
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">
+                    {field.value ? 'Ativo' : 'Inativo'}
+                  </span>
+                  <Switch checked={field.value} onCheckedChange={field.onChange} />
+                </div>
+              )}
+            />
+          </div>
+          <Separator />
+          {hasInterveniente && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={control}
-                name="torna_a_prazo"
+                name="interveniente_nome"
                 render={({ field }) => (
-                  <FormItem className="flex flex-row items-center gap-2 space-y-0">
+                  <FormItem>
+                    <FormLabel>Nome / Razão Social *</FormLabel>
                     <FormControl>
-                      <Checkbox checked={!!field.value} onChange={field.onChange} />
+                      <Input {...field} />
                     </FormControl>
-                    <FormLabel className="!mt-0 cursor-pointer">
-                      Torna a prazo (parcelada)
-                    </FormLabel>
+                    <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
                 control={control}
-                name="torna_forma"
+                name="interveniente_cpf"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      {tornaAPrazo ? 'Forma / parcelas *' : 'Forma de pagamento *'}
-                    </FormLabel>
+                    <FormLabel>CPF/CNPJ *</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={
-                          tornaAPrazo
-                            ? 'Ex: 3 parcelas mensais de R$ 50.000,00'
-                            : 'Ex: transferência PIX no ato'
-                        }
-                        {...field}
+                        value={field.value || ''}
+                        onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {tornaAPrazo && (
-                <FormField
-                  control={control}
-                  name="torna_garantia"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Garantia da torna (opcional)</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          rows={2}
-                          className="resize-none"
-                          placeholder="Ex: a escritura do IMÓVEL A só será outorgada após a quitação integral da torna"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
             </div>
           )}
         </div>
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
-            <Scale className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Arras</h3>
+            <Building2 className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Dados do Imóvel</h3>
           </div>
           <Separator />
           <FormField
             control={control}
-            name="arras_tipo"
+            name="imovel_descricao"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Natureza das arras</FormLabel>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {ARRAS_OPTIONS.map((o) => (
-                      <SelectItem key={o.value} value={o.value}>
-                        {o.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                {/* A consequência da escolha fica na tela: as arras são a
-                    engenharia de risco do contrato, não uma formalidade. */}
-                {field.value && (
-                  <p className="text-xs leading-relaxed text-muted-foreground pt-1">
-                    {getArrasResumo(field.value)}
-                  </p>
-                )}
+                <FormLabel>Descrição *</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ex: Apartamento nº 801..." {...field} />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={control}
+              name="imovel_endereco"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Endereço *</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="imovel_matricula"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Matrícula *</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="imovel_cidade"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cidade *</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="imovel_estado"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Estado (UF) *</FormLabel>
+                  <FormControl>
+                    <Input maxLength={2} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
 
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Comissão de Corretagem</h3>
+            <h3 className="font-semibold text-primary">Valores</h3>
           </div>
           <Separator />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
-              name="comissao_beneficiario"
+              name="valor_venda"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Corretor(a)</FormLabel>
+                  <FormLabel>Valor de Venda (R$) *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="R$ 0,00"
+                      value={field.value}
+                      onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -806,17 +405,27 @@ export function PermutaForm() {
             />
             <FormField
               control={control}
-              name="comissao_creci"
+              name="valor_sinal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>CRECI</FormLabel>
+                  <FormLabel>Sinal/Entrada (R$) *</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      placeholder="R$ 0,00"
+                      value={field.value}
+                      onChange={(e) => field.onChange(maskCurrency(e.target.value))}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormItem>
+              <FormLabel>Saldo (Calculado)</FormLabel>
+              <FormControl>
+                <Input disabled value={fmtCurrency(saldo)} />
+              </FormControl>
+            </FormItem>
             <FormField
               control={control}
               name="comissao_percentual"
@@ -824,18 +433,34 @@ export function PermutaForm() {
                 <FormItem>
                   <FormLabel>Comissão (%)</FormLabel>
                   <FormControl>
-                    <Input type="number" min={0} step="0.1" placeholder="Ex: 6" {...field} />
+                    <Input type="number" min={0} step="0.1" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+          </div>
+          <FormItem>
+            <FormLabel>Comissão (Calculado)</FormLabel>
+            <FormControl>
+              <Input disabled value={fmtCurrency(comissao)} />
+            </FormControl>
+          </FormItem>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Settings2 className="h-5 w-5 text-primary" />
+            <h3 className="font-semibold text-primary">Condições</h3>
+          </div>
+          <Separator />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
-              name="comissao_responsavel"
+              name="tipo_arras"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Comissão a cargo de *</FormLabel>
+                  <FormLabel>Natureza das Arras *</FormLabel>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger>
@@ -843,36 +468,32 @@ export function PermutaForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="primeiro">Primeiro(s) Permutante(s)</SelectItem>
-                      <SelectItem value="segundo">Segundo(s) Permutante(s)</SelectItem>
-                      <SelectItem value="ambos">Ambos (em partes iguais)</SelectItem>
+                      {ARRAS_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
+                  {/* A consequência da escolha fica na tela: as arras são a
+                      engenharia de risco do contrato, não uma formalidade. */}
+                  {field.value && (
+                    <p className="text-xs leading-relaxed text-muted-foreground pt-1">
+                      {getArrasResumo(field.value)}
+                    </p>
+                  )}
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </div>
-          <p className="text-xs text-muted-foreground">
-            A comissão em R$ é calculada automaticamente (% sobre a soma dos valores dos imóveis).
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Settings2 className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Foro, Local e Data</h3>
-          </div>
-          <Separator />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={control}
-              name="foro_comarca"
+              name="prazo_certidoes_dias"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Comarca do foro *</FormLabel>
+                  <FormLabel>Prazo p/ apresentar certidões (dias) *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
+                    <Input type="number" min={1} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -880,96 +501,24 @@ export function PermutaForm() {
             />
             <FormField
               control={control}
-              name="cidade"
+              name="saldo_pagamento"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Cidade (local da assinatura) *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="data_documento"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Data do Documento *</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
-
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <UserCheck className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Testemunhas</h3>
-          </div>
-          <Separator />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <FormField
-              control={control}
-              name="testemunha1_nome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome 1ª Testemunha</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="testemunha1_cpf"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CPF 1ª Testemunha</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="000.000.000-00"
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="testemunha2_nome"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome 2ª Testemunha</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={control}
-              name="testemunha2_cpf"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>CPF 2ª Testemunha</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="000.000.000-00"
-                      value={field.value || ''}
-                      onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
-                    />
-                  </FormControl>
+                  <FormLabel>Pagamento do Saldo *</FormLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {SALDO_PAGAMENTO_OPTIONS.map((o) => (
+                        <SelectItem key={o} value={o}>
+                          {o}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -981,17 +530,17 @@ export function PermutaForm() {
           type="button"
           variant="ghost"
           size="sm"
-          className="text-muted-foreground hover:text-foreground"
+          className="text-muted-foreground hover:text-foreground shrink-0 w-fit"
           onClick={() => {
-            form.reset(permutaMockData)
+            form.reset(promiseMockData)
             aplicarBroker()
           }}
         >
           <Wand2 className="mr-1.5 h-3.5 w-3.5" />
           Preencher dados de teste
         </Button>
-        {/* Barra de ação FIXA: num formulário longo, Gerar/Validar ficam sempre
-            alcançáveis. -mx-6/px-6 acompanham o padding do CardContent. */}
+
+        {/* Barra de ação FIXA: Gerar/Validar sempre alcançáveis no formulário longo. */}
         <div className="sticky bottom-0 z-10 -mx-6 flex flex-col sm:flex-row gap-2 border-t border-border bg-card/95 px-6 py-3 backdrop-blur-sm">
           <Button
             type="submit"
@@ -1032,5 +581,283 @@ export function PermutaForm() {
         </div>
       </form>
     </Form>
+  )
+}
+
+function PartySection({
+  control,
+  prefix,
+  title,
+  icon,
+}: {
+  control: any
+  prefix: string
+  title: string
+  icon: React.ReactNode
+}) {
+  const fName = (f: string) => `${prefix}_${f}` as any
+  const estadoCivil = useWatch({ control, name: fName('estado_civil') })
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        {icon}
+        <h3 className="font-semibold text-primary">{title}</h3>
+      </div>
+      <Separator />
+      <FormField
+        control={control}
+        name={fName('nome')}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Nome Completo *</FormLabel>
+            <FormControl>
+              <Input placeholder="Ex: João Silva" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={control}
+          name={fName('nacionalidade')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nacionalidade</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={fName('profissao')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Profissão</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={control}
+          name={fName('estado_civil')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Estado Civil *</FormLabel>
+              <Select value={field.value || undefined} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione..." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {ESTADO_CIVIL_OPTIONS.map((o) => (
+                    <SelectItem key={o} value={o}>
+                      {o}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={fName('regime_bens')}
+          render={({ field }) => (
+            <FormItem className={estadoCivil === 'Casado(a)' ? '' : 'hidden'}>
+              <FormLabel>Regime de Bens *</FormLabel>
+              <Select value={field.value || undefined} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione..." />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {REGIME_BENS_OPTIONS.map((o) => (
+                    <SelectItem key={o} value={o}>
+                      {o}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={control}
+          name={fName('cpf')}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>CPF/CNPJ *</FormLabel>
+              <FormControl>
+                <Input
+                  value={field.value}
+                  onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <FormField
+        control={control}
+        name={fName('endereco')}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Endereço Completo *</FormLabel>
+            <FormControl>
+              <Input placeholder="Rua, nº, Bairro, Cidade/UF, CEP" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </div>
+  )
+}
+
+// Bloco do cônjuge. Aparece só quando a parte é Casada. O PAPEL importa juridicamente:
+// co-vendedor/co-comprador = o cônjuge É parte; anuente = não é parte, só autoriza a
+// alienação (art. 1.647, I). O regime NÃO é perguntado aqui: é o mesmo casamento, então
+// herda o da parte — perguntar duas vezes convidaria a divergência.
+function ConjugeSection({
+  control,
+  lado,
+  titulo,
+  dica,
+  papeis,
+}: {
+  control: any
+  lado: 'vendedor' | 'comprador'
+  titulo: string
+  dica: string
+  papeis: readonly string[]
+}) {
+  const fName = (f: string) => `conjuge_${lado}_${f}` as any
+  const papel = useWatch({ control, name: fName('papel') })
+  const ROTULO: Record<string, string> = {
+    nenhum: 'Não participa do documento',
+    co_vendedor: 'Co-vendedor(a) — é parte e aliena junto',
+    anuente: 'Anuente — não é parte, apenas autoriza a venda',
+    co_comprador: 'Co-comprador(a) — adquire junto',
+  }
+  return (
+    <div className="space-y-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
+      <div className="flex items-center gap-2">
+        <HeartHandshake className="h-5 w-5 text-primary" />
+        <h3 className="font-semibold text-primary">{titulo}</h3>
+      </div>
+      <p className="text-xs text-muted-foreground">{dica}</p>
+      <FormField
+        control={control}
+        name={fName('papel')}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Participação no documento *</FormLabel>
+            <Select value={field.value} onValueChange={field.onChange}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {papeis.map((p) => (
+                  <SelectItem key={p} value={p}>
+                    {ROTULO[p]}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      {papel !== 'nenhum' && (
+        <>
+          <FormField
+            control={control}
+            name={fName('nome')}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Nome Completo *</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={control}
+              name={fName('nacionalidade')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nacionalidade *</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={fName('profissao')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Profissão *</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={fName('cpf')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>CPF *</FormLabel>
+                  <FormControl>
+                    <Input
+                      value={field.value || ''}
+                      onChange={(e) => field.onChange(maskCpfCnpj(e.target.value))}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name={fName('endereco')}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Endereço Completo *</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Rua, nº, Bairro, Cidade/UF, CEP" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </>
+      )}
+    </div>
   )
 }
