@@ -223,6 +223,21 @@ interface BrokerInfo {
   creci?: string
 }
 
+// IPTU-RJ (TRI003): a clausula de atualizacao cadastral do IPTU so se aplica a
+// imovel no MUNICIPIO do Rio de Janeiro. Normaliza acento, caixa e o sufixo "/RJ"
+// antes de comparar, para "Rio de Janeiro", "Rio de Janeiro/RJ" etc. casarem.
+function isMunicipioRio(cidade?: string): boolean {
+  if (!cidade) return false
+  const norm = cidade
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\/.*$/, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return norm === 'rio de janeiro'
+}
+
 export function buildPromiseTemplateData(
   data: PromiseValues,
   broker?: BrokerInfo | null,
@@ -297,5 +312,7 @@ export function buildPromiseTemplateData(
     contratado_creci: broker?.creci || '80.199 RJ',
     data_extenso: formatDateFull(new Date()).toLowerCase(),
     cidade_uf: `${data.imovel_cidade}/${data.imovel_estado}`,
+    // Flag lida pelo promise-docx: liga a clausula IPTU-RJ (TRI003) so no municipio do Rio.
+    iptu_rj: isMunicipioRio(data.imovel_cidade) ? 'sim' : '',
   }
 }
