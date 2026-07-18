@@ -140,6 +140,20 @@ function montarClausulas(d: Record<string, string>): Clausula[] {
         'As partes declaram estar cientes e de acordo com todos os termos e condições deste instrumento, que assinam em 2 (duas) vias de igual teor e forma, juntamente com as testemunhas abaixo assinadas.',
     },
   )
+  // IPTU-RJ (TRI003): atualizacao cadastral pos-transmissao. Condicional e RJ-only,
+  // como a outorga/interveniente. Entra logo apos "DOS IMPOSTOS" para agrupar o tema
+  // tributario; posicao > 5a preserva a referencia cruzada "conforme Clausula 5a".
+  if (d.iptu_rj === 'sim') {
+    const idx = cs.findIndex((c) => c.titulo === 'DOS IMPOSTOS, TAXAS E DESPESAS')
+    const iptuRj: Clausula = {
+      titulo: 'DA ATUALIZAÇÃO CADASTRAL DO IPTU (MUNICÍPIO DO RIO DE JANEIRO)',
+      texto:
+        'Por se tratar de imóvel situado no Município do Rio de Janeiro, o PROMITENTE COMPRADOR obriga-se a promover, junto à Secretaria Municipal de Fazenda, a atualização da titularidade do imóvel no cadastro do IPTU após o registro do título aquisitivo, ainda que a comunicação também incumba ao Registro de Imóveis por força dos convênios de integração cadastral (Lei Municipal nº 5.400/2012 e Decreto nº 35.744/2012), comprovando essa providência ao PROMITENTE VENDEDOR no prazo de 60 (sessenta) dias contados do registro. O PROMITENTE COMPRADOR responde integralmente pelos tributos, taxas e encargos incidentes sobre o imóvel a partir da entrega das chaves, ainda que lançados em nome do PROMITENTE VENDEDOR, assegurado a este o direito de reembolso e regresso, sujeitando-se, em caso de descumprimento do prazo, à multa de R$ 100,00 (cem reais) por dia de atraso, sem prejuízo das penalidades fiscais.',
+    }
+    if (idx >= 0) cs.splice(idx + 1, 0, iptuRj)
+    else cs.push(iptuRj)
+  }
+
   return cs
 }
 
