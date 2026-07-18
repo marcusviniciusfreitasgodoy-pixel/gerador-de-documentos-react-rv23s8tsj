@@ -3,6 +3,21 @@ import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import type { PromessaFgtsValues, PartyValues, AnuenteValues } from '@/lib/promessaFgtsHelpers'
 
+// IPTU-RJ (TRI003): a clausula de atualizacao cadastral do IPTU so se aplica a
+// imovel no MUNICIPIO do Rio de Janeiro. Normaliza acento, caixa e o sufixo "/RJ"
+// antes de comparar, para "Rio de Janeiro", "Rio de Janeiro/RJ" etc. casarem.
+function isMunicipioRio(cidade?: string): boolean {
+  if (!cidade) return false
+  const norm = cidade
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\/.*$/, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  return norm === 'rio de janeiro'
+}
+
 function formatDatePtBr(isoDate: string): string {
   if (!isoDate) return ''
   const [y, m, d] = isoDate.split('-')
@@ -94,6 +109,8 @@ export function buildPromessaFgtsTemplateData(data: PromessaFgtsValues): Record<
     imovel_rgi: data.imovel_rgi || '',
     imovel_matricula: data.imovel_matricula || '',
     imovel_iptu: data.imovel_iptu || '',
+    // IPTU-RJ: liga a clausula TRI003 so quando o imovel e no municipio do Rio.
+    iptu_rj: isMunicipioRio(data.imovel_cidade),
     imovel_origem_aquisicao: data.imovel_origem_aquisicao || '',
     imovel_origem_registro: data.imovel_origem_registro || '',
     valor_total: fmt(valorTotal),
