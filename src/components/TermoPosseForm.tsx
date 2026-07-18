@@ -18,7 +18,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarPosse } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -148,6 +148,9 @@ export function TermoPosseForm() {
     defaultValues: emptyData,
   })
 
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'posse')
+
   // Foro acompanha a comarca do IMÓVEL — e para de acompanhar assim que o corretor digita
   // nele. setValue sem shouldDirty não suja o campo, então auto ≠ escolha deliberada.
   const imovelComarcaForo = useWatch({ control: form.control, name: 'imovel_comarca' })
@@ -215,6 +218,7 @@ export function TermoPosseForm() {
       await generateTermoPosseDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -243,6 +247,7 @@ export function TermoPosseForm() {
   const handleGerarOutro = () => {
     form.reset()
     reaplicarNegocioRef.current?.()
+    limparRascunho()
     setGerado(false)
   }
 
