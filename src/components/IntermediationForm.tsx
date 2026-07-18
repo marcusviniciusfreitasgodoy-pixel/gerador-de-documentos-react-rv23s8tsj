@@ -15,7 +15,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarAutorizacao } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -82,6 +82,9 @@ export function IntermediationForm() {
   })
 
   const { control } = form
+
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'intermediacao')
 
   // Foro acompanha a cidade do imóvel — mas para de acompanhar assim que o usuário
   // digita nele. `dirtyFields` é o sinal: setValue sem shouldDirty não suja o campo,
@@ -156,6 +159,7 @@ export function IntermediationForm() {
       await generateIntermediationDocx(buildData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -185,6 +189,7 @@ export function IntermediationForm() {
     form.reset()
     reaplicarNegocioRef.current?.()
     aplicarBroker()
+    limparRascunho()
     setGerado(false)
   }
 
