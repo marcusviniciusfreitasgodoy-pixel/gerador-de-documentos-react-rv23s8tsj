@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarPromise } from '@/lib/aplicar-negocio'
 import {
   Form,
@@ -119,6 +119,9 @@ export function PromiseForm() {
 
   const { control, setValue } = form
 
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'simplificada')
+
   // C3: guarda a taxa do corretor para RE-APLICAR depois de cada reset — o
   // form.reset() zerava o percentual carregado do perfil e ele nunca voltava.
   const brokerRateRef = useRef<number | null>(null)
@@ -183,6 +186,7 @@ export function PromiseForm() {
       generatePromiseDocx(buildPromiseTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -195,6 +199,7 @@ export function PromiseForm() {
     form.reset()
     reaplicarNegocioRef.current?.()
     aplicarBroker()
+    limparRascunho()
     setGerado(false)
   }
 
