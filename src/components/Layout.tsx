@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { Component, useState, useEffect, type ReactNode } from 'react'
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   LogOut,
@@ -40,6 +40,45 @@ const NAV_ITEMS = [
   { to: '/especialista', label: 'Especialista', icon: Headset },
   { to: '/perfil', label: 'Perfil', icon: UserCircle },
 ]
+
+// A14: sem isto, QUALQUER excecao nao tratada em qualquer pagina derrubava o app
+// para tela branca — o corretor perdia o preenchimento sem nem saber o que houve.
+// Precisa ser class component: e a unica forma de error boundary no React.
+// Fica no Layout porque ele envolve todas as rotas pelo <Outlet/>.
+class ErrorBoundary extends Component<{ children: ReactNode }, { erro: Error | null }> {
+  state: { erro: Error | null } = { erro: null }
+
+  static getDerivedStateFromError(erro: Error) {
+    return { erro }
+  }
+
+  componentDidCatch(erro: Error) {
+    console.error('Erro nao tratado na aplicacao:', erro)
+  }
+
+  render() {
+    if (!this.state.erro) return this.props.children
+    return (
+      <div className="w-full max-w-lg rounded-lg border border-border bg-card p-6 space-y-4 shadow-elevation">
+        <h2 className="font-display text-2xl font-medium text-foreground">Algo deu errado</h2>
+        <p className="text-sm text-muted-foreground">
+          A tela encontrou um erro inesperado e parou. Recarregar costuma resolver. Se o problema
+          continuar, anote o que você estava fazendo e avise o suporte.
+        </p>
+        <p className="rounded bg-muted px-3 py-2 font-mono text-xs text-muted-foreground break-all">
+          {this.state.erro.message}
+        </p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+        >
+          Recarregar a página
+        </button>
+      </div>
+    )
+  }
+}
 
 export default function Layout() {
   const { isAuthenticated, user, signOut } = useAuth()
@@ -122,7 +161,9 @@ export default function Layout() {
       </header>
 
       <main className="flex-1 flex flex-col items-center p-4 md:p-8 py-8">
-        <Outlet />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
       </main>
     </div>
   )
