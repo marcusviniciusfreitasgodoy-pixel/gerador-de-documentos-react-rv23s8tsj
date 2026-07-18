@@ -146,8 +146,34 @@ export default function ValidarMinutaPage() {
       setDocumentText(st.texto)
       const tipo = st.tipo || documentType
       if (st.tipo) setDocumentType(st.tipo)
+      // A7: o replaceState abaixo limpa o state do router (para o F5 nao
+      // re-validar sozinho), mas ANTES guardamos a minuta na sessao. Sem isto,
+      // dar F5 nesta tela apagava o documento inteiro e sobrava a tela vazia.
+      try {
+        sessionStorage.setItem('validar:ultima', JSON.stringify({ texto: st.texto, tipo }))
+      } catch {
+        /* sessionStorage indisponivel (aba anonima/quota): segue sem persistir */
+      }
       window.history.replaceState({}, document.title)
       runValidation(st.texto, tipo)
+      return
+    }
+    // Reidrata apos um F5: repoe o texto na tela sem re-validar automaticamente
+    // (a revalidacao custa uma chamada de IA — o usuario decide clicando).
+    if (!autoRan.current && !st?.texto) {
+      try {
+        const salvo = sessionStorage.getItem('validar:ultima')
+        if (salvo) {
+          const { texto, tipo } = JSON.parse(salvo) as { texto?: string; tipo?: string }
+          if (texto) {
+            autoRan.current = true
+            setDocumentText(texto)
+            if (tipo) setDocumentType(tipo)
+          }
+        }
+      } catch {
+        /* JSON corrompido ou storage indisponivel: abre em branco, como antes */
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
