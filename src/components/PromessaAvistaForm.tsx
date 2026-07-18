@@ -124,6 +124,27 @@ export function PromessaAvistaForm() {
     replace: replaceCompradores,
   } = useFieldArray({ control, name: 'compradores' })
 
+  // C3: guarda o perfil do corretor para RE-APLICAR depois de cada reset. Antes,
+  // o broker era escrito uma unica vez no useEffect de carga e qualquer
+  // form.reset() o apagava para sempre — o contrato saia com a clausula de
+  // corretagem em branco ("devida a , inscrito(a) no , CRECI ,").
+  const brokerRef = useRef<{
+    nome: string
+    documento: string
+    creci: string
+    pix: string
+    rate?: number
+  } | null>(null)
+  const aplicarBroker = () => {
+    const b = brokerRef.current
+    if (!b) return
+    setValue('comissao_beneficiario', b.nome)
+    setValue('comissao_documento', b.documento)
+    setValue('comissao_creci', b.creci)
+    setValue('comissao_pix', b.pix)
+    if (b.rate) setValue('comissao_percentual', String(b.rate))
+  }
+
   useEffect(() => {
     let cancelled = false
     getBrokerProfile()
@@ -132,13 +153,8 @@ export function PromessaAvistaForm() {
         const display = getBrokerDisplay(profile)
         if (display) {
           setHasBroker(true)
-          setValue('comissao_beneficiario', display.nome)
-          setValue('comissao_documento', display.documento)
-          setValue('comissao_creci', display.creci)
-          setValue('comissao_pix', display.pix)
-          if (profile?.commission_rate) {
-            setValue('comissao_percentual', String(profile.commission_rate))
-          }
+          brokerRef.current = { ...display, rate: profile?.commission_rate }
+          aplicarBroker()
         }
       })
       .catch(() => {})
@@ -277,6 +293,7 @@ export function PromessaAvistaForm() {
   const handleGerarOutro = () => {
     form.reset(promessaAvistaEmptyData)
     reaplicarNegocioRef.current?.()
+    aplicarBroker()
     setGerado(null)
   }
 
@@ -1094,7 +1111,10 @@ export function PromessaAvistaForm() {
             variant="ghost"
             size="sm"
             className="text-muted-foreground hover:text-foreground shrink-0"
-            onClick={() => form.reset(promessaAvistaMockData)}
+            onClick={() => {
+              form.reset(promessaAvistaMockData)
+              aplicarBroker()
+            }}
           >
             <Wand2 className="mr-1.5 h-3.5 w-3.5" />
             Dados de teste
