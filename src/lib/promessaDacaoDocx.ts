@@ -2,12 +2,12 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
-// TEMPLATE PARTES FLEXÍVEIS: após subir o novo promessa_dacao_base64.txt
-// (gerado de TEMPLATE_promessa_dacao_PF.docx) no gist, atualize o hash do
-// commit abaixo. O byte-count já corresponde ao template PF.
+// TEMPLATE IPTU-RJ: pin 6c2273ac = 42174 bytes. Além do partes-flexíveis e do
+// "qualquer cidade", a cláusula de atualização cadastral do IPTU é condicional:
+// {#iptu_rj} versão reforçada (60d + Lei 5.400/2012 + multa) / {^iptu_rj} 30d.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/defd51fd783c1739e3da36dbf647df42f1a2cec7/promessa_dacao_base64.txt'
-const EXPECTED_BYTE_COUNT = 41946
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/6c2273ac318aed9b3f937325a43a5fd82c34ae5f/promessa_dacao_base64.txt'
+const EXPECTED_BYTE_COUNT = 42174
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
