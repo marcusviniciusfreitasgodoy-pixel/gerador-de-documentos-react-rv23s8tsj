@@ -51,7 +51,7 @@ import { buildReservaPropostaTemplateData } from '@/lib/reservaPropostaTemplate'
 import { generateReservaPropostaDocx, getReservaPropostaText } from '@/lib/reservaPropostaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 
 function sugerirPapelProponente(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
@@ -78,6 +78,9 @@ export function ReservaPropostaForm() {
     defaultValues: reservaPropostaEmptyData,
   })
   const { control, setValue, getValues } = form
+
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'reserva')
   const ctrl = control as any
 
   const {
@@ -180,6 +183,7 @@ export function ReservaPropostaForm() {
       await generateReservaPropostaDocx(buildReservaPropostaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -209,6 +213,7 @@ export function ReservaPropostaForm() {
     form.reset()
     reaplicarNegocioRef.current?.()
     aplicarBroker()
+    limparRascunho()
     setGerado(false)
   }
 
