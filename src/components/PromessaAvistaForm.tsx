@@ -62,7 +62,7 @@ import { buildPromessaAvistaTemplateData } from '@/lib/promessaAvistaTemplate'
 import { generatePromessaAvistaDocx, getPromessaAvistaText } from '@/lib/promessaAvistaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
+import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
 import type { ExtracaoResult, PessoaRole } from '@/lib/extraction-types'
 import type { PartyValues, AnuenteValues } from '@/lib/promessaAvistaHelpers'
@@ -94,6 +94,9 @@ export function PromessaAvistaForm() {
     defaultValues: promessaAvistaEmptyData,
   })
   const { control, setValue, getValues } = form
+
+  // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
+  const { limparRascunho } = useFormDraft(form, 'avista')
 
   // Foro acompanha a cidade do imóvel — e para de acompanhar assim que o corretor digita
   // nele. `dirtyFields` é o sinal: setValue sem shouldDirty não suja o campo, então o
@@ -265,6 +268,7 @@ export function PromessaAvistaForm() {
       await generatePromessaAvistaDocx(buildPromessaAvistaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado('promessa-de-compra-e-venda-avista.docx')
+      limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -294,6 +298,7 @@ export function PromessaAvistaForm() {
     form.reset(promessaAvistaEmptyData)
     reaplicarNegocioRef.current?.()
     aplicarBroker()
+    limparRascunho()
     setGerado(null)
   }
 
