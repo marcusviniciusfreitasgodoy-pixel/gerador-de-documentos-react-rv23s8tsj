@@ -10,9 +10,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { FolderOpen, Loader2, CheckCircle2, FileSearch, FilePlus2, ArrowLeft } from 'lucide-react'
 import { toast } from 'sonner'
-import { listNegocios, getNegocio } from '@/lib/negocios'
+import { listNegocios, getNegocio, updateNegocio } from '@/lib/negocios'
 import type { Negocio } from '@/lib/negocios'
-import { aplicarNegocio } from '@/lib/aplicar-negocio'
+import { aplicarNegocio, calcularVolta } from '@/lib/aplicar-negocio'
+import type { ResultadoVolta } from '@/lib/aplicar-negocio'
 
 interface CarregarDeNegocioProps {
   form: UseFormReturn<any>
@@ -39,6 +40,8 @@ interface CarregarDeNegocioProps {
   // permuta e as opções já capturados). O form guarda essa função e a chama
   // depois do reset. Se nenhum negócio for carregado, ela nunca é chamada.
   onNegocioAplicado?: (reaplicar: () => void) => void
+  /** C4: entrega o Negócio carregado ao form, para a volta saber onde gravar. */
+  onNegocioCarregado?: (negocio: Negocio) => void
 }
 
 export function CarregarDeNegocio({
@@ -51,6 +54,7 @@ export function CarregarDeNegocio({
   replaceCompradores,
   replaceAnuentes,
   onNegocioAplicado,
+  onNegocioCarregado,
 }: CarregarDeNegocioProps) {
   const [negocios, setNegocios] = useState<Negocio[]>([])
   const [selecionado, setSelecionado] = useState('')
@@ -92,6 +96,11 @@ export function CarregarDeNegocio({
             { imovel: !!imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
           )
         }
+        // Por último, depois de todos os setValue/replace acima: garante que o
+        // snapshot do useNegocioSync enxerga os valores já aplicados ao form.
+        // Como esta função roda de novo no "Gerar outro" (via onNegocioAplicado),
+        // isso re-snapshota automaticamente a cada re-aplicação — não só na carga inicial.
+        onNegocioCarregado?.(negocio)
       }
       aplicarNoForm()
       onNegocioAplicado?.(aplicarNoForm)
@@ -364,4 +373,89 @@ export function useFormDraft(form: UseFormReturn<any>, chave: string) {
   }, [key])
 
   return { limparRascunho }
+}
+
+// ── C4: volta pro dossiê ────────────────────────────────────────────────
+
+/**
+ * C4 — volta pro dossiê.
+ *
+ * Guarda o Negócio carregado E o snapshot dos valores do form logo após a
+ * carga. Na hora de gerar, compara os dois e devolve o que mudou.
+ *
+ * Mora aqui, e não em arquivo próprio, pela regra nº 5: o Skip não cria
+ * arquivo novo. Mesmo motivo do `useFormDraft` acima.
+ */
+export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string[]) {
+  const negocioRef = useRef<Negocio | null>(null)
+  const snapshotRef = useRef<Record<string, unknown> | null>(null)
+
+  /**
+   * Chamado pelo `aplicarNoForm` do CarregarDeNegocio via `onNegocioCarregado`
+   * — tanto na carga inicial quanto na RE-aplicação do "Gerar outro" (os forms
+   * guardam `aplicarNoForm` numa ref e a chamam de novo para reaplicar o mesmo
+   * negócio). Como a chamada mora dentro de `aplicarNoForm`, toda re-aplicação
+   * redispara este registro automaticamente. Sem isso, o diff da 2ª geração
+   * compararia contra o estado errado e acusaria mudança fantasma.
+   */
+  const registrarNegocio = useCallback(
+    (negocio: Negocio) => {
+      const atual = negocioRef.current
+      // O `negocio` que chega na RE-aplicação ("Gerar outro") é o objeto congelado
+      // no closure do CarregarDeNegocio — ele não sabe das gravações que fizemos.
+      // Esta é a ÚNICA guarda que impede reverter, em silêncio, dado já corrigido.
+      // Não "simplifique" sem entender os três casos abaixo:
+      //   - negocio.updated < atual.updated (mais antigo): manter o guardado é o
+      //     que impede a regressão — `r.partes` é construído a partir de
+      //     `negocio.partes` e `updateNegocio` substitui o array inteiro, então
+      //     regredir aqui faria a próxima gravação reverter campos já corrigidos.
+      //     Esta é a razão de a guarda existir.
+      //   - negocio.updated === atual.updated (empate): mesma revisão do
+      //     servidor, conteúdo idêntico — a escolha é indiferente; usar `<=`
+      //     (em vez de `<`) é só a opção mais defensiva.
+      //   - negocio.updated > atual.updated (mais novo): recarga manual ou
+      //     escrita externa trouxe `updated` mais novo, e assume a base, como deve.
+      // Premissa: a comparação é lexicográfica de STRING, não temporal — só
+      // funciona porque o PocketBase devolve `updated` em formato de largura
+      // fixa e sempre em UTC (`YYYY-MM-DD HH:MM:SS.sssZ`), repassado verbatim
+      // por `normalize()` em src/lib/negocios.ts sem reformatação. Se esse campo
+      // passar por formatação no cliente, esta comparação quebra em silêncio.
+      const guardadoEhMelhor =
+        !!atual && atual.id === negocio.id && negocio.updated <= atual.updated
+      negocioRef.current = guardadoEhMelhor ? atual : negocio
+      // O snapshot SEMPRE acompanha o form: o diff é form-vs-form, então mesmo
+      // que o form exiba dados antigos, o campo não-alterado não entra no patch
+      // e o valor já persistido sobrevive.
+      snapshotRef.current = form.getValues() as Record<string, unknown>
+    },
+    [form],
+  )
+
+  /** null = não há nada a oferecer (sem Negócio carregado, ou nada mudou). */
+  const calcular = useCallback((): ResultadoVolta | null => {
+    const negocio = negocioRef.current
+    const snapshot = snapshotRef.current
+    if (!negocio || !snapshot) return null
+    const r = calcularVolta(negocio, snapshot, form.getValues() as Record<string, unknown>, grupos)
+    return r.alteracoes.length > 0 ? r : null
+  }, [form, grupos])
+
+  const gravar = useCallback(
+    async (r: ResultadoVolta) => {
+      const negocio = negocioRef.current
+      if (!negocio) return
+      // Guarda o registro devolvido pelo servidor (já normalizado por
+      // updateNegocio, com o `updated` real) em vez de reconstruir a base
+      // localmente — é esse `updated` que registrarNegocio usa para decidir se
+      // uma versão recebida depois pode substituir a base sem regredi-la.
+      const gravado = await updateNegocio(negocio.id, { partes: r.partes, imovel: r.imovel })
+      negocioRef.current = gravado
+      // O dossiê agora reflete o form: o snapshot passa a ser o estado atual,
+      // senão gerar um 2º documento reofereceria as mesmas mudanças.
+      snapshotRef.current = form.getValues() as Record<string, unknown>
+    },
+    [form],
+  )
+
+  return { registrarNegocio, calcular, gravar }
 }
