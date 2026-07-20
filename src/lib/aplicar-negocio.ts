@@ -1,5 +1,5 @@
 import type { UseFormReturn } from 'react-hook-form'
-import type { Negocio } from '@/lib/negocios'
+import type { Negocio, ParteNegocio } from '@/lib/negocios'
 import type { PessoaExtraida, ImovelExtraido } from '@/lib/extraction-types'
 import { normalizarEstadoCivil, normalizarRegime } from '@/lib/form-helpers'
 
@@ -45,8 +45,9 @@ const emptyParty: PartyValues = {
 // normalizarEstadoCivil / normalizarRegime agora vivem em @/lib/form-helpers
 // (fonte única, compartilhada com o auto-preencher da à vista).
 
-function toParty(p: PessoaExtraida): PartyValues {
+function toParty(p: ParteNegocio) {
   return {
+    _id: p._id,
     nome: p.nome || '',
     nacionalidade: p.nacionalidade || 'brasileiro(a)',
     estado_civil: normalizarEstadoCivil(p.estado_civil),
@@ -303,4 +304,162 @@ export function aplicarChecklist(setValue: SetValue, negocio: Negocio): void {
   const v = primeiraParte(negocio, 'vendedor')
   if (v) setValue('responsavel', v.nome || '')
   setValue('imovel_resumo', resumoImovel(negocio.imovel))
+}
+
+// ---------------------------------------------------------------------------
+// C4 — volta pro dossiê. Tudo aqui é função pura: sem React, sem PocketBase.
+// ---------------------------------------------------------------------------
+
+/** Uma diferença já pronta para exibir no diálogo de confirmação. */
+export type CampoAlterado = { rotulo: string; de: string; para: string }
+
+/** Payload de gravação + o que mudou, para o hook decidir se pergunta. */
+export type ResultadoVolta = {
+  partes: ParteNegocio[]
+  imovel: ImovelExtraido
+  alteracoes: CampoAlterado[]
+}
+
+/** Os 10 campos que voltam 1:1. Fora daqui, nada é gravado. */
+const CAMPOS_PARTE = [
+  'nome',
+  'nacionalidade',
+  'estado_civil',
+  'regime_bens',
+  'profissao',
+  'rg',
+  'orgao_emissor',
+  'cpf',
+  'endereco',
+  'email',
+] as const
+
+/** Os 14 campos do imóvel. No form vêm com o prefixo `imovel_`. */
+const CAMPOS_IMOVEL = [
+  'descricao',
+  'endereco',
+  'bairro',
+  'cidade',
+  'uf',
+  'cep',
+  'matricula',
+  'rgi',
+  'iptu',
+  'fracao_ideal',
+  'vagas_qtd',
+  'vagas_descricao',
+  'origem_aquisicao',
+  'origem_registro',
+] as const
+
+const ROTULO_PARTE: Record<string, string> = {
+  nome: 'Nome',
+  nacionalidade: 'Nacionalidade',
+  estado_civil: 'Estado civil',
+  regime_bens: 'Regime de bens',
+  profissao: 'Profissão',
+  rg: 'RG',
+  orgao_emissor: 'Órgão emissor',
+  cpf: 'CPF',
+  endereco: 'Endereço',
+  email: 'E-mail',
+}
+
+// Papel da parte no rótulo do diálogo de consentimento: sem ele, duas partes
+// homônimas (ou duas sem nome) ficam indistinguíveis na lista de alterações.
+const ROTULO_PAPEL: Record<ParteNegocio['papel'], string> = {
+  vendedor: 'vendedor(a)',
+  comprador: 'comprador(a)',
+  anuente: 'anuente',
+}
+
+const ROTULO_IMOVEL: Record<string, string> = {
+  descricao: 'Descrição do imóvel',
+  endereco: 'Endereço do imóvel',
+  bairro: 'Bairro',
+  cidade: 'Cidade',
+  uf: 'UF',
+  cep: 'CEP',
+  matricula: 'Matrícula',
+  rgi: 'RGI',
+  iptu: 'IPTU',
+  fracao_ideal: 'Fração ideal',
+  vagas_qtd: 'Vagas (quantidade)',
+  vagas_descricao: 'Vagas (descrição)',
+  origem_aquisicao: 'Origem da aquisição',
+  origem_registro: 'Registro da origem',
+}
+
+const txt = (v: unknown): string => (typeof v === 'string' ? v.trim() : '')
+
+/** Acha uma linha de parte pelo _id, varrendo os grupos do form. */
+function acharLinha(
+  valores: Record<string, unknown>,
+  grupos: readonly string[],
+  id: string,
+): Record<string, unknown> | undefined {
+  for (const g of grupos) {
+    const lista = valores[g]
+    if (!Array.isArray(lista)) continue
+    const achou = lista.find(
+      (l) => l && typeof l === 'object' && (l as { _id?: string })._id === id,
+    )
+    if (achou) return achou as Record<string, unknown>
+  }
+  return undefined
+}
+
+/**
+ * Compara o form de agora com o snapshot tirado logo após a carga.
+ *
+ * O snapshot é do FORM, não do Negócio: assim os defaults injetados na ida
+ * (`nacionalidade || 'brasileiro(a)'`) estão dos dois lados e se cancelam,
+ * e só sobra o que o corretor realmente digitou.
+ *
+ * Decisão (c): só atualiza parte que já existe. Linha sem `_id` (adicionada à
+ * mão) é ignorada; parte removida no form continua no dossiê.
+ */
+export function calcularVolta(
+  negocio: { partes: ParteNegocio[]; imovel: ImovelExtraido },
+  snapshot: Record<string, unknown>,
+  atual: Record<string, unknown>,
+  grupos: readonly string[],
+): ResultadoVolta {
+  const alteracoes: CampoAlterado[] = []
+
+  const partes = negocio.partes.map((parte) => {
+    const antes = acharLinha(snapshot, grupos, parte._id)
+    const agora = acharLinha(atual, grupos, parte._id)
+    // Parte que não está no form (ou sumiu dele): preserva intacta.
+    if (!antes || !agora) return parte
+
+    const patch: Record<string, string> = {}
+    for (const campo of CAMPOS_PARTE) {
+      const de = txt(antes[campo])
+      const para = txt(agora[campo])
+      if (de === para) continue
+      patch[campo] = para
+      const identificacao = parte.nome ? ` ${parte.nome}` : ' (sem nome)'
+      alteracoes.push({
+        rotulo: `${ROTULO_PARTE[campo]} — ${ROTULO_PAPEL[parte.papel]}${identificacao}`,
+        de,
+        para,
+      })
+    }
+    // Espalha o original PRIMEIRO: papel, conjuge_de, _confianca e _fonte
+    // sobrevivem — só os 10 campos editáveis são sobrescritos.
+    return { ...parte, ...patch }
+  })
+
+  const patchImovel: Record<string, string> = {}
+  for (const campo of CAMPOS_IMOVEL) {
+    const chave = `imovel_${campo}`
+    const de = txt(snapshot[chave])
+    const para = txt(atual[chave])
+    if (de === para) continue
+    patchImovel[campo] = para
+    alteracoes.push({ rotulo: ROTULO_IMOVEL[campo], de, para })
+  }
+
+  return { partes, imovel: { ...negocio.imovel, ...patchImovel }, alteracoes }
 }
