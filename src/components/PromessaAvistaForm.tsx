@@ -120,7 +120,7 @@ export function PromessaAvistaForm() {
   const { limparRascunho } = useFormDraft(form, 'avista')
   // C4: volta pro dossiê — registra o Negócio carregado, calcula o diff no
   // submit e grava a confirmação do corretor.
-  const { registrarNegocio, calcular, gravar } = useNegocioSync(form, GRUPOS_AVISTA)
+  const { registrarNegocio, calcular, gravar, negocioAtual } = useNegocioSync(form, GRUPOS_AVISTA)
   const [voltaPendente, setVoltaPendente] = useState<ResultadoVolta | null>(null)
 
   // Foro acompanha a cidade do imóvel — e para de acompanhar assim que o corretor digita
@@ -404,6 +404,7 @@ export function PromessaAvistaForm() {
             reaplicarNegocioRef.current = fn
           }}
           onNegocioCarregado={registrarNegocio}
+          negocioAtual={negocioAtual}
         />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
