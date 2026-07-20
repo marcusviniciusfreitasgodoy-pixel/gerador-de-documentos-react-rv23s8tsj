@@ -102,7 +102,9 @@ export function buildPermutaTemplateData(data: PermutaValues): Record<string, un
     comissao_documento: data.comissao_documento || '',
     comissao_creci: cleanCreci(data.comissao_creci || ''),
     comissao_pix: data.comissao_pix || '',
-    comissao_percentual: (data.comissao_percentual || '').trim(),
+    comissao_percentual: String(data.comissao_percentual || '')
+      .trim()
+      .replace('.', ','),
     comissao_valor: fmt(comissaoValor),
     comissao_valor_extenso: extenso(comissaoValor),
     comissao_paga_por: PERMUTANTE_LABEL[data.comissao_responsavel || 'ambos'],
