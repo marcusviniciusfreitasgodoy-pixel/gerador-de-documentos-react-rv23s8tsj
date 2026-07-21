@@ -51,7 +51,28 @@ import { buildReservaPropostaTemplateData } from '@/lib/reservaPropostaTemplate'
 import { generateReservaPropostaDocx, getReservaPropostaText } from '@/lib/reservaPropostaDocx'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
-import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
+import {
+  CarregarDeNegocio,
+  DocumentoGerado,
+  useFormDraft,
+  useNegocioSync,
+} from '@/components/CarregarDeNegocio'
+import type { ResultadoVolta } from '@/lib/aplicar-negocio'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
+
+// C4: fora do componente para estabilidade de referência — um array literal
+// inline em cada render anularia a memoização de `calcular` dentro de
+// useNegocioSync.
+const GRUPOS_RESERVA = ['proponentes', 'proprietarios', 'anuentes'] as const
 
 function sugerirPapelProponente(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
@@ -81,6 +102,10 @@ export function ReservaPropostaForm() {
 
   // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
   const { limparRascunho } = useFormDraft(form, 'reserva')
+  // C4: volta pro dossiê — registra o Negócio carregado, calcula o diff no
+  // submit e grava a confirmação do corretor.
+  const { registrarNegocio, calcular, gravar, negocioAtual } = useNegocioSync(form, GRUPOS_RESERVA)
+  const [voltaPendente, setVoltaPendente] = useState<ResultadoVolta | null>(null)
   const ctrl = control as any
 
   const {
@@ -183,6 +208,9 @@ export function ReservaPropostaForm() {
       await generateReservaPropostaDocx(buildReservaPropostaTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      // C4: o documento JÁ saiu. Só agora oferecemos atualizar o dossiê —
+      // se isto falhar, o corretor não perde o trabalho.
+      setVoltaPendente(calcular())
       limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
@@ -219,12 +247,59 @@ export function ReservaPropostaForm() {
 
   if (gerado) {
     return (
-      <DocumentoGerado
-        onValidar={onValidate}
-        onGerarOutro={handleGerarOutro}
-        validando={isValidating}
-        onVoltar={() => navigate('/')}
-      />
+      <>
+        <DocumentoGerado
+          onValidar={onValidate}
+          onGerarOutro={handleGerarOutro}
+          validando={isValidating}
+          onVoltar={() => navigate('/')}
+        />
+        <AlertDialog open={!!voltaPendente} onOpenChange={(o) => !o && setVoltaPendente(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Atualizar o Negócio?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Documento gerado. Estes são os {voltaPendente?.alteracoes.length} dado(s) que você
+                alterou aqui:
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <ul className="max-h-60 space-y-2 overflow-y-auto text-sm">
+              {voltaPendente?.alteracoes.map((a, i) => (
+                <li key={i} className="border-l-2 border-muted pl-3">
+                  <div className="font-medium">{a.rotulo}</div>
+                  <div className="text-muted-foreground">
+                    <span className="line-through">{a.de || '(vazio)'}</span>
+                    {' → '}
+                    <span className="text-foreground">{a.para || '(vazio)'}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Agora não</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  const r = voltaPendente
+                  setVoltaPendente(null)
+                  if (!r) return
+                  try {
+                    await gravar(r)
+                    toast.success('Negócio atualizado.')
+                  } catch (e) {
+                    console.error('Erro ao atualizar o Negócio:', e)
+                    const mensagem = e instanceof Error ? e.message : String(e)
+                    toast.error(
+                      `Documento pronto, mas não consegui atualizar o Negócio. Tente pela tela do dossiê. ${mensagem}`,
+                    )
+                  }
+                }}
+              >
+                Atualizar o Negócio
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     )
   }
 
@@ -241,6 +316,8 @@ export function ReservaPropostaForm() {
           onNegocioAplicado={(fn) => {
             reaplicarNegocioRef.current = fn
           }}
+          onNegocioCarregado={registrarNegocio}
+          negocioAtual={negocioAtual}
         />
         {brokerLoaded && !hasBroker && (
           <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
