@@ -12,8 +12,8 @@ import { FolderOpen, Loader2, CheckCircle2, FileSearch, FilePlus2, ArrowLeft } f
 import { toast } from 'sonner'
 import { listNegocios, getNegocio, updateNegocio } from '@/lib/negocios'
 import type { Negocio } from '@/lib/negocios'
-import { aplicarNegocio, calcularVolta } from '@/lib/aplicar-negocio'
-import type { ResultadoVolta } from '@/lib/aplicar-negocio'
+import { aplicarNegocio, calcularVolta, calcularVoltaPlano } from '@/lib/aplicar-negocio'
+import type { ResultadoVolta, ConfigVoltaPlano } from '@/lib/aplicar-negocio'
 
 interface CarregarDeNegocioProps {
   form: UseFormReturn<any>
@@ -477,6 +477,63 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
   /** C4: getter estável do Negócio guardado — lido na hora da chamada (não no
    *  render em que o corretor clicou "Carregar"), então sempre devolve o mais
    *  recente conhecido pelo form, inclusive após `gravar`. */
+  const negocioAtual = useCallback(() => negocioRef.current, [])
+
+  return { registrarNegocio, calcular, gravar, negocioAtual }
+}
+
+/**
+ * C4 Lote 2 — irmão PLANO do useNegocioSync, para documentos sem arrays de partes
+ * (recibo, promise). Idêntico ao useNegocioSync — snapshot com cópia profunda,
+ * guarda do `updated`, gravar, negocioAtual — só o `calcular` difere: usa
+ * calcularVoltaPlano com um mapa por documento em vez de casar por _id.
+ *
+ * Mora aqui (não em arquivo próprio) pela regra nº 5: o Skip não cria arquivo novo.
+ * `config` deve ser const de módulo (ref estável), senão anula a memoização abaixo.
+ */
+export function useNegocioSyncPlano(form: UseFormReturn<any>, config: ConfigVoltaPlano) {
+  const negocioRef = useRef<Negocio | null>(null)
+  const snapshotRef = useRef<Record<string, unknown> | null>(null)
+
+  const registrarNegocio = useCallback(
+    (negocio: Negocio) => {
+      // Mesma guarda do useNegocioSync: nunca deixa um objeto congelado no closure
+      // do "Gerar outro" (updated <=) reverter, em silêncio, dado já gravado.
+      const atual = negocioRef.current
+      const guardadoEhMelhor =
+        !!atual && atual.id === negocio.id && negocio.updated <= atual.updated
+      negocioRef.current = guardadoEhMelhor ? atual : negocio
+      // Cópia PROFUNDA: getValues() devolve referência viva; sem o clone a edição
+      // do corretor mutaria o snapshot e o diálogo nunca apareceria.
+      snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
+    },
+    [form],
+  )
+
+  const calcular = useCallback((): ResultadoVolta | null => {
+    const negocio = negocioRef.current
+    const snapshot = snapshotRef.current
+    if (!negocio || !snapshot) return null
+    const r = calcularVoltaPlano(
+      negocio,
+      snapshot,
+      form.getValues() as Record<string, unknown>,
+      config,
+    )
+    return r.alteracoes.length > 0 ? r : null
+  }, [form, config])
+
+  const gravar = useCallback(
+    async (r: ResultadoVolta) => {
+      const negocio = negocioRef.current
+      if (!negocio) return
+      const gravado = await updateNegocio(negocio.id, { partes: r.partes, imovel: r.imovel })
+      negocioRef.current = gravado
+      snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
+    },
+    [form],
+  )
+
   const negocioAtual = useCallback(() => negocioRef.current, [])
 
   return { registrarNegocio, calcular, gravar, negocioAtual }
