@@ -61,37 +61,48 @@ function below1000(n: number): string {
   return `${HUNDREDS[h]} e ${below100(rest)}`
 }
 
-function below1Million(n: number): string {
-  const thousand = Math.floor(n / 1000)
-  const rest = n % 1000
-  const parts: string[] = []
-  if (thousand > 0) {
-    parts.push(thousand === 1 ? 'mil' : `${below1000(thousand)} mil`)
-  }
-  if (rest > 0) parts.push(below1000(rest))
-  return parts.join(' e ')
-}
+// Escala por posição da tripla (grupo de 3 dígitos): índice 1 = milhar,
+// 2 = milhão, 3 = bilhão. "mil" é invariável; milhão/bilhão têm plural.
+const ESCALA_SINGULAR = ['', 'mil', 'milhão', 'bilhão']
+const ESCALA_PLURAL = ['', 'mil', 'milhões', 'bilhões']
 
 function numberToWords(n: number): string {
   if (n === 0) return 'zero'
-  if (n < 1000000) return below1Million(n)
-  if (n < 1000000000) {
-    const million = Math.floor(n / 1000000)
-    const rest = n % 1000000
-    const parts: string[] = []
-    if (million === 1) parts.push('um milhão')
-    else parts.push(`${below1Million(million)} milhões`)
-    if (rest > 0) parts.push(below1Million(rest))
-    return parts.join(' e ')
+
+  // Decompõe em triplas de 3 dígitos (base 1000), da menos significativa para a
+  // mais. Ex.: 1.234.567 -> [567, 234, 1] (unidades, milhar, milhão).
+  const triplas: number[] = []
+  let x = Math.floor(n)
+  while (x > 0) {
+    triplas.push(x % 1000)
+    x = Math.floor(x / 1000)
   }
-  // Sem este ramo, 1.000.000.000 caia em below1Million e saia "um mil milhoes".
-  const billion = Math.floor(n / 1000000000)
-  const rest = n % 1000000000
-  const parts: string[] = []
-  if (billion === 1) parts.push('um bilhão')
-  else parts.push(`${below1Million(billion)} bilhões`)
-  if (rest > 0) parts.push(numberToWords(rest))
-  return parts.join(' e ')
+
+  // Monta a frase de cada tripla NÃO-zero, da mais significativa para a menos.
+  const frases: { valor: number; texto: string }[] = []
+  for (let i = triplas.length - 1; i >= 0; i--) {
+    const v = triplas[i]
+    if (v === 0) continue
+    let texto: string
+    if (i === 0) texto = below1000(v)
+    else if (i === 1) texto = v === 1 ? 'mil' : `${below1000(v)} mil`
+    else texto = `${below1000(v)} ${v === 1 ? ESCALA_SINGULAR[i] : ESCALA_PLURAL[i]}`
+    frases.push({ valor: v, texto })
+  }
+
+  // Junta os grupos com VÍRGULA, exceto o ÚLTIMO: antes dele usa-se " e " quando
+  // a última tripla é < 100 OU múltiplo exato de 100 (regra do português). Por
+  // isso "mil e vinte" e "mil e duzentos", mas "sessenta e três mil, duzentos e
+  // cinquenta" (250 não é < 100 nem centena redonda). O join(' e ') anterior
+  // produzia "...mil E duzentos e cinquenta", errado em todo documento.
+  let resultado = frases[0].texto
+  for (let k = 1; k < frases.length; k++) {
+    const ehUltimo = k === frases.length - 1
+    const v = frases[k].valor
+    const usaE = ehUltimo && (v < 100 || v % 100 === 0)
+    resultado += (usaE ? ' e ' : ', ') + frases[k].texto
+  }
+  return resultado
 }
 
 export function currencyToWords(value: number): string {
