@@ -8,6 +8,10 @@ export const FORMA_PAGAMENTO_OPTIONS = ['PIX', 'TED', 'Transferência'] as const
 export const COMISSAO_RESPONSAVEL_OPTIONS = ['vendedor', 'comprador'] as const
 
 const partySchema = z.object({
+  // C4: âncora da volta pro dossiê. Não aparece na tela — é só transporte.
+  // Precisa ser opcional: parte adicionada à mão pelo corretor não tem _id,
+  // e por decisão (c) ela é ignorada na volta em vez de virar erro.
+  _id: z.string().optional(),
   nome: z.string().min(3, 'Nome obrigatório'),
   nacionalidade: z.string().min(1, 'Obrigatório'),
   estado_civil: z.string().min(1, 'Selecione'),
