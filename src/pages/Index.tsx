@@ -22,8 +22,13 @@ import { PromessaFinanciadaForm } from '@/components/PromessaFinanciadaForm'
 import { TermoChavesForm } from '@/components/TermoChavesForm'
 import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
-import { CarregarDeNegocio, DocumentoGerado } from '@/components/CarregarDeNegocio'
-import { aplicarRecibo } from '@/lib/aplicar-negocio'
+import {
+  CarregarDeNegocio,
+  DocumentoGerado,
+  useNegocioSyncPlano,
+} from '@/components/CarregarDeNegocio'
+import { aplicarRecibo, MAPA_RECIBO } from '@/lib/aplicar-negocio'
+import type { ResultadoVolta } from '@/lib/aplicar-negocio'
 import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { PromessaDacaoForm } from '@/components/PromessaDacaoForm'
 import { reciboMockData } from '@/lib/form-helpers'
@@ -48,6 +53,16 @@ import {
 } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { PartyFields } from '@/components/PartyFields'
 import { maskCurrency, maskCpf } from '@/lib/utils'
 import {
@@ -204,6 +219,13 @@ export default function Index() {
     },
   })
 
+  // C4 Lote 2: volta pro dossiê no Recibo (documento de partes planas).
+  const { registrarNegocio, calcular, gravar, negocioAtual } = useNegocioSyncPlano(
+    form,
+    MAPA_RECIBO,
+  )
+  const [voltaPendente, setVoltaPendente] = useState<ResultadoVolta | null>(null)
+
   // Foro/assinatura do recibo acompanham a comarca do imóvel — e param de acompanhar
   // assim que o corretor digita no campo. cidade_uf (local da assinatura) deriva de
   // foro_comarca no buildTemplateData, então os dois seguem a comarca.
@@ -219,6 +241,8 @@ export default function Index() {
       await generateDocx(buildTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      // C4: o documento JÁ saiu. Só agora oferecemos atualizar o dossiê.
+      setVoltaPendente(calcular())
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -337,11 +361,58 @@ export default function Index() {
       </CardHeader>
       <CardContent>
         {docType === 'recibo' && gerado && (
-          <DocumentoGerado
-            onValidar={onValidateRecibo}
-            onGerarOutro={handleGerarOutro}
-            validando={isValidating}
-          />
+          <>
+            <DocumentoGerado
+              onValidar={onValidateRecibo}
+              onGerarOutro={handleGerarOutro}
+              validando={isValidating}
+            />
+            <AlertDialog open={!!voltaPendente} onOpenChange={(o) => !o && setVoltaPendente(null)}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Atualizar o Negócio?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Documento gerado. Estes são os {voltaPendente?.alteracoes.length} dado(s) que
+                    você alterou aqui:
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <ul className="max-h-60 space-y-2 overflow-y-auto text-sm">
+                  {voltaPendente?.alteracoes.map((a, i) => (
+                    <li key={i} className="border-l-2 border-muted pl-3">
+                      <div className="font-medium">{a.rotulo}</div>
+                      <div className="text-muted-foreground">
+                        <span className="line-through">{a.de || '(vazio)'}</span>
+                        {' → '}
+                        <span className="text-foreground">{a.para || '(vazio)'}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Agora não</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      const r = voltaPendente
+                      setVoltaPendente(null)
+                      if (!r) return
+                      try {
+                        await gravar(r)
+                        toast.success('Negócio atualizado.')
+                      } catch (e) {
+                        console.error('Erro ao atualizar o Negócio:', e)
+                        const mensagem = e instanceof Error ? e.message : String(e)
+                        toast.error(
+                          `Documento pronto, mas não consegui atualizar o Negócio. Tente pela tela do dossiê. ${mensagem}`,
+                        )
+                      }
+                    }}
+                  >
+                    Atualizar o Negócio
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
         )}
         {docType === 'recibo' && !gerado && (
           <Form {...form}>
@@ -352,6 +423,8 @@ export default function Index() {
                 onNegocioAplicado={(fn) => {
                   reaplicarNegocioRef.current = fn
                 }}
+                onNegocioCarregado={registrarNegocio}
+                negocioAtual={negocioAtual}
               />
               <PartyFields prefix="vendedor" title="Dados do Vendedor(a)" />
               <PartyFields prefix="comprador" title="Dados do Comprador(a)" />
