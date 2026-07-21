@@ -437,6 +437,15 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
       // que o form exiba dados antigos, o campo não-alterado não entra no patch
       // e o valor já persistido sobrevive.
       snapshotRef.current = form.getValues() as Record<string, unknown>
+      // [C4-DEBUG] temporário — remover depois. Mostra o que o snapshot capturou.
+      const snapDbg = snapshotRef.current as Record<string, unknown>
+      console.log('[C4-DEBUG] registrarNegocio: negocio.id =', negocio.id)
+      console.log(
+        '[C4-DEBUG] registrarNegocio: partes =',
+        negocio.partes.map((p) => ({ _id: p._id, papel: p.papel, cpf: p.cpf })),
+      )
+      console.log('[C4-DEBUG] snapshot.vendedores =', JSON.stringify(snapDbg.vendedores))
+      console.log('[C4-DEBUG] snapshot.compradores =', JSON.stringify(snapDbg.compradores))
     },
     [form],
   )
@@ -445,8 +454,14 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
   const calcular = useCallback((): ResultadoVolta | null => {
     const negocio = negocioRef.current
     const snapshot = snapshotRef.current
+    // [C4-DEBUG] temporário — remover depois.
+    console.log('[C4-DEBUG] calcular: negocio?', !!negocio, '| snapshot?', !!snapshot)
     if (!negocio || !snapshot) return null
-    const r = calcularVolta(negocio, snapshot, form.getValues() as Record<string, unknown>, grupos)
+    const atualVals = form.getValues() as Record<string, unknown>
+    console.log('[C4-DEBUG] calcular: atual.vendedores =', JSON.stringify(atualVals.vendedores))
+    console.log('[C4-DEBUG] calcular: atual.compradores =', JSON.stringify(atualVals.compradores))
+    const r = calcularVolta(negocio, snapshot, atualVals, grupos)
+    console.log('[C4-DEBUG] calcular: alteracoes =', JSON.stringify(r.alteracoes))
     return r.alteracoes.length > 0 ? r : null
   }, [form, grupos])
 
