@@ -436,16 +436,12 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
       // O snapshot SEMPRE acompanha o form: o diff é form-vs-form, então mesmo
       // que o form exiba dados antigos, o campo não-alterado não entra no patch
       // e o valor já persistido sobrevive.
-      snapshotRef.current = form.getValues() as Record<string, unknown>
-      // [C4-DEBUG] temporário — remover depois. Mostra o que o snapshot capturou.
-      const snapDbg = snapshotRef.current as Record<string, unknown>
-      console.log('[C4-DEBUG] registrarNegocio: negocio.id =', negocio.id)
-      console.log(
-        '[C4-DEBUG] registrarNegocio: partes =',
-        negocio.partes.map((p) => ({ _id: p._id, papel: p.papel, cpf: p.cpf })),
-      )
-      console.log('[C4-DEBUG] snapshot.vendedores =', JSON.stringify(snapDbg.vendedores))
-      console.log('[C4-DEBUG] snapshot.compradores =', JSON.stringify(snapDbg.compradores))
+      // ⚠️ CÓPIA PROFUNDA obrigatória: form.getValues() do react-hook-form devolve
+      // REFERÊNCIAS VIVAS aos objetos internos — sem clonar, a edição do corretor
+      // muta o próprio snapshot, e no diff snapshot === atual (zero alterações,
+      // diálogo nunca aparece). Os valores são JSON-safe (o autosave já os
+      // serializa assim no localStorage), então o round-trip é seguro.
+      snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
     },
     [form],
   )
@@ -454,14 +450,8 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
   const calcular = useCallback((): ResultadoVolta | null => {
     const negocio = negocioRef.current
     const snapshot = snapshotRef.current
-    // [C4-DEBUG] temporário — remover depois.
-    console.log('[C4-DEBUG] calcular: negocio?', !!negocio, '| snapshot?', !!snapshot)
     if (!negocio || !snapshot) return null
-    const atualVals = form.getValues() as Record<string, unknown>
-    console.log('[C4-DEBUG] calcular: atual.vendedores =', JSON.stringify(atualVals.vendedores))
-    console.log('[C4-DEBUG] calcular: atual.compradores =', JSON.stringify(atualVals.compradores))
-    const r = calcularVolta(negocio, snapshot, atualVals, grupos)
-    console.log('[C4-DEBUG] calcular: alteracoes =', JSON.stringify(r.alteracoes))
+    const r = calcularVolta(negocio, snapshot, form.getValues() as Record<string, unknown>, grupos)
     return r.alteracoes.length > 0 ? r : null
   }, [form, grupos])
 
@@ -477,7 +467,9 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
       negocioRef.current = gravado
       // O dossiê agora reflete o form: o snapshot passa a ser o estado atual,
       // senão gerar um 2º documento reofereceria as mesmas mudanças.
-      snapshotRef.current = form.getValues() as Record<string, unknown>
+      // CÓPIA PROFUNDA pelo mesmo motivo do registrarNegocio: getValues() devolve
+      // referências vivas; sem clonar, edições posteriores vazariam para o snapshot.
+      snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
     },
     [form],
   )
