@@ -42,6 +42,9 @@ interface CarregarDeNegocioProps {
   onNegocioAplicado?: (reaplicar: () => void) => void
   /** C4: entrega o Negócio carregado ao form, para a volta saber onde gravar. */
   onNegocioCarregado?: (negocio: Negocio) => void
+  /** C4: devolve o Negócio mais recente conhecido pelo form (pós-gravação), para a
+   *  RE-aplicação do "Gerar outro" não repovoar com o objeto congelado no closure. */
+  negocioAtual?: () => Negocio | null
 }
 
 export function CarregarDeNegocio({
@@ -55,6 +58,7 @@ export function CarregarDeNegocio({
   replaceAnuentes,
   onNegocioAplicado,
   onNegocioCarregado,
+  negocioAtual,
 }: CarregarDeNegocioProps) {
   const [negocios, setNegocios] = useState<Negocio[]>([])
   const [selecionado, setSelecionado] = useState('')
@@ -86,13 +90,19 @@ export function CarregarDeNegocio({
       // deste negócio" (Fase 4) possa RE-APLICAR exatamente o mesmo — com o slot
       // e as opções já capturados neste closure.
       const aplicarNoForm = () => {
+        // C4: na RE-aplicação ("Gerar outro"), `negocio` é o objeto congelado no
+        // closure de quando o corretor clicou "Carregar" — não sabe das gravações
+        // feitas depois. `negocioAtual` devolve o que o form sabe AGORA (pós-
+        // gravação); só usamos esse valor fresco quando é o MESMO negócio.
+        const fresco = negocioAtual?.()
+        const n = fresco && fresco.id === negocio.id ? fresco : negocio
         if (aplicar) {
           // Documento de partes planas: usa a função de mapeamento do próprio form.
-          aplicar(negocio)
+          aplicar(n)
         } else if (replaceVendedores && replaceCompradores && replaceAnuentes) {
           aplicarNegocio(
             { setValue: form.setValue, replaceVendedores, replaceCompradores, replaceAnuentes },
-            negocio,
+            n,
             { imovel: !!imovel, imovelSlot: imovelDuplo ? slot : undefined, incluirAnuentes },
           )
         }
@@ -100,7 +110,7 @@ export function CarregarDeNegocio({
         // snapshot do useNegocioSync enxerga os valores já aplicados ao form.
         // Como esta função roda de novo no "Gerar outro" (via onNegocioAplicado),
         // isso re-snapshota automaticamente a cada re-aplicação — não só na carga inicial.
-        onNegocioCarregado?.(negocio)
+        onNegocioCarregado?.(n)
       }
       aplicarNoForm()
       onNegocioAplicado?.(aplicarNoForm)
@@ -457,5 +467,10 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
     [form],
   )
 
-  return { registrarNegocio, calcular, gravar }
+  /** C4: getter estável do Negócio guardado — lido na hora da chamada (não no
+   *  render em que o corretor clicou "Carregar"), então sempre devolve o mais
+   *  recente conhecido pelo form, inclusive após `gravar`. */
+  const negocioAtual = useCallback(() => negocioRef.current, [])
+
+  return { registrarNegocio, calcular, gravar, negocioAtual }
 }
