@@ -463,3 +463,138 @@ export function calcularVolta(
 
   return { partes, imovel: { ...negocio.imovel, ...patchImovel }, alteracoes }
 }
+
+// ---------------------------------------------------------------------------
+// C4 Lote 2 — volta pro dossiê nos documentos de partes PLANAS (recibo, promise).
+// Gêmeo de calcularVolta: em vez de casar parte por _id, casa a 1ª parte de cada
+// papel via um mapa por documento (campoDoNegócio -> campo PLANO do formulário).
+// ---------------------------------------------------------------------------
+
+/** Mapa campoDoNegócio -> nome do campo PLANO no formulário, por lado + imóvel. */
+export type ConfigVoltaPlano = {
+  vendedor: Record<string, string>
+  comprador: Record<string, string>
+  imovel: Record<string, string>
+}
+
+/**
+ * Diff form-vs-snapshot para documentos de partes planas. Casa a PRIMEIRA parte
+ * de cada papel (decisão L2-a): se o negócio tem 2 vendedores, só o 1º volta — o
+ * form plano nem mostra o 2º. Rótulo e regra de "só campo que mudou" idênticos ao
+ * calcularVolta de array.
+ */
+export function calcularVoltaPlano(
+  negocio: { partes: ParteNegocio[]; imovel: ImovelExtraido },
+  snapshot: Record<string, unknown>,
+  atual: Record<string, unknown>,
+  config: ConfigVoltaPlano,
+): ResultadoVolta {
+  const alteracoes: CampoAlterado[] = []
+
+  const primeiroV = negocio.partes.find((p) => p.papel === 'vendedor')
+  const primeiroC = negocio.partes.find((p) => p.papel === 'comprador')
+
+  // Monta o patch de UMA parte a partir do mapa {campoNegocio -> campoForm}.
+  // Parte inexistente (negócio sem vendedor, p.ex.) -> patch vazio, nada volta.
+  const diffParte = (
+    parte: ParteNegocio | undefined,
+    mapa: Record<string, string>,
+  ): Partial<ParteNegocio> => {
+    if (!parte) return {}
+    const patch: Record<string, string> = {}
+    for (const campo in mapa) {
+      const campoForm = mapa[campo]
+      const de = txt(snapshot[campoForm])
+      const para = txt(atual[campoForm])
+      if (de === para) continue
+      patch[campo] = para
+      const identificacao = parte.nome ? ` ${parte.nome}` : ' (sem nome)'
+      alteracoes.push({
+        rotulo: `${ROTULO_PARTE[campo]} — ${ROTULO_PAPEL[parte.papel]}${identificacao}`,
+        de,
+        para,
+      })
+    }
+    return patch as Partial<ParteNegocio>
+  }
+
+  const patchV = diffParte(primeiroV, config.vendedor)
+  const patchC = diffParte(primeiroC, config.comprador)
+
+  const patchImovel: Record<string, string> = {}
+  for (const campo in config.imovel) {
+    const campoForm = config.imovel[campo]
+    const de = txt(snapshot[campoForm])
+    const para = txt(atual[campoForm])
+    if (de === para) continue
+    patchImovel[campo] = para
+    alteracoes.push({ rotulo: ROTULO_IMOVEL[campo], de, para })
+  }
+
+  // Só o 1º vendedor e o 1º comprador recebem patch (identidade de objeto). As
+  // demais partes (2º vendedor, anuentes) ficam intactas.
+  const partes = negocio.partes.map((p) =>
+    p === primeiroV ? { ...p, ...patchV } : p === primeiroC ? { ...p, ...patchC } : p,
+  )
+
+  return { partes, imovel: { ...negocio.imovel, ...patchImovel }, alteracoes }
+}
+
+// Inverso de aplicarRecibo. Imóvel traduz rgi->ri_numero, cidade->comarca.
+export const MAPA_RECIBO: ConfigVoltaPlano = {
+  vendedor: {
+    nome: 'vendedor_nome',
+    nacionalidade: 'vendedor_nacionalidade',
+    estado_civil: 'vendedor_estado_civil',
+    regime_bens: 'vendedor_regime_bens',
+    profissao: 'vendedor_profissao',
+    rg: 'vendedor_rg',
+    cpf: 'vendedor_cpf',
+    endereco: 'vendedor_endereco',
+  },
+  comprador: {
+    nome: 'comprador_nome',
+    nacionalidade: 'comprador_nacionalidade',
+    estado_civil: 'comprador_estado_civil',
+    regime_bens: 'comprador_regime_bens',
+    profissao: 'comprador_profissao',
+    rg: 'comprador_rg',
+    cpf: 'comprador_cpf',
+    endereco: 'comprador_endereco',
+  },
+  imovel: {
+    descricao: 'imovel_descricao',
+    matricula: 'imovel_matricula',
+    rgi: 'imovel_ri_numero',
+    cidade: 'imovel_comarca',
+    iptu: 'imovel_iptu',
+  },
+}
+
+// Inverso de aplicarPromise. Sem rg/regime_bens. Imóvel: cidade->imovel_cidade,
+// uf->imovel_estado, + endereco.
+export const MAPA_SIMPLIFICADA: ConfigVoltaPlano = {
+  vendedor: {
+    nome: 'vendedor_nome',
+    nacionalidade: 'vendedor_nacionalidade',
+    estado_civil: 'vendedor_estado_civil',
+    profissao: 'vendedor_profissao',
+    cpf: 'vendedor_cpf',
+    endereco: 'vendedor_endereco',
+  },
+  comprador: {
+    nome: 'comprador_nome',
+    nacionalidade: 'comprador_nacionalidade',
+    estado_civil: 'comprador_estado_civil',
+    profissao: 'comprador_profissao',
+    cpf: 'comprador_cpf',
+    endereco: 'comprador_endereco',
+  },
+  imovel: {
+    descricao: 'imovel_descricao',
+    endereco: 'imovel_endereco',
+    matricula: 'imovel_matricula',
+    cidade: 'imovel_cidade',
+    uf: 'imovel_estado',
+  },
+}
