@@ -736,7 +736,10 @@ export function PromessaFinanciadaForm() {
                 <FormItem>
                   <FormLabel>Origem da Aquisição</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: compra e venda" {...field} />
+                    <Input
+                      placeholder="Ex: Escritura lavrada em 22/08/2007, livro 5053, fls. 158"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -748,9 +751,9 @@ export function PromessaFinanciadaForm() {
             name="imovel_origem_registro"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Registro de Origem</FormLabel>
+                <FormLabel>Ato de Registro na Matrícula</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: escritura pública..." {...field} />
+                  <Input placeholder="Ex: R-9 — só o ato; a matrícula já foi citada" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
