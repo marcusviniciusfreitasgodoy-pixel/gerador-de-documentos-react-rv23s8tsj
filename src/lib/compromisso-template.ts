@@ -1,4 +1,4 @@
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import { parseCurrency, formatCurrency, cleanCurrencyMask, trimDeep } from '@/lib/form-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import {
   formatDateLower,
@@ -6,7 +6,11 @@ import {
   type CompromissoValues,
 } from '@/lib/compromisso-helpers'
 
-export function buildCompromissoTemplateData(data: CompromissoValues): Record<string, string> {
+export function buildCompromissoTemplateData(dataBruta: CompromissoValues): Record<string, string> {
+  // Trim de entrada (ver `trimDeep`): um " R-9 " digitado no dossiê saía
+  // "registrado sob o  R-9  da referida matrícula". Aqui, e não na saída, porque
+  // os valores são costurados em frases antes de virar template data.
+  const data = trimDeep(dataBruta)
   const total = parseCurrency(data.valor_total)
   const sinal = parseCurrency(data.valor_sinal)
   const reforco = parseCurrency(data.valor_reforco || '')
