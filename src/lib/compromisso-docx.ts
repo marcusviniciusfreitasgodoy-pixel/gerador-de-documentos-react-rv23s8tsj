@@ -19,7 +19,16 @@ function buildCompromissoDocumentXml(): string {
     ),
     para('{interveniente_block}', { align: 'both', after: 400 }),
     para(
-      'CLÁUSULA 1ª — DO OBJETO. O VENDEDOR compromete-se a vender e o COMPRADOR a comprar, pelo presente instrumento particular, o imóvel descrito como {imovel_descricao}, situado na {imovel_endereco}, bairro {imovel_bairro}, {imovel_cidade}/{imovel_uf}, CEP {imovel_cep}, com {imovel_vagas_qtd} vaga(s) de garagem ({imovel_vagas_descricao}), fração ideal de {imovel_fracao_ideal}, registrado no {imovel_rgi} sob a matrícula nº {imovel_matricula}, inscrição municipal (IPTU) nº {imovel_iptu}. O imóvel foi adquirido pelo VENDEDOR por {imovel_origem_aquisicao}, conforme {imovel_origem_registro}.',
+      // Descreve o imóvel UMA vez: a {imovel_descricao} vem da matrícula e já traz
+      // endereço, bairro, CEP, vagas e fração — repeti-los aqui fazia o mesmo bem
+      // sair descrito duas vezes, com vocabulários diferentes, o que num contrato
+      // lê como contradição. Mesma decisão aplicada aos 4 templates de promessa e
+      // à Simplificada. Quem individualiza o imóvel é matrícula + RGI.
+      // A 2ª frase segue a MESMA construção dos templates de promessa
+      // ("conforme {aquisicao}, registrado sob o {registro} da referida matrícula"):
+      // antes era invertida aqui, e como os dois campos vêm de um único valor do
+      // dossiê, um dos dois documentos sempre saía com a concordância quebrada.
+      'CLÁUSULA 1ª — DO OBJETO. O VENDEDOR compromete-se a vender e o COMPRADOR a comprar, pelo presente instrumento particular, o imóvel descrito como {imovel_descricao}, registrado no {imovel_rgi} sob a matrícula nº {imovel_matricula}, inscrição municipal (IPTU) nº {imovel_iptu}. O imóvel foi adquirido pelo VENDEDOR conforme {imovel_origem_aquisicao}, registrado sob o {imovel_origem_registro} da referida matrícula.',
       { align: 'both', after: 200 },
     ),
     para(
