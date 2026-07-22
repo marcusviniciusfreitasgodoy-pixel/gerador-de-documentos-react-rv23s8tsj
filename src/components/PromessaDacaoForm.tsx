@@ -45,6 +45,7 @@ import {
   parseCurrency,
   formatCurrency,
   cleanCurrencyMask,
+  calcComissao,
   ARRAS_OPTIONS,
   getArrasResumo,
 } from '@/lib/form-helpers'
@@ -204,11 +205,10 @@ export function PromessaDacaoForm() {
     return Math.max(0, t - e - r - d)
   }, [valorTotal, valorEntrada, valorReforco, valorDacao])
 
-  const comissaoValor = useMemo(() => {
-    const t = parseCurrency(valorTotal || '')
-    const pct = parseFloat(comissaoPct || '0') || 0
-    return t * (pct / 100)
-  }, [valorTotal, comissaoPct])
+  const comissaoValor = useMemo(
+    () => calcComissao(parseCurrency(valorTotal || ''), comissaoPct),
+    [valorTotal, comissaoPct],
+  )
 
   const fmt = (v: number) => cleanCurrencyMask(formatCurrency(v))
 
