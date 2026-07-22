@@ -217,6 +217,7 @@ export function aplicarPromise(setValue: SetValue, negocio: Negocio): void {
     setValue('vendedor_nome', v.nome || '')
     setValue('vendedor_nacionalidade', v.nacionalidade || 'brasileiro(a)')
     setValue('vendedor_estado_civil', normalizarEstadoCivil(v.estado_civil))
+    setValue('vendedor_regime_bens', normalizarRegime(v.regime_bens))
     setValue('vendedor_profissao', v.profissao || '')
     setValue('vendedor_cpf', v.cpf || '')
     setValue('vendedor_endereco', v.endereco || '')
@@ -225,6 +226,7 @@ export function aplicarPromise(setValue: SetValue, negocio: Negocio): void {
     setValue('comprador_nome', c.nome || '')
     setValue('comprador_nacionalidade', c.nacionalidade || 'brasileiro(a)')
     setValue('comprador_estado_civil', normalizarEstadoCivil(c.estado_civil))
+    setValue('comprador_regime_bens', normalizarRegime(c.regime_bens))
     setValue('comprador_profissao', c.profissao || '')
     setValue('comprador_cpf', c.cpf || '')
     setValue('comprador_endereco', c.endereco || '')
@@ -470,11 +472,13 @@ export function calcularVolta(
 // papel via um mapa por documento (campoDoNegócio -> campo PLANO do formulário).
 // ---------------------------------------------------------------------------
 
-/** Mapa campoDoNegócio -> nome do campo PLANO no formulário, por lado + imóvel. */
+/** Mapa campoDoNegócio -> nome do campo PLANO no formulário, por lado + imóvel.
+ *  Chaves restritas a CAMPOS_PARTE/CAMPOS_IMOVEL: um typo (ex.: `enderec`) não
+ *  compila, em vez de virar uma chave-lixo silenciosa no ResultadoVolta. */
 export type ConfigVoltaPlano = {
-  vendedor: Record<string, string>
-  comprador: Record<string, string>
-  imovel: Record<string, string>
+  vendedor: Partial<Record<(typeof CAMPOS_PARTE)[number], string>>
+  comprador: Partial<Record<(typeof CAMPOS_PARTE)[number], string>>
+  imovel: Partial<Record<(typeof CAMPOS_IMOVEL)[number], string>>
 }
 
 /**
@@ -496,14 +500,19 @@ export function calcularVoltaPlano(
 
   // Monta o patch de UMA parte a partir do mapa {campoNegocio -> campoForm}.
   // Parte inexistente (negócio sem vendedor, p.ex.) -> patch vazio, nada volta.
+  // Object.entries(mapa) tipa os pares como [chave-de-CAMPOS_PARTE, campoForm];
+  // como `mapa` já é Partial<Record<CAMPOS_PARTE[number], string>>, `patch[campo]`
+  // bate com Partial<ParteNegocio> sem precisar de cast no retorno.
   const diffParte = (
     parte: ParteNegocio | undefined,
-    mapa: Record<string, string>,
+    mapa: ConfigVoltaPlano['vendedor'],
   ): Partial<ParteNegocio> => {
     if (!parte) return {}
-    const patch: Record<string, string> = {}
-    for (const campo in mapa) {
-      const campoForm = mapa[campo]
+    const patch: Partial<ParteNegocio> = {}
+    for (const [campo, campoForm] of Object.entries(mapa) as [
+      (typeof CAMPOS_PARTE)[number],
+      string,
+    ][]) {
       const de = txt(snapshot[campoForm])
       const para = txt(atual[campoForm])
       if (de === para) continue
@@ -515,15 +524,17 @@ export function calcularVoltaPlano(
         para,
       })
     }
-    return patch as Partial<ParteNegocio>
+    return patch
   }
 
   const patchV = diffParte(primeiroV, config.vendedor)
   const patchC = diffParte(primeiroC, config.comprador)
 
-  const patchImovel: Record<string, string> = {}
-  for (const campo in config.imovel) {
-    const campoForm = config.imovel[campo]
+  const patchImovel: Partial<Record<(typeof CAMPOS_IMOVEL)[number], string>> = {}
+  for (const [campo, campoForm] of Object.entries(config.imovel) as [
+    (typeof CAMPOS_IMOVEL)[number],
+    string,
+  ][]) {
     const de = txt(snapshot[campoForm])
     const para = txt(atual[campoForm])
     if (de === para) continue
@@ -540,7 +551,14 @@ export function calcularVoltaPlano(
   return { partes, imovel: { ...negocio.imovel, ...patchImovel }, alteracoes }
 }
 
-// Inverso de aplicarRecibo. Imóvel traduz rgi->ri_numero, cidade->comarca.
+// Inverso de aplicarRecibo. Imóvel traduz rgi->ri_numero.
+// ⚠️ A Comarca (imovel_comarca) NÃO volta, de propósito: comarca é o distrito
+// judiciário, não o município — pode abranger várias cidades — e o negócio não
+// tem campo `comarca`. Mapear `cidade: 'imovel_comarca'` (como já esteve aqui)
+// grava a comarca como CIDADE do imóvel, e o updateNegocio troca o `imovel`
+// inteiro: o erro vaza para todos os outros documentos. A ida (linha ~208)
+// pré-preenche a comarca com a cidade, o que é inofensivo — o corretor
+// sobrescreve. Não "restaure" esta linha.
 export const MAPA_RECIBO: ConfigVoltaPlano = {
   vendedor: {
     nome: 'vendedor_nome',
@@ -566,18 +584,20 @@ export const MAPA_RECIBO: ConfigVoltaPlano = {
     descricao: 'imovel_descricao',
     matricula: 'imovel_matricula',
     rgi: 'imovel_ri_numero',
-    cidade: 'imovel_comarca',
     iptu: 'imovel_iptu',
   },
 }
 
-// Inverso de aplicarPromise. Sem rg/regime_bens. Imóvel: cidade->imovel_cidade,
-// uf->imovel_estado, + endereco.
+// Inverso de aplicarPromise. Sem rg (a Simplificada não coleta). O regime_bens
+// volta: o campo existe no form e é obrigatório para casado(a), e a ida também
+// o preenche — sem os dois lados, o corretor redigitaria em todo documento.
+// Imóvel: cidade->imovel_cidade, uf->imovel_estado, + endereco.
 export const MAPA_SIMPLIFICADA: ConfigVoltaPlano = {
   vendedor: {
     nome: 'vendedor_nome',
     nacionalidade: 'vendedor_nacionalidade',
     estado_civil: 'vendedor_estado_civil',
+    regime_bens: 'vendedor_regime_bens',
     profissao: 'vendedor_profissao',
     cpf: 'vendedor_cpf',
     endereco: 'vendedor_endereco',
@@ -586,6 +606,7 @@ export const MAPA_SIMPLIFICADA: ConfigVoltaPlano = {
     nome: 'comprador_nome',
     nacionalidade: 'comprador_nacionalidade',
     estado_civil: 'comprador_estado_civil',
+    regime_bens: 'comprador_regime_bens',
     profissao: 'comprador_profissao',
     cpf: 'comprador_cpf',
     endereco: 'comprador_endereco',
