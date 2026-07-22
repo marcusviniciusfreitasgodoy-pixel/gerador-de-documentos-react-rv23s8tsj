@@ -57,6 +57,7 @@ import {
   parseCurrency,
   formatCurrency,
   cleanCurrencyMask,
+  calcComissao,
   ARRAS_OPTIONS,
   getArrasResumo,
 } from '@/lib/form-helpers'
@@ -183,11 +184,10 @@ export function PromiseForm() {
     return Math.max(0, venda - sinal)
   }, [valorVenda, valorSinal])
 
-  const comissao = useMemo(() => {
-    const venda = parseCurrency(valorVenda || '')
-    const pct = parseFloat(comissaoPct || '0') || 0
-    return venda * (pct / 100)
-  }, [valorVenda, comissaoPct])
+  const comissao = useMemo(
+    () => calcComissao(parseCurrency(valorVenda || ''), comissaoPct),
+    [valorVenda, comissaoPct],
+  )
 
   // Mesma minuta que seria baixada, renderizada em memória e enviada ao Validador.
   // Tipo "Promessa/Compromisso": a régua da promessa se aplica a esta minuta.
