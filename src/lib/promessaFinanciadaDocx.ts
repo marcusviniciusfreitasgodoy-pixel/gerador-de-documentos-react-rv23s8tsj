@@ -2,12 +2,18 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
-// TEMPLATE IPTU-RJ: pin c3d2720a = 42561 bytes. Mantém os blocos {#usa_fgts}
-// da v3; a cláusula de atualização cadastral do IPTU agora é condicional:
+// TEMPLATE OBJETO-ENXUTO: pin 8b6b4c28 = 42474 bytes.
+// A Cláusula Primeira descreve o imóvel UMA vez. O pin anterior (c3d2720a = 42561)
+// repetia endereço, bairro, CEP, vagas e fração DEPOIS da {imovel_descricao} — e como
+// a descrição vem da matrícula e já traz tudo isso, o mesmo bem saía descrito duas
+// vezes, com vocabulários diferentes ("freguesia de Jacarepaguá" × "Barra da Tijuca"),
+// o que num contrato lê como contradição. Quem individualiza o imóvel é matrícula+RGI;
+// os campos estruturados seguem no formulário, alimentando o dossiê e os outros docs.
+// Mantém os blocos {#usa_fgts} da v3; a cláusula de atualização cadastral do IPTU segue condicional:
 // {#iptu_rj} versão reforçada (60d + Lei 5.400/2012 + multa) / {^iptu_rj} 30d.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/c3d2720a6328b9e10f8b8b3ce7fcce57316948e4/promessa_financiada_base64.txt'
-const EXPECTED_BYTE_COUNT = 42561
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/8b6b4c2826f28cf1819c27298dd1fb2e229fc203/promessa_financiada_base64.txt'
+const EXPECTED_BYTE_COUNT = 42474
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
