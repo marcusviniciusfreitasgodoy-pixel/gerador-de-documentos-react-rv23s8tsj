@@ -150,10 +150,13 @@ type SetValue = UseFormReturn<any>['setValue']
 
 // Um campo por lado: se o negócio tiver 2 vendedores, entra o primeiro; o
 // corretor edita o segundo na mão (esses documentos não têm partes múltiplas).
+// Devolve ParteNegocio (não PessoaExtraida): quem chama precisa do `_id` para
+// achar o anuente ligado a esta parte. ParteNegocio estende PessoaExtraida, então
+// os usos que só leem os campos da pessoa continuam válidos.
 function primeiraParte(
   negocio: Negocio,
   papel: 'vendedor' | 'comprador',
-): PessoaExtraida | undefined {
+): ParteNegocio | undefined {
   return negocio.partes.find((p) => p.papel === papel)
 }
 
@@ -230,6 +233,32 @@ export function aplicarPromise(setValue: SetValue, negocio: Negocio): void {
     setValue('comprador_profissao', c.profissao || '')
     setValue('comprador_cpf', c.cpf || '')
     setValue('comprador_endereco', c.endereco || '')
+  }
+  // Cônjuge do VENDEDOR. O dossiê guarda o cônjuge como uma parte de papel
+  // 'anuente' cujo `conjuge_de` é o `_id` do vendedor (ver negocios.ts) — é a
+  // outorga uxória. Sem isto o corretor cadastra o cônjuge no dossiê e mesmo
+  // assim redigita ele em TODA Simplificada.
+  //
+  // Só preenche quando o anuente tem nome E cpf: são exatamente os dois que o
+  // `promiseSchema` exige quando `conjuge_vendedor_papel !== 'nenhum'`. Preencher
+  // com um anuente incompleto deixaria o formulário INVÁLIDO e travaria a
+  // geração do documento — pior que não preencher.
+  //
+  // O cônjuge do COMPRADOR não é preenchido porque o dossiê não o modela: o
+  // `conjuge_de` aponta sempre para um vendedor (a tela do dossiê só oferece
+  // vendedores no seletor). O corretor segue digitando esse à mão.
+  if (v) {
+    const conjuge = negocio.partes.find(
+      (p) => p.papel === 'anuente' && p.conjuge_de === v._id && p.nome && p.cpf,
+    )
+    if (conjuge) {
+      setValue('conjuge_vendedor_papel', 'anuente')
+      setValue('conjuge_vendedor_nome', conjuge.nome)
+      setValue('conjuge_vendedor_nacionalidade', conjuge.nacionalidade || 'brasileiro(a)')
+      setValue('conjuge_vendedor_profissao', conjuge.profissao || '')
+      setValue('conjuge_vendedor_cpf', conjuge.cpf)
+      setValue('conjuge_vendedor_endereco', conjuge.endereco || '')
+    }
   }
   setValue('imovel_descricao', im.descricao || '')
   setValue('imovel_endereco', im.endereco || '')
