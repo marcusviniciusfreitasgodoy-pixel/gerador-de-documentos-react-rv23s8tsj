@@ -220,7 +220,7 @@ export default function Index() {
   })
 
   // C4 Lote 2: volta pro dossiê no Recibo (documento de partes planas).
-  const { registrarNegocio, calcular, gravar, negocioAtual } = useNegocioSyncPlano(
+  const { registrarNegocio, calcular, gravar, negocioAtual, resnapshot } = useNegocioSyncPlano(
     form,
     MAPA_RECIBO,
   )
@@ -728,7 +728,10 @@ export default function Index() {
                 variant="ghost"
                 size="sm"
                 className="text-muted-foreground hover:text-foreground w-fit"
-                onClick={() => form.reset(reciboMockData)}
+                onClick={() => {
+                  form.reset(reciboMockData)
+                  resnapshot()
+                }}
               >
                 <Wand2 className="mr-1.5 h-3.5 w-3.5" />
                 Preencher dados de teste
