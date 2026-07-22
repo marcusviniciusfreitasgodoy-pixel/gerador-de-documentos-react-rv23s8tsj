@@ -418,23 +418,21 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
       const atual = negocioRef.current
       // O `negocio` que chega na RE-aplicação ("Gerar outro") é o objeto congelado
       // no closure do CarregarDeNegocio — ele não sabe das gravações que fizemos.
-      // Esta é a ÚNICA guarda que impede reverter, em silêncio, dado já corrigido.
-      // Não "simplifique" sem entender os três casos abaixo:
-      //   - negocio.updated < atual.updated (mais antigo): manter o guardado é o
-      //     que impede a regressão — `r.partes` é construído a partir de
-      //     `negocio.partes` e `updateNegocio` substitui o array inteiro, então
-      //     regredir aqui faria a próxima gravação reverter campos já corrigidos.
-      //     Esta é a razão de a guarda existir.
-      //   - negocio.updated === atual.updated (empate): mesma revisão do
-      //     servidor, conteúdo idêntico — a escolha é indiferente; usar `<=`
-      //     (em vez de `<`) é só a opção mais defensiva.
-      //   - negocio.updated > atual.updated (mais novo): recarga manual ou
-      //     escrita externa trouxe `updated` mais novo, e assume a base, como deve.
+      // Manter o mais NOVO importa porque `negocioAtual()` alimenta a re-aplicação
+      // que REPOVOA o formulário: com a versão velha, o corretor veria de volta o
+      // dado que acabou de corrigir.
+      //   - negocio.updated < atual.updated (mais antigo): manter o guardado.
+      //   - === (empate): mesma revisão do servidor; `<=` é só a opção defensiva.
+      //   - > (mais novo): recarga manual ou escrita externa; assume a base.
+      // ⚠️ Esta guarda NÃO é mais o que protege a GRAVAÇÃO: desde a correção de
+      // concorrência, `gravar` busca o registro fresco e aplica só o patch, então a
+      // base guardada não entra no payload. Não remova a guarda por isso — ela
+      // continua sendo o que mantém o "Gerar outro" repovoando com dado atual.
       // Premissa: a comparação é lexicográfica de STRING, não temporal — só
-      // funciona porque o PocketBase devolve `updated` em formato de largura
-      // fixa e sempre em UTC (`YYYY-MM-DD HH:MM:SS.sssZ`), repassado verbatim
-      // por `normalize()` em src/lib/negocios.ts sem reformatação. Se esse campo
-      // passar por formatação no cliente, esta comparação quebra em silêncio.
+      // funciona porque o PocketBase devolve `updated` em formato de largura fixa
+      // e sempre em UTC, repassado verbatim por `normalize()` em negocios.ts. Se
+      // esse campo passar por formatação no cliente, esta comparação quebra em
+      // silêncio.
       const guardadoEhMelhor =
         !!atual && atual.id === negocio.id && negocio.updated <= atual.updated
       negocioRef.current = guardadoEhMelhor ? atual : negocio
@@ -464,16 +462,40 @@ export function useNegocioSync(form: UseFormReturn<any>, grupos: readonly string
     async (r: ResultadoVolta) => {
       const negocio = negocioRef.current
       if (!negocio) return
-      // Guarda o registro devolvido pelo servidor (já normalizado por
-      // updateNegocio, com o `updated` real) em vez de reconstruir a base
-      // localmente — é esse `updated` que registrarNegocio usa para decidir se
-      // uma versão recebida depois pode substituir a base sem regredi-la.
-      const gravado = await updateNegocio(negocio.id, { partes: r.partes, imovel: r.imovel })
+      // Busca o registro FRESCO: outro documento (ou outra aba) pode ter gravado
+      // depois da nossa carga. O patch é aplicado sobre o estado ATUAL do servidor,
+      // NUNCA sobre a base congelada — senão os campos que não mexemos aqui
+      // sobrescreveriam, com valores velhos, o que o outro documento corrigiu.
+      // Espalhar `p` PRIMEIRO preserva papel, conjuge_de, _confianca e _fonte;
+      // parte sem entrada no patch (ou criada em outro lugar) passa intacta.
+      // ⚠️ Isto NÃO é um lock: entre esta leitura e o update existe uma janela de
+      // milissegundos. Ela encolhe a perda de "desde que o form carregou" para
+      // "o round-trip", que é o ganho real — não a elimina.
+      const fresco = await getNegocio(negocio.id)
+      // Toda chave do patch precisa achar sua parte no registro fresco. Se não
+      // achar, a correção seria descartada em silêncio e o corretor veria
+      // "Negócio atualizado" mesmo assim — o modo de falha que esta correção
+      // existe para matar. Acontece de verdade quando a parte foi apagada no
+      // dossiê entre a carga e a gravação, ou quando ela está gravada sem `_id`
+      // e o normalize() de negocios.ts sorteia um id novo a cada leitura.
+      const idsFrescos = new Set(fresco.partes.map((p) => p._id))
+      const orfaos = Object.keys(r.patch.partes).filter((id) => !idsFrescos.has(id))
+      if (orfaos.length > 0) {
+        throw new Error(
+          'As partes deste negócio mudaram no dossiê desde que você carregou. Recarregue o negócio e gere o documento de novo.',
+        )
+      }
+      const partes = fresco.partes.map((p) =>
+        r.patch.partes[p._id] ? { ...p, ...r.patch.partes[p._id] } : p,
+      )
+      const gravado = await updateNegocio(negocio.id, {
+        partes,
+        imovel: { ...fresco.imovel, ...r.patch.imovel },
+      })
       negocioRef.current = gravado
       // O dossiê agora reflete o form: o snapshot passa a ser o estado atual,
       // senão gerar um 2º documento reofereceria as mesmas mudanças.
-      // CÓPIA PROFUNDA pelo mesmo motivo do registrarNegocio: getValues() devolve
-      // referências vivas; sem clonar, edições posteriores vazariam para o snapshot.
+      // CÓPIA PROFUNDA: getValues() devolve referências vivas.
       snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
     },
     [form],
@@ -532,7 +554,34 @@ export function useNegocioSyncPlano(form: UseFormReturn<any>, config: ConfigVolt
     async (r: ResultadoVolta) => {
       const negocio = negocioRef.current
       if (!negocio) return
-      const gravado = await updateNegocio(negocio.id, { partes: r.partes, imovel: r.imovel })
+      // Busca o registro FRESCO: outro documento (ou outra aba) pode ter gravado
+      // depois da nossa carga. O patch é aplicado sobre o estado ATUAL do servidor,
+      // NUNCA sobre a base congelada — senão os campos que não mexemos aqui
+      // sobrescreveriam, com valores velhos, o que o outro documento corrigiu.
+      // ⚠️ Isto NÃO é um lock: entre esta leitura e o update existe uma janela de
+      // milissegundos. Ela encolhe a perda de "desde que o form carregou" para
+      // "o round-trip", que é o ganho real — não a elimina.
+      const fresco = await getNegocio(negocio.id)
+      // Toda chave do patch precisa achar sua parte no registro fresco. Se não
+      // achar, a correção seria descartada em silêncio e o corretor veria
+      // "Negócio atualizado" mesmo assim — o modo de falha que esta correção
+      // existe para matar. Acontece de verdade quando a parte foi apagada no
+      // dossiê entre a carga e a gravação, ou quando ela está gravada sem `_id`
+      // e o normalize() de negocios.ts sorteia um id novo a cada leitura.
+      const idsFrescos = new Set(fresco.partes.map((p) => p._id))
+      const orfaos = Object.keys(r.patch.partes).filter((id) => !idsFrescos.has(id))
+      if (orfaos.length > 0) {
+        throw new Error(
+          'As partes deste negócio mudaram no dossiê desde que você carregou. Recarregue o negócio e gere o documento de novo.',
+        )
+      }
+      const partes = fresco.partes.map((p) =>
+        r.patch.partes[p._id] ? { ...p, ...r.patch.partes[p._id] } : p,
+      )
+      const gravado = await updateNegocio(negocio.id, {
+        partes,
+        imovel: { ...fresco.imovel, ...r.patch.imovel },
+      })
       negocioRef.current = gravado
       snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
     },
