@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { formatDateFull, cleanCurrencyMask, parseCurrency } from '@/lib/form-helpers'
+import { formatDateFull, cleanCurrencyMask, parseCurrency, trimDeep } from '@/lib/form-helpers'
 
 export const TIPO_EXCLUSIVIDADE_OPTIONS = ['COM GESTÃO EXCLUSIVA', 'SEM GESTÃO EXCLUSIVA'] as const
 
@@ -63,9 +63,14 @@ export interface BrokerInfo {
 }
 
 export function buildIntermediationTemplateData(
-  data: IntermediationValues,
-  broker?: BrokerInfo | null,
+  dataBruta: IntermediationValues,
+  brokerBruto?: BrokerInfo | null,
 ): Record<string, string> {
+  // Trim de entrada (ver `trimDeep`): um " R-9 " digitado no dossiê saía
+  // "registrado sob o  R-9  da referida matrícula". Aqui, e não na saída, porque
+  // os valores são costurados em frases antes de virar template data.
+  const data = trimDeep(dataBruta)
+  const broker = trimDeep(brokerBruto)
   const isComExclusiva = data.tipo_exclusividade === 'COM GESTÃO EXCLUSIVA'
   return {
     contratante_nome: data.contratante_nome,
