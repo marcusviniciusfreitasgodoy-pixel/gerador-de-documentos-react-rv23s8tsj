@@ -272,9 +272,13 @@ function temConteudo(v: unknown): boolean {
  *
  * @param form  o UseFormReturn do formulário
  * @param chave identificador único do documento (vira `localStorage['draft:'+chave]`)
+ * @param onRestaurar opcional: chamado logo após o `form.reset(saved)` do
+ *   "Recuperar", para o form saber que houve uma substituição EM MASSA (ex.:
+ *   re-tirar o snapshot do C4 — sem isso, o rascunho restaurado, que pode ser
+ *   de OUTRO negócio, seria oferecido como "correção" do corretor).
  * @returns `limparRascunho` — chame no submit bem-sucedido e no "Gerar outro".
  */
-export function useFormDraft(form: UseFormReturn<any>, chave: string) {
+export function useFormDraft(form: UseFormReturn<any>, chave: string, onRestaurar?: () => void) {
   const key = 'draft:' + chave
   const jaOfereceu = useRef(false)
   // Enquanto o toast "Recuperar?" está na tela, o autosave NÃO grava: o rascunho
@@ -322,6 +326,7 @@ export function useFormDraft(form: UseFormReturn<any>, chave: string) {
         label: 'Recuperar',
         onClick: () => {
           form.reset(saved)
+          onRestaurar?.()
           ofertaPendente.current = false
         },
       },
@@ -536,5 +541,14 @@ export function useNegocioSyncPlano(form: UseFormReturn<any>, config: ConfigVolt
 
   const negocioAtual = useCallback(() => negocioRef.current, [])
 
-  return { registrarNegocio, calcular, gravar, negocioAtual }
+  /** Re-tira o snapshot após uma substituição EM MASSA do form (mock, recuperar
+   *  rascunho). Sem isto, o dado injetado seria oferecido como "correção" do
+   *  corretor e poderia gravar dado de outro negócio no dossiê. Sem negócio
+   *  carregado não há o que fazer. */
+  const resnapshot = useCallback(() => {
+    if (!negocioRef.current) return
+    snapshotRef.current = JSON.parse(JSON.stringify(form.getValues())) as Record<string, unknown>
+  }, [form])
+
+  return { registrarNegocio, calcular, gravar, negocioAtual, resnapshot }
 }
