@@ -66,6 +66,26 @@ export function cleanCurrencyMask(value: string): string {
   return value.replace(/^R\$\s?/, '').trim()
 }
 
+// ── Comissão: fonte única da conta (fase 2c) ────────────────────────────
+// Os formulários calculavam com `parseFloat(pct)` — SEM tratar vírgula — enquanto
+// os templates usavam `.replace(',', '.')`. Com "5,5" a tela dizia 5% e o documento
+// 5,5%. O documento nunca esteve errado (o parsing dele já era o certo); quem
+// divergia era a tela. Aqui a conta passa a existir num lugar só.
+
+/** Percentual de comissão em número. Aceita vírgula BR ("5,5") e ponto ("5.5");
+ *  vazio/inválido → 0. Privado por ora: só `calcComissao` é consumida. Se um dia
+ *  os templates também adotarem esta fonte, é só exportar. */
+function parseComissaoPct(pctRaw?: string | number): number {
+  return parseFloat(String(pctRaw ?? '0').replace(',', '.')) || 0
+}
+
+/** Comissão em reais. A `base` vem PRONTA porque cada documento tem a sua: valor
+ *  total (à vista, financiada, FGTS, dação), valor de venda (simplificada) ou a
+ *  soma dos dois imóveis (permuta). O helper não adivinha a base. */
+export function calcComissao(base: number, pctRaw?: string | number): number {
+  return base * (parseComissaoPct(pctRaw) / 100)
+}
+
 export function formatDateFull(date: Date): string {
   const months = [
     'Janeiro',
