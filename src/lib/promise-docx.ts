@@ -17,7 +17,13 @@ function montarClausulas(d: Record<string, string>): Clausula[] {
     {
       titulo: 'DO OBJETO',
       texto:
-        'O PROMITENTE VENDEDOR promete vender ao PROMITENTE COMPRADOR, que aceita a promessa de compra, o imóvel descrito como {imovel_descricao}, situado em {imovel_endereco}, {imovel_cidade}/{imovel_estado}, objeto da matrícula nº {imovel_matricula} do respectivo Cartório de Registro de Imóveis.',
+        // A descrição do imóvel MANDA: ela vem da matrícula e já traz endereço,
+        // vagas e fração. Repetir os campos estruturados aqui produzia o mesmo bem
+        // descrito duas vezes — e com vocabulários diferentes (a matrícula diz
+        // "freguesia de Jacarepaguá", o cadastro diz "Barra da Tijuca"), o que num
+        // contrato lê como contradição. O `{imovel_cidade}` que sobrou qualifica o
+        // CARTÓRIO, não o imóvel — não é redundante e identifica o registro.
+        'O PROMITENTE VENDEDOR promete vender ao PROMITENTE COMPRADOR, que aceita a promessa de compra, o imóvel descrito como {imovel_descricao}, objeto da matrícula nº {imovel_matricula} do Cartório de Registro de Imóveis de {imovel_cidade}.',
     },
     {
       titulo: 'DO PREÇO',
