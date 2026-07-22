@@ -44,6 +44,7 @@ import {
   parseCurrency,
   formatCurrency,
   cleanCurrencyMask,
+  calcComissao,
   normalizarEstadoCivil,
   normalizarRegime,
   ARRAS_OPTIONS,
@@ -208,11 +209,10 @@ export function PromessaAvistaForm() {
     return Math.max(0, t - s - r)
   }, [valorTotal, valorSinal, valorReforco])
 
-  const comissaoValor = useMemo(() => {
-    const t = parseCurrency(valorTotal || '')
-    const pct = parseFloat(comissaoPct || '0') || 0
-    return t * (pct / 100)
-  }, [valorTotal, comissaoPct])
+  const comissaoValor = useMemo(
+    () => calcComissao(parseCurrency(valorTotal || ''), comissaoPct),
+    [valorTotal, comissaoPct],
+  )
 
   const fmt = (v: number) => cleanCurrencyMask(formatCurrency(v))
 
