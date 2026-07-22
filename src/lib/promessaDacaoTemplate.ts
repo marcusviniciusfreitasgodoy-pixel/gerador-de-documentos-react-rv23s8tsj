@@ -1,4 +1,4 @@
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import { parseCurrency, formatCurrency, cleanCurrencyMask, trimDeep } from '@/lib/form-helpers'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import type { PromessaDacaoValues, PartyValues, AnuenteValues } from '@/lib/promessaDacaoHelpers'
@@ -76,7 +76,13 @@ function anuenteToItem(a: AnuenteValues) {
   }
 }
 
-export function buildPromessaDacaoTemplateData(data: PromessaDacaoValues): Record<string, unknown> {
+export function buildPromessaDacaoTemplateData(
+  dataBruta: PromessaDacaoValues,
+): Record<string, unknown> {
+  // Trim de entrada (ver `trimDeep`): um " R-9 " digitado no dossiê saía
+  // "registrado sob o  R-9  da referida matrícula". Aqui, e não na saída, porque
+  // os valores são costurados em frases antes de virar template data.
+  const data = trimDeep(dataBruta)
   const valorTotal = parseCurrency(data.valor_total || '0')
   const valorEntrada = parseCurrency(data.valor_entrada || '0')
   const valorReforco = parseCurrency(data.valor_reforco || '0')
