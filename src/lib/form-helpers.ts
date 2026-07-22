@@ -253,3 +253,57 @@ export function buildTemplateData(dataBruta: FormValues): Record<string, string>
     testemunha2_cpf: data.testemunha2_cpf || '',
   }
 }
+
+// A IA de visao extrai texto livre da escritura ("casado", "comunhao parcial de
+// bens na vigencia da lei 6515/77"). Os campos do formulario sao <Select> com
+// opcoes FIXAS (ESTADO_CIVIL_OPTIONS / REGIME_BENS_OPTIONS). Se o valor nao bate
+// exatamente com uma opcao, o Select fica vazio. Estas funcoes mapeiam o texto
+// livre para a opcao correta; valor nao reconhecido volta '' (corretor escolhe).
+// Usadas pelo auto-preencher (AutoPreencherDialog -> form) e pelo Dossie
+// (aplicar-negocio.ts) — fonte unica de verdade.
+export function normalizarEstadoCivil(v: string): string {
+  const s = (v || '').toLowerCase()
+  if (s.includes('casad')) return 'Casado(a)'
+  if (s.includes('solteir')) return 'Solteiro(a)'
+  if (s.includes('divorc')) return 'Divorciado(a)'
+  if (s.includes('viúv') || s.includes('viuv')) return 'Viúvo(a)'
+  if (s.includes('união') || s.includes('uniao') || s.includes('estável') || s.includes('estavel'))
+    return 'União estável'
+  return ''
+}
+
+export function normalizarRegime(v: string): string {
+  const s = (v || '').toLowerCase()
+  if (s.includes('universal')) return 'Comunhão universal'
+  if (s.includes('parcial')) return 'Comunhão parcial'
+  if (s.includes('separa') || s.includes('total')) return 'Separação total'
+  return ''
+}
+
+// ── ARRAS ──────────────────────────────────────────────────────────────────
+// A natureza das arras não é formalidade: é a engenharia de risco do contrato.
+// Penitenciais limitam o prejuízo ao valor do sinal e permitem sair do negócio.
+// Confirmatórias tiram o direito de arrependimento e abrem perdas e danos
+// suplementares (art. 419) + execução específica — exposição sem teto.
+// Por isso a consequência vai pra tela: o corretor escolhe sabendo o que troca.
+// Redação conferida pelo Marcus (CRECI): o art. 420 diz "devolvê-las-á, mais o
+// equivalente" — devolve o sinal E paga multa igual. "Em dobro" é jargão que
+// esconde isso do corretor.
+export const ARRAS_OPTIONS = [
+  {
+    value: 'confirmatoria',
+    label: 'Confirmatórias — ninguém pode desistir',
+    resumo:
+      'Ninguém pode desistir. Quem descumprir responde: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E não para aí — a parte inocente ainda pode cobrar perdas e danos ALÉM disso, se provar prejuízo maior, ou exigir na Justiça que o contrato seja cumprido. Arts. 417 a 419 do Código Civil.',
+  },
+  {
+    value: 'penitencial',
+    label: 'Penitenciais — as partes podem desistir',
+    resumo:
+      'Qualquer das partes pode desistir, e quem desiste paga por isso: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E acaba aí — não cabe cobrar nada além disso, nem obrigar ninguém a assinar a escritura. Art. 420 do Código Civil.',
+  },
+] as const
+
+export function getArrasResumo(value?: string): string {
+  return ARRAS_OPTIONS.find((o) => o.value === value)?.resumo ?? ''
+}
