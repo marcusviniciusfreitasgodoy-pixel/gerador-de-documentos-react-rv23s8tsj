@@ -86,6 +86,28 @@ export function calcComissao(base: number, pctRaw?: string | number): number {
   return base * (parseComissaoPct(pctRaw) / 100)
 }
 
+// ── Trim de entrada: espaço nas pontas não pode chegar no contrato ──────
+// Um " R-9 " digitado no dossiê saía "registrado sob o  R-9  da referida matrícula".
+//
+// Trima na ENTRADA de cada build*TemplateData, não na saída, porque os valores são
+// COSTURADOS em frases antes de virar template data: `montarQualificacao` junta
+// rg/cpf/endereço numa string só, e aí já é tarde — limpar as pontas do resultado
+// não tira o espaço que ficou no meio ("nº  055274541 , expedido por").
+//
+// Só mexe em string. Booleano (iptu_rj, usa_fgts), número e Date passam intactos —
+// destruturar um Date num objeto o transformaria em {}, então ele sai antes.
+export function trimDeep<T>(value: T): T {
+  if (typeof value === 'string') return value.trim() as T
+  if (value instanceof Date) return value
+  if (Array.isArray(value)) return value.map((v) => trimDeep(v)) as T
+  if (value && typeof value === 'object') {
+    const out: Record<string, unknown> = {}
+    for (const [k, v] of Object.entries(value)) out[k] = trimDeep(v)
+    return out as T
+  }
+  return value
+}
+
 export function formatDateFull(date: Date): string {
   const months = [
     'Janeiro',
@@ -175,7 +197,11 @@ export const formSchema = z
 
 export type FormValues = z.infer<typeof formSchema>
 
-export function buildTemplateData(data: FormValues): Record<string, string> {
+export function buildTemplateData(dataBruta: FormValues): Record<string, string> {
+  // Trim de entrada (ver `trimDeep`): um " R-9 " digitado no dossiê saía
+  // "registrado sob o  R-9  da referida matrícula". Aqui, e não na saída, porque
+  // os valores são costurados em frases antes de virar template data.
+  const data = trimDeep(dataBruta)
   const sinal = parseCurrency(data.valor_sinal)
   const total = parseCurrency(data.valor_total)
   const saldo = total - sinal
@@ -207,77 +233,23 @@ export function buildTemplateData(data: FormValues): Record<string, string> {
     imovel_ri_numero: data.imovel_ri_numero,
     imovel_comarca: data.imovel_comarca,
     imovel_iptu: data.imovel_iptu,
-    valor_sinal: cleanCurrencyMask(data.valor_sinal),
+    valor_sinal: cleanCurrencyMask(formatCurrency(sinal)),
     valor_sinal_extenso: currencyToWords(sinal),
-    valor_total: cleanCurrencyMask(data.valor_total),
+    valor_total: cleanCurrencyMask(formatCurrency(total)),
     valor_total_extenso: currencyToWords(total),
     valor_saldo: cleanCurrencyMask(formatCurrency(saldo)),
     valor_saldo_extenso: currencyToWords(saldo),
-    forma_pagamento_sinal: data.forma_pagamento,
-    check_confirmatoria: isConfirmatoria ? '( X )' : '( )',
-    check_penitencial: !isConfirmatoria ? '( X )' : '( )',
+    forma_pagamento: data.forma_pagamento,
+    natureza_arras_texto: isConfirmatoria
+      ? 'confirmatórias, nos termos dos artigos 417 a 419 do Código Civil, não havendo direito de arrependimento'
+      : 'penitenciais, nos termos do artigo 420 do Código Civil, assegurado o direito de arrependimento',
     prazo_formalizacao_dias: data.prazo_formalizacao_dias,
     prazo_restituicao_dias: data.prazo_restituicao_dias,
     foro_comarca: data.foro_comarca,
-    cidade_uf: data.foro_comarca,
-    data_extenso: formatDateFull(new Date()).toLowerCase(),
+    data_documento: formatDateFull(new Date()),
     testemunha1_nome: data.testemunha1_nome || '',
     testemunha1_cpf: data.testemunha1_cpf || '',
     testemunha2_nome: data.testemunha2_nome || '',
     testemunha2_cpf: data.testemunha2_cpf || '',
   }
-}
-
-// A IA de visao extrai texto livre da escritura ("casado", "comunhao parcial de
-// bens na vigencia da lei 6515/77"). Os campos do formulario sao <Select> com
-// opcoes FIXAS (ESTADO_CIVIL_OPTIONS / REGIME_BENS_OPTIONS). Se o valor nao bate
-// exatamente com uma opcao, o Select fica vazio. Estas funcoes mapeiam o texto
-// livre para a opcao correta; valor nao reconhecido volta '' (corretor escolhe).
-// Usadas pelo auto-preencher (AutoPreencherDialog -> form) e pelo Dossie
-// (aplicar-negocio.ts) — fonte unica de verdade.
-export function normalizarEstadoCivil(v: string): string {
-  const s = (v || '').toLowerCase()
-  if (s.includes('casad')) return 'Casado(a)'
-  if (s.includes('solteir')) return 'Solteiro(a)'
-  if (s.includes('divorc')) return 'Divorciado(a)'
-  if (s.includes('viúv') || s.includes('viuv')) return 'Viúvo(a)'
-  if (s.includes('união') || s.includes('uniao') || s.includes('estável') || s.includes('estavel'))
-    return 'União estável'
-  return ''
-}
-
-export function normalizarRegime(v: string): string {
-  const s = (v || '').toLowerCase()
-  if (s.includes('universal')) return 'Comunhão universal'
-  if (s.includes('parcial')) return 'Comunhão parcial'
-  if (s.includes('separa') || s.includes('total')) return 'Separação total'
-  return ''
-}
-
-// ── ARRAS ──────────────────────────────────────────────────────────────────
-// A natureza das arras não é formalidade: é a engenharia de risco do contrato.
-// Penitenciais limitam o prejuízo ao valor do sinal e permitem sair do negócio.
-// Confirmatórias tiram o direito de arrependimento e abrem perdas e danos
-// suplementares (art. 419) + execução específica — exposição sem teto.
-// Por isso a consequência vai pra tela: o corretor escolhe sabendo o que troca.
-// Redação conferida pelo Marcus (CRECI): o art. 420 diz "devolvê-las-á, mais o
-// equivalente" — devolve o sinal E paga multa igual. "Em dobro" é jargão que
-// esconde isso do corretor.
-export const ARRAS_OPTIONS = [
-  {
-    value: 'confirmatoria',
-    label: 'Confirmatórias — ninguém pode desistir',
-    resumo:
-      'Ninguém pode desistir. Quem descumprir responde: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E não para aí — a parte inocente ainda pode cobrar perdas e danos ALÉM disso, se provar prejuízo maior, ou exigir na Justiça que o contrato seja cumprido. Arts. 417 a 419 do Código Civil.',
-  },
-  {
-    value: 'penitencial',
-    label: 'Penitenciais — as partes podem desistir',
-    resumo:
-      'Qualquer das partes pode desistir, e quem desiste paga por isso: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E acaba aí — não cabe cobrar nada além disso, nem obrigar ninguém a assinar a escritura. Art. 420 do Código Civil.',
-  },
-] as const
-
-export function getArrasResumo(value?: string): string {
-  return ARRAS_OPTIONS.find((o) => o.value === value)?.resumo ?? ''
 }
