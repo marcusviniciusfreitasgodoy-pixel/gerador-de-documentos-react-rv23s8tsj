@@ -315,10 +315,17 @@ export function aplicarChecklist(setValue: SetValue, negocio: Negocio): void {
 /** Uma diferença já pronta para exibir no diálogo de confirmação. */
 export type CampoAlterado = { rotulo: string; de: string; para: string }
 
-/** Payload de gravação + o que mudou, para o hook decidir se pergunta. */
+/** Só o que mudou, chaveado pelo `_id` da parte. Chavear por id (e não devolver o
+ *  array pronto) é o que permite aplicar este delta sobre QUALQUER versão do
+ *  registro — inclusive uma mais nova que a carregada quando o diff rodou. */
+export type PatchVolta = {
+  partes: Record<string, Partial<ParteNegocio>>
+  imovel: Partial<ImovelExtraido>
+}
+
+/** Delta de gravação + o que mudou, para o hook decidir se pergunta. */
 export type ResultadoVolta = {
-  partes: ParteNegocio[]
-  imovel: ImovelExtraido
+  patch: PatchVolta
   alteracoes: CampoAlterado[]
 }
 
@@ -428,14 +435,16 @@ export function calcularVolta(
   grupos: readonly string[],
 ): ResultadoVolta {
   const alteracoes: CampoAlterado[] = []
+  const patchPartes: Record<string, Partial<ParteNegocio>> = {}
 
-  const partes = negocio.partes.map((parte) => {
+  for (const parte of negocio.partes) {
     const antes = acharLinha(snapshot, grupos, parte._id)
     const agora = acharLinha(atual, grupos, parte._id)
-    // Parte que não está no form (ou sumiu dele): preserva intacta.
-    if (!antes || !agora) return parte
+    // Parte que não está no form (ou sumiu dele): não entra no patch, então
+    // fica intacta no registro na hora de gravar.
+    if (!antes || !agora) continue
 
-    const patch: Record<string, string> = {}
+    const patch: Partial<ParteNegocio> = {}
     for (const campo of CAMPOS_PARTE) {
       const de = txt(antes[campo])
       const para = txt(agora[campo])
@@ -448,12 +457,12 @@ export function calcularVolta(
         para,
       })
     }
-    // Espalha o original PRIMEIRO: papel, conjuge_de, _confianca e _fonte
-    // sobrevivem — só os 10 campos editáveis são sobrescritos.
-    return { ...parte, ...patch }
-  })
+    // Só entra quem realmente mudou: patch vazio no mapa faria o gravar
+    // reescrever a parte sem necessidade.
+    if (Object.keys(patch).length > 0) patchPartes[parte._id] = patch
+  }
 
-  const patchImovel: Record<string, string> = {}
+  const patchImovel: Partial<ImovelExtraido> = {}
   for (const campo of CAMPOS_IMOVEL) {
     const chave = `imovel_${campo}`
     const de = txt(snapshot[chave])
@@ -463,7 +472,7 @@ export function calcularVolta(
     alteracoes.push({ rotulo: ROTULO_IMOVEL[campo], de, para })
   }
 
-  return { partes, imovel: { ...negocio.imovel, ...patchImovel }, alteracoes }
+  return { patch: { partes: patchPartes, imovel: patchImovel }, alteracoes }
 }
 
 // ---------------------------------------------------------------------------
@@ -542,13 +551,13 @@ export function calcularVoltaPlano(
     alteracoes.push({ rotulo: ROTULO_IMOVEL[campo], de, para })
   }
 
-  // Só o 1º vendedor e o 1º comprador recebem patch (identidade de objeto). As
-  // demais partes (2º vendedor, anuentes) ficam intactas.
-  const partes = negocio.partes.map((p) =>
-    p === primeiroV ? { ...p, ...patchV } : p === primeiroC ? { ...p, ...patchC } : p,
-  )
+  // Só a 1ª parte de cada papel entra no patch; as demais (2º vendedor,
+  // anuentes) não são tocadas porque simplesmente não têm entrada aqui.
+  const patchPartes: Record<string, Partial<ParteNegocio>> = {}
+  if (primeiroV && Object.keys(patchV).length > 0) patchPartes[primeiroV._id] = patchV
+  if (primeiroC && Object.keys(patchC).length > 0) patchPartes[primeiroC._id] = patchC
 
-  return { partes, imovel: { ...negocio.imovel, ...patchImovel }, alteracoes }
+  return { patch: { partes: patchPartes, imovel: patchImovel }, alteracoes }
 }
 
 // Inverso de aplicarRecibo. Imóvel traduz rgi->ri_numero.
