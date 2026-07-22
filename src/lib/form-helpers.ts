@@ -1,59 +1,4 @@
-impoexport function buildTemplateData(dataBruta: FormValues): Record<string, string> {
-  // Trim de entrada (ver `trimDeep`): um " R-9 " digitado no dossiê saía
-  // "registrado sob o  R-9  da referida matrícula". Aqui, e não na saída, porque
-  // os valores são costurados em frases antes de virar template data.
-  const data = trimDeep(dataBruta)
-  const sinal = parseCurrency(data.valor_sinal)
-  const total = parseCurrency(data.valor_total)
-  const saldo = total - sinal
-  const isConfirmatoria = data.natureza_arras === 'confirmatoria'
-
-  return {
-    vendedor_nome: data.vendedor_nome,
-    vendedor_nacionalidade: data.vendedor_nacionalidade,
-    vendedor_qualificacao_civil: buildQualificacaoCivil(
-      data.vendedor_estado_civil,
-      data.vendedor_regime_bens,
-    ),
-    vendedor_profissao: data.vendedor_profissao,
-    vendedor_rg: data.vendedor_rg,
-    vendedor_cpf: data.vendedor_cpf,
-    vendedor_endereco: data.vendedor_endereco,
-    comprador_nome: data.comprador_nome,
-    comprador_nacionalidade: data.comprador_nacionalidade,
-    comprador_qualificacao_civil: buildQualificacaoCivil(
-      data.comprador_estado_civil,
-      data.comprador_regime_bens,
-    ),
-    comprador_profissao: data.comprador_profissao,
-    comprador_rg: data.comprador_rg,
-    comprador_cpf: data.comprador_cpf,
-    comprador_endereco: data.comprador_endereco,
-    imovel_descricao: data.imovel_descricao,
-    imovel_matricula: data.imovel_matricula,
-    imovel_ri_numero: data.imovel_ri_numero,
-    imovel_comarca: data.imovel_comarca,
-    imovel_iptu: data.imovel_iptu,
-    valor_sinal: cleanCurrencyMask(data.valor_sinal),
-    valor_sinal_extenso: currencyToWords(sinal),
-    valor_total: cleanCurrencyMask(data.valor_total),
-    valor_total_extenso: currencyToWords(total),
-    valor_saldo: cleanCurrencyMask(formatCurrency(saldo)),
-    valor_saldo_extenso: currencyToWords(saldo),
-    forma_pagamento_sinal: data.forma_pagamento,
-    check_confirmatoria: isConfirmatoria ? '( X )' : '( )',
-    check_penitencial: !isConfirmatoria ? '( X )' : '( )',
-    prazo_formalizacao_dias: data.prazo_formalizacao_dias,
-    prazo_restituicao_dias: data.prazo_restituicao_dias,
-    foro_comarca: data.foro_comarca,
-    cidade_uf: data.foro_comarca,
-    data_extenso: formatDateFull(new Date()).toLowerCase(),
-    testemunha1_nome: data.testemunha1_nome || '',
-    testemunha1_cpf: data.testemunha1_cpf || '',
-    testemunha2_nome: data.testemunha2_nome || '',
-    testemunha2_cpf: data.testemunha2_cpf || '',
-  }
-}rt { z } from 'zod'
+import { z } from 'zod'
 import { currencyToWords } from '@/lib/currency-to-words'
 
 export const reciboMockData: FormValues = {
@@ -288,20 +233,20 @@ export function buildTemplateData(dataBruta: FormValues): Record<string, string>
     imovel_ri_numero: data.imovel_ri_numero,
     imovel_comarca: data.imovel_comarca,
     imovel_iptu: data.imovel_iptu,
-    valor_sinal: cleanCurrencyMask(formatCurrency(sinal)),
+    valor_sinal: cleanCurrencyMask(data.valor_sinal),
     valor_sinal_extenso: currencyToWords(sinal),
-    valor_total: cleanCurrencyMask(formatCurrency(total)),
+    valor_total: cleanCurrencyMask(data.valor_total),
     valor_total_extenso: currencyToWords(total),
     valor_saldo: cleanCurrencyMask(formatCurrency(saldo)),
     valor_saldo_extenso: currencyToWords(saldo),
-    forma_pagamento: data.forma_pagamento,
-    natureza_arras_texto: isConfirmatoria
-      ? 'confirmatórias, nos termos dos artigos 417 a 419 do Código Civil, não havendo direito de arrependimento'
-      : 'penitenciais, nos termos do artigo 420 do Código Civil, assegurado o direito de arrependimento',
+    forma_pagamento_sinal: data.forma_pagamento,
+    check_confirmatoria: isConfirmatoria ? '( X )' : '( )',
+    check_penitencial: !isConfirmatoria ? '( X )' : '( )',
     prazo_formalizacao_dias: data.prazo_formalizacao_dias,
     prazo_restituicao_dias: data.prazo_restituicao_dias,
     foro_comarca: data.foro_comarca,
-    data_documento: formatDateFull(new Date()),
+    cidade_uf: data.foro_comarca,
+    data_extenso: formatDateFull(new Date()).toLowerCase(),
     testemunha1_nome: data.testemunha1_nome || '',
     testemunha1_cpf: data.testemunha1_cpf || '',
     testemunha2_nome: data.testemunha2_nome || '',
