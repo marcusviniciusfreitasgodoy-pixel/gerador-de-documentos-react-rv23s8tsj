@@ -16,8 +16,14 @@ import {
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
-import { aplicarPromise } from '@/lib/aplicar-negocio'
+import {
+  CarregarDeNegocio,
+  DocumentoGerado,
+  useFormDraft,
+  useNegocioSyncPlano,
+} from '@/components/CarregarDeNegocio'
+import { aplicarPromise, MAPA_SIMPLIFICADA } from '@/lib/aplicar-negocio'
+import type { ResultadoVolta } from '@/lib/aplicar-negocio'
 import {
   Form,
   FormField,
@@ -36,6 +42,16 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import { maskCurrency, maskCpfCnpj } from '@/lib/utils'
 import {
   parseCurrency,
@@ -117,10 +133,19 @@ export function PromiseForm() {
     },
   })
 
+  // C4 Lote 2: volta pro dossiê na Simplificada (documento de partes planas).
+  const { registrarNegocio, calcular, gravar, negocioAtual, resnapshot } = useNegocioSyncPlano(
+    form,
+    MAPA_SIMPLIFICADA,
+  )
+  const [voltaPendente, setVoltaPendente] = useState<ResultadoVolta | null>(null)
+
   const { control, setValue } = form
 
   // Fase 2b: autosalva o rascunho e oferece recuperar ao voltar (F5 / fechar aba).
-  const { limparRascunho } = useFormDraft(form, 'simplificada')
+  // C4 Lote 2: `resnapshot` como onRestaurar — o rascunho recuperado pode ser de
+  // OUTRO negócio; sem re-tirar o snapshot, ele seria oferecido como "correção".
+  const { limparRascunho } = useFormDraft(form, 'simplificada', resnapshot)
 
   // C3: guarda a taxa do corretor para RE-APLICAR depois de cada reset — o
   // form.reset() zerava o percentual carregado do perfil e ele nunca voltava.
@@ -186,6 +211,8 @@ export function PromiseForm() {
       generatePromiseDocx(buildPromiseTemplateData(data, broker))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
+      // C4: o documento JÁ saiu. Só agora oferecemos atualizar o dossiê.
+      setVoltaPendente(calcular())
       limparRascunho()
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
@@ -205,11 +232,58 @@ export function PromiseForm() {
 
   if (gerado) {
     return (
-      <DocumentoGerado
-        onValidar={onValidate}
-        onGerarOutro={handleGerarOutro}
-        validando={isValidating}
-      />
+      <>
+        <DocumentoGerado
+          onValidar={onValidate}
+          onGerarOutro={handleGerarOutro}
+          validando={isValidating}
+        />
+        <AlertDialog open={!!voltaPendente} onOpenChange={(o) => !o && setVoltaPendente(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Atualizar o Negócio?</AlertDialogTitle>
+              <AlertDialogDescription>
+                Documento gerado. Estes são os {voltaPendente?.alteracoes.length} dado(s) que você
+                alterou aqui:
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <ul className="max-h-60 space-y-2 overflow-y-auto text-sm">
+              {voltaPendente?.alteracoes.map((a, i) => (
+                <li key={i} className="border-l-2 border-muted pl-3">
+                  <div className="font-medium">{a.rotulo}</div>
+                  <div className="text-muted-foreground">
+                    <span className="line-through">{a.de || '(vazio)'}</span>
+                    {' → '}
+                    <span className="text-foreground">{a.para || '(vazio)'}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Agora não</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={async () => {
+                  const r = voltaPendente
+                  setVoltaPendente(null)
+                  if (!r) return
+                  try {
+                    await gravar(r)
+                    toast.success('Negócio atualizado.')
+                  } catch (e) {
+                    console.error('Erro ao atualizar o Negócio:', e)
+                    const mensagem = e instanceof Error ? e.message : String(e)
+                    toast.error(
+                      `Documento pronto, mas não consegui atualizar o Negócio. Tente pela tela do dossiê. ${mensagem}`,
+                    )
+                  }
+                }}
+              >
+                Atualizar o Negócio
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
     )
   }
 
@@ -222,6 +296,8 @@ export function PromiseForm() {
           onNegocioAplicado={(fn) => {
             reaplicarNegocioRef.current = fn
           }}
+          onNegocioCarregado={registrarNegocio}
+          negocioAtual={negocioAtual}
         />
         <PartySection
           control={control}
@@ -539,6 +615,7 @@ export function PromiseForm() {
           onClick={() => {
             form.reset(promiseMockData)
             aplicarBroker()
+            resnapshot()
           }}
         >
           <Wand2 className="mr-1.5 h-3.5 w-3.5" />
