@@ -106,7 +106,26 @@ export default function NegocioDetalhePage() {
     if (!id) return
     setSalvando(true)
     try {
-      await updateNegocio(id, { partes, imovel })
+      // Guarda de concorrência: esta tela substitui `partes` e `imovel` INTEIROS
+      // — é o editor do registro, e remover uma parte só se expressa assim. Por
+      // isso ela NÃO usa patch como os documentos (ver `gravar` em
+      // CarregarDeNegocio.tsx). Se o dossiê mudou em outro lugar depois que
+      // carregamos, salvar agora apagaria essa mudança em silêncio. Como as
+      // edições desta tela estão à vista do corretor, parar é seguro: ele
+      // recarrega e refaz.
+      const atual = await getNegocio(id)
+      if (negocio && atual.updated !== negocio.updated) {
+        toast.error(
+          'Este negócio foi alterado em outro lugar depois que você abriu esta tela. Recarregue a página antes de salvar — senão o que mudou lá seria sobrescrito.',
+        )
+        return
+      }
+      const gravado = await updateNegocio(id, { partes, imovel })
+      // Guarda o registro devolvido: sem isto o `updated` de referência ficaria
+      // velho e o PRÓXIMO salvamento acusaria conflito com a nossa própria
+      // gravação — um falso alarme a cada segundo save, do tipo que ensina o
+      // corretor a ignorar o aviso.
+      setNegocio(gravado)
       toast.success('Negócio salvo.')
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Não foi possível salvar.')
