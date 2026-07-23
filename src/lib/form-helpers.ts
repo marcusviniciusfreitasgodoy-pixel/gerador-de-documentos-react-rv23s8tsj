@@ -177,6 +177,31 @@ export function checarCpfRepetido(
   }
 }
 
+/** Mesma regra, para os documentos cujas partes são campos PLANOS
+ *  (`vendedor_cpf`, `conjuge_vendedor_cpf`, `interveniente_cpf`…) em vez de
+ *  arrays: Recibo, Compromisso e Simplificada. A ordem da lista é a ordem em que
+ *  o erro é atribuído — quem aparece depois é apontado como o repetido. */
+export function checarCpfRepetidoPlano(
+  partes: readonly { campo: string; rotulo: string; nome?: string; cpf?: string }[],
+  ctx: z.RefinementCtx,
+): void {
+  const vistos = new Map<string, string>()
+  for (const { campo, rotulo, nome, cpf } of partes) {
+    if (!documentoCompleto(cpf)) continue
+    const chave = digitosDocumento(cpf)
+    const anterior = vistos.get(chave)
+    if (anterior) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `CPF/CNPJ já informado para ${anterior} neste contrato`,
+        path: [campo],
+      })
+      continue
+    }
+    vistos.set(chave, (nome || '').trim() || rotulo)
+  }
+}
+
 export function formatDateFull(date: Date): string {
   const months = [
     'Janeiro',
@@ -263,6 +288,21 @@ export const formSchema = z
     message: 'Sinal não pode exceder o total',
     path: ['valor_sinal'],
   })
+  // Vendedor e comprador não podem ser a mesma pessoa (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetidoPlano(
+      [
+        { campo: 'vendedor_cpf', rotulo: 'o vendedor', nome: d.vendedor_nome, cpf: d.vendedor_cpf },
+        {
+          campo: 'comprador_cpf',
+          rotulo: 'o comprador',
+          nome: d.comprador_nome,
+          cpf: d.comprador_cpf,
+        },
+      ],
+      ctx,
+    ),
+  )
 
 export type FormValues = z.infer<typeof formSchema>
 
