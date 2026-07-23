@@ -52,7 +52,7 @@ function AguardandoLiberacao() {
             <p className="flex items-start gap-2">
               <FileText className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
               <span>
-                O acesso é liberado pelo administrador — normalmente em poucas horas. Você não
+                O acesso é liberado pelo administrador, normalmente em poucas horas. Você não
                 precisa fazer mais nada.
               </span>
             </p>
