@@ -77,10 +77,18 @@ export const promessaAvistaSchema = z
     // faziam via `entrada_parcelada`.
     prazo_reforco: z.string().optional(),
     data_limite_escritura: z.string().min(1, 'Obrigatório'),
-    comissao_beneficiario: z.string().optional(),
+    // Obrigatório: a cláusula da corretagem NÃO é condicional — ela imprime valor e
+    // percentual de qualquer jeito. Vazio, o contrato saía "a comissão é devida a ,
+    // inscrito(a) no , CRECI , ... no valor de R$ 60.000,00": obriga a pagar sessenta
+    // mil a NINGUÉM. Mesmo buraco do PIX vazio das Partes A/B/C, em outro campo.
+    // Na prática o `aplicarBroker` preenche do Perfil do Corretor — o que esta trava
+    // pega é justamente o perfil incompleto, que hoje passa em silêncio.
+    comissao_beneficiario: z.string().min(1, 'Obrigatório'),
     comissao_documento: z.string().optional(),
     comissao_creci: z.string().optional(),
-    comissao_pix: z.string().optional(),
+    // Obrigatório pelo mesmo motivo: a cláusula manda pagar "mediante PIX para a
+    // chave {comissao_pix}" sem condicional.
+    comissao_pix: z.string().min(1, 'Obrigatório'),
     comissao_percentual: z.string().min(1, 'Obrigatório'),
     comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
     tipo_arras: z.enum(['confirmatoria', 'penitencial']),
