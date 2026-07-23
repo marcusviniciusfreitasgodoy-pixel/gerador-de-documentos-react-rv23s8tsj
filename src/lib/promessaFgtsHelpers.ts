@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetido,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -68,7 +73,11 @@ export const promessaFgtsSchema = z
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
     data_limite_escritura: z.string().min(1, 'Obrigatório'),
     forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
-    dados_recebimento: z.string().optional(),
+    // Obrigatório: as Partes da Cláusula Quinta dizem "por meio de {forma_pagamento}
+    // para {dados_recebimento}". Vazio, o contrato saía "por meio de PIX para ."
+    // — promessa milionária sem dizer para onde pagar, e nada avisava.
+    // A Proposta/Reserva já exigia; as promessas, não.
+    dados_recebimento: z.string().min(1, 'Obrigatório'),
     prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
     comissao_beneficiario: z.string().optional(),
     comissao_documento: z.string().optional(),
@@ -104,6 +113,18 @@ export const promessaFgtsSchema = z
       message: 'Entrada + reforço + FGTS não podem exceder o valor total',
       path: ['valor_entrada'],
     },
+  )
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetido(
+      [
+        { campo: 'vendedores', rotulo: 'o vendedor', partes: d.vendedores || [] },
+        { campo: 'anuentes', rotulo: 'o anuente', partes: d.anuentes || [] },
+        { campo: 'compradores', rotulo: 'o comprador', partes: d.compradores || [] },
+      ],
+      ctx,
+    ),
   )
 
 export type PromessaFgtsValues = z.infer<typeof promessaFgtsSchema>
