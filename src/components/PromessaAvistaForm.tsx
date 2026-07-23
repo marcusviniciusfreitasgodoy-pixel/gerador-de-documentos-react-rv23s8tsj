@@ -91,7 +91,7 @@ const GRUPOS_AVISTA = ['vendedores', 'compradores', 'anuentes'] as const
 
 function sugerirPapel(regime?: string): string {
   if (regime === 'Comunhão universal')
-    return 'Sugerido: CO-VENDEDOR (comunhão universal — o cônjuge é meeiro do imóvel).'
+    return 'Sugerido: CO-VENDEDOR (comunhão universal: o cônjuge é meeiro do imóvel).'
   if (regime === 'Separação total')
     return 'Separação total: em regra dispensa a outorga (art. 1.647). Inclua o cônjuge só se quiser reforço.'
   if (regime === 'Comunhão parcial')
@@ -790,7 +790,7 @@ export function PromessaAvistaForm() {
               <FormItem>
                 <FormLabel>Ato de Registro na Matrícula</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ex: R-9 — só o ato; a matrícula já foi citada" {...field} />
+                  <Input placeholder="Ex: R-9 (só o ato; a matrícula já foi citada)" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -828,7 +828,7 @@ export function PromessaAvistaForm() {
               name="valor_sinal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Sinal — Parte A (R$) *</FormLabel>
+                  <FormLabel>Sinal: Parte A (R$) *</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="R$ 0,00"
@@ -845,7 +845,7 @@ export function PromessaAvistaForm() {
               name="valor_reforco"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Reforço — Parte B (R$)</FormLabel>
+                  <FormLabel>Reforço: Parte B (R$)</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="R$ 0,00"
@@ -858,7 +858,7 @@ export function PromessaAvistaForm() {
               )}
             />
             <FormItem>
-              <FormLabel>Saldo — Parte C (Calculado)</FormLabel>
+              <FormLabel>Saldo: Parte C (Calculado)</FormLabel>
               <FormControl>
                 <Input disabled value={fmt(saldo)} />
               </FormControl>
