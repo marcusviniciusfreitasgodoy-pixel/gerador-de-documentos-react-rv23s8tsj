@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetido,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -29,51 +34,70 @@ const anuenteSchema = partySchema.extend({
 export type PartyValues = z.infer<typeof partySchema>
 export type AnuenteValues = z.infer<typeof anuenteSchema>
 
-export const reservaPropostaSchema = z.object({
-  proponentes: z.array(partySchema).min(1, 'Ao menos um proponente'),
-  anuentes: z.array(anuenteSchema),
-  proprietarios: z.array(partySchema).min(1, 'Ao menos um proprietário'),
-  imovel_descricao: z.string().min(1, 'Obrigatório'),
-  imovel_endereco: z.string().min(1, 'Obrigatório'),
-  imovel_bairro: z.string().optional(),
-  imovel_cidade: z.string().min(1, 'Obrigatório'),
-  imovel_uf: z.string().min(1, 'Obrigatório'),
-  imovel_cep: z.string().optional(),
-  imovel_vagas_qtd: z.string().optional(),
-  imovel_vagas_descricao: z.string().optional(),
-  imovel_fracao_ideal: z.string().optional(),
-  imovel_rgi: z.string().optional(),
-  imovel_matricula: z.string().min(1, 'Obrigatório'),
-  imovel_iptu: z.string().optional(),
-  valor_proposto: z
-    .string()
-    .min(1, 'Obrigatório')
-    .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
-  forma_pagamento: z.string().min(1, 'Obrigatório'),
-  valor_sinal: z
-    .string()
-    .min(1, 'Obrigatório')
-    .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
-  dados_recebimento: z.string().min(1, 'Obrigatório'),
-  prazo_devolucao_dias: z.string().min(1, 'Obrigatório'),
-  prazo_validade_dias: z.string().min(1, 'Obrigatório'),
-  prazo_promessa_dias: z.string().min(1, 'Obrigatório'),
-  tem_contingencias: z.boolean(),
-  cont_financiamento: z.boolean(),
-  cont_certidoes: z.boolean(),
-  cont_vistoria: z.boolean(),
-  comissao_beneficiario: z.string().optional(),
-  comissao_documento: z.string().optional(),
-  comissao_creci: z.string().optional(),
-  comissao_pix: z.string().optional(),
-  comissao_percentual: z.string().optional(),
-  comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
-  data_documento: z.string().min(1, 'Obrigatório'),
-  testemunha1_nome: z.string().optional(),
-  testemunha1_cpf: z.string().optional(),
-  testemunha2_nome: z.string().optional(),
-  testemunha2_cpf: z.string().optional(),
-})
+export const reservaPropostaSchema = z
+  .object({
+    proponentes: z.array(partySchema).min(1, 'Ao menos um proponente'),
+    anuentes: z.array(anuenteSchema),
+    proprietarios: z.array(partySchema).min(1, 'Ao menos um proprietário'),
+    imovel_descricao: z.string().min(1, 'Obrigatório'),
+    imovel_endereco: z.string().min(1, 'Obrigatório'),
+    imovel_bairro: z.string().optional(),
+    imovel_cidade: z.string().min(1, 'Obrigatório'),
+    imovel_uf: z.string().min(1, 'Obrigatório'),
+    imovel_cep: z.string().optional(),
+    imovel_vagas_qtd: z.string().optional(),
+    imovel_vagas_descricao: z.string().optional(),
+    imovel_fracao_ideal: z.string().optional(),
+    imovel_rgi: z.string().optional(),
+    imovel_matricula: z.string().min(1, 'Obrigatório'),
+    imovel_iptu: z.string().optional(),
+    valor_proposto: z
+      .string()
+      .min(1, 'Obrigatório')
+      .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
+    forma_pagamento: z.string().min(1, 'Obrigatório'),
+    valor_sinal: z
+      .string()
+      .min(1, 'Obrigatório')
+      .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
+    dados_recebimento: z.string().min(1, 'Obrigatório'),
+    prazo_devolucao_dias: z.string().min(1, 'Obrigatório'),
+    prazo_validade_dias: z.string().min(1, 'Obrigatório'),
+    prazo_promessa_dias: z.string().min(1, 'Obrigatório'),
+    tem_contingencias: z.boolean(),
+    cont_financiamento: z.boolean(),
+    cont_certidoes: z.boolean(),
+    cont_vistoria: z.boolean(),
+    // Obrigatório: a cláusula da corretagem NÃO é condicional — ela imprime valor e
+    // percentual de qualquer jeito. Vazio, o contrato saía "a comissão é devida a ,
+    // inscrito(a) no , CRECI , ... no valor de R$ 60.000,00": obriga a pagar sessenta
+    // mil a NINGUÉM. Mesmo buraco do PIX vazio das Partes A/B/C, em outro campo.
+    // Na prática o `aplicarBroker` preenche do Perfil do Corretor — o que esta trava
+    // pega é justamente o perfil incompleto, que hoje passa em silêncio.
+    comissao_beneficiario: z.string().min(1, 'Obrigatório'),
+    comissao_documento: z.string().optional(),
+    comissao_creci: z.string().optional(),
+    comissao_pix: z.string().optional(),
+    comissao_percentual: z.string().optional(),
+    comissao_responsavel: z.enum(COMISSAO_RESPONSAVEL_OPTIONS),
+    data_documento: z.string().min(1, 'Obrigatório'),
+    testemunha1_nome: z.string().optional(),
+    testemunha1_cpf: z.string().optional(),
+    testemunha2_nome: z.string().optional(),
+    testemunha2_cpf: z.string().optional(),
+  })
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetido(
+      [
+        { campo: 'proprietarios', rotulo: 'o proprietário', partes: d.proprietarios || [] },
+        { campo: 'anuentes', rotulo: 'o anuente', partes: d.anuentes || [] },
+        { campo: 'proponentes', rotulo: 'o proponente', partes: d.proponentes || [] },
+      ],
+      ctx,
+    ),
+  )
 
 export type ReservaPropostaValues = z.infer<typeof reservaPropostaSchema>
 
