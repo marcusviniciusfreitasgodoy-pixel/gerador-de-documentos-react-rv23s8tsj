@@ -134,82 +134,78 @@ export default function ExpertSupportPage() {
         </Button>
       </div>
 
-      {/* Quem vai atender: só para o corretor. O admin JÁ é o especialista —
-          para ele isto seria a própria credencial de volta na tela, ocupando o
-          espaço da fila de trabalho. */}
-      {!isAdmin && (
-        <>
-          <div className="relative overflow-hidden rounded-2xl border border-primary/10 bg-primary/5 p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
-            <div className="absolute top-0 right-0 p-6 opacity-[0.03] pointer-events-none">
-              <ShieldCheck className="h-48 w-48 text-primary" />
-            </div>
-            <div className="hidden md:flex h-14 w-14 rounded-2xl bg-primary/10 items-center justify-center shrink-0">
-              <UserCheck className="h-7 w-7 text-primary" />
-            </div>
-            <div className="relative z-10 flex-1">
-              <Badge
-                variant="outline"
-                className="bg-background border-primary/20 text-primary hover:bg-background mb-2 font-semibold"
+      {/* Quem vai atender: aparece para todos. Para o corretor é a apresentação
+          da equipe antes de abrir o chamado; para o admin/especialista fica como
+          a credencial pública que ele apresenta (mesma que o corretor lê). */}
+      <div className="relative overflow-hidden rounded-2xl border border-primary/10 bg-primary/5 p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+        <div className="absolute top-0 right-0 p-6 opacity-[0.03] pointer-events-none">
+          <ShieldCheck className="h-48 w-48 text-primary" />
+        </div>
+        <div className="hidden md:flex h-14 w-14 rounded-2xl bg-primary/10 items-center justify-center shrink-0">
+          <UserCheck className="h-7 w-7 text-primary" />
+        </div>
+        <div className="relative z-10 flex-1">
+          <Badge
+            variant="outline"
+            className="bg-background border-primary/20 text-primary hover:bg-background mb-2 font-semibold"
+          >
+            Autoridade &amp; Experiência
+          </Badge>
+          <h3 className="text-lg md:text-xl font-bold text-primary mb-1.5">
+            Equipe de Especialistas e Escreventes
+          </h3>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
+            {ESPECIALISTA_INTRO}
+          </p>
+        </div>
+      </div>
+
+      <div className="pt-2">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
+            <ShieldCheck className="h-5 w-5 text-primary-foreground" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-primary">Quadro de Conhecimento e Segurança</h3>
+            <p className="text-sm text-muted-foreground">
+              Os pilares que garantem a segurança jurídica das suas operações.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          {ESPECIALISTA_PILARES.map((pilar) => {
+            const estilo = PILAR_ESTILO[pilar.id]
+            const { Icone } = estilo
+            return (
+              <Card
+                key={pilar.id}
+                className="border-border/60 shadow-sm hover:shadow-elevation transition-shadow overflow-hidden group"
               >
-                Autoridade &amp; Experiência
-              </Badge>
-              <h3 className="text-lg md:text-xl font-bold text-primary mb-1.5">
-                Equipe de Especialistas e Escreventes
-              </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
-                {ESPECIALISTA_INTRO}
-              </p>
-            </div>
-          </div>
-
-          <div className="pt-2">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
-                <ShieldCheck className="h-5 w-5 text-primary-foreground" />
-              </div>
-              <div>
-                <h3 className="text-lg font-bold text-primary">
-                  Quadro de Conhecimento e Segurança
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Os pilares que garantem a segurança jurídica das suas operações.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-              {ESPECIALISTA_PILARES.map((pilar) => {
-                const estilo = PILAR_ESTILO[pilar.id]
-                const { Icone } = estilo
-                return (
-                  <Card
-                    key={pilar.id}
-                    className="border-border/60 shadow-sm hover:shadow-elevation transition-shadow overflow-hidden group"
+                <CardContent className="p-5 relative">
+                  <div
+                    className={`absolute top-0 right-0 h-24 w-24 rounded-bl-full -mr-4 -mt-4 opacity-50 transition-transform duration-500 group-hover:scale-125 ${estilo.enfeite}`}
+                  />
+                  <div
+                    className={`h-12 w-12 rounded-xl flex items-center justify-center mb-4 relative z-10 border ${estilo.caixa}`}
                   >
-                    <CardContent className="p-5 relative">
-                      <div
-                        className={`absolute top-0 right-0 h-24 w-24 rounded-bl-full -mr-4 -mt-4 opacity-50 transition-transform duration-500 group-hover:scale-125 ${estilo.enfeite}`}
-                      />
-                      <div
-                        className={`h-12 w-12 rounded-xl flex items-center justify-center mb-4 relative z-10 border ${estilo.caixa}`}
-                      >
-                        <Icone className={`h-6 w-6 ${estilo.icone}`} />
-                      </div>
-                      <Badge variant="outline" className={`mb-2 font-semibold ${estilo.badge}`}>
-                        {pilar.badge}
-                      </Badge>
-                      <h4 className="font-bold text-primary mb-1.5">{pilar.titulo}</h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{pilar.desc}</p>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-          </div>
+                    <Icone className={`h-6 w-6 ${estilo.icone}`} />
+                  </div>
+                  <Badge variant="outline" className={`mb-2 font-semibold ${estilo.badge}`}>
+                    {pilar.badge}
+                  </Badge>
+                  <h4 className="font-bold text-primary mb-1.5">{pilar.titulo}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{pilar.desc}</p>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+      </div>
 
-          <h3 className="text-base font-semibold text-primary pt-2">Minhas Solicitações</h3>
-        </>
-      )}
+      <h3 className="text-base font-semibold text-primary pt-2">
+        {isAdmin ? 'Solicitações recebidas' : 'Minhas Solicitações'}
+      </h3>
 
       {requests.length === 0 ? (
         <Card className="shadow-elevation border-0 md:border md:border-border/60">
