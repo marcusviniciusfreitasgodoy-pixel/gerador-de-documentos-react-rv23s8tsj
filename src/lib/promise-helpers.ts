@@ -366,8 +366,16 @@ export function buildPromiseTemplateData(
     prazo_certidoes_dias: data.prazo_certidoes_dias,
     tipo_arras: tipoArras,
     saldo_pagamento: data.saldo_pagamento,
-    contratado_nome: broker?.name || 'Marcus Vinícius Freitas Godoy',
-    contratado_creci: broker?.creci || '80.199 RJ',
+    // Sem fallback chumbado: o app é multiusuário (tem Login/Signup) e o default
+    // anterior era o nome e o CRECI do Marcus. Um corretor com perfil incompleto
+    // emitia Simplificada dizendo que a comissão é devida a OUTRA pessoa, com o
+    // CRECI dela — e nome errado não se percebe lendo, ao contrário de campo vazio.
+    // Decisão do Marcus (2026-07-23): cair para vazio.
+    // ⚠️ Consequência aceita: sem perfil, a cláusula sai "devida ao INTERMEDIÁRIO
+    // — CRECI: ,". A Simplificada é o único documento sem trava para isso, porque
+    // aqui o intermediário não é campo de formulário — vem direto do perfil.
+    contratado_nome: broker?.name || '',
+    contratado_creci: broker?.creci || '',
     data_extenso: formatDateFull(new Date()).toLowerCase(),
     cidade_uf: `${data.imovel_cidade}/${data.imovel_estado}`,
     // Flag lida pelo promise-docx: liga a clausula IPTU-RJ (TRI003) so no municipio do Rio.
