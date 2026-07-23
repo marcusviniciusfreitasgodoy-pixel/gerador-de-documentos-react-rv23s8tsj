@@ -5,7 +5,8 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import { useAuth } from '@/hooks/use-auth'
 import { useRealtime } from '@/hooks/use-realtime'
@@ -240,9 +241,16 @@ export default function MyProfilePage() {
           <UserCircle className="h-6 w-6 text-primary" />
           <div>
             <CardTitle className="text-xl text-primary">Meu Perfil</CardTitle>
-            <CardDescription>
-              Gerencie suas informações profissionais para uso nos documentos gerados.
-            </CardDescription>
+            <div className="mt-1">
+              <IntroPagina
+                frase="Preencha uma vez: seu nome, CRECI e chave PIX entram automaticamente na cláusula de corretagem e na assinatura de todos os documentos."
+                passos={[
+                  'Escolha o tipo de perfil: corretor pessoa física ou imobiliária (CNPJ).',
+                  'O percentual de comissão padrão preenche os formulários sozinho (dá para ajustar caso a caso).',
+                  'Sem o perfil completo, a geração de documentos fica bloqueada, justamente para nenhum contrato sair sem os seus dados.',
+                ]}
+              />
+            </div>
           </div>
         </div>
       </CardHeader>
