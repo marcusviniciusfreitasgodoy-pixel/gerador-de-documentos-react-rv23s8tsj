@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
+import { ajudaDoc } from '@/pages/Index'
 import { DistratoForm } from '@/components/DistratoForm'
 
 export default function DistratoPage() {
@@ -19,9 +21,9 @@ export default function DistratoPage() {
         <CardTitle className="font-display text-3xl font-medium text-foreground">
           Distrato
         </CardTitle>
-        <CardDescription>
-          Desfazimento consensual de contrato, devolução de valores e quitação recíproca
-        </CardDescription>
+        <div className="mt-1">
+          <IntroPagina frase={ajudaDoc('/distrato')} />
+        </div>
       </CardHeader>
       <CardContent>
         <DistratoForm />
