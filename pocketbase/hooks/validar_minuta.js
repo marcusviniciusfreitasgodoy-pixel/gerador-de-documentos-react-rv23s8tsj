@@ -1,7 +1,61 @@
+// Retenção LGPD (decisão do Marcus, 2026-07-23): validation_logs e validation_audit
+// guardam o texto da minuta (dado pessoal). Registros com mais de 30 dias são
+// apagados por inteiro. O purge roda em dois lugares de propósito: no cron diário
+// das 03:00 (cobre períodos sem uso) e a cada chamada do validador (abaixo).
+// O código é duplicado porque handlers do JSVM do PocketBase são isolados:
+// não dá para compartilhar função entre cron e rota.
+try {
+  cronAdd('lgpd_retencao_validacao', '0 3 * * *', () => {
+    var cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().replace('T', ' ')
+    var cols = ['validation_logs', 'validation_audit']
+    for (var c = 0; c < cols.length; c++) {
+      try {
+        for (var rodada = 0; rodada < 20; rodada++) {
+          var velhos = $app.findRecordsByFilter(cols[c], 'created < {:cutoff}', '', 200, 0, {
+            cutoff: cutoff,
+          })
+          if (!velhos.length) break
+          for (var i = 0; i < velhos.length; i++) $app.delete(velhos[i])
+        }
+      } catch (err) {
+        $app.logger().error('lgpd_retencao: purge falhou', 'col', cols[c], 'error', String(err))
+      }
+    }
+  })
+} catch (cronErr) {
+  $app.logger().error('lgpd_retencao: cronAdd indisponivel', 'error', String(cronErr))
+}
+
 routerAdd(
   'POST',
   '/backend/v1/validar-minuta',
   (e) => {
+    // Retenção LGPD: mesmo purge do cron, disparado a cada uso. Fica ANTES da
+    // guarda do 'approved' de propósito: é limpeza interna (nada é devolvido ao
+    // usuário), e assim qualquer chamada autenticada mantém a retenção em dia.
+    try {
+      var lgpdCutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .replace('T', ' ')
+      var lgpdCols = ['validation_logs', 'validation_audit']
+      for (var lgpdC = 0; lgpdC < lgpdCols.length; lgpdC++) {
+        for (var lgpdRodada = 0; lgpdRodada < 10; lgpdRodada++) {
+          var lgpdVelhos = $app.findRecordsByFilter(
+            lgpdCols[lgpdC],
+            'created < {:cutoff}',
+            '',
+            200,
+            0,
+            { cutoff: lgpdCutoff },
+          )
+          if (!lgpdVelhos.length) break
+          for (var lgpdI = 0; lgpdI < lgpdVelhos.length; lgpdI++) $app.delete(lgpdVelhos[lgpdI])
+        }
+      }
+    } catch (lgpdErr) {
+      $app.logger().error('lgpd_retencao (inline): purge falhou', 'error', String(lgpdErr))
+    }
+
     // Guarda server-side do 'approved': o gate do frontend nao segura chamada
     // direta com o token de um usuario nao liberado. Admin dispensa, como no front.
     var guardAuth = e.auth
