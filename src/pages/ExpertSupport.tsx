@@ -1,6 +1,18 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, Plus, Headset, Clock, ShieldAlert } from 'lucide-react'
+import {
+  Loader2,
+  Plus,
+  Headset,
+  Clock,
+  ShieldAlert,
+  UserCheck,
+  ShieldCheck,
+  FileSignature,
+  Scale,
+  GraduationCap,
+  Building,
+} from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
@@ -19,8 +31,47 @@ import {
   type ExpertObjective,
   type ExpertUrgency,
   type ExpertStatus,
+  ESPECIALISTA_INTRO,
+  ESPECIALISTA_PILARES,
+  type EspecialistaPilarId,
 } from '@/services/expert'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+
+// Ícone e cor de cada pilar: layout mora aqui, texto mora em `services/expert`
+// (que é .ts e não comporta JSX). A chave é o `id` do pilar.
+const PILAR_ESTILO: Record<
+  EspecialistaPilarId,
+  { Icone: typeof FileSignature; caixa: string; icone: string; badge: string; enfeite: string }
+> = {
+  registral: {
+    Icone: FileSignature,
+    caixa: 'bg-blue-100 border-blue-200/50',
+    icone: 'text-blue-700',
+    badge: 'border-blue-200 text-blue-800 bg-blue-50',
+    enfeite: 'bg-blue-50',
+  },
+  juridica: {
+    Icone: Scale,
+    caixa: 'bg-indigo-100 border-indigo-200/50',
+    icone: 'text-indigo-700',
+    badge: 'border-indigo-200 text-indigo-800 bg-indigo-50',
+    enfeite: 'bg-indigo-50',
+  },
+  legislacao: {
+    Icone: GraduationCap,
+    caixa: 'bg-emerald-100 border-emerald-200/50',
+    icone: 'text-emerald-700',
+    badge: 'border-emerald-200 text-emerald-800 bg-emerald-50',
+    enfeite: 'bg-emerald-50',
+  },
+  mercado: {
+    Icone: Building,
+    caixa: 'bg-amber-100 border-amber-200/50',
+    icone: 'text-amber-700',
+    badge: 'border-amber-200 text-amber-800 bg-amber-50',
+    enfeite: 'bg-amber-50',
+  },
+}
 
 export default function ExpertSupportPage() {
   const { isAdmin } = useAuth()
@@ -60,17 +111,105 @@ export default function ExpertSupportPage() {
 
   return (
     <div className="w-full max-w-4xl space-y-4 animate-fade-in-up">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Headset className="h-6 w-6 text-primary" />
-          <h2 className="text-xl font-semibold text-primary">
-            {isAdmin ? 'Solicitações (Especialista)' : 'Minhas Solicitações'}
-          </h2>
+          {isAdmin ? (
+            <Headset className="h-6 w-6 text-primary shrink-0" />
+          ) : (
+            <UserCheck className="h-7 w-7 text-primary shrink-0" />
+          )}
+          <div>
+            <h2 className="text-xl md:text-2xl font-bold text-primary">
+              {isAdmin ? 'Solicitações (Especialista)' : 'Suporte Especializado'}
+            </h2>
+            {!isAdmin && (
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Escalone casos complexos para nossa equipe de Escreventes Notariais e Especialistas.
+              </p>
+            )}
+          </div>
         </div>
-        <Button size="sm" onClick={() => navigate('/especialista/nova')}>
+        <Button size="sm" className="shrink-0" onClick={() => navigate('/especialista/nova')}>
           <Plus className="mr-1 h-4 w-4" /> Nova solicitação
         </Button>
       </div>
+
+      {/* Quem vai atender: só para o corretor. O admin JÁ é o especialista —
+          para ele isto seria a própria credencial de volta na tela, ocupando o
+          espaço da fila de trabalho. */}
+      {!isAdmin && (
+        <>
+          <div className="relative overflow-hidden rounded-2xl border border-primary/10 bg-primary/5 p-5 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
+            <div className="absolute top-0 right-0 p-6 opacity-[0.03] pointer-events-none">
+              <ShieldCheck className="h-48 w-48 text-primary" />
+            </div>
+            <div className="hidden md:flex h-14 w-14 rounded-2xl bg-primary/10 items-center justify-center shrink-0">
+              <UserCheck className="h-7 w-7 text-primary" />
+            </div>
+            <div className="relative z-10 flex-1">
+              <Badge
+                variant="outline"
+                className="bg-background border-primary/20 text-primary hover:bg-background mb-2 font-semibold"
+              >
+                Autoridade &amp; Experiência
+              </Badge>
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-1.5">
+                Equipe de Especialistas e Escreventes
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
+                {ESPECIALISTA_INTRO}
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-2">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-10 w-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
+                <ShieldCheck className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-primary">
+                  Quadro de Conhecimento e Segurança
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Os pilares que garantem a segurança jurídica das suas operações.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+              {ESPECIALISTA_PILARES.map((pilar) => {
+                const estilo = PILAR_ESTILO[pilar.id]
+                const { Icone } = estilo
+                return (
+                  <Card
+                    key={pilar.id}
+                    className="border-border/60 shadow-sm hover:shadow-elevation transition-shadow overflow-hidden group"
+                  >
+                    <CardContent className="p-5 relative">
+                      <div
+                        className={`absolute top-0 right-0 h-24 w-24 rounded-bl-full -mr-4 -mt-4 opacity-50 transition-transform duration-500 group-hover:scale-125 ${estilo.enfeite}`}
+                      />
+                      <div
+                        className={`h-12 w-12 rounded-xl flex items-center justify-center mb-4 relative z-10 border ${estilo.caixa}`}
+                      >
+                        <Icone className={`h-6 w-6 ${estilo.icone}`} />
+                      </div>
+                      <Badge variant="outline" className={`mb-2 font-semibold ${estilo.badge}`}>
+                        {pilar.badge}
+                      </Badge>
+                      <h4 className="font-bold text-primary mb-1.5">{pilar.titulo}</h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{pilar.desc}</p>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </div>
+
+          <h3 className="text-base font-semibold text-primary pt-2">Minhas Solicitações</h3>
+        </>
+      )}
 
       {requests.length === 0 ? (
         <Card className="shadow-elevation border-0 md:border md:border-border/60">
