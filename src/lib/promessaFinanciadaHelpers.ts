@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetido,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -74,7 +79,11 @@ export const promessaFinanciadaSchema = z
     usa_fgts: z.boolean(),
     valor_fgts: z.string().optional(),
     forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
-    dados_recebimento: z.string().optional(),
+    // Obrigatório: as Partes da Cláusula Quinta dizem "por meio de {forma_pagamento}
+    // para {dados_recebimento}". Vazio, o contrato saía "por meio de PIX para ."
+    // — promessa milionária sem dizer para onde pagar, e nada avisava.
+    // A Proposta/Reserva já exigia; as promessas, não.
+    dados_recebimento: z.string().min(1, 'Obrigatório'),
     prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
     comissao_beneficiario: z.string().optional(),
     comissao_documento: z.string().optional(),
@@ -110,6 +119,18 @@ export const promessaFinanciadaSchema = z
     message: 'Informe o valor do FGTS',
     path: ['valor_fgts'],
   })
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetido(
+      [
+        { campo: 'vendedores', rotulo: 'o vendedor', partes: d.vendedores || [] },
+        { campo: 'anuentes', rotulo: 'o anuente', partes: d.anuentes || [] },
+        { campo: 'compradores', rotulo: 'o comprador', partes: d.compradores || [] },
+      ],
+      ctx,
+    ),
+  )
 
 export type PromessaFinanciadaValues = z.infer<typeof promessaFinanciadaSchema>
 
