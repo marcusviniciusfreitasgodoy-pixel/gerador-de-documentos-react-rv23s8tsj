@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetidoPlano,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -85,10 +90,18 @@ export const compromissoSchema = z
       .min(1, 'Obrigatório')
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
     valor_reforco: z.string().optional(),
-    comissao_beneficiario: z.string().optional(),
+    // Obrigatório: a cláusula da corretagem NÃO é condicional — ela imprime valor e
+    // percentual de qualquer jeito. Vazio, o contrato saía "a comissão é devida a ,
+    // inscrito(a) no , CRECI , ... no valor de R$ 60.000,00": obriga a pagar sessenta
+    // mil a NINGUÉM. Mesmo buraco do PIX vazio das Partes A/B/C, em outro campo.
+    // Na prática o `aplicarBroker` preenche do Perfil do Corretor — o que esta trava
+    // pega é justamente o perfil incompleto, que hoje passa em silêncio.
+    comissao_beneficiario: z.string().min(1, 'Obrigatório'),
     comissao_documento: z.string().optional(),
     comissao_creci: z.string().optional(),
-    comissao_pix: z.string().optional(),
+    // Obrigatório pelo mesmo motivo: a cláusula manda pagar "mediante PIX para a
+    // chave {comissao_pix}" sem condicional.
+    comissao_pix: z.string().min(1, 'Obrigatório'),
     comissao_percentual: z.string().min(1, 'Obrigatório'),
     prazo_certificado: z.string().min(1, 'Obrigatório'),
     prazo_reforco_texto: z.string().optional(),
@@ -111,6 +124,33 @@ export const compromissoSchema = z
     message: 'CPF obrigatório',
     path: ['interveniente_cpf'],
   })
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  // O interveniente só entra na conta quando existe: fora disso o campo é vazio.
+  .superRefine((d, ctx) =>
+    checarCpfRepetidoPlano(
+      [
+        { campo: 'vendedor_cpf', rotulo: 'o vendedor', nome: d.vendedor_nome, cpf: d.vendedor_cpf },
+        ...(d.has_interveniente
+          ? [
+              {
+                campo: 'interveniente_cpf',
+                rotulo: 'o interveniente anuente',
+                nome: d.interveniente_nome,
+                cpf: d.interveniente_cpf,
+              },
+            ]
+          : []),
+        {
+          campo: 'comprador_cpf',
+          rotulo: 'o comprador',
+          nome: d.comprador_nome,
+          cpf: d.comprador_cpf,
+        },
+      ],
+      ctx,
+    ),
+  )
 
 export type CompromissoValues = z.infer<typeof compromissoSchema>
 
