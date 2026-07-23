@@ -115,6 +115,13 @@ interface DocDef {
 // cada grupo situa quem não conhece a taxonomia jurídica. O `desc` de cada
 // documento é português do dia a dia; o termo técnico (arras, dação, tradição)
 // mora no `ajuda`, explicado — não no rótulo que o leigo lê primeiro.
+// Exportada para as páginas de rota própria (Permuta, Proposta, Distrato)
+// reusarem a MESMA explicação leiga do hub, sem segunda cópia de redação.
+export function ajudaDoc(href: string): string | undefined {
+  for (const g of DOC_GROUPS) for (const d of g.docs) if (d.href === href) return d.ajuda
+  return undefined
+}
+
 const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
   {
     label: 'Captação e pré-contrato',
@@ -139,7 +146,7 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         title: 'Recibo de Sinal',
         desc: 'Comprova o pagamento da entrada (sinal)',
         ajuda:
-          'Comprova que o comprador pagou o sinal — o valor de entrada que confirma o compromisso. Se alguém desistir, o sinal define quem perde ou devolve quanto (na lei, as "arras", arts. 417 a 420).',
+          'Comprova que o comprador pagou o sinal, o valor de entrada que confirma o compromisso. Se alguém desistir, o sinal define quem perde ou devolve quanto (na lei, as "arras", arts. 417 a 420).',
       },
     ],
   },
@@ -152,7 +159,7 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         title: 'À vista',
         desc: 'Pagamento com recursos próprios, sem banco',
         ajuda:
-          'O comprador paga o imóvel com dinheiro próprio — normalmente sinal, reforço e saldo — sem financiamento. É a promessa de venda mais direta.',
+          'O comprador paga o imóvel com dinheiro próprio (normalmente sinal, reforço e saldo), sem financiamento. É a promessa de venda mais direta.',
       },
       {
         key: 'compromissoFinanciado',
@@ -187,7 +194,7 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         title: 'Permuta',
         desc: 'Troca de um imóvel por outro',
         ajuda:
-          'Duas partes trocam imóveis entre si. Se um vale mais que o outro, a diferença é paga em dinheiro — a chamada "torna".',
+          'Duas partes trocam imóveis entre si. Se um vale mais que o outro, a diferença é paga em dinheiro, a chamada "torna".',
       },
     ],
   },
@@ -214,7 +221,7 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         title: 'Checklist Documental',
         desc: 'Lista para conferir os documentos da operação',
         ajuda:
-          'Uma lista para conferir se todos os documentos das partes e do imóvel estão reunidos e corretos antes de fechar — evita surpresas na hora do cartório.',
+          'Uma lista para conferir se todos os documentos das partes e do imóvel estão reunidos e corretos antes de fechar. Evita surpresas na hora do cartório.',
       },
       {
         href: '/distrato',
@@ -435,7 +442,7 @@ export default function Index() {
                     2. Cadastre seu primeiro Negócio
                   </p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Partes e imóvel digitados uma única vez — todos os documentos carregam de lá.
+                    Partes e imóvel digitados uma única vez: todos os documentos carregam de lá.
                   </p>
                 </div>
                 {!onboarding.negocioOk && (
