@@ -401,15 +401,15 @@ export function normalizarRegime(v: string): string {
 export const ARRAS_OPTIONS = [
   {
     value: 'confirmatoria',
-    label: 'Confirmatórias — ninguém pode desistir',
+    label: 'Confirmatórias: ninguém pode desistir',
     resumo:
-      'Ninguém pode desistir. Quem descumprir responde: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E não para aí — a parte inocente ainda pode cobrar perdas e danos ALÉM disso, se provar prejuízo maior, ou exigir na Justiça que o contrato seja cumprido. Arts. 417 a 419 do Código Civil.',
+      'Ninguém pode desistir. Quem descumprir responde: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E não para aí: a parte inocente ainda pode cobrar perdas e danos ALÉM disso, se provar prejuízo maior, ou exigir na Justiça que o contrato seja cumprido. Arts. 417 a 419 do Código Civil.',
   },
   {
     value: 'penitencial',
-    label: 'Penitenciais — as partes podem desistir',
+    label: 'Penitenciais: as partes podem desistir',
     resumo:
-      'Qualquer das partes pode desistir, e quem desiste paga por isso: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E acaba aí — não cabe cobrar nada além disso, nem obrigar ninguém a assinar a escritura. Art. 420 do Código Civil.',
+      'Qualquer das partes pode desistir, e quem desiste paga por isso: o comprador perde o sinal que deu; o vendedor devolve o sinal que recebeu e paga mais uma multa do mesmo valor. E acaba aí: não cabe cobrar nada além disso, nem obrigar ninguém a assinar a escritura. Art. 420 do Código Civil.',
   },
 ] as const
 
