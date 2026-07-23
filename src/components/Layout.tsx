@@ -2,6 +2,9 @@ import { Component, useState, useEffect, type ReactNode } from 'react'
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
 import {
   LogOut,
+  ChevronDown,
+  ChevronUp,
+  Lightbulb,
   BookOpen,
   FileCheck,
   UserCircle,
@@ -165,6 +168,63 @@ export default function Layout() {
           <Outlet />
         </ErrorBoundary>
       </main>
+    </div>
+  )
+}
+
+// ── Introdução padrão de página ─────────────────────────────────────────────
+// Onboarding contínuo: uma frase de benefício SEMPRE visível e um "Como
+// funciona" que só abre quando o usuário pede. O novato entende a página; o
+// veterano nunca é atrapalhado. Mora aqui (e não num arquivo próprio) porque o
+// editor do Skip não cria arquivos novos. Regra de redação do Marcus: nunca
+// usar travessão nos textos.
+export function IntroPagina({
+  frase,
+  passos,
+  dica,
+}: {
+  frase: ReactNode
+  passos?: ReactNode[]
+  dica?: ReactNode
+}) {
+  const [aberto, setAberto] = useState(false)
+  return (
+    <div className="space-y-2">
+      <p className="text-sm text-muted-foreground leading-relaxed">{frase}</p>
+      {passos && passos.length > 0 && (
+        <div>
+          <button
+            type="button"
+            onClick={() => setAberto((v) => !v)}
+            className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+          >
+            {aberto ? (
+              <ChevronUp className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronDown className="h-3.5 w-3.5" />
+            )}
+            Como funciona
+          </button>
+          {aberto && (
+            <div className="mt-2 space-y-2 animate-fade-in-up">
+              <ol className="space-y-2">
+                {passos.map((p, i) => (
+                  <li key={i} className="flex gap-2 text-sm text-muted-foreground leading-relaxed">
+                    <span className="text-primary font-medium shrink-0">{i + 1}.</span>
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ol>
+              {dica && (
+                <div className="flex gap-2 rounded-md bg-primary/5 p-2.5 text-sm text-muted-foreground leading-relaxed">
+                  <Lightbulb className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                  <span>{dica}</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
