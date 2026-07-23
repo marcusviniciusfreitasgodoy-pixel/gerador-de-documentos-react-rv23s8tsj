@@ -2,7 +2,15 @@ import PizZip from 'pizzip'
 import Docxtemplater from 'docxtemplater'
 import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 
-// TEMPLATE OBJETO-ENXUTO: pin 8b6b4c28 = 41808 bytes.
+// TEMPLATE OBJETO-ENXUTO + PARTE B CONDICIONAL: pin 1e083564 = 41816 bytes.
+// A Parte B (reforço) da Cláusula Quinta agora vive dentro de {#entrada_parcelada} —
+// sem reforço, o parágrafo some inteiro em vez de imprimir "R$ 0,00 ... a ser pago em
+// até <data>", que criava obrigação datada para pagamento inexistente. É o mesmo
+// mecanismo que Fgts/Financiada/Dação já usavam; só a à vista estava de fora.
+// A Cláusula Nona deixou de enumerar "das Partes A, B e C" (a referência ficaria
+// pendurada sem a Parte B) e passou a dizer "do preço ajustado na Cláusula Quinta",
+// que é a redação dos outros três.
+// Pin anterior: 8b6b4c28 = 41808 bytes.
 // A Cláusula Primeira descreve o imóvel UMA vez. O pin anterior (bc95bb9b = 41895)
 // repetia endereço, bairro, CEP, vagas e fração DEPOIS da {imovel_descricao} — e como
 // a descrição vem da matrícula e já traz tudo isso, o mesmo bem saía descrito duas
@@ -12,8 +20,8 @@ import { extractTextFromRenderedDoc } from '@/lib/docx-extract'
 // Além do "qualquer cidade" (defd51fd), a cláusula de atualização cadastral do IPTU segue condicional:
 // {#iptu_rj} versão reforçada (60d + Lei 5.400/2012 + multa) / {^iptu_rj} 30d.
 const TEMPLATE_URL =
-  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/8b6b4c2826f28cf1819c27298dd1fb2e229fc203/promessa_base64.txt'
-const EXPECTED_BYTE_COUNT = 41808
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/1e0835643cf4cdb3f7a74a251340ceab51fdf82f/promessa_base64.txt'
+const EXPECTED_BYTE_COUNT = 41816
 
 function base64ToUint8Array(base64: string): Uint8Array {
   const binaryString = atob(base64.trim())
