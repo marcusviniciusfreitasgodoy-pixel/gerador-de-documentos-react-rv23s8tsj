@@ -1,4 +1,10 @@
-import { parseCurrency, formatCurrency, cleanCurrencyMask, trimDeep } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  limparNumeroRedundante,
+  trimDeep,
+} from '@/lib/form-helpers'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import type {
@@ -67,7 +73,9 @@ export function buildReservaPropostaTemplateData(
     imovel_fracao_ideal: data.imovel_fracao_ideal || '',
     imovel_rgi: data.imovel_rgi || '',
     imovel_matricula: data.imovel_matricula || '',
-    imovel_iptu: data.imovel_iptu || '',
+    // O documento já escreve o "nº" antes deste valor; um "FRE nº 3.085.078-8"
+    // gravado no dossiê saía "inscrição municipal nº FRE nº 3.085.078-8".
+    imovel_iptu: limparNumeroRedundante(data.imovel_iptu || ''),
     valor_proposto: fmt(valorProposto),
     valor_proposto_extenso: extenso(valorProposto),
     forma_pagamento: data.forma_pagamento || '',
