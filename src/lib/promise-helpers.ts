@@ -5,6 +5,7 @@ import {
   cleanCurrencyMask,
   formatDateFull,
   buildQualificacaoCivil,
+  checarCpfRepetidoPlano,
   ESTADO_CIVIL_OPTIONS,
   REGIME_BENS_OPTIONS,
   trimDeep,
@@ -149,6 +150,54 @@ export const promiseSchema = z
     message: 'CPF/CNPJ obrigatório',
     path: ['interveniente_cpf'],
   })
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  // Cônjuges e interveniente só entram quando existem — fora disso os campos são
+  // vazios e a checagem já os ignoraria, mas explicitar deixa a intenção clara.
+  .superRefine((d, ctx) =>
+    checarCpfRepetidoPlano(
+      [
+        { campo: 'vendedor_cpf', rotulo: 'o vendedor', nome: d.vendedor_nome, cpf: d.vendedor_cpf },
+        ...(d.conjuge_vendedor_papel !== 'nenhum'
+          ? [
+              {
+                campo: 'conjuge_vendedor_cpf',
+                rotulo: 'o cônjuge do vendedor',
+                nome: d.conjuge_vendedor_nome,
+                cpf: d.conjuge_vendedor_cpf,
+              },
+            ]
+          : []),
+        ...(d.has_interveniente
+          ? [
+              {
+                campo: 'interveniente_cpf',
+                rotulo: 'o interveniente anuente',
+                nome: d.interveniente_nome,
+                cpf: d.interveniente_cpf,
+              },
+            ]
+          : []),
+        {
+          campo: 'comprador_cpf',
+          rotulo: 'o comprador',
+          nome: d.comprador_nome,
+          cpf: d.comprador_cpf,
+        },
+        ...(d.conjuge_comprador_papel !== 'nenhum'
+          ? [
+              {
+                campo: 'conjuge_comprador_cpf',
+                rotulo: 'o cônjuge do comprador',
+                nome: d.conjuge_comprador_nome,
+                cpf: d.conjuge_comprador_cpf,
+              },
+            ]
+          : []),
+      ],
+      ctx,
+    ),
+  )
 
 export type PromiseValues = z.infer<typeof promiseSchema>
 
