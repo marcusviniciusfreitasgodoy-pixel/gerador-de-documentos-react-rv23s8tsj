@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
+import { ajudaDoc } from '@/pages/Index'
 import { ReservaPropostaForm } from '@/components/ReservaPropostaForm'
 
 export default function PropostaReservaPage() {
@@ -19,9 +21,9 @@ export default function PropostaReservaPage() {
         <CardTitle className="font-display text-3xl font-medium text-foreground">
           Proposta de Compra e Reserva
         </CardTitle>
-        <CardDescription>
-          Oferta de compra com sinal/reserva, passo antes da promessa
-        </CardDescription>
+        <div className="mt-1">
+          <IntroPagina frase={ajudaDoc('/proposta-reserva')} />
+        </div>
       </CardHeader>
       <CardContent>
         <ReservaPropostaForm />
