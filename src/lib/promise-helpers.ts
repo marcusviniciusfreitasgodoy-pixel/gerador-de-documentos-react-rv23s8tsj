@@ -204,7 +204,7 @@ export type PromiseValues = z.infer<typeof promiseSchema>
 // Sugestão de papel do cônjuge do VENDEDOR, por regime — mesma régua da À vista.
 export function sugerirPapelConjuge(regime?: string): string {
   if (regime === 'Comunhão universal')
-    return 'Comunhão universal: o cônjuge é meeiro do imóvel — sugerido CO-VENDEDOR.'
+    return 'Comunhão universal: o cônjuge é meeiro do imóvel: sugerido CO-VENDEDOR.'
   if (regime === 'Separação total')
     return 'Separação total: em regra dispensa a outorga (art. 1.647). Inclua o cônjuge só se quiser reforço.'
   if (regime === 'Comunhão parcial')
@@ -216,7 +216,7 @@ export function sugerirPapelConjuge(regime?: string): string {
 // é se o cônjuge entra como co-adquirente — mesma régua da Proposta/Reserva.
 export function sugerirPapelConjugeComprador(regime?: string): string {
   if (regime === 'Comunhão universal' || regime === 'Comunhão parcial')
-    return 'Comunhão de bens: o imóvel entrará no patrimônio comum — sugerido CO-COMPRADOR.'
+    return 'Comunhão de bens: o imóvel entrará no patrimônio comum: sugerido CO-COMPRADOR.'
   if (regime === 'Separação total')
     return 'Separação total: a aquisição não integra o patrimônio do outro. Inclua o cônjuge só se comprarem juntos.'
   return 'Selecione o regime de bens para a sugestão.'
