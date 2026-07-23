@@ -461,7 +461,7 @@ export function PermutaForm() {
             control={ctrl}
             prefix={`${which}.${i}`}
             sep="."
-            title={`Dados — ${label} ${i + 1}`}
+            title={`Dados: ${label} ${i + 1}`}
             icon={<User className="h-5 w-5 text-primary" />}
           />
           {watched[i]?.estado_civil === 'Casado(a)' && (
@@ -653,12 +653,12 @@ export function PermutaForm() {
         <ImovelSection
           control={control}
           prefix="imovel_a"
-          titulo="Imóvel A — do Primeiro Permutante"
+          titulo="Imóvel A: do Primeiro Permutante"
         />
         <ImovelSection
           control={control}
           prefix="imovel_b"
-          titulo="Imóvel B — do Segundo Permutante"
+          titulo="Imóvel B: do Segundo Permutante"
         />
 
         <div className="space-y-4">
