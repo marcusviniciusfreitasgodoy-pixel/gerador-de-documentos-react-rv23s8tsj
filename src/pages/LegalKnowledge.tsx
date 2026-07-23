@@ -19,7 +19,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
 import {
   Dialog,
   DialogContent,
@@ -340,7 +341,16 @@ export default function LegalKnowledgePage() {
             <BookOpen className="h-6 w-6 text-primary" />
             <div>
               <CardTitle className="text-xl text-primary">Base de Conhecimento Jurídico</CardTitle>
-              <CardDescription>Referências legais para geração de documentos.</CardDescription>
+              <div className="mt-1">
+                <IntroPagina
+                  frase="As regras e cláusulas aprovadas que servem de régua para o Validador: é contra o que está aqui que toda minuta é conferida."
+                  passos={[
+                    'Consulte por código, título ou categoria para entender o que o validador cobra de cada documento.',
+                    'Cada regra tem um código (ex.: FIX004, LGP001) que aparece nos resultados da validação.',
+                    'Administradores podem criar, editar ou importar regras: a mudança vale já na validação seguinte.',
+                  ]}
+                />
+              </div>
             </div>
           </div>
           {isAdmin && (
@@ -412,7 +422,7 @@ export default function LegalKnowledgePage() {
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground">
-                        .doc antigo não é suportado — converta em PDF.
+                        .doc antigo não é suportado: converta em PDF.
                       </p>
                     </div>
                     {/* Texto (colar ou revisar o extraído) */}
