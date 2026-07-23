@@ -78,7 +78,7 @@ function sugerirPapelProponente(regime?: string, estadoCivil?: string): string {
   if (estadoCivil !== 'Casado(a)')
     return 'Casado(a) em comunhão de bens? Considere incluir o cônjuge como co-proponente (co-comprador).'
   if (regime === 'Comunhão universal' || regime === 'Comunhão parcial')
-    return 'Comunhão de bens: o imóvel entrará no patrimônio comum — inclua o cônjuge como CO-PROPONENTE (co-comprador).'
+    return 'Comunhão de bens: o imóvel entrará no patrimônio comum: inclua o cônjuge como CO-PROPONENTE (co-comprador).'
   if (regime === 'Separação total')
     return 'Separação total: a aquisição não integra o patrimônio do outro. Inclua o cônjuge só se comprarem juntos.'
   return 'Na dúvida, se pretendem adquirir em conjunto, inclua o cônjuge como co-proponente.'
@@ -342,7 +342,7 @@ export function ReservaPropostaForm() {
         <div className="space-y-4">
           <div className="flex items-center gap-2">
             <User className="h-5 w-5 text-primary" />
-            <h3 className="font-semibold text-primary">Proponente(s) — quem faz a proposta</h3>
+            <h3 className="font-semibold text-primary">Proponente(s): quem faz a proposta</h3>
           </div>
           <Separator />
           {proponenteFields.map((f, i) => (
@@ -465,7 +465,7 @@ export function ReservaPropostaForm() {
           <div className="flex items-center gap-2">
             <UserCheck className="h-5 w-5 text-primary" />
             <h3 className="font-semibold text-primary">
-              Proprietário(s) — a quem a proposta é dirigida
+              Proprietário(s): a quem a proposta é dirigida
             </h3>
           </div>
           <Separator />
