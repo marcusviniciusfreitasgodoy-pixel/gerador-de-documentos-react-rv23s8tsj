@@ -14,6 +14,7 @@ import { ArrowLeft, Plus, Save, Trash2, User, Building2, Loader2 } from 'lucide-
 import { toast } from 'sonner'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
 import { getNegocio, updateNegocio, mesclarPartes } from '@/lib/negocios'
+import { IntroPagina } from '@/components/Layout'
 import type { Negocio, ParteNegocio, PapelParte } from '@/lib/negocios'
 import { mergeResults, emptyImovel } from '@/lib/extraction-types'
 import type {
@@ -116,7 +117,7 @@ export default function NegocioDetalhePage() {
       const atual = await getNegocio(id)
       if (negocio && atual.updated !== negocio.updated) {
         toast.error(
-          'Este negócio foi alterado em outro lugar depois que você abriu esta tela. Recarregue a página antes de salvar — senão o que mudou lá seria sobrescrito.',
+          'Este negócio foi alterado em outro lugar depois que você abriu esta tela. Recarregue a página antes de salvar, senão o que mudou lá seria sobrescrito.',
         )
         return
       }
@@ -155,6 +156,16 @@ export default function NegocioDetalhePage() {
             <ArrowLeft className="h-3 w-3" /> Negócios
           </Link>
           <h1 className="text-2xl font-bold">{negocio.titulo}</h1>
+          <div className="mt-1 max-w-2xl">
+            <IntroPagina
+              frase="Este é o dossiê da operação: tudo que os documentos usam vem daqui. Mantenha os dados corretos e todos os documentos saem corretos."
+              passos={[
+                'Cadastre as partes (vendedores, compradores, anuentes) e o imóvel, ou suba os documentos e deixe a IA extrair.',
+                'Todos os documentos do app leem estes dados na hora de gerar.',
+                'Uma correção feita aqui vale para todos os próximos documentos deste negócio.',
+              ]}
+            />
+          </div>
         </div>
         <Button onClick={handleSalvar} disabled={salvando}>
           {salvando ? (
