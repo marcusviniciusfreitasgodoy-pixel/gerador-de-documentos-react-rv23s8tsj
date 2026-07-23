@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
+import { ajudaDoc } from '@/pages/Index'
 import { PermutaForm } from '@/components/PermutaForm'
 
 export default function PermutaPage() {
@@ -19,7 +21,9 @@ export default function PermutaPage() {
         <CardTitle className="font-display text-3xl font-medium text-foreground">
           Promessa de Permuta
         </CardTitle>
-        <CardDescription>Troca de imóveis com torna opcional</CardDescription>
+        <div className="mt-1">
+          <IntroPagina frase={ajudaDoc('/permuta')} />
+        </div>
       </CardHeader>
       <CardContent>
         <PermutaForm />
