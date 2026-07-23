@@ -12,6 +12,8 @@ import {
   FileSignature,
   FileSearch,
   Briefcase,
+  CheckCircle2,
+  Circle,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useNavigate, Link } from 'react-router-dom'
@@ -32,6 +34,8 @@ import type { ResultadoVolta } from '@/lib/aplicar-negocio'
 import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { PromessaDacaoForm } from '@/components/PromessaDacaoForm'
 import { reciboMockData } from '@/lib/form-helpers'
+import pb from '@/lib/pocketbase/client'
+import { getBrokerProfile } from '@/services/broker-profile'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -242,6 +246,37 @@ const DOC_CARD_CLASS =
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
+
+  // Onboarding do hub: os dois pré-requisitos reais de uso (perfil preenchido e
+  // um negócio cadastrado). O checklist aparece enquanto faltar um deles e some
+  // sozinho quando os dois existem — não é um tour, é o caminho mínimo até o
+  // primeiro documento bem gerado. Recarrega a cada volta ao hub (remount).
+  const [onboarding, setOnboarding] = useState<{
+    carregado: boolean
+    perfilOk: boolean
+    negocioOk: boolean
+  }>({ carregado: false, perfilOk: false, negocioOk: false })
+
+  useEffect(() => {
+    let cancelado = false
+    Promise.all([
+      getBrokerProfile().catch(() => null),
+      pb
+        .collection('negocios')
+        .getList(1, 1)
+        .catch(() => ({ totalItems: 0 })),
+    ]).then(([perfil, negocios]) => {
+      if (cancelado) return
+      setOnboarding({
+        carregado: true,
+        perfilOk: !!perfil?.name,
+        negocioOk: (negocios?.totalItems ?? 0) > 0,
+      })
+    })
+    return () => {
+      cancelado = true
+    }
+  }, [])
   const [isValidating, setIsValidating] = useState(false)
   const navigate = useNavigate()
   const [docType, setDocType] = useState<DocKey | null>(null)
@@ -354,6 +389,77 @@ export default function Index() {
             entrega das chaves.
           </p>
         </div>
+
+        {onboarding.carregado && !(onboarding.perfilOk && onboarding.negocioOk) && (
+          <div className="rounded-xl border border-[#C9A84C]/40 bg-[#C9A84C]/5 p-5 space-y-4 animate-fade-in-up">
+            <p className="font-mono text-[10px] tracking-[0.3em] uppercase text-[#C9A84C]">
+              Primeiros passos
+            </p>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                {onboarding.perfilOk ? (
+                  <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+                ) : (
+                  <Circle className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                )}
+                <div className="flex-1">
+                  <p
+                    className={`text-sm font-medium ${onboarding.perfilOk ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                  >
+                    1. Complete seu Perfil do Corretor
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Seu nome, CRECI e chave PIX entram automaticamente na cláusula de corretagem de
+                    todos os documentos.
+                  </p>
+                </div>
+                {!onboarding.perfilOk && (
+                  <Link
+                    to="/perfil"
+                    className="text-xs font-medium text-primary hover:underline shrink-0 mt-0.5"
+                  >
+                    Preencher →
+                  </Link>
+                )}
+              </div>
+              <div className="flex items-start gap-3">
+                {onboarding.negocioOk ? (
+                  <CheckCircle2 className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+                ) : (
+                  <Circle className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                )}
+                <div className="flex-1">
+                  <p
+                    className={`text-sm font-medium ${onboarding.negocioOk ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+                  >
+                    2. Cadastre seu primeiro Negócio
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Partes e imóvel digitados uma única vez — todos os documentos carregam de lá.
+                  </p>
+                </div>
+                {!onboarding.negocioOk && (
+                  <Link
+                    to="/negocios"
+                    className="text-xs font-medium text-primary hover:underline shrink-0 mt-0.5"
+                  >
+                    Cadastrar →
+                  </Link>
+                )}
+              </div>
+              <div className="flex items-start gap-3">
+                <Circle className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-foreground">3. Gere um documento</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Escolha um card abaixo. O botão "Dados de teste" dentro de cada formulário
+                    preenche um exemplo completo para você ver o resultado em um clique.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         <Link
           to="/negocios"
