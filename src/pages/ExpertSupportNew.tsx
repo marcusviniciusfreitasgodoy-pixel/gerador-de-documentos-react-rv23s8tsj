@@ -6,7 +6,8 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
 import {
   Select,
   SelectContent,
@@ -112,7 +113,16 @@ export default function ExpertSupportNewPage() {
       <Card className="shadow-elevation border-0 md:border md:border-border/60">
         <CardHeader>
           <CardTitle className="text-xl text-primary">Nova Solicitação</CardTitle>
-          <CardDescription>Solicite assistência jurídica ou técnica especializada.</CardDescription>
+          <div className="mt-1">
+            <IntroPagina
+              frase="Descreva seu caso: a IA orienta em segundos e, se o caso pedir, você escala para o especialista humano, que responde com proposta de escopo, prazo e valor."
+              passos={[
+                'Escolha o objetivo (revisão completa, análise de risco, dúvida etc.) e descreva a situação.',
+                'Anexe documentos se ajudar (matrícula, minuta, certidões).',
+                'A IA responde primeiro. Se recomendar o especialista humano, você escala com um clique e acompanha a proposta aqui mesmo.',
+              ]}
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
