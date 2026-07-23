@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetido,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -187,6 +192,18 @@ export const distratoSchema = z
         })
     }
   })
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetido(
+      [
+        { campo: 'vendedores', rotulo: 'o vendedor', partes: d.vendedores || [] },
+        { campo: 'anuentes', rotulo: 'o anuente', partes: d.anuentes || [] },
+        { campo: 'compradores', rotulo: 'o comprador', partes: d.compradores || [] },
+      ],
+      ctx,
+    ),
+  )
 
 export type DistratoValues = z.infer<typeof distratoSchema>
 
