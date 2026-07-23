@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 import { Plus, FolderOpen, Trash2, Users, Home, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { listNegocios, createNegocio, deleteNegocio } from '@/lib/negocios'
+import { IntroPagina } from '@/components/Layout'
 import type { Negocio } from '@/lib/negocios'
 
 export default function NegociosPage() {
@@ -60,10 +61,17 @@ export default function NegociosPage() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <FolderOpen className="h-6 w-6 text-primary" /> Negócios
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Suba os documentos de um negócio uma vez. Todos os documentos daquele negócio passam a
-          puxar os dados daqui.
-        </p>
+        <div className="mt-1">
+          <IntroPagina
+            frase="Cadastre as partes e o imóvel uma única vez: todos os documentos da operação puxam daqui, sem redigitação e sem erro de cópia."
+            passos={[
+              'Crie o negócio (ex.: Apto 418, João vende pra Maria) e suba os documentos das partes e do imóvel. A IA extrai os dados sozinha.',
+              'Ao abrir qualquer documento, toque em "Carregar de um negócio": promessa, recibo, termo, tudo já vem preenchido.',
+              'Corrigiu um CPF num formulário? O app oferece salvar a correção de volta no negócio, e os próximos documentos já saem certos.',
+            ]}
+            dica="Uma operação completa costuma usar de 4 a 6 documentos. Com o negócio cadastrado, cada um leva minutos em vez de uma hora."
+          />
+        </div>
       </div>
 
       <div className="flex gap-2">
