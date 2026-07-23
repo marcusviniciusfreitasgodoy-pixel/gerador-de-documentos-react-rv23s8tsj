@@ -481,7 +481,7 @@ export function calcularVolta(
       patch[campo] = para
       const identificacao = parte.nome ? ` ${parte.nome}` : ' (sem nome)'
       alteracoes.push({
-        rotulo: `${ROTULO_PARTE[campo]} — ${ROTULO_PAPEL[parte.papel]}${identificacao}`,
+        rotulo: `${ROTULO_PARTE[campo]}: ${ROTULO_PAPEL[parte.papel]}${identificacao}`,
         de,
         para,
       })
@@ -557,7 +557,7 @@ export function calcularVoltaPlano(
       patch[campo] = para
       const identificacao = parte.nome ? ` ${parte.nome}` : ' (sem nome)'
       alteracoes.push({
-        rotulo: `${ROTULO_PARTE[campo]} — ${ROTULO_PAPEL[parte.papel]}${identificacao}`,
+        rotulo: `${ROTULO_PARTE[campo]}: ${ROTULO_PAPEL[parte.papel]}${identificacao}`,
         de,
         para,
       })
