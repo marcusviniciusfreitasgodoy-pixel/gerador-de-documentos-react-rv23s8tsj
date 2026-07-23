@@ -338,18 +338,18 @@ export default function ExpertSupportDetailPage() {
               <ShieldCheck className="h-5 w-5" /> Fale com um Especialista (Nível 2)
             </CardTitle>
             <CardDescription>
-              Escalone casos complexos para nossa equipe de Escreventes Notariais e Especialistas.
+              Escalone casos complexos para o nosso Especialista e Escrevente Notarial.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {recommendsHuman && (
               <div className="text-sm font-medium text-primary bg-primary/10 rounded-lg p-3">
-                Recomendamos um Especialista humano para este caso. Um especialista vai analisar sua
+                Recomendamos um Especialista humano para este caso. O especialista vai analisar sua
                 solicitação e enviar uma proposta (escopo, prazo e valor) aqui mesmo.
               </div>
             )}
             <div>
-              <p className="text-sm font-semibold">Equipe de Especialistas e Escreventes</p>
+              <p className="text-sm font-semibold">Especialista e Escrevente Notarial</p>
               <p className="text-sm text-muted-foreground mt-1">{ESPECIALISTA_INTRO}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -363,7 +363,7 @@ export default function ExpertSupportDetailPage() {
             {request.escalated === 'true' ? (
               <div className="text-sm font-medium text-green-700 bg-green-50 rounded-lg p-3 flex items-center gap-2">
                 <CheckCircle2 className="h-4 w-4" /> Encaminhado ao especialista. Você receberá uma
-                proposta aqui em breve.
+                proposta aqui mesmo em breve.
               </div>
             ) : (
               <div className="space-y-4">

@@ -124,7 +124,7 @@ export default function ExpertSupportPage() {
             </h2>
             {!isAdmin && (
               <p className="text-sm text-muted-foreground mt-0.5">
-                Escalone casos complexos para nossa equipe de Escreventes Notariais e Especialistas.
+                Escalone casos complexos para o nosso Especialista e Escrevente Notarial.
               </p>
             )}
           </div>
@@ -152,7 +152,7 @@ export default function ExpertSupportPage() {
             Autoridade &amp; Experiência
           </Badge>
           <h3 className="text-lg md:text-xl font-bold text-primary mb-1.5">
-            Equipe de Especialistas e Escreventes
+            Especialista e Escrevente Notarial
           </h3>
           <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
             {ESPECIALISTA_INTRO}

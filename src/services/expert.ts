@@ -210,7 +210,7 @@ export const escalateRequest = (id: string, message?: string, files?: File[]) =>
 // Só texto: o ícone e a cor de cada pilar ficam na página, porque são decisão de
 // layout e este arquivo é `.ts` (sem JSX).
 export const ESPECIALISTA_INTRO =
-  'Nossos especialistas revisam seu caso para garantir a conformidade técnica, registral e ' +
+  'Nosso especialista revisa seu caso para garantir a conformidade técnica, registral e ' +
   'notarial, evitando exigências e prejuízos. Mais de 40 anos de vivência no mercado ' +
   'imobiliário do Rio de Janeiro.'
 

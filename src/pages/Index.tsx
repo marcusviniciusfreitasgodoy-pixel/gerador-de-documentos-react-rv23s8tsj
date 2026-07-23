@@ -52,6 +52,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 import { Separator } from '@/components/ui/separator'
 import {
   AlertDialog,
@@ -91,66 +92,133 @@ interface DocDef {
   key?: DocKey
   href?: string
   title: string
+  // uma linha, em português simples — é o que o card mostra sempre.
   desc: string
+  // 1–2 frases que EXPLICAM o documento para quem não é do ramo (o que é, quando
+  // usar); aparece ao passar o mouse / focar o card. Sem ela, o card fica só com
+  // o `desc`. A separação existe para o card ficar enxuto E o leigo ter onde
+  // entender o termo, sem poluir a grade.
+  ajuda?: string
+  // Ocupa a linha inteira da grade (usado no Distrato, que fecha o negócio e
+  // sobra sozinho na última fila — cheio, não fica um card órfão à esquerda).
+  wide?: boolean
 }
 
 // Registro único dos documentos: alimenta o hub E o título do formulário.
 // Fonte única de verdade, substitui o ternário de títulos (que errava a
 // financiada) e garante que todo documento tenha entrada no hub.
-const DOC_GROUPS: { label: string; docs: DocDef[] }[] = [
+// Ordem = a jornada real da operação, da captação ao encerramento. O `hint` de
+// cada grupo situa quem não conhece a taxonomia jurídica. O `desc` de cada
+// documento é português do dia a dia; o termo técnico (arras, dação, tradição)
+// mora no `ajuda`, explicado — não no rótulo que o leigo lê primeiro.
+const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
   {
-    label: 'Promessas de compra e venda',
+    label: 'Captação e pré-contrato',
+    hint: 'Onde a operação começa',
     docs: [
-      { key: 'compromisso', title: 'À vista', desc: 'Pagamento integral com sinal e reforço' },
-      { key: 'compromissoFinanciado', title: 'Financiada', desc: 'Com financiamento bancário' },
-      { key: 'compromissoFgts', title: 'Com FGTS', desc: 'Recursos do FGTS sem financiamento' },
-      {
-        key: 'compromissoDacao',
-        title: 'Com dação em pagamento',
-        desc: 'Outro bem compõe o preço',
-      },
-      { key: 'promise', title: 'Simplificada', desc: 'Modelo enxuto de promessa' },
-      { href: '/permuta', title: 'Permuta', desc: 'Troca de imóveis com torna opcional' },
-    ],
-  },
-  {
-    label: 'Pré-contratual e intermediação',
-    docs: [
-      {
-        href: '/proposta-reserva',
-        title: 'Proposta e Reserva',
-        desc: 'Oferta com sinal, o passo antes da promessa',
-      },
       {
         key: 'intermediation',
         title: 'Autorização de Venda',
-        desc: 'Intermediação com ou sem exclusividade',
+        desc: 'O dono autoriza você a vender o imóvel',
+        ajuda:
+          'O primeiro passo: o proprietário autoriza você, corretor, a anunciar e vender o imóvel dele. Pode ser exclusiva (só você vende) ou não, e já define sua comissão e o prazo.',
+      },
+      {
+        href: '/proposta-reserva',
+        title: 'Proposta e Reserva',
+        desc: 'O comprador faz a oferta e reserva o imóvel',
+        ajuda:
+          'Quando alguém decide comprar, este documento registra a oferta (valor e condições) e segura o imóvel para essa pessoa, em geral com um sinal. É o passo antes da promessa.',
+      },
+      {
+        key: 'recibo',
+        title: 'Recibo de Sinal',
+        desc: 'Comprova o pagamento da entrada (sinal)',
+        ajuda:
+          'Comprova que o comprador pagou o sinal — o valor de entrada que confirma o compromisso. Se alguém desistir, o sinal define quem perde ou devolve quanto (na lei, as "arras", arts. 417 a 420).',
+      },
+    ],
+  },
+  {
+    label: 'Promessas de compra e venda',
+    hint: 'O núcleo do negócio',
+    docs: [
+      {
+        key: 'compromisso',
+        title: 'À vista',
+        desc: 'Pagamento com recursos próprios, sem banco',
+        ajuda:
+          'O comprador paga o imóvel com dinheiro próprio — normalmente sinal, reforço e saldo — sem financiamento. É a promessa de venda mais direta.',
+      },
+      {
+        key: 'compromissoFinanciado',
+        title: 'Financiada',
+        desc: 'Parte do pagamento vem de financiamento bancário',
+        ajuda:
+          'O comprador paga uma parte com recursos próprios e o restante com financiamento de um banco. A promessa acompanha o processo até o banco liberar o valor.',
+      },
+      {
+        key: 'compromissoFgts',
+        title: 'Com FGTS',
+        desc: 'O comprador usa o saldo do FGTS na compra',
+        ajuda:
+          'O comprador usa o dinheiro da conta do FGTS para pagar o imóvel, sem financiamento bancário. Comum na compra do primeiro imóvel.',
+      },
+      {
+        key: 'compromissoDacao',
+        title: 'Com dação em pagamento',
+        desc: 'Parte do preço é paga com outro bem',
+        ajuda:
+          'Em vez de pagar tudo em dinheiro, o comprador entrega outro bem (um carro, outro imóvel) como parte do pagamento. "Dação" quer dizer dar um bem no lugar do dinheiro.',
+      },
+      {
+        key: 'promise',
+        title: 'Simplificada',
+        desc: 'Versão enxuta da promessa, para casos diretos',
+        ajuda:
+          'Uma promessa de compra e venda mais curta, só com as cláusulas essenciais. Boa para negócios simples que não precisam de todas as previsões de um contrato completo.',
+      },
+      {
+        href: '/permuta',
+        title: 'Permuta',
+        desc: 'Troca de um imóvel por outro',
+        ajuda:
+          'Duas partes trocam imóveis entre si. Se um vale mais que o outro, a diferença é paga em dinheiro — a chamada "torna".',
       },
     ],
   },
   {
     label: 'Execução e encerramento',
+    hint: 'Depois de assinado',
     docs: [
-      {
-        key: 'recibo',
-        title: 'Recibo de Sinal (Arras)',
-        desc: 'Princípio de pagamento, arts. 417 a 420',
-      },
       {
         key: 'termoChaves',
         title: 'Entrega das Chaves',
-        desc: 'Comprovação da disponibilização do imóvel',
+        desc: 'Registra a entrega do imóvel ao comprador',
+        ajuda:
+          'Documento que marca o momento em que o comprador recebe as chaves e o imóvel fica à disposição dele.',
       },
-      { key: 'termoPosse', title: 'Transmissão da Posse', desc: 'Tradição e imissão na posse' },
+      {
+        key: 'termoPosse',
+        title: 'Transmissão da Posse',
+        desc: 'Formaliza que o comprador passou a ocupar o imóvel',
+        ajuda:
+          'Registra que o comprador passou a ocupar e usar o imóvel de fato. "Tradição" e "imissão na posse" são os termos jurídicos dessa entrega.',
+      },
       {
         key: 'checklist',
         title: 'Checklist Documental',
-        desc: 'Conferência dos documentos da operação',
+        desc: 'Lista para conferir os documentos da operação',
+        ajuda:
+          'Uma lista para conferir se todos os documentos das partes e do imóvel estão reunidos e corretos antes de fechar — evita surpresas na hora do cartório.',
       },
       {
         href: '/distrato',
         title: 'Distrato',
-        desc: 'Desfazimento consensual com quitação recíproca',
+        desc: 'Desfaz o negócio, de comum acordo entre as partes',
+        ajuda:
+          'Quando as duas partes concordam em cancelar um contrato já assinado, o distrato encerra tudo e acerta a devolução de valores, dando quitação recíproca (nada mais é devido de parte a parte).',
+        wide: true,
       },
     ],
   },
@@ -170,7 +238,7 @@ const DOC_TITLES: Record<DocKey, string> = {
 }
 
 const DOC_CARD_CLASS =
-  'rounded-lg border border-border bg-card p-4 text-left shadow-subtle hover:border-primary/60 hover:shadow-elevation transition-all duration-200'
+  'block w-full h-full rounded-lg border border-border bg-card p-4 text-left shadow-subtle hover:border-primary/60 hover:shadow-elevation transition-all duration-200'
 
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
@@ -312,28 +380,53 @@ export default function Index() {
 
         {DOC_GROUPS.map((group) => (
           <div key={group.label} className="space-y-3">
-            <p className="font-mono text-[11px] tracking-[0.35em] uppercase text-muted-foreground">
-              {group.label}
-            </p>
+            <div className="space-y-1">
+              <p className="font-mono text-[11px] tracking-[0.35em] uppercase text-muted-foreground">
+                {group.label}
+              </p>
+              <p className="text-xs text-muted-foreground/70">{group.hint}</p>
+            </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {group.docs.map((doc) =>
-                doc.href ? (
-                  <Link key={doc.href} to={doc.href} className={DOC_CARD_CLASS}>
+              {group.docs.map((doc) => {
+                // Card enxuto (título + descrição leiga). O `ajuda`, quando existe,
+                // vem no tooltip: hover no desktop, foco pelo teclado. No toque o
+                // Radix não abre no tap, então o clique único segue abrindo o
+                // documento normalmente — o `desc` já basta ali.
+                const inner = (
+                  <>
                     <h3 className="font-semibold text-foreground">{doc.title}</h3>
                     <p className="text-sm text-muted-foreground mt-1">{doc.desc}</p>
+                  </>
+                )
+                const card = doc.href ? (
+                  <Link to={doc.href} className={DOC_CARD_CLASS}>
+                    {inner}
                   </Link>
                 ) : (
                   <button
-                    key={doc.key}
                     type="button"
                     onClick={() => setDocType(doc.key!)}
                     className={DOC_CARD_CLASS}
                   >
-                    <h3 className="font-semibold text-foreground">{doc.title}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{doc.desc}</p>
+                    {inner}
                   </button>
-                ),
-              )}
+                )
+                const wrapClass = doc.wide ? 'sm:col-span-2 lg:col-span-3' : undefined
+                return (
+                  <div key={doc.key ?? doc.href} className={wrapClass}>
+                    {doc.ajuda ? (
+                      <Tooltip>
+                        <TooltipTrigger asChild>{card}</TooltipTrigger>
+                        <TooltipContent side="bottom" className="max-w-xs text-sm leading-relaxed">
+                          {doc.ajuda}
+                        </TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      card
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
         ))}
