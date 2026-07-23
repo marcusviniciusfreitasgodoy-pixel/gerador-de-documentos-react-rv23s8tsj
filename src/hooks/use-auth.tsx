@@ -5,6 +5,7 @@ interface AuthContextType {
   user: any
   isAuthenticated: boolean
   isAdmin: boolean
+  isApproved: boolean
   signUp: (email: string, password: string, name?: string) => Promise<{ error: any }>
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signOut: () => void
@@ -25,6 +26,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   const isAdmin = user?.isAdmin ?? false
+  // Cadastro fechado com liberação: a conta nasce com approved=false e o Marcus
+  // libera no painel (Skip Cloud → users → approved). Admin dispensa aprovação —
+  // sem isso, um deslize no campo trancaria o próprio administrador do sistema.
+  const isApproved = (user?.approved ?? false) || isAdmin
 
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange((_token, record) => {
@@ -74,6 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         isAuthenticated,
         isAdmin,
+        isApproved,
         signUp,
         signIn,
         signOut,
