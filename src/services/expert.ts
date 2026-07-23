@@ -199,3 +199,51 @@ export const escalateRequest = (id: string, message?: string, files?: File[]) =>
   }
   return pb.collection('expert_support_requests').update<ExpertSupportRequest>(id, formData)
 }
+
+// ── Quem atende o corretor: credenciais da equipe ──────────────────────────
+// Fica AQUI, e não nas páginas, porque duas telas leem o mesmo texto: a entrada
+// do Suporte Especializado (antes de abrir o chamado) e o detalhe da solicitação
+// (na hora de escalar). É redação que o Marcus revisa — duplicada em dois .tsx,
+// a revisão dele viraria dois pastes e um dia as cópias divergiriam sem ninguém
+// notar. Mesmo motivo do ARRAS_OPTIONS em `form-helpers`.
+//
+// Só texto: o ícone e a cor de cada pilar ficam na página, porque são decisão de
+// layout e este arquivo é `.ts` (sem JSX).
+export const ESPECIALISTA_INTRO =
+  'Nossos especialistas revisam seu caso para garantir a conformidade técnica, registral e ' +
+  'notarial, evitando exigências e prejuízos. Mais de 40 anos de vivência no mercado ' +
+  'imobiliário do Rio de Janeiro.'
+
+export type EspecialistaPilarId = 'registral' | 'juridica' | 'legislacao' | 'mercado'
+
+export const ESPECIALISTA_PILARES: readonly {
+  id: EspecialistaPilarId
+  badge: string
+  titulo: string
+  desc: string
+}[] = [
+  {
+    id: 'registral',
+    badge: 'Registral',
+    titulo: 'Escrevente Notarial',
+    desc: 'Profissional com vasta prática em registros públicos e análise de documentações complexas e matrículas.',
+  },
+  {
+    id: 'juridica',
+    badge: 'Segurança Jurídica',
+    titulo: 'Prevenção de Riscos',
+    desc: 'Bacharelado em Direito com foco total na elaboração segura de contratos e mitigação de futuros litígios.',
+  },
+  {
+    id: 'legislacao',
+    badge: 'Legislação',
+    titulo: 'Especialização',
+    desc: 'Pós-graduação específica em Direito Imobiliário, sempre atualizado com as leis e normas regulamentares.',
+  },
+  {
+    id: 'mercado',
+    badge: 'Mercado Local',
+    titulo: 'Experiência Prática',
+    desc: 'Conhecimento profundo das particularidades e práticas reais do mercado imobiliário do Rio de Janeiro.',
+  },
+]
