@@ -6,6 +6,18 @@ routerAdd(
   'POST',
   '/backend/v1/extrair-dados',
   (e) => {
+    // Guarda server-side do 'approved': o gate do frontend nao segura chamada
+    // direta com o token de um usuario nao liberado. Admin dispensa, como no front.
+    var guardAuth = e.auth
+    if (
+      guardAuth &&
+      guardAuth.collection().name === 'users' &&
+      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('isAdmin')
+    ) {
+      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+    }
+
     var body = e.requestInfo().body || {}
     var motor = (body.motor || body.model || 'claude').trim().toLowerCase()
     var images = Array.isArray(body.images) ? body.images : []
@@ -164,6 +176,17 @@ routerAdd(
   'POST',
   '/backend/v1/extrair-conhecimento',
   (e) => {
+    // Guarda server-side do 'approved' (mesma regua da rota acima).
+    var guardAuth = e.auth
+    if (
+      guardAuth &&
+      guardAuth.collection().name === 'users' &&
+      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('isAdmin')
+    ) {
+      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+    }
+
     var body = e.requestInfo().body || {}
     var texto = (body.texto || body.text || '').trim()
     var modo = (body.modo || 'documento').trim().toLowerCase()

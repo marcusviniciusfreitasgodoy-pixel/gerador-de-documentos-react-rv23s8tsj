@@ -2,6 +2,18 @@ routerAdd(
   'POST',
   '/backend/v1/validar-minuta',
   (e) => {
+    // Guarda server-side do 'approved': o gate do frontend nao segura chamada
+    // direta com o token de um usuario nao liberado. Admin dispensa, como no front.
+    var guardAuth = e.auth
+    if (
+      guardAuth &&
+      guardAuth.collection().name === 'users' &&
+      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('isAdmin')
+    ) {
+      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+    }
+
     var body = e.requestInfo().body || {}
     var documentText = (body.document_text || '').trim()
     var documentType = (body.document_type || 'Genérico').trim()
@@ -478,6 +490,17 @@ routerAdd(
   'POST',
   '/backend/v1/consultar-ia',
   (e) => {
+    // Guarda server-side do 'approved' (mesma regua das outras rotas de IA).
+    const guardAuth = e.auth
+    if (
+      guardAuth &&
+      guardAuth.collection().name === 'users' &&
+      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('isAdmin')
+    ) {
+      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+    }
+
     const body = e.requestInfo().body || {}
     const requestId = (body.request_id || '').trim()
     if (!requestId) {
