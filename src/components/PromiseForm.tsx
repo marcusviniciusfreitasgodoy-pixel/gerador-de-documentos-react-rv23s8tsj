@@ -5,6 +5,7 @@ import {
   Loader2,
   Download,
   Wand2,
+  AlertCircle,
   FileSearch,
   User,
   Building2,
@@ -87,6 +88,7 @@ export function PromiseForm() {
   const [gerado, setGerado] = useState(false)
   const reaplicarNegocioRef = useRef<(() => void) | null>(null)
   const [broker, setBroker] = useState<BrokerProfile | null>(null)
+  const [brokerLoaded, setBrokerLoaded] = useState(false)
 
   const form = useForm<PromiseValues>({
     resolver: zodResolver(promiseSchema),
@@ -167,7 +169,15 @@ export function PromiseForm() {
         }
       })
       .catch(() => {})
+      .finally(() => setBrokerLoaded(true))
   }, [setValue])
+
+  // Trava de perfil, igual aos outros 7 documentos que leem o Perfil do Corretor.
+  // A Simplificada era a ÚNICA sem ela — e é justamente a que imprime o
+  // INTERMEDIÁRIO direto do perfil (cláusula de corretagem + bloco de assinatura).
+  // Sem perfil, o contrato saía "INTERMEDIÁRIO:  — CRECI: ." em silêncio, dizendo
+  // que a comissão é devida a ninguém.
+  const hasBroker = !!broker?.name
 
   const valorVenda = useWatch({ control, name: 'valor_venda' })
   const valorSinal = useWatch({ control, name: 'valor_sinal' })
@@ -192,6 +202,10 @@ export function PromiseForm() {
   // Mesma minuta que seria baixada, renderizada em memória e enviada ao Validador.
   // Tipo "Promessa/Compromisso": a régua da promessa se aplica a esta minuta.
   const onValidate = async () => {
+    if (!hasBroker) {
+      toast.error('Preencha seu Perfil em Meu Perfil')
+      return
+    }
     setIsValidating(true)
     try {
       const texto = getPromiseText(buildPromiseTemplateData(form.getValues(), broker))
@@ -205,6 +219,10 @@ export function PromiseForm() {
   }
 
   const onSubmit = async (data: PromiseValues) => {
+    if (!hasBroker) {
+      toast.error('Preencha seu Perfil em Meu Perfil')
+      return
+    }
     setIsGenerating(true)
     try {
       await new Promise((r) => setTimeout(r, 800))
@@ -299,6 +317,19 @@ export function PromiseForm() {
           onNegocioCarregado={registrarNegocio}
           negocioAtual={negocioAtual}
         />
+        {brokerLoaded && !hasBroker && (
+          <div className="flex items-start gap-3 rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800 animate-fade-in-up">
+            <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+            <div className="text-sm">
+              <p className="font-semibold mb-1">Perfil não cadastrado</p>
+              <p>
+                Preencha seu perfil profissional em <strong>Meu Perfil</strong> para que os dados do
+                INTERMEDIÁRIO (nome e CRECI) entrem na cláusula de corretagem e na assinatura deste
+                documento.
+              </p>
+            </div>
+          </div>
+        )}
         <PartySection
           control={control}
           prefix="vendedor"
