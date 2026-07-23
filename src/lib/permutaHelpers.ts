@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetido,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -69,10 +74,18 @@ export const permutaSchema = z
 
     arras_tipo: z.enum(ARRAS_TIPO_OPTIONS),
 
-    comissao_beneficiario: z.string().optional(),
+    // Obrigatório: a cláusula da corretagem NÃO é condicional — ela imprime valor e
+    // percentual de qualquer jeito. Vazio, o contrato saía "a comissão é devida a ,
+    // inscrito(a) no , CRECI , ... no valor de R$ 60.000,00": obriga a pagar sessenta
+    // mil a NINGUÉM. Mesmo buraco do PIX vazio das Partes A/B/C, em outro campo.
+    // Na prática o `aplicarBroker` preenche do Perfil do Corretor — o que esta trava
+    // pega é justamente o perfil incompleto, que hoje passa em silêncio.
+    comissao_beneficiario: z.string().min(1, 'Obrigatório'),
     comissao_documento: z.string().optional(),
     comissao_creci: z.string().optional(),
-    comissao_pix: z.string().optional(),
+    // Obrigatório pelo mesmo motivo: a cláusula manda pagar "mediante PIX para a
+    // chave {comissao_pix}" sem condicional.
+    comissao_pix: z.string().min(1, 'Obrigatório'),
     comissao_percentual: z.string().optional(),
     comissao_responsavel: z.enum(COMISSAO_RESP_OPTIONS),
 
@@ -107,6 +120,18 @@ export const permutaSchema = z
         })
     }
   })
+
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetido(
+      [
+        { campo: 'primeiros', rotulo: 'o primeiro permutante', partes: d.primeiros || [] },
+        { campo: 'anuentes', rotulo: 'o anuente', partes: d.anuentes || [] },
+        { campo: 'segundos', rotulo: 'o segundo permutante', partes: d.segundos || [] },
+      ],
+      ctx,
+    ),
+  )
 
 export type PermutaValues = z.infer<typeof permutaSchema>
 
