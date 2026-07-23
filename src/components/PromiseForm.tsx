@@ -862,9 +862,9 @@ function ConjugeSection({
   const papel = useWatch({ control, name: fName('papel') })
   const ROTULO: Record<string, string> = {
     nenhum: 'Não participa do documento',
-    co_vendedor: 'Co-vendedor(a) — é parte e aliena junto',
-    anuente: 'Anuente — não é parte, apenas autoriza a venda',
-    co_comprador: 'Co-comprador(a) — adquire junto',
+    co_vendedor: 'Co-vendedor(a): é parte e aliena junto',
+    anuente: 'Anuente: não é parte, apenas autoriza a venda',
+    co_comprador: 'Co-comprador(a): adquire junto',
   }
   return (
     <div className="space-y-4 rounded-lg border border-primary/30 bg-primary/5 p-4">
