@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+import pb from '@/lib/pocketbase/client'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -16,6 +17,28 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [enviandoReset, setEnviandoReset] = useState(false)
+
+  // "Esqueci minha senha": usa o e-mail já digitado no campo acima. O PocketBase
+  // responde 204 mesmo para e-mail inexistente (de propósito — não revela quem
+  // tem conta), então a mensagem de sucesso é a mesma em qualquer caso. O link
+  // do e-mail abre a página de redefinição do próprio backend; depois de trocar
+  // a senha, a pessoa volta e entra normalmente.
+  const handleEsqueciSenha = async () => {
+    if (!email.trim()) {
+      toast.error('Digite seu e-mail no campo acima primeiro.')
+      return
+    }
+    setEnviandoReset(true)
+    try {
+      await pb.collection('users').requestPasswordReset(email.trim())
+      toast.success(`Se existir uma conta para ${email.trim()}, enviamos o link de redefinição.`)
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    } finally {
+      setEnviandoReset(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,7 +76,17 @@ export default function Login() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Senha</Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password">Senha</Label>
+              <button
+                type="button"
+                onClick={handleEsqueciSenha}
+                disabled={enviandoReset}
+                className="text-xs text-primary hover:underline disabled:opacity-50"
+              >
+                {enviandoReset ? 'Enviando...' : 'Esqueci minha senha'}
+              </button>
+            </div>
             <Input
               id="password"
               type="password"
