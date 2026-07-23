@@ -108,6 +108,75 @@ export function trimDeep<T>(value: T): T {
   return value
 }
 
+// ── "nº" duplicado: o rótulo já está no contrato ───────────────────────────
+// Os documentos escrevem o rótulo com o "nº" embutido — "inscrição municipal nº
+// {imovel_iptu}" (promessas), "inscrição municipal (IPTU) nº {imovel_iptu}"
+// (compromisso), "inscrição de IPTU nº {imovel_iptu}" (reserva). Quando o valor
+// gravado no dossiê já carrega o SEU "nº" — no Rio o número vem como
+// "FRE nº 3.085.078-8" — o contrato saía "inscrição municipal nº FRE nº 3.085.078-8".
+//
+// Tira o "nº" do VALOR e deixa o do documento, porque o do documento é o que
+// garante a frase quando o corretor digita só os dígitos. Preserva o prefixo do
+// tipo de inscrição ("FRE"), que identifica o cadastro e não é ruído.
+// Só reconhece o ordinal masculino (º/°) e o "n." colado num dígito: um "no"
+// solto continua sendo palavra, não abreviação.
+export function limparNumeroRedundante(value: string): string {
+  if (!value) return ''
+  return value
+    .replace(/\bn\.?\s*[º°]\.?\s*/gi, ' ')
+    .replace(/\bn\.\s*(?=\d)/gi, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
+// ── CPF repetido entre partes do MESMO contrato ────────────────────────────
+// Um teste real emitiu promessa com a anuente e o comprador carregando o mesmo
+// 111.111.111-11, sem nenhum aviso: duas pessoas distintas, um CPF só. Num
+// contrato registrável isso é sempre erro de digitação — ninguém compra de si
+// mesmo, e o cônjuge anuente tem CPF próprio.
+//
+// Só compara documento COMPLETO (11 dígitos = CPF, 14 = CNPJ). Enquanto o
+// corretor digita, os dígitos parciais de duas partes coincidem o tempo todo;
+// acusar aí seria alarme que se aprende a ignorar.
+export function digitosDocumento(value?: string): string {
+  return (value || '').replace(/\D/g, '')
+}
+
+export function documentoCompleto(value?: string): boolean {
+  const d = digitosDocumento(value).length
+  return d === 11 || d === 14
+}
+
+/** Aponta o erro na parte REPETIDA (a 2ª a aparecer), não na primeira: quem o
+ *  corretor acabou de digitar é quem ele está olhando. Por isso `superRefine`, e
+ *  não `refine` — o path precisa carregar o índice do array. */
+export function checarCpfRepetido(
+  grupos: readonly {
+    campo: string
+    rotulo: string
+    partes: readonly { nome?: string; cpf?: string }[]
+  }[],
+  ctx: z.RefinementCtx,
+): void {
+  const vistos = new Map<string, string>()
+  for (const { campo, rotulo, partes } of grupos) {
+    partes.forEach((p, i) => {
+      if (!documentoCompleto(p.cpf)) return
+      const chave = digitosDocumento(p.cpf)
+      const anterior = vistos.get(chave)
+      if (anterior) {
+        ctx.addIssue({
+          code: 'custom',
+          message: `CPF/CNPJ já informado para ${anterior} neste contrato`,
+          path: [campo, i, 'cpf'],
+        })
+        return
+      }
+      vistos.set(chave, (p.nome || '').trim() || rotulo)
+    })
+  }
+}
+
 export function formatDateFull(date: Date): string {
   const months = [
     'Janeiro',
