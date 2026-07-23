@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
@@ -59,6 +59,28 @@ export function CompromissoForm() {
   })
   const { control, setValue } = form
 
+  // Mesmo desenho dos outros 6 forms que leem o Perfil do Corretor: o perfil fica
+  // num ref e a aplicacao vira funcao, para poder ser REAPLICADA depois do
+  // `form.reset(mock)`. Sem isso o botao de dados de teste zerava a comissao e o
+  // Compromisso saia "devida a , documento nº , CRECI , PIX , no valor de
+  // R$ 60.000,00" — obrigando sessenta mil a ninguem. Era o unico dos 7 sem isto.
+  const brokerRef = useRef<{
+    nome: string
+    documento: string
+    creci: string
+    pix: string
+    rate?: number
+  } | null>(null)
+  const aplicarBroker = () => {
+    const b = brokerRef.current
+    if (!b) return
+    setValue('comissao_beneficiario', b.nome)
+    setValue('comissao_documento', b.documento)
+    setValue('comissao_creci', b.creci)
+    setValue('comissao_pix', b.pix)
+    if (b.rate) setValue('comissao_percentual', String(b.rate))
+  }
+
   useEffect(() => {
     let cancelled = false
     getBrokerProfile()
@@ -67,13 +89,8 @@ export function CompromissoForm() {
         const display = getBrokerDisplay(profile)
         if (display) {
           setHasBroker(true)
-          setValue('comissao_beneficiario', display.nome)
-          setValue('comissao_documento', display.documento)
-          setValue('comissao_creci', display.creci)
-          setValue('comissao_pix', display.pix)
-          if (profile?.commission_rate) {
-            setValue('comissao_percentual', String(profile.commission_rate))
-          }
+          brokerRef.current = { ...display, rate: profile?.commission_rate }
+          aplicarBroker()
         }
       })
       .catch(() => {})
@@ -704,7 +721,10 @@ export function CompromissoForm() {
           type="button"
           variant="outline"
           className="w-full"
-          onClick={() => form.reset(compromissoMockData)}
+          onClick={() => {
+            form.reset(compromissoMockData)
+            aplicarBroker()
+          }}
         >
           <Wand2 className="mr-2 h-4 w-4" />
           Preencher dados de teste
