@@ -50,30 +50,13 @@ import {
   type ExpertStatus,
   type ComplexityType,
   type ProposalResponse,
+  ESPECIALISTA_INTRO,
+  ESPECIALISTA_PILARES,
 } from '@/services/expert'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 
 // Objetivos que naturalmente pedem o especialista humano (Nível 2).
 const NEEDS_HUMAN_OBJECTIVES = ['full_review', 'risk_analysis', 'doc_analysis']
-
-const ESPECIALISTA_PILARES = [
-  {
-    titulo: 'Escrevente Notarial',
-    desc: 'Vasta prática em registros públicos e análise de documentações complexas e matrículas.',
-  },
-  {
-    titulo: 'Prevenção de Riscos',
-    desc: 'Bacharelado em Direito com foco na elaboração segura de contratos e mitigação de litígios.',
-  },
-  {
-    titulo: 'Especialização',
-    desc: 'Pós-graduação em Direito Imobiliário, atualizado com as leis e normas regulamentares.',
-  },
-  {
-    titulo: 'Experiência Prática',
-    desc: 'Conhecimento profundo das práticas reais do mercado imobiliário do Rio de Janeiro.',
-  },
-]
 
 export default function ExpertSupportDetailPage() {
   const { id } = useParams()
@@ -367,11 +350,7 @@ export default function ExpertSupportDetailPage() {
             )}
             <div>
               <p className="text-sm font-semibold">Equipe de Especialistas e Escreventes</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Nossos especialistas revisam seu caso para garantir a conformidade técnica,
-                registral e notarial, evitando exigências e prejuízos. Mais de 40 anos de vivência
-                no mercado imobiliário do Rio de Janeiro.
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{ESPECIALISTA_INTRO}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {ESPECIALISTA_PILARES.map((p) => (
