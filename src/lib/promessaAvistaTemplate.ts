@@ -1,4 +1,10 @@
-import { parseCurrency, formatCurrency, cleanCurrencyMask, trimDeep } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  limparNumeroRedundante,
+  trimDeep,
+} from '@/lib/form-helpers'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import type { PromessaAvistaValues, PartyValues, AnuenteValues } from '@/lib/promessaAvistaHelpers'
@@ -113,7 +119,9 @@ export function buildPromessaAvistaTemplateData(
     imovel_fracao_ideal: data.imovel_fracao_ideal || '',
     imovel_rgi: data.imovel_rgi || '',
     imovel_matricula: data.imovel_matricula || '',
-    imovel_iptu: data.imovel_iptu || '',
+    // O documento já escreve o "nº" antes deste valor; um "FRE nº 3.085.078-8"
+    // gravado no dossiê saía "inscrição municipal nº FRE nº 3.085.078-8".
+    imovel_iptu: limparNumeroRedundante(data.imovel_iptu || ''),
     // IPTU-RJ: liga a clausula TRI003 so quando o imovel e no municipio do Rio.
     iptu_rj: isMunicipioRio(data.imovel_cidade),
     imovel_origem_aquisicao: data.imovel_origem_aquisicao || '',
@@ -124,6 +132,18 @@ export function buildPromessaAvistaTemplateData(
     valor_sinal_extenso: extenso(valorSinal),
     valor_reforco: fmt(valorReforco),
     valor_reforco_extenso: extenso(valorReforco),
+    // Liga a Parte B da Cláusula Quinta. Sem isto o contrato imprimia
+    // "Parte B) R$ 0,00 (zero reais), a título de reforço de sinal, a ser pago em
+    // até 21/08/2026" — obrigação datada para pagamento que não existe.
+    //
+    // DERIVADO do valor, não um checkbox. Fgts/Financiada/Dação têm o campo
+    // `entrada_parcelada` na tela porque lá "parcelar a entrada" é uma escolha de
+    // estrutura do negócio, com valores próprios. Na à vista o reforço é só mais uma
+    // parcela: se o corretor não digitou reforço, não há Parte B — não há uma segunda
+    // pergunta a fazer, e um checkbox a mais seria só outra chance de discordar do
+    // valor. O NOME da flag é o mesmo dos três irmãos de propósito: os quatro
+    // templates do gist leem `{#entrada_parcelada}`.
+    entrada_parcelada: valorReforco > 0,
     valor_saldo: fmt(valorSaldo),
     valor_saldo_extenso: extenso(valorSaldo),
     forma_pagamento: data.forma_pagamento || '',
