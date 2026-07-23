@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { parseCurrency, ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  checarCpfRepetido,
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+} from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
 
@@ -61,9 +66,16 @@ export const promessaAvistaSchema = z
       .refine((v) => parseCurrency(v) > 0, 'Maior que zero'),
     valor_reforco: z.string().optional(),
     forma_pagamento: z.enum(FORMA_PAGAMENTO_OPTIONS),
-    dados_recebimento: z.string().optional(),
+    // Obrigatório: as três Partes (A, B e C) da Cláusula Quinta dizem "por meio de
+    // {forma_pagamento} para {dados_recebimento}". Vazio, o contrato saía
+    // "por meio de PIX para ." TRÊS vezes — promessa milionária sem dizer para onde
+    // pagar, e nada avisava. A Proposta/Reserva já exigia; as promessas, não.
+    dados_recebimento: z.string().min(1, 'Obrigatório'),
     prazo_certidoes_dias: z.string().min(1, 'Obrigatório'),
-    prazo_reforco: z.string().min(1, 'Obrigatório'),
+    // Opcional aqui e cobrado no refine abaixo APENAS quando há reforço — era
+    // obrigatório mesmo com reforço zero. Espelha o que Fgts/Financiada/Dação já
+    // faziam via `entrada_parcelada`.
+    prazo_reforco: z.string().optional(),
     data_limite_escritura: z.string().min(1, 'Obrigatório'),
     comissao_beneficiario: z.string().optional(),
     comissao_documento: z.string().optional(),
@@ -86,6 +98,25 @@ export const promessaAvistaSchema = z
       parseCurrency(d.valor_sinal || '0') + parseCurrency(d.valor_reforco || '0') <=
       parseCurrency(d.valor_total || '0'),
     { message: 'Sinal + reforço não podem exceder o valor total', path: ['valor_sinal'] },
+  )
+  // Prazo só faz sentido se existe reforço a pagar. Sem isto, o contrato imprimia
+  // "Parte B) R$ 0,00 (zero reais) ... a ser pago em até 21/08/2026": obrigação
+  // datada para pagamento inexistente. A cláusula em si some via `entrada_parcelada`
+  // (ver buildPromessaAvistaTemplateData); aqui some a exigência do prazo.
+  .refine((d) => parseCurrency(d.valor_reforco || '0') === 0 || !!d.prazo_reforco, {
+    message: 'Informe o prazo do reforço',
+    path: ['prazo_reforco'],
+  })
+  // Duas partes distintas não podem carregar o mesmo CPF (ver `checarCpfRepetido`).
+  .superRefine((d, ctx) =>
+    checarCpfRepetido(
+      [
+        { campo: 'vendedores', rotulo: 'o vendedor', partes: d.vendedores || [] },
+        { campo: 'anuentes', rotulo: 'o anuente', partes: d.anuentes || [] },
+        { campo: 'compradores', rotulo: 'o comprador', partes: d.compradores || [] },
+      ],
+      ctx,
+    ),
   )
 
 export type PromessaAvistaValues = z.infer<typeof promessaAvistaSchema>
