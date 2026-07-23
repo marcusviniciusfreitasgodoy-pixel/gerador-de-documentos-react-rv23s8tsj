@@ -15,7 +15,8 @@ import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { IntroPagina } from '@/components/Layout'
 import {
   Select,
   SelectContent,
@@ -186,9 +187,17 @@ export default function ValidarMinutaPage() {
             <FileSearch className="h-6 w-6 text-primary" />
             <div>
               <CardTitle className="text-xl text-primary">Validar Minuta</CardTitle>
-              <CardDescription>
-                Analise seu documento contra a base de conhecimento jurídico usando IA.
-              </CardDescription>
+              <div className="mt-1">
+                <IntroPagina
+                  frase="Confira qualquer minuta em segundos contra as regras aprovadas da sua operação e pegue cláusula faltando antes da assinatura, não no cartório."
+                  passos={[
+                    'Cole o texto da minuta ou faça upload do arquivo .docx.',
+                    'Escolha o tipo de documento: a régua da análise muda conforme o tipo.',
+                    'Receba o veredito (verde, amarelo ou vermelho) com o que está presente, fraco ou faltando, e as recomendações.',
+                  ]}
+                  dica="Vale validar a mesma minuta mais de uma vez: a leitura da IA pode variar e uma segunda passada complementa a primeira. É uma análise de apoio, não um parecer jurídico."
+                />
+              </div>
             </div>
           </div>
         </CardHeader>
