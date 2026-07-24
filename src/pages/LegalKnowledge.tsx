@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Navigate } from 'react-router-dom'
 import {
   Loader2,
   BookOpen,
@@ -87,7 +87,16 @@ function gerarCode(category: string, usados: Set<string>): string {
   return code
 }
 
+// Página restrita ao admin (decisão do Marcus, 2026-07-24): a base é a régua
+// jurídica interna da validação, não um recurso do corretor. O wrapper existe
+// para o redirect não brigar com a regra dos hooks do componente de dentro.
 export default function LegalKnowledgePage() {
+  const { isAdmin } = useAuth()
+  if (!isAdmin) return <Navigate to="/" replace />
+  return <LegalKnowledgeAdmin />
+}
+
+function LegalKnowledgeAdmin() {
   const { isAdmin } = useAuth()
   const [items, setItems] = useState<LegalKnowledge[]>([])
   const [loading, setLoading] = useState(true)

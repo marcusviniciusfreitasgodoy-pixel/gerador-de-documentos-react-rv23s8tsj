@@ -425,3 +425,44 @@ onMailerRecordPasswordResetSend((e) => {
   }
   e.next()
 })
+
+// Novo chamado (sugestão/correção/suporte/dúvida) -> avisa os admins.
+onRecordAfterCreateSuccess((e) => {
+  try {
+    var chamado = e.record
+    var autorId = chamado.getString('user')
+    var autorTxt = autorId
+    if (autorId) {
+      try {
+        var autor = $app.findRecordById('users', autorId)
+        autorTxt = (autor.getString('name') || '') + ' (' + autor.email() + ')'
+      } catch (err2) {}
+    }
+    var admins = $app.findRecordsByFilter('users', 'isAdmin = true', '', 10, 0)
+    var meta = $app.settings().meta
+    for (var i = 0; i < admins.length; i++) {
+      var adminEmail = admins[i].email()
+      if (!adminEmail) continue
+      var msg = new MailerMessage({
+        from: { address: meta.senderAddress, name: meta.senderName },
+        to: [{ address: adminEmail }],
+        subject: 'Novo chamado no Gerador de Documentos: ' + chamado.getString('tipo'),
+        html:
+          '<p>Chegou um chamado novo na plataforma.</p>' +
+          '<p><strong>Tipo:</strong> ' +
+          chamado.getString('tipo') +
+          '<br><strong>De:</strong> ' +
+          autorTxt +
+          '</p>' +
+          '<p style="white-space:pre-wrap;border-left:3px solid #C9A84C;padding-left:12px;">' +
+          chamado.getString('mensagem') +
+          '</p>' +
+          '<p>Para responder: painel Skip Cloud, coleção chamados, campo resposta (e o status, se quiser). O corretor acompanha na página Ajuda e Suporte.</p>',
+      })
+      $app.newMailClient().send(msg)
+    }
+  } catch (err) {
+    $app.logger().error('email chamado: falha no envio', 'error', String(err))
+  }
+  e.next()
+}, 'chamados')

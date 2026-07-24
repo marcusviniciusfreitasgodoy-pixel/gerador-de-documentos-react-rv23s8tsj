@@ -277,3 +277,273 @@ export default function ExpertSupportPage() {
     </div>
   )
 }
+
+// ============================================================================
+// Ajuda e Suporte (decisão do Marcus, 2026-07-24): FAQ com o funcionamento da
+// plataforma + canal aberto de sugestões e chamados (coleção `chamados`).
+// Mora neste arquivo porque o Skip não cria arquivo novo; a rota é /ajuda.
+// ============================================================================
+import { LifeBuoy, MessageSquarePlus, Send as SendIcon } from 'lucide-react'
+import { IntroPagina } from '@/components/Layout'
+import pb from '@/lib/pocketbase/client'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+
+const TIPOS_CHAMADO = [
+  { valor: 'sugestao', rotulo: 'Sugestão de melhoria' },
+  { valor: 'correcao', rotulo: 'Correção de erro' },
+  { valor: 'suporte', rotulo: 'Suporte / dificuldade de uso' },
+  { valor: 'duvida', rotulo: 'Dúvida sobre a plataforma' },
+]
+
+const STATUS_CHAMADO: Record<string, { rotulo: string; classe: string }> = {
+  aberto: { rotulo: 'Aberto', classe: 'bg-primary/10 text-primary' },
+  em_andamento: { rotulo: 'Em andamento', classe: 'bg-amber-500/10 text-amber-600' },
+  resolvido: { rotulo: 'Resolvido', classe: 'bg-emerald-500/10 text-emerald-600' },
+}
+
+type Chamado = {
+  id: string
+  tipo: string
+  mensagem: string
+  status: string
+  resposta?: string
+  created: string
+}
+
+const FAQ: { pergunta: string; resposta: string }[] = [
+  {
+    pergunta: 'Por onde eu começo?',
+    resposta:
+      'Três passos: 1) preencha o seu Perfil do Corretor (nome, CRECI e comissão), porque os contratos imprimem esses dados; 2) cadastre um Negócio com as partes e o imóvel; 3) escolha um documento no hub e clique em Gerar. O arquivo sai pronto em Word.',
+  },
+  {
+    pergunta: 'O que é um Negócio e por que cadastrar um?',
+    resposta:
+      'O Negócio é o dossiê da operação: as partes (vendedores, compradores, cônjuges) e o imóvel, cadastrados uma única vez. Todos os documentos da mesma operação puxam os dados de lá. Você evita redigitação e, principalmente, evita divergência de dados entre documentos.',
+  },
+  {
+    pergunta: 'Quais documentos a plataforma gera?',
+    resposta:
+      'O ciclo completo da intermediação: Autorização de Venda, Proposta e Reserva, Recibo de Sinal, as Promessas de Compra e Venda (à vista, financiada, com FGTS, com dação e a versão simplificada), Compromisso particular, Permuta, Distrato, Autorização de Intermediação, Termo de Entrega das Chaves, Termo de Posse e Checklist de documentos.',
+  },
+  {
+    pergunta: 'Como preencho um formulário mais rápido?',
+    resposta:
+      'Duas ferramentas: o botão Carregar de um Negócio, que puxa as partes e o imóvel do dossiê escolhido, e o Preenchimento automático por documentos, que lê fotos ou PDFs (RG, escritura, matrícula) com IA e sugere os campos. Revise sempre antes de gerar.',
+  },
+  {
+    pergunta: 'O documento gerado pode ser editado?',
+    resposta:
+      'Sim. Tudo sai em Word (.docx) editável. A plataforma entrega a minuta pronta e padronizada, e você ajusta o que for específico da sua negociação antes de colher assinaturas.',
+  },
+  {
+    pergunta: 'O que é a Validação de Minuta?',
+    resposta:
+      'Você cola o texto de um contrato (seu ou de terceiros) e a plataforma revisa com IA usando uma régua jurídica interna: aponta cláusulas ausentes, riscos e não conformidades, item por item. Use antes de assinar qualquer minuta que não saiu daqui.',
+  },
+  {
+    pergunta: 'O que é o Suporte Especializado?',
+    resposta:
+      'É o canal para casos que pedem um olhar humano especializado: você descreve o caso, recebe uma primeira análise com IA e, quando precisa, uma proposta de trabalho do especialista com escopo, prazo e valor, que você aceita ou recusa dentro do app.',
+  },
+  {
+    pergunta: 'Como funciona o meu acesso?',
+    resposta:
+      'O cadastro é aberto: você cria a conta, recebe um e-mail de confirmação e o acesso libera na hora do clique, sem depender de ninguém. Esqueceu a senha? Na tela de login há o botão Esqueci minha senha, que envia o link de redefinição por e-mail.',
+  },
+  {
+    pergunta: 'Meus dados estão protegidos?',
+    resposta:
+      'Os dados dos seus Negócios pertencem à sua conta: cada corretor enxerga somente o que é seu. Os textos enviados à Validação de Minuta são apagados automaticamente após 30 dias, em linha com a LGPD.',
+  },
+  {
+    pergunta: 'Encontrei um erro ou tenho uma sugestão. O que eu faço?',
+    resposta:
+      'Use a aba Sugestões e chamados aqui desta página. Descreva o que aconteceu (ou a sua ideia), envie e acompanhe o andamento por aqui mesmo. O administrador é avisado por e-mail na hora.',
+  },
+]
+
+export function AjudaSuportePage() {
+  const { user } = useAuth()
+  const [tipo, setTipo] = useState('')
+  const [mensagem, setMensagem] = useState('')
+  const [enviando, setEnviando] = useState(false)
+  const [chamados, setChamados] = useState<Chamado[]>([])
+  const [carregando, setCarregando] = useState(true)
+
+  const carregar = useCallback(async () => {
+    if (!user?.id) return
+    try {
+      const lista = await pb.collection('chamados').getFullList<Chamado>({
+        filter: `user = "${user.id}"`,
+        sort: '-created',
+      })
+      setChamados(lista)
+    } catch {
+      // Sem toast: a lista vazia com o formulário em cima já conta a história.
+    } finally {
+      setCarregando(false)
+    }
+  }, [user?.id])
+
+  useEffect(() => {
+    carregar()
+  }, [carregar])
+
+  const enviar = async () => {
+    if (!tipo) {
+      toast.error('Escolha o tipo do chamado.')
+      return
+    }
+    if (mensagem.trim().length < 10) {
+      toast.error('Descreva com um pouco mais de detalhe (mínimo de 10 caracteres).')
+      return
+    }
+    setEnviando(true)
+    try {
+      await pb.collection('chamados').create({
+        user: user?.id,
+        tipo,
+        mensagem: mensagem.trim(),
+        status: 'aberto',
+      })
+      toast.success('Chamado enviado! Você acompanha o andamento aqui nesta página.')
+      setTipo('')
+      setMensagem('')
+      await carregar()
+    } catch {
+      toast.error('Não foi possível enviar agora. Tente novamente.')
+    } finally {
+      setEnviando(false)
+    }
+  }
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-6 animate-fade-in-up">
+      <div className="space-y-2">
+        <h1 className="font-display text-3xl font-medium text-foreground flex items-center gap-2">
+          <LifeBuoy className="h-7 w-7 text-primary" /> Ajuda e Suporte
+        </h1>
+        <IntroPagina frase="Tire dúvidas sobre o funcionamento da plataforma e fale com a gente: sugestões, correções e pedidos de suporte entram por aqui e você acompanha a resposta na mesma tela." />
+      </div>
+
+      <Tabs defaultValue="faq" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="faq">Dúvidas frequentes</TabsTrigger>
+          <TabsTrigger value="chamados">Sugestões e chamados</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="faq">
+          <Card className="shadow-elevation border-0 md:border md:border-border/60">
+            <CardContent className="pt-6">
+              <Accordion type="single" collapsible className="w-full">
+                {FAQ.map((item, i) => (
+                  <AccordionItem key={i} value={`faq-${i}`}>
+                    <AccordionTrigger className="text-left text-sm font-medium">
+                      {item.pergunta}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-muted-foreground leading-relaxed">
+                      {item.resposta}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="chamados" className="space-y-4">
+          <Card className="shadow-elevation border-0 md:border md:border-border/60">
+            <CardContent className="pt-6 space-y-4">
+              <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+                <MessageSquarePlus className="h-4 w-4 text-primary" /> Novo chamado
+              </div>
+              <Select value={tipo} onValueChange={setTipo}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Tipo do chamado" />
+                </SelectTrigger>
+                <SelectContent>
+                  {TIPOS_CHAMADO.map((t) => (
+                    <SelectItem key={t.valor} value={t.valor}>
+                      {t.rotulo}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Textarea
+                value={mensagem}
+                onChange={(e) => setMensagem(e.target.value)}
+                placeholder="Conte o que aconteceu ou descreva a sua ideia. Quanto mais detalhe, mais rápido conseguimos ajudar."
+                rows={5}
+              />
+              <Button onClick={enviar} disabled={enviando} className="w-full sm:w-auto">
+                {enviando ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...
+                  </>
+                ) : (
+                  <>
+                    <SendIcon className="mr-2 h-4 w-4" /> Enviar chamado
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          <div className="space-y-3">
+            <h2 className="text-sm font-medium text-foreground">Meus chamados</h2>
+            {carregando ? (
+              <div className="flex justify-center py-6">
+                <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              </div>
+            ) : chamados.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Você ainda não abriu nenhum chamado.</p>
+            ) : (
+              chamados.map((c) => {
+                const st = STATUS_CHAMADO[c.status] ?? STATUS_CHAMADO.aberto
+                const tp = TIPOS_CHAMADO.find((t) => t.valor === c.tipo)
+                return (
+                  <Card key={c.id} className="border border-border/60">
+                    <CardContent className="pt-4 pb-4 space-y-2">
+                      <div className="flex items-center justify-between gap-2 flex-wrap">
+                        <span className="text-xs font-medium text-muted-foreground">
+                          {tp ? tp.rotulo : c.tipo}
+                        </span>
+                        <span
+                          className={`text-xs font-medium px-2 py-0.5 rounded-full ${st.classe}`}
+                        >
+                          {st.rotulo}
+                        </span>
+                      </div>
+                      <p className="text-sm text-foreground whitespace-pre-wrap">{c.mensagem}</p>
+                      {c.resposta ? (
+                        <div className="rounded-md bg-muted/50 p-3 text-sm text-muted-foreground">
+                          <span className="font-medium text-foreground">Resposta: </span>
+                          {c.resposta}
+                        </div>
+                      ) : null}
+                    </CardContent>
+                  </Card>
+                )
+              })
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
