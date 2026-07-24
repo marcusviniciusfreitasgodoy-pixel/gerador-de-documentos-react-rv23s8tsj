@@ -26,10 +26,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true)
 
   const isAdmin = user?.isAdmin ?? false
-  // Cadastro fechado com liberação: a conta nasce com approved=false e o Marcus
-  // libera no painel (Skip Cloud → users → approved). Admin dispensa aprovação —
-  // sem isso, um deslize no campo trancaria o próprio administrador do sistema.
-  const isApproved = (user?.approved ?? false) || isAdmin
+  // Acesso por confirmação de e-mail (decisão do Marcus, 2026-07-24): a conta
+  // libera sozinha quando o usuário clica no link de verificação do PocketBase
+  // (campo `verified`). Ninguém precisa aprovar no painel. Admin dispensa a
+  // checagem, senão um deslize trancaria o próprio administrador do sistema.
+  const isApproved = (user?.verified ?? false) || isAdmin
 
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange((_token, record) => {
@@ -53,6 +54,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signUp = async (email: string, password: string, name?: string) => {
     try {
       await pb.collection('users').create({ email, password, passwordConfirm: password, name })
+      // Dispara o e-mail de verificação já no cadastro. Se o envio falhar, a
+      // tela "Confirme seu e-mail" tem o botão de reenviar; por isso o catch vazio.
+      await pb
+        .collection('users')
+        .requestVerification(email)
+        .catch(() => {})
       await pb.collection('users').authWithPassword(email, password)
       return { error: null }
     } catch (error) {

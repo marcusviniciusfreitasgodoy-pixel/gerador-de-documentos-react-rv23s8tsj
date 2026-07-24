@@ -12,10 +12,10 @@ routerAdd(
     if (
       guardAuth &&
       guardAuth.collection().name === 'users' &&
-      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('verified') &&
       !guardAuth.getBool('isAdmin')
     ) {
-      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+      return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
     var body = e.requestInfo().body || {}
@@ -181,10 +181,10 @@ routerAdd(
     if (
       guardAuth &&
       guardAuth.collection().name === 'users' &&
-      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('verified') &&
       !guardAuth.getBool('isAdmin')
     ) {
-      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+      return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
     var body = e.requestInfo().body || {}
@@ -295,15 +295,16 @@ onRecordAfterCreateSuccess((e) => {
       var msg = new MailerMessage({
         from: { address: meta.senderAddress, name: meta.senderName },
         to: [{ address: adminEmail }],
-        subject: 'Novo cadastro aguardando liberação: ' + (novo.getString('name') || novo.email()),
+        subject:
+          'Novo cadastro no Gerador de Documentos: ' + (novo.getString('name') || novo.email()),
         html:
-          '<p>Um novo usuário se cadastrou no Gerador de Documentos e está aguardando liberação.</p>' +
+          '<p>Um novo usuário se cadastrou no Gerador de Documentos.</p>' +
           '<p><strong>Nome:</strong> ' +
           (novo.getString('name') || '(sem nome)') +
           '<br><strong>E-mail:</strong> ' +
           novo.email() +
           '</p>' +
-          '<p>Para liberar: painel Skip Cloud, coleção users, lápis na linha do usuário, ligar o campo approved.</p>',
+          '<p>O acesso libera sozinho quando ele confirmar o e-mail. Este aviso é só para acompanhamento.</p>',
       })
       $app.newMailClient().send(msg)
     }

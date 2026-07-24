@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-import { Loader2, Clock, LogOut, RefreshCw, FileText } from 'lucide-react'
+import { Loader2, MailCheck, LogOut, RefreshCw, Send } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { useAuth } from '@/hooks/use-auth'
@@ -8,26 +8,40 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import pb from '@/lib/pocketbase/client'
 
-// Cadastro fechado com liberação: a conta é criada na hora, mas o acesso só
-// abre quando o administrador marca `approved` no painel. Enquanto isso, o
-// usuário autenticado vê esta tela — que é a CONFIRMAÇÃO do cadastro dele —
-// em vez do app. O token local guarda o `approved` da época do login, então o
-// botão "Verificar liberação" força um authRefresh para buscar o valor atual.
-function AguardandoLiberacao() {
+// Acesso por confirmação de e-mail: a conta é criada na hora e o acesso abre
+// sozinho quando o usuário clica no link de verificação que chega por e-mail
+// (campo `verified` do PocketBase). Enquanto isso, o usuário autenticado vê
+// esta tela. O token local guarda o `verified` da época do login, então o
+// botão "Já confirmei" força um authRefresh para buscar o valor atual.
+function ConfirmeSeuEmail() {
   const { user, signOut } = useAuth()
   const [checando, setChecando] = useState(false)
+  const [reenviando, setReenviando] = useState(false)
 
   const verificar = async () => {
     setChecando(true)
     try {
       await pb.collection('users').authRefresh()
-      // O onChange do authStore atualiza o `user` do contexto; se aprovado,
+      // O onChange do authStore atualiza o `user` do contexto; se verificado,
       // o ProtectedRoute re-renderiza direto para o app. Se ainda não:
-      toast.info('Seu acesso ainda não foi liberado. Tente novamente mais tarde.')
+      toast.info('Ainda não vimos a confirmação. Clique no link do e-mail e tente de novo.')
     } catch {
       toast.error('Não foi possível verificar agora. Tente novamente.')
     } finally {
       setChecando(false)
+    }
+  }
+
+  const reenviar = async () => {
+    if (!user?.email) return
+    setReenviando(true)
+    try {
+      await pb.collection('users').requestVerification(user.email)
+      toast.success('E-mail de confirmação reenviado. Olhe também a caixa de spam.')
+    } catch {
+      toast.error('Não foi possível reenviar agora. Tente novamente em instantes.')
+    } finally {
+      setReenviando(false)
     }
   }
 
@@ -37,29 +51,23 @@ function AguardandoLiberacao() {
         <CardHeader className="space-y-1 pb-6 text-center">
           <div className="flex justify-center mb-2">
             <div className="rounded-full bg-primary/10 p-3">
-              <Clock className="h-8 w-8 text-primary" />
+              <MailCheck className="h-8 w-8 text-primary" />
             </div>
           </div>
           <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
-            Cadastro recebido!
+            Confirme seu e-mail
           </CardTitle>
           <CardDescription>
-            Sua conta foi criada com sucesso{user?.email ? ` para ${user.email}` : ''}.
+            Sua conta foi criada{user?.email ? ` para ${user.email}` : ''}.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="rounded-lg border border-border bg-muted/40 p-4 text-sm text-muted-foreground space-y-2">
-            <p className="flex items-start gap-2">
-              <FileText className="h-4 w-4 shrink-0 mt-0.5 text-primary" />
-              <span>
-                O acesso é liberado pelo administrador, normalmente em poucas horas. Você não
-                precisa fazer mais nada.
-              </span>
-            </p>
             <p>
-              Quando for liberado, é só entrar de novo (ou tocar em &quot;Verificar
-              liberação&quot;).
+              Enviamos um link de confirmação para o seu e-mail. Clique nele e depois toque em
+              &quot;Já confirmei&quot;: o acesso libera na hora, sem depender de ninguém.
             </p>
+            <p>Não chegou? Olhe a caixa de spam ou reenvie abaixo.</p>
           </div>
           <Button onClick={verificar} disabled={checando} className="w-full h-11">
             {checando ? (
@@ -68,7 +76,23 @@ function AguardandoLiberacao() {
               </>
             ) : (
               <>
-                <RefreshCw className="mr-2 h-4 w-4" /> Verificar liberação
+                <RefreshCw className="mr-2 h-4 w-4" /> Já confirmei
+              </>
+            )}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={reenviar}
+            disabled={reenviando}
+            className="w-full h-11"
+          >
+            {reenviando ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Reenviando...
+              </>
+            ) : (
+              <>
+                <Send className="mr-2 h-4 w-4" /> Reenviar e-mail
               </>
             )}
           </Button>
@@ -97,7 +121,7 @@ export function ProtectedRoute() {
   }
 
   if (!isApproved) {
-    return <AguardandoLiberacao />
+    return <ConfirmeSeuEmail />
   }
 
   return <Outlet />

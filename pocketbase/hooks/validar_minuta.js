@@ -62,10 +62,10 @@ routerAdd(
     if (
       guardAuth &&
       guardAuth.collection().name === 'users' &&
-      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('verified') &&
       !guardAuth.getBool('isAdmin')
     ) {
-      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+      return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
     var body = e.requestInfo().body || {}
@@ -549,10 +549,10 @@ routerAdd(
     if (
       guardAuth &&
       guardAuth.collection().name === 'users' &&
-      !guardAuth.getBool('approved') &&
+      !guardAuth.getBool('verified') &&
       !guardAuth.getBool('isAdmin')
     ) {
-      return e.json(403, { error: 'Seu acesso ainda não foi liberado pelo administrador.' })
+      return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
     const body = e.requestInfo().body || {}

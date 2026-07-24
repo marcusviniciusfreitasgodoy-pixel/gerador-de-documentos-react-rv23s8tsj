@@ -29,10 +29,9 @@ export default function Signup() {
     if (error) {
       toast.error(getErrorMessage(error))
     } else {
-      // O acesso nasce bloqueado (cadastro fechado com liberação): o "/" cai no
-      // ProtectedRoute, que mostra a tela "Cadastro recebido — aguardando
-      // liberação". O toast antecipa isso para não parecer erro.
-      toast.success('Conta criada! Seu acesso será liberado pelo administrador.')
+      // O "/" cai no ProtectedRoute, que mostra a tela "Confirme seu e-mail".
+      // O toast antecipa o próximo passo para não parecer erro.
+      toast.success('Conta criada! Enviamos um e-mail de confirmação: é só clicar no link.')
       navigate('/')
     }
     setLoading(false)
@@ -48,7 +47,8 @@ export default function Signup() {
           Criar Conta
         </CardTitle>
         <CardDescription>
-          Cadastre-se para gerar documentos. O acesso é liberado pelo administrador após o cadastro.
+          Cadastre-se para gerar documentos. Você recebe um e-mail de confirmação e o acesso libera
+          na hora.
         </CardDescription>
       </CardHeader>
       <CardContent>
