@@ -353,71 +353,75 @@ onRecordAfterCreateSuccess((e) => {
 
 // ============================================================================
 // Identidade dos e-mails transacionais (decisão do Marcus, 2026-07-24):
-// nome do app/remetente + templates de verificação e de reset em português,
-// com a cara da Prime Circle (Ink #0E0E0E, Ouro #C9A84C, Marfim).
-// Roda no boot do PocketBase e é idempotente: gravar o mesmo valor não muda nada.
+// os e-mails de verificação e de reset saem em português, com a cara da
+// Prime Circle (Ink #0E0E0E, Ouro #C9A84C, Marfim). Em vez de gravar template
+// nas settings (o PB do Skip ignora a gravação), interceptamos o ENVIO e
+// trocamos assunto e corpo na hora. O link original é extraído do corpo padrão.
+// O HTML é duplicado nos dois handlers de propósito: handlers do JSVM são
+// isolados e não enxergam função de fora.
 // ============================================================================
-try {
-  var pcSettings = $app.settings()
-  pcSettings.meta.appName = 'Prime Circle Documentos'
-  pcSettings.meta.senderName = 'Prime Circle Documentos'
-  $app.save(pcSettings)
-} catch (err) {
-  $app.logger().error('identidade email: settings falhou', 'error', String(err))
-}
-
-try {
-  function pcEmailHtml(titulo, saudacao, corpo, botao, rodape) {
-    return (
-      '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
-      '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
-      '<div style="padding:28px 32px 0 32px;">' +
-      '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
-      '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
-      '</div>' +
-      '<div style="padding:20px 32px 32px 32px;">' +
-      '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">' +
-      titulo +
-      '</h1>' +
-      '<p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">' +
-      saudacao +
-      '</p>' +
-      '<p style="margin:0 0 24px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">' +
-      corpo +
-      '</p>' +
-      '<a href="{ACTION_URL}" target="_blank" rel="noopener" style="display:inline-block;background:#0E0E0E;color:#C9A84C;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;line-height:44px;padding:0 28px;border-radius:8px;">' +
-      botao +
-      '</a>' +
-      '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">' +
-      rodape +
-      '</p>' +
-      '</div>' +
-      '<div style="padding:14px 32px;background:#F1EBDD;">' +
-      '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
-      '</div>' +
-      '</div>' +
-      '</div>'
-    )
+onMailerRecordVerificationSend((e) => {
+  try {
+    var m = String(e.message.html || '').match(/href="([^"]+)"/)
+    if (m) {
+      e.message.subject = 'Confirme seu e-mail | Prime Circle Documentos'
+      e.message.html =
+        '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
+        '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
+        '<div style="padding:28px 32px 0 32px;">' +
+        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
+        '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
+        '</div>' +
+        '<div style="padding:20px 32px 32px 32px;">' +
+        '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Confirme seu e-mail</h1>' +
+        '<p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Que bom ter você no Prime Circle Documentos!</p>' +
+        '<p style="margin:0 0 24px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Falta um passo: clique no botão abaixo para confirmar o seu e-mail. O acesso libera na hora.</p>' +
+        '<a href="' +
+        m[1] +
+        '" target="_blank" rel="noopener" style="display:inline-block;background:#0E0E0E;color:#C9A84C;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;line-height:44px;padding:0 28px;border-radius:8px;">Confirmar e liberar acesso</a>' +
+        '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">Se você não criou esta conta, ignore este e-mail.</p>' +
+        '</div>' +
+        '<div style="padding:14px 32px;background:#F1EBDD;">' +
+        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
+    }
+  } catch (err) {
+    $app.logger().error('email verificacao: personalizacao falhou', 'error', String(err))
   }
+  e.next()
+})
 
-  var pcUsersCol = $app.findCollectionByNameOrId('users')
-  pcUsersCol.verificationTemplate.subject = 'Confirme seu e-mail | Prime Circle Documentos'
-  pcUsersCol.verificationTemplate.body = pcEmailHtml(
-    'Confirme seu e-mail',
-    'Que bom ter você no Prime Circle Documentos!',
-    'Falta um passo: clique no botão abaixo para confirmar o seu e-mail. O acesso libera na hora.',
-    'Confirmar e liberar acesso',
-    'Se você não criou esta conta, ignore este e-mail.',
-  )
-  pcUsersCol.resetPasswordTemplate.subject = 'Redefinir sua senha | Prime Circle Documentos'
-  pcUsersCol.resetPasswordTemplate.body = pcEmailHtml(
-    'Redefinir sua senha',
-    'Recebemos um pedido para redefinir a senha da sua conta.',
-    'Clique no botão abaixo para escolher uma senha nova.',
-    'Escolher nova senha',
-    'Se não foi você, ignore este e-mail: sua senha continua a mesma.',
-  )
-  $app.save(pcUsersCol)
-} catch (err) {
-  $app.logger().error('identidade email: templates falharam', 'error', String(err))
-}
+onMailerRecordPasswordResetSend((e) => {
+  try {
+    var m = String(e.message.html || '').match(/href="([^"]+)"/)
+    if (m) {
+      e.message.subject = 'Redefinir sua senha | Prime Circle Documentos'
+      e.message.html =
+        '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
+        '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
+        '<div style="padding:28px 32px 0 32px;">' +
+        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
+        '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
+        '</div>' +
+        '<div style="padding:20px 32px 32px 32px;">' +
+        '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Redefinir sua senha</h1>' +
+        '<p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Recebemos um pedido para redefinir a senha da sua conta.</p>' +
+        '<p style="margin:0 0 24px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Clique no botão abaixo para escolher uma senha nova.</p>' +
+        '<a href="' +
+        m[1] +
+        '" target="_blank" rel="noopener" style="display:inline-block;background:#0E0E0E;color:#C9A84C;text-decoration:none;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;line-height:44px;padding:0 28px;border-radius:8px;">Escolher nova senha</a>' +
+        '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">Se não foi você, ignore este e-mail: sua senha continua a mesma.</p>' +
+        '</div>' +
+        '<div style="padding:14px 32px;background:#F1EBDD;">' +
+        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>'
+    }
+  } catch (err) {
+    $app.logger().error('email reset: personalizacao falhou', 'error', String(err))
+  }
+  e.next()
+})
