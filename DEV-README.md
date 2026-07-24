@@ -39,14 +39,14 @@ combine a revisão, e quem tem acesso ao Skip cola e aplica.
 
 ## 2. Stack
 
-| Camada | O que é |
-|---|---|
-| Front-end | React 19, TypeScript, Vite, React Router 7, Tailwind, shadcn/ui |
-| Formulários | react-hook-form + zod |
-| Documentos | docxtemplater (gera .docx a partir de templates) |
-| Back-end | PocketBase (banco + auth + rotas HTTP em JS) hospedado pelo Skip |
-| IA | Chamada direta à API da Anthropic e do Gemini a partir dos hooks do PocketBase |
-| Qualidade | oxlint + oxfmt (não é ESLint/Prettier) |
+| Camada      | O que é                                                                        |
+| ----------- | ------------------------------------------------------------------------------ |
+| Front-end   | React 19, TypeScript, Vite, React Router 7, Tailwind, shadcn/ui                |
+| Formulários | react-hook-form + zod                                                          |
+| Documentos  | docxtemplater (gera .docx a partir de templates)                               |
+| Back-end    | PocketBase (banco + auth + rotas HTTP em JS) hospedado pelo Skip               |
+| IA          | Chamada direta à API da Anthropic e do Gemini a partir dos hooks do PocketBase |
+| Qualidade   | oxlint + oxfmt (não é ESLint/Prettier)                                         |
 
 ## 3. Mapa do repositório
 
@@ -89,15 +89,15 @@ npx oxfmt <arquivos>  # rode antes de propor: o Skip reformata e gera diff falso
 
 ## 5. Modelo de dados (PocketBase)
 
-| Coleção | Papel |
-|---|---|
-| `users` | contas; `verified` libera o acesso, `isAdmin` marca administrador |
-| `negocios` | dossiê da operação: partes e imóvel, reaproveitados por todos os documentos |
-| `broker_profile` | dados do corretor que saem impressos nos contratos |
-| `legal_knowledge` | régua jurídica usada pelo validador. **Somente admin**, no front e nas regras |
-| `validation_logs` / `validation_audit` | histórico das validações. Expurgo automático em 30 dias (LGPD) |
-| `expert_support_requests` / `expert_proposals` | fluxo de suporte especializado e propostas |
-| `chamados` | sugestões e chamados de suporte abertos pelos usuários |
+| Coleção                                        | Papel                                                                         |
+| ---------------------------------------------- | ----------------------------------------------------------------------------- |
+| `users`                                        | contas; `verified` libera o acesso, `isAdmin` marca administrador             |
+| `negocios`                                     | dossiê da operação: partes e imóvel, reaproveitados por todos os documentos   |
+| `broker_profile`                               | dados do corretor que saem impressos nos contratos                            |
+| `legal_knowledge`                              | régua jurídica usada pelo validador. **Somente admin**, no front e nas regras |
+| `validation_logs` / `validation_audit`         | histórico das validações. Expurgo automático em 30 dias (LGPD)                |
+| `expert_support_requests` / `expert_proposals` | fluxo de suporte especializado e propostas                                    |
+| `chamados`                                     | sugestões e chamados de suporte abertos pelos usuários                        |
 
 As regras de acesso de cada coleção são a real camada de segurança. O padrão é
 `dono ou admin`; nunca afrouxe para `@request.auth.id != ""` sem entender o que a coleção guarda.
