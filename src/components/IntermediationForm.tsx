@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
   Download,
-  Wand2,
   User,
   Building2,
   DollarSign,
@@ -15,6 +14,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { BotaoDadosTeste } from '@/components/Layout'
 import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarAutorizacao } from '@/lib/aplicar-negocio'
 import {
@@ -565,19 +565,12 @@ export function IntermediationForm() {
           </div>
         </div>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="text-muted-foreground hover:text-foreground"
+        <BotaoDadosTeste
           onClick={() => {
             form.reset(intermediationMockData)
             aplicarBroker()
           }}
-        >
-          <Wand2 className="mr-1.5 h-3.5 w-3.5" />
-          Preencher dados de teste
-        </Button>
+        />
 
         {/* Barra de ação FIXA: num formulário longo, Gerar/Validar ficam sempre
             alcançáveis. -mx-6/px-6 acompanham o padding do CardContent. */}

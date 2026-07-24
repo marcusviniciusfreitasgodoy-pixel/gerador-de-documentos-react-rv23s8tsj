@@ -13,9 +13,11 @@ import {
   Briefcase,
   Sun,
   Moon,
+  Wand2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+import { Button } from '@/components/ui/button'
 
 // Connection Mark — símbolo oficial Prime Circle (dois círculos + ponto de acordo).
 // Regra da marca: um círculo ouro + um marfim, ambos vazados; nunca preencher os dois.
@@ -226,5 +228,42 @@ export function IntroPagina({
         </div>
       )}
     </div>
+  )
+}
+
+// Botão "Preencher dados de teste": só existe para o admin. O corretor comum
+// não deve ver um atalho que enche o contrato de dados fictícios.
+export function BotaoDadosTeste({
+  onClick,
+  className,
+  variante = 'ghost',
+  rotulo = 'Preencher dados de teste',
+}: {
+  onClick: () => void
+  className?: string
+  variante?: 'ghost' | 'outline'
+  rotulo?: string
+}) {
+  const { isAdmin } = useAuth()
+  if (!isAdmin) return null
+  if (variante === 'outline') {
+    return (
+      <Button type="button" variant="outline" className={className ?? 'w-full'} onClick={onClick}>
+        <Wand2 className="mr-2 h-4 w-4" />
+        {rotulo}
+      </Button>
+    )
+  }
+  return (
+    <Button
+      type="button"
+      variant="ghost"
+      size="sm"
+      className={className ?? 'text-muted-foreground hover:text-foreground'}
+      onClick={onClick}
+    >
+      <Wand2 className="mr-1.5 h-3.5 w-3.5" />
+      {rotulo}
+    </Button>
   )
 }

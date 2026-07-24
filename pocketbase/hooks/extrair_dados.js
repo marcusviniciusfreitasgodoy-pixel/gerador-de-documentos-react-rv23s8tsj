@@ -276,3 +276,76 @@ routerAdd(
   },
   $apis.requireAuth(),
 )
+
+// ============================================================================
+// E-mails de notificação (SMTP já validado pelo fluxo de reset de senha).
+// Regras: envio SEMPRE em try/catch com logger (e-mail falhando não pode
+// quebrar o cadastro nem a proposta) e nada de travessão nos textos.
+// ============================================================================
+
+// Novo cadastro -> avisa os admins (são eles que ligam o `approved`).
+onRecordAfterCreateSuccess((e) => {
+  try {
+    var novo = e.record
+    var admins = $app.findRecordsByFilter('users', 'isAdmin = true', '', 10, 0)
+    var meta = $app.settings().meta
+    for (var i = 0; i < admins.length; i++) {
+      var adminEmail = admins[i].email()
+      if (!adminEmail) continue
+      var msg = new MailerMessage({
+        from: { address: meta.senderAddress, name: meta.senderName },
+        to: [{ address: adminEmail }],
+        subject: 'Novo cadastro aguardando liberação: ' + (novo.getString('name') || novo.email()),
+        html:
+          '<p>Um novo usuário se cadastrou no Gerador de Documentos e está aguardando liberação.</p>' +
+          '<p><strong>Nome:</strong> ' +
+          (novo.getString('name') || '(sem nome)') +
+          '<br><strong>E-mail:</strong> ' +
+          novo.email() +
+          '</p>' +
+          '<p>Para liberar: painel Skip Cloud, coleção users, lápis na linha do usuário, ligar o campo approved.</p>',
+      })
+      $app.newMailClient().send(msg)
+    }
+  } catch (err) {
+    $app.logger().error('email novo cadastro: falha no envio', 'error', String(err))
+  }
+  e.next()
+}, 'users')
+
+// Nova proposta do especialista -> avisa o corretor dono da solicitação.
+onRecordAfterCreateSuccess((e) => {
+  try {
+    var proposta = e.record
+    var reqId = proposta.getString('request')
+    if (reqId) {
+      var solicitacao = $app.findRecordById('expert_support_requests', reqId)
+      var donoId = solicitacao.getString('user')
+      if (donoId) {
+        var dono = $app.findRecordById('users', donoId)
+        var donoEmail = dono.email()
+        if (donoEmail) {
+          var meta = $app.settings().meta
+          var link = 'https://gerador-de-documentos-react-85e34.goskip.app/especialista/' + reqId
+          var msg = new MailerMessage({
+            from: { address: meta.senderAddress, name: meta.senderName },
+            to: [{ address: donoEmail }],
+            subject: 'Você recebeu uma proposta do Especialista',
+            html:
+              '<p>Olá' +
+              (dono.getString('name') ? ', ' + dono.getString('name') : '') +
+              '!</p>' +
+              '<p>Sua solicitação de suporte especializado recebeu uma proposta. Entre no app para ver o escopo, o prazo e o valor, e para aceitar ou recusar.</p>' +
+              '<p><a href="' +
+              link +
+              '">Ver a proposta</a></p>',
+          })
+          $app.newMailClient().send(msg)
+        }
+      }
+    }
+  } catch (err) {
+    $app.logger().error('email proposta: falha no envio', 'error', String(err))
+  }
+  e.next()
+}, 'expert_proposals')

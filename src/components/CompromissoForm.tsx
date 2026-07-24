@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
   Download,
-  Wand2,
   User,
   UserCheck,
   Building2,
@@ -17,6 +16,7 @@ import {
 import { toast } from 'sonner'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { BotaoDadosTeste } from '@/components/Layout'
 import {
   Form,
   FormField,
@@ -717,18 +717,13 @@ export function CompromissoForm() {
           </div>
         </div>
 
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full"
+        <BotaoDadosTeste
+          variante="outline"
           onClick={() => {
             form.reset(compromissoMockData)
             aplicarBroker()
           }}
-        >
-          <Wand2 className="mr-2 h-4 w-4" />
-          Preencher dados de teste
-        </Button>
+        />
         <Button
           type="submit"
           disabled={isGenerating}

@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
   Download,
-  Wand2,
   User,
   UserCheck,
   Building2,
@@ -21,6 +20,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { BotaoDadosTeste } from '@/components/Layout'
 import {
   Form,
   FormField,
@@ -1191,19 +1191,14 @@ export function PromessaAvistaForm() {
             <Sparkles className="mr-2 h-4 w-4" />
             Preencher a partir de documentos
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
+          <BotaoDadosTeste
             className="text-muted-foreground hover:text-foreground shrink-0"
+            rotulo="Dados de teste"
             onClick={() => {
               form.reset(promessaAvistaMockData)
               aplicarBroker()
             }}
-          >
-            <Wand2 className="mr-1.5 h-3.5 w-3.5" />
-            Dados de teste
-          </Button>
+          />
         </div>
         <AutoPreencherDialog
           open={autoPreencherOpen}

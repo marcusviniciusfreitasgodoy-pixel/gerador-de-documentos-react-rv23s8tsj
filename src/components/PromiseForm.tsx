@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Loader2,
   Download,
-  Wand2,
   AlertCircle,
   FileSearch,
   User,
@@ -17,6 +16,7 @@ import {
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { BotaoDadosTeste } from '@/components/Layout'
 import {
   CarregarDeNegocio,
   DocumentoGerado,
@@ -638,20 +638,14 @@ export function PromiseForm() {
           </div>
         </div>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
+        <BotaoDadosTeste
           className="text-muted-foreground hover:text-foreground shrink-0 w-fit"
           onClick={() => {
             form.reset(promiseMockData)
             aplicarBroker()
             resnapshot()
           }}
-        >
-          <Wand2 className="mr-1.5 h-3.5 w-3.5" />
-          Preencher dados de teste
-        </Button>
+        />
 
         {/* Barra de ação FIXA: Gerar/Validar sempre alcançáveis no formulário longo. */}
         <div className="sticky bottom-0 z-10 -mx-6 flex flex-col sm:flex-row gap-2 border-t border-border bg-card/95 px-6 py-3 backdrop-blur-sm">
