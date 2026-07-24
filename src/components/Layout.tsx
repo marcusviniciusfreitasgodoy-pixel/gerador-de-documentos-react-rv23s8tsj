@@ -14,6 +14,7 @@ import {
   Sun,
   Moon,
   Wand2,
+  LifeBuoy,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
@@ -37,12 +38,15 @@ function ConnectionMark({ className }: { className?: string }) {
   )
 }
 
+// A Base de Conhecimento é ferramenta interna do admin (régua jurídica da
+// validação); o corretor comum não vê. A porta do corretor é "Ajuda".
 const NAV_ITEMS = [
   { to: '/', label: 'Documentos', icon: FileCheck, end: true },
   { to: '/negocios', label: 'Negócios', icon: Briefcase },
   { to: '/validar', label: 'Validar', icon: FileSearch },
-  { to: '/legal-knowledge', label: 'Conhecimento', icon: BookOpen },
+  { to: '/legal-knowledge', label: 'Conhecimento', icon: BookOpen, adminOnly: true },
   { to: '/especialista', label: 'Especialista', icon: Headset },
+  { to: '/ajuda', label: 'Ajuda', icon: LifeBuoy },
   { to: '/perfil', label: 'Perfil', icon: UserCircle },
 ]
 
@@ -86,7 +90,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { erro: Error | n
 }
 
 export default function Layout() {
-  const { isAuthenticated, user, signOut } = useAuth()
+  const { isAuthenticated, user, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
 
   const [dark, setDark] = useState(
@@ -123,7 +127,7 @@ export default function Layout() {
           </Link>
           {isAuthenticated && (
             <nav className="flex items-center gap-0.5 sm:gap-1 min-w-0">
-              {NAV_ITEMS.map((item) => (
+              {NAV_ITEMS.filter((item) => !('adminOnly' in item) || isAdmin).map((item) => (
                 <NavLink
                   key={item.to}
                   to={item.to}
