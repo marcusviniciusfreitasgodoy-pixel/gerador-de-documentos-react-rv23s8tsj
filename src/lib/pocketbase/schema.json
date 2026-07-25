@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-07-23T18:19:30.043Z",
+  "generatedAt": "2026-07-24T20:05:57.645Z",
   "collections": [
     {
       "name": "users",
       "type": "auth",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
-        "create": null,
+        "list": "id = @request.auth.id || @request.auth.isAdmin = true",
+        "view": "id = @request.auth.id || @request.auth.isAdmin = true",
+        "create": "@request.body.isAdmin:isset = false && @request.body.approved:isset = false",
         "update": null,
         "delete": null
       },
@@ -43,6 +43,12 @@
           "type": "bool",
           "required": false,
           "system": false
+        },
+        {
+          "name": "approved",
+          "type": "bool",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": [
@@ -54,8 +60,8 @@
       "name": "legal_knowledge",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
+        "list": "@request.auth.isAdmin = true",
+        "view": "@request.auth.isAdmin = true",
         "create": "@request.auth.isAdmin = true",
         "update": "@request.auth.isAdmin = true",
         "delete": "@request.auth.isAdmin = true"
@@ -494,7 +500,7 @@
       "apiRules": {
         "list": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
         "view": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
-        "create": "@request.auth.id != \"\"",
+        "create": "@request.auth.id != \"\" && user = @request.auth.id",
         "update": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
         "delete": "@request.auth.isAdmin = true"
       },
@@ -594,7 +600,7 @@
         "list": "@request.auth.id != \"\" && (request.user = @request.auth.id || @request.auth.isAdmin = true)",
         "view": "@request.auth.id != \"\" && (request.user = @request.auth.id || @request.auth.isAdmin = true)",
         "create": "@request.auth.isAdmin = true",
-        "update": "@request.auth.id != \"\"",
+        "update": "request.user = @request.auth.id || @request.auth.isAdmin = true",
         "delete": "@request.auth.isAdmin = true"
       },
       "fields": [
@@ -704,6 +710,65 @@
         }
       ],
       "indexes": ["CREATE INDEX idx_negocios_owner ON negocios (owner)"]
+    },
+    {
+      "name": "chamados",
+      "type": "base",
+      "apiRules": {
+        "list": "user = @request.auth.id || @request.auth.isAdmin = true",
+        "view": "user = @request.auth.id || @request.auth.isAdmin = true",
+        "create": "@request.auth.id != \"\" && user = @request.auth.id",
+        "update": "@request.auth.isAdmin = true",
+        "delete": "@request.auth.isAdmin = true"
+      },
+      "fields": [
+        {
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "tipo",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "mensagem",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "resposta",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onUpdate"]
+        }
+      ],
+      "indexes": []
     }
   ]
 }

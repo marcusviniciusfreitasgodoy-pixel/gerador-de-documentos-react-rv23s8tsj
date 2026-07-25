@@ -22,9 +22,15 @@ function ConfirmeSeuEmail() {
     setChecando(true)
     try {
       await pb.collection('users').authRefresh()
-      // O onChange do authStore atualiza o `user` do contexto; se verificado,
-      // o ProtectedRoute re-renderiza direto para o app. Se ainda não:
-      toast.info('Ainda não vimos a confirmação. Clique no link do e-mail e tente de novo.')
+      // Depois do refresh, o valor atual do `verified` está no authStore. Só
+      // avisamos "ainda não confirmou" quando de fato não confirmou: se já
+      // confirmou, o onChange atualiza o contexto e o ProtectedRoute
+      // re-renderiza direto para o app (um toast de sucesso apareceria por um
+      // instante e sumiria junto com a tela, então não mostramos nada).
+      const confirmou = pb.authStore.record?.verified === true
+      if (!confirmou) {
+        toast.info('Ainda não vimos a confirmação. Clique no link do e-mail e tente de novo.')
+      }
     } catch {
       toast.error('Não foi possível verificar agora. Tente novamente.')
     } finally {
