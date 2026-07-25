@@ -466,3 +466,66 @@ onRecordAfterCreateSuccess((e) => {
   }
   e.next()
 }, 'chamados')
+
+// ============================================================================
+// Exclusão de usuário em cascata (decisão do Marcus, 2026-07-24).
+// PROBLEMA: várias coleções apontam para o usuário com relação OBRIGATÓRIA e
+// sem cascade (validation_audit.user_id, broker_profile.user, negocios.owner,
+// chamados.user). Isso faz o banco RECUSAR apagar qualquer usuário que já
+// tenha dados, e o painel do Skip mostra "excluído" de forma enganosa. O editor
+// de campos do Skip não expõe a opção de cascade, então resolvemos por hook.
+// Este hook roda ANTES de excluir o usuário (vale inclusive para o delete do
+// painel/superuser) e apaga os dados dele primeiro, liberando a exclusão. É o
+// comportamento correto de "apagar a conta" para a LGPD: some o usuário, somem
+// os dados. Usa as MESMAS APIs já provadas no purge de retenção.
+onRecordDelete((e) => {
+  try {
+    var uid = e.record.id
+
+    // Propostas dependem das solicitações (proposta.request é obrigatória e sem
+    // cascade), então apagamos as propostas antes das solicitações do usuário.
+    try {
+      var reqs = $app.findRecordsByFilter('expert_support_requests', 'user = {:id}', '', 200, 0, {
+        id: uid,
+      })
+      for (var ri = 0; ri < reqs.length; ri++) {
+        try {
+          var props = $app.findRecordsByFilter('expert_proposals', 'request = {:rid}', '', 200, 0, {
+            rid: reqs[ri].id,
+          })
+          for (var pi = 0; pi < props.length; pi++) $app.delete(props[pi])
+        } catch (perr) {
+          $app.logger().error('cascade user: propostas', 'error', String(perr))
+        }
+        $app.delete(reqs[ri])
+      }
+    } catch (rerr) {
+      $app.logger().error('cascade user: solicitacoes', 'error', String(rerr))
+    }
+
+    // Demais coleções que referenciam o usuário direto.
+    var alvos = [
+      ['validation_audit', 'user_id'],
+      ['validation_logs', 'user'],
+      ['broker_profile', 'user'],
+      ['negocios', 'owner'],
+      ['chamados', 'user'],
+    ]
+    for (var ai = 0; ai < alvos.length; ai++) {
+      var col = alvos[ai][0]
+      var campo = alvos[ai][1]
+      try {
+        for (var rodada = 0; rodada < 20; rodada++) {
+          var filhos = $app.findRecordsByFilter(col, campo + ' = {:id}', '', 200, 0, { id: uid })
+          if (!filhos.length) break
+          for (var fi = 0; fi < filhos.length; fi++) $app.delete(filhos[fi])
+        }
+      } catch (cerr) {
+        $app.logger().error('cascade user: ' + col, 'error', String(cerr))
+      }
+    }
+  } catch (err) {
+    $app.logger().error('cascade user delete falhou', 'error', String(err))
+  }
+  e.next()
+}, 'users')
