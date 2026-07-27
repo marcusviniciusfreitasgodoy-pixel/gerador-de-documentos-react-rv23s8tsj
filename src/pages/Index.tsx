@@ -150,13 +150,6 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
           'O primeiro passo: o proprietário autoriza você, corretor, a anunciar e vender o imóvel dele. Pode ser exclusiva (só você vende) ou não, e já define sua comissão e o prazo.',
       },
       {
-        key: 'corretagem',
-        title: 'Contrato de Corretagem',
-        desc: 'Combina por escrito quanto e quando você recebe',
-        ajuda:
-          'O contrato dos seus honorários. Fixa o percentual, o vencimento e a exclusividade, e garante a comissão mesmo se as partes se arrependerem depois de o negócio estar fechado (arts. 725 e 727 do Código Civil).',
-      },
-      {
         href: '/proposta-reserva',
         title: 'Proposta e Reserva',
         desc: 'O comprador faz a oferta e reserva o imóvel',
@@ -244,6 +237,13 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         desc: 'Só a posse, quando as chaves já foram entregues',
         ajuda:
           'Use quando a posse é passada em momento diferente da entrega das chaves, como na posse antecipada, em que o comprador entra antes de quitar o preço.',
+      },
+      {
+        key: 'corretagem',
+        title: 'Contrato de Corretagem',
+        desc: 'Combina por escrito quanto e quando você recebe',
+        ajuda:
+          'O contrato dos seus honorários. Fixa o percentual, o vencimento e a exclusividade, e garante a comissão mesmo se as partes se arrependerem depois de o negócio estar fechado (arts. 725 e 727 do Código Civil).',
       },
       {
         key: 'reciboComissao',
