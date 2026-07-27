@@ -170,13 +170,6 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         ajuda:
           'Comprova que o comprador pagou o sinal, o valor de entrada que confirma o compromisso. Se alguém desistir, o sinal define quem perde ou devolve quanto (na lei, as "arras", arts. 417 a 420).',
       },
-      {
-        key: 'reciboComissao',
-        title: 'Recibo de Comissão',
-        desc: 'Comprova que você recebeu a sua corretagem',
-        ajuda:
-          'O comprovante de que a comissão foi paga a você. Dá quitação ao pagador, registra o valor e a forma, e amarra o pagamento ao negócio que o gerou. Use um a cada parcela recebida.',
-      },
     ],
   },
   {
@@ -251,6 +244,13 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         desc: 'Só a posse, quando as chaves já foram entregues',
         ajuda:
           'Use quando a posse é passada em momento diferente da entrega das chaves, como na posse antecipada, em que o comprador entra antes de quitar o preço.',
+      },
+      {
+        key: 'reciboComissao',
+        title: 'Recibo de Comissão',
+        desc: 'Comprova que você recebeu a sua corretagem',
+        ajuda:
+          'O comprovante de que a comissão foi paga a você. Dá quitação ao pagador, registra o valor e a forma, e amarra o pagamento ao negócio que o gerou. Use um a cada parcela recebida.',
       },
       {
         key: 'checklist',
