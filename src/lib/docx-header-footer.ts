@@ -169,7 +169,7 @@ export async function fetchHeaderFooterData(): Promise<HeaderFooterData | undefi
       endereco: profile.endereco || '',
       cidade: profile.cidade || '',
       uf: profile.uf || '',
-      telefone: profile.telefone || profile.phone || '',
+      telefone: profile.telefone || '',
       email: profile.email || '',
     }
   } catch {
