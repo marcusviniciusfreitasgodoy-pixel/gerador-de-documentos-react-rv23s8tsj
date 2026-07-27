@@ -16,11 +16,15 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useNavigate, Link } from 'react-router-dom'
-import { IntermediationForm } from '@/components/IntermediationForm'
+import {
+  IntermediationForm,
+  ReciboComissaoForm,
+  CorretagemForm,
+} from '@/components/IntermediationForm'
 import { PromiseForm } from '@/components/PromiseForm'
 import { PromessaAvistaForm } from '@/components/PromessaAvistaForm'
 import { PromessaFinanciadaForm } from '@/components/PromessaFinanciadaForm'
-import { TermoChavesForm } from '@/components/TermoChavesForm'
+import { TermoChavesForm, ChavesPosseForm } from '@/components/TermoChavesForm'
 import { TermoPosseForm } from '@/components/TermoPosseForm'
 import { ChecklistForm } from '@/components/ChecklistForm'
 import {
@@ -88,6 +92,9 @@ type DocKey =
   | 'compromissoFinanciado'
   | 'compromissoFgts'
   | 'compromissoDacao'
+  | 'corretagem'
+  | 'reciboComissao'
+  | 'chavesPosse'
   | 'termoChaves'
   | 'termoPosse'
   | 'checklist'
@@ -135,6 +142,13 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
           'O primeiro passo: o proprietário autoriza você, corretor, a anunciar e vender o imóvel dele. Pode ser exclusiva (só você vende) ou não, e já define sua comissão e o prazo.',
       },
       {
+        key: 'corretagem',
+        title: 'Contrato de Corretagem',
+        desc: 'Combina por escrito quanto e quando você recebe',
+        ajuda:
+          'O contrato dos seus honorários. Fixa o percentual, o vencimento e a exclusividade, e garante a comissão mesmo se as partes se arrependerem depois de o negócio estar fechado (arts. 725 e 727 do Código Civil).',
+      },
+      {
         href: '/proposta-reserva',
         title: 'Proposta e Reserva',
         desc: 'O comprador faz a oferta e reserva o imóvel',
@@ -147,6 +161,13 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         desc: 'Comprova o pagamento da entrada (sinal)',
         ajuda:
           'Comprova que o comprador pagou o sinal, o valor de entrada que confirma o compromisso. Se alguém desistir, o sinal define quem perde ou devolve quanto (na lei, as "arras", arts. 417 a 420).',
+      },
+      {
+        key: 'reciboComissao',
+        title: 'Recibo de Comissão',
+        desc: 'Comprova que você recebeu a sua corretagem',
+        ajuda:
+          'O comprovante de que a comissão foi paga a você. Dá quitação ao pagador, registra o valor e a forma, e amarra o pagamento ao negócio que o gerou. Use um a cada parcela recebida.',
       },
     ],
   },
@@ -200,21 +221,28 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
   },
   {
     label: 'Execução e encerramento',
-    hint: 'Depois de assinado',
+    hint: 'Depois de assinado. Na dúvida entre os três termos de entrega, use o combinado: ele cobre o caso normal, em que chaves e posse saem no mesmo dia',
     docs: [
+      {
+        key: 'chavesPosse',
+        title: 'Entrega de Chaves e Posse',
+        desc: 'Entrega as chaves e passa a posse no mesmo ato',
+        ajuda:
+          'O caso mais comum: o comprador quitou, recebe as chaves e assume o imóvel na mesma data. Um documento só, com a relação de chaves, a leitura dos medidores e a autorização de mudança para mostrar na portaria.',
+      },
       {
         key: 'termoChaves',
         title: 'Entrega das Chaves',
-        desc: 'Registra a entrega do imóvel ao comprador',
+        desc: 'Só a entrega física, sem passar a posse',
         ajuda:
-          'Documento que marca o momento em que o comprador recebe as chaves e o imóvel fica à disposição dele.',
+          'Use quando o comprador precisa entrar no imóvel mas ainda não assume a posse: acesso para reforma, medição ou vistoria técnica. Registra chaves e medidores, sem transmitir posse.',
       },
       {
         key: 'termoPosse',
         title: 'Transmissão da Posse',
-        desc: 'Formaliza que o comprador passou a ocupar o imóvel',
+        desc: 'Só a posse, quando as chaves já foram entregues',
         ajuda:
-          'Registra que o comprador passou a ocupar e usar o imóvel de fato. "Tradição" e "imissão na posse" são os termos jurídicos dessa entrega.',
+          'Use quando a posse é passada em momento diferente da entrega das chaves, como na posse antecipada, em que o comprador entra antes de quitar o preço.',
       },
       {
         key: 'checklist',
@@ -243,6 +271,9 @@ const DOC_TITLES: Record<DocKey, string> = {
   compromissoFinanciado: 'Promessa / Compromisso de Compra e Venda (financiada)',
   compromissoFgts: 'Promessa com FGTS (sem financiamento)',
   compromissoDacao: 'Promessa com Dação em Pagamento',
+  corretagem: 'Contrato de Corretagem e Honorários de Intermediação',
+  reciboComissao: 'Recibo de Comissão de Corretagem',
+  chavesPosse: 'Termo de Entrega de Chaves e Transmissão da Posse',
   termoChaves: 'Termo de Entrega das Chaves',
   termoPosse: 'Termo de Transmissão da Posse',
   checklist: 'Checklist Documental',
@@ -985,6 +1016,9 @@ export default function Index() {
         {docType === 'compromissoFinanciado' && <PromessaFinanciadaForm />}
         {docType === 'compromissoFgts' && <PromessaFgtsForm />}
         {docType === 'compromissoDacao' && <PromessaDacaoForm />}
+        {docType === 'corretagem' && <CorretagemForm />}
+        {docType === 'reciboComissao' && <ReciboComissaoForm />}
+        {docType === 'chavesPosse' && <ChavesPosseForm />}
         {docType === 'termoChaves' && <TermoChavesForm />}
         {docType === 'termoPosse' && <TermoPosseForm />}
         {docType === 'checklist' && <ChecklistForm />}

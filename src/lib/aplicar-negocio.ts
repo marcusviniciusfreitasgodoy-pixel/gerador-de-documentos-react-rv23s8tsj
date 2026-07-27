@@ -331,6 +331,78 @@ export function aplicarPosse(setValue: SetValue, negocio: Negocio): void {
   setValue('imovel_iptu', im.iptu || '')
 }
 
+// Recibo de comissão: o PAGADOR é quem arca com a corretagem. No mercado a
+// comissão costuma ser do vendedor, então é ele que entra por padrão; se no
+// negócio o combinado for outro, o corretor troca o nome na mão. Não há campo
+// de "quem paga a comissão" no dossiê para decidir isso sozinho.
+export function aplicarReciboComissao(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const im = negocio.imovel
+  if (v) {
+    setValue('pagador_nome', v.nome || '')
+    setValue('pagador_qualificacao', montarQualificacaoPlana(v))
+    setValue('pagador_documento', v.cpf || '')
+    setValue('pagador_endereco', v.endereco || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_ri_numero', im.rgi || '')
+  setValue('imovel_comarca', im.cidade || '')
+  setValue('imovel_iptu', im.iptu || '')
+  setValue('cidade_uf', im.cidade ? `${im.cidade}/${im.uf || ''}`.replace(/\/$/, '') : '')
+}
+
+// Contrato de corretagem: o CONTRATANTE é quem contrata o corretor, em regra o
+// vendedor (é dele o imóvel a vender). O imóvel entra completo porque o contrato
+// identifica o bem sobre o qual a intermediação recai.
+export function aplicarCorretagem(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const im = negocio.imovel
+  if (v) {
+    setValue('contratante_nome', v.nome || '')
+    setValue('contratante_qualificacao', montarQualificacaoPlana(v))
+    setValue('contratante_rg', v.rg || '')
+    setValue('contratante_documento', v.cpf || '')
+    setValue('contratante_endereco', v.endereco || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_ri_numero', im.rgi || '')
+  setValue('imovel_comarca', im.cidade || '')
+  setValue('imovel_iptu', im.iptu || '')
+  setValue('foro_comarca', im.cidade || '')
+  setValue('cidade_uf', im.cidade ? `${im.cidade}/${im.uf || ''}`.replace(/\/$/, '') : '')
+}
+
+// Termo combinado: mesmas partes do termo de posse (o vendedor transmite, o
+// comprador recebe), mais o foro e a cidade da assinatura, que o documento usa.
+export function aplicarChavesPosse(setValue: SetValue, negocio: Negocio): void {
+  const v = primeiraParte(negocio, 'vendedor')
+  const c = primeiraParte(negocio, 'comprador')
+  const im = negocio.imovel
+  if (v) {
+    setValue('transmitente_nome', v.nome || '')
+    setValue('transmitente_qualificacao', montarQualificacaoPlana(v))
+    setValue('transmitente_rg', v.rg || '')
+    setValue('transmitente_documento', v.cpf || '')
+    setValue('transmitente_endereco', v.endereco || '')
+  }
+  if (c) {
+    setValue('recebedor_nome', c.nome || '')
+    setValue('recebedor_qualificacao', montarQualificacaoPlana(c))
+    setValue('recebedor_rg', c.rg || '')
+    setValue('recebedor_documento', c.cpf || '')
+    setValue('recebedor_endereco', c.endereco || '')
+  }
+  setValue('imovel_descricao', im.descricao || '')
+  setValue('imovel_matricula', im.matricula || '')
+  setValue('imovel_ri_numero', im.rgi || '')
+  setValue('imovel_comarca', im.cidade || '')
+  setValue('imovel_iptu', im.iptu || '')
+  setValue('foro_comarca', im.cidade || '')
+  setValue('cidade_uf', im.cidade ? `${im.cidade}/${im.uf || ''}`.replace(/\/$/, '') : '')
+}
+
 export function aplicarChecklist(setValue: SetValue, negocio: Negocio): void {
   const v = primeiraParte(negocio, 'vendedor')
   if (v) setValue('responsavel', v.nome || '')

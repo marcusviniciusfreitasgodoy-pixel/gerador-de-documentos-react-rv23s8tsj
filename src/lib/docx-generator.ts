@@ -213,3 +213,64 @@ export async function generateDocx(data: Record<string, string>): Promise<void> 
 export async function getReciboText(data: Record<string, string>): Promise<string> {
   return extractTextFromUrl(RECIBO_TEMPLATE_URL, RECIBO_EXPECTED_BYTES, data)
 }
+
+// Recibo de COMISSÃO de corretagem — não confundir com o de sinal/arras acima.
+// Mora aqui pelo parentesco: os dois são recibos e dividem a mesma mecânica.
+const RECIBO_COMISSAO_TEMPLATE_URL =
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/3cbf49acf727418a687879996a3c2195f9d8bb10/recibo_comissao_base64.txt'
+const RECIBO_COMISSAO_EXPECTED_BYTES = 37941
+
+export async function generateReciboComissaoDocx(data: Record<string, string>): Promise<void> {
+  await renderFromUrl(
+    RECIBO_COMISSAO_TEMPLATE_URL,
+    RECIBO_COMISSAO_EXPECTED_BYTES,
+    data,
+    'recibo-de-comissao-de-corretagem.docx',
+  )
+}
+
+export async function getReciboComissaoText(data: Record<string, string>): Promise<string> {
+  return extractTextFromUrl(RECIBO_COMISSAO_TEMPLATE_URL, RECIBO_COMISSAO_EXPECTED_BYTES, data)
+}
+
+// Contrato de corretagem (honorários). Irmão do recibo acima: aquele quita a
+// comissão, este é onde ela é combinada. As cláusulas 3ª e 4ª (arts. 725 e 727
+// do Código Civil) são a razão de o documento existir: garantem a comissão
+// mesmo quando o negócio não se efetiva por arrependimento das partes.
+const CORRETAGEM_TEMPLATE_URL =
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/a2b8366f2592c2e936c564cebe1114c7f6c5a768/corretagem_base64.txt'
+const CORRETAGEM_EXPECTED_BYTES = 39525
+
+export async function generateCorretagemDocx(data: Record<string, string>): Promise<void> {
+  await renderFromUrl(
+    CORRETAGEM_TEMPLATE_URL,
+    CORRETAGEM_EXPECTED_BYTES,
+    data,
+    'contrato-de-corretagem.docx',
+  )
+}
+
+export async function getCorretagemText(data: Record<string, string>): Promise<string> {
+  return extractTextFromUrl(CORRETAGEM_TEMPLATE_URL, CORRETAGEM_EXPECTED_BYTES, data)
+}
+
+// Termo combinado de chaves + posse. Existe porque, na maioria das operações, as
+// chaves e a posse mudam de mão no MESMO ato: emitir dois documentos e colher
+// duas assinaturas para o mesmo momento é o que faz o corretor deixar de emitir
+// um dos dois. Os termos separados continuam para quando os atos não coincidem.
+const CHAVES_POSSE_TEMPLATE_URL =
+  'https://gist.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34/raw/a939b4b7f748cfed3737a087abeddfcb4299fa6c/chaves_posse_base64.txt'
+const CHAVES_POSSE_EXPECTED_BYTES = 39714
+
+export async function generateChavesPosseDocx(data: Record<string, string>): Promise<void> {
+  await renderFromUrl(
+    CHAVES_POSSE_TEMPLATE_URL,
+    CHAVES_POSSE_EXPECTED_BYTES,
+    data,
+    'termo-de-entrega-de-chaves-e-posse.docx',
+  )
+}
+
+export async function getChavesPosseText(data: Record<string, string>): Promise<string> {
+  return extractTextFromUrl(CHAVES_POSSE_TEMPLATE_URL, CHAVES_POSSE_EXPECTED_BYTES, data)
+}
