@@ -15,6 +15,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 
+import { listarDocumentosPorGrupo } from '@/pages/Index'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -324,58 +325,76 @@ type Chamado = {
   created: string
 }
 
-const FAQ: { pergunta: string; resposta: string }[] = [
-  {
-    pergunta: 'Por onde eu começo?',
-    resposta:
-      'Três passos: 1) preencha o seu Perfil do Corretor (nome, CRECI e comissão), porque os contratos imprimem esses dados; 2) cadastre um Negócio com as partes e o imóvel; 3) escolha um documento no hub e clique em Gerar. O arquivo sai pronto em Word.',
-  },
-  {
-    pergunta: 'O que é um Negócio e por que cadastrar um?',
-    resposta:
-      'O Negócio é o dossiê da operação: as partes (vendedores, compradores, cônjuges) e o imóvel, cadastrados uma única vez. Todos os documentos da mesma operação puxam os dados de lá. Você evita redigitação e, principalmente, evita divergência de dados entre documentos.',
-  },
-  {
-    pergunta: 'Quais documentos a plataforma gera?',
-    resposta:
-      'O ciclo completo da intermediação: Autorização de Venda, Proposta e Reserva, Recibo de Sinal, as Promessas de Compra e Venda (à vista, financiada, com FGTS, com dação e a versão simplificada), Compromisso particular, Permuta, Distrato, Autorização de Intermediação, Termo de Entrega das Chaves, Termo de Posse e Checklist de documentos.',
-  },
-  {
-    pergunta: 'Como preencho um formulário mais rápido?',
-    resposta:
-      'Duas ferramentas: o botão Carregar de um Negócio, que puxa as partes e o imóvel do dossiê escolhido, e o Preenchimento automático por documentos, que lê fotos ou PDFs (RG, escritura, matrícula) com IA e sugere os campos. Revise sempre antes de gerar.',
-  },
-  {
-    pergunta: 'O documento gerado pode ser editado?',
-    resposta:
-      'Sim. Tudo sai em Word (.docx) editável. A plataforma entrega a minuta pronta e padronizada, e você ajusta o que for específico da sua negociação antes de colher assinaturas.',
-  },
-  {
-    pergunta: 'O que é a Validação de Minuta?',
-    resposta:
-      'Você cola o texto de um contrato (seu ou de terceiros) e a plataforma revisa com IA usando uma régua jurídica interna: aponta cláusulas ausentes, riscos e não conformidades, item por item. Use antes de assinar qualquer minuta que não saiu daqui.',
-  },
-  {
-    pergunta: 'O que é o Suporte Especializado?',
-    resposta:
-      'É o canal para casos que pedem um olhar humano especializado: você descreve o caso, recebe uma primeira análise com IA e, quando precisa, uma proposta de trabalho do especialista com escopo, prazo e valor, que você aceita ou recusa dentro do app.',
-  },
-  {
-    pergunta: 'Como funciona o meu acesso?',
-    resposta:
-      'O cadastro é aberto: você cria a conta, recebe um e-mail de confirmação e o acesso libera na hora do clique, sem depender de ninguém. Esqueceu a senha? Na tela de login há o botão Esqueci minha senha, que envia o link de redefinição por e-mail.',
-  },
-  {
-    pergunta: 'Meus dados estão protegidos?',
-    resposta:
-      'Os dados dos seus Negócios pertencem à sua conta: cada corretor enxerga somente o que é seu. Os textos enviados à Validação de Minuta são apagados automaticamente após 30 dias, em linha com a LGPD.',
-  },
-  {
-    pergunta: 'Encontrei um erro ou tenho uma sugestão. O que eu faço?',
-    resposta:
-      'Use a aba Sugestões e chamados aqui desta página. Descreva o que aconteceu (ou a sua ideia), envie e acompanhe o andamento por aqui mesmo. O administrador é avisado por e-mail na hora.',
-  },
-]
+// Montada em runtime porque a lista de documentos vem do hub: um documento novo
+// entra aqui sozinho, sem ninguem lembrar de editar esta frase.
+function montarFaq(): { pergunta: string; resposta: string }[] {
+  const documentos = listarDocumentosPorGrupo()
+    .map((g) => `${g.grupo}: ${g.titulos.join(', ')}`)
+    .join('. ')
+  return [
+    {
+      pergunta: 'Por onde eu começo?',
+      resposta:
+        'Três passos: 1) preencha o seu Perfil do Corretor (nome, CRECI e comissão), porque os contratos imprimem esses dados; 2) cadastre um Negócio com as partes e o imóvel; 3) escolha um documento no hub e clique em Gerar. O arquivo sai pronto em Word.',
+    },
+    {
+      pergunta: 'O que é um Negócio e por que cadastrar um?',
+      resposta:
+        'O Negócio é o dossiê da operação: as partes (vendedores, compradores, cônjuges) e o imóvel, cadastrados uma única vez. Todos os documentos da mesma operação puxam os dados de lá. Você evita redigitação e, principalmente, evita divergência de dados entre documentos.',
+    },
+    {
+      pergunta: 'Quais documentos a plataforma gera?',
+      resposta: `O ciclo completo da intermediação, na ordem da operação. ${documentos}.`,
+    },
+    {
+      pergunta: 'Quem paga a comissão, e se o negócio cair eu recebo?',
+      resposta:
+        'Quem paga é quem contratou você, e isso fica escrito no Contrato de Corretagem. Sobre cair: o art. 725 do Código Civil diz que a comissão é devida quando o resultado foi conseguido, ainda que o negócio não se efetive por arrependimento das partes. O nosso contrato traz essa cláusula expressa, e mais a do art. 727, que garante a comissão se as partes fecharem por fora depois de dispensarem você. Depois de receber, emita o Recibo de Comissão: é ele que dá quitação.',
+    },
+    {
+      pergunta: 'Qual documento eu uso para entregar as chaves?',
+      resposta:
+        'Na maioria dos casos, o Termo de Entrega de Chaves e Posse: o comprador quitou, recebe as chaves e assume o imóvel no mesmo dia, então um documento só resolve. Use o Termo de Entrega das Chaves sozinho quando o comprador precisa entrar mas ainda não assume a posse (reforma, medição, vistoria). Use o Termo de Transmissão da Posse sozinho quando a posse é passada em outro momento, como na posse antecipada, antes da quitação.',
+    },
+    {
+      pergunta: 'Como preencho um formulário mais rápido?',
+      resposta:
+        'Duas ferramentas: o botão Carregar de um Negócio, que puxa as partes e o imóvel do dossiê escolhido, e o Preenchimento automático por documentos, que lê fotos ou PDFs (RG, escritura, matrícula) com IA e sugere os campos. Revise sempre antes de gerar.',
+    },
+    {
+      pergunta: 'O documento gerado pode ser editado?',
+      resposta:
+        'Sim. Tudo sai em Word (.docx) editável. A plataforma entrega a minuta pronta e padronizada, e você ajusta o que for específico da sua negociação antes de colher assinaturas.',
+    },
+    {
+      pergunta: 'O que é a Validação de Minuta?',
+      resposta:
+        'Você cola o texto de um contrato (seu ou de terceiros) e a plataforma revisa com IA usando uma régua jurídica interna: aponta cláusulas ausentes, riscos e não conformidades, item por item. Use antes de assinar qualquer minuta que não saiu daqui.',
+    },
+    {
+      pergunta: 'O que é o Suporte Especializado?',
+      resposta:
+        'É o canal para casos que pedem um olhar humano especializado: você descreve o caso, recebe uma primeira análise com IA e, quando precisa, uma proposta de trabalho do especialista com escopo, prazo e valor, que você aceita ou recusa dentro do app.',
+    },
+    {
+      pergunta: 'Como funciona o meu acesso?',
+      resposta:
+        'O cadastro é aberto: você cria a conta, recebe um e-mail de confirmação e o acesso libera na hora do clique, sem depender de ninguém. Esqueceu a senha? Na tela de login há o botão Esqueci minha senha, que envia o link de redefinição por e-mail.',
+    },
+    {
+      pergunta: 'Meus dados estão protegidos?',
+      resposta:
+        'Os dados dos seus Negócios pertencem à sua conta: cada corretor enxerga somente o que é seu. Os textos enviados à Validação de Minuta são apagados automaticamente após 30 dias, em linha com a LGPD.',
+    },
+    {
+      pergunta: 'Encontrei um erro ou tenho uma sugestão. O que eu faço?',
+      resposta:
+        'Use a aba Sugestões e chamados aqui desta página. Descreva o que aconteceu (ou a sua ideia), envie e acompanhe o andamento por aqui mesmo. O administrador é avisado por e-mail na hora.',
+    },
+  ]
+}
+
+const FAQ = montarFaq()
 
 export function AjudaSuportePage() {
   const { user } = useAuth()

@@ -124,6 +124,14 @@ interface DocDef {
 // mora no `ajuda`, explicado — não no rótulo que o leigo lê primeiro.
 // Exportada para as páginas de rota própria (Permuta, Proposta, Distrato)
 // reusarem a MESMA explicação leiga do hub, sem segunda cópia de redação.
+// O FAQ da pagina /ajuda listava os documentos numa frase escrita a mao, que ja
+// tinha divergido do hub (citava "Compromisso particular" e "Autorizacao de
+// Intermediacao", nomes que nao existem aqui). Agora ele monta a resposta a
+// partir DESTA lista, entao um documento novo aparece no FAQ sozinho.
+export function listarDocumentosPorGrupo(): { grupo: string; titulos: string[] }[] {
+  return DOC_GROUPS.map((g) => ({ grupo: g.label, titulos: g.docs.map((d) => d.title) }))
+}
+
 export function ajudaDoc(href: string): string | undefined {
   for (const g of DOC_GROUPS) for (const d of g.docs) if (d.href === href) return d.ajuda
   return undefined
@@ -540,6 +548,17 @@ export default function Index() {
                   <>
                     <h3 className="font-semibold text-foreground">{doc.title}</h3>
                     <p className="text-sm text-muted-foreground mt-1">{doc.desc}</p>
+                    {/* No celular não existe hover nem foco por teclado, então o
+                        tooltip abaixo nunca abria: a explicação para leigo, que é
+                        o que mais ajuda quem não é do ramo, simplesmente não
+                        existia no aparelho onde o corretor mais trabalha. Aqui
+                        ela vira texto normal do card e some a partir de lg, onde
+                        o tooltip volta a funcionar. */}
+                    {doc.ajuda && (
+                      <p className="lg:hidden text-xs text-muted-foreground/75 mt-2 leading-relaxed">
+                        {doc.ajuda}
+                      </p>
+                    )}
                   </>
                 )
                 const card = doc.href ? (

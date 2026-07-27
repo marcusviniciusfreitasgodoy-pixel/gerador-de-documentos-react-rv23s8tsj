@@ -15,10 +15,12 @@ import {
   Moon,
   Wand2,
   LifeBuoy,
+  Menu,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
 
 // Connection Mark — símbolo oficial Prime Circle (dois círculos + ponto de acordo).
 // Regra da marca: um círculo ouro + um marfim, ambos vazados; nunca preencher os dois.
@@ -40,14 +42,53 @@ function ConnectionMark({ className }: { className?: string }) {
 
 // A Base de Conhecimento é ferramenta interna do admin (régua jurídica da
 // validação); o corretor comum não vê. A porta do corretor é "Ajuda".
+// `desc` existe só para o painel do celular: lá cabe uma linha dizendo o que a
+// tela faz, coisa que a barra do desktop nunca teve espaço para mostrar.
 const NAV_ITEMS = [
-  { to: '/', label: 'Documentos', icon: FileCheck, end: true },
-  { to: '/negocios', label: 'Negócios', icon: Briefcase },
-  { to: '/validar', label: 'Validar', icon: FileSearch },
-  { to: '/legal-knowledge', label: 'Conhecimento', icon: BookOpen, adminOnly: true },
-  { to: '/especialista', label: 'Especialista', icon: Headset },
-  { to: '/ajuda', label: 'Ajuda', icon: LifeBuoy },
-  { to: '/perfil', label: 'Perfil', icon: UserCircle },
+  {
+    to: '/',
+    label: 'Documentos',
+    icon: FileCheck,
+    end: true,
+    desc: 'Gerar contratos, termos e recibos da operação',
+  },
+  {
+    to: '/negocios',
+    label: 'Negócios',
+    icon: Briefcase,
+    desc: 'O dossiê da operação: partes e imóvel cadastrados uma vez só',
+  },
+  {
+    to: '/validar',
+    label: 'Validar minuta',
+    icon: FileSearch,
+    desc: 'Revisar um contrato de terceiros com IA antes de assinar',
+  },
+  {
+    to: '/legal-knowledge',
+    label: 'Base jurídica',
+    icon: BookOpen,
+    adminOnly: true,
+    desc: 'A régua que a validação usa para revisar as minutas',
+  },
+  {
+    to: '/especialista',
+    label: 'Especialista',
+    icon: Headset,
+    desc: 'Levar um caso difícil para análise de um especialista',
+  },
+  {
+    to: '/ajuda',
+    label: 'Ajuda',
+    icon: LifeBuoy,
+    desc: 'Dúvidas frequentes, sugestões e chamados de suporte',
+  },
+  {
+    to: '/perfil',
+    label: 'Perfil',
+    icon: UserCircle,
+    desc: 'Seus dados de corretor: nome, CRECI, comissão e PIX',
+  },
 ]
 
 // A14: sem isto, QUALQUER excecao nao tratada em qualquer pagina derrubava o app
@@ -92,6 +133,9 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { erro: Error | n
 export default function Layout() {
   const { isAuthenticated, user, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
+  // Painel de navegação do celular. Fecha sozinho ao escolher um item, senão o
+  // corretor troca de tela e o painel continua por cima do conteúdo.
+  const [menuAberto, setMenuAberto] = useState(false)
 
   const [dark, setDark] = useState(
     () => typeof window !== 'undefined' && localStorage.getItem('pc-theme') === 'dark',
@@ -102,9 +146,12 @@ export default function Layout() {
   }, [dark])
 
   const handleSignOut = () => {
+    setMenuAberto(false)
     signOut()
     navigate('/login')
   }
+
+  const itensVisiveis = NAV_ITEMS.filter((item) => !('adminOnly' in item) || isAdmin)
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -120,51 +167,161 @@ export default function Layout() {
               <span className="font-bold text-[15px] tracking-tight text-[#F5F1E6]">
                 Prime Circle
               </span>
-              <span className="font-mono text-[9px] tracking-[0.35em] uppercase text-[#C9A84C] mt-1">
+              {/* No celular a segunda linha sai: cada pixel do cabeçalho conta. */}
+              <span className="hidden sm:inline font-mono text-[9px] tracking-[0.35em] uppercase text-[#C9A84C] mt-1">
                 Documentos
               </span>
             </span>
           </Link>
+
           {isAuthenticated && (
-            <nav className="flex items-center gap-0.5 sm:gap-1 min-w-0">
-              {NAV_ITEMS.filter((item) => !('adminOnly' in item) || isAdmin).map((item) => (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    cn(
-                      'flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors',
-                      isActive
-                        ? 'text-[#C9A84C] bg-white/[0.06]'
-                        : 'text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5',
-                    )
-                  }
+            <>
+              {/* Barra horizontal: só a partir de lg, onde os rótulos cabem.
+                  Abaixo disso ela estourava a tela do celular e jogava Tema e
+                  Sair para fora do viewport. */}
+              <nav className="hidden lg:flex items-center gap-0.5 sm:gap-1 min-w-0">
+                {itensVisiveis.map((item) => (
+                  <NavLink
+                    key={item.to}
+                    to={item.to}
+                    end={item.end}
+                    title={item.label}
+                    aria-label={item.label}
+                    className={({ isActive }) =>
+                      cn(
+                        'flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors',
+                        isActive
+                          ? 'text-[#C9A84C] bg-white/[0.06]'
+                          : 'text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5',
+                      )
+                    }
+                  >
+                    <item.icon className="h-4 w-4 shrink-0" />
+                    <span>{item.label}</span>
+                  </NavLink>
+                ))}
+                <span className="hidden xl:inline text-xs text-[#E8E0CC]/50 px-2 truncate max-w-[180px]">
+                  {user?.email}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setDark((v) => !v)}
+                  aria-label={dark ? 'Tema claro' : 'Tema escuro'}
+                  title={dark ? 'Tema claro' : 'Tema escuro'}
+                  className="flex items-center rounded-md p-1.5 text-[#E8E0CC]/75 hover:text-[#C9A84C] hover:bg-white/5 transition-colors"
                 >
-                  <item.icon className="h-4 w-4 shrink-0" />
-                  <span className="hidden lg:inline">{item.label}</span>
-                </NavLink>
-              ))}
-              <span className="hidden xl:inline text-xs text-[#E8E0CC]/50 px-2 truncate max-w-[180px]">
-                {user?.email}
-              </span>
-              <button
-                type="button"
-                onClick={() => setDark((v) => !v)}
-                aria-label={dark ? 'Tema claro' : 'Tema escuro'}
-                className="flex items-center rounded-md p-1.5 text-[#E8E0CC]/75 hover:text-[#C9A84C] hover:bg-white/5 transition-colors"
-              >
-                {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-              </button>
-              <button
-                type="button"
-                onClick={handleSignOut}
-                className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5 transition-colors"
-              >
-                <LogOut className="h-4 w-4 shrink-0" />
-                <span className="hidden lg:inline">Sair</span>
-              </button>
-            </nav>
+                  {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  title="Sair da conta"
+                  aria-label="Sair da conta"
+                  className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5 transition-colors"
+                >
+                  <LogOut className="h-4 w-4 shrink-0" />
+                  <span>Sair</span>
+                </button>
+              </nav>
+
+              {/* Celular e tablet: um único alvo de 44px, o mínimo que o dedo
+                  acerta. O painel mostra cada item COM rótulo e explicação. */}
+              <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
+                <SheetTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="Abrir menu"
+                    className="lg:hidden flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-[#E8E0CC] hover:bg-white/10 active:bg-white/15 transition-colors"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </button>
+                </SheetTrigger>
+                {/* [&>button] mira o "X" de fechar que o SheetContent injeta:
+                    ele nasce com 16px de alvo, pequeno demais para o dedo. */}
+                <SheetContent
+                  side="right"
+                  className="w-[86%] max-w-sm bg-[#0E0E0E] border-l border-white/10 p-0 flex flex-col [&>button]:h-11 [&>button]:w-11 [&>button]:flex [&>button]:items-center [&>button]:justify-center [&>button]:rounded-md [&>button]:top-2.5 [&>button]:right-2.5 [&>button]:text-[#E8E0CC] [&>button]:opacity-100 [&>button:hover]:bg-white/10"
+                >
+                  <SheetTitle className="sr-only">Menu de navegação</SheetTitle>
+
+                  <div className="flex items-center gap-2.5 px-5 h-16 border-b border-white/10 shrink-0">
+                    <ConnectionMark className="h-7 w-7" />
+                    <span className="font-bold text-[15px] tracking-tight text-[#F5F1E6]">
+                      Prime Circle
+                    </span>
+                  </div>
+
+                  <nav className="flex-1 overflow-y-auto py-2">
+                    {itensVisiveis.map((item) => (
+                      <NavLink
+                        key={item.to}
+                        to={item.to}
+                        end={item.end}
+                        onClick={() => setMenuAberto(false)}
+                        className={({ isActive }) =>
+                          cn(
+                            'flex items-start gap-3 px-5 py-3 min-h-[48px] transition-colors',
+                            isActive
+                              ? 'bg-white/[0.07] border-l-2 border-[#C9A84C]'
+                              : 'border-l-2 border-transparent hover:bg-white/5 active:bg-white/[0.08]',
+                          )
+                        }
+                      >
+                        {({ isActive }) => (
+                          <>
+                            <item.icon
+                              className={cn(
+                                'h-5 w-5 shrink-0 mt-0.5',
+                                isActive ? 'text-[#C9A84C]' : 'text-[#E8E0CC]/70',
+                              )}
+                            />
+                            <span className="flex flex-col min-w-0">
+                              <span
+                                className={cn(
+                                  'text-[15px] font-medium leading-tight',
+                                  isActive ? 'text-[#C9A84C]' : 'text-[#F5F1E6]',
+                                )}
+                              >
+                                {item.label}
+                              </span>
+                              <span className="text-xs text-[#E8E0CC]/55 leading-snug mt-0.5">
+                                {item.desc}
+                              </span>
+                            </span>
+                          </>
+                        )}
+                      </NavLink>
+                    ))}
+                  </nav>
+
+                  <div className="border-t border-white/10 p-4 space-y-1 shrink-0">
+                    {user?.email && (
+                      <p className="px-1 pb-2 text-xs text-[#E8E0CC]/45 truncate">{user.email}</p>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => setDark((v) => !v)}
+                      className="flex w-full items-center gap-3 rounded-md px-1 py-3 min-h-[48px] text-[15px] font-medium text-[#E8E0CC]/85 hover:bg-white/5 active:bg-white/[0.08] transition-colors"
+                    >
+                      {dark ? (
+                        <Sun className="h-5 w-5 shrink-0" />
+                      ) : (
+                        <Moon className="h-5 w-5 shrink-0" />
+                      )}
+                      {dark ? 'Tema claro' : 'Tema escuro'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="flex w-full items-center gap-3 rounded-md px-1 py-3 min-h-[48px] text-[15px] font-medium text-[#E8E0CC]/85 hover:bg-white/5 active:bg-white/[0.08] transition-colors"
+                    >
+                      <LogOut className="h-5 w-5 shrink-0" />
+                      Sair da conta
+                    </button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </>
           )}
         </div>
       </header>

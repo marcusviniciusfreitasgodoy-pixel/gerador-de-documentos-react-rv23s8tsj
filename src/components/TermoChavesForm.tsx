@@ -351,6 +351,10 @@ export function TermoChavesForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Não inclua matrícula nem inscrição do IPTU aqui: eles têm campo próprio abaixo e
+                  sairiam repetidos no termo.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -378,6 +382,9 @@ export function TermoChavesForm() {
                   <FormControl>
                     <Input placeholder="Ex: 6" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Só o número. O termo escreve o resto: "6º RI de Rio de Janeiro".
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -426,6 +433,10 @@ export function TermoChavesForm() {
                 <FormControl>
                   <Input placeholder="Ex: Rio de Janeiro/RJ" {...field} />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  É a linha de fecho do documento, logo acima das assinaturas: sai como "Rio de
+                  Janeiro/RJ, 27 de julho de 2026". A data entra sozinha, com a de hoje.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
