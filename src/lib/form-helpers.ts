@@ -416,3 +416,73 @@ export const ARRAS_OPTIONS = [
 export function getArrasResumo(value?: string): string {
   return ARRAS_OPTIONS.find((o) => o.value === value)?.resumo ?? ''
 }
+
+// ---------------------------------------------------------------------------
+// TEXTOS DE CLÁUSULA QUE A ESCOLHA TROCA
+//
+// Estas funções são a ÚNICA fonte da redação: o buildData de cada formulário
+// as chama para montar o documento, e o botão "Ver texto da cláusula" mostra o
+// retorno delas na tela. Assim a prévia não pode divergir do .docx gerado, que
+// é a única falha capaz de tornar a prévia pior do que não ter prévia nenhuma.
+//
+// Os parâmetros opcionais são os campos que o corretor ainda pode não ter
+// preenchido. Na prévia eles chegam vazios e viram um marcador visível, em vez
+// de abrir um buraco no meio da frase.
+// ---------------------------------------------------------------------------
+
+function ouMarcador(valor: string | undefined, marcador: string): string {
+  const limpo = (valor ?? '').trim()
+  return limpo || `[${marcador}]`
+}
+
+export function textoNaturezaPosse(tipo?: string): string {
+  return tipo === 'precaria'
+    ? 'A posse ora transmitida é DIRETA E PRECÁRIA, concedida por liberalidade do TRANSMITENTE ANTES da integralização do preço. O RECEBEDOR exerce a posse direta a título precário, reconhecendo que a posse indireta permanece com o TRANSMITENTE até a quitação integral. O descumprimento das obrigações de pagamento autoriza a revogação desta posse e a reintegração do TRANSMITENTE, independentemente de indenização por benfeitorias voluptuárias, sem prejuízo das penalidades previstas no contrato principal.'
+    : 'A posse ora transmitida é DEFINITIVA E PLENA, decorrente do integral cumprimento das obrigações de pagamento previstas no contrato principal. O RECEBEDOR passa a exercê-la com animus domini, de forma mansa e pacífica, nos termos dos arts. 1.196, 1.204 e 1.205 do Código Civil.'
+}
+
+export function textoComunicacaoCondominio(opcao?: string, prazo?: string): string {
+  if (opcao === 'vai_comunicar') {
+    return `O TRANSMITENTE compromete-se a comunicar a administração do condomínio, no prazo de ${ouMarcador(prazo, 'prazo')} contados desta data, a autorização concedida ao RECEBEDOR para ingresso, mudança e ocupação do imóvel, recomendando-se que a comunicação seja feita por escrito, com cópia ao RECEBEDOR.`
+  }
+  if (opcao === 'ja_comunicou') {
+    return 'O TRANSMITENTE declara já haver comunicado a administração do condomínio acerca da autorização concedida ao RECEBEDOR para ingresso, mudança e ocupação do imóvel.'
+  }
+  return 'O imóvel não integra condomínio edilício, sendo dispensada comunicação a administradora.'
+}
+
+export function textoExclusividade(opcao?: string): string {
+  return opcao === 'com'
+    ? 'A intermediação é contratada EM CARÁTER DE EXCLUSIVIDADE. Nos termos do art. 726 do Código Civil, ajustada a corretagem com exclusividade, a comissão será integralmente devida ao CORRETOR ainda que o negócio se realize sem a sua mediação, salvo se comprovada sua inércia ou ociosidade durante a vigência deste contrato.'
+    : 'A intermediação é contratada SEM EXCLUSIVIDADE, podendo o CONTRATANTE valer-se de outros corretores. A comissão será devida ao CORRETOR que houver dado causa ao resultado útil do negócio, na forma das Cláusulas 3ª e 4ª.'
+}
+
+export function textoRateioCorretagem(opcao?: string, lista?: string): string {
+  return opcao === 'sim'
+    ? `A intermediação é realizada em conjunto pelos corretores adiante indicados, cabendo a cada um o percentual da comissão a seguir discriminado, sem qualquer acréscimo ao valor total devido pelo CONTRATANTE: ${ouMarcador(lista, 'corretores e percentuais')}. Aplica-se, no que couber, o art. 728 do Código Civil.`
+    : 'Concluído o negócio com a participação de mais de um corretor, a remuneração será dividida entre eles, nos termos do art. 728 do Código Civil, sem acréscimo do valor total devido pelo CONTRATANTE.'
+}
+
+export function textoAmplitudeQuitacao(opcao?: string): string {
+  return opcao === 'parcial'
+    ? 'quitação da parcela ora recebida, permanecendo em aberto o saldo indicado na Cláusula 3ª, sem que este recibo importe quitação da totalidade da comissão'
+    : 'plena, geral, rasa e irrevogável quitação da comissão de corretagem devida pela intermediação do negócio acima descrito'
+}
+
+export function textoSaldoRecibo(
+  opcao?: string,
+  saldoFmt?: string,
+  saldoExtenso?: string,
+  vencimento?: string,
+): string {
+  if (opcao !== 'parcial') {
+    return 'A comissão de corretagem encontra-se integralmente quitada, nada remanescendo a pagar a este título.'
+  }
+  return `Remanesce em aberto o saldo de R$ ${ouMarcador(saldoFmt, 'saldo')} (${ouMarcador(saldoExtenso, 'valor por extenso')}), a ser pago ${ouMarcador(vencimento, 'vencimento')}, na forma do contrato de corretagem.`
+}
+
+export function textoRateioRecibo(opcao?: string, percentual?: string): string {
+  return opcao === 'sim'
+    ? `O valor ora recebido corresponde à quota-parte do RECEBEDOR na comissão, equivalente a ${ouMarcador(percentual, 'percentual')} do total, na forma ajustada entre os corretores participantes.`
+    : 'A comissão foi recebida integralmente pelo RECEBEDOR, não havendo rateio com outros corretores quanto ao valor ora quitado.'
+}
