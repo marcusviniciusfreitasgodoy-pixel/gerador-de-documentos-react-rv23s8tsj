@@ -15,7 +15,7 @@ import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { BotaoDadosTeste } from '@/components/Layout'
+import { BotaoDadosTeste, VerTextoClausula } from '@/components/Layout'
 import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarAutorizacao, aplicarReciboComissao, aplicarCorretagem } from '@/lib/aplicar-negocio'
 import { Textarea } from '@/components/ui/textarea'
@@ -27,7 +27,16 @@ import {
 } from '@/lib/docx-generator'
 import { currencyToWords } from '@/lib/currency-to-words'
 import { formatDateLower } from '@/lib/compromisso-helpers'
-import { parseCurrency, formatCurrency, cleanCurrencyMask } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  textoExclusividade,
+  textoRateioCorretagem,
+  textoAmplitudeQuitacao,
+  textoSaldoRecibo,
+  textoRateioRecibo,
+} from '@/lib/form-helpers'
 import {
   Form,
   FormField,
@@ -758,6 +767,10 @@ export function ReciboComissaoForm() {
 
   const tipoQuitacao = useWatch({ control: form.control, name: 'tipo_quitacao' })
   const temRateio = useWatch({ control: form.control, name: 'tem_rateio' })
+  // Alimentam a prévia da cláusula enquanto o corretor ainda digita.
+  const saldoComissao = useWatch({ control: form.control, name: 'valor_saldo_comissao' })
+  const vencimentoSaldo = useWatch({ control: form.control, name: 'vencimento_saldo_comissao' })
+  const percentualRateio = useWatch({ control: form.control, name: 'percentual_rateio' })
 
   useEffect(() => {
     let cancelled = false
@@ -809,20 +822,14 @@ export function ReciboComissaoForm() {
         ? `neste ato representada por ${broker.responsavel_nome}, CPF nº ${broker.responsavel_cpf}, CRECI ${broker.responsavel_creci}, `
         : ''
 
-    const amplitude =
-      data.tipo_quitacao === 'total'
-        ? 'plena, geral, rasa e irrevogável quitação da comissão de corretagem devida pela intermediação do negócio acima descrito'
-        : 'quitação da parcela ora recebida, permanecendo em aberto o saldo indicado na Cláusula 3ª, sem que este recibo importe quitação da totalidade da comissão'
-
-    const saldoTexto =
-      data.tipo_quitacao === 'total'
-        ? 'A comissão de corretagem encontra-se integralmente quitada, nada remanescendo a pagar a este título.'
-        : `Remanesce em aberto o saldo de R$ ${fmt(saldo)} (${currencyToWords(saldo)}), a ser pago ${data.vencimento_saldo_comissao}, na forma do contrato de corretagem.`
-
-    const rateioTexto =
-      data.tem_rateio === 'nao'
-        ? 'A comissão foi recebida integralmente pelo RECEBEDOR, não havendo rateio com outros corretores quanto ao valor ora quitado.'
-        : `O valor ora recebido corresponde à quota-parte do RECEBEDOR na comissão, equivalente a ${data.percentual_rateio} do total, na forma ajustada entre os corretores participantes.`
+    const amplitude = textoAmplitudeQuitacao(data.tipo_quitacao)
+    const saldoTexto = textoSaldoRecibo(
+      data.tipo_quitacao,
+      fmt(saldo),
+      currencyToWords(saldo),
+      data.vencimento_saldo_comissao,
+    )
+    const rateioTexto = textoRateioRecibo(data.tem_rateio, data.percentual_rateio)
 
     return {
       pagador_nome: data.pagador_nome,
@@ -1198,6 +1205,14 @@ export function ReciboComissaoForm() {
                     <SelectItem value="parcial">Não, ainda falta receber uma parte</SelectItem>
                   </SelectContent>
                 </Select>
+                <VerTextoClausula
+                  texto={textoSaldoRecibo(
+                    field.value,
+                    saldoComissao,
+                    saldoComissao ? currencyToWords(parseCurrency(saldoComissao)) : '',
+                    vencimentoSaldo,
+                  )}
+                />
                 <p className="text-xs text-muted-foreground">
                   Na quitação total o recibo diz que você dá plena e geral quitação, e nada mais é
                   devido. Na parcial ele registra o saldo que continua em aberto.
@@ -1259,6 +1274,7 @@ export function ReciboComissaoForm() {
                     <SelectItem value="sim">Sim, este valor é a minha parte</SelectItem>
                   </SelectContent>
                 </Select>
+                <VerTextoClausula texto={textoRateioRecibo(field.value, percentualRateio)} />
                 <FormMessage />
               </FormItem>
             )}
@@ -1511,6 +1527,7 @@ export function CorretagemForm() {
   const { limparRascunho } = useFormDraft(form, 'corretagem')
 
   const temRateio = useWatch({ control: form.control, name: 'tem_rateio' })
+  const listaRateio = useWatch({ control: form.control, name: 'lista_rateio' })
   const valorNegocio = useWatch({ control: form.control, name: 'valor_negocio' })
   const percentual = useWatch({ control: form.control, name: 'percentual_comissao' })
 
@@ -1570,15 +1587,8 @@ export function CorretagemForm() {
         ? `neste ato representada por ${broker.responsavel_nome}, CPF nº ${broker.responsavel_cpf}, CRECI ${broker.responsavel_creci}, `
         : ''
 
-    const exclusividadeTexto =
-      data.exclusividade === 'com'
-        ? 'A intermediação é contratada EM CARÁTER DE EXCLUSIVIDADE. Nos termos do art. 726 do Código Civil, ajustada a corretagem com exclusividade, a comissão será integralmente devida ao CORRETOR ainda que o negócio se realize sem a sua mediação, salvo se comprovada sua inércia ou ociosidade durante a vigência deste contrato.'
-        : 'A intermediação é contratada SEM EXCLUSIVIDADE, podendo o CONTRATANTE valer-se de outros corretores. A comissão será devida ao CORRETOR que houver dado causa ao resultado útil do negócio, na forma das Cláusulas 3ª e 4ª.'
-
-    const rateioTexto =
-      data.tem_rateio === 'nao'
-        ? 'Concluído o negócio com a participação de mais de um corretor, a remuneração será dividida entre eles, nos termos do art. 728 do Código Civil, sem acréscimo do valor total devido pelo CONTRATANTE.'
-        : `A intermediação é realizada em conjunto pelos corretores adiante indicados, cabendo a cada um o percentual da comissão a seguir discriminado, sem qualquer acréscimo ao valor total devido pelo CONTRATANTE: ${data.lista_rateio}. Aplica-se, no que couber, o art. 728 do Código Civil.`
+    const exclusividadeTexto = textoExclusividade(data.exclusividade)
+    const rateioTexto = textoRateioCorretagem(data.tem_rateio, data.lista_rateio)
 
     const dadosPagamento = [broker?.nome, broker?.pix ? `PIX ${broker.pix}` : '']
       .filter(Boolean)
@@ -2006,6 +2016,7 @@ export function CorretagemForm() {
                   o negócio for fechado sem você, salvo se ficar provado que você ficou inerte. Sem
                   exclusividade, a comissão é de quem deu causa ao resultado.
                 </p>
+                <VerTextoClausula texto={textoExclusividade(field.value)} />
                 <FormMessage />
               </FormItem>
             )}
@@ -2027,6 +2038,7 @@ export function CorretagemForm() {
                     <SelectItem value="sim">Sim, em parceria</SelectItem>
                   </SelectContent>
                 </Select>
+                <VerTextoClausula texto={textoRateioCorretagem(field.value, listaRateio)} />
                 <FormMessage />
               </FormItem>
             )}
