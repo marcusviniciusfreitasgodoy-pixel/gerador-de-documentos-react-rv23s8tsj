@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { BotaoDadosTeste } from '@/components/Layout'
+import { BotaoDadosTeste, VerTextoClausula } from '@/components/Layout'
 import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarChaves, aplicarChavesPosse } from '@/lib/aplicar-negocio'
 import {
@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { formatDateLower } from '@/lib/compromisso-helpers'
+import { textoNaturezaPosse, textoComunicacaoCondominio } from '@/lib/form-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 
 const termoChavesSchema = z.object({
@@ -611,6 +612,10 @@ export function ChavesPosseForm() {
 
   const tipoPosse = useWatch({ control: form.control, name: 'tipo_posse' })
   const condominio = useWatch({ control: form.control, name: 'condominio' })
+  const prazoComunicacao = useWatch({
+    control: form.control,
+    name: 'prazo_comunicacao_condominio',
+  })
 
   useEffect(() => {
     let cancelled = false
@@ -635,17 +640,11 @@ export function ChavesPosseForm() {
   const buildData = (data: ChavesPosseValues): Record<string, string> => {
     const stripPrefix = (val: string) => val.replace(/^\s*(CPF|CNPJ)\s*n?[ºo°]?\.?\s*/i, '').trim()
 
-    const naturezaPosse =
-      data.tipo_posse === 'plena'
-        ? 'A posse ora transmitida é DEFINITIVA E PLENA, decorrente do integral cumprimento das obrigações de pagamento previstas no contrato principal. O RECEBEDOR passa a exercê-la com animus domini, de forma mansa e pacífica, nos termos dos arts. 1.196, 1.204 e 1.205 do Código Civil.'
-        : 'A posse ora transmitida é DIRETA E PRECÁRIA, concedida por liberalidade do TRANSMITENTE ANTES da integralização do preço. O RECEBEDOR exerce a posse direta a título precário, reconhecendo que a posse indireta permanece com o TRANSMITENTE até a quitação integral. O descumprimento das obrigações de pagamento autoriza a revogação desta posse e a reintegração do TRANSMITENTE, independentemente de indenização por benfeitorias voluptuárias, sem prejuízo das penalidades previstas no contrato principal.'
-
-    const comunicacao =
-      data.condominio === 'vai_comunicar'
-        ? `O TRANSMITENTE compromete-se a comunicar a administração do condomínio, no prazo de ${data.prazo_comunicacao_condominio} contados desta data, a autorização concedida ao RECEBEDOR para ingresso, mudança e ocupação do imóvel, recomendando-se que a comunicação seja feita por escrito, com cópia ao RECEBEDOR.`
-        : data.condominio === 'ja_comunicou'
-          ? 'O TRANSMITENTE declara já haver comunicado a administração do condomínio acerca da autorização concedida ao RECEBEDOR para ingresso, mudança e ocupação do imóvel.'
-          : 'O imóvel não integra condomínio edilício, sendo dispensada comunicação a administradora.'
+    const naturezaPosse = textoNaturezaPosse(data.tipo_posse)
+    const comunicacao = textoComunicacaoCondominio(
+      data.condominio,
+      data.prazo_comunicacao_condominio,
+    )
 
     return {
       transmitente_nome: data.transmitente_nome,
@@ -1029,6 +1028,7 @@ export function ChavesPosseForm() {
                     </SelectItem>
                   </SelectContent>
                 </Select>
+                <VerTextoClausula texto={textoNaturezaPosse(field.value)} />
                 <FormMessage />
               </FormItem>
             )}
@@ -1097,6 +1097,9 @@ export function ChavesPosseForm() {
                     <SelectItem value="sem_condominio">O imóvel não é de condomínio</SelectItem>
                   </SelectContent>
                 </Select>
+                <VerTextoClausula
+                  texto={textoComunicacaoCondominio(field.value, prazoComunicacao)}
+                />
                 <p className="text-xs text-muted-foreground">
                   É o que evita a portaria barrar o caminhão de mudança no dia.
                 </p>
