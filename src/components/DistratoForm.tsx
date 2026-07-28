@@ -493,6 +493,10 @@ export function DistratoForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Descreva o imóvel como está no contrato que se desfaz, para não restar dúvida
+                  sobre o que está sendo distratado.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -535,6 +539,9 @@ export function DistratoForm() {
                         onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                       />
                     </FormControl>
+                    <p className="text-xs text-muted-foreground">
+                      Tudo o que o comprador já pagou. A devolução é calculada a partir daqui.
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -581,6 +588,10 @@ export function DistratoForm() {
                         <FormControl>
                           <Input placeholder="Ex: arras, a título de perdas e danos" {...field} />
                         </FormControl>
+                        <p className="text-xs text-muted-foreground">
+                          Justificativa da retenção, como sai no distrato. Ex.: despesas
+                          administrativas, comissão de corretagem.
+                        </p>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -827,6 +838,10 @@ export function DistratoForm() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
+                    <p className="text-xs text-muted-foreground">
+                      Só é preciso quando o contrato original chegou à matrícula: o distrato
+                      autoriza a baixa da averbação.
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -964,6 +979,11 @@ export function DistratoForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Com duas testemunhas o contrato vira título executivo extrajudicial (art. 784,
+                    III, do CPC): dá para cobrar direto, sem precisar antes provar a dívida em
+                    juízo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
