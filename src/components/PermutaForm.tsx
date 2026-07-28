@@ -681,6 +681,10 @@ export function PermutaForm() {
                       onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Valor atribuído a cada imóvel. A diferença entre os dois é a torna, e a comissão
+                    incide sobre a soma.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -745,6 +749,9 @@ export function PermutaForm() {
                           <SelectItem value="segundo">Segundo(s) Permutante(s)</SelectItem>
                         </SelectContent>
                       </Select>
+                      <p className="text-xs text-muted-foreground">
+                        Quem recebe o imóvel de maior valor paga a diferença ao outro permutante.
+                      </p>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -818,6 +825,10 @@ export function PermutaForm() {
                           {...field}
                         />
                       </FormControl>
+                      <p className="text-xs text-muted-foreground">
+                        Opcional, e só faz sentido em torna parcelada. Ex.: nota promissória,
+                        alienação fiduciária do próprio imóvel.
+                      </p>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -930,6 +941,9 @@ export function PermutaForm() {
                       <SelectItem value="ambos">Ambos (em partes iguais)</SelectItem>
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Quem paga a corretagem sai nominalmente na cláusula da comissão.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1005,6 +1019,11 @@ export function PermutaForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Com duas testemunhas o contrato vira título executivo extrajudicial (art. 784,
+                    III, do CPC): dá para cobrar direto, sem precisar antes provar a dívida em
+                    juízo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
