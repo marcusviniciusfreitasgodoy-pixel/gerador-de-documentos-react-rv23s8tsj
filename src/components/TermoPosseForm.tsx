@@ -322,6 +322,9 @@ export function TermoPosseForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Nacionalidade, estado civil e profissão. Entra logo depois do nome, antes do RG.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -407,6 +410,9 @@ export function TermoPosseForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Nacionalidade, estado civil e profissão. Entra logo depois do nome, antes do RG.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -479,6 +485,10 @@ export function TermoPosseForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Não inclua matrícula nem inscrição do IPTU aqui: eles têm campo próprio abaixo e
+                  sairiam repetidos no termo.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -506,6 +516,10 @@ export function TermoPosseForm() {
                   <FormControl>
                     <Input placeholder="Ex: 6" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Só o número. O termo escreve o resto: "6º Registro de Imóveis de Rio de
+                    Janeiro".
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -555,6 +569,9 @@ export function TermoPosseForm() {
                   <FormControl>
                     <Input placeholder="Ex: 08/07/2026" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    A promessa ou compra e venda que este termo está cumprindo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -579,6 +596,9 @@ export function TermoPosseForm() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Completa a frase "CONSIDERANDO o pagamento ..., na forma do referido contrato".
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -641,6 +661,11 @@ export function TermoPosseForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Com duas testemunhas o contrato vira título executivo extrajudicial (art. 784,
+                    III, do CPC): dá para cobrar direto, sem precisar antes provar a dívida em
+                    juízo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
