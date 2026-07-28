@@ -526,6 +526,11 @@ export function ReservaPropostaForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Copie da matrícula. É a única descrição que sai na cláusula do objeto: endereço,
+                  vagas e fração ideal abaixo alimentam o dossiê e os outros documentos. Não repita
+                  matrícula, RGI nem IPTU aqui, que têm campo próprio.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -648,6 +653,10 @@ export function ReservaPropostaForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Escreva o cartório por extenso, como entra na frase "registrado no ... sob a
+                    matrícula nº". Ex.: 6º Oficial de Registro de Imóveis.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -702,6 +711,10 @@ export function ReservaPropostaForm() {
                       onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Quanto o comprador está oferecendo. É este valor que vai ao vendedor para
+                    aceite, e sobre ele se calcula a comissão.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -719,6 +732,10 @@ export function ReservaPropostaForm() {
                       onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Entregue agora para reservar o imóvel. Aceita a proposta, vira parte do preço.
+                    Recusada, volta integral, sem retenção nem correção.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -863,6 +880,10 @@ export function ReservaPropostaForm() {
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Dentro desse prazo a proposta é irretratável e prende o comprador (art. 427 do
+                    Código Civil). Passado sem resposta, ela caduca.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -876,6 +897,9 @@ export function ReservaPropostaForm() {
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Prazo para devolver o sinal, contado da recusa ou do fim da validade.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -889,6 +913,9 @@ export function ReservaPropostaForm() {
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Prazo para assinar a promessa ou a escritura depois do aceite.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -952,6 +979,10 @@ export function ReservaPropostaForm() {
                   <FormControl>
                     <Input type="number" min={0} step="0.1" placeholder="Ex: 5" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Percentual sobre o preço total. O contrato calcula o valor em reais e escreve
+                    por extenso.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -976,6 +1007,9 @@ export function ReservaPropostaForm() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Quem paga a corretagem sai nominalmente na cláusula da intermediação.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1000,6 +1034,11 @@ export function ReservaPropostaForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Com duas testemunhas o contrato vira título executivo extrajudicial (art. 784,
+                    III, do CPC): dá para cobrar direto, sem precisar antes provar a dívida em
+                    juízo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
