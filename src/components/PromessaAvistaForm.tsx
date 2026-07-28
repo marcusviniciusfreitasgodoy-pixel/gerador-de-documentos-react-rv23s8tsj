@@ -598,6 +598,11 @@ export function PromessaAvistaForm() {
                     {...field}
                   />
                 </FormControl>
+                <p className="text-xs text-muted-foreground">
+                  Copie da matrícula. É a única descrição que sai na cláusula do objeto: endereço,
+                  vagas e fração ideal abaixo alimentam o dossiê e os outros documentos. Não repita
+                  matrícula, RGI nem IPTU aqui, que têm campo próprio.
+                </p>
                 <FormMessage />
               </FormItem>
             )}
@@ -736,6 +741,10 @@ export function PromessaAvistaForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Escreva o cartório por extenso, como entra na frase "registrado no ... sob a
+                    matrícula nº". Ex.: 6º Oficial de Registro de Imóveis.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -778,6 +787,10 @@ export function PromessaAvistaForm() {
                       {...field}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Como o vendedor se tornou dono. Sai na cláusula do objeto e é o que liga o nome
+                    dele à matrícula.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -819,6 +832,10 @@ export function PromessaAvistaForm() {
                       onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Preço cheio do imóvel. O contrato desconta o sinal e o reforço e escreve o saldo
+                    sozinho, pago na escritura.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -836,6 +853,10 @@ export function PromessaAvistaForm() {
                       onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    O que o comprador paga na assinatura. É este valor que dobra se alguém desistir,
+                    conforme a natureza das arras escolhida no fim do formulário.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -853,6 +874,10 @@ export function PromessaAvistaForm() {
                       onChange={(e) => field.onChange(maskCurrency(e.target.value))}
                     />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Parcela intermediária, paga só depois de as certidões do vendedor voltarem
+                    limpas e sem apontamentos.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -975,6 +1000,10 @@ export function PromessaAvistaForm() {
                   <FormControl>
                     <Input type="number" min={0} step="0.1" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Percentual sobre o preço total. O contrato calcula o valor em reais e escreve
+                    por extenso.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1005,6 +1034,10 @@ export function PromessaAvistaForm() {
                       ))}
                     </SelectContent>
                   </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Quem paga sai nominalmente na cláusula da comissão, que é quitada no ato do
+                    recebimento do saldo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1029,6 +1062,10 @@ export function PromessaAvistaForm() {
                   <FormControl>
                     <Input type="number" min={1} {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Dias corridos, contados da assinatura, para o vendedor apresentar as certidões
+                    negativas dele e do imóvel.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1055,6 +1092,10 @@ export function PromessaAvistaForm() {
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Prazo para lavrar a escritura. É quando o saldo é pago e, se as arras forem
+                    penitenciais, quando o direito de arrependimento se encerra.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
@@ -1123,6 +1164,11 @@ export function PromessaAvistaForm() {
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
+                  <p className="text-xs text-muted-foreground">
+                    Com duas testemunhas o contrato vira título executivo extrajudicial (art. 784,
+                    III, do CPC): dá para cobrar direto, sem precisar antes provar a dívida em
+                    juízo.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
