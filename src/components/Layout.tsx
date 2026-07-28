@@ -16,6 +16,7 @@ import {
   Wand2,
   LifeBuoy,
   Menu,
+  FileText,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
@@ -426,5 +427,36 @@ export function BotaoDadosTeste({
       <Wand2 className="mr-1.5 h-3.5 w-3.5" />
       {rotulo}
     </Button>
+  )
+}
+
+// Prévia da cláusula que a escolha troca. O corretor decide entre duas opções
+// cujo efeito só aparece no .docx depois de gerar; aqui ele lê a redação exata
+// antes. O texto vem sempre das funções de form-helpers, as mesmas que o
+// buildData usa, para prévia e documento nunca divergirem.
+export function VerTextoClausula({ texto, className }: { texto: string; className?: string }) {
+  const [aberto, setAberto] = useState(false)
+  return (
+    <div className={cn('pt-0.5', className)}>
+      <button
+        type="button"
+        onClick={() => setAberto((v) => !v)}
+        aria-expanded={aberto}
+        title={aberto ? 'Ocultar o texto da cláusula' : 'Ver o texto que vai sair no documento'}
+        className="flex w-full items-center gap-1.5 py-2 text-left text-xs text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <FileText className="h-3.5 w-3.5 shrink-0" />
+        {/* O sublinhado fica no texto, não no botão: o botão ocupa a linha
+            inteira só para o dedo ter onde acertar no celular. */}
+        <span className="underline underline-offset-4">
+          {aberto ? 'Ocultar texto da cláusula' : 'Ver texto da cláusula'}
+        </span>
+      </button>
+      {aberto && (
+        <p className="mt-1 rounded-md border border-border/60 bg-muted/40 p-3 text-xs leading-relaxed text-muted-foreground">
+          {texto}
+        </p>
+      )}
+    </div>
   )
 }
