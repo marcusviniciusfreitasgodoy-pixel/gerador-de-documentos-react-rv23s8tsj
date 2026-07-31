@@ -290,6 +290,17 @@ export default function NegocioDetalhePage() {
                 onChange={(e) => updateParte(i, 'endereco', e.target.value)}
                 className="md:col-span-2"
               />
+              {/* O e-mail alimenta o `contratante_email` da Autorização de Venda
+                  (ver aplicarAutorizacao em lib/aplicar-negocio.ts). Sem este campo
+                  ele era um dado cego: a IA extraía, o documento usava, e o corretor
+                  não tinha como conferir nem digitar. */}
+              <Input
+                type="email"
+                placeholder="E-mail"
+                value={p.email}
+                onChange={(e) => updateParte(i, 'email', e.target.value)}
+                className="md:col-span-2"
+              />
             </div>
           </Card>
         ))}
