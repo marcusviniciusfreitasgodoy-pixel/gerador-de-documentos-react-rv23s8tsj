@@ -341,7 +341,7 @@ export function PromiseForm() {
             control={control}
             lado="vendedor"
             titulo="Cônjuge do Promitente Vendedor(a)"
-            dica={sugerirPapelConjuge(vendedorRegime)}
+            dica={sugerirPapelConjuge(vendedorRegime, vendedorEstadoCivil)}
             papeis={PAPEL_CONJUGE_VENDEDOR}
           />
         )}
@@ -356,7 +356,7 @@ export function PromiseForm() {
             control={control}
             lado="comprador"
             titulo="Cônjuge do Promitente Comprador(a)"
-            dica={sugerirPapelConjugeComprador(compradorRegime)}
+            dica={sugerirPapelConjugeComprador(compradorRegime, compradorEstadoCivil)}
             papeis={PAPEL_CONJUGE_COMPRADOR}
           />
         )}
