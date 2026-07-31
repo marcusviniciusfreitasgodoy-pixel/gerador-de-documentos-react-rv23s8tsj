@@ -14,7 +14,7 @@ import { ArrowLeft, Plus, Save, Trash2, User, Building2, Loader2 } from 'lucide-
 import { toast } from 'sonner'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
 import { getNegocio, updateNegocio, mesclarPartes, novaParte } from '@/lib/negocios'
-import { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
+import { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS, regimeSeAplica } from '@/lib/form-helpers'
 import { IntroPagina } from '@/components/Layout'
 import type { Negocio, ParteNegocio, PapelParte } from '@/lib/negocios'
 import { mergeResults, emptyImovel } from '@/lib/extraction-types'
@@ -33,9 +33,8 @@ const PAPEL_LABELS: Record<PapelParte, string> = {
 
 // Regime de bens só faz sentido para quem casou ou vive em união estável: nos
 // dois a lei impõe um regime (na união estável sem pacto, comunhão parcial —
-// art. 1.725 do Código Civil). Nos demais estados civis o campo é escondido e
-// zerado, para não gravar um regime que não se aplica.
-const REGIME_APLICAVEL: string[] = ['Casado(a)', 'União estável']
+// art. 1.725 do Código Civil). A regra de "quando o regime se aplica" vem do
+// form-helpers (`regimeSeAplica`), a MESMA que os documentos usam.
 
 export default function NegocioDetalhePage() {
   const { id } = useParams<{ id: string }>()
@@ -107,7 +106,7 @@ export default function NegocioDetalhePage() {
           ? {
               ...p,
               estado_civil: valor,
-              regime_bens: REGIME_APLICAVEL.includes(valor) ? p.regime_bens : '',
+              regime_bens: regimeSeAplica(valor) ? p.regime_bens : '',
             }
           : p,
       ),
@@ -316,7 +315,7 @@ export default function NegocioDetalhePage() {
                   ))}
                 </SelectContent>
               </Select>
-              {REGIME_APLICAVEL.includes(p.estado_civil) && (
+              {regimeSeAplica(p.estado_civil) && (
                 <Select
                   value={p.regime_bens || undefined}
                   onValueChange={(v) => updateParte(i, 'regime_bens', v)}
@@ -350,6 +349,19 @@ export default function NegocioDetalhePage() {
                 onChange={(e) => updateParte(i, 'email', e.target.value)}
                 className="md:col-span-2"
               />
+              {/* Bem comum x bem particular: se o imóvel foi adquirido na constância,
+                  o(a) companheiro(a) é MEEIRO(A) e entra como vendedor(a), não anuente
+                  (a qualificação errada gera problema de responsabilidade e de imposto).
+                  A anuência pura é do bem particular. Na união estável o art. 1.647 não
+                  se aplica automaticamente (STJ), mas a boa-fé do comprador some quando a
+                  união é registrada/averbada. Ver base de conhecimento (união estável). */}
+              {p.estado_civil === 'União estável' && (
+                <p className="md:col-span-2 text-xs text-muted-foreground leading-relaxed">
+                  {p.papel === 'comprador'
+                    ? 'União estável: comprar em nome de só um convivente já gera meação do outro (art. 1.725). Vale registrar a união no Livro E ou averbá-la na matrícula.'
+                    : 'União estável: inclua o(a) companheiro(a) na venda — como VENDEDOR(A) se o imóvel foi adquirido durante a união (meeiro), ou como ANUENTE se for bem particular dele(a). Não é a outorga obrigatória do casamento (art. 1.647), mas a assinatura evita disputa na revenda, sobretudo se a união estiver registrada ou averbada.'}
+                </p>
+              )}
             </div>
           </Card>
         ))}
