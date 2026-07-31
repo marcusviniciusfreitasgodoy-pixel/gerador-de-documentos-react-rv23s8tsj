@@ -49,11 +49,18 @@ function montarClausulas(d: Record<string, string>): Clausula[] {
 
   // Outorga: só quando o cônjuge do vendedor entra como ANUENTE. Como CO-VENDEDOR
   // ele já é parte alienante no preâmbulo e a outorga é dispensável.
+  //
+  // Casamento x união estável: a outorga do art. 1.647 é do CÔNJUGE. O STJ não a
+  // estende automaticamente à união estável (falta de publicidade obrigatória), então
+  // para o companheiro a cláusula entra como ANUÊNCIA (salvaguarda contra disputa
+  // futura, sobretudo se a união estiver registrada/averbada), SEM invocar o 1.647.
   if (d.conjuge_vendedor_papel === 'anuente') {
+    const uniaoEstavel = d.vendedor_estado_civil === 'União estável'
     cs.push({
-      titulo: 'DA OUTORGA CONJUGAL',
-      texto:
-        '{conjuge_vendedor_nome}, cônjuge do PROMITENTE VENDEDOR {vendedor_nome}, com quem é casado(a) sob o regime de {vendedor_regime_bens}, comparece a este instrumento e dá sua expressa e irrevogável anuência à promessa de venda do imóvel objeto da Cláusula 1ª, para os fins do artigo 1.647, inciso I, do Código Civil, declarando conhecer e aceitar todas as condições aqui pactuadas.',
+      titulo: uniaoEstavel ? 'DA ANUÊNCIA DO(A) COMPANHEIRO(A)' : 'DA OUTORGA CONJUGAL',
+      texto: uniaoEstavel
+        ? '{conjuge_vendedor_nome}, companheiro(a) do PROMITENTE VENDEDOR {vendedor_nome}, com quem convive em união estável sob o regime de {vendedor_regime_bens}, comparece a este instrumento e dá sua expressa e irrevogável anuência à promessa de venda do imóvel objeto da Cláusula 1ª, declarando conhecer e aceitar todas as condições aqui pactuadas.'
+        : '{conjuge_vendedor_nome}, cônjuge do PROMITENTE VENDEDOR {vendedor_nome}, com quem é casado(a) sob o regime de {vendedor_regime_bens}, comparece a este instrumento e dá sua expressa e irrevogável anuência à promessa de venda do imóvel objeto da Cláusula 1ª, para os fins do artigo 1.647, inciso I, do Código Civil, declarando conhecer e aceitar todas as condições aqui pactuadas.',
     })
   }
 
