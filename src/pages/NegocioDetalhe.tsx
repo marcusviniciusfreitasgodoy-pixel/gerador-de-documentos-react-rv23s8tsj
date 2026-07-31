@@ -14,6 +14,7 @@ import { ArrowLeft, Plus, Save, Trash2, User, Building2, Loader2 } from 'lucide-
 import { toast } from 'sonner'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
 import { getNegocio, updateNegocio, mesclarPartes, novaParte } from '@/lib/negocios'
+import { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS } from '@/lib/form-helpers'
 import { IntroPagina } from '@/components/Layout'
 import type { Negocio, ParteNegocio, PapelParte } from '@/lib/negocios'
 import { mergeResults, emptyImovel } from '@/lib/extraction-types'
@@ -29,6 +30,12 @@ const PAPEL_LABELS: Record<PapelParte, string> = {
   comprador: 'Comprador(a)',
   anuente: 'Anuente (cônjuge)',
 }
+
+// Regime de bens só faz sentido para quem casou ou vive em união estável: nos
+// dois a lei impõe um regime (na união estável sem pacto, comunhão parcial —
+// art. 1.725 do Código Civil). Nos demais estados civis o campo é escondido e
+// zerado, para não gravar um regime que não se aplica.
+const REGIME_APLICAVEL: string[] = ['Casado(a)', 'União estável']
 
 export default function NegocioDetalhePage() {
   const { id } = useParams<{ id: string }>()
@@ -90,6 +97,21 @@ export default function NegocioDetalhePage() {
   // pelo que já sabe e completa depois. Entra como vendedor porque é o papel
   // que costuma abrir o negócio; o seletor do card troca em um clique.
   const adicionarParte = () => setPartes((prev) => [...prev, novaParte('vendedor')])
+
+  // Trocar o estado civil para um caso sem regime (solteiro, divorciado, viúvo)
+  // limpa o regime junto: senão um regime escolhido antes ficaria salvo escondido.
+  const setEstadoCivil = (i: number, valor: string) =>
+    setPartes((prev) =>
+      prev.map((p, idx) =>
+        idx === i
+          ? {
+              ...p,
+              estado_civil: valor,
+              regime_bens: REGIME_APLICAVEL.includes(valor) ? p.regime_bens : '',
+            }
+          : p,
+      ),
+    )
 
   const updateParte = (i: number, campo: keyof ParteNegocio, valor: string) => {
     setPartes((prev) =>
@@ -274,16 +296,43 @@ export default function NegocioDetalhePage() {
                 value={p.profissao}
                 onChange={(e) => updateParte(i, 'profissao', e.target.value)}
               />
-              <Input
-                placeholder="Estado civil"
-                value={p.estado_civil}
-                onChange={(e) => updateParte(i, 'estado_civil', e.target.value)}
-              />
-              <Input
-                placeholder="Regime de bens"
-                value={p.regime_bens}
-                onChange={(e) => updateParte(i, 'regime_bens', e.target.value)}
-              />
+              {/* Estado civil e regime de bens saem da MESMA lista canônica que os
+                  formulários de documento usam (ESTADO_CIVIL_OPTIONS /
+                  REGIME_BENS_OPTIONS em form-helpers). Assim o valor escolhido aqui
+                  bate exatamente com o que o documento espera — texto livre divergia
+                  de 'Casado(a)' e a cláusula de regime não disparava. */}
+              <Select
+                value={p.estado_civil || undefined}
+                onValueChange={(v) => setEstadoCivil(i, v)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Estado civil" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ESTADO_CIVIL_OPTIONS.map((o) => (
+                    <SelectItem key={o} value={o}>
+                      {o}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {REGIME_APLICAVEL.includes(p.estado_civil) && (
+                <Select
+                  value={p.regime_bens || undefined}
+                  onValueChange={(v) => updateParte(i, 'regime_bens', v)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Regime de bens" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REGIME_BENS_OPTIONS.map((o) => (
+                      <SelectItem key={o} value={o}>
+                        {o}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
               <Input
                 placeholder="Endereço"
                 value={p.endereco}
