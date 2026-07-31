@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { Loader2, MailCheck, LogOut, RefreshCw, Send } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import pb from '@/lib/pocketbase/client'
+import { Abertura } from '@/pages/Signup'
 
 // Acesso por confirmação de e-mail: a conta é criada na hora e o acesso abre
 // sozinho quando o usuário clica no link de verificação que chega por e-mail
@@ -113,6 +114,7 @@ function ConfirmeSeuEmail() {
 
 export function ProtectedRoute() {
   const { isAuthenticated, isApproved, loading } = useAuth()
+  const { pathname } = useLocation()
 
   if (loading) {
     return (
@@ -123,6 +125,14 @@ export function ProtectedRoute() {
   }
 
   if (!isAuthenticated) {
+    // A porta do app e a pagina de abertura, no MESMO endereco: quem chega em
+    // documentos.primecircle.app.br sem conta ve a apresentacao e o convite
+    // para se cadastrar, nao um formulario de login sem contexto. As demais
+    // rotas seguem indo para o /login, e o fluxo de e-mail verificado abaixo
+    // continua intacto.
+    if (pathname === '/') {
+      return <Abertura />
+    }
     return <Navigate to="/login" replace />
   }
 
