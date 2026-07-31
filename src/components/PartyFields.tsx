@@ -11,7 +11,12 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { maskCpf } from '@/lib/utils'
-import { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS, type FormValues } from '@/lib/form-helpers'
+import {
+  ESTADO_CIVIL_OPTIONS,
+  REGIME_BENS_OPTIONS,
+  regimeSeAplica,
+  type FormValues,
+} from '@/lib/form-helpers'
 
 interface PartyFieldsProps {
   prefix: 'vendedor' | 'comprador'
@@ -99,7 +104,7 @@ export function PartyFields({ prefix, title }: PartyFieldsProps) {
             </FormItem>
           )}
         />
-        {estadoCivil === 'Casado(a)' && (
+        {regimeSeAplica(estadoCivil) && (
           <FormField
             control={control}
             name={fName('regime_bens')}
