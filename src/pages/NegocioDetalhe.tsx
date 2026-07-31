@@ -13,7 +13,7 @@ import {
 import { ArrowLeft, Plus, Save, Trash2, User, Building2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { AutoPreencherDialog } from '@/components/AutoPreencherDialog'
-import { getNegocio, updateNegocio, mesclarPartes } from '@/lib/negocios'
+import { getNegocio, updateNegocio, mesclarPartes, novaParte } from '@/lib/negocios'
 import { IntroPagina } from '@/components/Layout'
 import type { Negocio, ParteNegocio, PapelParte } from '@/lib/negocios'
 import { mergeResults, emptyImovel } from '@/lib/extraction-types'
@@ -85,6 +85,11 @@ export default function NegocioDetalhePage() {
     }
     toast.success('Documentos processados. Revise os dados abaixo e salve.')
   }
+
+  // Cadastro manual: quem ainda não tem os documentos em mãos começa a ficha
+  // pelo que já sabe e completa depois. Entra como vendedor porque é o papel
+  // que costuma abrir o negócio; o seletor do card troca em um clique.
+  const adicionarParte = () => setPartes((prev) => [...prev, novaParte('vendedor')])
 
   const updateParte = (i: number, campo: keyof ParteNegocio, valor: string) => {
     setPartes((prev) =>
@@ -190,7 +195,8 @@ export default function NegocioDetalhePage() {
         </h2>
         {!partes.length && (
           <Card className="p-6 text-center text-sm text-muted-foreground">
-            Nenhuma parte ainda. Adicione documentos acima.
+            Nenhuma parte ainda. Suba os documentos acima e a IA preenche, ou cadastre na mão no
+            botão abaixo.
           </Card>
         )}
         {partes.map((p, i) => (
@@ -287,6 +293,10 @@ export default function NegocioDetalhePage() {
             </div>
           </Card>
         ))}
+
+        <Button variant="outline" onClick={adicionarParte} className="w-full">
+          <Plus className="mr-2 h-4 w-4" /> Adicionar parte
+        </Button>
       </div>
 
       <div className="space-y-3">
