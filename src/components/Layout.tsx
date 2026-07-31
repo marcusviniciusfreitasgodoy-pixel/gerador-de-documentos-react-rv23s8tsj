@@ -1,5 +1,5 @@
 import { Component, useState, useEffect, type ReactNode } from 'react'
-import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
+import { Outlet, Link, NavLink, useNavigate, useLocation } from 'react-router-dom'
 import {
   LogOut,
   ChevronDown,
@@ -134,6 +134,11 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { erro: Error | n
 export default function Layout() {
   const { isAuthenticated, user, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  // A pagina de abertura (visitante sem conta no "/") e a unica tela de largura
+  // total do app: as faixas Ink e Marfim precisam sangrar ate a borda. Todas as
+  // outras continuam no miolo centrado e com respiro.
+  const naAbertura = !isAuthenticated && pathname === '/'
   // Painel de navegação do celular. Fecha sozinho ao escolher um item, senão o
   // corretor troca de tela e o painel continua por cima do conteúdo.
   const [menuAberto, setMenuAberto] = useState(false)
@@ -154,15 +159,23 @@ export default function Layout() {
 
   const itensVisiveis = NAV_ITEMS.filter((item) => !('adminOnly' in item) || isAdmin)
 
+  // A pagina de abertura (visitante sem sessao no "/") traz o proprio cabecalho
+  // e rodape (vieram do design). Aqui o Layout sai da frente por completo: sem
+  // header, sem rodape, sem respiro, para a landing ocupar a tela inteira.
+  if (naAbertura) {
+    return (
+      <ErrorBoundary>
+        <Outlet />
+      </ErrorBoundary>
+    )
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Casca Ink — a marca mora aqui; o miolo (main) fica no Marfim. */}
       <header className="sticky top-0 z-10 bg-[#0E0E0E] border-b border-white/10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-3">
-          <Link
-            to={isAuthenticated ? '/' : '/login'}
-            className="flex items-center gap-2.5 shrink-0"
-          >
+          <Link to="/" className="flex items-center gap-2.5 shrink-0">
             <ConnectionMark className="h-8 w-8" />
             <span className="flex flex-col leading-none">
               <span className="font-bold text-[15px] tracking-tight text-[#F5F1E6]">
@@ -174,6 +187,25 @@ export default function Layout() {
               </span>
             </span>
           </Link>
+
+          {/* Visitante: o cabecalho vira a barra da pagina de abertura, com o
+              caminho do cadastro sempre a vista. Some assim que ele entra. */}
+          {!isAuthenticated && (
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                to="/login"
+                className="rounded-md px-3 py-2 text-sm font-medium text-[#E8E0CC]/75 transition-colors hover:text-[#F5F1E6]"
+              >
+                Entrar
+              </Link>
+              <Link
+                to="/signup"
+                className="rounded-sm bg-[#C9A84C] px-4 py-2.5 text-sm font-bold text-[#14110A] transition-transform hover:-translate-y-0.5"
+              >
+                Criar conta
+              </Link>
+            </div>
+          )}
 
           {isAuthenticated && (
             <>
@@ -327,7 +359,12 @@ export default function Layout() {
         </div>
       </header>
 
-      <main className="flex-1 flex flex-col items-center p-4 md:p-8 py-8">
+      <main
+        className={cn(
+          'flex-1 flex flex-col',
+          naAbertura ? 'w-full' : 'items-center p-4 md:p-8 py-8',
+        )}
+      >
         <ErrorBoundary>
           <Outlet />
         </ErrorBoundary>
