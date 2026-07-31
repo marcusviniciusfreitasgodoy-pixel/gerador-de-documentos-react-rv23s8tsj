@@ -48,6 +48,16 @@ export const REGIME_BENS_OPTIONS = [
   'Comunhão universal',
   'Separação total',
 ] as const
+
+// Regime de bens se aplica a quem casou E a quem vive em união estável: nos dois
+// a lei impõe um regime (na união estável sem pacto, comunhão parcial — art. 1.725
+// do Código Civil). Fonte única usada pelo dossiê, pelos formulários e pelos
+// templates de documento, para o comportamento não divergir entre eles.
+export const ESTADOS_COM_REGIME: readonly string[] = ['Casado(a)', 'União estável']
+export function regimeSeAplica(estadoCivil?: string): boolean {
+  return !!estadoCivil && ESTADOS_COM_REGIME.includes(estadoCivil)
+}
+
 export const FORMA_PAGAMENTO_OPTIONS = ['Transferência bancária (PIX)', 'PIX', 'Cheque'] as const
 
 export function parseCurrency(value: string): number {
@@ -223,6 +233,11 @@ export function formatDateFull(date: Date): string {
 export function buildQualificacaoCivil(estadoCivil: string, regimeBens?: string): string {
   if (estadoCivil === 'Casado(a)') {
     return `casado(a) sob o regime de ${regimeBens || 'comunhão parcial'}`
+  }
+  // União estável tem regime como o casamento (art. 1.725 CC): no silêncio,
+  // comunhão parcial. Qualifica o convivente com o regime, como se faz no casado.
+  if (estadoCivil === 'União estável') {
+    return `convivente em união estável sob o regime de ${regimeBens || 'comunhão parcial'}`
   }
   return estadoCivil.toLowerCase()
 }
