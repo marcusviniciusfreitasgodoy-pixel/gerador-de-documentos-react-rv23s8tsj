@@ -1,5 +1,5 @@
 import pb from '@/lib/pocketbase/client'
-import { emptyImovel, mergeResults } from '@/lib/extraction-types'
+import { emptyImovel, emptyPessoa, mergeResults } from '@/lib/extraction-types'
 import type { PessoaExtraida, ImovelExtraido, ExtracaoResult } from '@/lib/extraction-types'
 
 export type PapelParte = 'vendedor' | 'comprador' | 'anuente'
@@ -15,6 +15,14 @@ function novoId(): string {
     return crypto.randomUUID()
   }
   return `id_${Date.now()}_${Math.random().toString(36).slice(2)}`
+}
+
+// Ficha em branco para quem ainda não tem documento em mãos: o corretor digita
+// os dados na mão, sem depender do upload. Nasce com os mesmos campos que a
+// extração produz, então o resto do app (mesclagem, documentos) não vê
+// diferença entre uma parte digitada e uma parte lida pela IA.
+export function novaParte(papel: PapelParte): ParteNegocio {
+  return { ...emptyPessoa, _id: novoId(), papel }
 }
 
 export interface Negocio {
