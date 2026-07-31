@@ -8,6 +8,7 @@ import {
   checarCpfRepetidoPlano,
   ESTADO_CIVIL_OPTIONS,
   REGIME_BENS_OPTIONS,
+  regimeSeAplica,
   trimDeep,
 } from '@/lib/form-helpers'
 
@@ -86,14 +87,14 @@ export const promiseSchema = z
     message: 'Sinal não pode exceder o valor de venda',
     path: ['valor_sinal'],
   })
-  // O regime não é opcional quando a parte é casada: o documento AFIRMA o regime na
-  // qualificação, e ele define se a outorga do cônjuge é exigida (art. 1.647).
-  .refine((d) => d.vendedor_estado_civil !== 'Casado(a)' || !!d.vendedor_regime_bens, {
-    message: 'Obrigatório para casado(a)',
+  // O regime não é opcional quando a parte é casada OU vive em união estável: o
+  // documento AFIRMA o regime na qualificação (art. 1.725 CC para a união estável).
+  .refine((d) => !regimeSeAplica(d.vendedor_estado_civil) || !!d.vendedor_regime_bens, {
+    message: 'Obrigatório para casado(a) ou união estável',
     path: ['vendedor_regime_bens'],
   })
-  .refine((d) => d.comprador_estado_civil !== 'Casado(a)' || !!d.comprador_regime_bens, {
-    message: 'Obrigatório para casado(a)',
+  .refine((d) => !regimeSeAplica(d.comprador_estado_civil) || !!d.comprador_regime_bens, {
+    message: 'Obrigatório para casado(a) ou união estável',
     path: ['comprador_regime_bens'],
   })
   .refine(
@@ -307,8 +308,11 @@ export function buildPromiseTemplateData(
 
   const fmt = (v: number) => cleanCurrencyMask(formatCurrency(v))
 
-  // O cônjuge é do MESMO casamento: herda o regime da parte, não se pergunta duas vezes.
-  const qualifConjuge = (regime?: string) => buildQualificacaoCivil('Casado(a)', regime)
+  // O cônjuge/companheiro é do MESMO vínculo da parte: herda o estado civil e o
+  // regime dela, não se pergunta duas vezes. (Casado herda 'Casado(a)'; convivente
+  // herda 'União estável', qualificado com o regime — art. 1.725 CC.)
+  const qualifConjuge = (estadoCivil: string, regime?: string) =>
+    buildQualificacaoCivil(estadoCivil, regime)
 
   return {
     vendedor_nome: data.vendedor_nome,
@@ -320,13 +324,19 @@ export function buildPromiseTemplateData(
       data.vendedor_regime_bens,
     ),
     vendedor_regime_bens: data.vendedor_regime_bens || '',
+    // Passado adiante só para a cláusula de anuência do docx escolher entre a
+    // outorga conjugal (casamento) e a anuência do companheiro (união estável).
+    vendedor_estado_civil: data.vendedor_estado_civil || '',
     vendedor_profissao: data.vendedor_profissao,
     vendedor_cpf: data.vendedor_cpf,
     vendedor_endereco: data.vendedor_endereco,
     conjuge_vendedor_papel: data.conjuge_vendedor_papel,
     conjuge_vendedor_nome: data.conjuge_vendedor_nome || '',
     conjuge_vendedor_nacionalidade: data.conjuge_vendedor_nacionalidade || '',
-    conjuge_vendedor_qualificacao_civil: qualifConjuge(data.vendedor_regime_bens),
+    conjuge_vendedor_qualificacao_civil: qualifConjuge(
+      data.vendedor_estado_civil,
+      data.vendedor_regime_bens,
+    ),
     conjuge_vendedor_profissao: data.conjuge_vendedor_profissao || '',
     conjuge_vendedor_cpf: data.conjuge_vendedor_cpf || '',
     conjuge_vendedor_endereco: data.conjuge_vendedor_endereco || '',
@@ -343,7 +353,10 @@ export function buildPromiseTemplateData(
     conjuge_comprador_papel: data.conjuge_comprador_papel,
     conjuge_comprador_nome: data.conjuge_comprador_nome || '',
     conjuge_comprador_nacionalidade: data.conjuge_comprador_nacionalidade || '',
-    conjuge_comprador_qualificacao_civil: qualifConjuge(data.comprador_regime_bens),
+    conjuge_comprador_qualificacao_civil: qualifConjuge(
+      data.comprador_estado_civil,
+      data.comprador_regime_bens,
+    ),
     conjuge_comprador_profissao: data.conjuge_comprador_profissao || '',
     conjuge_comprador_cpf: data.conjuge_comprador_cpf || '',
     conjuge_comprador_endereco: data.conjuge_comprador_endereco || '',
