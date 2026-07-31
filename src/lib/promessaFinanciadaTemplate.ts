@@ -4,6 +4,7 @@ import {
   cleanCurrencyMask,
   limparNumeroRedundante,
   trimDeep,
+  regimeSeAplica,
 } from '@/lib/form-helpers'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
@@ -64,7 +65,7 @@ function prefixarDocumento(value: string): string {
 // O sufixo "doravante denominado(a) VENDEDOR/COMPRADOR" fica no template (texto fixo do loop).
 function montarQualificacao(p: PartyValues): string {
   const regime =
-    p.estado_civil === 'Casado(a)' && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
+    regimeSeAplica(p.estado_civil) && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
   const email = p.email ? `, e-mail ${p.email}` : ''
   return (
     `${p.nacionalidade || ''}, ${p.estado_civil || ''}${regime}, ${p.profissao || ''}, ` +
