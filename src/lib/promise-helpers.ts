@@ -202,24 +202,31 @@ export const promiseSchema = z
 
 export type PromiseValues = z.infer<typeof promiseSchema>
 
-// Sugestão de papel do cônjuge do VENDEDOR, por regime — mesma régua da À vista.
-export function sugerirPapelConjuge(regime?: string): string {
+// Sugestão de papel do cônjuge/companheiro do VENDEDOR, por regime — mesma régua da
+// À vista. Na união estável a outorga do art. 1.647 não se aplica (é do cônjuge); a
+// nomenclatura vira "companheiro(a)" e a assinatura entra como recomendação, não outorga.
+export function sugerirPapelConjuge(regime?: string, estadoCivil?: string): string {
+  const uniao = estadoCivil === 'União estável'
+  const quem = uniao ? 'companheiro(a)' : 'cônjuge'
   if (regime === 'Comunhão universal')
-    return 'Comunhão universal: o cônjuge é meeiro do imóvel: sugerido CO-VENDEDOR.'
+    return `Comunhão universal: o ${quem} é meeiro do imóvel: sugerido CO-VENDEDOR.`
   if (regime === 'Separação total')
-    return 'Separação total: em regra dispensa a outorga (art. 1.647). Inclua o cônjuge só se quiser reforço.'
+    return uniao
+      ? `Separação total: em regra o ${quem} não tem meação neste imóvel. Inclua só se quiser reforço.`
+      : 'Separação total: em regra dispensa a outorga (art. 1.647). Inclua o cônjuge só se quiser reforço.'
   if (regime === 'Comunhão parcial')
-    return 'Comunhão parcial: imóvel adquirido DEPOIS do casamento → co-vendedor; adquirido ANTES (bem particular) → anuente.'
-  return 'Selecione o regime de bens para a sugestão. Na dúvida, inclua o cônjuge como anuente.'
+    return `Comunhão parcial: imóvel adquirido DEPOIS do ${uniao ? 'início da união' : 'casamento'} → co-vendedor; adquirido ANTES (bem particular) → anuente.`
+  return `Selecione o regime de bens para a sugestão. Na dúvida, inclua o ${quem} como anuente.`
 }
 
 // Lado do COMPRADOR: aqui não há outorga a dar (não se aliena, se adquire). A questão
-// é se o cônjuge entra como co-adquirente — mesma régua da Proposta/Reserva.
-export function sugerirPapelConjugeComprador(regime?: string): string {
+// é se o cônjuge/companheiro entra como co-adquirente — mesma régua da Proposta/Reserva.
+export function sugerirPapelConjugeComprador(regime?: string, estadoCivil?: string): string {
+  const quem = estadoCivil === 'União estável' ? 'companheiro(a)' : 'cônjuge'
   if (regime === 'Comunhão universal' || regime === 'Comunhão parcial')
     return 'Comunhão de bens: o imóvel entrará no patrimônio comum: sugerido CO-COMPRADOR.'
   if (regime === 'Separação total')
-    return 'Separação total: a aquisição não integra o patrimônio do outro. Inclua o cônjuge só se comprarem juntos.'
+    return `Separação total: a aquisição não integra o patrimônio do outro. Inclua o ${quem} só se comprarem juntos.`
   return 'Selecione o regime de bens para a sugestão.'
 }
 
