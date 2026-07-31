@@ -163,6 +163,20 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
         ajuda:
           'Comprova que o comprador pagou o sinal, o valor de entrada que confirma o compromisso. Se alguém desistir, o sinal define quem perde ou devolve quanto (na lei, as "arras", arts. 417 a 420).',
       },
+      {
+        key: 'corretagem',
+        title: 'Contrato de Corretagem',
+        desc: 'Combina por escrito quanto e quando você recebe',
+        ajuda:
+          'O contrato dos seus honorários. Fixa o percentual, o vencimento e a exclusividade, e garante a comissão mesmo se as partes se arrependerem depois de o negócio estar fechado (arts. 725 e 727 do Código Civil).',
+      },
+      {
+        key: 'checklist',
+        title: 'Checklist Documental',
+        desc: 'Lista para conferir os documentos da operação',
+        ajuda:
+          'Uma lista para conferir se todos os documentos das partes e do imóvel estão reunidos e corretos antes de fechar. Evita surpresas na hora do cartório.',
+      },
     ],
   },
   {
@@ -239,13 +253,6 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
           'Use quando a posse é passada em momento diferente da entrega das chaves, como na posse antecipada, em que o comprador entra antes de quitar o preço.',
       },
       {
-        key: 'corretagem',
-        title: 'Contrato de Corretagem',
-        desc: 'Combina por escrito quanto e quando você recebe',
-        ajuda:
-          'O contrato dos seus honorários. Fixa o percentual, o vencimento e a exclusividade, e garante a comissão mesmo se as partes se arrependerem depois de o negócio estar fechado (arts. 725 e 727 do Código Civil).',
-      },
-      {
         key: 'reciboComissao',
         title: 'Recibo de Comissão',
         desc: 'Comprova que você recebeu a sua corretagem',
@@ -253,19 +260,11 @@ const DOC_GROUPS: { label: string; hint: string; docs: DocDef[] }[] = [
           'O comprovante de que a comissão foi paga a você. Dá quitação ao pagador, registra o valor e a forma, e amarra o pagamento ao negócio que o gerou. Use um a cada parcela recebida.',
       },
       {
-        key: 'checklist',
-        title: 'Checklist Documental',
-        desc: 'Lista para conferir os documentos da operação',
-        ajuda:
-          'Uma lista para conferir se todos os documentos das partes e do imóvel estão reunidos e corretos antes de fechar. Evita surpresas na hora do cartório.',
-      },
-      {
         href: '/distrato',
         title: 'Distrato',
         desc: 'Desfaz o negócio, de comum acordo entre as partes',
         ajuda:
           'Quando as duas partes concordam em cancelar um contrato já assinado, o distrato encerra tudo e acerta a devolução de valores, dando quitação recíproca (nada mais é devido de parte a parte).',
-        wide: true,
       },
     ],
   },
