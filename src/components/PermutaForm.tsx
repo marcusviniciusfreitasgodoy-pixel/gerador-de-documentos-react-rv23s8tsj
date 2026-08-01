@@ -49,7 +49,7 @@ import {
 } from '@/lib/permutaHelpers'
 import { buildPermutaTemplateData } from '@/lib/permutaTemplate'
 import { generatePermutaDocx, getPermutaText } from '@/lib/permutaDocx'
-import { ARRAS_OPTIONS, getArrasResumo } from '@/lib/form-helpers'
+import { ARRAS_OPTIONS, getArrasResumo, regimeSeAplica } from '@/lib/form-helpers'
 import { getBrokerProfile, getBrokerDisplay } from '@/services/broker-profile'
 import { CompromissoPartySection } from '@/components/CompromissoPartySection'
 import {
@@ -381,7 +381,7 @@ export function PermutaForm() {
       list.forEach((p, i) => {
         const key = `${which}.${i}:${p?.nome || ''}`
         if (
-          p?.estado_civil === 'Casado(a)' &&
+          regimeSeAplica(p?.estado_civil) &&
           requiresConsent(p?.regime_bens) &&
           p?.nome &&
           !autoLinkedRef.current.has(key) &&
@@ -464,10 +464,10 @@ export function PermutaForm() {
             title={`Dados: ${label} ${i + 1}`}
             icon={<User className="h-5 w-5 text-primary" />}
           />
-          {watched[i]?.estado_civil === 'Casado(a)' && (
+          {regimeSeAplica(watched[i]?.estado_civil) && (
             <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
               <p className="text-sm font-medium text-primary flex items-center gap-1.5">
-                <HeartHandshake className="h-4 w-4" /> Participação do cônjuge
+                <HeartHandshake className="h-4 w-4" /> Participação do cônjuge/companheiro
               </p>
               <p className="text-xs text-muted-foreground">
                 {requiresConsent(watched[i]?.regime_bens)
@@ -487,7 +487,7 @@ export function PermutaForm() {
                   )
                 }
               >
-                <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
+                <Plus className="mr-1 h-3 w-3" /> Cônjuge/companheiro como anuente
               </Button>
             </div>
           )}
