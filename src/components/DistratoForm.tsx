@@ -40,6 +40,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { maskCurrency, maskCpfCnpj } from '@/lib/utils'
+import { regimeSeAplica } from '@/lib/form-helpers'
 import {
   distratoSchema,
   type DistratoValues,
@@ -307,10 +308,11 @@ export function DistratoForm() {
                 title={`Dados do Vendedor ${i + 1}`}
                 icon={<User className="h-5 w-5 text-primary" />}
               />
-              {vendedoresW[i]?.estado_civil === 'Casado(a)' && (
+              {regimeSeAplica(vendedoresW[i]?.estado_civil) && (
                 <div className="rounded-lg border border-primary/30 bg-primary/5 p-3 space-y-2">
                   <p className="text-sm font-medium text-primary flex items-center gap-1.5">
-                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge deste vendedor
+                    <HeartHandshake className="h-4 w-4" /> Participação do cônjuge/companheiro deste
+                    vendedor
                   </p>
                   <p className="text-xs text-muted-foreground">
                     {sugerirPapelVendedor(
@@ -325,7 +327,7 @@ export function DistratoForm() {
                       size="sm"
                       onClick={() => addConjugeCoVendedor(i)}
                     >
-                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como co-vendedor
+                      <Plus className="mr-1 h-3 w-3" /> Cônjuge/companheiro como co-vendedor
                     </Button>
                     <Button
                       type="button"
@@ -333,7 +335,7 @@ export function DistratoForm() {
                       size="sm"
                       onClick={() => addConjugeAnuente(i)}
                     >
-                      <Plus className="mr-1 h-3 w-3" /> Cônjuge como anuente
+                      <Plus className="mr-1 h-3 w-3" /> Cônjuge/companheiro como anuente
                     </Button>
                   </div>
                 </div>
