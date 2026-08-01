@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { maskCpfCnpj } from '@/lib/utils'
+import { regimeSeAplica } from '@/lib/form-helpers'
 import {
   ESTADO_CIVIL_OPTIONS,
   REGIME_BENS_OPTIONS,
@@ -112,7 +113,7 @@ export function CompromissoPartySection({
             </FormItem>
           )}
         />
-        {estadoCivil === 'Casado(a)' && (
+        {regimeSeAplica(estadoCivil) && (
           <FormField
             control={control}
             name={f('regime_bens')}
