@@ -61,6 +61,7 @@ import {
   calcComissao,
   ARRAS_OPTIONS,
   getArrasResumo,
+  regimeSeAplica,
 } from '@/lib/form-helpers'
 import {
   promiseSchema,
@@ -336,11 +337,11 @@ export function PromiseForm() {
           title="Promitente Vendedor(a)"
           icon={<User className="h-5 w-5 text-primary" />}
         />
-        {vendedorEstadoCivil === 'Casado(a)' && (
+        {regimeSeAplica(vendedorEstadoCivil) && (
           <ConjugeSection
             control={control}
             lado="vendedor"
-            titulo="Cônjuge do Promitente Vendedor(a)"
+            titulo="Cônjuge/Companheiro(a) do Promitente Vendedor(a)"
             dica={sugerirPapelConjuge(vendedorRegime, vendedorEstadoCivil)}
             papeis={PAPEL_CONJUGE_VENDEDOR}
           />
@@ -351,11 +352,11 @@ export function PromiseForm() {
           title="Promitente Comprador(a)"
           icon={<User className="h-5 w-5 text-primary" />}
         />
-        {compradorEstadoCivil === 'Casado(a)' && (
+        {regimeSeAplica(compradorEstadoCivil) && (
           <ConjugeSection
             control={control}
             lado="comprador"
-            titulo="Cônjuge do Promitente Comprador(a)"
+            titulo="Cônjuge/Companheiro(a) do Promitente Comprador(a)"
             dica={sugerirPapelConjugeComprador(compradorRegime, compradorEstadoCivil)}
             papeis={PAPEL_CONJUGE_COMPRADOR}
           />
@@ -800,7 +801,7 @@ function PartySection({
           control={control}
           name={fName('regime_bens')}
           render={({ field }) => (
-            <FormItem className={estadoCivil === 'Casado(a)' ? '' : 'hidden'}>
+            <FormItem className={regimeSeAplica(estadoCivil) ? '' : 'hidden'}>
               <FormLabel>Regime de Bens *</FormLabel>
               <Select value={field.value || undefined} onValueChange={field.onChange}>
                 <FormControl>
