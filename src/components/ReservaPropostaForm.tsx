@@ -76,13 +76,12 @@ import {
 const GRUPOS_RESERVA = ['proponentes', 'proprietarios', 'anuentes'] as const
 
 function sugerirPapelProponente(regime?: string, estadoCivil?: string): string {
-  if (estadoCivil !== 'Casado(a)')
-    return 'Casado(a) em comunhão de bens? Considere incluir o cônjuge como co-proponente (co-comprador).'
+  const quem = estadoCivil === 'União estável' ? 'companheiro(a)' : 'cônjuge'
   if (regime === 'Comunhão universal' || regime === 'Comunhão parcial')
-    return 'Comunhão de bens: o imóvel entrará no patrimônio comum: inclua o cônjuge como CO-PROPONENTE (co-comprador).'
+    return `Comunhão de bens: o imóvel entrará no patrimônio comum: inclua o ${quem} como CO-PROPONENTE (co-comprador).`
   if (regime === 'Separação total')
-    return 'Separação total: a aquisição não integra o patrimônio do outro. Inclua o cônjuge só se comprarem juntos.'
-  return 'Na dúvida, se pretendem adquirir em conjunto, inclua o cônjuge como co-proponente.'
+    return `Separação total: a aquisição não integra o patrimônio do outro. Inclua o ${quem} só se comprarem juntos.`
+  return `Na dúvida, se pretendem adquirir em conjunto, inclua o ${quem} como co-proponente.`
 }
 
 export function ReservaPropostaForm() {
