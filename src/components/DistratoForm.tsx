@@ -75,11 +75,10 @@ import {
 const GRUPOS_DISTRATO = ['vendedores', 'compradores', 'anuentes'] as const
 
 function sugerirPapelVendedor(regime?: string, estadoCivil?: string): string {
-  if (estadoCivil !== 'Casado(a)')
-    return 'Casado(a)? A anuência do cônjuge pode ser exigida para o desfazimento do negócio.'
+  const quem = estadoCivil === 'União estável' ? 'companheiro(a)' : 'cônjuge'
   if (regime === 'Separação total')
-    return 'Separação total: em regra dispensa anuência, mas inclua o cônjuge se ele participou do contrato original.'
-  return 'Comunhão de bens: inclua o cônjuge como CO-VENDEDOR (se era parte) ou como ANUENTE (para consentir no distrato).'
+    return `Separação total: em regra dispensa anuência, mas inclua o ${quem} se ele participou do contrato original.`
+  return `Comunhão de bens: inclua o ${quem} como CO-VENDEDOR (se era parte) ou como ANUENTE (para consentir no distrato).`
 }
 
 const Checkbox = ({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) => (
