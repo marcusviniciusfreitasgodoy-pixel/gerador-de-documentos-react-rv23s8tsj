@@ -1,4 +1,10 @@
-import { parseCurrency, formatCurrency, cleanCurrencyMask, trimDeep } from '@/lib/form-helpers'
+import {
+  parseCurrency,
+  formatCurrency,
+  cleanCurrencyMask,
+  trimDeep,
+  regimeSeAplica,
+} from '@/lib/form-helpers'
 import { formatDateLower } from '@/lib/compromisso-helpers'
 import { currencyToWords } from '@/lib/currency-to-words'
 import type { PermutaValues, PartyValues, AnuenteValues } from '@/lib/permutaHelpers'
@@ -10,7 +16,7 @@ function cleanCreci(creci: string): string {
 
 function montarQualificacao(p: PartyValues): string {
   const regime =
-    p.estado_civil === 'Casado(a)' && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
+    regimeSeAplica(p.estado_civil) && p.regime_bens ? `, sob o regime de ${p.regime_bens}` : ''
   return (
     `${p.nacionalidade || ''}, ${p.estado_civil || ''}${regime}, ${p.profissao || ''}, ` +
     `portador(a) do documento de identidade nº ${p.rg || ''}, expedido por ${p.orgao_emissor || ''}, ` +
