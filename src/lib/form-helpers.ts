@@ -291,11 +291,11 @@ export const formSchema = z
     testemunha2_nome: z.string().optional(),
     testemunha2_cpf: z.string().optional().refine(cpfRefine, 'CPF inválido'),
   })
-  .refine((d) => !(d.vendedor_estado_civil === 'Casado(a)' && !d.vendedor_regime_bens), {
+  .refine((d) => !regimeSeAplica(d.vendedor_estado_civil) || !!d.vendedor_regime_bens, {
     message: 'Obrigatório',
     path: ['vendedor_regime_bens'],
   })
-  .refine((d) => !(d.comprador_estado_civil === 'Casado(a)' && !d.comprador_regime_bens), {
+  .refine((d) => !regimeSeAplica(d.comprador_estado_civil) || !!d.comprador_regime_bens, {
     message: 'Obrigatório',
     path: ['comprador_regime_bens'],
   })
