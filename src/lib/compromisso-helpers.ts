@@ -4,6 +4,7 @@ import {
   checarCpfRepetidoPlano,
   ESTADO_CIVIL_OPTIONS,
   REGIME_BENS_OPTIONS,
+  regimeSeAplica,
 } from '@/lib/form-helpers'
 
 export { ESTADO_CIVIL_OPTIONS, REGIME_BENS_OPTIONS }
@@ -27,7 +28,7 @@ export function formatDateLower(date: Date): string {
 }
 
 export function buildRegimeSuffix(estadoCivil: string, regimeBens?: string): string {
-  if (estadoCivil === 'Casado(a)') {
+  if (regimeSeAplica(estadoCivil)) {
     return `, sob o regime de ${regimeBens || 'comunhão parcial'}`
   }
   return ''
