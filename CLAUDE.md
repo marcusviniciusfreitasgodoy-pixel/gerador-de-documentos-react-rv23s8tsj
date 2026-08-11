@@ -84,7 +84,7 @@ rode `npm install` se for executar o app.
 
 ## ✅ Próximos passos (lista viva — atualizar a cada sessão)
 
-_Última atualização: 2026-07-11_
+_Última atualização: 2026-08-11_
 
 **Estado atual:** projeto estável e funcional. Branch de trabalho:
 `claude/last-contact-action-review-2oa1uz`. Sem PRs abertos. Sem trabalho pela metade
@@ -94,8 +94,22 @@ identificado no código.
 Promessa Financiada (`PromessaFinanciadaForm.tsx`) — verificado como completo
 (formulário → validação Zod → template `.docx`).
 
+### 🏠 Negócio/projeto em andamento: modelo de Relatório de Avaliação
+Analisamos o relatório final de avaliação da **Av. Geremário Dantas, 472 · Pechincha**
+(cliente Anna, Godoy Prime Realty, v5 de 04/08/2026, no Google Drive) e extraímos um
+**modelo replicável** para avaliar outros imóveis:
+- 📄 `docs/modelo-relatorio-avaliacao-imovel.md` — estrutura (7 seções), checklist de
+  insumos, método (comparativo + ITBI, depuração de duplicidades, convergência de dois
+  métodos, três faixas de liquidez) e placeholders `{{ }}`.
+- Base normativa: **NBR 14.653/ABNT + COFECI**.
+
 ### A fazer (preencher conforme surgir)
-- [ ] _(anote aqui as próximas tarefas antes de encerrar cada sessão)_
+- [ ] Decidir se o relatório de avaliação vira um **gerador no app**
+      (`Form → Helpers → Template → Docx`), com cálculo automático (média, desvio, CV,
+      convergência) — seria uma feature nova e faseada.
+- [ ] (Opcional) Analisar o **layout visual** dos PDFs no Drive (capa, gráfico de barras,
+      fotos, tipografia) caso queira replicar também o design entregue ao cliente.
+- [ ] Testar o modelo com um novo imóvel real para calibrar o molde.
 
 ### Ideias / backlog
 - [ ] _(itens sem data definida)_
