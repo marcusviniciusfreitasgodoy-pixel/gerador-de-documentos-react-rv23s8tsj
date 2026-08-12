@@ -10,6 +10,41 @@
 
 ---
 
+## PARTE 0 · Para que este documento existe
+
+Antes de qualquer decisão de conteúdo ou forma, esta é a intenção que a governa.
+
+**O estudo precisa fazer o cliente perceber que está diante de um trabalho diferenciado, feito
+sobre dados e fatos verificáveis, e não sobre achismo e percepção de mercado.** É isso que
+diferencia a Godoy Prime Realty do corretor que chega com um número na cabeça e uma justificativa
+genérica.
+
+Três consequências práticas:
+
+1. **Todo número tem fonte declarada.** Transação registrada, cadastro municipal, amostra
+   verificável ou cartografia pública. O que for inferência minha é rotulado como estimativa ou
+   fica fora. Isso não é escrúpulo acadêmico: é o que sustenta a percepção de rigor.
+2. **O rigor precisa ser visível, não só existir.** Daí o roteiro na Seção 01, os volumes de
+   dados nos KPIs, o código do logradouro citado, as ressalvas numeradas e a declaração explícita
+   de que nenhum valor vem de percepção de mercado.
+3. **A honestidade sobre os limites vale mais que a aparência de certeza.** Declarar a vistoria
+   indireta, a área de fonte secundária e o custo de ocupação estimado **aumenta** a credibilidade.
+   Quem esconde limitação parece vendedor; quem declara parece perito.
+
+**Efeito comercial pretendido.** O estudo valoriza a imobiliária e abre caminho para a proposta de
+**gestão exclusiva**, que vem depois, em conversa separada.
+
+⚠️ **Por isso mesmo, o estudo não faz a oferta.** Nada de proposta comercial, condições de
+contrato ou argumento de venda dentro do documento. Um parecer técnico que vende serviço deixa de
+ser parecer e vira material publicitário, e perde exatamente a autoridade que o torna útil. O
+documento conquista o direito à conversa; a proposta acontece na conversa.
+
+A única ponte legítima é operacional e já está no fecho: recomendar revisão de posicionamento se o
+imóvel completar noventa dias sem propostas. Isso pressupõe acompanhamento contínuo sem nunca
+precisar pedir nada.
+
+---
+
 ## PARTE 1 · O que perguntar na abertura
 
 Apresentar em três blocos. Os do bloco A bloqueiam o início; os demais podem chegar durante.
