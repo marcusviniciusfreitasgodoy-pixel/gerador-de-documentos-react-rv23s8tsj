@@ -264,7 +264,11 @@ Margem de negociação: {{margem_pct}}%. Fechamento esperado entre R$ {{fechamen
 - **Fatores de desvalorização:** {{lista_desvalorizacao}}
 - **Tabela de recomendação:** divulgar por | margem de negociação | fechamento esperado | teto técnico | piso de absorção rápida.
 - **Comparação com o valor de aquisição:** redução percentual do preço de divulgação e do valor provável em relação ao que o proprietário pagou, e o **líquido estimado** descontada a corretagem.
-- **Ressalvas de responsabilidade:** a avaliação não contempla vistoria estrutural, verificação de regularidade documental além da matrícula apresentada, análise urbanística, Faixa Marginal de Proteção, cota de inundação nem histórico de alagamento. Registrar aqui qualquer dado adotado de fonte secundária (área não averbada, por exemplo). Cabe ao interessado obter certidões atualizadas.
+- **Ressalvas de responsabilidade:** montar **conforme a tipologia**, não por lista fixa. Sempre entram: ausência de vistoria estrutural, ausência de verificação de regularidade documental, dados adotados de fonte secundária e a natureza do documento. Entram **apenas quando pertinentes**:
+  - *Casa, terreno ou imóvel térreo:* análise urbanística, Faixa Marginal de Proteção, cota de inundação, histórico de alagamento, topografia e recuos.
+  - *Apartamento:* área privativa não averbada, custo de ocupação estimado, convenção de condomínio não examinada.
+
+  ⚠️ Ressalva impertinente **enfraquece** o documento: sinaliza formulário preenchido no automático em vez de análise do caso. Cota de inundação em apartamento de 2º pavimento é o exemplo típico. Cabe sempre ao interessado obter certidões atualizadas.
 - **Assinatura:** {{nome_avaliador}} · CRECI {{creci_pf}} · Godoy Prime Realty · CRECI {{creci_pj}} · {{cidade}}, {{data_emissao}}.
 
 ### ⚠️ BLOCO DE PENDÊNCIAS (uso interno, remover antes de entregar)

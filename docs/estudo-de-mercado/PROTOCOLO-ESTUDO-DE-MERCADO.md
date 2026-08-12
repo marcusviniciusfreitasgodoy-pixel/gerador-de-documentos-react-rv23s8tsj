@@ -206,6 +206,11 @@ Obrigatória. Entregar a **lista de achados**, nunca um "está pronto".
 - [ ] **Transbordo.** Renderizar o PDF e olhar página a página. Conteúdo passando por baixo do rodapé
       é o defeito mais comum.
 - [ ] **Origem dos arquivos de marca.** Confirmar que o logo é da Godoy Prime Realty.
+- [ ] **Pertinência das ressalvas à tipologia.** As ressalvas são montadas caso a caso, nunca
+      copiadas em bloco. Cota de inundação, alagamento, Faixa Marginal de Proteção, topografia e
+      recuos são de casa e terreno; em apartamento não cabem. Área não averbada, custo de ocupação
+      estimado e convenção não examinada são de apartamento. **Ressalva impertinente enfraquece o
+      documento**, porque sinaliza formulário preenchido no automático em vez de análise do caso.
 
 ---
 
