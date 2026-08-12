@@ -188,6 +188,12 @@ Obrigatória. Entregar a **lista de achados**, nunca um "está pronto".
 - [ ] **Coerência entre seções.** Buscar afirmações contraditórias, principalmente entre a descrição
       do imóvel e os fatores de desvalorização.
 - [ ] **Aritmética.** Recalcular percentuais, líquidos e projeções por m².
+- [ ] **Precisão do teto.** O limite observado é sempre de **valor por metro quadrado**, nunca de
+      preço total. Escrever "nenhuma transação superou esse patamar" ao lado de uma cifra em reais
+      induz o leitor a entender que não houve negócio de preço total maior na via, o que é falso:
+      imóveis de metragem maior transacionam por mais. Toda afirmação sobre o teto precisa dizer
+      **R$/m²** de forma explícita, e convém registrar que há negócios de valor total superior em
+      metragens maiores, o que não altera o limite unitário.
 - [ ] **Transbordo.** Renderizar o PDF e olhar página a página. Conteúdo passando por baixo do rodapé
       é o defeito mais comum.
 - [ ] **Origem dos arquivos de marca.** Confirmar que o logo é da Godoy Prime Realty.
