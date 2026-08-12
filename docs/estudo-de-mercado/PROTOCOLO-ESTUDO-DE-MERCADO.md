@@ -87,7 +87,8 @@ percorrer o método antes de ver o número, ou ele lê o preço e para.
 | 9 | **06** Justificativa do teto | Três limites, gráfico de posicionamento na escala unitária |
 | 10 | **07** Conclusão | Valor provável e teto, fatores de valorização e desvalorização, escala completa |
 | 11 | **07** Recomendação | Tabela bruto → comissão → líquido, condicionante da vistoria, tabela inversa |
-| 12 | Ressalvas | Seis ressalvas numeradas, assinatura, logo |
+| 12 | **07** Síntese e recomendação final | KPIs de credibilidade, amarração dos argumentos e bloco de recomendação em destaque. **Fecha o raciocínio antes das ressalvas.** |
+| 13 | Ressalvas | Seis ressalvas numeradas, assinatura, logo |
 
 **Regras de conteúdo:**
 - **Nada de percentuais de ajuste por atributo.** Lista os atributos, não abre a planilha.

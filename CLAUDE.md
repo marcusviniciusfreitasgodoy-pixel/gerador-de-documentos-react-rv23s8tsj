@@ -107,9 +107,9 @@ apresentação** para todos os estudos futuros.
   viabilidade do preço pretendido.
 - 📄 `estudo-de-mercado/PROTOCOLO-ESTUDO-DE-MERCADO.md` — **protocolo operacional**: perguntas
   de abertura, fontes públicas apuradas sem pedir ao cliente (ITBI e IPTU via API da Fazenda,
-  entorno via OpenStreetMap), estrutura das 12 páginas, sistema de design, regras de
+  entorno via OpenStreetMap), estrutura das 13 páginas, sistema de design, regras de
   confidencialidade e checklist de auditoria.
-- 📄 `estudo-de-mercado/MODELO-estudo-de-mercado.html` — **documento aprovado**, A4, 12 páginas,
+- 📄 `estudo-de-mercado/MODELO-estudo-de-mercado.html` — **documento aprovado**, A4, 13 páginas,
   autossuficiente, com logos em base64. Base para copiar. Gerar o PDF com Chrome headless.
 
 **Decisões que valem para todos os estudos:**
