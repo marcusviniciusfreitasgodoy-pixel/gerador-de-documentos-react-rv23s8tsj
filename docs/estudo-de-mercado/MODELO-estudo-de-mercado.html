@@ -379,7 +379,7 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
   </table>
 
   <div class="label mt6">Evolução da mediana · R$ por m²</div>
-  <svg viewBox="0 0 700 200" style="width:100%; height:39mm; margin-top:3mm;">
+  <svg viewBox="0 0 700 200" style="width:100%; height:31mm; margin-top:3mm;">
     <line x1="0" y1="175" x2="700" y2="175" stroke="#d8dce1" stroke-width="1"/>
     <g font-family="acumin-pro, Arial" font-size="12" fill="#8a9099" text-anchor="middle">
       <g>
@@ -394,6 +394,12 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
   </svg>
   <div class="caption">*Janeiro a junho, último período disponível na base oficial na data deste estudo.</div>
 
+  <div class="callout mt5">
+    <div class="label" style="color:#8a7a45">Nota sobre a natureza da base</div>
+    <div class="body mt2">A Secretaria Municipal de Fazenda publica os dados de ITBI <b>agregados por mês</b>, informando o valor médio e a área média das transações de cada período. <b>Não há divulgação de negócios individuais.</b> Os valores desta tabela são, portanto, médias mensais, e a coluna de máximo indica o mês de maior valor médio, não o maior negócio isolado.</div>
+    <div class="body mt2">Foram excluídos os registros com valor médio incompatível com o histórico do logradouro, atribuíveis a inconsistência na origem. <b>O tratamento de valores atípicos é parte da metodologia.</b></div>
+  </div>
+
   <div class="two mt6">
     <div class="grow callout">
       <div class="h-sub">O teto da avenida não subiu em 2026</div>
@@ -405,14 +411,7 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
     </div>
   </div>
 
-  <div class="label mt6">Fontes consultadas</div>
-  <table class="mt3">
-    <tr><th>Fonte</th><th>Base de dados</th><th class="n">Natureza do dado</th></tr>
-    <tr><td>Modelo estatístico sobre ITBI, com ajuste de características</td><td>Transações oficiais registradas</td><td class="n">Negócios fechados</td></tr>
-    <tr><td>Comparativo de anúncios de mercado</td><td>555 anúncios da zona de influência</td><td class="n">Preços pedidos</td></tr>
-    <tr><td>Cadastro do IPTU 2026</td><td>Logradouro CL 091330</td><td class="n">Estoque e área construída</td></tr>
-  </table>
-  <div class="body mt3">As duas primeiras produzem estimativas de valor por caminhos independentes e chegam a resultados distintos. <b>A reconciliação entre elas está na Seção 06</b>, depois de apresentada a amostra que fundamenta a escolha.</div>
+  <div class="body mt5">As duas fontes de valor consultadas, transações registradas e anúncios de mercado, chegam a resultados distintos. <b>A reconciliação entre elas está na Seção 06.</b></div>
 
   <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">04</div></div>
 </div>
@@ -469,7 +468,7 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
 
   <div class="body mt3">Aplicar a média geral (R$ 15.568/m²) superestimaria o imóvel em <b>4,1%</b>, porque ela é puxada pelas unidades de 186 m². <b>A cobertura duplex de 375 m², anunciada por R$ 4.800.000, é a confirmação mais forte do fator de escala:</b> é a unidade mais nobre do condomínio, com frente-mar, terraço, área gourmet, quatro quartos, seis banheiros e três vagas mais box, e ainda assim seu valor unitário é o mais baixo de toda a amostra. O gradiente se mantém consistente de 170 m² até 375 m².</div>
 
-  <div class="body mt3">Este ponto é essencial para interpretar o teto da avenida: os valores unitários mais altos da via pertencem a apartamentos pequenos. O máximo de 2026, R$ 17.798/m², foi registrado em um mês cuja área média transacionada era de <b>141 m²</b>. Nenhum mês de 2026 com apartamentos grandes se aproximou desse patamar.</div>
+  <div class="body mt3">O mecanismo por trás desse gradiente é a <b>liquidez</b>: quanto menor o imóvel, maior o número de compradores capazes de adquiri-lo, e maior a disputa que sustenta o valor por metro quadrado. Metragens grandes têm público proporcionalmente menor, e o mercado compensa isso reduzindo o preço unitário, ainda que o preço total seja maior. É por isso que o teto de R$/m² da avenida <b>não é transponível para 225 m² sem justificativa qualitativa</b>.</div>
 
   <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">05</div></div>
 </div>
@@ -576,13 +575,13 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
         <tr><td>Máximo do ITBI em 2025</td><td class="n">R$ 4.020.525</td></tr>
         <tr><td>Máximo do ITBI em 2026</td><td class="n">R$ 4.004.604</td></tr>
       </table>
-      <div class="body mt2">R$ 4.000.000 corresponde a <b>R$ 17.778/m²</b> para os 225 m² deste imóvel. Em 1.631 transações registradas em seis anos, <b>nenhuma foi fechada a valor unitário superior a R$ 17.869/m²</b>. O limite, portanto, é de valor por metro quadrado, e é essa a base de comparação pertinente.</div>
+      <div class="body mt2">R$ 4.000.000 corresponde a <b>R$ 17.778/m²</b> para os 225 m² deste imóvel. Em seis anos de série mensal, <b>nenhum mês registrou valor médio superior a R$ 17.869/m²</b>. O limite é de valor por metro quadrado, e é essa a base de comparação pertinente.</div>
     </div>
     <div class="grow note">
       <div class="h-sub">2 · A tendência</div>
       <div class="body mt2">Como o mercado da via parou de subir em 2026, não há valorização projetada que empurre esse teto para cima no curto prazo. <b>O teto de hoje é o teto do ano.</b></div>
       <div class="h-sub mt4">3 · O produto</div>
-      <div class="body mt2">Os valores unitários no topo da avenida pertencem a apartamentos pequenos. Para 225 m², tanto o estrato de área quanto o próprio bloco apontam para cerca de R$ 15.000/m². Pleitear R$ 17.778/m² só se sustenta pelo pacote de atributos deste imóvel.</div>
+      <div class="body mt2">O valor por metro quadrado responde à liquidez, e metragens grandes têm público comprador proporcionalmente menor. Para 225 m², tanto o estrato de área quanto o próprio bloco apontam para cerca de R$ 15.000/m². Pleitear R$ 17.778/m² só se sustenta pelo pacote de atributos deste imóvel.</div>
     </div>
   </div>
 
@@ -666,7 +665,7 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
   </div>
 
   <div class="callout mt6">
-    <div class="body"><b>Sobre o teto de R$ 4.000.000.</b> É o máximo defensável para divulgação, e não o valor de mercado. Corresponde a R$ 17.778/m², praticamente idêntico ao maior valor unitário já registrado em transação oficial nesta avenida: R$ 17.869/m² em 2025 e R$ 17.798/m² em 2026. Em <b>1.631 negócios registrados nos últimos seis anos, nenhum foi fechado a valor unitário superior</b>. Há na avenida transações de preço total mais alto, em imóveis de metragem maior, mas nenhuma a um valor por metro quadrado acima desse patamar, que é a base de comparação pertinente para este imóvel.</div>
+    <div class="body"><b>Sobre o teto de R$ 4.000.000.</b> É o máximo defensável para divulgação, e não o valor de mercado. Corresponde a R$ 17.778/m², praticamente idêntico ao maior valor unitário já registrado em transação oficial nesta avenida: R$ 17.869/m² em 2025 e R$ 17.798/m² em 2026. Em seis anos de série mensal, cobrindo <b>1.631 negócios, nenhum mês registrou valor médio superior a esse patamar</b>. Há na avenida transações de preço total mais alto, em imóveis de metragem maior, o que não altera o limite unitário, que é a base de comparação pertinente para este imóvel.</div>
   </div>
 
   <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">09</div></div>
@@ -719,7 +718,7 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
 
   <div class="kpi-row mt8">
     <div class="kpi"><div class="v">4</div><div class="k">métodos independentes convergindo para a mesma faixa de valor</div></div>
-    <div class="kpi"><div class="v">1.631</div><div class="k">transações oficiais analisadas, nenhuma acima de R$ 17.869/m²</div></div>
+    <div class="kpi"><div class="v">1.631</div><div class="k">transações oficiais analisadas, sem nenhum mês acima de R$ 17.869/m²</div></div>
     <div class="kpi"><div class="v">18,75%</div><div class="k">do condomínio à venda, disputando o mesmo comprador</div></div>
     <div class="kpi"><div class="v">4,3%</div><div class="k">valorização ao ano, após a estabilização de 2026</div></div>
   </div>
@@ -727,7 +726,7 @@ tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:60
   <div class="mt8">
     <div class="body">Quatro métodos independentes convergem para a faixa de <b>R$ 3,37 a R$ 3,57 milhões</b>. O conjunto de atributos do imóvel, com vista frontal para o mar, reforma integral, três vagas de garagem e metragem 47% acima da média da avenida, sustenta o posicionamento no topo dessa faixa. Daí o valor provável de mercado de <b>R$ 3.550.000</b>.</div>
 
-    <div class="body mt3">O teto de R$ 4.000.000 decorre do maior <b>valor por metro quadrado</b> que esta avenida já registrou. Em 1.631 transações em seis anos, <b>nenhuma foi fechada acima de R$ 17.869/m²</b>, e esse limite, aplicado aos 225 m² do imóvel, equivale a cerca de R$ 4.020.000. A avenida tem negócios de preço total superior, sempre em imóveis de metragem maior, o que não altera o limite unitário. Some-se a isso que a curva de valorização da via deixou de subir em 2026 e que há uma unidade do próprio condomínio pedindo exatamente esse valor, ainda à venda. O teto, portanto, não é projeção: é limite observado.</div>
+    <div class="body mt3">O teto de R$ 4.000.000 decorre do maior <b>valor por metro quadrado</b> que esta avenida já registrou. Em seis anos de série mensal, cobrindo 1.631 negócios, <b>nenhum mês registrou valor médio acima de R$ 17.869/m²</b>, e esse limite, aplicado aos 225 m² do imóvel, equivale a cerca de R$ 4.020.000. A avenida tem negócios de preço total superior, sempre em imóveis de metragem maior, o que não altera o limite unitário. Some-se a isso que a curva de valorização da via deixou de subir em 2026 e que há uma unidade do próprio condomínio pedindo exatamente esse valor, ainda à venda. O teto, portanto, não é projeção: é limite observado.</div>
 
     <div class="body mt3">Entre esses dois pontos está a faixa de trabalho. E em um mercado no qual quase uma em cada cinco unidades do condomínio disputa o mesmo comprador, o preço não determina apenas quanto se recebe: determina <b>se o imóvel chega a ser visitado</b>.</div>
   </div>

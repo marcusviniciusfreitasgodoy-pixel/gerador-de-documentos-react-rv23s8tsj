@@ -97,6 +97,15 @@ Nunca pedir estes dados a ele. São públicos e eu apuro.
 - Consolidar **todos os bairros** em que o logradouro aparece. Vias de divisa aparecem repartidas.
 - **Incluir o ano corrente** como linha parcial sinalizada. A ferramenta do Analytics o exclui por
   padrão, e foi justamente o ano corrente que revelou a virada do mercado no caso Lúcio Costa.
+- **A base é agregada por mês.** Cada linha traz `média_valor_transação` e `média_área_construída`
+  de um período. **Não existe transação individual publicada.** Portanto o máximo apurado é o
+  **mês de maior valor médio**, nunca o maior negócio isolado. Nunca escrever "nenhuma transação
+  foi fechada acima de X": o dado não permite essa afirmação. O correto é "nenhum mês registrou
+  valor médio acima de X", e o documento deve **declarar a natureza agregada da base**.
+- **Excluir valores atípicos, e declarar que foram excluídos sem citar o número.** A série tem
+  lançamentos claramente inconsistentes (no caso Lúcio Costa, um mês implicando R$ 50.769/m²).
+  Citar a cifra excluída planta no cliente um número alto que ele pode tentar usar; declarar o
+  tratamento sem a cifra preserva o rigor sem criar o problema.
 - **Não misturar séries de origens diferentes na mesma tabela.** Se as linhas antigas vierem da
   ferramenta (que apara outliers) e a nova da apuração direta (que não apara), ou se recalcula tudo
   na mesma base, ou se omite a coluna afetada. A coluna de mínimo é a mais sensível e raramente
