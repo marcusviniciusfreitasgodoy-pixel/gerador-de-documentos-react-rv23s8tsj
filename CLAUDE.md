@@ -84,7 +84,7 @@ rode `npm install` se for executar o app.
 
 ## ✅ Próximos passos (lista viva — atualizar a cada sessão)
 
-_Última atualização: 2026-08-11_
+_Última atualização: 2026-08-12_
 
 **Estado atual:** projeto estável e funcional. Branch de trabalho:
 `claude/last-contact-action-review-2oa1uz`. Sem PRs abertos. Sem trabalho pela metade
@@ -94,25 +94,45 @@ identificado no código.
 Promessa Financiada (`PromessaFinanciadaForm.tsx`) — verificado como completo
 (formulário → validação Zod → template `.docx`).
 
-### 🏠 Negócio/projeto em andamento: modelo de Relatório de Avaliação
-Analisamos o relatório final de avaliação da **Av. Geremário Dantas, 472 · Pechincha**
-(cliente Anna, Godoy Prime Realty, v5 de 04/08/2026, no Google Drive) e extraímos um
-**modelo replicável** para avaliar outros imóveis:
-- 📄 `docs/modelo-relatorio-avaliacao-imovel.md` — estrutura (7 seções), checklist de
-  insumos, método (comparativo + ITBI, depuração de duplicidades, convergência de dois
-  métodos, três faixas de liquidez) e placeholders `{{ }}`.
-- Base normativa: **NBR 14.653/ABNT + COFECI**.
+### 🏠 Estudo de Mercado: padrão fechado em 12/08/2026
+
+O modelo de avaliação foi calibrado com um segundo caso real (**Av. Lúcio Costa, 3.606,
+Condomínio Beton, Barra da Tijuca**, um apartamento) e virou **padrão oficial de estrutura e
+apresentação** para todos os estudos futuros.
+
+**Documentação, em `docs/`:**
+- 📄 `modelo-relatorio-avaliacao-imovel.md` — **v2 do método**, com 11 calibrações sobre a v1.
+  As mais importantes: estratificação por faixa de área (fator de escala), remoção do
+  auto-comparável, âncora dominial, reconciliação de fontes automatizadas e teste de
+  viabilidade do preço pretendido.
+- 📄 `estudo-de-mercado/PROTOCOLO-ESTUDO-DE-MERCADO.md` — **protocolo operacional**: perguntas
+  de abertura, fontes públicas apuradas sem pedir ao cliente (ITBI e IPTU via API da Fazenda,
+  entorno via OpenStreetMap), estrutura das 12 páginas, sistema de design, regras de
+  confidencialidade e checklist de auditoria.
+- 📄 `estudo-de-mercado/MODELO-estudo-de-mercado.html` — **documento aprovado**, A4, 12 páginas,
+  autossuficiente, com logos em base64. Base para copiar. Gerar o PDF com Chrome headless.
+
+**Decisões que valem para todos os estudos:**
+- O documento se chama **Estudo de Mercado**, não "Relatório de Avaliação": evita a conotação de
+  PTAM da NBR 14.653, coerente com as ressalvas que ele declara.
+- **O valor só aparece na Seção 07**, ao final. A Seção 01 traz identificação e um roteiro.
+- **Sem percentuais de ajuste por atributo** e sem número isolado para o valor de um atributo.
+- **Todo preço é preço de venda com a comissão de 5% dentro**, sempre com a coluna de líquido.
+- **Nada que só fonte confidencial forneça** entra no documento do cliente. Certidão gera uma
+  nota interna separada, que **não é versionada** por conter dado pessoal.
 
 ### A fazer (preencher conforme surgir)
-- [ ] Decidir se o relatório de avaliação vira um **gerador no app**
+- [ ] Decidir se o estudo de mercado vira um **gerador no app**
       (`Form → Helpers → Template → Docx`), com cálculo automático (média, desvio, CV,
-      convergência) — seria uma feature nova e faseada.
-- [ ] (Opcional) Analisar o **layout visual** dos PDFs no Drive (capa, gráfico de barras,
-      fotos, tipografia) caso queira replicar também o design entregue ao cliente.
-- [ ] Testar o modelo com um novo imóvel real para calibrar o molde.
+      estratificação, convergência) e saída no layout já aprovado — feature nova e faseada.
+- [x] ~~Analisar o layout visual e replicar o design entregue ao cliente~~ — feito: o layout
+      está implementado em `MODELO-estudo-de-mercado.html`.
+- [x] ~~Testar o modelo com um novo imóvel real para calibrar o molde~~ — feito com o
+      Av. Lúcio Costa 3.606; gerou 11 calibrações no método.
 
 ### Ideias / backlog
-- [ ] _(itens sem data definida)_
+- [ ] Automatizar a apuração de ITBI e IPTU dentro do app, hoje feita por chamada direta à API
+      ArcGIS da Fazenda do Rio (endpoints no protocolo).
 
 > 💡 Dica: sempre que decidir "amanhã eu mexo em X", anote em **A fazer** acima e peça
 > *"faz commit e push"*. Assim você retoma exatamente daqui, em qualquer máquina.

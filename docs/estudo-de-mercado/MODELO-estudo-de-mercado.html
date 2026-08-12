@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Estudo de Mercado — modelo Godoy Prime Realty</title>
+<meta name="hz:slide-selector" content=".page">
+<meta name="hz:canvas-width" content="794">
+<meta name="hz:canvas-height" content="1123">
+<link rel="stylesheet" href="https://use.typekit.net/bye1efb.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+@page { size: A4; margin: 0; }
+
+body {
+  background:#e8e8e8;
+  font-family:"acumin-pro", "Helvetica Neue", Arial, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.page {
+  position:relative;
+  width:210mm;
+  height:297mm;
+  background:#ffffff;
+  overflow:hidden;
+  margin:0 auto 8mm auto;
+  padding:18mm 18mm 16mm 18mm;
+  color:#2b2f36;
+}
+@media print { .page { margin:0; break-after:page; } .page:last-child { break-after:auto; } }
+
+/* ---------- tipografia ---------- */
+.display   { font-family:"minion-3", "Times New Roman", serif; font-weight:600; color:#0C2340; line-height:1.06; letter-spacing:-0.01em; }
+.h-section { font-family:"minion-3", "Times New Roman", serif; font-weight:600; font-size:19pt; color:#0C2340; line-height:1.15; }
+.h-sub     { font-family:"acumin-pro", Arial, sans-serif; font-weight:600; font-size:10pt; color:#0C2340; letter-spacing:.06em; text-transform:uppercase; }
+.body      { font-family:"acumin-pro", Arial, sans-serif; font-weight:400; font-size:8.8pt; line-height:1.48; color:#3a3f47; }
+.body b, .body strong { font-weight:600; color:#1d2229; }
+.lead      { font-family:"acumin-pro", Arial, sans-serif; font-weight:300; font-size:10.4pt; line-height:1.45; color:#4a5058; }
+.label     { font-family:"acumin-pro", Arial, sans-serif; font-weight:600; font-size:7pt; letter-spacing:.14em; text-transform:uppercase; color:#8a9099; }
+.caption   { font-family:"acumin-pro", Arial, sans-serif; font-weight:400; font-size:7.4pt; line-height:1.45; color:#8a9099; font-style:italic; }
+.num       { font-family:"acumin-pro", Arial, sans-serif; font-weight:600; font-variant-numeric:tabular-nums; }
+
+/* ---------- cabeçalho / rodapé ---------- */
+.sec-head { display:flex; align-items:baseline; gap:5mm; border-bottom:.5pt solid #d8dce1; padding-bottom:3mm; margin-bottom:6mm; }
+.sec-num  { font-family:"minion-3", serif; font-weight:600; font-size:11pt; color:#D4AF37; letter-spacing:.02em; }
+.foot { position:absolute; left:18mm; right:18mm; bottom:7.5mm; text-align:center;
+        font-family:"acumin-pro", Arial, sans-serif; font-size:6.6pt; letter-spacing:.08em; text-transform:uppercase; color:#a9aeb5; border-top:.5pt solid #e4e7ea; padding-top:2.6mm; }
+.foot .cred { margin-top:1.4mm; color:#b9bec5; letter-spacing:.05em; }
+.foot .pg { position:absolute; right:0; top:2.6mm; color:#8a9099; font-weight:600; letter-spacing:.1em; }
+
+/* ---------- marca ---------- */
+.mark { line-height:1; }
+.mark .g { font-family:"minion-3", serif; font-weight:600; font-size:17pt; color:#0C2340; letter-spacing:.24em; }
+.mark .s { font-family:"acumin-pro", Arial, sans-serif; font-weight:600; font-size:5.6pt; letter-spacing:.42em; color:#D4AF37; margin-top:1.5mm; }
+.rule-gold { width:22mm; height:2pt; background:#D4AF37; }
+
+/* ---------- capa ---------- */
+.cover { padding:0; background:#0C2340; color:#fff; }
+.cover-inner { position:absolute; inset:0; padding:20mm 18mm 16mm 18mm; display:flex; flex-direction:column; }
+.cover .mark .g { color:#fff; }
+.cover-art { position:absolute; right:-30mm; top:52mm; width:150mm; height:150mm; border:.75pt solid rgba(212,175,55,.28); border-radius:50%; }
+.cover-art2 { position:absolute; right:6mm; top:96mm; width:78mm; height:78mm; border:.75pt solid rgba(212,175,55,.18); border-radius:50%; }
+.cover-band { position:absolute; left:0; right:0; bottom:0; height:34mm; background:#08192f; }
+
+/* ---------- tabelas ---------- */
+table { width:100%; border-collapse:collapse; font-family:"acumin-pro", Arial, sans-serif; }
+th { font-size:6.5pt; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#0C2340;
+     text-align:left; padding:1.9mm 1.6mm; border-bottom:.75pt solid #0C2340; white-space:nowrap; }
+td { font-size:8.1pt; padding:1.55mm 1.6mm; border-bottom:.4pt solid #e6e9ec; color:#3a3f47; vertical-align:top; }
+td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+td.bul { width:4.5mm; color:#D4AF37; font-weight:600; padding-right:0; }
+tr.hl td { background:#fbf7ea; font-weight:600; color:#1d2229; }
+tr.total td { border-top:.75pt solid #0C2340; border-bottom:none; font-weight:600; color:#0C2340; }
+
+/* ---------- blocos ---------- */
+.result { background:#0C2340; color:#fff; padding:7mm 8mm; }
+.result .label { color:rgba(255,255,255,.55); }
+.result .v { font-family:"minion-3", serif; font-weight:600; font-size:30pt; line-height:1; color:#fff; letter-spacing:-0.015em; }
+.result .u { font-size:8.4pt; color:#D4AF37; font-weight:600; margin-top:1.5mm; }
+
+.ladder { display:flex; gap:0; margin-top:5mm; }
+.rung { flex:1; padding:3.5mm 2mm; border-top:2.5pt solid #d8dce1; }
+.rung.on { border-top-color:#D4AF37; }
+.rung .k { font-size:6.2pt; letter-spacing:.08em; text-transform:uppercase; color:#8a9099; font-weight:600; line-height:1.3; min-height:7mm; }
+.rung .v { font-family:"acumin-pro", sans-serif; font-weight:600; font-size:10.6pt; color:#0C2340; margin-top:1.5mm; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.rung.on .v { font-size:12pt; color:#0C2340; }
+.rung .n { font-size:6.6pt; color:#8a9099; margin-top:1mm; white-space:nowrap; }
+
+.callout { border-left:2.5pt solid #D4AF37; background:#fbf9f2; padding:4.5mm 5mm; }
+.callout .body { color:#4a4433; }
+.note { border-left:1.5pt solid #d8dce1; padding-left:4mm; }
+
+.kpi-row { display:flex; gap:4mm; }
+.kpi { flex:1; border-top:1.5pt solid #0C2340; padding-top:3mm; }
+.kpi .v { font-family:"minion-3", serif; font-weight:600; font-size:20pt; color:#0C2340; line-height:1; }
+.kpi .k { font-size:7pt; color:#8a9099; margin-top:2mm; line-height:1.35; }
+
+.two { display:flex; gap:8mm; }
+.grow { flex:1; }
+.mt2{margin-top:2mm}.mt3{margin-top:3mm}.mt4{margin-top:4mm}.mt5{margin-top:5mm}.mt6{margin-top:6mm}.mt8{margin-top:8mm}
+.gold{color:#D4AF37}.navy{color:#0C2340}
+</style>
+</head>
+<body>
+
+<!-- ============ CAPA ============ -->
+<div class="page cover" data-canvas-width="794" data-canvas-height="1123">
+  <div class="cover-art"></div>
+  <div class="cover-art2"></div>
+  <div class="cover-band"></div>
+  <div class="cover-inner">
+    <img src="data:image/png;base64,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" alt="Godoy Prime Realty" style="width:23mm; height:auto; display:block;">
+
+    <div style="margin-top:46mm; position:relative;">
+      <div class="rule-gold"></div>
+      <div class="label" style="color:#D4AF37; margin-top:6mm;">Estudo de Mercado</div>
+      <div class="display" style="font-size:41pt; color:#fff; margin-top:4mm;">Valor de<br>Mercado</div>
+      <div style="font-family:'acumin-pro',sans-serif; font-weight:300; font-size:13pt; color:rgba(255,255,255,.82); margin-top:8mm; line-height:1.45;">
+        Avenida Lúcio Costa, 3.606 — 2º andar<br>
+        Condomínio Beton · Barra da Tijuca<br>
+        Rio de Janeiro / RJ
+      </div>
+    </div>
+
+    <div style="margin-top:auto; position:relative; z-index:2; color:#fff;">
+      <div style="display:flex; gap:14mm;">
+        <div>
+          <div class="label" style="color:rgba(255,255,255,.5)">Solicitante</div>
+          <div style="font-size:9.6pt; margin-top:1.5mm;">{{NOME_DO_SOLICITANTE}}</div>
+        </div>
+        <div>
+          <div class="label" style="color:rgba(255,255,255,.5)">Data</div>
+          <div style="font-size:9.6pt; margin-top:1.5mm;">11 de agosto de 2026</div>
+        </div>
+      </div>
+      <div style="margin-top:7mm;">
+        <div class="label" style="color:rgba(255,255,255,.5)">Avaliador</div>
+        <div style="font-size:9.6pt; margin-top:1.5mm;">Marcus Godoy · CRECI 80199-PF</div>
+        <div style="font-size:8.4pt; color:#D4AF37; margin-top:1.5mm;">Perito Avaliador Credenciado no Tribunal de Justiça</div>
+        <div style="font-size:8pt; color:rgba(255,255,255,.6); margin-top:2.5mm; line-height:1.5;">
+          Godoy Prime Realty · CRECI 11841-PJ<br>
+          Av. das Américas, 10101, Bloco 2, Sala 316 · (21) 4040-0067 · www.godoyprime.com.br
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 01 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">01</span><span class="h-section">Identificação do imóvel</span></div>
+
+  <div class="two">
+    <div class="grow">
+      <div class="label">Características do imóvel</div>
+      <table class="mt3">
+        <tr><td style="color:#8a9099">Endereço</td><td class="n">Av. Lúcio Costa, 3.606</td></tr>
+        <tr><td style="color:#8a9099">Condomínio</td><td class="n">Beton</td></tr>
+        <tr><td style="color:#8a9099">Bairro</td><td class="n">Barra da Tijuca</td></tr>
+        <tr><td style="color:#8a9099">Tipo</td><td class="n">Apartamento padrão</td></tr>
+        <tr><td style="color:#8a9099">Área privativa</td><td class="n">225 m²</td></tr>
+        <tr><td style="color:#8a9099">Pavimento</td><td class="n">2º de 5</td></tr>
+        <tr><td style="color:#8a9099">Quartos</td><td class="n">4, sendo 2 suítes</td></tr>
+        <tr><td style="color:#8a9099">Banheiros</td><td class="n">3</td></tr>
+        <tr><td style="color:#8a9099">Vagas de garagem</td><td class="n">3</td></tr>
+        <tr><td style="color:#8a9099">Idade da edificação</td><td class="n">≈ 48 anos, reformado</td></tr>
+        <tr><td style="color:#8a9099">Situação de mercado</td><td class="n">Não anunciado</td></tr>
+      </table>
+    </div>
+    <div class="grow">
+      <div class="label">Custo de ocupação estimado</div>
+      <table class="mt3">
+        <tr><td style="color:#8a9099">Condomínio</td><td class="n">≈ R$ 3.500 / mês</td></tr>
+        <tr><td style="color:#8a9099">IPTU</td><td class="n">≈ R$ 1.600 / mês</td></tr>
+        <tr class="total"><td>Total</td><td class="n">≈ R$ 61.000 / ano</td></tr>
+      </table>
+      <div class="caption mt3">Estimado por rateio proporcional à área, a partir dos valores declarados em anúncio de outra unidade do próprio condomínio. O rateio efetivo se dá por fração ideal.</div>
+
+      <div class="label mt6">Finalidade</div>
+      <div class="body mt2">Determinar o valor de mercado para fins de compra e venda, orientando as partes na definição de um preço condizente com o mercado local.</div>
+      <div class="caption mt3">Opinião técnica de valor fundamentada em transações oficiais registradas, pesquisa de mercado e vistoria indireta. Orientada pelos critérios da NBR 14.653 da ABNT e pelas diretrizes do COFECI. Ver ressalvas ao final do documento.</div>
+    </div>
+  </div>
+
+  <div class="label mt8">Como este estudo foi construído</div>
+
+  <div class="mt4" style="display:flex; gap:6mm;">
+    <div style="flex:1;">
+      <div style="border-top:1.5pt solid #0C2340; padding-top:3mm;">
+        <div class="sec-num" style="font-size:9pt;">02 · 03</div>
+        <div class="h-sub mt2">O imóvel e a região</div>
+        <div class="body mt2">O que o imóvel tem, em que estado está, e o que a localização oferece e cobra. Inclui a caracterização do Condomínio Beton e a medição do entorno.</div>
+      </div>
+    </div>
+    <div style="flex:1;">
+      <div style="border-top:1.5pt solid #0C2340; padding-top:3mm;">
+        <div class="sec-num" style="font-size:9pt;">04</div>
+        <div class="h-sub mt2">Os dados oficiais</div>
+        <div class="body mt2">Seis anos de transações registradas na Secretaria Municipal de Fazenda para esta avenida: <b>1.631 negócios</b>, ano a ano, com mediana e máximo por metro quadrado.</div>
+      </div>
+    </div>
+    <div style="flex:1;">
+      <div style="border-top:1.5pt solid #0C2340; padding-top:3mm;">
+        <div class="sec-num" style="font-size:9pt;">05</div>
+        <div class="h-sub mt2">O mercado hoje</div>
+        <div class="body mt2">555 anúncios na região, depurados até os comparáveis reais. Todos eles estão no próprio Condomínio Beton, o que torna a comparação a mais rigorosa possível.</div>
+      </div>
+    </div>
+    <div style="flex:1;">
+      <div style="border-top:1.5pt solid #D4AF37; padding-top:3mm;">
+        <div class="sec-num" style="font-size:9pt;">06 · 07</div>
+        <div class="h-sub mt2">O valor</div>
+        <div class="body mt2">A convergência dos métodos, o posicionamento do imóvel e a recomendação de preço, com o líquido correspondente a cada cenário de venda.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="label mt8">Base do estudo</div>
+  <div class="two mt3">
+    <div class="grow">
+      <table>
+        <tr><td style="color:#8a9099">Método</td><td class="n">Comparativo Direto de Dados de Mercado</td></tr>
+        <tr><td style="color:#8a9099">Validação</td><td class="n">Transações oficiais · base ITBI</td></tr>
+        <tr><td style="color:#8a9099">Logradouro pesquisado</td><td class="n">CL 091330</td></tr>
+      </table>
+    </div>
+    <div class="grow">
+      <table>
+        <tr><td style="color:#8a9099">Período dos dados oficiais</td><td class="n">2021 a junho de 2026</td></tr>
+        <tr><td style="color:#8a9099">Transações analisadas</td><td class="n">1.631</td></tr>
+        <tr><td style="color:#8a9099">Anúncios pesquisados</td><td class="n">555</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="caption mt6">Todos os valores apresentados neste estudo são preços de venda, com a comissão de corretagem de 5% já contida neles. A conversão para o líquido ao proprietário consta da Seção 07.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">01</div></div>
+</div>
+
+<!-- ============ 02 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">02</span><span class="h-section">O imóvel e seu estado de conservação</span></div>
+
+  <div class="lead">Apartamento de 4 quartos, 2 suítes, 3 banheiros e 3 vagas de garagem em subsolo, no 2º pavimento do Condomínio Beton, na orla da Barra da Tijuca, com frente própria para a Avenida Lúcio Costa e vista frontal para o mar.</div>
+
+  <div class="two mt6">
+    <div class="grow">
+      <div class="label">Atributos considerados na avaliação</div>
+      <table class="mt3">
+        <tr><td class="bul">•</td><td>Vista frontal para o mar</td></tr>
+        <tr><td class="bul">•</td><td>Reforma integral</td></tr>
+        <tr><td class="bul">•</td><td>Lazer completo</td></tr>
+        <tr><td class="bul">•</td><td>Frente própria</td></tr>
+        <tr><td class="bul">•</td><td>Sol da manhã</td></tr>
+        <tr><td class="bul">•</td><td>Portaria 24h</td></tr>
+        <tr><td class="bul">•</td><td>Terceira vaga de garagem</td></tr>
+        <tr><td class="bul">•</td><td>Elevador</td></tr>
+        <tr><td class="bul">•</td><td>Monitoramento por câmeras</td></tr>
+        <tr><td class="bul">•</td><td>Dependência de empregada</td></tr>
+      </table>
+      <div class="caption mt3">Cada atributo foi ponderado no modelo conforme o impacto que o mercado atribui a ele. O conjunto posiciona o imóvel acima da média do estoque da avenida e é o que sustenta o pleito pelo topo da faixa de preço da via.</div>
+    </div>
+    <div class="grow">
+      <div class="label">O condomínio</div>
+      <div class="body mt2">O Beton é um condomínio de prédios que ocupa os números 3.606, 3.626, 3.636 e 3.646 da Avenida Lúcio Costa. São edificações separadas, de <b>apenas cinco pavimentos</b>, com poucas unidades por andar, recuadas em relação à avenida.</div>
+      <div class="body mt3">Esse padrão de baixo gabarito e baixa densidade é o oposto do modelo de torre que domina o restante da orla, e é o que produz apartamentos de metragem generosa: os 225 m² deste imóvel estão <b>47% acima da média da avenida</b>. Em um mercado majoritariamente de torres, um conjunto de cinco andares em frente-mar é produto escasso.</div>
+
+      <div class="label mt5">O pavimento</div>
+      <div class="body mt2">O imóvel está no 2º de 5 andares, a 40% da altura da edificação. É posição intermediária em prédio baixo, e não andar baixo em torre: o equivalente proporcional em um edifício de 20 pavimentos seria o 8º andar.</div>
+      <div class="body mt3">Em edificações de cinco pavimentos a diferença de valor entre o primeiro e o último andar é comprimida, porque a vista e a insolação variam pouco ao longo da altura. Somado ao recuo do prédio em relação à avenida, isso preserva o aproveitamento da vista frontal para o mar mesmo nos pavimentos inferiores.</div>
+    </div>
+  </div>
+
+  <div class="callout mt6">
+    <div class="label" style="color:#8a7a45">Base da verificação do estado de conservação</div>
+    <div class="body mt2">A constatação de reforma integral e o estado geral de conservação foram apurados por <b>vistoria indireta</b>, mediante análise de registro audiovisual do imóvel. <b>Não houve vistoria presencial.</b></div>
+    <div class="body mt2">A reforma é o principal diferencial do imóvel frente aos concorrentes do próprio condomínio, e as consequências de sua eventual não confirmação em vistoria presencial estão quantificadas na Seção 07. As demais ressalvas quanto à natureza e aos limites deste estudo constam ao final do documento.</div>
+  </div>
+
+  <div class="label mt5">Como a reforma foi tratada no valor</div>
+  <div class="body mt2"><b>Custo de obra e valor de mercado são grandezas distintas.</b> O mercado não paga pelo que foi desembolsado: paga pelo estado de conservação que encontra. Em revenda, reformas residenciais recuperam tipicamente entre <b>50% e 70% do custo</b>, e o percentual cai à medida que a obra envelhece, porque acabamentos, louças, metais e marcenaria se desatualizam.</div>
+  <div class="body mt3">Neste estudo, <b>a reforma está integralmente reconhecida no valor apurado</b>, e é o atributo de maior peso entre os que diferenciam este imóvel dos concorrentes do próprio condomínio. O custo efetivo da obra não foi informado e não integra o cálculo: a avaliação parte do estado de conservação observado, e não de valores de investimento. O benefício da reforma, aliás, <b>não se acumula com o tempo, decai</b>: uma reforma recente sustenta prêmio maior que uma reforma de alguns anos, ainda que o padrão do acabamento permaneça alto.</div>
+  <div class="body mt3">A dimensão desse reconhecimento está demonstrada na <b>Seção 07</b>: a tabela de condicionante apresenta a escala de preço com e sem a confirmação da reforma, e a diferença entre as duas colunas é exatamente o que ela representa neste estudo.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">02</div></div>
+</div>
+
+<!-- ============ 03 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">03</span><span class="h-section">A região</span></div>
+
+  <div class="lead">Orla da Barra da Tijuca, na Avenida Lúcio Costa (antiga Sernambetiba), via litorânea de frente para a praia. O imóvel situa-se <b style="color:#0C2340">entre o Posto 5 e o Posto 6</b>, no trecho conhecido como <b style="color:#0C2340">Beton</b>, denominação que o próprio condomínio deu a este segmento da orla.</div>
+
+  <div class="kpi-row mt6">
+    <div class="kpi"><div class="v">7.660</div><div class="k">apartamentos residenciais tributados na avenida (IPTU 2026)</div></div>
+    <div class="kpi"><div class="v">153 m²</div><div class="k">área média do apartamento da avenida</div></div>
+    <div class="kpi"><div class="v">+47%</div><div class="k">a metragem deste imóvel em relação à média da via</div></div>
+    <div class="kpi"><div class="v">1,05 km</div><div class="k">até a Avenida das Américas</div></div>
+  </div>
+
+  <div class="label mt8">Configuração urbana do trecho</div>
+  <div class="body mt2">Este é um dos pontos em que a Avenida Lúcio Costa corre sobre uma <b>faixa estreita de terra entre a praia e a Lagoa de Marapendi</b>. A consequência é dupla e precisa ser lida nos dois sentidos.</div>
+
+  <div class="two mt4">
+    <div class="grow note">
+      <div class="h-sub">A favor</div>
+      <div class="body mt2">A ocupação é de frente de quadra única, sem malha viária de fundo. Não há tráfego de passagem local, e o trecho tem caráter mais reservado que os setores da Barra servidos por várias ruas paralelas.</div>
+    </div>
+    <div class="grow note">
+      <div class="h-sub">Contra</div>
+      <div class="body mt2">O acesso é concentrado. A ligação com a Avenida das Américas, arterial que reúne o comércio de maior porte e o transporte público, se dá pela Ponte de Marapendi, a cerca de 400 m, transpondo a lagoa.</div>
+    </div>
+  </div>
+
+  <div class="two mt6">
+    <div class="grow">
+      <div class="label">Comércio e serviços</div>
+      <table class="mt3">
+        <tr><td>Farmácia Padrão</td><td class="n">295 m</td></tr>
+        <tr><td>Escola Municipal Golda Meir</td><td class="n">420 m</td></tr>
+        <tr><td>Mercado Barramares</td><td class="n">468 m</td></tr>
+        <tr class="hl"><td>Colégio pH</td><td class="n">524 m</td></tr>
+        <tr><td>Barra Prime</td><td class="n">951 m</td></tr>
+        <tr><td>Centro Universitário IBMR Barra</td><td class="n">1,08 km</td></tr>
+        <tr><td>Pronto Atendimento Unimed Rio</td><td class="n">1,16 km</td></tr>
+        <tr><td>Supermercado Guanabara</td><td class="n">1,21 km</td></tr>
+        <tr><td>Supermercado Zona Sul</td><td class="n">1,34 km</td></tr>
+        <tr><td>Pão de Açúcar</td><td class="n">1,36 km</td></tr>
+      </table>
+    </div>
+    <div class="grow">
+      <div class="label">Transporte público</div>
+      <table class="mt3">
+        <tr><td>BRT TransOeste · Paulo Malta Rezende</td><td class="n">1,10 km</td></tr>
+        <tr><td>BRT TransOeste · Afrânio Costa</td><td class="n">1,18 km</td></tr>
+        <tr><td>BRT TransOeste · Bosque Marapendi</td><td class="n">1,19 km</td></tr>
+        <tr><td>Metrô Linha 4 · Jardim Oceânico</td><td class="n">2,03 km</td></tr>
+      </table>
+
+      <div class="callout mt5">
+        <div class="body"><b>Leitura para efeito de precificação.</b> O trecho resolve bem o cotidiano a pé: farmácia, mercado e duas escolas dentro de 550 m. Já os equipamentos de maior porte e todo o transporte de massa estão além de 1 km e do outro lado da lagoa. Na prática, <b>é uma localização dependente de automóvel</b>, o que valoriza de forma concreta as três vagas de garagem do imóvel e define o perfil do comprador: quem prioriza praia, vista e reserva, não conveniência urbana.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="caption mt6">Distâncias medidas em linha reta a partir da posição do imóvel entre os Postos 5 e 6, com base em cartografia pública. Os percursos viários são superiores às distâncias indicadas, especialmente para destinos além da Lagoa de Marapendi. Dados de estoque: cadastro do IPTU 2026, logradouro CL 091330.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">03</div></div>
+</div>
+
+<!-- ============ 04 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">04</span><span class="h-section">Metodologia aplicada</span></div>
+
+  <div class="body">Método Comparativo Direto de Dados de Mercado, validado por transações oficiais registradas na Secretaria Municipal de Fazenda do Rio de Janeiro (base ITBI). Apuração direta na base oficial, logradouro <b>CL 091330</b>, uso residencial, transferências integrais, consolidando os bairros Barra da Tijuca e Recreio dos Bandeirantes.</div>
+
+  <div class="label mt6">Transações oficiais na avenida</div>
+  <table class="mt3">
+    <tr><th>Ano</th><th class="n">Transações</th><th class="n">Mediana / m²</th><th class="n">Máx / m²</th></tr>
+    <tr><td>2021</td><td class="n">369</td><td class="n">R$ 12.313</td><td class="n">R$ 13.208</td></tr>
+    <tr><td>2022</td><td class="n">289</td><td class="n">R$ 12.589</td><td class="n">R$ 14.500</td></tr>
+    <tr><td>2023</td><td class="n">251</td><td class="n">R$ 13.369</td><td class="n">R$ 14.918</td></tr>
+    <tr><td>2024</td><td class="n">262</td><td class="n">R$ 13.856</td><td class="n">R$ 15.815</td></tr>
+    <tr class="hl"><td>2025</td><td class="n">328</td><td class="n">R$ 15.560</td><td class="n">R$ 17.869</td></tr>
+    <tr class="hl"><td>2026 · jan a jun</td><td class="n">132</td><td class="n">R$ 15.230</td><td class="n">R$ 17.798</td></tr>
+    <tr class="total"><td>Total</td><td class="n">1.631</td><td class="n"></td><td class="n"></td></tr>
+  </table>
+
+  <div class="label mt6">Evolução da mediana · R$ por m²</div>
+  <svg viewBox="0 0 700 200" style="width:100%; height:39mm; margin-top:3mm;">
+    <line x1="0" y1="175" x2="700" y2="175" stroke="#d8dce1" stroke-width="1"/>
+    <g font-family="acumin-pro, Arial" font-size="12" fill="#8a9099" text-anchor="middle">
+      <g>
+        <rect x="22"  y="79"  width="72" height="96"  fill="#c8cfd8"/><text x="58"  y="71">12.313</text><text x="58"  y="192">2021</text>
+        <rect x="132" y="74"  width="72" height="101" fill="#c8cfd8"/><text x="168" y="66">12.589</text><text x="168" y="192">2022</text>
+        <rect x="242" y="59"  width="72" height="116" fill="#a9b4c2"/><text x="278" y="51">13.369</text><text x="278" y="192">2023</text>
+        <rect x="352" y="50"  width="72" height="125" fill="#a9b4c2"/><text x="388" y="42">13.856</text><text x="388" y="192">2024</text>
+        <rect x="462" y="18"  width="72" height="157" fill="#0C2340"/><text x="498" y="10" fill="#0C2340" font-weight="600">15.560</text><text x="498" y="192" fill="#0C2340" font-weight="600">2025</text>
+        <rect x="572" y="24"  width="72" height="151" fill="#D4AF37"/><text x="608" y="16" fill="#8a7a45" font-weight="600">15.230</text><text x="608" y="192" fill="#8a7a45" font-weight="600">2026*</text>
+      </g>
+    </g>
+  </svg>
+  <div class="caption">*Janeiro a junho, último período disponível na base oficial na data deste estudo.</div>
+
+  <div class="two mt6">
+    <div class="grow callout">
+      <div class="h-sub">O teto da avenida não subiu em 2026</div>
+      <div class="body mt2">O máximo de 2025 foi R$ 17.869/m² e o de 2026 até junho, R$ 17.798/m². São, para efeitos práticos, o mesmo número. <b>Não há valorização projetada que empurre esse teto para cima no curto prazo.</b></div>
+    </div>
+    <div class="grow callout">
+      <div class="h-sub">A curva de valorização se estabilizou</div>
+      <div class="body mt2">A mediana passou de R$ 15.560/m² em 2025 para R$ 15.230/m² em 2026, variação de −2,1%. A taxa considerando a série completa de 2021 a 2026 é de <b>4,3% ao ano</b>, e não os 6,6% que se obtinha com a janela encerrada em 2025. O ano de 2025 foi o pico da série, e 2026 acomodou.</div>
+    </div>
+  </div>
+
+  <div class="label mt6">Fontes consultadas</div>
+  <table class="mt3">
+    <tr><th>Fonte</th><th>Base de dados</th><th class="n">Natureza do dado</th></tr>
+    <tr><td>Modelo estatístico sobre ITBI, com ajuste de características</td><td>Transações oficiais registradas</td><td class="n">Negócios fechados</td></tr>
+    <tr><td>Comparativo de anúncios de mercado</td><td>555 anúncios da zona de influência</td><td class="n">Preços pedidos</td></tr>
+    <tr><td>Cadastro do IPTU 2026</td><td>Logradouro CL 091330</td><td class="n">Estoque e área construída</td></tr>
+  </table>
+  <div class="body mt3">As duas primeiras produzem estimativas de valor por caminhos independentes e chegam a resultados distintos. <b>A reconciliação entre elas está na Seção 06</b>, depois de apresentada a amostra que fundamenta a escolha.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">04</div></div>
+</div>
+
+<!-- ============ 05 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">05</span><span class="h-section">Amostragem de mercado</span></div>
+
+  <div class="body">Universo de <b>555 anúncios</b> na zona de influência, dos quais foram selecionados os <b>20 de maior semelhança</b>. O imóvel avaliado não está anunciado e, portanto, não integra a amostra.</div>
+
+  <div class="callout mt4">
+    <div class="body"><b>Os 20 anúncios selecionados, sem exceção, estão nos quatro prédios do próprio Condomínio Beton.</b> Não se trata de uma comparação com imóveis semelhantes da região: é uma comparação com os vizinhos diretos, dentro do mesmo condomínio. Construtora, idade, padrão construtivo, área comum, custo condominial, orientação, vista e localização passam a ser variáveis controladas. É o mais alto grau de comparabilidade que uma avaliação pode alcançar.</div>
+  </div>
+
+  <div class="two mt6">
+    <div class="grow">
+      <div class="label">Depuração por duplicidade</div>
+      <table class="mt3">
+        <tr><th>Imóvel</th><th class="n">Anúncios</th></tr>
+        <tr><td>Nº 3.626 · R$ 3.200.000 · 186 m²</td><td class="n">4</td></tr>
+        <tr><td>Nº 3.626 · R$ 3.300.000 · 186 m²</td><td class="n">2</td></tr>
+        <tr><td>Nº 3.646 · R$ 4.000.000 · 221 m²</td><td class="n">2</td></tr>
+        <tr><td>Nº 3.606 · 225 m², com redução de preço</td><td class="n">2</td></tr>
+        <tr class="total"><td>20 anúncios → 14 elementos distintos</td><td class="n">30%</td></tr>
+      </table>
+      <div class="caption mt2">Taxa de duplicidade: anúncios do mesmo imóvel divulgados por corretores diferentes.</div>
+    </div>
+    <div class="grow">
+      <div class="label">Tratamento estatístico dos unitários</div>
+      <table class="mt3">
+        <tr><td>Média</td><td class="n">R$ 15.568,14 / m²</td></tr>
+        <tr><td>Mediana</td><td class="n">R$ 15.055,56 / m²</td></tr>
+        <tr><td>Desvio-padrão</td><td class="n">R$ 1.818,92</td></tr>
+        <tr class="hl"><td>Coeficiente de variação</td><td class="n">11,68%</td></tr>
+      </table>
+      <div class="caption mt2">CV abaixo de 15%: a amostra é homogênea e a leitura por R$/m² se sustenta.</div>
+    </div>
+  </div>
+
+  <div class="label mt6">Estratificação por faixa de área · o fator de escala</div>
+  <div class="body mt2">O R$/m² cai à medida que a área cresce, o que impede aplicar a média geral a um imóvel de 225 m².</div>
+
+  <svg viewBox="0 0 700 190" style="width:100%; height:38mm; margin-top:3mm;">
+    <g font-family="acumin-pro, Arial" font-size="12" fill="#8a9099">
+      <g text-anchor="middle">
+        <rect x="30"  y="20"  width="120" height="130" fill="#c8cfd8"/><text x="90"  y="13" font-weight="600" fill="#5a616a">R$ 17.544</text><text x="90"  y="167">170 a 186 m²</text><text x="90" y="182" font-size="10">4 unidades</text>
+        <rect x="200" y="60"  width="120" height="90"  fill="#0C2340"/><text x="260" y="53" font-weight="600" fill="#0C2340">R$ 14.957</text><text x="260" y="167" font-weight="600" fill="#0C2340">221 a 230 m²</text><text x="260" y="182" font-size="10" fill="#0C2340">faixa do avaliado · 6</text>
+        <rect x="370" y="67"  width="120" height="83"  fill="#c8cfd8"/><text x="430" y="60" font-weight="600" fill="#5a616a">R$ 14.509</text><text x="430" y="167">240 a 255 m²</text><text x="430" y="182" font-size="10">4 unidades</text>
+        <rect x="540" y="94"  width="120" height="56"  fill="#D4AF37"/><text x="600" y="87" font-weight="600" fill="#8a7a45">R$ 12.800</text><text x="600" y="167" fill="#8a7a45">375 m² · cobertura</text><text x="600" y="182" font-size="10" fill="#8a7a45">duplex</text>
+      </g>
+      <line x1="30" y1="150" x2="660" y2="150" stroke="#d8dce1" stroke-width="1"/>
+    </g>
+  </svg>
+
+  <div class="body mt3">Aplicar a média geral (R$ 15.568/m²) superestimaria o imóvel em <b>4,1%</b>, porque ela é puxada pelas unidades de 186 m². <b>A cobertura duplex de 375 m², anunciada por R$ 4.800.000, é a confirmação mais forte do fator de escala:</b> é a unidade mais nobre do condomínio, com frente-mar, terraço, área gourmet, quatro quartos, seis banheiros e três vagas mais box, e ainda assim seu valor unitário é o mais baixo de toda a amostra. O gradiente se mantém consistente de 170 m² até 375 m².</div>
+
+  <div class="body mt3">Este ponto é essencial para interpretar o teto da avenida: os valores unitários mais altos da via pertencem a apartamentos pequenos. O máximo de 2026, R$ 17.798/m², foi registrado em um mês cuja área média transacionada era de <b>141 m²</b>. Nenhum mês de 2026 com apartamentos grandes se aproximou desse patamar.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">05</div></div>
+</div>
+
+<!-- ============ 05b ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">05</span><span class="h-section">A concorrência dentro do próprio condomínio</span></div>
+
+  <div class="label">As 14 unidades distintas à venda no Condomínio Beton</div>
+  <table class="mt3">
+    <tr><th>Endereço</th><th class="n">Unidades à venda</th><th class="n">R$ / m² médio</th><th class="n">Faixa de pedidos</th></tr>
+    <tr class="hl"><td>Nº 3.606 — bloco do imóvel avaliado</td><td class="n">5</td><td class="n">R$ 15.011</td><td class="n">R$ 2.790.000 a R$ 3.700.000</td></tr>
+    <tr><td>Nº 3.626</td><td class="n">5</td><td class="n">R$ 16.259</td><td class="n">R$ 2.994.999 a R$ 3.700.000</td></tr>
+    <tr><td>Nº 3.636</td><td class="n">2</td><td class="n">R$ 14.418</td><td class="n">R$ 3.400.000 a R$ 3.500.000</td></tr>
+    <tr><td>Nº 3.646</td><td class="n">2</td><td class="n">R$ 16.383</td><td class="n">R$ 3.300.000 a R$ 4.000.000</td></tr>
+    <tr class="total"><td>Condomínio</td><td class="n">14</td><td class="n">R$ 15.568</td><td class="n">R$ 2.790.000 a R$ 4.000.000</td></tr>
+  </table>
+
+  <div class="two mt6">
+    <div class="grow">
+      <div class="label">Unidades à venda no bloco 3.606</div>
+      <table class="mt3">
+        <tr><th>Área</th><th class="n">Pedido</th><th class="n">R$ / m²</th><th class="n">No mercado desde</th></tr>
+        <tr><td>170 m² · 2 vagas</td><td class="n">R$ 2.790.000</td><td class="n">16.412</td><td class="n">27 mai</td></tr>
+        <tr><td>225 m²</td><td class="n">R$ 2.999.999</td><td class="n">13.333</td><td class="n">24 jun</td></tr>
+        <tr><td>225 m²</td><td class="n">R$ 3.490.000</td><td class="n">15.511</td><td class="n">09 jun *</td></tr>
+        <tr><td>240 m²</td><td class="n">R$ 3.600.000</td><td class="n">15.000</td><td class="n">19 jun</td></tr>
+        <tr class="hl"><td>250 m²</td><td class="n">R$ 3.700.000</td><td class="n">14.800</td><td class="n">24 mai</td></tr>
+      </table>
+      <div class="caption mt2">* Anunciado por R$ 3.500.000 em 09 de junho, reduzido para R$ 3.490.000 em 09 de agosto.</div>
+      <div class="body mt4"><b>Média do bloco 3.606: R$ 15.011,24/m²</b>, o que projeta R$ 3.377.529 para 225 m². O resultado fica a <b>0,4%</b> do estrato de área (R$ 3.365.381). Dois recortes independentes chegando ao mesmo número é a validação mais forte desta amostra.</div>
+    </div>
+
+    <div class="grow">
+      <div class="label">Concentração de oferta</div>
+      <div style="border-top:1.5pt solid #D4AF37; margin-top:3mm; padding-top:4mm;">
+        <div style="font-family:'minion-3',serif; font-weight:600; font-size:44pt; color:#D4AF37; line-height:1;">18,75%</div>
+        <div class="body mt2">do condomínio está simultaneamente à venda</div>
+      </div>
+      <table class="mt4">
+        <tr><td>Prédios</td><td class="n">4</td></tr>
+        <tr><td>Pavimentos por prédio</td><td class="n">5</td></tr>
+        <tr><td>Apartamentos por andar</td><td class="n">4</td></tr>
+        <tr class="total"><td>Total de unidades</td><td class="n">80</td></tr>
+        <tr class="hl"><td>À venda hoje (14 + a cobertura)</td><td class="n">15</td></tr>
+      </table>
+      <div class="body mt4">Praticamente <b>uma em cada cinco unidades</b> está anunciada. É concentração muito acima do normal, e ela compete diretamente com o imóvel avaliado: qualquer comprador interessado encontrará outras quatorze opções no mesmo condomínio, com a mesma vista, o mesmo lazer e o mesmo custo condominial, boa parte delas por preço inferior.</div>
+    </div>
+  </div>
+
+  <div class="callout mt5">
+    <div class="body">Este é o principal fator de pressão sobre o prazo de venda. Em um cenário de oferta concentrada, <b>preço acima do mercado não resulta em venda lenta: resulta em ausência de visitas</b>, porque o imóvel é filtrado antes mesmo de ser visitado.</div>
+  </div>
+
+  <div class="label mt5">A referência do topo do condomínio</div>
+  <div class="body mt2">O imóvel mais caro do Condomínio Beton é uma <b>cobertura duplex de 375 m²</b>, com quatro quartos, seis banheiros, terraço, área gourmet, três vagas mais box e vista frontal para o mar, anunciada por <b>R$ 4.800.000</b>. Ela funciona como régua para qualquer pretensão de preço no condomínio. A cobertura tem 67% mais área que o imóvel avaliado, além de dois pavimentos, terraço e área gourmet.</div>
+  <div class="body mt3">Seu valor unitário, de <b>R$ 12.800/m²</b>, é o mais baixo de toda a amostra, o que confirma o fator de escala demonstrado na página anterior. A comparação entre esse patamar e a recomendação de preço deste estudo está na Seção 06.</div>
+  <div class="caption mt3">O anúncio consultado registra o endereço no campo de cadastro como "Avenida das Américas", em aparente inconsistência do portal, uma vez que o mesmo corretor publica o Condomínio Beton na Avenida Lúcio Costa. A pertinência ao condomínio foi confirmada e os valores unitário, de condomínio e de IPTU são consistentes com o restante da amostra.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">06</div></div>
+</div>
+
+<!-- ============ 06 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">06</span><span class="h-section">Convergência e posicionamento</span></div>
+
+  <div class="label">Convergência dos métodos</div>
+  <table class="mt3">
+    <tr><th>Referência</th><th class="n">Valor para 225 m²</th></tr>
+    <tr class="hl"><td>Modelo oficial sobre ITBI, com ajuste de características</td><td class="n">R$ 3.572.651</td></tr>
+    <tr><td>Comparativo de anúncios · média geral dos unitários</td><td class="n">R$ 3.502.832</td></tr>
+    <tr><td>Comparativo de anúncios · estrato de área pertinente</td><td class="n">R$ 3.365.381</td></tr>
+    <tr><td>Comparativo do próprio bloco 3.606</td><td class="n">R$ 3.377.529</td></tr>
+    <tr class="total"><td>Ferramenta de comparativo de anúncios · resultado isolado</td><td class="n">R$ 4.000.000</td></tr>
+  </table>
+  <div class="body mt3"><b>Divergência entre os dois métodos principais, o modelo oficial e a média geral dos unitários anunciados: 1,95%.</b> Quatro caminhos independentes convergem para a faixa de R$ 3,37 a R$ 3,57 milhões. A quinta referência, destacada na última linha, destoa das demais e merece tratamento à parte.</div>
+
+  <div class="label mt5">Reconciliação: por que R$ 4.000.000 é teto, e não valor central</div>
+  <div class="body mt2"><b>Referência adotada como valor central: R$ 3.572.651</b>, produzida sobre transações efetivamente registradas. O resultado de R$ 4.000.000 não foi descartado, mas <b>reposicionado como teto</b>, por três razões:</div>
+  <div class="body mt2">Primeiro, equivale a R$ 17.777,78/m², praticamente idêntico ao máximo absoluto registrado nesta avenida, e <b>um valor central não pode coincidir com o extremo superior</b> de uma distribuição de 1.631 negócios. Segundo, deriva de preços <b>pedidos</b>, não de negócios <b>fechados</b>: na amostra depurada da Seção 05, os pedidos do estrato de área deste imóvel promediam R$ 14.957/m², 16% abaixo. Terceiro, não é o ponto médio da faixa que a própria ferramenta declara, situando-se a 98,9% do topo dela.</div>
+  <div class="body mt2">Transação efetivada prevalece sobre preço pedido. Anúncio é intenção; ITBI é negócio concluído.</div>
+
+  <div class="label mt6">O teste que os vizinhos já fizeram</div>
+  <div class="body mt2">O imóvel nunca foi ao mercado, o que é uma <b>vantagem</b>: entra sem exposição desgastada e pode ser posicionado corretamente na primeira tentativa. Essa vantagem, porém, é de tiro único, e se perde se ele entrar em um preço que o mercado já está rejeitando.</div>
+  <div class="body mt3">E há evidência direta de qual é esse preço, no endereço mais próximo possível. Quinze apartamentos do próprio condomínio estão anunciados, cinco deles no bloco do imóvel avaliado. O mais antigo está no mercado desde 24 de maio e <b>nenhum vendeu</b> em aproximadamente dois meses e meio. Um deles já reduziu o preço.</div>
+
+  <div class="callout mt4">
+    <div class="body">O maior pedido do bloco 3.606 é de <b>R$ 3.700.000</b>, por uma unidade de 250 m². O maior pedido de todo o condomínio é de <b>R$ 4.000.000</b>, por uma unidade de 221 m² no nº 3.646, que <b>também não vendeu</b>. Já existe uma unidade do condomínio pedindo exatamente R$ 4.000.000, e ela permanece à venda: é a demonstração prática de que esse patamar é o teto, e não um valor de realização rápida.</div>
+  </div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">07</div></div>
+</div>
+
+<!-- ============ 06b ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">06</span><span class="h-section">A justificativa do teto de divulgação</span></div>
+
+  <div class="lead">O teto de R$ 4.000.000 não é arbitrário. Decorre de três limites que se sobrepõem, e nenhum deles depende de opinião: todos são verificáveis em registro público ou na própria amostra de mercado.</div>
+
+  <div class="two mt4">
+    <div class="grow note">
+      <div class="h-sub">1 · O registro oficial</div>
+      <table class="mt2">
+        <tr><td>Máximo do ITBI em 2025</td><td class="n">R$ 4.020.525</td></tr>
+        <tr><td>Máximo do ITBI em 2026</td><td class="n">R$ 4.004.604</td></tr>
+      </table>
+      <div class="body mt2">R$ 4.000.000 corresponde a R$ 17.778/m². É o teto da avenida, arredondado para baixo. Acima disso não há precedente em 1.631 negócios.</div>
+    </div>
+    <div class="grow note">
+      <div class="h-sub">2 · A tendência</div>
+      <div class="body mt2">Como o mercado da via parou de subir em 2026, não há valorização projetada que empurre esse teto para cima no curto prazo. <b>O teto de hoje é o teto do ano.</b></div>
+      <div class="h-sub mt4">3 · O produto</div>
+      <div class="body mt2">Os valores unitários no topo da avenida pertencem a apartamentos pequenos. Para 225 m², tanto o estrato de área quanto o próprio bloco apontam para cerca de R$ 15.000/m². Pleitear R$ 17.778/m² só se sustenta pelo pacote de atributos deste imóvel.</div>
+    </div>
+  </div>
+
+  <div class="body mt5">A referência do topo do condomínio, apresentada na Seção 05, confirma o mesmo limite: a cobertura duplex de 375 m² é anunciada por R$ 4.800.000, e um apartamento de 225 m² no 2º pavimento anunciado a R$ 4.000.000 estaria pedindo <b>83% do preço dela</b>. É sustentável apenas como posição de teto, com prazo de absorção longo.</div>
+
+  <div class="label mt6">Posicionamento na escala de valores unitários da avenida</div>
+
+  <svg viewBox="0 0 700 200" style="width:100%; height:50mm; margin-top:4mm;">
+    <g font-family="acumin-pro, Arial">
+      <rect x="30" y="138" width="578" height="14" fill="#e9edf1"/>
+      <rect x="597" y="42" width="14" height="110" fill="#D4AF37" opacity=".16"/>
+      <rect x="597" y="138" width="14" height="14" fill="#D4AF37"/>
+      <line x1="30" y1="152" x2="670" y2="152" stroke="#c8cfd8" stroke-width="1"/>
+      <g font-size="11" fill="#a9aeb5" text-anchor="middle">
+        <text x="30"  y="169">R$ 12.000</text>
+        <text x="227" y="169">R$ 14.000</text>
+        <text x="424" y="169">R$ 16.000</text>
+        <text x="621" y="169">R$ 18.000</text>
+      </g>
+      <text x="30" y="190" font-size="10" fill="#8a9099">Valores unitários por m² · transações oficiais e amostra de mercado da Avenida Lúcio Costa</text>
+
+      <line x1="321" y1="120" x2="321" y2="138" stroke="#8a9099" stroke-width="1.5"/>
+      <circle cx="321" cy="120" r="3.5" fill="#8a9099"/>
+      <text x="321" y="111" font-size="11.5" fill="#5a616a" text-anchor="middle" font-weight="600">R$ 14.957</text>
+      <text x="321" y="99" font-size="10" fill="#8a9099" text-anchor="middle">estrato de área do imóvel</text>
+
+      <line x1="402" y1="82" x2="402" y2="138" stroke="#0C2340" stroke-width="2"/>
+      <circle cx="402" cy="82" r="4.5" fill="#0C2340"/>
+      <text x="402" y="72" font-size="12.5" fill="#0C2340" text-anchor="middle" font-weight="600">R$ 15.778</text>
+      <text x="402" y="60" font-size="10" fill="#0C2340" text-anchor="middle">valor provável de mercado</text>
+
+      <circle cx="604" cy="42" r="4.5" fill="#D4AF37"/>
+      <text x="670" y="32" font-size="12.5" fill="#8a7a45" text-anchor="end" font-weight="600">R$ 17.778 a 17.869</text>
+      <text x="670" y="20" font-size="10" fill="#8a7a45" text-anchor="end">teto de divulgação · máximo histórico da avenida</text>
+    </g>
+  </svg>
+
+  <div class="body mt4">O gráfico torna visível o que as tabelas declaram: <b>o teto de divulgação está encostado no limite superior de tudo o que a avenida já transacionou</b>. Não há espaço acima dele. A distância entre o valor provável e esse limite é a margem de negociação disponível, e não um valor adicional a ser capturado.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">08</div></div>
+</div>
+
+<!-- ============ 07 ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">07</span><span class="h-section">Conclusão e recomendação</span></div>
+
+  <div class="result">
+    <div style="display:flex; align-items:flex-end; justify-content:space-between;">
+      <div>
+        <div class="label">Valor provável de mercado</div>
+        <div class="v" style="margin-top:2mm;">R$ 3.550.000</div>
+        <div class="u">R$ 15.778 / m²</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="label">Teto de divulgação</div>
+        <div class="v" style="margin-top:2mm; color:#D4AF37;">R$ 4.000.000</div>
+        <div class="u" style="color:rgba(255,255,255,.6)">R$ 17.778 / m² · máximo defensável</div>
+      </div>
+    </div>
+    <div class="body mt4" style="color:rgba(255,255,255,.78)">O valor provável situa-se 0,6% abaixo do modelo sobre transações oficiais e 1,3% acima da média geral dos unitários anunciados, posição coerente com um imóvel de vista frontal mar e reforma integral em um estoque majoritariamente original.</div>
+  </div>
+
+  <div class="two mt6">
+    <div class="grow">
+      <div class="h-sub" style="color:#2e7d5b">Fatores de valorização</div>
+      <div class="body mt2">Vista frontal para o mar. Reforma integral, atributo que os concorrentes do próprio condomínio aparentemente não têm. Baixo gabarito e poucas unidades por pavimento. Três vagas de garagem, uma acima do padrão e especialmente relevante em localização dependente de automóvel. Lazer completo com portaria 24h. Frente própria e sol da manhã. Metragem escassa, 47% acima da média da avenida. Trecho de frente de quadra única, sem tráfego de passagem. Comércio e escolas a menos de 550 m. Avenida de altíssima liquidez, com 1.631 negócios em seis anos. Imóvel sem exposição prévia.</div>
+    </div>
+    <div class="grow">
+      <div class="h-sub" style="color:#b04a3a">Fatores de desvalorização</div>
+      <div class="body mt2">Edificação com cerca de 48 anos. Concentração de oferta no próprio condomínio, com 15 unidades à venda simultaneamente, todas competindo pelo mesmo comprador com vista e custo condominial idênticos. Via arterial litorânea, com tráfego e ruído. Dependência de automóvel, com transporte de massa e comércio de maior porte além de 1 km e do outro lado da lagoa. Efeito de escala, com público comprador proporcionalmente menor para 225 m² e valor unitário inferior ao das unidades menores da via. Estabilização do mercado em 2026, com a mediana recuando 2,1% e a valorização anual caindo para 4,3%.</div>
+    </div>
+  </div>
+
+  <div class="label mt6">Escala completa de preço</div>
+  <div class="ladder">
+    <div class="rung"><div class="k">Piso de absorção rápida ≈ 90 dias</div><div class="v">R$ 3.350.000</div><div class="n">líquido R$ 3.182.500</div></div>
+    <div class="rung"><div class="k">Valor provável de mercado</div><div class="v">R$ 3.550.000</div><div class="n">líquido R$ 3.372.500</div></div>
+    <div class="rung on"><div class="k">Fechamento recomendado</div><div class="v">R$ 3.650.000</div><div class="n">líquido R$ 3.467.500</div></div>
+    <div class="rung"><div class="k">Divulgação recomendada</div><div class="v">R$ 3.800.000</div><div class="n">líquido R$ 3.610.000</div></div>
+    <div class="rung on"><div class="k">Teto de divulgação</div><div class="v">R$ 4.000.000</div><div class="n">líquido R$ 3.800.000</div></div>
+  </div>
+
+  <div class="callout mt6">
+    <div class="body"><b>Sobre o teto de R$ 4.000.000.</b> É o máximo defensável para divulgação, e não o valor de mercado. Corresponde a R$ 17.778/m², praticamente idêntico ao maior valor unitário já registrado em transação oficial nesta avenida: R$ 17.869/m² em 2025 e R$ 17.798/m² em 2026. Em <b>1.631 negócios registrados nos últimos seis anos, nenhum superou esse patamar</b>. Divulgar acima disso posiciona o imóvel fora da faixa de qualquer transação já ocorrida no logradouro.</div>
+  </div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">09</div></div>
+</div>
+
+<!-- ============ 07b ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">07</span><span class="h-section">A recomendação de preço</span></div>
+
+  <div class="label">Recomendação · todos os valores já contêm a comissão de 5%</div>
+  <table class="mt3">
+    <tr><th>Item</th><th class="n">Preço de venda</th><th class="n">Comissão 5%</th><th class="n">Líquido ao proprietário</th></tr>
+    <tr class="hl"><td>Teto de divulgação · máximo defensável</td><td class="n">R$ 4.000.000</td><td class="n">R$ 200.000</td><td class="n">R$ 3.800.000</td></tr>
+    <tr><td>Divulgação recomendada</td><td class="n">R$ 3.800.000</td><td class="n">R$ 190.000</td><td class="n">R$ 3.610.000</td></tr>
+    <tr class="hl"><td>Fechamento recomendado</td><td class="n">R$ 3.650.000</td><td class="n">R$ 182.500</td><td class="n">R$ 3.467.500</td></tr>
+    <tr><td>Valor provável de mercado</td><td class="n">R$ 3.550.000</td><td class="n">R$ 177.500</td><td class="n">R$ 3.372.500</td></tr>
+    <tr><td>Piso de absorção rápida ≈ 90 dias</td><td class="n">R$ 3.350.000</td><td class="n">R$ 167.500</td><td class="n">R$ 3.182.500</td></tr>
+  </table>
+
+  <div class="body mt4">A escolha dentro da faixa de divulgação é <b>uma decisão de prazo, não de valor</b>: R$ 3.800.000 para vender em prazo normal, R$ 4.000.000 para quem aceita esperar o comprador de topo. Em ambos os casos o fechamento tende a ocorrer entre R$ 3.550.000 e R$ 3.750.000, com <b>R$ 3.650.000 como desfecho mais provável</b>. Esse número está 2,8% acima do valor provável, diferença que os atributos do imóvel sustentam, e 8,2% abaixo do teto, margem compatível com um mercado em que 18,75% das unidades do próprio condomínio estão à venda.</div>
+
+  <div class="label mt6">Condicionante · confirmação da reforma em vistoria presencial</div>
+  <table class="mt3">
+    <tr><th>Referência</th><th class="n">Com reforma confirmada · adotado</th><th class="n">Sem confirmação</th></tr>
+    <tr class="hl"><td>Teto de divulgação</td><td class="n">R$ 4.000.000</td><td class="n">R$ 3.800.000</td></tr>
+    <tr><td>Divulgação recomendada</td><td class="n">R$ 3.800.000</td><td class="n">R$ 3.610.000</td></tr>
+    <tr><td>Valor provável de mercado</td><td class="n">R$ 3.550.000</td><td class="n">R$ 3.380.000</td></tr>
+    <tr><td>Piso de absorção rápida</td><td class="n">R$ 3.350.000</td><td class="n">R$ 3.190.000</td></tr>
+  </table>
+  <div class="body mt3">A coluna da direita mostra a escala caso vistoria presencial não confirme a reforma integral. <b>A diferença entre as duas colunas é a medida exata do que a reforma representa neste estudo</b>, em cada ponto da escala de preço. Recomenda-se realizar a vistoria antes do início da comercialização.</div>
+
+  <div class="label mt6">Na direção inversa · partindo de um objetivo de líquido</div>
+  <table class="mt3">
+    <tr><th>Para receber líquido</th><th class="n">É preciso vender por</th><th class="n">Equivalente em R$ / m²</th></tr>
+    <tr><td>R$ 3.500.000</td><td class="n">R$ 3.684.211</td><td class="n">R$ 16.374</td></tr>
+    <tr><td>R$ 3.600.000</td><td class="n">R$ 3.789.474</td><td class="n">R$ 16.842</td></tr>
+    <tr class="hl"><td>R$ 3.800.000</td><td class="n">R$ 4.000.000</td><td class="n">R$ 17.778</td></tr>
+    <tr><td>R$ 4.000.000</td><td class="n">R$ 4.210.526</td><td class="n">R$ 18.713</td></tr>
+  </table>
+  <div class="body mt3">A última linha é relevante como referência de limite: um líquido de R$ 4.000.000 exigiria preço de venda de R$ 4.210.526, equivalente a R$ 18.713/m², <b>acima do maior valor unitário já registrado nesta avenida em seis anos e 1.631 negócios</b>. Não é um objetivo alcançável nas condições atuais de mercado.</div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">10</div></div>
+</div>
+
+<!-- ============ RESSALVAS ============ -->
+<div class="page" data-canvas-width="794" data-canvas-height="1123">
+  <div class="sec-head"><span class="sec-num">—</span><span class="h-section">Ressalvas de responsabilidade</span></div>
+
+  <div class="body"><b>1 · Vistoria.</b> A verificação do estado de conservação foi indireta, por registro audiovisual, sem inspeção presencial. Não foram realizadas vistoria estrutural, verificação de instalações nem avaliação de patologias construtivas.</div>
+
+  <div class="body mt4"><b>2 · Área.</b> Os 225 m² foram adotados a partir de fonte secundária e devem ser confirmados na convenção de condomínio ou no carnê de IPTU. Todo o estudo é proporcional a essa medida: uma divergência de 5% desloca o valor provável em cerca de R$ 178.000.</div>
+
+  <div class="body mt4"><b>3 · Custo de ocupação.</b> Os valores de condomínio e IPTU do imóvel não foram disponibilizados e foram estimados por rateio proporcional à área, a partir dos valores declarados em anúncio de outra unidade do condomínio. Como o rateio efetivo se dá por fração ideal, os valores reais podem divergir.</div>
+
+  <div class="body mt4"><b>4 · Documentação.</b> Não foi realizada verificação de regularidade documental, análise urbanística, cota de inundação nem histórico de alagamento. Cabe ao interessado obter certidões atualizadas do imóvel e dos proprietários, bem como negativas de débitos condominiais e fiscais.</div>
+
+  <div class="body mt4"><b>5 · Vigência dos dados.</b> Os dados oficiais de 2026 compreendem o período de janeiro a junho, último disponível na base da Secretaria Municipal de Fazenda na data deste estudo.</div>
+
+  <div class="body mt4"><b>6 · Natureza do documento.</b> Trata-se de opinião técnica de valor para fins de orientação comercial, orientada pelos critérios da NBR 14.653 da ABNT e pelas diretrizes do COFECI. Não substitui laudo de avaliação com vistoria presencial (PTAM), atribuição de profissional habilitado com registro no CREA ou CAU.</div>
+
+  <div style="margin-top:34mm; border-top:.5pt solid #d8dce1; padding-top:8mm;">
+    <div style="width:78mm; border-bottom:.75pt solid #0C2340; height:14mm;"></div>
+    <div style="font-family:'acumin-pro',sans-serif; font-weight:600; font-size:10.5pt; color:#0C2340; margin-top:3mm;">Marcus Godoy</div>
+    <div class="body" style="margin-top:1mm;">CRECI 80199-PF · Consultor de Avaliação</div>
+    <div class="body" style="font-weight:600; color:#0C2340;">Perito Avaliador Credenciado no Tribunal de Justiça</div>
+    <div class="body">Godoy Prime Realty · CRECI 11841-PJ</div>
+    <div class="body mt3">Rio de Janeiro, 11 de agosto de 2026.</div>
+  </div>
+
+  <div style="position:absolute; left:18mm; right:18mm; bottom:26mm;">
+    <div class="rule-gold"></div>
+    <img src="data:image/png;base64,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" alt="Godoy Prime Realty" style="width:56mm; height:auto; display:block; margin-top:5mm;">
+  </div>
+
+  <div class="foot"><div>Godoy Prime Realty · CRECI 11841-PJ · Av. Lúcio Costa 3.606 · Barra da Tijuca · 11.08.2026</div><div class="cred">Marcus Godoy · CRECI 80199-PF · Perito Avaliador Credenciado no Tribunal de Justiça</div><div class="pg">11</div></div>
+</div>
+
+</body>
+</html>
