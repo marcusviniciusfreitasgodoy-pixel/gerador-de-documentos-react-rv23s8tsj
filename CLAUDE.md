@@ -122,9 +122,16 @@ apresentação** para todos os estudos futuros.
   nota interna separada, que **não é versionada** por conter dado pessoal.
 
 ### A fazer (preencher conforme surgir)
-- [ ] Decidir se o estudo de mercado vira um **gerador no app**
-      (`Form → Helpers → Template → Docx`), com cálculo automático (média, desvio, CV,
-      estratificação, convergência) e saída no layout já aprovado — feature nova e faseada.
+- [ ] **Construir o gerador de Estudo de Mercado no app.** A decisão foi tomada e a
+      especificação está pronta em `docs/estudo-de-mercado/SPEC-APP-ESTUDO-DE-MERCADO.md`,
+      com os prompts para colar no Skip na Parte 9. Três fases: formulário e motor de
+      cálculo com dados manuais; apuração automática de ITBI e IPTU por edge function;
+      importação de comparáveis e nota interna.
+      Duas decisões de arquitetura já fechadas: **módulo dentro deste app** (rota
+      `/estudo-mercado`), com pipeline próprio `Form → Helpers → engine.ts → Report.tsx → PDF`,
+      que não substitui o `Form → Helpers → Template → Docx` dos oito geradores atuais; e
+      **PDF por `window.print()`**, reaproveitando o CSS A4 já validado, **nunca por jsPDF
+      ou pdfmake**.
 - [x] ~~Analisar o layout visual e replicar o design entregue ao cliente~~ — feito: o layout
       está implementado em `MODELO-estudo-de-mercado.html`.
 - [x] ~~Testar o modelo com um novo imóvel real para calibrar o molde~~ — feito com o
