@@ -151,6 +151,14 @@ routerAdd(
     }
 
     var baseLines = []
+    // Teto de tamanho da base no prompt (anti-truncamento). A base vem ordenada
+    // por -priority; paramos ao atingir o orçamento e SEMPRE no fim de um
+    // registro inteiro. Antes, a base inteira ia ao modelo e o corte acontecia
+    // no meio do prompt, corrompendo o JSON de saída (~20% de falha). Um corte
+    // limpo aqui nunca é pior: preserva as regras de maior prioridade e nunca
+    // parte um registro no meio.
+    var BASE_ORCAMENTO = 120000
+    var baseUsado = 0
     for (var i = 0; i < knowledgeRecords.length; i++) {
       var rec = knowledgeRecords[i]
       var code = rec.getString('code') || 'SEM_CODE'
@@ -162,9 +170,22 @@ routerAdd(
       if (content.length > 700) {
         content = content.substring(0, 700)
       }
-      baseLines.push(
-        '[' + code + '] ' + title + ' (' + category + ' | ' + triggerLogic + '): ' + content,
-      )
+      var linha =
+        '[' + code + '] ' + title + ' (' + category + ' | ' + triggerLogic + '): ' + content
+      if (baseUsado + linha.length + 1 > BASE_ORCAMENTO) break
+      baseLines.push(linha)
+      baseUsado += linha.length + 1
+    }
+    if (baseLines.length < knowledgeRecords.length) {
+      $app
+        .logger()
+        .warn(
+          'validar_minuta: base limitada por orcamento',
+          'incluidas',
+          baseLines.length,
+          'total',
+          knowledgeRecords.length,
+        )
     }
 
     var baseStr = baseLines.join('\n')
@@ -583,21 +604,38 @@ routerAdd(
       return e.json(500, { error: 'Base de conhecimento indisponível.' })
     }
     let baseLines = []
+    // Teto de tamanho da base no prompt (anti-truncamento) — mesma lógica da
+    // rota de validação: corta no fim de um registro, respeitando -priority.
+    const BASE_ORCAMENTO = 120000
+    let baseUsado = 0
     for (let i = 0; i < knowledgeRecords.length; i++) {
       const rec = knowledgeRecords[i]
       let content = rec.getString('content') || ''
       if (!content.trim()) continue
       if (content.length > 700) content = content.substring(0, 700)
-      baseLines.push(
+      const linha =
         '[' +
-          (rec.getString('code') || 'SEM_CODE') +
-          '] ' +
-          (rec.getString('title') || '') +
-          ' (' +
-          (rec.getString('category') || '') +
-          '): ' +
-          content,
-      )
+        (rec.getString('code') || 'SEM_CODE') +
+        '] ' +
+        (rec.getString('title') || '') +
+        ' (' +
+        (rec.getString('category') || '') +
+        '): ' +
+        content
+      if (baseUsado + linha.length + 1 > BASE_ORCAMENTO) break
+      baseLines.push(linha)
+      baseUsado += linha.length + 1
+    }
+    if (baseLines.length < knowledgeRecords.length) {
+      $app
+        .logger()
+        .warn(
+          'consultar_ia: base limitada por orcamento',
+          'incluidas',
+          baseLines.length,
+          'total',
+          knowledgeRecords.length,
+        )
     }
     const baseStr = baseLines.join('\n')
 
