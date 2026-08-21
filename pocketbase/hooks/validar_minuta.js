@@ -76,6 +76,11 @@ routerAdd(
     if (!documentText) {
       return e.badRequestError('O texto do documento é obrigatório.')
     }
+    // Teto de tamanho (revisão de segurança SEC-03): limita o custo por chamada
+    // e barra abuso. 60k caracteres cobrem qualquer minuta real com folga.
+    if (documentText.length > 60000) {
+      return e.badRequestError('Documento muito longo (limite de 60.000 caracteres).')
+    }
 
     function createAuditLog(status, parsedResult, rawResponse, errorMessage, errorCode) {
       try {

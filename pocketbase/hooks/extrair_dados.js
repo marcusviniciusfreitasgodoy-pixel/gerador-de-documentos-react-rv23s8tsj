@@ -26,6 +26,21 @@ routerAdd(
     if (!images.length && !text) {
       return e.badRequestError('Forneça ao menos uma imagem ou texto.')
     }
+    // Teto de tamanho (revisão de segurança SEC-03): limita custo e abuso.
+    if (text.length > 60000) {
+      return e.badRequestError('Texto muito longo (limite de 60.000 caracteres).')
+    }
+    var tamImagens = 0
+    for (var ti = 0; ti < images.length; ti++) {
+      var imgStr = String(images[ti] || '')
+      if (imgStr.length > 7500000) {
+        return e.badRequestError('Imagem muito grande (limite de ~5 MB por imagem).')
+      }
+      tamImagens += imgStr.length
+    }
+    if (tamImagens > 20000000) {
+      return e.badRequestError('Conjunto de imagens muito grande (limite de ~15 MB no total).')
+    }
 
     try {
       var anthropicKey = ($secrets.get('ANTHROPIC_API_KEY') || '').replace(/[^\x21-\x7E]/g, '')
@@ -191,6 +206,9 @@ routerAdd(
     var texto = (body.texto || body.text || '').trim()
     var modo = (body.modo || 'documento').trim().toLowerCase()
     if (!texto) return e.badRequestError('Forneça o texto do documento.')
+    if (texto.length > 60000) {
+      return e.badRequestError('Texto muito longo (limite de 60.000 caracteres).')
+    }
 
     try {
       var anthropicKey = ($secrets.get('ANTHROPIC_API_KEY') || '').replace(/[^\x21-\x7E]/g, '')
