@@ -414,6 +414,11 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <p style="margin:18px 0 0;max-width:520px;font-size:16px;line-height:1.78;color:#5A544C">
           Por isso a plataforma não pergunta o que um sistema acharia importante. Ela pergunta o que o negócio exige para sair do papel.
         </p>
+        <div style="margin-top:38px;padding-top:26px;border-top:1px solid #DDD5C7;max-width:520px">
+          <p style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">Quem escreveu</p>
+          <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:600;line-height:1.25;letter-spacing:-.01em;color:#0E0E0E">Marcus V. F. Godoy Assessoria Imobiliária</p>
+          <p style="margin:7px 0 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7a6435">CRECI PJ 11841</p>
+        </div>
       </div>
     </div>
   </section>
@@ -490,6 +495,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         </svg>
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Documentos</span>
       </div>
+      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Marcus V. F. Godoy Assessoria Imobiliária<br>CRECI PJ 11841</p>
       <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
         A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
       </p>
