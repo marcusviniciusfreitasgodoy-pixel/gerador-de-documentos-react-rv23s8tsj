@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-31T14:40:04.232Z",
+  "generatedAt": "2026-08-08T15:57:36.396Z",
   "collections": [
     {
       "name": "users",
@@ -29,14 +29,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         },
         {
           "name": "isAdmin",
@@ -114,14 +119,18 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onUpdate"]
+          "autodateTriggers": [
+            "onUpdate"
+          ]
         }
       ],
       "indexes": []
@@ -179,14 +188,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         },
         {
           "name": "commission_rate",
@@ -199,7 +213,10 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["corretor_autonomo", "imobiliaria"]
+          "selectValues": [
+            "corretor_autonomo",
+            "imobiliaria"
+          ]
         },
         {
           "name": "nome",
@@ -292,7 +309,9 @@
           "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_broker_profile_user ON broker_profile (user)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_broker_profile_user ON broker_profile (user)"
+      ]
     },
     {
       "name": "app_templates",
@@ -316,14 +335,18 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onUpdate"]
+          "autodateTriggers": [
+            "onUpdate"
+          ]
         },
         {
           "name": "template_key",
@@ -399,14 +422,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
@@ -479,14 +507,19 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
       "indexes": [
@@ -538,7 +571,11 @@
           "type": "select",
           "required": false,
           "system": false,
-          "selectValues": ["Max select 1 · Required ✔ · Choices: low", "medium", "high"]
+          "selectValues": [
+            "Max select 1 · Required ✔ · Choices: low",
+            "medium",
+            "high"
+          ]
         },
         {
           "name": "description",
@@ -551,14 +588,18 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onUpdate"]
+          "autodateTriggers": [
+            "onUpdate"
+          ]
         },
         {
           "name": "status",
@@ -634,14 +675,18 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onUpdate"]
+          "autodateTriggers": [
+            "onUpdate"
+          ]
         },
         {
           "name": "complexity_type",
@@ -699,17 +744,24 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate", "onUpdate"]
+          "autodateTriggers": [
+            "onCreate",
+            "onUpdate"
+          ]
         }
       ],
-      "indexes": ["CREATE INDEX idx_negocios_owner ON negocios (owner)"]
+      "indexes": [
+        "CREATE INDEX idx_negocios_owner ON negocios (owner)"
+      ]
     },
     {
       "name": "chamados",
@@ -758,14 +810,18 @@
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onCreate"]
+          "autodateTriggers": [
+            "onCreate"
+          ]
         },
         {
           "name": "updated",
           "type": "autodate",
           "required": false,
           "system": false,
-          "autodateTriggers": ["onUpdate"]
+          "autodateTriggers": [
+            "onUpdate"
+          ]
         }
       ],
       "indexes": []
