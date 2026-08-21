@@ -52,6 +52,7 @@ const DESIGN_CSS = `html { scroll-behavior: smooth; }
   * { box-sizing: border-box; }
   section[id] { scroll-margin-top: 84px; }
   [data-mobile-only] { display: none; }
+  [data-cta-fixo] { display: none; }
   a { color: #7a6435; text-decoration: none; }
   a:hover { color: #0E0E0E; }
   p { text-wrap: pretty; }
@@ -64,6 +65,8 @@ const DESIGN_CSS = `html { scroll-behavior: smooth; }
     [data-hero] > * { min-width: 0; }
     [data-validador], [data-shot-skip] { grid-template-columns: minmax(0,1fr) !important; }
     [data-nav-cta] { height: 44px !important; padding: 0 22px !important; }
+    [data-cta-fixo] { display: flex; }
+    footer { padding-bottom: 84px; }
   }
   @media (max-width: 620px) {
     [data-hero-art], [data-desk-only] { display: none !important; }
@@ -128,7 +131,8 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
           <a href="/signup" style="display:inline-flex;align-items:center;height:52px;padding:0 30px;border-radius:1px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background .25s ease" style-hover="background:#F5F1E6">Criar conta e gerar meu primeiro documento</a>
           <a href="#documentos" style="display:inline-flex;align-items:center;height:52px;padding:0 30px;border-radius:1px;border:1px solid rgba(245,241,230,.22);color:#F5F1E6;font-size:15px;font-weight:500;transition:border-color .25s ease" style-hover="border-color:#C9A84C;color:#C9A84C">Ver os 16 documentos</a>
         </div>
-        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:9px 18px;margin-top:26px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,224,204,.5)">
+        <p style="margin:15px 0 0;font-size:13px;line-height:1.6;color:rgba(232,224,204,.55)">Você confirma o e-mail e entra. Ninguém precisa aprovar nada.</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:9px 18px;margin-top:22px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(232,224,204,.5)">
           <span>Grátis nesta fase</span>
           <span style="width:3px;height:3px;border-radius:50%;background:rgba(201,168,76,.7)"></span>
           <span>Sem cartão</span>
@@ -239,6 +243,25 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
           <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Escolha o documento e ele abre já preenchido. Confira o que é específico do caso, clique em gerar e baixe o arquivo .docx, aberto para edição final.</p>
         </div>
       </div>
+      <div style="margin-top:clamp(48px,6vw,72px);border:1px solid #DDD5C7;background:#FDFBF6;padding:clamp(30px,4vw,52px)">
+        <p style="margin:0 0 16px;display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#8B7340">O dossiê do negócio<span style="display:block;width:40px;height:1px;background:rgba(201,168,76,.5)"></span></p>
+        <h3 style="margin:0;max-width:840px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(26px,3.2vw,40px);line-height:1.1;letter-spacing:-.02em;color:#0E0E0E">Modelo de contrato qualquer um tem. <em style="font-style:italic;color:#7a6435">O dossiê é a diferença.</em></h3>
+        <p style="margin:22px 0 0;max-width:660px;font-size:15.5px;line-height:1.75;color:#5A544C">Uma pasta de modelos obriga você a redigitar as mesmas partes e o mesmo imóvel em cada documento, com uma chance nova de erro em cada um. Aqui a operação é cadastrada uma vez e todos os documentos daquele negócio bebem dela.</p>
+        <div data-trio style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#DDD5C7;margin-top:34px;border:1px solid #DDD5C7">
+        <div style="background:#FDFBF6;padding:26px 24px">
+          <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Cadastrou uma vez</h4>
+          <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">Partes, imóvel, valores e prazos ficam guardados no negócio, e não presos dentro de um documento.</p>
+        </div>
+        <div style="background:#FDFBF6;padding:26px 24px">
+          <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Vale para os dezesseis</h4>
+          <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">Qualquer documento daquela operação abre já preenchido a partir do dossiê, do recibo de sinal ao distrato.</p>
+        </div>
+        <div style="background:#FDFBF6;padding:26px 24px">
+          <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Corrigiu num, corrigiu em todos</h4>
+          <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O ajuste que você faz volta para o dossiê, e o próximo documento já nasce com ele.</p>
+        </div>
+        </div>
+      </div>
       <div data-pares style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7;margin-top:clamp(40px,5vw,64px)">
         <div style="background:#FDFBF6;padding:30px 28px">
           <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O negócio mudou? O documento acompanha.</h3>
@@ -333,6 +356,22 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
     </div>
   </section>
 
+  <section data-reveal style="background:#F7F3EA">
+    <div style="max-width:1120px;margin:0 auto;padding:clamp(80px,12vw,132px) clamp(20px,5vw,60px)">
+      <p style="margin:0 0 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B7340">Apoio de especialista</p>
+      <div style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
+      <h2 style="margin:0;max-width:820px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(32px,4.4vw,52px);line-height:1.08;letter-spacing:-.02em;color:#0E0E0E">Gerar resolve a rotina. Validar resolve o que chega pronto. <em style="font-style:italic;color:#7a6435">E o que não cabe em nenhum dos dois?</em></h2>
+      <div data-pares style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,4vw,56px);margin-top:44px;align-items:start">
+        <p style="margin:0;font-size:16px;line-height:1.78;color:#5A544C">Toda carreira tem o negócio que sai do padrão: a herança que ainda não foi partilhada, o vendedor que mora fora, a cláusula que o comprador exige e você nunca viu. Nessa hora o corretor autônomo costuma ficar sozinho, ou procurar às pressas alguém que atenda no mesmo dia.<br><br>Aqui você abre um pedido de análise dentro da própria plataforma, com o negócio que já está cadastrado anexado. Sem sair da operação, sem recomeçar a explicação do zero.</p>
+        <div style="display:flex;flex-direction:column;gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
+          <div style="background:#FDFBF6;padding:24px 24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">O caso vai junto com o negócio</h3><p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">As partes, o imóvel e os valores já cadastrados seguem anexados ao pedido. Você descreve a dúvida, não a operação inteira.</p></div>
+          <div style="background:#FDFBF6;padding:24px 24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">A conversa fica registrada</h3><p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O pedido e a resposta ficam guardados junto do negócio, e não perdidos num aplicativo de mensagem.</p></div>
+          <div style="background:#0E0E0E;padding:24px 24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#F5F1E6">Isto não substitui o seu advogado</h3><p style="margin:0;font-size:14px;line-height:1.68;color:rgba(232,224,204,.75)">É apoio para decidir o próximo passo. A análise jurídica do caso concreto continua sendo caminho, e a plataforma não a dispensa.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section data-reveal style="background:#F3EBE0;border-top:1px solid #DDD5C7">
     <div style="max-width:1120px;margin:0 auto;padding:clamp(80px,12vw,132px) clamp(20px,5vw,60px)">
       <p style="margin:0 0 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B7340">§ 05 · Para imobiliárias</p>
@@ -386,11 +425,11 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <div style="display:flex;flex-direction:column;gap:1px;background:#DDD5C7;border-top:1px solid #DDD5C7;border-bottom:1px solid #DDD5C7">
         <div style="background:#F3EBE0;padding:26px 0">
           <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Quanto custa?</h3>
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Nesta fase, nada. O cadastro está aberto, a plataforma inteira liberada e não pedimos cartão de crédito. O que pedimos em troca é que você diga o que faltou.</p>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Nesta fase, nada. O cadastro está aberto, a plataforma inteira liberada e não pedimos cartão de crédito. Quando houver preço, você será avisado com antecedência e decide se continua; nada é cobrado sem que você saiba antes. O que pedimos em troca nesta fase é que você diga o que faltou.</p>
         </div>
         <div style="background:#F3EBE0;padding:26px 0">
-          <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Quanto tempo até o primeiro documento?</h3>
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Cadastro, perfil de corretor e primeiro documento saem na mesma sessão. Não há instalação, não há treinamento e não há migração de nada. Com os dados do negócio à mão, é questão de minutos.</p>
+          <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Como é o cadastro? Quanto tempo até o primeiro documento?</h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Não há aprovação nem fila de espera. Você informa nome, e-mail e senha, clica no link de confirmação que chega no seu e-mail e o acesso abre na hora. O CRECI e o percentual de comissão ficam para depois, no perfil, e passam a entrar sozinhos na cláusula de corretagem de tudo que você gerar. Não há instalação, não há treinamento e não há migração de nada: com os dados do negócio à mão, o primeiro documento sai na mesma sessão.</p>
         </div>
         <div style="background:#F3EBE0;padding:26px 0">
           <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Sai em Word mesmo? Consigo editar depois?</h3>
@@ -403,6 +442,10 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <div style="background:#F3EBE0;padding:26px 0">
           <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Isso substitui o advogado?</h3>
           <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Não, e não é essa a proposta. O que sai daqui é o documento de rotina da intermediação, redigido com fundamentação no Código Civil, que você deixa de terceirizar a cada negócio. Quando a operação foge do padrão, você leva o caso ao Especialista sem sair da plataforma, e a análise de um advogado continua sendo o caminho. A ideia não é tirar o advogado da operação, é tirar ele da papelada repetitiva.</p>
+        </div>
+        <div style="background:#F3EBE0;padding:26px 0">
+          <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Serve para locação?</h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Ainda não. Os dezesseis documentos cobrem compra e venda, da captação ao encerramento. Se a sua carteira é de locação, o que existe aqui hoje não vai te atender, e preferimos dizer isso antes de você criar a conta.</p>
         </div>
         <div style="background:#F3EBE0;padding:26px 0">
           <h3 style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:600;color:#0E0E0E">Os documentos têm validade jurídica?</h3>
@@ -427,7 +470,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         Gere o próximo contrato aqui e <em style="font-style:italic;color:#C9A84C">compare com o seu.</em>
       </h2>
       <p style="margin:24px auto 0;max-width:540px;font-size:16.5px;line-height:1.75;color:rgba(232,224,204,.75)">
-        O cadastro leva menos tempo do que trocar os nomes num modelo antigo. Depois disso, os documentos da sua próxima operação saem prontos.
+        O cadastro leva menos tempo do que trocar os nomes num modelo antigo: você cria a conta, confirma pelo link que chega no e-mail e entra. Ninguém precisa aprovar nada. Depois disso, os documentos da sua próxima operação saem prontos.
       </p>
       <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:40px">
         <a href="/signup" style="display:inline-flex;align-items:center;height:54px;padding:0 34px;border-radius:1px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background .25s ease" style-hover="background:#F5F1E6">Criar conta grátis</a>
@@ -452,6 +495,11 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       </p>
     </div>
   </footer>
+
+  <div data-cta-fixo style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0E0E0E;border-top:1px solid rgba(201,168,76,.35);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px">
+    <a href="/login" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72)">Entrar</a>
+    <a href="/signup" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:1px;background:#C9A84C;color:#0E0E0E;font-size:14px;font-weight:600">Criar conta grátis</a>
+  </div>
 
 </div>`
 
