@@ -435,7 +435,7 @@ export function PermutaForm() {
 
   const renderParty = (
     which: 'primeiros' | 'segundos',
-    fa: typeof primeiroFA,
+    fa: any,
     watched: PermutaValues['primeiros'],
     label: string,
   ) => (
