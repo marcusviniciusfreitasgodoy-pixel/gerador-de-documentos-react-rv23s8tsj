@@ -2,6 +2,7 @@
 // NÃO usa o Skip AI Gateway ($ai). Chaves SEMPRE via $secrets.get — nunca hardcoded, nunca logadas.
 // Payload do front: { motor: 'claude'|'gemini', images: [dataURL...], text: '' }
 // Retorno: { pessoas:[...], imovel:{...}, meta:{ motor, usage:{in,out,modelo} } }
+
 routerAdd(
   'POST',
   '/backend/v1/extrair-dados',
@@ -18,6 +19,30 @@ routerAdd(
       return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
+    var userId = e.auth ? e.auth.id : ''
+
+    // ── Rate Limiting (10 req/min por usuário) ─────────────────────────
+    if (userId) {
+      var now = Date.now()
+      var windowMs = 60000
+      var limit = 10
+      var rlKey = 'rl_extrair_dados_' + userId
+      var rlEntry = null
+      try {
+        rlEntry = $app.store().get(rlKey)
+      } catch (_) {}
+
+      if (!rlEntry || typeof rlEntry !== 'object' || now - rlEntry.windowStart >= windowMs) {
+        $app.store().set(rlKey, { count: 1, windowStart: now })
+      } else {
+        if (rlEntry.count >= limit) {
+          var waitSec = Math.max(1, Math.ceil((rlEntry.windowStart + windowMs - now) / 1000))
+          return e.json(429, { error: 'Muitas requisições. Aguarde ' + waitSec + ' segundos.' })
+        }
+        $app.store().set(rlKey, { count: rlEntry.count + 1, windowStart: rlEntry.windowStart })
+      }
+    }
+
     var body = e.requestInfo().body || {}
     var motor = (body.motor || body.model || 'claude').trim().toLowerCase()
     var images = Array.isArray(body.images) ? body.images : []
@@ -25,21 +50,6 @@ routerAdd(
 
     if (!images.length && !text) {
       return e.badRequestError('Forneça ao menos uma imagem ou texto.')
-    }
-    // Teto de tamanho (revisão de segurança SEC-03): limita custo e abuso.
-    if (text.length > 60000) {
-      return e.badRequestError('Texto muito longo (limite de 60.000 caracteres).')
-    }
-    var tamImagens = 0
-    for (var ti = 0; ti < images.length; ti++) {
-      var imgStr = String(images[ti] || '')
-      if (imgStr.length > 7500000) {
-        return e.badRequestError('Imagem muito grande (limite de ~5 MB por imagem).')
-      }
-      tamImagens += imgStr.length
-    }
-    if (tamImagens > 20000000) {
-      return e.badRequestError('Conjunto de imagens muito grande (limite de ~15 MB no total).')
     }
 
     try {
@@ -143,33 +153,235 @@ routerAdd(
         return c ? c.content.parts[0].text : ''
       }
 
-      var raw = ''
-      if (motor === 'gemini' && geminiKey) raw = callGemini()
-      else if (anthropicKey) raw = callClaude()
-      else if (geminiKey) raw = callGemini()
-      else throw new Error('Motor sem chave disponível.')
+      // ── JSON sanitization helpers ──────────────────────────────────────
 
-      // isola/parseia o JSON (blindagem)
-      var s = String(raw || '')
-        .replace(/```json/gi, '')
-        .replace(/```/g, '')
-        .trim()
-      var a = s.indexOf('{')
-      var b = s.lastIndexOf('}')
-      if (a === -1 || b === -1 || b < a)
-        return e.json(500, { error: 'Não foi possível interpretar a resposta da IA.' })
-      s = s.substring(a, b + 1).replace(/,(\s*[}\]])/g, '$1')
+      function sanitizeJsonString(str) {
+        var s = String(str || '')
+          .replace(/^\uFEFF/, '')
+          .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        s = s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        return s
+      }
 
-      var parsed
-      try {
-        parsed = JSON.parse(s)
-      } catch (perr) {
-        $app
-          .logger()
-          .error('extrair_dados: JSON parse falhou', 'raw', String(raw).substring(0, 400))
+      function stripMarkdownFences(str) {
+        var mdMatch = str.match(/```(?:json)?\s*([\s\S]*?)```/i)
+        if (mdMatch) return mdMatch[1].trim()
+        var unclosedMatch = str.match(/```(?:json)?\s*([\s\S]+)/i)
+        if (unclosedMatch) {
+          var content = unclosedMatch[1]
+          var braceIdx = content.indexOf('{')
+          if (braceIdx !== -1 && braceIdx < 5) {
+            return content.trim()
+          }
+        }
+        return str
+      }
+
+      function extractJsonObject(str) {
+        var start = str.indexOf('{')
+        if (start === -1) return null
+        var depth = 0
+        var inString = false
+        var escape = false
+        for (var i = start; i < str.length; i++) {
+          var ch = str.charAt(i)
+          if (escape) {
+            escape = false
+            continue
+          }
+          if (ch === '\\' && inString) {
+            escape = true
+            continue
+          }
+          if (ch === '"') {
+            inString = !inString
+            continue
+          }
+          if (inString) continue
+          if (ch === '{') depth++
+          else if (ch === '}') {
+            depth--
+            if (depth === 0) {
+              return str.substring(start, i + 1)
+            }
+          }
+        }
+        return str.substring(start)
+      }
+
+      function fixTrailingCommas(str) {
+        return str.replace(/,(\s*[}\]])/g, '$1')
+      }
+
+      function fixUnquotedKeys(str) {
+        return str.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
+      }
+
+      function repairJsonString(str) {
+        var result = []
+        var inString = false
+        var escape = false
+        for (var i = 0; i < str.length; i++) {
+          var ch = str.charAt(i)
+          if (escape) {
+            result.push(ch)
+            escape = false
+            continue
+          }
+          if (ch === '\\' && inString) {
+            result.push(ch)
+            escape = true
+            continue
+          }
+          if (ch === '"') {
+            inString = !inString
+            result.push(ch)
+            continue
+          }
+          if (inString) {
+            if (ch === '\n') {
+              result.push('\\n')
+              continue
+            }
+            if (ch === '\r') {
+              result.push('\\r')
+              continue
+            }
+            if (ch === '\t') {
+              result.push('\\t')
+              continue
+            }
+            if (ch.charCodeAt(0) < 32) {
+              result.push('\\u' + ('0000' + ch.charCodeAt(0).toString(16)).slice(-4))
+              continue
+            }
+            result.push(ch)
+            continue
+          }
+          if (ch === '/' && i + 1 < str.length) {
+            var nc = str.charAt(i + 1)
+            if (nc === '/') {
+              while (i < str.length && str.charAt(i) !== '\n') i++
+              continue
+            }
+            if (nc === '*') {
+              i += 2
+              while (i < str.length - 1 && !(str.charAt(i) === '*' && str.charAt(i + 1) === '/'))
+                i++
+              i++
+              continue
+            }
+          }
+          result.push(ch)
+        }
+        return result.join('')
+      }
+
+      function attemptParse(str) {
+        try {
+          return JSON.parse(str)
+        } catch (e1) {
+          try {
+            return JSON.parse(fixTrailingCommas(str))
+          } catch (e2) {
+            try {
+              return JSON.parse(fixTrailingCommas(fixUnquotedKeys(str)))
+            } catch (e3) {
+              try {
+                return JSON.parse(fixTrailingCommas(repairJsonString(str)))
+              } catch (e4) {
+                try {
+                  return JSON.parse(fixTrailingCommas(fixUnquotedKeys(repairJsonString(str))))
+                } catch (e5) {
+                  return null
+                }
+              }
+            }
+          }
+        }
+      }
+
+      function parseAiResponse(rawContent) {
+        var cleaned = sanitizeJsonString(rawContent)
+        cleaned = stripMarkdownFences(cleaned)
+
+        var parsed = attemptParse(cleaned)
+
+        if (!parsed) {
+          var extracted = extractJsonObject(cleaned)
+          if (extracted) {
+            parsed = attemptParse(sanitizeJsonString(extracted))
+          }
+        }
+
+        if (!parsed) {
+          var rawExtracted = extractJsonObject(sanitizeJsonString(rawContent))
+          if (rawExtracted) {
+            parsed = attemptParse(sanitizeJsonString(rawExtracted))
+          }
+        }
+
+        if (!parsed) {
+          var rawRepaired = repairJsonString(sanitizeJsonString(stripMarkdownFences(rawContent)))
+          var repairedExtracted = extractJsonObject(rawRepaired)
+          if (repairedExtracted) {
+            parsed = attemptParse(repairedExtracted)
+          } else {
+            parsed = attemptParse(rawRepaired)
+          }
+        }
+
+        return parsed
+      }
+
+      // ── Loop de 2 tentativas ──────────────────────────────────────────
+      var MAX_ATTEMPTS = 2
+      var parsed = null
+      var success = false
+
+      for (var attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        try {
+          $app.logger().info('extrair_dados: tentativa ' + attempt + '/' + MAX_ATTEMPTS)
+          var raw = ''
+          if (motor === 'gemini' && geminiKey) raw = callGemini()
+          else if (anthropicKey) raw = callClaude()
+          else if (geminiKey) raw = callGemini()
+          else throw new Error('Motor sem chave disponível.')
+
+          if (!raw || !raw.trim()) {
+            $app.logger().error('extrair_dados: tentativa ' + attempt + ' resposta vazia')
+            continue
+          }
+
+          var parseResult = parseAiResponse(raw)
+          if (!parseResult) {
+            $app
+              .logger()
+              .error(
+                'extrair_dados: tentativa ' + attempt + ' parse JSON falhou',
+                'raw',
+                String(raw).substring(0, 400),
+              )
+            continue
+          }
+
+          parsed = parseResult
+          success = true
+          $app.logger().info('extrair_dados: tentativa ' + attempt + ' sucesso')
+          break
+        } catch (callErr) {
+          $app
+            .logger()
+            .error('extrair_dados: tentativa ' + attempt + ' falhou', 'error', String(callErr))
+          if (attempt === MAX_ATTEMPTS) throw callErr
+        }
+      }
+
+      if (!success || !parsed) {
         return e.json(500, { error: 'Não foi possível interpretar a resposta da IA.' })
       }
-      if (!parsed || typeof parsed !== 'object') parsed = {}
+
+      if (typeof parsed !== 'object') parsed = {}
       if (!Array.isArray(parsed.pessoas)) parsed.pessoas = []
       if (!parsed.imovel || typeof parsed.imovel !== 'object') parsed.imovel = {}
       parsed.meta = { motor: motor, usage: usage }
@@ -202,13 +414,34 @@ routerAdd(
       return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
+    var userId = e.auth ? e.auth.id : ''
+
+    // ── Rate Limiting (10 req/min por usuário) ─────────────────────────
+    if (userId) {
+      var now = Date.now()
+      var windowMs = 60000
+      var limit = 10
+      var rlKey = 'rl_extrair_conhecimento_' + userId
+      var rlEntry = null
+      try {
+        rlEntry = $app.store().get(rlKey)
+      } catch (_) {}
+
+      if (!rlEntry || typeof rlEntry !== 'object' || now - rlEntry.windowStart >= windowMs) {
+        $app.store().set(rlKey, { count: 1, windowStart: now })
+      } else {
+        if (rlEntry.count >= limit) {
+          var waitSec = Math.max(1, Math.ceil((rlEntry.windowStart + windowMs - now) / 1000))
+          return e.json(429, { error: 'Muitas requisições. Aguarde ' + waitSec + ' segundos.' })
+        }
+        $app.store().set(rlKey, { count: rlEntry.count + 1, windowStart: rlEntry.windowStart })
+      }
+    }
+
     var body = e.requestInfo().body || {}
     var texto = (body.texto || body.text || '').trim()
     var modo = (body.modo || 'documento').trim().toLowerCase()
     if (!texto) return e.badRequestError('Forneça o texto do documento.')
-    if (texto.length > 60000) {
-      return e.badRequestError('Texto muito longo (limite de 60.000 caracteres).')
-    }
 
     try {
       var anthropicKey = ($secrets.get('ANTHROPIC_API_KEY') || '').replace(/[^\x21-\x7E]/g, '')
@@ -236,48 +469,259 @@ routerAdd(
         '- Só itens com valor normativo/contratual. Ignore preâmbulo, assinaturas e dados de exemplo.\n' +
         '- Português do Brasil. Comece com { e termine com }.'
 
-      var res = $http.send({
-        url: 'https://api.anthropic.com/v1/messages',
-        method: 'POST',
-        headers: {
-          'x-api-key': anthropicKey,
-          'anthropic-version': '2023-06-01',
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-5',
-          thinking: { type: 'disabled' },
-          max_tokens: 8192,
-          system: SYSTEM,
-          messages: [
-            { role: 'user', content: 'MODO: ' + modo + '\n\nTEXTO DO DOCUMENTO:\n' + texto },
-          ],
-        }),
-        timeout: 120,
-      })
-      if (res.statusCode !== 200) throw new Error('Anthropic ' + res.statusCode)
-      var raw = res.json.content[0].text
+      function callAnthropic() {
+        var res = $http.send({
+          url: 'https://api.anthropic.com/v1/messages',
+          method: 'POST',
+          headers: {
+            'x-api-key': anthropicKey,
+            'anthropic-version': '2023-06-01',
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-5',
+            thinking: { type: 'disabled' },
+            max_tokens: 8192,
+            system: SYSTEM,
+            messages: [
+              { role: 'user', content: 'MODO: ' + modo + '\n\nTEXTO DO DOCUMENTO:\n' + texto },
+            ],
+          }),
+          timeout: 120,
+        })
+        if (res.statusCode !== 200) throw new Error('Anthropic ' + res.statusCode)
+        return res.json.content[0].text
+      }
 
-      var s = String(raw || '')
-        .replace(/```json/gi, '')
-        .replace(/```/g, '')
-        .trim()
-      var a = s.indexOf('{')
-      var b = s.lastIndexOf('}')
-      if (a === -1 || b === -1 || b < a)
-        return e.json(500, { error: 'Não foi possível interpretar a resposta da IA.' })
-      s = s.substring(a, b + 1).replace(/,(\s*[}\]])/g, '$1')
+      // ── JSON sanitization helpers ──────────────────────────────────────
 
-      var parsed
-      try {
-        parsed = JSON.parse(s)
-      } catch (perr) {
-        $app
-          .logger()
-          .error('extrair_conhecimento: JSON parse falhou', 'raw', String(raw).substring(0, 400))
+      function sanitizeJsonString(str) {
+        var s = String(str || '')
+          .replace(/^\uFEFF/, '')
+          .replace(/[\u200B-\u200D\uFEFF]/g, '')
+        s = s.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+        return s
+      }
+
+      function stripMarkdownFences(str) {
+        var mdMatch = str.match(/```(?:json)?\s*([\s\S]*?)```/i)
+        if (mdMatch) return mdMatch[1].trim()
+        var unclosedMatch = str.match(/```(?:json)?\s*([\s\S]+)/i)
+        if (unclosedMatch) {
+          var content = unclosedMatch[1]
+          var braceIdx = content.indexOf('{')
+          if (braceIdx !== -1 && braceIdx < 5) {
+            return content.trim()
+          }
+        }
+        return str
+      }
+
+      function extractJsonObject(str) {
+        var start = str.indexOf('{')
+        if (start === -1) return null
+        var depth = 0
+        var inString = false
+        var escape = false
+        for (var i = start; i < str.length; i++) {
+          var ch = str.charAt(i)
+          if (escape) {
+            escape = false
+            continue
+          }
+          if (ch === '\\' && inString) {
+            escape = true
+            continue
+          }
+          if (ch === '"') {
+            inString = !inString
+            continue
+          }
+          if (inString) continue
+          if (ch === '{') depth++
+          else if (ch === '}') {
+            depth--
+            if (depth === 0) {
+              return str.substring(start, i + 1)
+            }
+          }
+        }
+        return str.substring(start)
+      }
+
+      function fixTrailingCommas(str) {
+        return str.replace(/,(\s*[}\]])/g, '$1')
+      }
+
+      function fixUnquotedKeys(str) {
+        return str.replace(/([{,]\s*)([a-zA-Z_][a-zA-Z0-9_]*)(\s*:)/g, '$1"$2"$3')
+      }
+
+      function repairJsonString(str) {
+        var result = []
+        var inString = false
+        var escape = false
+        for (var i = 0; i < str.length; i++) {
+          var ch = str.charAt(i)
+          if (escape) {
+            result.push(ch)
+            escape = false
+            continue
+          }
+          if (ch === '\\' && inString) {
+            result.push(ch)
+            escape = true
+            continue
+          }
+          if (ch === '"') {
+            inString = !inString
+            result.push(ch)
+            continue
+          }
+          if (inString) {
+            if (ch === '\n') {
+              result.push('\\n')
+              continue
+            }
+            if (ch === '\r') {
+              result.push('\\r')
+              continue
+            }
+            if (ch === '\t') {
+              result.push('\\t')
+              continue
+            }
+            if (ch.charCodeAt(0) < 32) {
+              result.push('\\u' + ('0000' + ch.charCodeAt(0).toString(16)).slice(-4))
+              continue
+            }
+            result.push(ch)
+            continue
+          }
+          if (ch === '/' && i + 1 < str.length) {
+            var nc = str.charAt(i + 1)
+            if (nc === '/') {
+              while (i < str.length && str.charAt(i) !== '\n') i++
+              continue
+            }
+            if (nc === '*') {
+              i += 2
+              while (i < str.length - 1 && !(str.charAt(i) === '*' && str.charAt(i + 1) === '/'))
+                i++
+              i++
+              continue
+            }
+          }
+          result.push(ch)
+        }
+        return result.join('')
+      }
+
+      function attemptParse(str) {
+        try {
+          return JSON.parse(str)
+        } catch (e1) {
+          try {
+            return JSON.parse(fixTrailingCommas(str))
+          } catch (e2) {
+            try {
+              return JSON.parse(fixTrailingCommas(fixUnquotedKeys(str)))
+            } catch (e3) {
+              try {
+                return JSON.parse(fixTrailingCommas(repairJsonString(str)))
+              } catch (e4) {
+                try {
+                  return JSON.parse(fixTrailingCommas(fixUnquotedKeys(repairJsonString(str))))
+                } catch (e5) {
+                  return null
+                }
+              }
+            }
+          }
+        }
+      }
+
+      function parseAiResponse(rawContent) {
+        var cleaned = sanitizeJsonString(rawContent)
+        cleaned = stripMarkdownFences(cleaned)
+
+        var parsed = attemptParse(cleaned)
+
+        if (!parsed) {
+          var extracted = extractJsonObject(cleaned)
+          if (extracted) {
+            parsed = attemptParse(sanitizeJsonString(extracted))
+          }
+        }
+
+        if (!parsed) {
+          var rawExtracted = extractJsonObject(sanitizeJsonString(rawContent))
+          if (rawExtracted) {
+            parsed = attemptParse(sanitizeJsonString(rawExtracted))
+          }
+        }
+
+        if (!parsed) {
+          var rawRepaired = repairJsonString(sanitizeJsonString(stripMarkdownFences(rawContent)))
+          var repairedExtracted = extractJsonObject(rawRepaired)
+          if (repairedExtracted) {
+            parsed = attemptParse(repairedExtracted)
+          } else {
+            parsed = attemptParse(rawRepaired)
+          }
+        }
+
+        return parsed
+      }
+
+      // ── Loop de 2 tentativas ──────────────────────────────────────────
+      var MAX_ATTEMPTS = 2
+      var parsed = null
+      var success = false
+
+      for (var attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        try {
+          $app.logger().info('extrair_conhecimento: tentativa ' + attempt + '/' + MAX_ATTEMPTS)
+          var raw = callAnthropic()
+
+          if (!raw || !raw.trim()) {
+            $app.logger().error('extrair_conhecimento: tentativa ' + attempt + ' resposta vazia')
+            continue
+          }
+
+          var parseResult = parseAiResponse(raw)
+          if (!parseResult) {
+            $app
+              .logger()
+              .error(
+                'extrair_conhecimento: tentativa ' + attempt + ' parse JSON falhou',
+                'raw',
+                String(raw).substring(0, 400),
+              )
+            continue
+          }
+
+          parsed = parseResult
+          success = true
+          $app.logger().info('extrair_conhecimento: tentativa ' + attempt + ' sucesso')
+          break
+        } catch (callErr) {
+          $app
+            .logger()
+            .error(
+              'extrair_conhecimento: tentativa ' + attempt + ' falhou',
+              'error',
+              String(callErr),
+            )
+          if (attempt === MAX_ATTEMPTS) throw callErr
+        }
+      }
+
+      if (!success || !parsed) {
         return e.json(500, { error: 'Não foi possível interpretar a resposta da IA.' })
       }
-      if (!parsed || !Array.isArray(parsed.registros)) parsed = { registros: [] }
+
+      if (typeof parsed !== 'object' || !Array.isArray(parsed.registros)) parsed = { registros: [] }
       parsed.registros = parsed.registros
         .filter((r) => r && String(r.content || '').trim())
         .map((r) => ({
@@ -372,7 +816,7 @@ onRecordAfterCreateSuccess((e) => {
 // ============================================================================
 // Identidade dos e-mails transacionais (decisão do Marcus, 2026-07-24):
 // os e-mails de verificação e de reset saem em português, com a cara da
-// Prime Circle (Ink #0E0E0E, Ouro #C9A84C, Marfim). Em vez de gravar template
+// Prime Circle (Ink #0E0E0E, Ouro #C9A84C, Marfim). Em vez de怪 template
 // nas settings (o PB do Skip ignora a gravação), interceptamos o ENVIO e
 // trocamos assunto e corpo na hora. O link original é extraído do corpo padrão.
 // O HTML é duplicado nos dois handlers de propósito: handlers do JSVM são
