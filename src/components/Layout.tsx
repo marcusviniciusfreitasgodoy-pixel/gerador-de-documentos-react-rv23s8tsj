@@ -4,6 +4,7 @@ import {
   LogOut,
   ChevronDown,
   ChevronUp,
+  Shield,
   Lightbulb,
   BookOpen,
   FileCheck,

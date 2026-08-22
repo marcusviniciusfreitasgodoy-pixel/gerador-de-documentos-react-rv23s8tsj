@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T16:38:28.228Z",
+  "generatedAt": "2026-08-22T17:22:53.597Z",
   "collections": [
     {
       "name": "users",
@@ -130,8 +130,8 @@
       "name": "broker_profile",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != \"\" && user = @request.auth.id",
-        "view": "@request.auth.id != \"\" && user = @request.auth.id",
+        "list": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
+        "view": "@request.auth.id != \"\" && (user = @request.auth.id || @request.auth.isAdmin = true)",
         "create": "@request.auth.id != \"\" && user = @request.auth.id",
         "update": "@request.auth.id != \"\" && user = @request.auth.id",
         "delete": "@request.auth.id != \"\" && user = @request.auth.id"
