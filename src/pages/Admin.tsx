@@ -32,6 +32,7 @@ import pb from '@/lib/pocketbase/client'
 import { getAdminOverview, type AdminOverview } from '@/services/admin'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import type { BrokerProfile } from '@/services/broker-profile'
+import AdminAgenciasBlock from '@/components/admin/AgenciasBlock'
 
 // ── Fila de Atendimento ────────────────────────────────────────────────────
 // Item unificado: vem de expert_support_requests (Suporte) ou chamados (Chamado).
@@ -607,6 +608,9 @@ export default function AdminPage() {
           </Card>
         </div>
       </div>
+
+      {/* ── Bloco 5: Imobiliárias (camada de equipe) ─────────────────────── */}
+      <AdminAgenciasBlock />
     </div>
   )
 }

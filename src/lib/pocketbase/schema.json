@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T17:43:27.905Z",
+  "generatedAt": "2026-08-22T18:18:40.845Z",
   "collections": [
     {
       "name": "users",
@@ -662,11 +662,11 @@
       "name": "negocios",
       "type": "base",
       "apiRules": {
-        "list": "owner = @request.auth.id",
-        "view": "owner = @request.auth.id",
+        "list": "@request.auth.id != \"\" && (owner = @request.auth.id || agency = @request.auth.id || @request.auth.isAdmin = true)",
+        "view": "@request.auth.id != \"\" && (owner = @request.auth.id || agency = @request.auth.id || @request.auth.isAdmin = true)",
         "create": "owner = @request.auth.id",
-        "update": "owner = @request.auth.id",
-        "delete": "owner = @request.auth.id"
+        "update": "@request.auth.id != \"\" && (owner = @request.auth.id || agency = @request.auth.id || @request.auth.isAdmin = true)",
+        "delete": "@request.auth.id != \"\" && (owner = @request.auth.id || @request.auth.isAdmin = true)"
       },
       "fields": [
         {
@@ -707,9 +707,19 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onCreate", "onUpdate"]
+        },
+        {
+          "name": "agency",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
         }
       ],
-      "indexes": ["CREATE INDEX idx_negocios_owner ON negocios (owner)"]
+      "indexes": [
+        "CREATE INDEX idx_negocios_owner ON negocios (owner)",
+        "CREATE INDEX `idx_negocios_agency` ON `negocios` (agency)"
+      ]
     },
     {
       "name": "chamados",
@@ -824,6 +834,110 @@
       "indexes": [
         "CREATE UNIQUE INDEX idx_rate_limits_user_endpoint_window ON rate_limits (user, endpoint, window_start)",
         "CREATE INDEX idx_rate_limits_window_start ON rate_limits (window_start)"
+      ]
+    },
+    {
+      "name": "agency_members",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != \"\" && (agency = @request.auth.id || member = @request.auth.id || @request.auth.isAdmin = true)",
+        "view": "@request.auth.id != \"\" && (agency = @request.auth.id || member = @request.auth.id || @request.auth.isAdmin = true)",
+        "create": "@request.auth.isAdmin = true",
+        "update": "@request.auth.isAdmin = true",
+        "delete": "@request.auth.isAdmin = true"
+      },
+      "fields": [
+        {
+          "name": "agency",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "member",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["ativo", "removido"]
+        },
+        {
+          "name": "termo_aceito_em",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_agency_members_agency_member ON agency_members (agency, member)",
+        "CREATE UNIQUE INDEX idx_agency_members_member_ativo ON agency_members (member) WHERE status = 'ativo'"
+      ]
+    },
+    {
+      "name": "access_logs",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.isAdmin = true",
+        "view": "@request.auth.isAdmin = true",
+        "create": null,
+        "update": null,
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "user",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "negocio",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "negocios"
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE INDEX idx_access_logs_user ON access_logs (user)",
+        "CREATE INDEX idx_access_logs_negocio ON access_logs (negocio)",
+        "CREATE INDEX idx_access_logs_created ON access_logs (created DESC)"
       ]
     }
   ]

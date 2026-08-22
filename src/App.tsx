@@ -21,6 +21,7 @@ import DistratoPage from './pages/Distrato'
 import PermutaPage from './pages/Permuta'
 import NegociosPage from './pages/Negocios'
 import NegocioDetalhePage from './pages/NegocioDetalhe'
+import EquipePage from './pages/Equipe'
 import AdminPage from './pages/Admin'
 import ChamadoDetalhePage from './pages/ChamadoDetalhe'
 
@@ -48,6 +49,7 @@ const App = () => (
               <Route path="/permuta" element={<PermutaPage />} />
               <Route path="/negocios" element={<NegociosPage />} />
               <Route path="/negocios/:id" element={<NegocioDetalhePage />} />
+              <Route path="/equipe" element={<EquipePage />} />
               <Route path="/admin" element={<AdminPage />} />
               <Route path="/chamados/:id" element={<ChamadoDetalhePage />} />
             </Route>
