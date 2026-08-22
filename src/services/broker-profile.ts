@@ -24,6 +24,7 @@ export interface BrokerProfile {
   endereco: string
   cidade: string
   uf: string
+  commission_rate?: number
   created: string
   updated: string
 }
@@ -37,6 +38,7 @@ export interface BrokerDisplay {
   responsavel_cpf: string
   responsavel_creci: string
   pix: string
+  rate?: number
 }
 
 export const getBrokerProfile = async (): Promise<BrokerProfile | null> => {
@@ -63,6 +65,7 @@ export const getBrokerDisplay = (profile: BrokerProfile | null): BrokerDisplay |
       responsavel_cpf: profile.responsavel_cpf || '',
       responsavel_creci: profile.responsavel_creci || '',
       pix: profile.pix || '',
+      rate: profile.commission_rate,
     }
   }
 
@@ -75,6 +78,7 @@ export const getBrokerDisplay = (profile: BrokerProfile | null): BrokerDisplay |
     responsavel_cpf: profile.cpf || '',
     responsavel_creci: profile.creci || '',
     pix: profile.pix || '',
+    rate: profile.commission_rate,
   }
 }
 

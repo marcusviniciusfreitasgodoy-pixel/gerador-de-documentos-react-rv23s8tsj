@@ -58,24 +58,24 @@ export function normalizeValidationResult(raw: unknown): ValidarMinutaResponse {
     status: validStatus(r.status),
     resumo: str(r.resumo),
     conformidade: Array.isArray(r.conformidade)
-      ? r.conformidade.filter(Boolean).map((item) => ({
-          code: str((item as Record<string, unknown>)?.code),
-          titulo: str((item as Record<string, unknown>)?.titulo) || 'Sem título',
-          status: validConformidadeStatus((item as Record<string, unknown>)?.status),
-          descricao: str((item as Record<string, unknown>)?.descricao),
+      ? r.conformidade.filter(Boolean).map((item: any) => ({
+          code: str(item?.code),
+          titulo: str(item?.titulo) || 'Sem título',
+          status: validConformidadeStatus(item?.status),
+          descricao: str(item?.descricao),
         }))
       : [],
     riscos: Array.isArray(r.riscos)
-      ? r.riscos.filter(Boolean).map((item) => ({
-          gravidade: validGravidade((item as Record<string, unknown>)?.gravidade),
-          descricao: str((item as Record<string, unknown>)?.descricao),
-          base_code: str((item as Record<string, unknown>)?.base_code),
+      ? r.riscos.filter(Boolean).map((item: any) => ({
+          gravidade: validGravidade(item?.gravidade),
+          descricao: str(item?.descricao),
+          base_code: str(item?.base_code),
         }))
       : [],
     recomendacoes: Array.isArray(r.recomendacoes)
-      ? r.recomendacoes.filter(Boolean).map((item) => ({
-          texto: str((item as Record<string, unknown>)?.texto),
-          base_code: str((item as Record<string, unknown>)?.base_code),
+      ? r.recomendacoes.filter(Boolean).map((item: any) => ({
+          texto: str(item?.texto),
+          base_code: str(item?.base_code),
         }))
       : [],
   }

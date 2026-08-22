@@ -723,7 +723,7 @@ function PartySection({
   icon: React.ReactNode
 }) {
   const fName = (f: string) => `${prefix}_${f}` as any
-  const estadoCivil = useWatch({ control, name: fName('estado_civil') })
+  const estadoCivil = String(useWatch({ control, name: fName('estado_civil') }) || '')
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -873,7 +873,7 @@ function ConjugeSection({
   papeis: readonly string[]
 }) {
   const fName = (f: string) => `conjuge_${lado}_${f}` as any
-  const papel = useWatch({ control, name: fName('papel') })
+  const papel = String(useWatch({ control, name: fName('papel') }) || '')
   const ROTULO: Record<string, string> = {
     nenhum: 'Não participa do documento',
     co_vendedor: 'Co-vendedor(a): é parte e aliena junto',
