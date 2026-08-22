@@ -21,25 +21,70 @@ routerAdd(
 
     var userId = e.auth ? e.auth.id : ''
 
-    // ── Rate Limiting (10 req/min por usuário) ─────────────────────────
+    // ── Rate Limiting via coleção `rate_limits` (janela fixa de 60s) ──────
+    // Fail-open: qualquer erro na coleção é logado e a requisição passa —
+    // nunca bloqueia um usuário legítimo por falha de infra de rate limit.
     if (userId) {
-      var now = Date.now()
-      var windowMs = 60000
-      var limit = 10
-      var rlKey = 'rl_extrair_dados_' + userId
-      var rlEntry = null
       try {
-        rlEntry = $app.store().get(rlKey)
-      } catch (_) {}
+        var rlNowSec = Math.floor(Date.now() / 1000)
+        var rlWindowStart = Math.floor(rlNowSec / 60) * 60
+        var rlLimit = 10
+        var rlEndpoint = 'extrair_dados'
 
-      if (!rlEntry || typeof rlEntry !== 'object' || now - rlEntry.windowStart >= windowMs) {
-        $app.store().set(rlKey, { count: 1, windowStart: now })
-      } else {
-        if (rlEntry.count >= limit) {
-          var waitSec = Math.max(1, Math.ceil((rlEntry.windowStart + windowMs - now) / 1000))
-          return e.json(429, { error: 'Muitas requisições. Aguarde ' + waitSec + ' segundos.' })
+        // Limpeza: remove registros com window_start mais antigo que 2 min.
+        try {
+          var rlCutoff = rlWindowStart - 120
+          var rlStale = $app.findRecordsByFilter(
+            'rate_limits',
+            'window_start < {:cutoff}',
+            '',
+            200,
+            0,
+            { cutoff: rlCutoff },
+          )
+          for (var rlPurgeI = 0; rlPurgeI < rlStale.length; rlPurgeI++) {
+            try {
+              $app.delete(rlStale[rlPurgeI])
+            } catch (_) {}
+          }
+        } catch (rlCleanErr) {
+          $app.logger().error('rate_limits: limpeza falhou', 'error', String(rlCleanErr))
         }
-        $app.store().set(rlKey, { count: rlEntry.count + 1, windowStart: rlEntry.windowStart })
+
+        var rlExisting = []
+        try {
+          rlExisting = $app.findRecordsByFilter(
+            'rate_limits',
+            'user = {:uid} && endpoint = {:ep} && window_start = {:ws}',
+            '',
+            1,
+            0,
+            { uid: userId, ep: rlEndpoint, ws: rlWindowStart },
+          )
+        } catch (rlFindErr) {
+          $app.logger().error('rate_limits: busca falhou', 'error', String(rlFindErr))
+        }
+
+        if (rlExisting && rlExisting.length > 0) {
+          var rlRec = rlExisting[0]
+          var rlCount = (rlRec.getInt('count') || 0) + 1
+          rlRec.set('count', rlCount)
+          $app.saveNoValidate(rlRec)
+          if (rlCount > rlLimit) {
+            var rlWaitSec = Math.max(1, rlWindowStart + 60 - rlNowSec)
+            return e.json(429, { error: 'Muitas requisições. Aguarde ' + rlWaitSec + ' segundos.' })
+          }
+        } else {
+          var rlCol = $app.findCollectionByNameOrId('rate_limits')
+          var rlNewRec = new Record(rlCol)
+          rlNewRec.set('user', userId)
+          rlNewRec.set('endpoint', rlEndpoint)
+          rlNewRec.set('window_start', rlWindowStart)
+          rlNewRec.set('count', 1)
+          $app.saveNoValidate(rlNewRec)
+        }
+      } catch (rlErr) {
+        $app.logger().error('rate_limits: erro (fail-open)', 'error', String(rlErr))
       }
     }
 
@@ -416,25 +461,70 @@ routerAdd(
 
     var userId = e.auth ? e.auth.id : ''
 
-    // ── Rate Limiting (10 req/min por usuário) ─────────────────────────
+    // ── Rate Limiting via coleção `rate_limits` (janela fixa de 60s) ──────
+    // Fail-open: qualquer erro na coleção é logado e a requisição passa —
+    // nunca bloqueia um usuário legítimo por falha de infra de rate limit.
     if (userId) {
-      var now = Date.now()
-      var windowMs = 60000
-      var limit = 10
-      var rlKey = 'rl_extrair_conhecimento_' + userId
-      var rlEntry = null
       try {
-        rlEntry = $app.store().get(rlKey)
-      } catch (_) {}
+        var rlNowSec = Math.floor(Date.now() / 1000)
+        var rlWindowStart = Math.floor(rlNowSec / 60) * 60
+        var rlLimit = 10
+        var rlEndpoint = 'extrair_conhecimento'
 
-      if (!rlEntry || typeof rlEntry !== 'object' || now - rlEntry.windowStart >= windowMs) {
-        $app.store().set(rlKey, { count: 1, windowStart: now })
-      } else {
-        if (rlEntry.count >= limit) {
-          var waitSec = Math.max(1, Math.ceil((rlEntry.windowStart + windowMs - now) / 1000))
-          return e.json(429, { error: 'Muitas requisições. Aguarde ' + waitSec + ' segundos.' })
+        // Limpeza: remove registros com window_start mais antigo que 2 min.
+        try {
+          var rlCutoff = rlWindowStart - 120
+          var rlStale = $app.findRecordsByFilter(
+            'rate_limits',
+            'window_start < {:cutoff}',
+            '',
+            200,
+            0,
+            { cutoff: rlCutoff },
+          )
+          for (var rlPurgeI = 0; rlPurgeI < rlStale.length; rlPurgeI++) {
+            try {
+              $app.delete(rlStale[rlPurgeI])
+            } catch (_) {}
+          }
+        } catch (rlCleanErr) {
+          $app.logger().error('rate_limits: limpeza falhou', 'error', String(rlCleanErr))
         }
-        $app.store().set(rlKey, { count: rlEntry.count + 1, windowStart: rlEntry.windowStart })
+
+        var rlExisting = []
+        try {
+          rlExisting = $app.findRecordsByFilter(
+            'rate_limits',
+            'user = {:uid} && endpoint = {:ep} && window_start = {:ws}',
+            '',
+            1,
+            0,
+            { uid: userId, ep: rlEndpoint, ws: rlWindowStart },
+          )
+        } catch (rlFindErr) {
+          $app.logger().error('rate_limits: busca falhou', 'error', String(rlFindErr))
+        }
+
+        if (rlExisting && rlExisting.length > 0) {
+          var rlRec = rlExisting[0]
+          var rlCount = (rlRec.getInt('count') || 0) + 1
+          rlRec.set('count', rlCount)
+          $app.saveNoValidate(rlRec)
+          if (rlCount > rlLimit) {
+            var rlWaitSec = Math.max(1, rlWindowStart + 60 - rlNowSec)
+            return e.json(429, { error: 'Muitas requisições. Aguarde ' + rlWaitSec + ' segundos.' })
+          }
+        } else {
+          var rlCol = $app.findCollectionByNameOrId('rate_limits')
+          var rlNewRec = new Record(rlCol)
+          rlNewRec.set('user', userId)
+          rlNewRec.set('endpoint', rlEndpoint)
+          rlNewRec.set('window_start', rlWindowStart)
+          rlNewRec.set('count', 1)
+          $app.saveNoValidate(rlNewRec)
+        }
+      } catch (rlErr) {
+        $app.logger().error('rate_limits: erro (fail-open)', 'error', String(rlErr))
       }
     }
 

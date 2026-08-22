@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-21T22:25:54.609Z",
+  "generatedAt": "2026-08-22T16:11:49.791Z",
   "collections": [
     {
       "name": "users",
@@ -769,6 +769,62 @@
         }
       ],
       "indexes": []
+    },
+    {
+      "name": "rate_limits",
+      "type": "base",
+      "apiRules": {
+        "list": null,
+        "view": null,
+        "create": null,
+        "update": null,
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "user",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "endpoint",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "window_start",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "count",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_rate_limits_user_endpoint_window ON rate_limits (user, endpoint, window_start)",
+        "CREATE INDEX idx_rate_limits_window_start ON rate_limits (window_start)"
+      ]
     }
   ]
 }
