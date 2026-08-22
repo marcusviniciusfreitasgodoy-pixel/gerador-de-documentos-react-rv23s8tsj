@@ -21,6 +21,8 @@ import DistratoPage from './pages/Distrato'
 import PermutaPage from './pages/Permuta'
 import NegociosPage from './pages/Negocios'
 import NegocioDetalhePage from './pages/NegocioDetalhe'
+import AdminPage from './pages/Admin'
+import ChamadoDetalhePage from './pages/ChamadoDetalhe'
 
 const App = () => (
   <BrowserRouter>
