@@ -145,38 +145,19 @@ routerAdd(
       return e.badRequestError('O texto do documento é obrigatório.')
     }
 
-    // Redação de CPF/RG para logs de falha (LGPD). Só roda quando o parse
-    // FALHOU — no sucesso, document_text não é gravado (parsed_result basta).
-    function redactSensitive(text) {
-      var t = String(text || '')
-      // CPF formatado: 000.000.000-00
-      t = t.replace(/\d{3}\.\d{3}\.\d{3}-\d{2}/g, 'XXX.XXX.XXX-XX')
-      // RG formatado: 00.000.000-X ou 0.000.000-X (1-2 dígitos iniciais)
-      t = t.replace(/\d{1,2}\.\d{3}\.\d{3}-\d{1,2}/g, 'XX.XXX.XXX-X')
-      // RG sem formatação: 7 a 10 dígitos + dígito verificador (com ou sem traço)
-      t = t.replace(/\d{7,10}-?\d{1,2}/g, 'XX.XXX.XXX-X')
-      return t
-    }
-
     function createAuditLog(status, parsedResult, rawResponse, errorMessage, errorCode) {
-      // Estratégia dupla de log para document_text (LGPD):
-      // - Parse bem-sucedido (status='success'): NÃO grava document_text — o
-      //   parsed_result (JSON estruturado) já basta para auditoria.
-      // - Parse falhou (status!='success'): grava document_text COM redação de
-      //   CPF/RG via regex, sem truncar (contexto integral do erro).
-      var logDocumentText = ''
-      if (status !== 'success') {
-        logDocumentText = redactSensitive(documentText)
-      }
-
+      // LGPD (decisão do Marcus, 2026-07-24): NÃO gravar document_text NUNCA —
+      // nem no sucesso, nem na falha. O texto da minuta é dado pessoal
+      // (nome, CPF, RG, endereço das partes) e mesmo redigido deixava resíduo.
+      // No sucesso, o parsed_result (JSON estruturado) basta para auditoria.
+      // Na falha, ficam só error_code, error_message, parsed_result (se houver
+      // algo parcial) e o raw_ai_response (saída da IA, não o documento do
+      // usuário). Zera o resíduo de PII nos logs de validação.
       try {
         var logCol = $app.findCollectionByNameOrId('validation_logs')
         var logRecord = new Record(logCol)
         if (userId) {
           logRecord.set('user', userId)
-        }
-        if (logDocumentText) {
-          logRecord.set('document_text', logDocumentText)
         }
         logRecord.set('document_type', documentType)
         logRecord.set('status', status)
@@ -202,9 +183,6 @@ routerAdd(
           var auditCol = $app.findCollectionByNameOrId('validation_audit')
           var auditRecord = new Record(auditCol)
           auditRecord.set('user_id', userId)
-          if (logDocumentText) {
-            auditRecord.set('document_text', logDocumentText)
-          }
           auditRecord.set('document_type', documentType)
           auditRecord.set('status', status)
           if (rawResponse) {
