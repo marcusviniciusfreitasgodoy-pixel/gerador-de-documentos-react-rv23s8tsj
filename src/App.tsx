@@ -21,6 +21,8 @@ import DistratoPage from './pages/Distrato'
 import PermutaPage from './pages/Permuta'
 import NegociosPage from './pages/Negocios'
 import NegocioDetalhePage from './pages/NegocioDetalhe'
+import AdminPage from './pages/Admin'
+import ChamadoDetalhePage from './pages/ChamadoDetalhe'
 
 const App = () => (
   <BrowserRouter>
@@ -46,6 +48,8 @@ const App = () => (
               <Route path="/permuta" element={<PermutaPage />} />
               <Route path="/negocios" element={<NegociosPage />} />
               <Route path="/negocios/:id" element={<NegocioDetalhePage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/chamados/:id" element={<ChamadoDetalhePage />} />
             </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
