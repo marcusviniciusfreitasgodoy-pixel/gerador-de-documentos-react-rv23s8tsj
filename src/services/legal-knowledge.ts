@@ -9,12 +9,19 @@ export interface LegalKnowledge {
   content: string
   priority?: number
   version?: number
+  agency?: string
   created: string
   updated: string
 }
 
 export const getLegalKnowledge = () =>
   pb.collection('legal_knowledge').getFullList<LegalKnowledge>({ sort: '-created' })
+
+export const getAgencyLegalKnowledge = (agencyId: string) =>
+  pb.collection('legal_knowledge').getFullList<LegalKnowledge>({
+    filter: pb.filter('agency = {:agency}', { agency: agencyId }),
+    sort: '-created',
+  })
 
 export const getLegalKnowledgeById = (id: string) =>
   pb.collection('legal_knowledge').getOne<LegalKnowledge>(id)

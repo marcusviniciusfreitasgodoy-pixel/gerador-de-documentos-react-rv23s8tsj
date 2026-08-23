@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-22T18:18:40.845Z",
+  "generatedAt": "2026-08-23T15:37:43.593Z",
   "collections": [
     {
       "name": "users",
@@ -60,11 +60,11 @@
       "name": "legal_knowledge",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.isAdmin = true",
-        "view": "@request.auth.isAdmin = true",
-        "create": "@request.auth.isAdmin = true",
-        "update": "@request.auth.isAdmin = true",
-        "delete": "@request.auth.isAdmin = true"
+        "list": "@request.auth.isAdmin = true || (agency != '' && agency = @request.auth.id)",
+        "view": "@request.auth.isAdmin = true || (agency != '' && agency = @request.auth.id)",
+        "create": "@request.auth.isAdmin = true || (@request.auth.id != \"\" && agency = @request.auth.id)",
+        "update": "@request.auth.isAdmin = true || (agency != '' && agency = @request.auth.id)",
+        "delete": "@request.auth.isAdmin = true || (agency != '' && agency = @request.auth.id)"
       },
       "fields": [
         {
@@ -122,9 +122,16 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onUpdate"]
+        },
+        {
+          "name": "agency",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
         }
       ],
-      "indexes": []
+      "indexes": ["CREATE INDEX `idx_legal_knowledge_agency` ON `legal_knowledge` (agency)"]
     },
     {
       "name": "broker_profile",

@@ -206,25 +206,77 @@ routerAdd(
       }
     }
 
-    var knowledgeRecords = []
+    // ── Resolução de agencyId (Fase 2, §3) ──────────────────────────────
+    var userAgencyId = ''
+    if (userId) {
+      try {
+        var userMemberships = $app.findRecordsByFilter(
+          'agency_members',
+          "member = {:m} && status = 'ativo' && termo_aceito_em != ''",
+          '-created',
+          1,
+          0,
+          { m: userId },
+        )
+        if (userMemberships && userMemberships.length > 0) {
+          userAgencyId = userMemberships[0].getString('agency') || ''
+        }
+      } catch (agencyErr) {
+        $app
+          .logger()
+          .error('validar_minuta: erro ao resolver agency do usuario', 'error', String(agencyErr))
+      }
+    }
+
+    // Carregamento com escopo de agência (4 pontos) + mesclagem por code (casa vence global)
+    var rawKnowledgeRecords = []
     try {
       if (documentType && documentType !== 'Genérico') {
         try {
-          knowledgeRecords = $app.findRecordsByFilter(
-            'legal_knowledge',
-            'trigger_logic ~ {:dt} || trigger_logic = {:todos}',
-            '-priority',
-            50,
-            0,
-            { dt: documentType, todos: 'todos' },
-          )
+          if (userAgencyId) {
+            rawKnowledgeRecords = $app.findRecordsByFilter(
+              'legal_knowledge',
+              "(agency = '' || agency = {:agencyId}) && (trigger_logic ~ {:dt} || trigger_logic = {:todos})",
+              '-priority',
+              100,
+              0,
+              { agencyId: userAgencyId, dt: documentType, todos: 'todos' },
+            )
+          } else {
+            rawKnowledgeRecords = $app.findRecordsByFilter(
+              'legal_knowledge',
+              "agency = '' && (trigger_logic ~ {:dt} || trigger_logic = {:todos})",
+              '-priority',
+              100,
+              0,
+              { dt: documentType, todos: 'todos' },
+            )
+          }
         } catch (filterErr) {
-          knowledgeRecords = []
+          rawKnowledgeRecords = []
         }
       }
+
       // Fallback: se o filtro não retornar nada ou documentType for genérico
-      if (!knowledgeRecords || knowledgeRecords.length === 0) {
-        knowledgeRecords = $app.findRecordsByFilter('legal_knowledge', '1=1', '-priority', 50, 0)
+      if (!rawKnowledgeRecords || rawKnowledgeRecords.length === 0) {
+        if (userAgencyId) {
+          rawKnowledgeRecords = $app.findRecordsByFilter(
+            'legal_knowledge',
+            "(agency = '' || agency = {:agencyId})",
+            '-priority',
+            100,
+            0,
+            { agencyId: userAgencyId },
+          )
+        } else {
+          rawKnowledgeRecords = $app.findRecordsByFilter(
+            'legal_knowledge',
+            "agency = ''",
+            '-priority',
+            100,
+            0,
+          )
+        }
       }
     } catch (err) {
       $app.logger().error('validar_minuta: knowledge base load failed', 'error', String(err))
@@ -234,6 +286,41 @@ routerAdd(
         code: 'KNOWLEDGE_BASE_ERROR',
       })
     }
+
+    // Mesclagem por code (regra da imobiliária vence a global de mesmo code)
+    // e ordenação por priority decrescente
+    var rulesByCode = {}
+    for (var k = 0; k < rawKnowledgeRecords.length; k++) {
+      var kRec = rawKnowledgeRecords[k]
+      var kCode = kRec.getString('code') || 'SEM_CODE_' + kRec.id
+      var kAgency = kRec.getString('agency') || ''
+
+      // Se ainda não temos essa regra OU se a atual é da imobiliária (kAgency === userAgencyId),
+      // a regra da imobiliária substitui a global
+      if (!rulesByCode[kCode]) {
+        rulesByCode[kCode] = kRec
+      } else {
+        var existingAgency = rulesByCode[kCode].getString('agency') || ''
+        if (userAgencyId && kAgency === userAgencyId && !existingAgency) {
+          rulesByCode[kCode] = kRec
+        }
+      }
+    }
+
+    var mergedRecords = []
+    var codeKeys = Object.keys(rulesByCode)
+    for (var ck = 0; ck < codeKeys.length; ck++) {
+      mergedRecords.push(rulesByCode[codeKeys[ck]])
+    }
+
+    mergedRecords.sort(function (a, b) {
+      var pA = a.getInt('priority') || 0
+      var pB = b.getInt('priority') || 0
+      return pB - pA
+    })
+
+    // Teto de 50 registros
+    var knowledgeRecords = mergedRecords.slice(0, 50)
 
     var baseLines = []
     for (var i = 0; i < knowledgeRecords.length; i++) {
@@ -735,29 +822,114 @@ routerAdd(
     var description = req.getString('description') || ''
     var documentType = req.getString('document_type') || ''
 
-    var knowledgeRecords = []
+    // ── Resolução de agencyId para consultar-ia (Fase 2, §3) ────────────
+    var userAgencyId = ''
+    if (userId) {
+      try {
+        var userMemberships = $app.findRecordsByFilter(
+          'agency_members',
+          "member = {:m} && status = 'ativo' && termo_aceito_em != ''",
+          '-created',
+          1,
+          0,
+          { m: userId },
+        )
+        if (userMemberships && userMemberships.length > 0) {
+          userAgencyId = userMemberships[0].getString('agency') || ''
+        }
+      } catch (agencyErr) {
+        $app
+          .logger()
+          .error('consultar-ia: erro ao resolver agency do usuario', 'error', String(agencyErr))
+      }
+    }
+
+    // Carregamento com escopo de agência (4 pontos) + mesclagem por code
+    var rawKnowledgeRecords = []
     try {
       if (documentType && documentType !== 'Genérico') {
         try {
-          knowledgeRecords = $app.findRecordsByFilter(
-            'legal_knowledge',
-            'trigger_logic ~ {:dt} || trigger_logic = {:todos}',
-            '-priority',
-            50,
-            0,
-            { dt: documentType, todos: 'todos' },
-          )
+          if (userAgencyId) {
+            rawKnowledgeRecords = $app.findRecordsByFilter(
+              'legal_knowledge',
+              "(agency = '' || agency = {:agencyId}) && (trigger_logic ~ {:dt} || trigger_logic = {:todos})",
+              '-priority',
+              100,
+              0,
+              { agencyId: userAgencyId, dt: documentType, todos: 'todos' },
+            )
+          } else {
+            rawKnowledgeRecords = $app.findRecordsByFilter(
+              'legal_knowledge',
+              "agency = '' && (trigger_logic ~ {:dt} || trigger_logic = {:todos})",
+              '-priority',
+              100,
+              0,
+              { dt: documentType, todos: 'todos' },
+            )
+          }
         } catch (filterErr) {
-          knowledgeRecords = []
+          rawKnowledgeRecords = []
         }
       }
+
       // Fallback: se o filtro não retornar nada ou documentType for genérico
-      if (!knowledgeRecords || knowledgeRecords.length === 0) {
-        knowledgeRecords = $app.findRecordsByFilter('legal_knowledge', '1=1', '-priority', 50, 0)
+      if (!rawKnowledgeRecords || rawKnowledgeRecords.length === 0) {
+        if (userAgencyId) {
+          rawKnowledgeRecords = $app.findRecordsByFilter(
+            'legal_knowledge',
+            "(agency = '' || agency = {:agencyId})",
+            '-priority',
+            100,
+            0,
+            { agencyId: userAgencyId },
+          )
+        } else {
+          rawKnowledgeRecords = $app.findRecordsByFilter(
+            'legal_knowledge',
+            "agency = ''",
+            '-priority',
+            100,
+            0,
+          )
+        }
       }
     } catch (err) {
       return e.json(500, { error: 'Base de conhecimento indisponível.' })
     }
+
+    // Mesclagem por code (regra da imobiliária vence a global de mesmo code)
+    // e ordenação por priority decrescente
+    var rulesByCode = {}
+    for (var k = 0; k < rawKnowledgeRecords.length; k++) {
+      var kRec = rawKnowledgeRecords[k]
+      var kCode = kRec.getString('code') || 'SEM_CODE_' + kRec.id
+      var kAgency = kRec.getString('agency') || ''
+
+      if (!rulesByCode[kCode]) {
+        rulesByCode[kCode] = kRec
+      } else {
+        var existingAgency = rulesByCode[kCode].getString('agency') || ''
+        if (userAgencyId && kAgency === userAgencyId && !existingAgency) {
+          rulesByCode[kCode] = kRec
+        }
+      }
+    }
+
+    var mergedRecords = []
+    var codeKeys = Object.keys(rulesByCode)
+    for (var ck = 0; ck < codeKeys.length; ck++) {
+      mergedRecords.push(rulesByCode[codeKeys[ck]])
+    }
+
+    mergedRecords.sort(function (a, b) {
+      var pA = a.getInt('priority') || 0
+      var pB = b.getInt('priority') || 0
+      return pB - pA
+    })
+
+    // Teto de 50 registros
+    var knowledgeRecords = mergedRecords.slice(0, 50)
 
     var baseLines = []
     for (var i = 0; i < knowledgeRecords.length; i++) {
