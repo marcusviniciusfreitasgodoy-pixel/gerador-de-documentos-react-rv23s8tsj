@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Users,
@@ -9,6 +9,13 @@ import {
   RefreshCw,
   ShieldCheck,
   AlertTriangle,
+  Scale,
+  Plus,
+  Pencil,
+  Trash2,
+  Search,
+  X,
+  Info,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -16,9 +23,50 @@ import { IntroPagina } from '@/components/Layout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { getEquipeResumo, type EquipeResumo } from '@/services/agencies'
+import {
+  getAgencyLegalKnowledge,
+  createLegalKnowledge,
+  updateLegalKnowledge,
+  deleteLegalKnowledge,
+  type LegalKnowledge,
+} from '@/services/legal-knowledge'
+import { useAuth } from '@/hooks/use-auth'
+import { useRealtime } from '@/hooks/use-realtime'
+import { cn } from '@/lib/utils'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
+
+interface EditState {
+  id?: string
+  title: string
+  category: string
+  code: string
+  trigger_logic: string
+  content: string
+  priority: string
+  version: string
+}
+
+const emptyForm: EditState = {
+  title: '',
+  category: '',
+  code: '',
+  trigger_logic: '',
+  content: '',
+  priority: '50',
+  version: '1',
+}
 
 // Tempo relativo em PT-BR (espelha o do /admin).
 function tempoRelativo(iso: string): string {
@@ -36,9 +84,18 @@ function tempoRelativo(iso: string): string {
 }
 
 export default function EquipePage() {
+  const { user } = useAuth()
   const [resumo, setResumo] = useState<EquipeResumo | null>(null)
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
+
+  // Estado da Régua da Casa
+  const [houseRules, setHouseRules] = useState<LegalKnowledge[]>([])
+  const [rulesLoading, setRulesLoading] = useState(true)
+  const [ruleDialogOpen, setRuleDialogOpen] = useState(false)
+  const [ruleEditForm, setRuleEditForm] = useState<EditState>(emptyForm)
+  const [ruleSearch, setRuleSearch] = useState('')
+  const [ruleSaving, setRuleSaving] = useState(false)
 
   const carregar = useCallback(async () => {
     setLoading(true)
@@ -57,9 +114,99 @@ export default function EquipePage() {
     }
   }, [])
 
+  const carregarRegras = useCallback(async () => {
+    if (!user?.id) return
+    setRulesLoading(true)
+    try {
+      const rules = await getAgencyLegalKnowledge(user.id)
+      setHouseRules(rules)
+    } catch (error) {
+      toast.error('Erro ao carregar regras da casa: ' + getErrorMessage(error))
+    } finally {
+      setRulesLoading(false)
+    }
+  }, [user?.id])
+
   useEffect(() => {
     carregar()
-  }, [carregar])
+    carregarRegras()
+  }, [carregar, carregarRegras])
+
+  useRealtime('legal_knowledge', () => {
+    carregarRegras()
+  })
+
+  const filteredRules = useMemo(() => {
+    const q = ruleSearch.trim().toLowerCase()
+    if (!q) return houseRules
+    return houseRules.filter((r) =>
+      [r.code, r.title, r.category, r.content].some((f) =>
+        (f || '').toString().toLowerCase().includes(q),
+      ),
+    )
+  }, [houseRules, ruleSearch])
+
+  const handleSaveRule = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!ruleEditForm.title.trim() || !ruleEditForm.content.trim()) {
+      toast.error('Título e conteúdo são obrigatórios.')
+      return
+    }
+
+    setRuleSaving(true)
+    const payload = {
+      title: ruleEditForm.title.trim(),
+      category: ruleEditForm.category.trim() || undefined,
+      code: ruleEditForm.code.trim().toUpperCase() || undefined,
+      trigger_logic: ruleEditForm.trigger_logic.trim() || undefined,
+      content: ruleEditForm.content.trim(),
+      priority: ruleEditForm.priority ? Number(ruleEditForm.priority) : 50,
+      version: ruleEditForm.version ? Number(ruleEditForm.version) : 1,
+      agency: user?.id,
+    }
+
+    try {
+      if (ruleEditForm.id) {
+        await updateLegalKnowledge(ruleEditForm.id, payload)
+        toast.success('Regra da casa atualizada com sucesso!')
+      } else {
+        await createLegalKnowledge(payload)
+        toast.success('Regra da casa criada com sucesso!')
+      }
+      setRuleDialogOpen(false)
+      setRuleEditForm(emptyForm)
+      carregarRegras()
+    } catch (err) {
+      toast.error('Falha ao salvar regra: ' + getErrorMessage(err))
+    } finally {
+      setRuleSaving(false)
+    }
+  }
+
+  const handleEditRule = (rule: LegalKnowledge) => {
+    setRuleEditForm({
+      id: rule.id,
+      title: rule.title,
+      category: rule.category || '',
+      code: rule.code || '',
+      trigger_logic: rule.trigger_logic || '',
+      content: rule.content,
+      priority: rule.priority?.toString() || '50',
+      version: rule.version?.toString() || '1',
+    })
+    setRuleDialogOpen(true)
+  }
+
+  const handleDeleteRule = async (id: string) => {
+    if (!window.confirm('Tem certeza que deseja remover esta regra da casa?')) return
+    try {
+      await deleteLegalKnowledge(id)
+      toast.success('Regra da casa removida.')
+      carregarRegras()
+    } catch (err) {
+      toast.error('Falha ao remover regra: ' + getErrorMessage(err))
+    }
+  }
 
   return (
     <div className="w-full max-w-5xl space-y-5 animate-fade-in-up">
@@ -242,6 +389,267 @@ export default function EquipePage() {
                         </p>
                       </div>
                     </Link>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Seção Régua da Casa */}
+          <Card className="shadow-elevation border-0 md:border md:border-border/60">
+            <CardHeader className="pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <CardTitle className="text-base font-semibold text-primary flex items-center gap-2">
+                    <Scale className="h-5 w-5" /> Régua da casa
+                  </CardTitle>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Regras e diretrizes jurídicas personalizadas da sua imobiliária aplicadas na
+                    validação de minutas da sua equipe.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 px-2 text-muted-foreground"
+                    onClick={carregarRegras}
+                    disabled={rulesLoading}
+                    aria-label="Atualizar regras"
+                  >
+                    <RefreshCw className={cn('h-3.5 w-3.5', rulesLoading && 'animate-spin')} />
+                  </Button>
+
+                  <Dialog
+                    open={ruleDialogOpen}
+                    onOpenChange={(open) => {
+                      setRuleDialogOpen(open)
+                      if (!open) setRuleEditForm(emptyForm)
+                    }}
+                  >
+                    <DialogTrigger asChild>
+                      <Button size="sm">
+                        <Plus className="mr-1 h-4 w-4" /> Nova Regra da Casa
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>
+                          {ruleEditForm.id ? 'Editar' : 'Nova'} Regra da Casa
+                        </DialogTitle>
+                      </DialogHeader>
+                      <form onSubmit={handleSaveRule} className="space-y-3">
+                        <div className="space-y-1">
+                          <Label htmlFor="house-title">Título *</Label>
+                          <Input
+                            id="house-title"
+                            value={ruleEditForm.title}
+                            onChange={(e) =>
+                              setRuleEditForm({ ...ruleEditForm, title: e.target.value })
+                            }
+                            placeholder="Ex: Cláusula de Sinal e Arras Personalizada"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label htmlFor="house-category">Categoria</Label>
+                            <Input
+                              id="house-category"
+                              value={ruleEditForm.category}
+                              onChange={(e) =>
+                                setRuleEditForm({ ...ruleEditForm, category: e.target.value })
+                              }
+                              placeholder="Ex: Arras / Pagamento"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="house-code">Código da Regra</Label>
+                            <Input
+                              id="house-code"
+                              value={ruleEditForm.code}
+                              onChange={(e) =>
+                                setRuleEditForm({ ...ruleEditForm, code: e.target.value })
+                              }
+                              placeholder="Ex: ARR001 ou FIX004"
+                            />
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground">
+                          Dica: se usar o mesmo código de uma regra padrão (ex: FIX004), a sua regra
+                          da casa irá substituir a global na validação.
+                        </p>
+                        <div className="space-y-1">
+                          <Label htmlFor="house-trigger">Lógica de Disparo (opcional)</Label>
+                          <Input
+                            id="house-trigger"
+                            value={ruleEditForm.trigger_logic}
+                            onChange={(e) =>
+                              setRuleEditForm({
+                                ...ruleEditForm,
+                                trigger_logic: e.target.value,
+                              })
+                            }
+                            placeholder="Ex: Promessa de Compra e Venda"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="house-content">Conteúdo / Diretriz Jurídica *</Label>
+                          <Textarea
+                            id="house-content"
+                            rows={4}
+                            value={ruleEditForm.content}
+                            onChange={(e) =>
+                              setRuleEditForm({ ...ruleEditForm, content: e.target.value })
+                            }
+                            placeholder="Descreva o que deve ser verificado ou a redação exigida pela sua imobiliária..."
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div className="space-y-1">
+                            <Label htmlFor="house-priority">Prioridade</Label>
+                            <Input
+                              id="house-priority"
+                              type="number"
+                              value={ruleEditForm.priority}
+                              onChange={(e) =>
+                                setRuleEditForm({ ...ruleEditForm, priority: e.target.value })
+                              }
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="house-version">Versão</Label>
+                            <Input
+                              id="house-version"
+                              type="number"
+                              value={ruleEditForm.version}
+                              onChange={(e) =>
+                                setRuleEditForm({ ...ruleEditForm, version: e.target.value })
+                              }
+                            />
+                          </div>
+                        </div>
+                        <Button type="submit" className="w-full" disabled={ruleSaving}>
+                          {ruleSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                          Salvar Regra
+                        </Button>
+                      </form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </div>
+
+              {/* Informação sobre a Mesclagem */}
+              <div className="mt-3 flex items-start gap-2 rounded-md bg-blue-50/80 border border-blue-200/60 p-3 text-xs text-blue-900 leading-relaxed">
+                <Info className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                <div>
+                  <strong className="font-semibold">Como funciona a régua da casa:</strong> As
+                  regras globais da Prime Circle continuam valendo para toda a sua equipe. Se você
+                  cadastrar uma regra própria com o mesmo <strong>Código</strong> de uma regra
+                  global, a sua regra da casa terá precedência e substituirá a global na validação.
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="pt-0">
+              {/* Barra de busca das regras */}
+              {houseRules.length > 0 && (
+                <div className="relative mb-3">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+                  <Input
+                    value={ruleSearch}
+                    onChange={(e) => setRuleSearch(e.target.value)}
+                    placeholder="Buscar regras da casa por código, título ou categoria..."
+                    className="pl-8 pr-8 h-8 text-xs"
+                  />
+                  {ruleSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setRuleSearch('')}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      aria-label="Limpar busca"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {rulesLoading ? (
+                <div className="space-y-2 py-4">
+                  <Skeleton className="h-16 w-full" />
+                  <Skeleton className="h-16 w-full" />
+                </div>
+              ) : houseRules.length === 0 ? (
+                <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
+                  <Scale className="h-6 w-6 text-muted-foreground/50" />
+                  Nenhuma regra própria cadastrada ainda. Sua equipe está utilizando a régua padrão
+                  global da Prime Circle.
+                </div>
+              ) : filteredRules.length === 0 ? (
+                <div className="flex flex-col items-center gap-2 py-6 text-center text-sm text-muted-foreground">
+                  Nenhuma regra encontrada para a busca “{ruleSearch}”.
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {filteredRules.map((r) => (
+                    <div
+                      key={r.id}
+                      className="rounded-lg border border-border/60 p-3 hover:bg-secondary/30 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h4 className="text-sm font-semibold text-primary truncate">
+                              {r.title}
+                            </h4>
+                            {r.code && (
+                              <Badge variant="secondary" className="text-[10px] font-mono h-4 px-1">
+                                {r.code}
+                              </Badge>
+                            )}
+                            {r.category && (
+                              <Badge variant="outline" className="text-[10px] h-4 px-1">
+                                {r.category}
+                              </Badge>
+                            )}
+                          </div>
+
+                          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                            {r.content}
+                          </p>
+
+                          {r.trigger_logic && (
+                            <p className="text-[11px] text-muted-foreground/80 mt-1 italic">
+                              Gatilho: {r.trigger_logic}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="flex items-center gap-1 shrink-0">
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7 text-muted-foreground hover:text-foreground"
+                            onClick={() => handleEditRule(r)}
+                            aria-label="Editar regra"
+                          >
+                            <Pencil className="h-3.5 w-3.5" />
+                          </Button>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            className="h-7 w-7 text-muted-foreground hover:text-destructive"
+                            onClick={() => handleDeleteRule(r.id)}
+                            aria-label="Excluir regra"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
               )}
