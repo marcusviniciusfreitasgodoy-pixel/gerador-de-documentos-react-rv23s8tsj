@@ -124,7 +124,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:rgba(245,241,230,.12);margin-top:26px;max-width:560px">
           <div style="background:#0E0E0E;padding:20px 22px 22px">
             <p style="margin:0 0 9px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#C9A84C">Gerar</p>
-            <p style="margin:0;font-size:14.5px;line-height:1.65;color:rgba(232,224,204,.82)">16 documentos em Word, das arras à entrega das chaves, com partes, imóvel e comissão já aplicados.</p>
+            <p style="margin:0;font-size:14.5px;line-height:1.65;color:rgba(232,224,204,.82)">16 documentos em Word, das arras à entrega das chaves. O negócio entra uma vez e alimenta todos eles.</p>
           </div>
           <div style="background:#0E0E0E;padding:20px 22px 22px">
             <p style="margin:0 0 9px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#C9A84C">Validar</p>
@@ -302,7 +302,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <h2 style="margin:0;max-width:760px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(32px,4.4vw,52px);line-height:1.08;letter-spacing:-.02em;color:#0E0E0E">
         16 documentos. Da autorização de venda à <em style="font-style:italic;color:#7a6435">entrega das chaves.</em>
       </h2>
-      <p style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar.</p>
+      <p style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar. E nenhum deles começa em branco: todos bebem do dossiê do negócio.</p>
 
       <div style="margin-top:56px">
         <p style="margin:0 0 18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#6B645B">Captação e pré-contrato</p>
@@ -321,6 +321,31 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       </div>
 
 
+    </div>
+  </section>
+
+
+  <section data-reveal style="background:#F3EBE0;border-top:1px solid #DDD5C7">
+    <div style="max-width:1120px;margin:0 auto;padding:clamp(80px,12vw,132px) clamp(20px,5vw,60px)">
+      <p style="margin:0 0 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B7340">Na mesa com o cliente</p>
+      <div style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
+      <h2 style="margin:0;max-width:820px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(32px,4.4vw,52px);line-height:1.08;letter-spacing:-.02em;color:#0E0E0E">O documento é a primeira coisa que o cliente <em style="font-style:italic;color:#7a6435">vê do seu trabalho.</em></h2>
+      <p style="margin:26px 0 0;max-width:660px;font-size:16px;line-height:1.78;color:#5A544C">Ninguém avalia um corretor pelo esforço que ele teve para fechar. Avalia pelo que chega à mesa. O contrato que abre certo, com a qualificação completa das partes, a cláusula que responde à dúvida antes de ela ser feita e o prazo que não precisa ser explicado dizem, sem você falar nada, que ali tem método.</p>
+      <p style="margin:16px 0 0;max-width:660px;font-size:16px;line-height:1.78;color:#5A544C">É o que separa quem intermedeia de quem improvisa. E é o que faz o cliente indicar você para o próximo negócio.</p>
+      <div data-trio style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#DDD5C7;margin-top:44px;border:1px solid #DDD5C7">
+          <div style="background:#FDFBF6;padding:26px 24px">
+            <h3 style="margin:0 0 8px;font-size:15px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Chega pronto</h3>
+            <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O cliente não espera você redigitar dados que ele já forneceu. O documento sai com tudo no lugar, na mesma conversa.</p>
+          </div>
+          <div style="background:#FDFBF6;padding:26px 24px">
+            <h3 style="margin:0 0 8px;font-size:15px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Escrito para o caso</h3>
+            <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">Cláusula fundamentada no Código Civil, não texto emprestado de outro negócio com o nome trocado.</p>
+          </div>
+          <div style="background:#FDFBF6;padding:26px 24px">
+            <h3 style="margin:0 0 8px;font-size:15px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Sem ponta solta</h3>
+            <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O que costuma virar discussão depois, como a natureza das arras ou o prazo da escritura, já está resolvido no papel.</p>
+          </div>
+      </div>
     </div>
   </section>
 
@@ -366,7 +391,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <div style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
       <h2 style="margin:0;max-width:820px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(32px,4.4vw,52px);line-height:1.08;letter-spacing:-.02em;color:#0E0E0E">Gerar resolve a rotina. Validar resolve o que chega pronto. <em style="font-style:italic;color:#7a6435">E o que não cabe em nenhum dos dois?</em></h2>
       <div data-pares style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,4vw,56px);margin-top:44px;align-items:start">
-        <p style="margin:0;font-size:16px;line-height:1.78;color:#5A544C">Toda carreira tem o negócio que sai do padrão: a herança que ainda não foi partilhada, o vendedor que mora fora, a cláusula que o comprador exige e você nunca viu. Nessa hora o corretor autônomo costuma ficar sozinho, ou procurar às pressas alguém que atenda no mesmo dia.<br><br>Aqui você abre um pedido de análise dentro da própria plataforma, com o negócio que já está cadastrado anexado. Sem sair da operação, sem recomeçar a explicação do zero.</p>
+        <p style="margin:0;font-size:16px;line-height:1.78;color:#5A544C">Toda carreira tem o negócio que sai do padrão: a herança que ainda não foi partilhada, o vendedor que mora fora, a cláusula que o comprador exige e você nunca viu. Nessa hora o corretor autônomo costuma ficar sozinho, ou procurar às pressas alguém que atenda no mesmo dia.<br><br>Aqui a dúvida tem dois caminhos, e você escolhe pelo tamanho dela. <strong style="font-weight:600;color:#0E0E0E">No primeiro nível</strong>, um agente especializado responde na hora, ancorado na base jurídica da plataforma: serve para a dúvida conceitual que trava a próxima linha do contrato. <strong style="font-weight:600;color:#0E0E0E">No segundo</strong>, quando o caso foge do padrão, o pedido vai para um profissional experiente, com o negócio já anexado. Sem sair da operação, sem recomeçar a explicação do zero.</p>
         <div style="display:flex;flex-direction:column;gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
           <div style="background:#FDFBF6;padding:24px 24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">O caso vai junto com o negócio</h3><p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">As partes, o imóvel e os valores já cadastrados seguem anexados ao pedido. Você descreve a dúvida, não a operação inteira.</p></div>
           <div style="background:#FDFBF6;padding:24px 24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">A conversa fica registrada</h3><p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O pedido e a resposta ficam guardados junto do negócio, e não perdidos num aplicativo de mensagem.</p></div>
