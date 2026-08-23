@@ -1,8 +1,10 @@
 # Registro de Melhorias — Landing Page e Segurança
 
 Trabalho conduzido em **agosto de 2026** sobre a Prime Circle Documentos
-(`documentos.primecircle.app.br`), em duas frentes: a **página de abertura**
-(copy e um bug de renderização) e o **endurecimento de segurança** do backend.
+(`documentos.primecircle.app.br`), em quatro frentes: a **página de abertura**
+(copy e um bug de renderização), o **endurecimento de segurança** do backend, o
+**painel administrativo** e a **camada de imobiliárias** (equipe e régua
+própria).
 
 Este documento é o registro do que mudou e por quê. Não altera o funcionamento
 do app; serve de histórico versionado. O `README.md` (template do Skip) e o
@@ -111,16 +113,117 @@ reconciliado para espelhar byte a byte a versão em produção.
 | `1900000023_create_rate_limits` | Cria a coleção do rate limit |
 | `1900000024_fix_validation_log_rules` | Amarra o dono no create dos logs |
 | `1900000025_clear_document_text_pii` | Zera o PII dos 26 registros antigos |
+| `1900000026_admin_read_broker_profile` | Perfil legível pelo dono ou admin |
+| `1900000027_create_agency_members` | Vínculo entre imobiliária e corretores |
+| `1900000028_negocios_add_agency` | Carimbo da imobiliária no negócio |
+| `1900000029_create_access_logs` | Trilha de acesso do gestor (LGPD) |
+| `1900000030_legal_knowledge_add_agency` | Régua própria por imobiliária |
 
 ---
 
-## 4. O que fica para depois (não é código)
+## 4. Painel administrativo (`/admin`)
 
-A parte técnica está encerrada. O que passa a mover a conversão:
+O admin não tinha casa: a régua jurídica, a fila de especialista e os chamados
+viviam dentro de páginas feitas para o corretor, ligados por `if (isAdmin)` no
+meio do componente. Para saber "o que precisa da minha atenção hoje" era preciso
+abrir três páginas e filtrar mentalmente.
+
+Rota `/admin` (adminOnly) com quatro blocos: **fila de atendimento** (pedidos de
+especialista e chamados pendentes, do mais antigo para o mais novo), **pulso da
+operação**, **régua jurídica** e **saúde técnica**.
+
+O ponto de arquitetura que sustentou tudo: as métricas vêm de um endpoint
+(`GET /backend/v1/admin/overview`) que calcula agregados com privilégio de app e
+devolve **só números**. Nenhuma regra de coleção foi afrouxada para o painel
+existir — do contrário, dar ao admin "acesso a tudo" teria reaberto a exposição
+de PII fechada na frente anterior.
+
+---
+
+## 5. Camada de imobiliárias
+
+A landing page prometia *"a régua jurídica é sua, sob controle do administrador
+da conta"*, mas o sistema não tinha o conceito de equipe: uma imobiliária era só
+uma conta solo cujo perfil era uma empresa. Duas fases fecharam essa distância.
+
+### Fase 1 — vínculo de equipe
+
+Coleção `agency_members` liga a conta PJ aos corretores dela, e `negocios.agency`
+carimba de qual imobiliária é cada negócio.
+
+Três decisões que definiram a fase:
+
+- **O carimbo é feito no servidor.** `createNegocio()` roda no cliente e envia o
+  `owner` a partir do `authStore`; se o `agency` também viesse de lá, um corretor
+  poderia forjá-lo — enfiar um negócio na imobiliária de outro, ou tirar o
+  próprio da vista do gestor. Um hook `onRecordCreate` resolve o vínculo e grava
+  o campo, sobrescrevendo o que o cliente mandar.
+- **O gestor lê e edita, mas não apaga.** A `deleteRule` é mais restrita que a de
+  leitura: apagar é destrutivo e assimétrico, então fica com o dono e com o admin
+  da plataforma.
+- **O termo de consentimento bloqueia o carimbo.** Sem `termo_aceito_em`
+  preenchido, o hook não carimba e o gestor não vê nada daquele corretor. A
+  exigência de LGPD é garantida pelo código, não pela lembrança de alguém.
+
+Acrescenta ainda `access_logs` (trilha de quando o gestor abre negócio alheio,
+admin-only) e a rota `/equipe` para o gestor.
+
+### Fase 2 — régua jurídica própria
+
+Campo `legal_knowledge.agency`: vazio = regra global da Prime Circle;
+preenchido = regra daquela imobiliária. A base é montada mesclando as duas, **por
+`code`, com a regra da casa vencendo a global** — a imobiliária pode sobrescrever
+uma cláusula padrão, não só acrescentar.
+
+O ponto crítico: `legal_knowledge` é carregada com `$app`, que **ignora as API
+rules**. Mudar a regra da coleção não filtraria nada na validação — o isolamento
+teve de entrar no filtro de **cada uma das quatro consultas** (duas por rota),
+incluindo os fallbacks, que eram os mais perigosos por dispararem justamente
+quando a imobiliária ainda não tem regra daquele tipo.
+
+Especificações completas em `docs/SPEC-IMOBILIARIAS-F1.md` e
+`docs/SPEC-IMOBILIARIAS-F2.md`.
+
+---
+
+## 6. Uma nota sobre o método
+
+Duas vezes um critério dado como "confirmado pelo código" não se sustentou ao
+abrir o arquivo: o campo que o servidor grava só fica provado olhando o
+**registro criado no banco**, não a intenção do código. Nos dois casos o problema
+apareceu (ou teria aparecido) por essa via. Vale manter o hábito: para qualquer
+regra de acesso ou campo carimbado pelo servidor, conferir o resultado, não a
+descrição.
+
+---
+
+## 7. Próximos passos
+
+### Verificações pendentes (rápidas, sem risco)
+
+- **Regra da casa:** gestor cria uma regra e o `agency` tem de vir com o id dele,
+  nunca vazio. Conferir o registro no banco.
+- **`createRule` de `negocios`:** a migration `1900000028` reescreveu a regra
+  perdendo o `@request.auth.id != ""`. Provavelmente inócuo, mas regra de acesso
+  não é lugar para "provavelmente".
+- **Taxa de falha do `/admin`:** confirmar que o validador grava
+  `status = 'fail'`; se gravar outro valor, o número fica sempre zero.
+- **Documento "Genérico":** confirmar que a validação ainda aponta arras, foro,
+  LGPD e comissão — é o ponto cego do filtro por `trigger_logic`.
+
+### Produto (quando quiser)
+
+- **Fase 3 das imobiliárias** — convite por e-mail e aceite do termo in-app pelo
+  próprio corretor, no lugar do vínculo manual. Faz sentido quando o número de
+  imobiliárias crescer.
+- **Home do corretor** — painel consolidado pessoal. Seguro e barato (lê só o
+  que ele já pode ver), mas é polimento: ele já chega em tudo pelo menu.
+
+### O que move a conversão, e não é código
 
 - **Prova social** — depoimentos de corretor com nome e CRECI.
-- **Ver o produto funcionando** — um vídeo curto de um documento sendo gerado,
-  no lugar do print estático.
+- **Ver o produto funcionando** — um vídeo curto de um documento sendo gerado, no
+  lugar do print estático.
 - **Um canal humano** — um WhatsApp de contato.
 
 ---
