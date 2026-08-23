@@ -5,10 +5,10 @@
 // sobrescrevendo o que vier do cliente.
 // Se for admin, pode definir agency como desejar (vazio para global ou o ID de uma imobiliária).
 //
-// Usa onRecordCreate e onRecordUpdate. Dispara em inserções/atualizações de records.
+// Usa onRecordCreateRequest e onRecordUpdateRequest. Dispara em requests de inserções/atualizações de records.
 
-onRecordCreate((e) => {
-  var auth = e.httpContext ? e.httpContext.get('authRecord') : null
+onRecordCreateRequest((e) => {
+  var auth = e.auth
   var isAdmin = auth ? auth.getBool('isAdmin') : false
 
   if (!isAdmin) {
@@ -20,8 +20,8 @@ onRecordCreate((e) => {
   e.next()
 }, 'legal_knowledge')
 
-onRecordUpdate((e) => {
-  var auth = e.httpContext ? e.httpContext.get('authRecord') : null
+onRecordUpdateRequest((e) => {
+  var auth = e.auth
   var isAdmin = auth ? auth.getBool('isAdmin') : false
 
   if (!isAdmin) {
