@@ -12,6 +12,7 @@ import {
   FileSearch,
   Headset,
   Briefcase,
+  Building2,
   Sun,
   Moon,
   Wand2,
@@ -21,6 +22,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+import { getBrokerProfile } from '@/services/broker-profile'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
 
@@ -59,6 +61,13 @@ const NAV_ITEMS = [
     label: 'Negócios',
     icon: Briefcase,
     desc: 'O dossiê da operação: partes e imóvel cadastrados uma vez só',
+  },
+  {
+    to: '/equipe',
+    label: 'Equipe',
+    icon: Building2,
+    agencyOnly: true,
+    desc: 'Membros da imobiliária, negócios da casa e contagens por corretor',
   },
   {
     to: '/validar',
@@ -143,6 +152,10 @@ export default function Layout() {
   // Painel de navegação do celular. Fecha sozinho ao escolher um item, senão o
   // corretor troca de tela e o painel continua por cima do conteúdo.
   const [menuAberto, setMenuAberto] = useState(false)
+  // "Equipe" só é visível para a conta-imobiliária (tipo_perfil =
+  // 'imobiliaria'). O broker_profile é owner-scoped; o admin da plataforma lê
+  // todos (migration 1900000026), mas a aba é do gestor, não do admin.
+  const [isAgency, setIsAgency] = useState(false)
 
   const [dark, setDark] = useState(
     () => typeof window !== 'undefined' && localStorage.getItem('pc-theme') === 'dark',
@@ -152,13 +165,39 @@ export default function Layout() {
     localStorage.setItem('pc-theme', dark ? 'dark' : 'light')
   }, [dark])
 
+  // Recarrega o tipo de perfil quando o usuário (ou a sessão) muda. O
+  // authStore.onChange dispara na troca de sessão; o useEffect roda na
+  // montagem e no mudar do user. Falha silenciosa: sem perfil = não é
+  // imobiliária, a aba some (não é erro de tela).
+  useEffect(() => {
+    let active = true
+    if (!isAuthenticated) {
+      setIsAgency(false)
+      return
+    }
+    getBrokerProfile()
+      .then((p) => {
+        if (active) setIsAgency(p?.tipo_perfil === 'imobiliaria')
+      })
+      .catch(() => {
+        if (active) setIsAgency(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [isAuthenticated, user?.id, user?.updated])
+
   const handleSignOut = () => {
     setMenuAberto(false)
     signOut()
     navigate('/login')
   }
 
-  const itensVisiveis = NAV_ITEMS.filter((item) => !('adminOnly' in item) || isAdmin)
+  const itensVisiveis = NAV_ITEMS.filter((item) => {
+    if ('adminOnly' in item && item.adminOnly) return isAdmin
+    if ('agencyOnly' in item && item.agencyOnly) return isAgency
+    return true
+  })
 
   // A pagina de abertura (visitante sem sessao no "/") traz o proprio cabecalho
   // e rodape (vieram do design). Aqui o Layout sai da frente por completo: sem
