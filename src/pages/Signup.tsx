@@ -107,17 +107,17 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
   <section id="topo" style="background:#0E0E0E;color:#F5F1E6;overflow:hidden">
     <div data-hero style="max-width:1120px;margin:0 auto;padding:clamp(64px,10vw,120px) clamp(20px,5vw,60px) clamp(72px,11vw,132px);display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:clamp(40px,6vw,80px);align-items:center">
       <div>
-        <p style="display:flex;align-items:center;gap:14px;margin:0 0 26px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C">
+        <p style="display:flex;align-items:center;gap:14px;margin:0 0 22px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C">
           Para corretores e imobiliárias
           <span style="display:block;width:56px;height:1px;background:rgba(201,168,76,.5)"></span>
         </p>
-        <h1 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;font-size:clamp(34px,4.4vw,52px);line-height:1.07;letter-spacing:-.02em;color:#F5F1E6">
-          O contrato do seu negócio não devia começar num <em style="font-style:italic;color:#C9A84C">modelo do WhatsApp.</em><br>Nem terminar na <em style="font-style:italic;color:#C9A84C">conta do advogado.</em>
+        <h1 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:600;max-width:15ch;font-size:clamp(36px,4.6vw,56px);line-height:1.06;letter-spacing:-.02em;color:#F5F1E6">
+          No fim, vale o que está no papel.<br><em style="font-style:italic;color:#C9A84C">Inclusive a sua comissão.</em>
         </h1>
-        <p style="margin:28px 0 0;max-width:520px;font-size:clamp(16px,1.5vw,18px);line-height:1.75;color:rgba(232,224,204,.80)">
-          Cadastre as partes e o imóvel uma vez. Saem 16 contratos em Word, fundamentados no Código Civil, com a sua comissão já na cláusula.
+        <p style="margin:24px 0 0;max-width:500px;font-size:clamp(15.5px,1.4vw,17px);line-height:1.7;color:rgba(232,224,204,.80)">
+          Você apresenta um contrato à altura do negócio, fundamentado no Código Civil, com segurança para todas as partes. Cadastre uma vez e gere na hora, sem esperar por ninguém.
         </p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:rgba(245,241,230,.12);margin-top:30px;max-width:560px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:rgba(245,241,230,.12);margin-top:26px;max-width:560px">
           <div style="background:#0E0E0E;padding:20px 22px 22px">
             <p style="margin:0 0 9px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#C9A84C">Gerar</p>
             <p style="margin:0;font-size:14.5px;line-height:1.65;color:rgba(232,224,204,.82)">16 documentos em Word, das arras à entrega das chaves, com partes, imóvel e comissão já aplicados.</p>
@@ -127,7 +127,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
             <p style="margin:0;font-size:14.5px;line-height:1.65;color:rgba(232,224,204,.82)">A minuta que o outro lado mandou, lida por IA, com o que está faltando apontado antes da assinatura.</p>
           </div>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:34px">
+        <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:28px">
           <a href="/signup" style="display:inline-flex;align-items:center;height:52px;padding:0 30px;border-radius:1px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background .25s ease" style-hover="background:#F5F1E6">Criar conta e gerar meu primeiro documento</a>
           <a href="#documentos" style="display:inline-flex;align-items:center;height:52px;padding:0 30px;border-radius:1px;border:1px solid rgba(245,241,230,.22);color:#F5F1E6;font-size:15px;font-weight:500;transition:border-color .25s ease" style-hover="border-color:#C9A84C;color:#C9A84C">Ver os 16 documentos</a>
         </div>
