@@ -20,15 +20,35 @@ O app **não** é buildado a partir daqui. Ele vive no [Skip](https://goskip.dev
 que tem editor web próprio. Este repositório é um **espelho de leitura**.
 
 - **Push aqui não chega em produção.** Nenhum. Não existe CI/CD entre os dois.
-- Mudança entra **colando o arquivo inteiro** no editor do Skip.
-- **O Skip não cria arquivos novos.** Código novo tem de caber em arquivo que já
-  existe. Por isso há componentes convivendo em arquivos que normalmente seriam
-  separados. Não é desleixo, é a restrição da ferramenta.
+- Mudança entra pelo **chat do Skip**, com o **arquivo inteiro colado pelo dono
+  do projeto**. O painel "Editar Código" é **somente leitura** (o textarea do
+  Monaco tem `readOnly: true` e o cursor fica escondido): serve para ler, não
+  para escrever. Quem grava os arquivos é o agente do próprio Skip, e é por isso
+  que o `.skip.config.json` tem uma lista `preventAI`.
+- **Não automatize esse paste pelo navegador.** Não é preferência, é resultado
+  medido: o clipboard corrompeu o arquivo em **2 de 6** tentativas (mojibake e
+  uma corrida que trocou o arquivo por três linhas aleatórias), e a conferência
+  passou **falso** nas duas. Está em `COMO_RETOMAR.md`, "REGRAS DE OURO", no
+  repositório `gerador-documentos-artefatos`.
+- **Conferir = baixar o projeto pelo Skip e diffar** contra o repositório. Nunca
+  pelo editor do Skip.
+- **Antes de gerar arquivo, baixe a fonte fresca do Skip** (`</>` → Editar
+  Código → ícone de download). Snapshot velho regride o que já está no ar. Se
+  não der, prove a equivalência de outro jeito: sincronize o Skip e confira que
+  os arquivos que você vai tocar estão idênticos entre o sync e a sua base.
 - **Rode `npx oxfmt <arquivo>` antes de entregar.** O Skip reformata o que recebe
   e, sem isso, o dono do projeto vê um diff falso enorme.
 
 Entregue o **arquivo completo**, formatado, pronto para colar. Um patch ou um
-trecho não serve: ninguém aplica diff no editor do Skip.
+trecho não serve: ninguém aplica diff no chat do Skip.
+
+> **Sobre "o Skip não cria arquivos novos":** era verdade até julho de 2026 e
+> ainda explica por que `IntroPagina`, `BotaoDadosTeste` e `VerTextoClausula`
+> moram no `Layout.tsx`. **Deixou de valer:** a camada de imobiliárias (agosto)
+> entrou com arquivos novos que hoje existem no Skip, entre eles
+> `src/pages/Equipe.tsx`, `src/services/agencies.ts` e
+> `pocketbase/hooks/agencia_equipe.js`. Confira antes de contorcer código para
+> caber em arquivo existente.
 
 ## Trabalhe com dados de produção
 

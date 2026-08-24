@@ -1,35 +1,48 @@
 ---
-description: Cola no editor web do Skip, pelo Chrome, os arquivos da fase 3 das imobiliárias
+description: Prepara a entrega dos arquivos da fase 3 para o Skip e confere depois, por diff
 ---
 
-Você está numa máquina que tem o Chrome com a extensão Claude in Chrome. Sua
-tarefa é colar 9 arquivos desta branch no editor web do Skip, um por vez, e
-conferir cada um antes de seguir.
+## Leia isto antes de agir
 
-## Contexto que já foi apurado, não precisa refazer
+Uma versão anterior deste comando mandava colar os arquivos **automatizando o
+navegador**. Estava errada, e a correção vale mais que a instrução: o projeto já
+tinha aprendido isso apanhando, e anotado em `COMO_RETOMAR.md` ("REGRAS DE
+OURO"), no repositório `gerador-documentos-artefatos`:
 
-- Os 6 arquivos alterados estão **idênticos** entre o Skip atual (v0.0.676) e a
-  base desta branch. Nenhum paste apaga trabalho de ninguém.
-- `Signup.tsx` **não** está na lista e não deve ser tocado: ele tem três imagens
-  WebP em base64 que qualquer recorte destrói.
-- O Skip é a fonte da verdade do app em produção, com dados reais de cliente.
-  Este repositório é espelho de leitura: push aqui não chega em produção.
+> **Arquivo completo no chat, o Marcus cola. Não automatizar paste pelo
+> navegador.** O clipboard falhou 2x em 6: mojibake e uma corrida que trocou o
+> arquivo por 3 linhas aleatórias. Detalhe cruel: a verificação PASSA
+> falsamente (os dois lados erram na mesma direção).
 
-## O risco real, e a única defesa contra ele
+E o painel "Editar Código" do Skip é **somente leitura** (`readOnly: true` no
+textarea do Monaco), então nem havia onde digitar. Quem grava é o agente do
+próprio Skip, pelo chat.
 
-O editor do Skip é virtualizado (Monaco ou CodeMirror): só renderiza as linhas
-visíveis. Automação de "selecionar tudo e digitar" nesse tipo de editor
-**trunca em silêncio**. Um arquivo de 1.050 linhas colado pela metade não dá
-erro, ele salva.
+**Portanto: você não cola nada. Nunca dirija o navegador para escrever no Skip.**
 
-Por isso, **depois de cada arquivo**, confira a contagem de linhas na tela
-contra a tabela abaixo. Se divergir, **pare imediatamente**, não tente
-consertar sozinho, e avise o usuário dizendo qual arquivo e qual contagem
-apareceu.
+## O que você faz
 
-## A ordem, que é obrigatória
+### Antes: provar que a base não está velha
 
-Backend primeiro. O 1 cria a coleção de que o 2 depende.
+Snapshot velho regride produção. Confirme que os arquivos a tocar estão
+idênticos entre o Skip sincronizado e esta branch:
+
+```
+git fetch --all
+git diff --stat origin/main HEAD~1 -- \
+  pocketbase/hooks/extrair_dados.js src/services/agencies.ts \
+  src/components/Layout.tsx src/pages/MyProfile.tsx \
+  src/pages/Equipe.tsx src/components/admin/AgenciasBlock.tsx
+```
+
+Saída vazia = base boa. Qualquer linha = **pare** e avise: o Skip andou desde
+que a fase 3 foi escrita, e colar por cima apagaria trabalho.
+
+### Durante: entregar um arquivo por vez
+
+Mostre o conteúdo **completo** de um arquivo, para o dono do projeto colar no
+chat do Skip. Um por vez, na ordem abaixo, e **espere ele confirmar** que
+aplicou antes de passar ao próximo.
 
 | #   | Arquivo                                                     | Linhas |
 | --- | ----------------------------------------------------------- | ------ |
@@ -43,27 +56,27 @@ Backend primeiro. O 1 cria a coleção de que o 2 depende.
 | 8   | `src/pages/Equipe.tsx`                                      | 971    |
 | 9   | `src/components/admin/AgenciasBlock.tsx`                    | 785    |
 
-**Depois do arquivo 1, pare.** Confirme no painel do Skip que a coleção
-`agency_invites` passou a existir. Só siga para o 2 depois disso. Se ela não
-aparecer, avise o usuário: pode ser que o Skip não reinicie o PocketBase ao
-aplicar, e aí a coleção precisa ser criada à mão pelo painel.
+Depois do **1**, pare: a coleção `agency_invites` precisa existir antes de o
+hook do **2** conseguir gravar nela.
 
-A ordem do frontend (4 a 9) é obrigatória por causa dos imports: o 5 importa do
-4; o 6 e o 7 importam do 5. Colar fora de ordem quebra o build.
+Os arquivos 1, 2 e 5 são novos. A regra antiga "o Skip não cria arquivos novos"
+não vale mais: a camada de imobiliárias entrou com arquivos novos em agosto e
+eles estão no Skip hoje.
 
-## O que NÃO vai para o Skip
+`MELHORIAS.md` e `docs/SPEC-IMOBILIARIAS-F3.md` **não** vão para o Skip.
 
-`MELHORIAS.md` e `docs/SPEC-IMOBILIARIAS-F3.md`. São documentação do
-repositório, e o histórico mostra que nunca entraram por sync do Skip.
+### Depois: conferir por diff, não por tela
 
-## Como proceder
+Quando os 9 estiverem aplicados e publicados, a conferência é **baixar o
+projeto pelo Skip** (`</>` → Editar Código → ícone de download) e comparar com
+esta branch. Peça a pasta descompactada ao dono e rode um diff arquivo a
+arquivo. **Nunca** confira lendo o editor do Skip: a regra 2 das regras de ouro
+existe porque isso já enganou antes.
 
-1. Leia o conteúdo de cada arquivo do disco, nesta branch, na íntegra.
-2. Abra o editor do Skip no Chrome e navegue até o arquivo alvo.
-3. Substitua o conteúdo inteiro pelo do disco. Arquivo novo (1, 2 e 5) precisa
-   ser criado.
-4. Confira a contagem de linhas. Só então passe para o próximo.
-5. Ao terminar os 9, avise o usuário para clicar em Sincronizar.
+Alternativa aceitável: o dono sincroniza o Skip e você compara `origin/main`
+com esta branch.
 
-Se algo sair do previsto em qualquer ponto, pare e pergunte. É preferível parar
-no meio a deixar produção num estado que ninguém consegue reconstruir.
+## Se algo divergir
+
+Pare e relate: qual arquivo, o que esperava, o que veio. Não tente consertar
+sozinho colando de novo. É produção, com CPF e RG de cliente real.
