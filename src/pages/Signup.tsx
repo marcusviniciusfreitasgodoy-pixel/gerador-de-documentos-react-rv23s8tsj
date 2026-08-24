@@ -435,8 +435,8 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <div data-anim style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(24px,3.5vw,48px);align-items:start">
         <div>
           <p style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">Quem escreveu</p>
-          <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.01em;color:#0E0E0E">Marcus V. F. Godoy Assessoria Imobiliária</p>
-          <p style="margin:8px 0 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7a6435">CRECI PJ 11841</p>
+          <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.01em;color:#0E0E0E">Prime Circle</p>
+          <p style="margin:8px 0 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7a6435">CNPJ 58.409.058/0001-73</p>
         </div>
         <p style="margin:0;font-size:15.5px;line-height:1.78;color:#5A544C">Cada modelo aqui existe porque precisou existir em uma negociação de verdade. As cláusulas vieram do que faltou em contratos anteriores, os prazos vieram do que deu problema e as conferências vieram do que o cartório apontou na hora errada. Por isso a plataforma não pergunta o que um sistema acharia importante. Ela pergunta o que o negócio exige para sair do papel.</p>
       </div>
@@ -671,7 +671,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:24px;height:24px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
         <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Documentos</span>
       </div>
-      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Marcus V. F. Godoy Assessoria Imobiliária<br>CRECI PJ 11841</p>
+      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Prime Circle<br>CNPJ 58.409.058/0001-73</p>
       <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
         A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
       </p>
