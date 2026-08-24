@@ -2,7 +2,7 @@
 
 Permite que cada imobiliária tenha suas próprias regras em `legal_knowledge`,
 usadas na validação de minutas dos corretores da casa. Entrega a promessa da
-landing page: *"a régua jurídica é sua, sob controle do administrador da conta"*.
+landing page: _"a régua jurídica é sua, sob controle do administrador da conta"_.
 
 Pré-requisito: **fase 1 no ar** (`agency_members`, `negocios.agency`,
 `docs/SPEC-IMOBILIARIAS-F1.md`).
@@ -24,12 +24,12 @@ coleção**.
 Em `pocketbase/hooks/validar_minuta.js` existem **quatro** consultas a
 `legal_knowledge`, duas em cada rota:
 
-| Rota | Linha aprox. | Consulta |
-|---|---|---|
-| `validar-minuta` | ~213 | filtro por `trigger_logic` (quando há `documentType`) |
-| `validar-minuta` | ~227 | **fallback `'1=1'`** |
-| `consultar-ia` | ~743 | filtro por `trigger_logic` |
-| `consultar-ia` | ~756 | **fallback `'1=1'`** |
+| Rota             | Linha aprox. | Consulta                                              |
+| ---------------- | ------------ | ----------------------------------------------------- |
+| `validar-minuta` | ~213         | filtro por `trigger_logic` (quando há `documentType`) |
+| `validar-minuta` | ~227         | **fallback `'1=1'`**                                  |
+| `consultar-ia`   | ~743         | filtro por `trigger_logic`                            |
+| `consultar-ia`   | ~756         | **fallback `'1=1'`**                                  |
 
 **Os quatro precisam do filtro de escopo.** Se um só escapar, a régua vaza.
 
@@ -70,7 +70,7 @@ Para cada validação, resolver a imobiliária do autor e montar a base assim:
 3. Se houver `agencyId`, carregar também as regras **daquela** imobiliária
    (`agency = {:agencyId}`).
 4. **Mesclar por `code`, com a regra da imobiliária vencendo** a global de mesmo
-   `code`. Assim a casa pode *sobrescrever* uma cláusula padrão, não só somar.
+   `code`. Assim a casa pode _sobrescrever_ uma cláusula padrão, não só somar.
 5. Ordenar o resultado por `priority` decrescente e aplicar o teto atual (50
    registros / 50 KB, como já é hoje).
 
@@ -118,6 +118,7 @@ updateRule / deleteRule:
 ```
 
 **Efeitos:**
+
 - O gestor da imobiliária lê e edita **só as próprias** regras. Não vê nem toca
   nas globais, nem nas de outra imobiliária.
 - A Prime Circle continua com controle total.

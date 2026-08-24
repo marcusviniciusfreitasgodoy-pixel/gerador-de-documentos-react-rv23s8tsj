@@ -38,16 +38,16 @@ e a voz, e ajustou ordem, promessa e provas.
 - **Barra de CTA fixa** no celular, já que a página é longa e o botão do hero
   some ao rolar.
 
-A headline dessa rodada era *"O contrato do seu negócio não devia começar num
-modelo do WhatsApp. Nem terminar na conta do advogado."* Ela cumpria o papel de
+A headline dessa rodada era _"O contrato do seu negócio não devia começar num
+modelo do WhatsApp. Nem terminar na conta do advogado."_ Ela cumpria o papel de
 nomear as duas contas que o corretor autônomo paga, mas partia de um lugar
 negativo, apontando o erro do leitor antes de oferecer qualquer coisa. Foi
 substituída na rodada seguinte.
 
 ### 1.2 Segunda rodada — a promessa e os seis argumentos
 
-A headline passou a ser *"No fim, vale o que está no papel. Inclusive a sua
-comissão."*, com o subtítulo prometendo o que o corretor apresenta ao cliente, e
+A headline passou a ser _"No fim, vale o que está no papel. Inclusive a sua
+comissão."_, com o subtítulo prometendo o que o corretor apresenta ao cliente, e
 não o que ele evita.
 
 Na sequência, a copy inteira foi auditada contra seis argumentos que a página
@@ -88,14 +88,14 @@ repostas antes de ir ao ar:
   (o cartão do documento tem `rotate`, e um `translate3d` por cima o desalinharia).
 - **A tela do documento preenchido** no § 02, ocupando a largura toda do painel
   escuro em vez de meia coluna.
-- **O fecho da banda da prova**: *"É o que separa quem intermedeia de quem
-  improvisa."*
+- **O fecho da banda da prova**: _"É o que separa quem intermedeia de quem
+  improvisa."_
 - **O menu no celular.** A nav tinha virado rolagem horizontal e ficava cortada
   no meio do botão, sem indicação de que dava para arrastar. Voltou a sumir
   abaixo de 900 px, já que a barra fixa carrega Entrar e Criar conta.
 
-Headline atual: *"Todo negócio termina em documento. O seu não devia terminar em
-improviso."* Seções: § 01 O problema, § 02 Como funciona, § 03 O que você gera,
+Headline atual: _"Todo negócio termina em documento. O seu não devia terminar em
+improviso."_ Seções: § 01 O problema, § 02 Como funciona, § 03 O que você gera,
 § 04 Validador de minuta, § 05 Para imobiliárias, § 06 Preço, § 07 Perguntas.
 
 ### 1.4 Assinatura e a desconfiança de dado
@@ -205,17 +205,17 @@ reconciliado para espelhar byte a byte a versão em produção.
 
 ### Migrations adicionadas
 
-| Migration | O que faz |
-|---|---|
-| `1900000023_create_rate_limits` | Cria a coleção do rate limit |
-| `1900000024_fix_validation_log_rules` | Amarra o dono no create dos logs |
-| `1900000025_clear_document_text_pii` | Zera o PII dos 26 registros antigos |
-| `1900000026_admin_read_broker_profile` | Perfil legível pelo dono ou admin |
-| `1900000027_create_agency_members` | Vínculo entre imobiliária e corretores |
-| `1900000028_negocios_add_agency` | Carimbo da imobiliária no negócio |
-| `1900000029_create_access_logs` | Trilha de acesso do gestor (LGPD) |
-| `1900000030_legal_knowledge_add_agency` | Régua própria por imobiliária |
-| `1900000031_fix_negocios_create_rule` | Restaura o `@request.auth.id != ""` no create |
+| Migration                               | O que faz                                     |
+| --------------------------------------- | --------------------------------------------- |
+| `1900000023_create_rate_limits`         | Cria a coleção do rate limit                  |
+| `1900000024_fix_validation_log_rules`   | Amarra o dono no create dos logs              |
+| `1900000025_clear_document_text_pii`    | Zera o PII dos 26 registros antigos           |
+| `1900000026_admin_read_broker_profile`  | Perfil legível pelo dono ou admin             |
+| `1900000027_create_agency_members`      | Vínculo entre imobiliária e corretores        |
+| `1900000028_negocios_add_agency`        | Carimbo da imobiliária no negócio             |
+| `1900000029_create_access_logs`         | Trilha de acesso do gestor (LGPD)             |
+| `1900000030_legal_knowledge_add_agency` | Régua própria por imobiliária                 |
+| `1900000031_fix_negocios_create_rule`   | Restaura o `@request.auth.id != ""` no create |
 
 ---
 
@@ -240,8 +240,8 @@ de PII fechada na frente anterior.
 
 ## 5. Camada de imobiliárias
 
-A landing page prometia *"a régua jurídica é sua, sob controle do administrador
-da conta"*, mas o sistema não tinha o conceito de equipe: uma imobiliária era só
+A landing page prometia _"a régua jurídica é sua, sob controle do administrador
+da conta"_, mas o sistema não tinha o conceito de equipe: uma imobiliária era só
 uma conta solo cujo perfil era uma empresa. Duas fases fecharam essa distância.
 
 ### Fase 1 — vínculo de equipe
@@ -337,6 +337,6 @@ por revisão de código sem ser notada e só apareceu na renderização.
 
 ---
 
-*Fluxo de deploy: este repositório é um espelho de leitura do
+_Fluxo de deploy: este repositório é um espelho de leitura do
 [Skip](https://goskip.dev), onde o app roda. Mudanças chegam em produção pelo
-editor do Skip, não por push aqui. Ver `DEV-README.md`.*
+editor do Skip, não por push aqui. Ver `DEV-README.md`._
