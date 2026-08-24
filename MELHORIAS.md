@@ -2,9 +2,11 @@
 
 Trabalho conduzido em **agosto de 2026** sobre a Prime Circle Documentos
 (`documentos.primecircle.app.br`), em quatro frentes: a **página de abertura**
-(copy e um bug de renderização), o **endurecimento de segurança** do backend, o
-**painel administrativo** e a **camada de imobiliárias** (equipe e régua
-própria).
+(copy, arte e um bug de renderização), o **endurecimento de segurança** do
+backend, o **painel administrativo** e a **camada de imobiliárias** (equipe e
+régua própria).
+
+Estado no ar quando este registro foi fechado: **v0.0.675**.
 
 Este documento é o registro do que mudou e por quê. Não altera o funcionamento
 do app; serve de histórico versionado. O `README.md` (template do Skip) e o
@@ -12,16 +14,17 @@ do app; serve de histórico versionado. O `README.md` (template do Skip) e o
 
 ---
 
-## 1. Landing page — copy e conversão
+## 1. Landing page
+
+A página passou por três rodadas, e o que está no ar hoje é o resultado da
+terceira. As duas primeiras ficam registradas porque explicam por que a terceira
+tem a forma que tem.
+
+### 1.1 Primeira rodada — conversão
 
 A página convencia mas não conduzia à contratação. A revisão manteve a estrutura
 e a voz, e ajustou ordem, promessa e provas.
 
-- **Hero** — mantida a headline original ("O contrato do seu negócio não devia
-  começar num modelo do WhatsApp") e acrescentada a segunda batida sobre o custo
-  que mais pesa no corretor autônomo: **"Nem terminar na conta do advogado."**
-  Subheadline reescrita para prometer resultado, com "fundamentados no Código
-  Civil" respondendo à objeção que a nova headline cria.
 - **§ 01 (O problema)** — de seis cards para cinco, com um card novo em primeiro
   lugar sobre o honorário pago por documento (o único que fala em dinheiro
   saindo). Duas dores viraram recurso no § 02, onde rendem mais.
@@ -29,25 +32,119 @@ e a voz, e ajustou ordem, promessa e provas.
   qualquer um tem. O dossiê é a diferença"), em vez de ser um passo de lista.
 - **Apoio de especialista** — de bullet escondido a banda própria, respondendo
   "e quando o caso foge do padrão?".
-- **FAQ** — reordenado com o **preço em primeiro**, mais perguntas novas
-  (tempo de cadastro, "substitui o advogado?", "serve para locação?" — que
-  responde **não**, evitando cadastro frustrado).
-- **Assinatura** — a seção "Como nasceu" e o rodapé passaram a trazer
-  **Marcus V. F. Godoy Assessoria Imobiliária · CRECI PJ 11841**, dando
-  credencial à única prova social da página.
+- **FAQ** — reordenado, com perguntas novas: tempo de cadastro, "substitui o
+  advogado?" e "serve para locação?", que responde **não** e evita cadastro
+  frustrado.
 - **Barra de CTA fixa** no celular, já que a página é longa e o botão do hero
   some ao rolar.
 
-### Conserto do reveal por scroll
+A headline dessa rodada era *"O contrato do seu negócio não devia começar num
+modelo do WhatsApp. Nem terminar na conta do advogado."* Ela cumpria o papel de
+nomear as duas contas que o corretor autônomo paga, mas partia de um lugar
+negativo, apontando o erro do leitor antes de oferecer qualquer coisa. Foi
+substituída na rodada seguinte.
+
+### 1.2 Segunda rodada — a promessa e os seis argumentos
+
+A headline passou a ser *"No fim, vale o que está no papel. Inclusive a sua
+comissão."*, com o subtítulo prometendo o que o corretor apresenta ao cliente, e
+não o que ele evita.
+
+Na sequência, a copy inteira foi auditada contra seis argumentos que a página
+precisava entregar a quem lesse até o fim: **autonomia, segurança jurídica para
+todas as partes, profissionalismo, cobertura do início ao fim da transação,
+preenchimento automático dos dados e o especialista em dois níveis**. Quatro
+intervenções fecharam as lacunas encontradas:
+
+- O pilar "Gerar" passou a dizer que o negócio entra uma vez e alimenta todos os
+  documentos, em vez de só listar quantidade.
+- O § 03 ganhou a frase que amarra os documentos ao dossiê ("nenhum deles começa
+  em branco").
+- Entrou uma banda nova sobre o documento como primeira prova do trabalho diante
+  do cliente.
+- O bloco do especialista passou a nomear explicitamente os dois níveis.
+
+### 1.3 Terceira rodada — a estrutura que está no ar
+
+Uma proposta de estrutura nova chegou do Skip e foi adotada, depois de auditada.
+Ela trouxe quatro ganhos reais:
+
+- **§ 06 · Preço, seção dedicada.** O item "Preço" do menu apontava para o FAQ:
+  o visitante clicava em Preço e caía num acordeão de perguntas. Agora existe a
+  seção, com "Grátis nesta fase" e o que está incluído.
+- **Faixa de números** abaixo do hero (16 documentos, 1 cadastro por negócio, 3
+  fases cobertas, 30 dias até o expurgo), animando de zero ao entrar na tela.
+  Todos os quatro foram conferidos contra o conteúdo da própria página.
+- **Cláusula de arras exibida na íntegra**, com a fundamentação nos artigos 417 a
+  419 do Código Civil. É a prova mais concreta da página: o corretor lê o que sai
+  do `.docx`.
+- **CSS mais enxuto**, trocando breakpoints manuais por grades `auto-fit`.
+
+A proposta perdia coisas que já estavam validadas em produção, e elas foram
+repostas antes de ir ao ar:
+
+- **As três telas reais da plataforma.** A arte do hero tinha virado um cartão de
+  CSS vazio. Voltaram, com o parallax novo aplicado só nas camadas que não giram
+  (o cartão do documento tem `rotate`, e um `translate3d` por cima o desalinharia).
+- **A tela do documento preenchido** no § 02, ocupando a largura toda do painel
+  escuro em vez de meia coluna.
+- **O fecho da banda da prova**: *"É o que separa quem intermedeia de quem
+  improvisa."*
+- **O menu no celular.** A nav tinha virado rolagem horizontal e ficava cortada
+  no meio do botão, sem indicação de que dava para arrastar. Voltou a sumir
+  abaixo de 900 px, já que a barra fixa carrega Entrar e Criar conta.
+
+Headline atual: *"Todo negócio termina em documento. O seu não devia terminar em
+improviso."* Seções: § 01 O problema, § 02 Como funciona, § 03 O que você gera,
+§ 04 Validador de minuta, § 05 Para imobiliárias, § 06 Preço, § 07 Perguntas.
+
+### 1.4 Assinatura e a desconfiança de dado
+
+A página assinava **Marcus V. F. Godoy Assessoria Imobiliária · CRECI PJ 11841**,
+o que dava credencial de ofício à única prova social existente. Foi trocada por
+**Prime Circle · CNPJ 58.409.058/0001-73**, com o CRECI mantido no rodapé.
+
+O motivo é de leitura de público, e é mais forte que o ganho de autoridade:
+corretor e imobiliária desconfiam de concorrente. Um corretor que vê **outro
+corretor** assinando a ferramenta não pensa "esse entende do ofício", pensa "esse
+vai ver minha carteira de clientes". Tirar o nome pessoal remove o gatilho.
+
+Remover o gatilho, porém, não responde à dúvida, e a resposta estava mal
+colocada: o card "Dados tratados com regra" mora no § 05, que se chama "Para
+imobiliárias" e o corretor autônomo pula; e a pergunta do FAQ era a oitava, atrás
+de um acordeão fechado no fim da página. As duas diziam "acessível ao seu dono e
+a mais ninguém", abstrato demais para quem quer ler que **outro corretor não vê**.
+
+Duas alterações fecharam isso:
+
+- A **resposta do FAQ** passou a nomear quem não vê (nenhum outro corretor,
+  nenhuma imobiliária), o que não vê (cadastro de partes, negócios, documentos) e
+  por que a garantia vale (regra por dono do registro, aplicada no servidor, não
+  configuração de tela).
+- A **mesma garantia, em uma frase, entrou no fim do § 02**, logo depois dos três
+  cartões do dossiê. É ali que a dúvida nasce, no momento em que a página pede
+  para cadastrar CPF e RG de cliente.
+
+Uma escolha deliberada de redação: **não foi escrito "ninguém vê, nem nós"**. Não
+seria verdade, porque administração de banco tem acesso, e um corretor que
+descobre isso depois se sente enganado, o que custa mais do que a frase compra. A
+afirmação que ficou é a que sustenta escrutínio, e as regras de acesso auditadas
+entregam exatamente ela.
+
+### 1.5 Conserto do reveal por scroll
 
 As nove seções do miolo tinham `data-reveal` e ficavam em `opacity: 0` até o
 `IntersectionObserver` disparar. Com `threshold: 0.12`, **seis das nove seções
 ficavam invisíveis para um leitor rolando no celular** (reproduzido em Chromium
 a 390×844). Trocado por `threshold: 0` com `rootMargin` e uma rede de segurança
-por timeout que revela tudo caso o observer não dispare — nenhum texto depende
-de JavaScript para existir.
+por timeout que revela tudo caso o observer não dispare.
 
-### Metatags de compartilhamento (`index.html`)
+A estrutura atual melhorou isso de novo: cada elemento nasce com `opacity: 0`
+aplicado **pelo próprio JavaScript**, e não pelo HTML. Se o script falhar, a
+página aparece inteira em vez de sumir. Nenhum texto depende de JavaScript para
+existir.
+
+### 1.6 Metatags de compartilhamento (`index.html`)
 
 O `og:image` era caminho relativo, que o robô do WhatsApp e do Facebook não
 resolvem — o cartão saía sem imagem. Corrigido para URL absoluta, com
@@ -118,6 +215,7 @@ reconciliado para espelhar byte a byte a versão em produção.
 | `1900000028_negocios_add_agency` | Carimbo da imobiliária no negócio |
 | `1900000029_create_access_logs` | Trilha de acesso do gestor (LGPD) |
 | `1900000030_legal_knowledge_add_agency` | Régua própria por imobiliária |
+| `1900000031_fix_negocios_create_rule` | Restaura o `@request.auth.id != ""` no create |
 
 ---
 
@@ -181,6 +279,12 @@ teve de entrar no filtro de **cada uma das quatro consultas** (duas por rota),
 incluindo os fallbacks, que eram os mais perigosos por dispararem justamente
 quando a imobiliária ainda não tem regra daquele tipo.
 
+Um bug pego na auditoria dessa fase: o hook `legal_knowledge_agency.js` lia o
+usuário por `e.httpContext.get('authRecord')`, e não pelo `e.auth` que é o padrão
+do projeto. Em hooks de modelo o `httpContext` é nulo nas escritas
+programáticas, então o campo `agency` seria zerado em toda regra gravada assim.
+Corrigido para `onRecordCreateRequest` / `onRecordUpdateRequest` com `e.auth`.
+
 Especificações completas em `docs/SPEC-IMOBILIARIAS-F1.md` e
 `docs/SPEC-IMOBILIARIAS-F2.md`.
 
@@ -195,6 +299,12 @@ apareceu (ou teria aparecido) por essa via. Vale manter o hábito: para qualquer
 regra de acesso ou campo carimbado pelo servidor, conferir o resultado, não a
 descrição.
 
+O mesmo hábito vale para a página. Toda alteração de copy ou de arte foi
+conferida renderizando o `DESIGN_HTML` em Chromium a 1440, 820 e 390 px, olhando
+três coisas: nenhuma seção presa em `opacity: 0`, nenhuma rolagem horizontal, e
+os três hashes das imagens em base64 intactos. Uma regressão de arte já passou
+por revisão de código sem ser notada e só apareceu na renderização.
+
 ---
 
 ## 7. Próximos passos
@@ -202,10 +312,8 @@ descrição.
 ### Verificações pendentes (rápidas, sem risco)
 
 - **Regra da casa:** gestor cria uma regra e o `agency` tem de vir com o id dele,
-  nunca vazio. Conferir o registro no banco.
-- **`createRule` de `negocios`:** a migration `1900000028` reescreveu a regra
-  perdendo o `@request.auth.id != ""`. Provavelmente inócuo, mas regra de acesso
-  não é lugar para "provavelmente".
+  nunca vazio. Conferir o registro no banco. Só faz diferença quando houver uma
+  imobiliária real cadastrada.
 - **Taxa de falha do `/admin`:** confirmar que o validador grava
   `status = 'fail'`; se gravar outro valor, o número fica sempre zero.
 - **Documento "Genérico":** confirmar que a validação ainda aponta arras, foro,
@@ -221,7 +329,8 @@ descrição.
 
 ### O que move a conversão, e não é código
 
-- **Prova social** — depoimentos de corretor com nome e CRECI.
+- **Prova social** — depoimentos de corretor com nome e CRECI. Segue sendo a
+  maior lacuna da página: ela argumenta bem e não mostra ninguém que já usou.
 - **Ver o produto funcionando** — um vídeo curto de um documento sendo gerado, no
   lugar do print estático.
 - **Um canal humano** — um WhatsApp de contato.
