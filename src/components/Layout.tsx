@@ -23,6 +23,7 @@ import {
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
 import { getBrokerProfile } from '@/services/broker-profile'
+import { ConviteBanner } from '@/components/ConviteImobiliaria'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
 
@@ -405,6 +406,11 @@ export default function Layout() {
           naAbertura ? 'w-full' : 'items-center p-4 md:p-8 py-8',
         )}
       >
+        {/* Convite de imobiliária pendente (fase 3). Fica FORA do
+            ErrorBoundary de propósito: se a tela de baixo quebrar, o corretor
+            ainda vê e responde o convite. O componente some sozinho quando não
+            há convite nenhum. */}
+        {isAuthenticated && <ConviteBanner />}
         <ErrorBoundary>
           <Outlet />
         </ErrorBoundary>

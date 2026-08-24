@@ -279,3 +279,117 @@ export async function removerMember(agencyMemberId: string): Promise<void> {
 
 export const getEquipeResumo = (): Promise<EquipeResumo> =>
   pb.send('/backend/v1/agencia/equipe', { method: 'GET' })
+
+// ── Fase 3: convite por e-mail e aceite in-app ──────────────────────────────
+
+// Registro de `agency_invites`. O gestor lê os convites da própria casa direto
+// pela API (a regra de leitura cobre `agency = @request.auth.id`); toda
+// ESCRITA passa pelos endpoints, porque quem decide o vínculo não pode ser o
+// cliente.
+export interface AgencyInvite {
+  id: string
+  agency: string
+  email: string
+  member: string
+  convidado_por: string
+  status: 'pendente' | 'aceito' | 'recusado' | 'cancelado' | 'expirado'
+  token: string
+  expira_em: string
+  respondido_em: string
+  created: string
+  updated: string
+}
+
+// Convite como o CONVIDADO o vê: com o nome da imobiliária resolvido pelo
+// servidor. O corretor não lê `broker_profile` de ninguém, então esses campos
+// só chegam pelo endpoint.
+export interface ConvitePendente {
+  id: string
+  token: string
+  agency_id: string
+  agency_nome: string
+  agency_cnpj: string
+  agency_creci: string
+  criado: string
+  expira_em: string
+}
+
+// Vínculo ativo do corretor, se houver.
+export interface VinculoAtual {
+  id: string
+  agency_id: string
+  agency_nome: string
+  agency_cnpj: string
+  agency_creci: string
+  termo_aceito_em: string
+  desde: string
+}
+
+export interface MeusConvites {
+  convites: ConvitePendente[]
+  vinculo: VinculoAtual | null
+}
+
+export interface ConviteCriado {
+  id: string
+  email: string
+  status: string
+  expira_em: string
+  email_enviado: boolean
+  conta_existente: boolean
+}
+
+// Convites emitidos por uma imobiliária (leitura direta: a regra permite).
+export async function listAgencyInvites(agencyUserId: string): Promise<AgencyInvite[]> {
+  const recs = await pb.collection('agency_invites').getFullList<AgencyInvite>({
+    filter: pb.filter('agency = {:agency}', { agency: agencyUserId }),
+    sort: '-created',
+  })
+  return recs
+}
+
+// Convidar. O `agency` só é aceito pelo servidor quando quem chama é o admin
+// da plataforma; o gestor convida sempre para a própria casa.
+export const convidarCorretor = (email: string, agency?: string): Promise<ConviteCriado> =>
+  pb.send('/backend/v1/agencia/convites', {
+    method: 'POST',
+    body: agency ? { email, agency } : { email },
+  })
+
+export const reenviarConvite = (
+  id: string,
+): Promise<{ id: string; expira_em: string; email_enviado: boolean }> =>
+  pb.send('/backend/v1/agencia/convites/reenviar', { method: 'POST', body: { id } })
+
+export const cancelarConvite = (id: string): Promise<{ id: string; status: string }> =>
+  pb.send('/backend/v1/agencia/convites/cancelar', { method: 'POST', body: { id } })
+
+// O que o corretor logado tem para decidir, e onde ele está hoje.
+export const getMeusConvites = (): Promise<MeusConvites> =>
+  pb.send('/backend/v1/convites/meus', { method: 'GET' })
+
+// Aceitar ou recusar. A autorização no servidor é o e-mail da conta bater com
+// o do convite: o token serve só para o link do e-mail achar o convite certo.
+export const responderConvite = (
+  alvo: { id?: string; token?: string },
+  acao: 'aceitar' | 'recusar',
+): Promise<{ status: string; agency_id?: string; agency_nome?: string }> =>
+  pb.send('/backend/v1/convites/responder', { method: 'POST', body: { ...alvo, acao } })
+
+// Revogação do consentimento pelo próprio corretor.
+export const sairDaImobiliaria = (): Promise<{ status: string }> =>
+  pb.send('/backend/v1/vinculo/sair', { method: 'POST' })
+
+// Remoção pelo gestor. Mesmo efeito da remoção pelo /admin: status vira
+// 'removido', a linha fica no histórico e os negócios já carimbados continuam
+// com a casa. Passa por endpoint porque abrir `agency_members` para update do
+// gestor colocaria `termo_aceito_em` ao alcance de quem não é o titular do
+// consentimento.
+export const removerMembroDaEquipe = (
+  member: string,
+  agency?: string,
+): Promise<{ status: string }> =>
+  pb.send('/backend/v1/agencia/membros/remover', {
+    method: 'POST',
+    body: agency ? { member, agency } : { member },
+  })

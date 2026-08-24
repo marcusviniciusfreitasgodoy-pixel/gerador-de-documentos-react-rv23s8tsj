@@ -1055,10 +1055,47 @@ onRecordDelete((e) => {
       $app.logger().error('cascade user: solicitacoes', 'error', String(rerr))
     }
 
-    // Demais coleções que referenciam o usuário direto.
+    // A trilha de acesso (fase 1) aponta para `negocios` com relação
+    // OBRIGATÓRIA e sem cascade. Uma linha dessas é criada pelo GESTOR da
+    // imobiliária, não pelo dono do negócio, então ela não some pelo filtro
+    // por usuário logo abaixo: sem apagá-la aqui, o banco recusa excluir os
+    // negócios e a exclusão da conta trava no meio.
+    try {
+      var meusNegocios = $app.findRecordsByFilter('negocios', 'owner = {:id}', '', 500, 0, {
+        id: uid,
+      })
+      for (var mnI = 0; mnI < meusNegocios.length; mnI++) {
+        try {
+          for (var alRodada = 0; alRodada < 20; alRodada++) {
+            var acessos = $app.findRecordsByFilter('access_logs', 'negocio = {:n}', '', 200, 0, {
+              n: meusNegocios[mnI].id,
+            })
+            if (!acessos.length) break
+            for (var acI = 0; acI < acessos.length; acI++) $app.delete(acessos[acI])
+          }
+        } catch (alErr) {
+          $app.logger().error('cascade user: access_logs por negocio', 'error', String(alErr))
+        }
+      }
+    } catch (negErr) {
+      $app.logger().error('cascade user: leitura de negocios', 'error', String(negErr))
+    }
+
+    // Demais coleções que referenciam o usuário direto. A mesma coleção pode
+    // aparecer mais de uma vez, uma linha por campo que aponta para `users`.
+    // Todas as relações da camada de imobiliárias (fases 1 e 3) são required e
+    // sem cascade: se não entrarem nesta lista, o banco RECUSA apagar a conta e
+    // o painel mostra "excluído" de forma enganosa. `access_logs` e as duas
+    // coleções de equipe vêm ANTES de `negocios`, que é do que elas dependem.
     var alvos = [
       ['validation_audit', 'user_id'],
       ['validation_logs', 'user'],
+      ['access_logs', 'user'],
+      ['agency_invites', 'agency'],
+      ['agency_invites', 'member'],
+      ['agency_invites', 'convidado_por'],
+      ['agency_members', 'agency'],
+      ['agency_members', 'member'],
       ['broker_profile', 'user'],
       ['negocios', 'owner'],
       ['chamados', 'user'],

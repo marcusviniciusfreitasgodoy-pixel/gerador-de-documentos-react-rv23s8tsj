@@ -16,6 +16,11 @@ import {
   Search,
   X,
   Info,
+  Mail,
+  Send,
+  Clock,
+  Ban,
+  UserMinus,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -34,7 +39,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { getEquipeResumo, type EquipeResumo } from '@/services/agencies'
+import {
+  getEquipeResumo,
+  listAgencyInvites,
+  convidarCorretor,
+  reenviarConvite,
+  cancelarConvite,
+  removerMembroDaEquipe,
+  type EquipeResumo,
+  type AgencyInvite,
+} from '@/services/agencies'
 import {
   getAgencyLegalKnowledge,
   createLegalKnowledge,
@@ -83,6 +97,22 @@ function tempoRelativo(iso: string): string {
   return `há ${d} dias`
 }
 
+// Quantos dias faltam para o convite vencer. Null quando não há prazo lido.
+function diasRestantes(iso: string): number | null {
+  if (!iso) return null
+  const t = new Date(String(iso).replace(' ', 'T')).getTime()
+  if (!t) return null
+  return Math.max(0, Math.ceil((t - Date.now()) / (24 * 60 * 60 * 1000)))
+}
+
+const ROTULO_STATUS: Record<string, string> = {
+  pendente: 'aguardando resposta',
+  aceito: 'aceito',
+  recusado: 'recusado',
+  cancelado: 'cancelado',
+  expirado: 'vencido',
+}
+
 export default function EquipePage() {
   const { user } = useAuth()
   const [resumo, setResumo] = useState<EquipeResumo | null>(null)
@@ -114,6 +144,27 @@ export default function EquipePage() {
     }
   }, [])
 
+  // Convites emitidos pela casa (fase 3). A leitura é direta: a regra de
+  // `agency_invites` já cobre `agency = @request.auth.id`. Toda ESCRITA passa
+  // pelos endpoints, porque quem decide o vínculo não pode ser o cliente.
+  const [convites, setConvites] = useState<AgencyInvite[]>([])
+  const [convitesLoading, setConvitesLoading] = useState(true)
+  const [emailConvite, setEmailConvite] = useState('')
+  const [convidando, setConvidando] = useState(false)
+  const [acaoConvite, setAcaoConvite] = useState<string | null>(null)
+
+  const carregarConvites = useCallback(async () => {
+    if (!user?.id) return
+    setConvitesLoading(true)
+    try {
+      setConvites(await listAgencyInvites(user.id))
+    } catch (error) {
+      toast.error('Erro ao carregar convites: ' + getErrorMessage(error))
+    } finally {
+      setConvitesLoading(false)
+    }
+  }, [user?.id])
+
   const carregarRegras = useCallback(async () => {
     if (!user?.id) return
     setRulesLoading(true)
@@ -130,11 +181,21 @@ export default function EquipePage() {
   useEffect(() => {
     carregar()
     carregarRegras()
-  }, [carregar, carregarRegras])
+    carregarConvites()
+  }, [carregar, carregarRegras, carregarConvites])
 
   useRealtime('legal_knowledge', () => {
     carregarRegras()
   })
+
+  const convitesPendentes = useMemo(
+    () => convites.filter((c) => c.status === 'pendente'),
+    [convites],
+  )
+  const convitesHistorico = useMemo(
+    () => convites.filter((c) => c.status !== 'pendente'),
+    [convites],
+  )
 
   const filteredRules = useMemo(() => {
     const q = ruleSearch.trim().toLowerCase()
@@ -145,6 +206,84 @@ export default function EquipePage() {
       ),
     )
   }, [houseRules, ruleSearch])
+
+  const [removendo, setRemovendo] = useState<string | null>(null)
+
+  const handleRemoverMembro = async (memberId: string, nome: string) => {
+    if (
+      !window.confirm(
+        `Remover ${nome} da equipe? Os negócios que ele já criou pela casa continuam acessíveis aqui. Os próximos nascem sem o carimbo da imobiliária.`,
+      )
+    )
+      return
+    setRemovendo(memberId)
+    try {
+      await removerMembroDaEquipe(memberId)
+      toast.success('Corretor removido da equipe.', {
+        description: 'O vínculo fica no histórico e ele foi avisado por e-mail.',
+      })
+      carregar()
+    } catch (error) {
+      toast.error('Não foi possível remover.', { description: getErrorMessage(error) })
+    } finally {
+      setRemovendo(null)
+    }
+  }
+
+  const handleConvidar = async (ev: React.FormEvent) => {
+    ev.preventDefault()
+    const alvo = emailConvite.trim()
+    if (!alvo) return
+    setConvidando(true)
+    try {
+      const r = await convidarCorretor(alvo)
+      if (r.email_enviado) {
+        toast.success('Convite enviado.', {
+          description: r.conta_existente
+            ? 'Ele vê o convite no app assim que entrar.'
+            : 'Ele precisa criar a conta com este mesmo e-mail para aceitar.',
+        })
+      } else {
+        toast.warning('Convite registrado, mas o e-mail não saiu.', {
+          description: 'Use "Reenviar" na lista abaixo. O convite continua valendo.',
+        })
+      }
+      setEmailConvite('')
+      carregarConvites()
+    } catch (error) {
+      toast.error('Não foi possível convidar.', { description: getErrorMessage(error) })
+    } finally {
+      setConvidando(false)
+    }
+  }
+
+  const handleReenviar = async (id: string) => {
+    setAcaoConvite(id)
+    try {
+      const r = await reenviarConvite(id)
+      if (r.email_enviado) toast.success('Convite reenviado, com prazo renovado.')
+      else toast.warning('Prazo renovado, mas o e-mail não saiu. Tente de novo em instantes.')
+      carregarConvites()
+    } catch (error) {
+      toast.error('Não foi possível reenviar.', { description: getErrorMessage(error) })
+    } finally {
+      setAcaoConvite(null)
+    }
+  }
+
+  const handleCancelarConvite = async (id: string) => {
+    if (!window.confirm('Cancelar este convite? Ele deixa de valer para quem recebeu.')) return
+    setAcaoConvite(id)
+    try {
+      await cancelarConvite(id)
+      toast.success('Convite cancelado.')
+      carregarConvites()
+    } catch (error) {
+      toast.error('Não foi possível cancelar.', { description: getErrorMessage(error) })
+    } finally {
+      setAcaoConvite(null)
+    }
+  }
 
   const handleSaveRule = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -215,11 +354,12 @@ export default function EquipePage() {
           <Building2 className="h-6 w-6 text-primary" /> Equipe
         </h1>
         <IntroPagina
-          frase="Membros da imobiliária, contagem de negócios e validações de cada corretor, e o acesso aos negócios da casa. Você vê os negócios que seus corretores intermediaram, com o aceite LGPD registrado."
+          frase="Membros da imobiliária, contagem de negócios e validações de cada corretor, e o acesso aos negócios da casa. Você vê os negócios que seus corretores intermediaram, com o aceite registrado por eles mesmos."
           passos={[
-            'Cada corretor vinculado com termo aceito tem os negócios dele carimbados com a imobiliária na criação.',
-            'Abra qualquer negócio da casa pelo detalhe já existente — o acesso fica registrado para auditoria.',
-            'Remover um corretor não apaga o vínculo: ele fica marcado como removido, preservando o histórico.',
+            'Convide o corretor pelo e-mail de cadastro dele. Quem aceita é ele, dentro do app, depois de ler o que a imobiliária passa a ver.',
+            'A partir do aceite, os negócios que ele criar nascem carimbados com a imobiliária. Os anteriores continuam só dele.',
+            'Abra qualquer negócio da casa pelo detalhe já existente: o acesso fica registrado para auditoria.',
+            'Remover um corretor não apaga o vínculo: ele fica marcado como removido, preservando o histórico. Ele também pode sair sozinho, pelo perfil.',
           ]}
         />
       </div>
@@ -314,7 +454,8 @@ export default function EquipePage() {
               {resumo.members.length === 0 ? (
                 <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
                   <Users className="h-6 w-6 text-muted-foreground/50" />
-                  Nenhum membro ativo. A Prime Circle vincula corretores pelo painel /admin.
+                  Nenhum membro ativo ainda. Convide um corretor pelo e-mail, no bloco abaixo: ele
+                  entra na equipe quando aceitar.
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -349,10 +490,169 @@ export default function EquipePage() {
                             </Badge>
                           </div>
                         </div>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-7 w-7 shrink-0 p-0 text-muted-foreground hover:text-destructive"
+                          onClick={() => handleRemoverMembro(m.member_id, m.nome || 'Corretor')}
+                          disabled={removendo === m.member_id}
+                          aria-label="Remover da equipe"
+                        >
+                          {removendo === m.member_id ? (
+                            <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                          ) : (
+                            <UserMinus className="h-3.5 w-3.5" />
+                          )}
+                        </Button>
                       </div>
                     )
                   })}
                 </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Convites (fase 3): o gestor convida, o corretor decide */}
+          <Card className="shadow-elevation border-0 md:border md:border-border/60">
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between gap-2">
+                <CardTitle className="text-base font-semibold text-primary flex items-center gap-2">
+                  <Mail className="h-5 w-5" /> Convites
+                </CardTitle>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 px-2 text-muted-foreground"
+                  onClick={carregarConvites}
+                  disabled={convitesLoading}
+                  aria-label="Atualizar convites"
+                >
+                  <RefreshCw className={cn('h-3.5 w-3.5', convitesLoading && 'animate-spin')} />
+                </Button>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Convide pelo e-mail de cadastro do corretor. Quem aceita é ele, dentro do app,
+                depois de ler o que a imobiliária passa a ver. Você não marca o aceite no lugar
+                dele, e nada dele aparece aqui antes disso.
+              </p>
+            </CardHeader>
+            <CardContent className="pt-0 space-y-3">
+              <form onSubmit={handleConvidar} className="flex flex-col gap-2 sm:flex-row">
+                <Input
+                  type="email"
+                  value={emailConvite}
+                  onChange={(e) => setEmailConvite(e.target.value)}
+                  placeholder="corretor@exemplo.com"
+                  className="h-9"
+                  required
+                />
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="h-9 shrink-0"
+                  disabled={convidando || !emailConvite.trim()}
+                >
+                  {convidando ? (
+                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Send className="mr-1.5 h-4 w-4" />
+                  )}
+                  Enviar convite
+                </Button>
+              </form>
+
+              {convitesLoading ? (
+                <div className="space-y-2 py-2">
+                  <Skeleton className="h-12 w-full" />
+                  <Skeleton className="h-12 w-full" />
+                </div>
+              ) : (
+                <>
+                  {convitesPendentes.length === 0 ? (
+                    <p className="py-2 text-xs text-muted-foreground">
+                      Nenhum convite esperando resposta.
+                    </p>
+                  ) : (
+                    <div className="space-y-2">
+                      {convitesPendentes.map((c) => {
+                        const dias = diasRestantes(c.expira_em)
+                        return (
+                          <div
+                            key={c.id}
+                            className="flex flex-col gap-2 rounded-lg border border-border/60 p-3 sm:flex-row sm:items-center sm:justify-between"
+                          >
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-medium text-foreground">
+                                {c.email}
+                              </p>
+                              <p className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
+                                <Clock className="h-3 w-3" />
+                                {dias === null
+                                  ? 'Aguardando resposta'
+                                  : dias === 0
+                                    ? 'Vence hoje'
+                                    : `Vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}`}
+                                {c.created ? ` · enviado ${tempoRelativo(c.created)}` : ''}
+                              </p>
+                            </div>
+                            <div className="flex shrink-0 items-center gap-1">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-8"
+                                onClick={() => handleReenviar(c.id)}
+                                disabled={acaoConvite === c.id}
+                              >
+                                {acaoConvite === c.id ? (
+                                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                ) : (
+                                  <Send className="h-3.5 w-3.5" />
+                                )}
+                                <span className="ml-1.5">Reenviar</span>
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-8 text-muted-foreground hover:text-destructive"
+                                onClick={() => handleCancelarConvite(c.id)}
+                                disabled={acaoConvite === c.id}
+                                aria-label="Cancelar convite"
+                              >
+                                <Ban className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+
+                  {convitesHistorico.length > 0 && (
+                    <details className="text-xs">
+                      <summary className="cursor-pointer py-1 text-muted-foreground hover:text-foreground">
+                        {convitesHistorico.length} convite
+                        {convitesHistorico.length === 1 ? '' : 's'} já respondido
+                        {convitesHistorico.length === 1 ? '' : 's'} (histórico)
+                      </summary>
+                      <div className="mt-1 space-y-1">
+                        {convitesHistorico.map((c) => (
+                          <div
+                            key={c.id}
+                            className="flex items-center gap-2 rounded-md border border-border/40 px-2.5 py-1.5 opacity-75"
+                          >
+                            <span className="flex-1 truncate text-[11px] text-muted-foreground">
+                              {c.email}
+                              {c.respondido_em ? ` · ${tempoRelativo(c.respondido_em)}` : ''}
+                            </span>
+                            <Badge variant="outline" className="h-4 shrink-0 px-1 text-[10px]">
+                              {ROTULO_STATUS[c.status] || c.status}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </details>
+                  )}
+                </>
               )}
             </CardContent>
           </Card>

@@ -11,6 +11,10 @@ import {
   CheckCircle2,
   ChevronRight,
   Calendar,
+  Mail,
+  Send,
+  Clock,
+  Ban,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -36,9 +40,14 @@ import {
   vincularMember,
   removerMember,
   getMemberProfiles,
+  listAgencyInvites,
+  convidarCorretor,
+  reenviarConvite,
+  cancelarConvite,
   type Imobiliaria,
   type AgencyMember,
   type BrokerCandidate,
+  type AgencyInvite,
 } from '@/services/agencies'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 import type { BrokerProfile } from '@/services/broker-profile'
@@ -48,6 +57,22 @@ function hojeISODate(): string {
   const d = new Date()
   const off = d.getTimezoneOffset()
   return new Date(d.getTime() - off * 60000).toISOString().slice(0, 10)
+}
+
+// Quantos dias faltam para o convite vencer.
+function diasRestantes(iso: string): number | null {
+  if (!iso) return null
+  const t = new Date(String(iso).replace(' ', 'T')).getTime()
+  if (!t) return null
+  return Math.max(0, Math.ceil((t - Date.now()) / (24 * 60 * 60 * 1000)))
+}
+
+const ROTULO_STATUS: Record<string, string> = {
+  pendente: 'aguardando resposta',
+  aceito: 'aceito',
+  recusado: 'recusado',
+  cancelado: 'cancelado',
+  expirado: 'vencido',
 }
 
 export default function AdminAgenciasBlock() {
@@ -100,8 +125,8 @@ function AgenciasAdmin() {
           </Button>
         </div>
         <p className="text-xs text-muted-foreground">
-          Contas com tipo de perfil “imobiliária”. Abrir uma para vincular corretores e registrar o
-          aceite do termo LGPD.
+          Contas com tipo de perfil “imobiliária”. Abra uma para convidar corretores por e-mail. O
+          aceite é dado pelo próprio corretor, no app.
         </p>
       </CardHeader>
       <CardContent className="pt-0">
@@ -153,7 +178,7 @@ function AgenciasAdmin() {
                       <p className="text-xs text-muted-foreground truncate">
                         {imob.razao_social && imob.razao_social !== imob.name
                           ? imob.razao_social
-                          : imob.email || '—'}
+                          : imob.email || 'sem e-mail'}
                         {imob.creci_juridico ? ` · CRECI-J ${imob.creci_juridico}` : ''}
                       </p>
                     </div>
@@ -178,13 +203,86 @@ function AgenciasAdmin() {
   )
 }
 
-// ── Detalhe de uma imobiliária aberta: membros + vincular/remover ───────────
+// ── Detalhe de uma imobiliária aberta: convites, membros e vínculo manual ──
 function DetalheImobiliaria({ imob }: { imob: Imobiliaria }) {
   const [members, setMembers] = useState<AgencyMember[]>([])
   const [perfis, setPerfis] = useState<Record<string, BrokerProfile>>({})
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState<string | null>(null)
   const [modalVincular, setModalVincular] = useState(false)
+
+  // Convites em nome desta imobiliária (fase 3). O admin da plataforma pode
+  // convidar por ela: o endpoint aceita `agency` no corpo só de quem é admin.
+  const [convites, setConvites] = useState<AgencyInvite[]>([])
+  const [convitesLoading, setConvitesLoading] = useState(true)
+  const [emailConvite, setEmailConvite] = useState('')
+  const [convidando, setConvidando] = useState(false)
+  const [acaoConvite, setAcaoConvite] = useState<string | null>(null)
+
+  const carregarConvites = useCallback(async () => {
+    setConvitesLoading(true)
+    try {
+      setConvites(await listAgencyInvites(imob.user))
+    } catch (error) {
+      toast.error('Erro ao carregar convites.', { description: getErrorMessage(error) })
+    } finally {
+      setConvitesLoading(false)
+    }
+  }, [imob.user])
+
+  const handleConvidar = async (ev: React.FormEvent) => {
+    ev.preventDefault()
+    const alvo = emailConvite.trim()
+    if (!alvo) return
+    setConvidando(true)
+    try {
+      const r = await convidarCorretor(alvo, imob.user)
+      if (r.email_enviado) {
+        toast.success('Convite enviado.', {
+          description: r.conta_existente
+            ? 'Ele vê o convite no app assim que entrar.'
+            : 'Ele precisa criar a conta com este mesmo e-mail para aceitar.',
+        })
+      } else {
+        toast.warning('Convite registrado, mas o e-mail não saiu.', {
+          description: 'Use “Reenviar” na lista. O convite continua valendo.',
+        })
+      }
+      setEmailConvite('')
+      carregarConvites()
+    } catch (error) {
+      toast.error('Não foi possível convidar.', { description: getErrorMessage(error) })
+    } finally {
+      setConvidando(false)
+    }
+  }
+
+  const handleReenviar = async (id: string) => {
+    setAcaoConvite(id)
+    try {
+      const r = await reenviarConvite(id)
+      if (r.email_enviado) toast.success('Convite reenviado, com prazo renovado.')
+      else toast.warning('Prazo renovado, mas o e-mail não saiu.')
+      carregarConvites()
+    } catch (error) {
+      toast.error('Não foi possível reenviar.', { description: getErrorMessage(error) })
+    } finally {
+      setAcaoConvite(null)
+    }
+  }
+
+  const handleCancelarConvite = async (id: string) => {
+    setAcaoConvite(id)
+    try {
+      await cancelarConvite(id)
+      toast.success('Convite cancelado.')
+      carregarConvites()
+    } catch (error) {
+      toast.error('Não foi possível cancelar.', { description: getErrorMessage(error) })
+    } finally {
+      setAcaoConvite(null)
+    }
+  }
 
   const carregar = useCallback(async () => {
     setLoading(true)
@@ -205,10 +303,13 @@ function DetalheImobiliaria({ imob }: { imob: Imobiliaria }) {
 
   useEffect(() => {
     carregar()
-  }, [carregar])
+    carregarConvites()
+  }, [carregar, carregarConvites])
 
   const ativos = members.filter((m) => m.status === 'ativo')
   const removidos = members.filter((m) => m.status === 'removido')
+  const convitesPendentes = convites.filter((c) => c.status === 'pendente')
+  const convitesHistorico = convites.filter((c) => c.status !== 'pendente')
 
   return (
     <div className="rounded-lg border border-border/60 bg-card/40 p-3 space-y-3">
@@ -237,7 +338,7 @@ function DetalheImobiliaria({ imob }: { imob: Imobiliaria }) {
         <p className="text-xs text-red-600">{erro}</p>
       ) : ativos.length === 0 ? (
         <p className="text-xs text-muted-foreground py-2">
-          Nenhum corretor vinculado. Use “Vincular corretor”.
+          Nenhum corretor vinculado ainda. Convide por e-mail no bloco abaixo.
         </p>
       ) : (
         <div className="space-y-1.5">
@@ -272,9 +373,152 @@ function DetalheImobiliaria({ imob }: { imob: Imobiliaria }) {
         </div>
       )}
 
-      <Button size="sm" className="w-full h-9" onClick={() => setModalVincular(true)}>
-        <UserPlus className="mr-1.5 h-4 w-4" /> Vincular corretor
-      </Button>
+      {/* ── Convites (fase 3): o caminho padrão ─────────────────────────── */}
+      <div className="space-y-2 rounded-md border border-border/50 p-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <p className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+            <Mail className="h-3.5 w-3.5 text-primary" /> Convidar por e-mail
+          </p>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 px-1.5 text-muted-foreground"
+            onClick={carregarConvites}
+            disabled={convitesLoading}
+            aria-label="Atualizar convites"
+          >
+            <RefreshCw className={`h-3 w-3 ${convitesLoading ? 'animate-spin' : ''}`} />
+          </Button>
+        </div>
+        <p className="text-[11px] leading-relaxed text-muted-foreground">
+          O corretor recebe o convite, lê o que a imobiliária passa a ver e aceita ele mesmo. A data
+          e a hora do aceite são carimbadas pelo servidor.
+        </p>
+        <form onSubmit={handleConvidar} className="flex gap-2">
+          <Input
+            type="email"
+            value={emailConvite}
+            onChange={(e) => setEmailConvite(e.target.value)}
+            placeholder="corretor@exemplo.com"
+            className="h-8 text-xs"
+            required
+          />
+          <Button
+            type="submit"
+            size="sm"
+            className="h-8 shrink-0"
+            disabled={convidando || !emailConvite.trim()}
+          >
+            {convidando ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Send className="h-3.5 w-3.5" />
+            )}
+            <span className="ml-1.5">Convidar</span>
+          </Button>
+        </form>
+
+        {convitesLoading ? (
+          <Skeleton className="h-9 w-full" />
+        ) : convitesPendentes.length === 0 ? (
+          <p className="text-[11px] text-muted-foreground">Nenhum convite esperando resposta.</p>
+        ) : (
+          <div className="space-y-1.5">
+            {convitesPendentes.map((c) => {
+              const dias = diasRestantes(c.expira_em)
+              return (
+                <div
+                  key={c.id}
+                  className="flex items-center gap-2 rounded-md border border-border/50 px-2.5 py-1.5"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs text-foreground">{c.email}</p>
+                    <p className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                      <Clock className="h-2.5 w-2.5" />
+                      {dias === null
+                        ? 'Aguardando resposta'
+                        : dias === 0
+                          ? 'Vence hoje'
+                          : `Vence em ${dias} ${dias === 1 ? 'dia' : 'dias'}`}
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 w-6 p-0 text-muted-foreground hover:text-foreground"
+                    onClick={() => handleReenviar(c.id)}
+                    disabled={acaoConvite === c.id}
+                    aria-label="Reenviar convite"
+                  >
+                    {acaoConvite === c.id ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <Send className="h-3 w-3" />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-6 w-6 p-0 text-muted-foreground hover:text-red-600"
+                    onClick={() => handleCancelarConvite(c.id)}
+                    disabled={acaoConvite === c.id}
+                    aria-label="Cancelar convite"
+                  >
+                    <Ban className="h-3 w-3" />
+                  </Button>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {convitesHistorico.length > 0 && (
+          <details className="text-xs">
+            <summary className="cursor-pointer py-0.5 text-[11px] text-muted-foreground hover:text-foreground">
+              {convitesHistorico.length} convite{convitesHistorico.length === 1 ? '' : 's'} no
+              histórico
+            </summary>
+            <div className="mt-1 space-y-1">
+              {convitesHistorico.map((c) => (
+                <div
+                  key={c.id}
+                  className="flex items-center gap-2 rounded-md border border-border/40 px-2.5 py-1 opacity-75"
+                >
+                  <span className="flex-1 truncate text-[10px] text-muted-foreground">
+                    {c.email}
+                  </span>
+                  <Badge variant="outline" className="h-4 shrink-0 px-1 text-[10px]">
+                    {ROTULO_STATUS[c.status] || c.status}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </details>
+        )}
+      </div>
+
+      {/* ── Vínculo manual: a exceção, não o caminho ──────────────────────── */}
+      {/* Continua aqui porque é a única saída quando o e-mail não chega de jeito
+          nenhum e a imobiliária precisa operar hoje. Fica marcado como exceção
+          de propósito: aqui quem afirma o consentimento é a Prime Circle, e não
+          o corretor, que é justamente o que a fase 3 veio resolver. */}
+      <details className="rounded-md border border-border/50 p-2.5">
+        <summary className="cursor-pointer text-xs font-medium text-muted-foreground hover:text-foreground">
+          Vínculo manual (exceção)
+        </summary>
+        <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
+          Cria o vínculo sem passar pelo aceite do corretor, registrando a data de um combinado
+          contratual feito fora do app. Use só quando o convite por e-mail não for possível.
+        </p>
+        <Button
+          size="sm"
+          variant="outline"
+          className="mt-2 h-8 w-full"
+          onClick={() => setModalVincular(true)}
+        >
+          <UserPlus className="mr-1.5 h-3.5 w-3.5" /> Vincular corretor manualmente
+        </Button>
+      </details>
 
       {removidos.length > 0 && (
         <details className="text-xs">
@@ -454,10 +698,11 @@ function VincularDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>Vincular corretor a {imob.name}</DialogTitle>
+          <DialogTitle>Vínculo manual: {imob.name}</DialogTitle>
           <DialogDescription>
-            Busque pelo e-mail de cadastro ou pelo CRECI. Marque a data do aceite do termo LGPD: sem
-            termo, o corretor opera como autônomo e a imobiliária não vê nada dele.
+            Caminho de exceção. O padrão é o convite por e-mail, em que o próprio corretor lê o
+            termo e aceita. Aqui a data registrada representa um combinado contratual feito fora do
+            app: sem ela, o corretor opera como autônomo e a imobiliária não vê nada dele.
           </DialogDescription>
         </DialogHeader>
 
@@ -515,7 +760,8 @@ function VincularDialog({
             />
             <p className="text-[11px] text-muted-foreground leading-relaxed">
               Representa o combinado contratual com a imobiliária. Só com termo o carimbo de agência
-              vale na criação de negócios.
+              vale na criação de negócios. Prefira o convite: lá o aceite é do corretor, com data e
+              hora do servidor.
             </p>
           </div>
         </div>
