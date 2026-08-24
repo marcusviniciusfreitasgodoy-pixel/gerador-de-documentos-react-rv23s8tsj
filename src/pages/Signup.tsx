@@ -272,6 +272,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
             <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O ajuste que você faz volta para o dossiê, e o próximo documento já nasce com ele.</p>
           </div>
         </div>
+        <p data-anim style="margin:clamp(26px,3vw,34px) 0 0;max-width:70ch;font-size:14.5px;line-height:1.72;color:#6B645B;border-left:2px solid #C9A84C;padding-left:16px">O dossiê é seu e de mais ninguém. Nenhum outro corretor e nenhuma imobiliária têm acesso às partes, aos negócios ou aos documentos que você cadastra: a regra de acesso é por dono do registro e roda no servidor.</p>
       </div>
 
       <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7;margin-top:clamp(40px,5vw,64px)">
@@ -636,7 +637,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
             <span data-faq-sinal style="flex:none;font-family:'JetBrains Mono',monospace;font-size:16px;color:#8B7340;transition:transform 200ms cubic-bezier(.22,.61,.36,1)">+</span>
           </button>
           <div data-faq-corpo style="overflow:hidden;transition:max-height 220ms cubic-bezier(.22,.61,.36,1),opacity 200ms cubic-bezier(.22,.61,.36,1)">
-            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Cada registro é acessível ao seu dono e a mais ninguém. Os logs da validação de minutas são apagados automaticamente após 30 dias.</p>
+            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Ficam na sua conta. Nenhum outro corretor e nenhuma imobiliária têm acesso ao seu cadastro de partes, aos seus negócios ou aos documentos que você gera: a regra de acesso é por dono do registro e roda no servidor, não é uma configuração de tela que alguém pode virar. Os registros da validação de minutas são apagados automaticamente após 30 dias, por compromisso de LGPD.</p>
           </div>
         </div>
 
