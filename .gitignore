@@ -26,6 +26,9 @@ dev-dist-ssr
 *.failed-*
 *.tmp
 
+# Saida incremental do tsc (gerada por `tsc -b`, nao e fonte)
+*.tsbuildinfo
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
