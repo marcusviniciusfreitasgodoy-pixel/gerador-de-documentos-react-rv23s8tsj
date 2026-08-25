@@ -51,8 +51,8 @@ Falta apenas o que só o painel e o banco provam:
 | #   | Arquivo                                               | Linhas |            |
 | --- | ----------------------------------------------------- | ------ | ---------- |
 | 1   | `pocketbase/migrations/1900000033_users_add_trial.js` | 45     | APLICADO   |
-| 2   | `pocketbase/hooks/trial_carimbo.js`                   | 64     | APLICADO   |
-| 3   | `pocketbase/hooks/validar_minuta.js`                  | 1269   | substituir |
+| 2   | `pocketbase/hooks/trial_carimbo.js`                   | 71     | RECOLAR    |
+| 3   | `pocketbase/hooks/validar_minuta.js`                  | 1269   | APLICADO   |
 | 4   | `pocketbase/hooks/extrair_dados.js`                   | 1152   | substituir |
 | 5   | `src/hooks/use-auth.tsx`                              | 119    | substituir |
 | 6   | `src/components/Layout.tsx`                           | 635    | substituir |
@@ -73,6 +73,17 @@ b=open('src/pages/Signup.tsx',encoding='utf-8').read()
 print([hashlib.sha256(x.encode()).hexdigest()[:10] for x in re.findall(r'data:image/webp;base64,[A-Za-z0-9+/=]+',b)])"
 # esperado: ['40b6f0b3af', '40b6f0b3af', '582241ca47']
 ```
+
+## Armadilha do JSVM (custou um bug nesta entrega)
+
+**Handler do PocketBase não enxerga o escopo do módulo.** Uma `var` declarada no
+topo do arquivo chega como `undefined` dentro de `onRecordCreate` e afins. Foi
+exatamente o que aconteceu com o `TRIAL_DIAS` do `trial_carimbo.js`: a conta
+viraria `NaN`, o `toISOString()` lançaria, o `catch` engoliria, e nenhuma conta
+nova seria carimbada. Falha muda.
+
+Constante e helper vão **dentro** de cada handler, repetidos se preciso. É a
+razão da duplicação que já existe em `agencia_convites.js` e `validar_minuta.js`.
 
 ## O ciclo, por arquivo
 
