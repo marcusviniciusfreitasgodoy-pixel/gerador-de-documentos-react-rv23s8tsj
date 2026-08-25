@@ -22,6 +22,14 @@
 // fase 2 já pagou uma vez (ver MELHORIAS.md, seção 5).
 
 onRecordCreate((e) => {
+  // A constante fica DENTRO do handler de propósito. Handlers do JSVM do
+  // PocketBase são isolados e não enxergam o escopo do módulo: um
+  // `var TRIAL_DIAS` no topo do arquivo chegaria aqui como `undefined`, a
+  // conta viraria NaN, o `toISOString()` lançaria, o catch abaixo engoliria o
+  // erro e NENHUMA conta nova seria carimbada. Falha muda, do tipo que só
+  // aparece semanas depois. É a mesma razão de os helpers aparecerem
+  // repetidos dentro de cada rota em `agencia_convites.js` e
+  // `validar_minuta.js`.
   var TRIAL_DIAS = 15
   try {
     var prazo = new Date(Date.now() + TRIAL_DIAS * 24 * 60 * 60 * 1000)
