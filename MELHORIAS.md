@@ -217,6 +217,7 @@ reconciliado para espelhar byte a byte a versão em produção.
 | `1900000030_legal_knowledge_add_agency` | Régua própria por imobiliária                 |
 | `1900000031_fix_negocios_create_rule`   | Restaura o `@request.auth.id != ""` no create |
 | `1900000032_create_agency_invites`      | Convite por e-mail com aceite do corretor     |
+| `1900000033_users_add_trial`            | Prazo de teste por conta (vazio = sem limite) |
 
 ---
 
@@ -347,7 +348,47 @@ Especificações completas em `docs/SPEC-IMOBILIARIAS-F1.md`,
 
 ---
 
-## 6. Uma nota sobre o método
+## 6. Teste de 15 dias
+
+A plataforma estava liberada "nesta fase", sem prazo, esperando o sistema ficar
+pronto. Passa a ter teste de 15 dias para quem se cadastrar.
+
+O ponto que definiu o desenho não foi técnico. A § 06 da landing prometia, com
+todas as letras: _"Quando houver preço, você será avisado com antecedência e
+decide se continua"_. Ligar um prazo retroativo em quem já estava dentro
+quebraria essa frase, num público que este mesmo documento descreve como
+desconfiado por ofício. Então **conta antiga não tem prazo**: o campo
+`users.trial_expira_em` nasce vazio, e vazio significa sem limite. Só quem se
+cadastra a partir daqui é carimbado.
+
+Três decisões:
+
+- **O carimbo é do servidor.** No PocketBase o usuário tem update do próprio
+  registro em `users`, então prazo vindo do cliente seria prazo que o próprio
+  corretor edita. O hook `trial_carimbo.js` grava na criação e desfaz qualquer
+  alteração de quem não é admin. Mesma doutrina do `agency` na fase 1 e do
+  `termo_aceito_em` na fase 3.
+- **Vencido, param a geração e a validação; a leitura continua.** O corretor
+  segue entrando, abrindo os negócios e vendo o cadastro das partes. Prender
+  CPF e RG de cliente atrás de um bloqueio não é alavanca de venda, é problema
+  de LGPD, e destrói a confiança que a § 05 tenta construir.
+- **O bloqueio de tela é por rota, num lugar só.** Existem 10 pontos de
+  download de `.docx` em 8 arquivos; o gate mora no `Layout.tsx`, numa lista de
+  rotas. É conveniência de tela e dá para contornar, e por isso **o gate que
+  vale é o do servidor**, no topo das quatro rotas de IA, que é onde está o
+  custo. Gerar `.docx` roda no navegador, então ali não existe barreira de
+  servidor para ter.
+
+O erro de teste vencido devolve **402**, não 403, para a tela distinguir "seu
+teste acabou" de "confirme seu e-mail".
+
+Não há cobrança no sistema. Vencido, a tela aponta para a página de ajuda e o
+admin estende à mão, mudando a data no painel. É o que dá para sustentar hoje, e
+a copy não promete mais do que isso.
+
+---
+
+## 7. Uma nota sobre o método
 
 Duas vezes um critério dado como "confirmado pelo código" não se sustentou ao
 abrir o arquivo: o campo que o servidor grava só fica provado olhando o
@@ -364,7 +405,7 @@ por revisão de código sem ser notada e só apareceu na renderização.
 
 ---
 
-## 7. Próximos passos
+## 8. Próximos passos
 
 ### Verificações pendentes (rápidas, sem risco)
 

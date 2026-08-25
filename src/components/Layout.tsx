@@ -19,6 +19,8 @@ import {
   LifeBuoy,
   Menu,
   FileText,
+  Clock,
+  LifeBuoy as LifeBuoyAviso,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
@@ -142,8 +144,88 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { erro: Error | n
   }
 }
 
+// ── Teste de 15 dias ────────────────────────────────────────────────────────
+// As rotas que PARAM quando o teste vence. A escolha é deliberada: sai o que
+// produz (documento e validação de minuta), fica o que guarda (negócios,
+// perfil, equipe, ajuda). Prender o cadastro de CPF e RG de cliente atrás de
+// um bloqueio não é alavanca de venda, é problema de LGPD.
+//
+// O gate mora aqui, por rota, e não nos 8 arquivos que baixam .docx: um lugar
+// só, fácil de auditar. Ele é conveniência de tela e pode ser contornado por
+// quem entende do assunto; quem barra de verdade é o servidor, no topo das
+// quatro rotas de IA, que é onde está o custo.
+const ROTAS_DO_TESTE = ['/', '/proposta-reserva', '/distrato', '/permuta', '/validar']
+
+function TesteTerminado() {
+  return (
+    <div className="w-full max-w-lg animate-fade-in-up">
+      <div className="rounded-lg border border-border bg-card p-6 space-y-4 shadow-elevation">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
+            <Clock className="h-5 w-5" />
+          </div>
+          <h2 className="font-display text-2xl font-medium text-foreground">Seu teste terminou</h2>
+        </div>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Os 15 dias de teste acabaram, então gerar documento e validar minuta estão pausados por
+          enquanto.
+        </p>
+        <div className="rounded-md bg-primary/5 p-3">
+          <p className="text-sm font-medium text-foreground">Seus dados continuam seus</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Nada foi apagado. Você continua entrando na conta, abrindo os seus negócios e vendo o
+            cadastro das partes. Nenhum dado de cliente fica preso aqui dentro.
+          </p>
+        </div>
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Quer continuar usando? Fale com a gente pela página de ajuda: a gente responde e libera.
+        </p>
+        <div className="flex flex-wrap gap-2 pt-1">
+          <Button asChild>
+            <Link to="/ajuda">
+              <LifeBuoyAviso className="mr-1.5 h-4 w-4" /> Falar com a gente
+            </Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/negocios">Ver meus negócios</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Aviso na reta final. Só aparece nos últimos 5 dias: um aviso que aparece
+// desde o primeiro dia deixa de ser aviso e vira decoração.
+function AvisoDeTeste({ dias }: { dias: number }) {
+  return (
+    <div className="w-full max-w-5xl mb-4 animate-fade-in-up">
+      <div className="flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3">
+        <Clock className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-amber-900">
+            {dias === 0
+              ? 'Seu teste termina hoje'
+              : dias === 1
+                ? 'Seu teste termina amanhã'
+                : `Seu teste termina em ${dias} dias`}
+          </p>
+          <p className="text-xs leading-relaxed text-amber-800">
+            Depois disso, gerar documento e validar minuta ficam pausados. Seus negócios e o
+            cadastro das partes continuam acessíveis.{' '}
+            <Link to="/ajuda" className="font-medium underline">
+              Fale com a gente
+            </Link>{' '}
+            para continuar usando.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Layout() {
-  const { isAuthenticated, user, signOut, isAdmin } = useAuth()
+  const { isAuthenticated, user, signOut, isAdmin, trialExpirado, trialDiasRestantes } = useAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
   // A pagina de abertura (visitante sem conta no "/") e a unica tela de largura
@@ -411,8 +493,16 @@ export default function Layout() {
             ainda vê e responde o convite. O componente some sozinho quando não
             há convite nenhum. */}
         {isAuthenticated && <ConviteBanner />}
+        {isAuthenticated &&
+          !trialExpirado &&
+          trialDiasRestantes !== null &&
+          trialDiasRestantes <= 5 && <AvisoDeTeste dias={trialDiasRestantes} />}
         <ErrorBoundary>
-          <Outlet />
+          {isAuthenticated && trialExpirado && ROTAS_DO_TESTE.includes(pathname) ? (
+            <TesteTerminado />
+          ) : (
+            <Outlet />
+          )}
         </ErrorBoundary>
       </main>
     </div>
