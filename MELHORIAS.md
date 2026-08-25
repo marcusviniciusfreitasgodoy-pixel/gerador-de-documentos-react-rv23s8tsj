@@ -3,8 +3,8 @@
 Trabalho conduzido em **agosto de 2026** sobre a Prime Circle Documentos
 (`documentos.primecircle.app.br`), em quatro frentes: a **página de abertura**
 (copy, arte e um bug de renderização), o **endurecimento de segurança** do
-backend, o **painel administrativo** e a **camada de imobiliárias** (equipe e
-régua própria).
+backend, o **painel administrativo** e a **camada de imobiliárias** (equipe,
+régua própria e convite com aceite do corretor).
 
 Estado no ar quando este registro foi fechado: **v0.0.675**.
 
@@ -216,6 +216,7 @@ reconciliado para espelhar byte a byte a versão em produção.
 | `1900000029_create_access_logs`         | Trilha de acesso do gestor (LGPD)             |
 | `1900000030_legal_knowledge_add_agency` | Régua própria por imobiliária                 |
 | `1900000031_fix_negocios_create_rule`   | Restaura o `@request.auth.id != ""` no create |
+| `1900000032_create_agency_invites`      | Convite por e-mail com aceite do corretor     |
 
 ---
 
@@ -285,8 +286,64 @@ do projeto. Em hooks de modelo o `httpContext` é nulo nas escritas
 programáticas, então o campo `agency` seria zerado em toda regra gravada assim.
 Corrigido para `onRecordCreateRequest` / `onRecordUpdateRequest` com `e.auth`.
 
-Especificações completas em `docs/SPEC-IMOBILIARIAS-F1.md` e
-`docs/SPEC-IMOBILIARIAS-F2.md`.
+### Fase 3 — convite por e-mail e aceite in-app
+
+A fase 1 criava o vínculo pelo painel `/admin`: o administrador da plataforma
+buscava o corretor e **digitava a data do aceite do termo**. O carimbo só valia
+com essa data preenchida, então a exigência de consentimento estava garantida
+pelo código. O que não estava garantido é quem afirmava o consentimento: era o
+administrador, não o titular dos dados. A data representava um combinado
+fechado fora do app.
+
+Agora a imobiliária convida por e-mail (coleção `agency_invites`), e quem aceita
+é o corretor, depois de ler o que a casa passa a ver. A hora do aceite sai do
+relógio do servidor.
+
+Quatro decisões que definiram a fase:
+
+- **O token do link não é credencial.** A autorização do aceite é o e-mail do
+  convite bater com o da conta autenticada. Token vazado, sozinho, não vincula
+  ninguém, e por isso o reenvio nem troca o token. Sem conta, o link leva ao
+  cadastro: não existe "aceitar sem conta".
+- **`agency_members` continua fechada na API.** O aceite grava com
+  `$app.saveNoValidate`, e não afrouxando a regra da coleção. O critério 6 da
+  fase 1 (corretor comum recebe 403 ao escrever ali) segue valendo palavra por
+  palavra. Vale a mesma lógica do painel `/admin`: a tela nova não foi motivo
+  para abrir coleção nenhuma.
+- **"Já está em outra imobiliária" é checado no aceite, não no convite.** Dizer
+  isso ao gestor entregaria a ele um dado do corretor que não é dele. No aceite,
+  a resposta vai para quem tem direito a ela: o próprio corretor, com o nome da
+  casa onde ele está e o caminho para sair.
+- **O corpo do e-mail é fixo, sem campo de recado.** Com texto livre, o convite
+  viraria um canal de envio de mensagem arbitrária para endereço arbitrário,
+  assinado pelo domínio da Prime Circle.
+
+Entraram junto duas coisas que são consequência direta, não escopo extra. A
+**revogação pelo próprio corretor** (`/vinculo/sair`), porque consentimento que
+só a outra parte desfaz não é consentimento; e a **remoção pelo gestor**, porque
+com o convite ele monta a equipe sem depender do admin, e "entra sozinho mas
+precisa de chamado para sair" seria uma assimetria estranha. Nos dois casos o
+efeito é o da fase 1: o vínculo vira `removido`, a linha não some, e os negócios
+já carimbados continuam com a casa que os intermediou. A tela **diz isso antes
+de confirmar**, porque a expectativa natural de quem clica em "sair" é que o
+passado também suma.
+
+O vínculo manual do `/admin` **não foi removido**. Ficou recolhido e rotulado
+como exceção: é a única saída quando o e-mail não chega de jeito nenhum e a
+imobiliária precisa operar hoje. Tirá-lo durante a transição deixaria a operação
+sem rede.
+
+**Um conserto que veio junto.** A exclusão de usuário em cascata não conhecia
+`agency_members` nem `access_logs`, e as duas apontam para `users` com relação
+obrigatória e sem cascade: o banco **recusava excluir** qualquer conta com
+vínculo de equipe, e o painel mostrava "excluído" de forma enganosa. O mesmo
+valia para `access_logs.negocio`, criada pelo _gestor_ e por isso invisível ao
+filtro por usuário. Buraco aberto desde a fase 1, e apagar a conta é obrigação
+de LGPD. Entrou aqui porque esta fase acrescentaria uma quarta relação ao mesmo
+problema.
+
+Especificações completas em `docs/SPEC-IMOBILIARIAS-F1.md`,
+`docs/SPEC-IMOBILIARIAS-F2.md` e `docs/SPEC-IMOBILIARIAS-F3.md`.
 
 ---
 
@@ -318,14 +375,24 @@ por revisão de código sem ser notada e só apareceu na renderização.
   `status = 'fail'`; se gravar outro valor, o número fica sempre zero.
 - **Documento "Genérico":** confirmar que a validação ainda aponta arras, foro,
   LGPD e comissão — é o ponto cego do filtro por `trigger_logic`.
+- **Aceite do convite (fase 3):** um corretor aceita e o `agency_members` tem de
+  nascer com `termo_aceito_em` preenchido pelo servidor, e o negócio seguinte
+  dele com `agency` carimbado. Conferir os dois **no banco**, não no código: é
+  exatamente o tipo de campo que a seção 6 diz para não dar por provado.
+- **Envio do convite:** confirmar que o e-mail sai de fato pelo SMTP do Skip. O
+  código trata a falha (o convite continua valendo in-app e a tela oferece
+  reenvio), mas a primeira imobiliária real merece o caminho feliz.
+- **Exclusão de conta:** apagar uma conta de teste **com** vínculo de equipe e
+  confirmar que ela some. A cascata foi estendida para `agency_members`,
+  `access_logs` e `agency_invites`; era um travamento silencioso desde a fase 1.
 
 ### Produto (quando quiser)
 
-- **Fase 3 das imobiliárias** — convite por e-mail e aceite do termo in-app pelo
-  próprio corretor, no lugar do vínculo manual. Faz sentido quando o número de
-  imobiliárias crescer.
 - **Home do corretor** — painel consolidado pessoal. Seguro e barato (lê só o
   que ele já pode ver), mas é polimento: ele já chega em tudo pelo menu.
+- **Transferência de equipe** — hoje o corretor sai de uma casa e aceita a
+  outra, em dois passos. Um passo só resolveria, mas só vale a pena quando
+  houver rotatividade de verdade.
 
 ### O que move a conversão, e não é código
 
