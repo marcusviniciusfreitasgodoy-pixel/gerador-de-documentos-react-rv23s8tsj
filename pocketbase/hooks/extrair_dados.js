@@ -19,6 +19,22 @@ routerAdd(
       return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
     }
 
+    // Teste de 15 dias. Campo VAZIO = sem limite: é o que mantém liberadas as
+    // contas anteriores à mudança, conforme a promessa de aviso prévio da § 06
+    // da landing. Admin nunca expira. O 402 distingue "teste vencido" de "não
+    // confirmou o e-mail", que é 403, para a tela saber qual mensagem mostrar.
+    if (guardAuth && guardAuth.collection().name === 'users' && !guardAuth.getBool('isAdmin')) {
+      var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
+      if (trialStr) {
+        var trialMs = new Date(trialStr.replace(' ', 'T')).getTime()
+        if (trialMs && trialMs < Date.now()) {
+          return e.json(402, {
+            error: 'Seu período de teste terminou. Fale com a gente pela página Ajuda e Suporte.',
+          })
+        }
+      }
+    }
+
     var userId = e.auth ? e.auth.id : ''
 
     // ── Rate Limiting via coleção `rate_limits` (janela fixa de 60s) ──────
@@ -457,6 +473,22 @@ routerAdd(
       !guardAuth.getBool('isAdmin')
     ) {
       return e.json(403, { error: 'Confirme seu e-mail para liberar o acesso.' })
+    }
+
+    // Teste de 15 dias. Campo VAZIO = sem limite: é o que mantém liberadas as
+    // contas anteriores à mudança, conforme a promessa de aviso prévio da § 06
+    // da landing. Admin nunca expira. O 402 distingue "teste vencido" de "não
+    // confirmou o e-mail", que é 403, para a tela saber qual mensagem mostrar.
+    if (guardAuth && guardAuth.collection().name === 'users' && !guardAuth.getBool('isAdmin')) {
+      var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
+      if (trialStr) {
+        var trialMs = new Date(trialStr.replace(' ', 'T')).getTime()
+        if (trialMs && trialMs < Date.now()) {
+          return e.json(402, {
+            error: 'Seu período de teste terminou. Fale com a gente pela página Ajuda e Suporte.',
+          })
+        }
+      }
     }
 
     var userId = e.auth ? e.auth.id : ''
