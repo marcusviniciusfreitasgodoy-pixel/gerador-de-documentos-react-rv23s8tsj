@@ -50,12 +50,12 @@ Falta apenas o que só o painel e o banco provam:
 
 | #   | Arquivo                                               | Linhas |            |
 | --- | ----------------------------------------------------- | ------ | ---------- |
-| 1   | `pocketbase/migrations/1900000033_users_add_trial.js` | 45     | criar      |
-| 2   | `pocketbase/hooks/trial_carimbo.js`                   | 64     | criar      |
-| 3   | `pocketbase/hooks/validar_minuta.js`                  | 1084   | substituir |
-| 4   | `pocketbase/hooks/extrair_dados.js`                   | 1143   | substituir |
-| 5   | `src/hooks/use-auth.tsx`                              | 111    | substituir |
-| 6   | `src/components/Layout.tsx`                           | 645    | substituir |
+| 1   | `pocketbase/migrations/1900000033_users_add_trial.js` | 45     | APLICADO   |
+| 2   | `pocketbase/hooks/trial_carimbo.js`                   | 64     | APLICADO   |
+| 3   | `pocketbase/hooks/validar_minuta.js`                  | 1269   | substituir |
+| 4   | `pocketbase/hooks/extrair_dados.js`                   | 1152   | substituir |
+| 5   | `src/hooks/use-auth.tsx`                              | 119    | substituir |
+| 6   | `src/components/Layout.tsx`                           | 635    | substituir |
 | 7   | `src/pages/Signup.tsx`                                | 1045   | substituir |
 | 8   | `MELHORIAS.md`                                        | 450    | substituir |
 
