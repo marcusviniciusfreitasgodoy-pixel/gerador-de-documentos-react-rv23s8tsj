@@ -6,6 +6,12 @@ interface AuthContextType {
   isAuthenticated: boolean
   isAdmin: boolean
   isApproved: boolean
+  // Teste de 15 dias. `trialExpiraEm` vazio significa SEM LIMITE, e é o caso
+  // das contas anteriores à mudança: elas continuam liberadas, como a § 06 da
+  // landing prometeu. Admin nunca expira.
+  trialExpiraEm: string | null
+  trialExpirado: boolean
+  trialDiasRestantes: number | null
   signUp: (email: string, password: string, name?: string) => Promise<{ error: any }>
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signOut: () => void
@@ -31,6 +37,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // (campo `verified`). Ninguém precisa aprovar no painel. Admin dispensa a
   // checagem, senão um deslize trancaria o próprio administrador do sistema.
   const isApproved = (user?.verified ?? false) || isAdmin
+
+  // O prazo é carimbado pelo servidor no cadastro e o próprio usuário não
+  // consegue alterá-lo (hook `trial_carimbo.js`). Aqui só lemos: esta conta é
+  // conveniência de tela, e quem barra de verdade são as rotas do servidor.
+  const trialRaw = String(user?.trial_expira_em ?? '').trim()
+  const trialMs = trialRaw ? new Date(trialRaw.replace(' ', 'T')).getTime() : 0
+  const trialExpiraEm = trialMs ? trialRaw : null
+  const trialExpirado = !isAdmin && !!trialMs && trialMs < Date.now()
+  const trialDiasRestantes = trialMs
+    ? Math.max(0, Math.ceil((trialMs - Date.now()) / (24 * 60 * 60 * 1000)))
+    : null
 
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange((_token, record) => {
@@ -87,6 +104,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated,
         isAdmin,
         isApproved,
+        trialExpiraEm,
+        trialExpirado,
+        trialDiasRestantes,
         signUp,
         signIn,
         signOut,
