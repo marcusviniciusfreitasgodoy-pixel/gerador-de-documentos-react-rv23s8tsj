@@ -34,6 +34,7 @@ import {
 } from '@/components/CarregarDeNegocio'
 import { aplicarRecibo, MAPA_RECIBO } from '@/lib/aplicar-negocio'
 import type { ResultadoVolta } from '@/lib/aplicar-negocio'
+import { garantirNegocioDaOperacao, operacaoDoFormularioPlano } from '@/lib/negocioAutomatico'
 import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { PromessaDacaoForm } from '@/components/PromessaDacaoForm'
 import { reciboMockData } from '@/lib/form-helpers'
@@ -103,31 +104,11 @@ interface DocDef {
   key?: DocKey
   href?: string
   title: string
-  // uma linha, em português simples — é o que o card mostra sempre.
   desc: string
-  // 1–2 frases que EXPLICAM o documento para quem não é do ramo (o que é, quando
-  // usar); aparece ao passar o mouse / focar o card. Sem ela, o card fica só com
-  // o `desc`. A separação existe para o card ficar enxuto E o leigo ter onde
-  // entender o termo, sem poluir a grade.
   ajuda?: string
-  // Ocupa a linha inteira da grade (usado no Distrato, que fecha o negócio e
-  // sobra sozinho na última fila — cheio, não fica um card órfão à esquerda).
   wide?: boolean
 }
 
-// Registro único dos documentos: alimenta o hub E o título do formulário.
-// Fonte única de verdade, substitui o ternário de títulos (que errava a
-// financiada) e garante que todo documento tenha entrada no hub.
-// Ordem = a jornada real da operação, da captação ao encerramento. O `hint` de
-// cada grupo situa quem não conhece a taxonomia jurídica. O `desc` de cada
-// documento é português do dia a dia; o termo técnico (arras, dação, tradição)
-// mora no `ajuda`, explicado — não no rótulo que o leigo lê primeiro.
-// Exportada para as páginas de rota própria (Permuta, Proposta, Distrato)
-// reusarem a MESMA explicação leiga do hub, sem segunda cópia de redação.
-// O FAQ da pagina /ajuda listava os documentos numa frase escrita a mao, que ja
-// tinha divergido do hub (citava "Compromisso particular" e "Autorizacao de
-// Intermediacao", nomes que nao existem aqui). Agora ele monta a resposta a
-// partir DESTA lista, entao um documento novo aparece no FAQ sozinho.
 export function listarDocumentosPorGrupo(): { grupo: string; titulos: string[] }[] {
   return DOC_GROUPS.map((g) => ({ grupo: g.label, titulos: g.docs.map((d) => d.title) }))
 }
@@ -292,10 +273,6 @@ const DOC_CARD_CLASS =
 export default function Index() {
   const [isGenerating, setIsGenerating] = useState(false)
 
-  // Onboarding do hub: os dois pré-requisitos reais de uso (perfil preenchido e
-  // um negócio cadastrado). O checklist aparece enquanto faltar um deles e some
-  // sozinho quando os dois existem — não é um tour, é o caminho mínimo até o
-  // primeiro documento bem gerado. Recarrega a cada volta ao hub (remount).
   const [onboarding, setOnboarding] = useState<{
     carregado: boolean
     perfilOk: boolean
@@ -325,7 +302,6 @@ export default function Index() {
   const [isValidating, setIsValidating] = useState(false)
   const navigate = useNavigate()
   const [docType, setDocType] = useState<DocKey | null>(null)
-  // Fase 4 (Recibo): tela de sucesso + re-aplicar negócio no "Gerar outro".
   const [gerado, setGerado] = useState(false)
   const reaplicarNegocioRef = useRef<(() => void) | null>(null)
 
@@ -367,16 +343,12 @@ export default function Index() {
     },
   })
 
-  // C4 Lote 2: volta pro dossiê no Recibo (documento de partes planas).
   const { registrarNegocio, calcular, gravar, negocioAtual, resnapshot } = useNegocioSyncPlano(
     form,
     MAPA_RECIBO,
   )
   const [voltaPendente, setVoltaPendente] = useState<ResultadoVolta | null>(null)
 
-  // Foro/assinatura do recibo acompanham a comarca do imóvel — e param de acompanhar
-  // assim que o corretor digita no campo. cidade_uf (local da assinatura) deriva de
-  // foro_comarca no buildTemplateData, então os dois seguem a comarca.
   const foroImovelComarca = useWatch({ control: form.control, name: 'imovel_comarca' })
   const foroReciboEditado = !!form.formState.dirtyFields.foro_comarca
   useEffect(() => {
@@ -389,8 +361,11 @@ export default function Index() {
       await generateDocx(buildTemplateData(data))
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
-      // C4: o documento JÁ saiu. Só agora oferecemos atualizar o dossiê.
       setVoltaPendente(calcular())
+      await garantirNegocioDaOperacao(
+        operacaoDoFormularioPlano(data as unknown as Record<string, unknown>, MAPA_RECIBO),
+        negocioAtual(),
+      )
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -418,7 +393,6 @@ export default function Index() {
     setGerado(false)
   }
 
-  // Hub: nenhum documento selecionado -> grade de documentos por categoria.
   if (docType === null) {
     return (
       <div className="w-full max-w-4xl space-y-10 animate-fade-in-up">
@@ -539,20 +513,10 @@ export default function Index() {
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {group.docs.map((doc) => {
-                // Card enxuto (título + descrição leiga). O `ajuda`, quando existe,
-                // vem no tooltip: hover no desktop, foco pelo teclado. No toque o
-                // Radix não abre no tap, então o clique único segue abrindo o
-                // documento normalmente — o `desc` já basta ali.
                 const inner = (
                   <>
                     <h3 className="font-semibold text-foreground">{doc.title}</h3>
                     <p className="text-sm text-muted-foreground mt-1">{doc.desc}</p>
-                    {/* No celular não existe hover nem foco por teclado, então o
-                        tooltip abaixo nunca abria: a explicação para leigo, que é
-                        o que mais ajuda quem não é do ramo, simplesmente não
-                        existia no aparelho onde o corretor mais trabalha. Aqui
-                        ela vira texto normal do card e some a partir de lg, onde
-                        o tooltip volta a funcionar. */}
                     {doc.ajuda && (
                       <p className="lg:hidden text-xs text-muted-foreground/75 mt-2 leading-relaxed">
                         {doc.ajuda}
@@ -851,8 +815,6 @@ export default function Index() {
                             ))}
                           </SelectContent>
                         </Select>
-                        {/* A consequência da escolha fica na tela: as arras são a
-                            engenharia de risco do contrato, não uma formalidade. */}
                         {field.value && (
                           <p className="text-xs leading-relaxed text-muted-foreground pt-1">
                             {getArrasResumo(field.value)}
@@ -985,8 +947,6 @@ export default function Index() {
                   resnapshot()
                 }}
               />
-              {/* Barra de ação FIXA: num formulário longo, Gerar/Validar ficam sempre
-                  alcançáveis. -mx-6/px-6 acompanham o padding do CardContent. */}
               <div className="sticky bottom-0 z-10 -mx-6 flex flex-col sm:flex-row gap-2 border-t border-border bg-card/95 px-6 py-3 backdrop-blur-sm">
                 <Button
                   type="submit"
