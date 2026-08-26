@@ -178,16 +178,20 @@ function TesteTerminado() {
           </p>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Quer continuar usando? Fale com a gente pela página de ajuda: a gente responde e libera.
+          Quer continuar usando? Veja os planos: tem assinatura mensal e tem uso avulso, por
+          operação, para quem não quer assinar.
         </p>
         <div className="flex flex-wrap gap-2 pt-1">
           <Button asChild>
-            <Link to="/ajuda">
-              <LifeBuoyAviso className="mr-1.5 h-4 w-4" /> Falar com a gente
-            </Link>
+            <Link to="/planos">Ver planos</Link>
           </Button>
           <Button asChild variant="outline">
             <Link to="/negocios">Ver meus negócios</Link>
+          </Button>
+          <Button asChild variant="ghost">
+            <Link to="/ajuda">
+              <LifeBuoyAviso className="mr-1.5 h-4 w-4" /> Falar com a gente
+            </Link>
           </Button>
         </div>
       </div>
@@ -213,10 +217,36 @@ function AvisoDeTeste({ dias }: { dias: number }) {
           <p className="text-xs leading-relaxed text-amber-800">
             Depois disso, gerar documento e validar minuta ficam pausados. Seus negócios e o
             cadastro das partes continuam acessíveis.{' '}
-            <Link to="/ajuda" className="font-medium underline">
-              Fale com a gente
+            <Link to="/planos" className="font-medium underline">
+              Ver planos
             </Link>{' '}
             para continuar usando.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Aviso de teto estourado. NÃO é bloqueio, e o texto diz isso na primeira
+// frase de propósito: o corretor que lê "você passou do limite" assume que
+// parou de funcionar e vai embora resolver por fora. Aqui nada parou, e a
+// conversa é sobre a fatura fechar certa, não sobre permissão.
+function AvisoDeTeto({ usados, teto }: { usados: number; teto: number }) {
+  return (
+    <div className="w-full max-w-5xl mb-4 animate-fade-in-up">
+      <div className="flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3">
+        <Clock className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-amber-900 tabular-nums">
+            Você abriu {usados} operações este mês, e o seu plano cobre {teto}
+          </p>
+          <p className="text-xs leading-relaxed text-amber-800">
+            Nada foi bloqueado e nada vai ser: os documentos continuam saindo normalmente.{' '}
+            <Link to="/planos" className="font-medium underline">
+              Ver planos
+            </Link>{' '}
+            para a conta fechar certa.
           </p>
         </div>
       </div>
@@ -234,6 +264,8 @@ export default function Layout() {
     trialDiasRestantes,
     planoAtivo,
     acessoBloqueado,
+    negociosNoMes,
+    planoLimiteNegocios,
   } = useAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
@@ -512,6 +544,11 @@ export default function Layout() {
           !trialExpirado &&
           trialDiasRestantes !== null &&
           trialDiasRestantes <= 5 && <AvisoDeTeste dias={trialDiasRestantes} />}
+        {/* Teto zero significa SEM LIMITE (conta em teste, ou plano sem teto
+            definido), então o aviso só existe quando há teto de verdade. */}
+        {isAuthenticated && planoLimiteNegocios > 0 && negociosNoMes > planoLimiteNegocios && (
+          <AvisoDeTeto usados={negociosNoMes} teto={planoLimiteNegocios} />
+        )}
         <ErrorBoundary>
           {/* `acessoBloqueado`, e NÃO `trialExpirado`: assinante que teve o
               teste vencido continua liberado. Bloquear pelo prazo do teste
