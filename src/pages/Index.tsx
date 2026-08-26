@@ -434,9 +434,7 @@ export default function Index() {
           <p className="font-mono text-[11px] tracking-[0.35em] uppercase text-primary">
             Prime Circle
           </p>
-          <h1 className="font-display text-4xl md:text-5xl font-medium text-foreground">
-            Documentos
-          </h1>
+          <h1 className="font-display text-4xl md:text-5xl font-medium text-foreground">Docs</h1>
           <p className="text-muted-foreground max-w-xl">
             Gere, valide e gerencie os instrumentos da operação imobiliária, do primeiro contato à
             entrega das chaves.

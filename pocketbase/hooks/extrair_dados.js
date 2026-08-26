@@ -972,7 +972,7 @@ onMailerRecordVerificationSend((e) => {
   try {
     var m = String(e.message.html || '').match(/href="([^"]+)"/)
     if (m) {
-      e.message.subject = 'Confirme seu e-mail | Prime Circle Documentos'
+      e.message.subject = 'Confirme seu e-mail | Prime Circle Docs'
       e.message.html =
         '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
         '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
@@ -982,7 +982,7 @@ onMailerRecordVerificationSend((e) => {
         '</div>' +
         '<div style="padding:20px 32px 32px 32px;">' +
         '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Confirme seu e-mail</h1>' +
-        '<p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Que bom ter você no Prime Circle Documentos!</p>' +
+        '<p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Que bom ter você no Prime Circle Docs!</p>' +
         '<p style="margin:0 0 24px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Falta um passo: clique no botão abaixo para confirmar o seu e-mail. O acesso libera na hora.</p>' +
         '<a href="' +
         m[1] +
@@ -990,7 +990,7 @@ onMailerRecordVerificationSend((e) => {
         '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">Se você não criou esta conta, ignore este e-mail.</p>' +
         '</div>' +
         '<div style="padding:14px 32px;background:#F1EBDD;">' +
-        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
+        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Docs</p>' +
         '</div>' +
         '</div>' +
         '</div>'
@@ -1005,7 +1005,7 @@ onMailerRecordPasswordResetSend((e) => {
   try {
     var m = String(e.message.html || '').match(/href="([^"]+)"/)
     if (m) {
-      e.message.subject = 'Redefinir sua senha | Prime Circle Documentos'
+      e.message.subject = 'Redefinir sua senha | Prime Circle Docs'
       e.message.html =
         '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
         '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
@@ -1023,7 +1023,7 @@ onMailerRecordPasswordResetSend((e) => {
         '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">Se não foi você, ignore este e-mail: sua senha continua a mesma.</p>' +
         '</div>' +
         '<div style="padding:14px 32px;background:#F1EBDD;">' +
-        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
+        '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Docs</p>' +
         '</div>' +
         '</div>' +
         '</div>'

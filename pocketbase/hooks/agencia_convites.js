@@ -264,7 +264,7 @@ routerAdd(
       var msg = new MailerMessage({
         from: { address: meta.senderAddress, name: meta.senderName },
         to: [{ address: emailGravado }],
-        subject: nomeCasa + ' convidou você para a equipe | Prime Circle Documentos',
+        subject: nomeCasa + ' convidou você para a equipe | Prime Circle Docs',
         html:
           '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
           '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
@@ -278,7 +278,7 @@ routerAdd(
           nomeCasa +
           '</strong>' +
           (creciCasa ? ' (CRECI PJ ' + creciCasa + ')' : '') +
-          ' convidou você para fazer parte da equipe dela no Prime Circle Documentos.</p>' +
+          ' convidou você para fazer parte da equipe dela no Prime Circle Docs.</p>' +
           '<p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">Aceitando, os negócios que você criar a partir daí passam a ficar visíveis para a imobiliária, e a régua jurídica da casa entra nas suas validações. Você decide: nada acontece antes do seu aceite, e você pode sair quando quiser.</p>' +
           '<p style="margin:0 0 24px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">' +
           chamada +
@@ -291,7 +291,7 @@ routerAdd(
           '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">O convite vale por 14 dias. Se você não conhece esta imobiliária, ignore este e-mail: sem o seu aceite, ela não vê nada seu.</p>' +
           '</div>' +
           '<div style="padding:14px 32px;background:#F1EBDD;">' +
-          '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
+          '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Docs</p>' +
           '</div>' +
           '</div>' +
           '</div>',
@@ -446,7 +446,7 @@ routerAdd(
       var msg = new MailerMessage({
         from: { address: meta.senderAddress, name: meta.senderName },
         to: [{ address: emailGravado }],
-        subject: 'Lembrete: ' + nomeCasa + ' convidou você | Prime Circle Documentos',
+        subject: 'Lembrete: ' + nomeCasa + ' convidou você | Prime Circle Docs',
         html:
           '<div style="margin:0;padding:32px 16px;background:#0E0E0E;">' +
           '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
@@ -460,7 +460,7 @@ routerAdd(
           nomeCasa +
           '</strong>' +
           (creciCasa ? ' (CRECI PJ ' + creciCasa + ')' : '') +
-          ' convidou você para a equipe dela no Prime Circle Documentos e ainda espera sua resposta.</p>' +
+          ' convidou você para a equipe dela no Prime Circle Docs e ainda espera sua resposta.</p>' +
           '<p style="margin:0 0 24px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:22px;color:#3A372F;">' +
           chamada +
           '</p>' +
@@ -472,7 +472,7 @@ routerAdd(
           '<p style="margin:24px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:18px;color:#8A8578;">O convite vale por mais 14 dias. Se você não conhece esta imobiliária, ignore este e-mail: sem o seu aceite, ela não vê nada seu.</p>' +
           '</div>' +
           '<div style="padding:14px 32px;background:#F1EBDD;">' +
-          '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Documentos</p>' +
+          '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#8A8578;">Prime Circle Docs</p>' +
           '</div>' +
           '</div>' +
           '</div>',
@@ -858,7 +858,7 @@ routerAdd(
           html:
             '<p><strong>' +
             quem +
-            '</strong> aceitou o convite e agora faz parte da equipe da sua imobiliária no Prime Circle Documentos.</p>' +
+            '</strong> aceitou o convite e agora faz parte da equipe da sua imobiliária no Prime Circle Docs.</p>' +
             '<p>Os negócios que ele criar a partir de agora nascem carimbados com a imobiliária e aparecem na página Equipe. O aceite do termo ficou registrado com data e hora.</p>',
         })
         $app.newMailClient().send(msg)
@@ -937,7 +937,7 @@ routerAdd(
           html:
             '<p><strong>' +
             quem +
-            '</strong> saiu da equipe da sua imobiliária no Prime Circle Documentos.</p>' +
+            '</strong> saiu da equipe da sua imobiliária no Prime Circle Docs.</p>' +
             '<p>Os negócios que ele já tinha criado pela casa continuam acessíveis na página Equipe. Os próximos negócios dele nascem sem o carimbo da imobiliária.</p>',
         })
         $app.newMailClient().send(msg)
@@ -1035,7 +1035,7 @@ routerAdd(
           html:
             '<p>O vínculo da sua conta com <strong>' +
             nomeCasa +
-            '</strong> no Prime Circle Documentos foi encerrado.</p>' +
+            '</strong> no Prime Circle Docs foi encerrado.</p>' +
             '<p>Os negócios que você criar a partir de agora ficam só com você, como corretor autônomo. Os que a casa já tinha intermediado continuam visíveis para ela.</p>',
         })
         $app.newMailClient().send(msg)

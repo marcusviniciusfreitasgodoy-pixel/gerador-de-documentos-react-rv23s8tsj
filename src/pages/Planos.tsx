@@ -159,7 +159,7 @@ export default function PlanosPage() {
     <div className="w-full max-w-5xl space-y-6 animate-fade-in-up">
       <div>
         <h1 className="font-display text-3xl font-medium text-foreground">
-          Escolha como quer usar a plataforma
+          Escolha como quer usar o Prime Circle Docs
         </h1>
         <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-2xl">
           Teste grátis por 15 dias, use em uma operação avulsa, ou assine para organizar a
@@ -305,9 +305,9 @@ export default function PlanosPage() {
         <div>
           <p className="text-sm font-medium text-foreground">Modelos prontos resolvem um arquivo</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Aqui a operação inteira fica organizada: partes, imóvel, comissão, documentos em Word e
-            validação com IA no mesmo fluxo. E os seus dados continuam seus, com ou sem plano: nada
-            é apagado e nada fica preso aqui dentro.
+            O Prime Circle Docs organiza a operação inteira: partes, imóvel, comissão, documentos em
+            Word e validação com IA no mesmo fluxo. E os seus dados continuam seus, com ou sem
+            plano: nada é apagado e nada fica preso aqui dentro.
           </p>
         </div>
       </div>
