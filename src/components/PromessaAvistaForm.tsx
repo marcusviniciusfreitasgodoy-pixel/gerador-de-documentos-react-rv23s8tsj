@@ -1297,7 +1297,7 @@ export function PromessaAvistaForm() {
           >
             {isValidating ? (
               <>
-                <Loader2 className="mr-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Preparando validação...
               </>
             ) : (
