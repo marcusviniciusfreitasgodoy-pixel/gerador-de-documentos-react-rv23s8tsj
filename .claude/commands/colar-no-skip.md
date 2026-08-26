@@ -34,45 +34,68 @@ não decida por ele. O diff é a única prova.
 
 Os 12 arquivos foram aplicados e conferidos byte a byte contra o download do
 Skip, e a árvore baixada compila (`tsc -b` 0 erros, `oxlint` 18 avisos, build
-passando). Nada a fazer aqui.
+passando).
 
-Falta apenas o que só o painel e o banco provam:
+### Teste de 15 dias: COMPLETO
 
-- **Regras de acesso da coleção `agency_invites`**: `create`, `update` e
-  `delete` têm de estar **em branco** (só superuser). Nenhum download carrega
-  regras de API, então só se confirma olhando o painel. É o que impede um
-  corretor de forjar convite para si mesmo.
+Os 8 arquivos foram conferidos contra o download de 25/08/2026 e estão
+**idênticos** à branch, inclusive o `trial_carimbo.js`, que já esteve marcado
+para recolar. Os três hashes WebP do `Signup.tsx` conferem no arquivo que veio
+do Skip: `['40b6f0b3af', '40b6f0b3af', '582241ca47']`.
+
+### O que o download PROVA, e o que ele não prova
+
+Correção importante de uma afirmação anterior deste arquivo: **o download do
+Skip carrega, sim, as regras de API.** Elas vêm em
+`src/lib/pocketbase/schema.json`, que é um dump do banco com `apiRules`,
+campos e índices por coleção. Não é preciso abrir o painel para conferir regra.
+
+Já conferido por esse caminho, no dump de 25/08/2026:
+
+- `agency_invites` com `create`, `update` e `delete` em `null`, ou seja,
+  bloqueados a superuser. É o que impede um corretor de forjar convite para si
+  mesmo.
+- `users.trial_expira_em` presente, com o índice `idx_users_trial_expira_em`.
+
+Continua aberto só o que schema nenhum prova, porque é comportamento e não
+estrutura:
+
+- **Carimbo do teste**: cadastrar conta nova e conferir no banco que
+  `trial_expira_em` nasceu 15 dias à frente, e que uma conta antiga continua com
+  o campo vazio.
 - **Aceite de ponta a ponta**: convidar, aceitar, e conferir **no banco** que o
   `agency_members` nasceu com `termo_aceito_em` preenchido e que o negócio
   seguinte nasceu com `agency` carimbado.
 
-### Teste de 15 dias: PENDENTE, 8 arquivos
+### Negócio automático na geração (B2): PENDENTE, 9 arquivos
 
-| #   | Arquivo                                               | Linhas |            |
-| --- | ----------------------------------------------------- | ------ | ---------- |
-| 1   | `pocketbase/migrations/1900000033_users_add_trial.js` | 45     | APLICADO   |
-| 2   | `pocketbase/hooks/trial_carimbo.js`                   | 71     | RECOLAR    |
-| 3   | `pocketbase/hooks/validar_minuta.js`                  | 1269   | APLICADO   |
-| 4   | `pocketbase/hooks/extrair_dados.js`                   | 1152   | substituir |
-| 5   | `src/hooks/use-auth.tsx`                              | 119    | substituir |
-| 6   | `src/components/Layout.tsx`                           | 635    | substituir |
-| 7   | `src/pages/Signup.tsx`                                | 1045   | substituir |
-| 8   | `MELHORIAS.md`                                        | 450    | substituir |
+Cria o dossiê no ato da geração, nos documentos que definem uma operação. Fecha
+o buraco de o caminho padrão do produto nunca passar por um negócio.
 
-**A migration (1) vem primeiro:** sem o campo `users.trial_expira_em`, o hook
-do (2) grava em coisa que não existe.
+| #   | Arquivo                                     | Linhas | Ação       |
+| --- | ------------------------------------------- | ------ | ---------- |
+| 1   | `src/lib/negocioAutomatico.ts`              | 360    | CRIAR      |
+| 2   | `src/lib/negocios.ts`                       | 186    | substituir |
+| 3   | `src/components/PromessaFinanciadaForm.tsx` | 1426   | substituir |
+| 4   | `src/components/PromessaAvistaForm.tsx`     | 1314   | substituir |
+| 5   | `src/components/PromessaDacaoForm.tsx`      | 1309   | substituir |
+| 6   | `src/components/PromessaFgtsForm.tsx`       | 1291   | substituir |
+| 7   | `src/components/ReservaPropostaForm.tsx`    | 1162   | substituir |
+| 8   | `src/components/PermutaForm.tsx`            | 1147   | substituir |
+| 9   | `src/components/DistratoForm.tsx`           | 1100   | substituir |
 
-**Cuidado especial com o (7).** O `Signup.tsx` tem três imagens WebP em base64,
-~200 KB. Truncar ali apaga a arte da landing. Depois de aplicar, confira os
-hashes:
+**Os dois de `src/lib` vêm primeiro, nesta ordem.** O (1) é arquivo novo e os
+sete formulários importam dele: aplicados antes, o editor acusa import
+inexistente. O (2) ganhou um segundo parâmetro opcional em `createNegocio`, que
+o (1) usa.
 
-```bash
-python3 -c "
-import re,hashlib
-b=open('src/pages/Signup.tsx',encoding='utf-8').read()
-print([hashlib.sha256(x.encode()).hexdigest()[:10] for x in re.findall(r'data:image/webp;base64,[A-Za-z0-9+/=]+',b)])"
-# esperado: ['40b6f0b3af', '40b6f0b3af', '582241ca47']
-```
+Nenhum passa de 50.000 caracteres, então todos vão inteiros. Não é preciso
+instrução de busca e substituição nesta leva.
+
+Depois de aplicar, o diff tem de dar 114 inserções e nenhuma remoção de
+comportamento nos sete formulários. Cada um recebe exatamente um bloco de import
+e uma chamada `await garantirNegocioDaOperacao(...)` logo após o
+`limparRascunho()`.
 
 ## Armadilha do JSVM (custou um bug nesta entrega)
 
