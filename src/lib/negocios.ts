@@ -67,14 +67,24 @@ export async function getNegocio(id: string): Promise<Negocio> {
   return normalize(rec)
 }
 
-export async function createNegocio(titulo: string): Promise<Negocio> {
+/**
+ * `dados` é opcional e existe para a criação automática do dossiê no ato da
+ * geração (ver `negocioAutomatico.ts`): sem ele o negócio nasceria vazio e
+ * precisaria de um update logo em seguida, o que deixaria um dossiê em branco
+ * gravado sempre que a segunda chamada falhasse. Chamador antigo que passa só o
+ * título continua com o comportamento de sempre.
+ */
+export async function createNegocio(
+  titulo: string,
+  dados?: { partes?: ParteNegocio[]; imovel?: ImovelExtraido },
+): Promise<Negocio> {
   const owner = pb.authStore.record?.id
   if (!owner) throw new Error('Sessão expirada. Faça login novamente.')
   const rec = await pb.collection('negocios').create({
     owner,
     titulo,
-    partes: [],
-    imovel: { ...emptyImovel },
+    partes: dados?.partes ?? [],
+    imovel: dados?.imovel ? { ...emptyImovel, ...dados.imovel } : { ...emptyImovel },
   })
   return normalize(rec)
 }
