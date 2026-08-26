@@ -238,11 +238,18 @@ export async function garantirNegocioDaOperacao(
 // proprietarios/proponentes. Por isso aqui existe uma funcao so, parametrizada
 // por um mapa, em vez de um extrator por documento.
 
-/** Nome do array no formulario -> papel gravado no dossie. */
+/**
+ * Nome do array no formulario -> papel gravado no dossie.
+ *
+ * Chamam-se PAPEIS_ e nao GRUPOS_ de proposito: varios formularios ja tem uma
+ * constante local `GRUPOS_<documento>` com a LISTA de nomes dos arrays, usada
+ * pelo `useNegocioSync`. Sao coisas diferentes, e o nome distinto evita tanto a
+ * colisao de import quanto a confusao de quem le.
+ */
 export type MapaDeGrupos = Readonly<Record<string, PapelParte>>
 
 /** Ávista, dacao, FGTS, financiada e distrato. */
-export const GRUPOS_VENDA: MapaDeGrupos = {
+export const PAPEIS_VENDA: MapaDeGrupos = {
   vendedores: 'vendedor',
   compradores: 'comprador',
   anuentes: 'anuente',
@@ -258,14 +265,14 @@ export const GRUPOS_VENDA: MapaDeGrupos = {
  * semanticamente coerente, precisa ser ESTAVEL: o mesmo formulario preenchido
  * do mesmo jeito produz sempre a mesma chave, que e o unico requisito do reuso.
  */
-export const GRUPOS_PERMUTA: MapaDeGrupos = {
+export const PAPEIS_PERMUTA: MapaDeGrupos = {
   primeiros: 'vendedor',
   segundos: 'comprador',
   anuentes: 'anuente',
 }
 
 /** Reserva e proposta. */
-export const GRUPOS_RESERVA: MapaDeGrupos = {
+export const PAPEIS_RESERVA: MapaDeGrupos = {
   proprietarios: 'vendedor',
   proponentes: 'comprador',
   anuentes: 'anuente',
