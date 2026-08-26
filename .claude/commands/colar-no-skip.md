@@ -102,14 +102,52 @@ criam negócio: são acessórios, mesma regra dos termos e do checklist.
 
 Com isso o negócio automático cobre os dez documentos que definem uma operação.
 
+### Bloco B (plano e contador): COMPLETO
+
+Os 7 arquivos foram conferidos contra o download de 26/08/2026 e a árvore
+baixada do Skip compila: `tsc -b` 0 erros, `oxlint` 18 avisos, build passando,
+hashes WebP do `Signup.tsx` íntegros.
+
+**A migração 1900000034 rodou.** O dump do banco em
+`src/lib/pocketbase/schema.json` traz os cinco campos em `users` (`plano`,
+`plano_renova_em`, `negocios_no_mes`, `contador_mes`,
+`plano_limite_negocios`) e os dois índices. Conferido pelo download, sem abrir
+o painel.
+
+Para hook de backend, três checagens além do diff, porque lá a falha é muda:
+`node --check` em cada arquivo, contagem de `planoAtivo` nos quatro gates de IA
+(2 por arquivo), e a auditoria da armadilha do JSVM abaixo.
+
+## Auditoria da armadilha do JSVM
+
+Handler do PocketBase não enxerga o escopo do módulo, e isso já custou um bug
+(`TRIAL_DIAS` no `trial_carimbo.js`). Agora existe verificação em vez de
+disciplina. Rode contra a árvore baixada do Skip:
+
+```bash
+python3 - <<'EOF'
+import io,re,glob
+ruim=0
+for p in sorted(glob.glob('pocketbase/hooks/*.js')):
+    s=io.open(p,encoding='utf-8').read()
+    m=re.search(r'^(onRecord\w+|routerAdd|cronAdd)\(', s, re.M)
+    if not m: continue
+    topo, corpo = s[:m.start()], s[m.start():]
+    decls=re.findall(r'^(?:var|const|let)\s+([A-Za-z_$][\w$]*)', topo, re.M)
+    usadas=[d for d in decls if re.search(r'\b'+re.escape(d)+r'\b', corpo)]
+    if usadas: print('PERIGO', p, usadas); ruim+=1
+print('ok' if not ruim else f'{ruim} arquivo(s) com o padrao que quebrou o trial_carimbo')
+EOF
+```
+
 ## O paste inteiro falhou duas vezes; a instrução, nenhuma
 
 Placar até aqui, e ele deve guiar a escolha do método:
 
 | método | entregas | falhas |
 | ------ | -------- | ------ |
-| arquivo inteiro colado | 16 | 2 |
-| instrução de busca e substituição | 4 | 0 |
+| arquivo inteiro colado | 18 | 2 |
+| instrução de busca e substituição | 7 | 0 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
