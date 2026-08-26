@@ -155,6 +155,38 @@ provedor de pagamento ainda não foi escolhido. O admin combina o pagamento e
 carimba `plano` e `plano_renova_em` no painel. Quando o provedor existir, muda a
 função `solicitar` do `Planos.tsx` e mais nada.
 
+### Bloco A (renomear para Docs): PENDENTE, 8 arquivos
+
+Mudou o NOME DO PRODUTO. "Prime Circle" sozinho é a marca da empresa e ficou
+intacto. O substantivo comum também: "16 documentos", "documentos em Word", a
+âncora `#documentos`, o rótulo "Documentos / todos os 16". Foram 20 ocorrências
+conferidas uma a uma antes de trocar, e um replace cego teria estragado nove.
+
+**Todos vão por INSTRUÇÃO**, não por paste inteiro: são mudanças pequenas em
+arquivos grandes, e é o método que está 8 por 8 sem erro.
+
+| #   | Arquivo                               | Edição                                     |
+| --- | ------------------------------------- | ------------------------------------------ |
+| 1   | `index.html`                          | 3x `Prime Circle Documentos` → `... Docs`  |
+| 2   | `pocketbase/hooks/agencia_convites.js`| 9x a mesma substituição                    |
+| 3   | `pocketbase/hooks/extrair_dados.js`   | 5x a mesma substituição                    |
+| 4   | `src/pages/Signup.tsx`                | 2 linhas: wordmark do topo e do rodapé     |
+| 5   | `src/components/Layout.tsx`           | 2 linhas: lockup e item de menu            |
+| 6   | `src/pages/Index.tsx`                 | 1 bloco: h1 do hub                         |
+| 7   | `src/pages/Planos.tsx`                | 2 blocos: a copy com o nome do produto     |
+| 8   | `MELHORIAS.md`                        | arquivo inteiro (587 linhas)               |
+
+Os três primeiros são "substitua todas as ocorrências de `Prime Circle
+Documentos` por `Prime Circle Docs`", sem âncora complicada.
+
+**Depois de aplicar o (4), confira os hashes WebP e renderize a landing.** Os
+hashes têm de continuar `['40b6f0b3af', '40b6f0b3af', '582241ca47']`.
+
+**Uma inconsistência conhecida, que não é bug de código:** o mockup do app
+embutido na landing é uma das imagens WebP e ainda mostra a interface antiga,
+com "DOCUMENTOS". Precisa de quem faz a arte. Está registrado em MELHORIAS.md
+§ 9.
+
 ## Renderizar antes de entregar tela nova
 
 Não vale só para o `Signup.tsx`. Nesta leva o render pegou um defeito que o diff

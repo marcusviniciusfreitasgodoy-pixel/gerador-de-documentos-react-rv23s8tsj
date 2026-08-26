@@ -388,7 +388,105 @@ a copy não promete mais do que isso.
 
 ---
 
-## 7. Uma nota sobre o método
+## 7. Lançamento: do dossiê automático ao preço
+
+Agosto de 2026, depois da fase 3. O objetivo era sair de "liberado até o sistema
+ficar pronto" para uma plataforma que sabe cobrar. Quatro blocos, nesta ordem.
+
+### 7.1 O dossiê nasce sozinho (B2)
+
+Até aqui, gerar documento nunca exigiu negócio: todo formulário travava só em
+`hasBroker`, e o `CarregarDeNegocio` era conveniência opcional. Isso deixava dois
+buracos ao mesmo tempo. Quem gerava avulso **perdia o histórico**, justamente o
+corretor que ainda não entendeu o dossiê. E se o plano fosse medir por operação,
+o caminho que escapa da contagem seria o caminho **padrão** do produto.
+
+A saída não foi exigir negócio antes de gerar, o que meteria uma etapa no meio do
+trabalho. É criar o negócio **no ato**: o corretor preenche e baixa, igual a
+sempre, e o dossiê aparece com o que ele acabou de digitar.
+
+Ligado nos dez documentos que **definem** uma operação. Checklist, termo de
+chaves, termo de posse, compromisso, recibo de comissão e corretagem ficam de
+fora de propósito: são acessórios de um negócio que já existe, e cobrar vaga por
+eles puniria quem documenta direito. A regra fica dizível numa frase para o
+corretor: _o limite é por operação, e termo de chaves não conta._
+
+**Duas correções de desenho no caminho, e as duas importam.**
+
+A primeira: eu tinha escrito uma regra própria de identidade de pessoa. O
+`negocios.ts` já tem `mesclarPartes`, e o comentário dele diz por que não pode
+haver duas. A minha divergia num ponto perigoso: `mesmaPessoa` devolve **false**
+quando só um dos lados tem CPF, ou seja, se recusa a fundir na ambiguidade; a
+minha casava por nome nesse caso, o que fundiria homônimos e misturaria dados de
+clientes diferentes.
+
+A segunda: a regra de reuso elegia uma **parte âncora**, com preferência pelo
+comprador. Ela quebrava na sequência mais comum do mercado. A autorização de
+venda é assinada quando o corretor pega a captação, semanas antes de existir
+comprador: ela ancorava no vendedor e a promessa posterior no comprador, dando
+duas chaves para a mesma operação. Hoje duas operações são a mesma quando tratam
+do **mesmo imóvel** e têm **ao menos uma parte em comum**. As duas condições são
+necessárias: só o imóvel fundiria a revenda a outro comprador anos depois; só a
+pessoa fundiria os dois imóveis de um investidor.
+
+E o identificador do imóvel é um **conjunto**, não um valor. A primeira tentativa
+devolvia "matrícula se houver, senão endereço", e um teste pegou: a autorização
+não coleta matrícula e a promessa coleta, então uma produzia `e:endereço` e a
+outra `m:matrícula` e nunca se encontravam. Precedência só funciona quando os
+dois lados coletam os mesmos campos.
+
+_Limite conhecido:_ o recibo de sinal coleta matrícula e não coleta endereço; a
+autorização faz o contrário. Os dois não têm token em comum e não se reconhecem.
+Não há dado comparável entre as duas telas. A promessa tem os dois tokens e serve
+de ponte assim que existe.
+
+### 7.2 Plano e contador (bloco B)
+
+Cinco campos em `users`, migração 1900000034, com a convenção herdada da 33:
+**vazio significa sem limite**. `plano` e `plano_renova_em` guardam a assinatura;
+`negocios_no_mes` e `contador_mes` guardam a contagem; `plano_limite_negocios`
+guarda o teto que valia quando o contador foi mexido, para o app mostrar "7 de
+10" sem carregar tabela de preço no cliente.
+
+**O contador não conta linhas.** A regra de `negocios` é
+`deleteRule: 'owner = @request.auth.id'`: o corretor apaga o próprio negócio.
+Contagem de linhas existentes seria enfeite, porque bastaria criar, gerar os
+documentos, apagar, e a vaga voltava. O número só sobe.
+
+**E não bloqueia.** Passar do teto não impede nada. Se o sistema recusasse com o
+cliente na frente, o corretor abriria o Word do mês passado, ou reaproveitaria um
+dossiê antigo trocando as partes, o que estraga o ativo de retenção. Falha ao
+contar também não impede: sem contagem ele ganha uma operação de graça, com
+exceção propagada ele perde o documento que ia entregar.
+
+**O bug latente que apareceu ao ligar isso.** O gate olhava só `trialExpirado`, e
+teria **trancado o assinante no dia seguinte ao pagamento**, porque o prazo do
+teste continua vencendo no banco. Entrou `acessoBloqueado` = não admin **e** sem
+plano ativo **e** teste vencido. O mesmo defeito estava nos **quatro** gates de
+IA do servidor, onde a falha seria muda e chegaria como "erro ao validar".
+
+### 7.3 Página de planos (bloco D)
+
+Quatro ofertas com preço visível, e o estado do corretor na própria página: qual
+plano, quantos dias faltam, quantas operações no mês contra o teto.
+
+**O botão abre um chamado, não um checkout.** O provedor de pagamento ainda não
+foi escolhido. Até lá o pedido cai na fila que o admin já atende, com o nome do
+plano na mensagem; o admin combina o pagamento e carimba `plano` e
+`plano_renova_em` no painel. Não é remendo: para os primeiros assinantes, fechar
+à mão é mais rápido que integrar e ensina qual objeção aparece de verdade. Quando
+o provedor existir, muda a função `solicitar` do `Planos.tsx` e mais nada.
+
+### 7.4 O produto vira Prime Circle Docs (bloco A)
+
+Mudou o **nome do produto**, não a marca: "Prime Circle" sozinho ficou intacto.
+O substantivo comum também: "16 documentos", "documentos em Word", a âncora
+`#documentos`. Foram 20 ocorrências conferidas uma a uma, e um replace cego teria
+estragado nove.
+
+---
+
+## 8. Uma nota sobre o método
 
 Duas vezes um critério dado como "confirmado pelo código" não se sustentou ao
 abrir o arquivo: o campo que o servidor grava só fica provado olhando o
@@ -403,9 +501,20 @@ três coisas: nenhuma seção presa em `opacity: 0`, nenhuma rolagem horizontal,
 os três hashes das imagens em base64 intactos. Uma regressão de arte já passou
 por revisão de código sem ser notada e só apareceu na renderização.
 
+**Isso deixou de valer só para a landing.** Numa página React comum, feita de
+componentes do próprio design system, o render pegou o preço do plano de
+imobiliária quebrando em duas linhas ("R$" em cima, "197" embaixo), porque a
+unidade longa espremia o número. Diff nenhum pega, e numa grade de preços salta
+aos olhos. Tela nova se renderiza antes de entregar, sempre.
+
+**E a armadilha do JSVM virou verificação, não disciplina.** Handler do PocketBase
+não enxerga o escopo do módulo, e isso já custou um bug silencioso. Hoje existe um
+script que varre todos os hooks procurando handler que leia variável de fora
+dele; está no comando `/colar-no-skip` e roda contra a árvore baixada do Skip.
+
 ---
 
-## 8. Próximos passos
+## 9. Próximos passos
 
 ### Verificações pendentes (rápidas, sem risco)
 
@@ -426,6 +535,34 @@ por revisão de código sem ser notada e só apareceu na renderização.
 - **Exclusão de conta:** apagar uma conta de teste **com** vínculo de equipe e
   confirmar que ela some. A cascata foi estendida para `agency_members`,
   `access_logs` e `agency_invites`; era um travamento silencioso desde a fase 1.
+
+### O que ficou aberto do lançamento
+
+- **A arte da landing contradiz o nome.** O mockup do app embutido na página de
+  abertura é uma das imagens WebP em base64, e ainda mostra "Prime Circle /
+  DOCUMENTOS" no cabeçalho, com "Documentos" como título e aba ativa. Depois do
+  rename, a landing exibe uma imagem do produto que contradiz o nome do produto.
+  Não dá para corrigir por código: precisa de quem faz a arte. Não quebra nada,
+  mas aparece para todo visitante.
+- **Os tetos de 10 e 30 operações são hipótese, não dado.** Saíram de uma conta,
+  não de pesquisa. O `negocios_no_mes` começou a rodar em 26/08/2026, em cima do
+  dossiê automático: em algumas semanas ele responde quantas operações um
+  corretor abre de verdade por mês, e aí os planos se recortam em cima do real.
+  **É a única premissa da proposta de preço que se resolve sozinha, só
+  esperando.** Mudar valor é mexer em `PLANOS` no `Planos.tsx` e em `LIMITES` no
+  `negocio_limite.js`, nesta ordem.
+- **O provedor de pagamento.** Comparar taxa, conciliação e o que acontece quando
+  o cartão falha. Enquanto isso o caminho manual funciona de ponta a ponta.
+- **O avulso (bloco E)** é um segundo sistema de cobrança, transacional em vez de
+  recorrente, com direito de uso amarrado a um negócio. Não construir antes de
+  alguém pedir: na página de preços ele já cumpre metade da função só existindo,
+  como âncora que faz a assinatura parecer óbvia a partir do segundo negócio.
+- **Contador subindo**, a conferir no banco: criar um negócio e ver
+  `negocios_no_mes` virar 1 e `contador_mes` virar o mês corrente. Se ficar
+  zerado, o `catch` está engolindo algo e o log mostra
+  `negocio_limite: falha ao contar a operacao`.
+- **Carimbo do teste**, a conferir no banco: conta nova recebe
+  `trial_expira_em` 15 dias à frente, e conta antiga continua com o campo vazio.
 
 ### Produto (quando quiser)
 
