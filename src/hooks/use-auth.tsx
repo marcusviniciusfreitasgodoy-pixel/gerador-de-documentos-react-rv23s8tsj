@@ -12,6 +12,19 @@ interface AuthContextType {
   trialExpiraEm: string | null
   trialExpirado: boolean
   trialDiasRestantes: number | null
+  // Assinatura. Mesma convenção do teste: VAZIO SIGNIFICA SEM PLANO, e aí quem
+  // manda é o prazo do teste. Os cinco campos são carimbados pelo servidor
+  // (`plano_carimbo.js` e `negocio_limite.js`) e o próprio usuário não consegue
+  // alterá-los.
+  plano: string
+  planoRenovaEm: string | null
+  planoAtivo: boolean
+  negociosNoMes: number
+  planoLimiteNegocios: number
+  // O gate de verdade. Existe separado de `trialExpirado` porque assinante que
+  // teve o teste vencido continua liberado: bloquear por `trialExpirado` sozinho
+  // trancaria justamente quem paga.
+  acessoBloqueado: boolean
   signUp: (email: string, password: string, name?: string) => Promise<{ error: any }>
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signOut: () => void
@@ -48,6 +61,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const trialDiasRestantes = trialMs
     ? Math.max(0, Math.ceil((trialMs - Date.now()) / (24 * 60 * 60 * 1000)))
     : null
+
+  // Assinatura, lida do mesmo jeito e com a mesma ressalva: isto é conveniência
+  // de tela. Quem barra de verdade são as rotas do servidor.
+  const plano = String(user?.plano ?? '').trim()
+  const renovaRaw = String(user?.plano_renova_em ?? '').trim()
+  const renovaMs = renovaRaw ? new Date(renovaRaw.replace(' ', 'T')).getTime() : 0
+  const planoRenovaEm = renovaMs ? renovaRaw : null
+  const planoAtivo = !!plano && !!renovaMs && renovaMs > Date.now()
+  const negociosNoMes = Number(user?.negocios_no_mes ?? 0) || 0
+  // Zero significa SEM LIMITE, a mesma convenção do `trial_expira_em` vazio: é
+  // o que mantém a conta em teste sem teto de volume, já que o teste é limitado
+  // por prazo.
+  const planoLimiteNegocios = Number(user?.plano_limite_negocios ?? 0) || 0
+  const acessoBloqueado = !isAdmin && !planoAtivo && trialExpirado
 
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange((_token, record) => {
@@ -107,6 +134,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         trialExpiraEm,
         trialExpirado,
         trialDiasRestantes,
+        plano,
+        planoRenovaEm,
+        planoAtivo,
+        negociosNoMes,
+        planoLimiteNegocios,
+        acessoBloqueado,
         signUp,
         signIn,
         signOut,

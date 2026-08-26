@@ -225,7 +225,16 @@ function AvisoDeTeste({ dias }: { dias: number }) {
 }
 
 export default function Layout() {
-  const { isAuthenticated, user, signOut, isAdmin, trialExpirado, trialDiasRestantes } = useAuth()
+  const {
+    isAuthenticated,
+    user,
+    signOut,
+    isAdmin,
+    trialExpirado,
+    trialDiasRestantes,
+    planoAtivo,
+    acessoBloqueado,
+  } = useAuth()
   const navigate = useNavigate()
   const { pathname } = useLocation()
   // A pagina de abertura (visitante sem conta no "/") e a unica tela de largura
@@ -493,12 +502,22 @@ export default function Layout() {
             ainda vê e responde o convite. O componente some sozinho quando não
             há convite nenhum. */}
         {isAuthenticated && <ConviteBanner />}
+        {/* O aviso de fim de teste some para quem assinou: o prazo do teste
+            continua correndo no banco, mas deixou de significar alguma coisa
+            para ele. Avisar assinante que o teste acaba em 3 dias assusta sem
+            motivo, e é o tipo de detalhe que faz o corretor duvidar de que a
+            cobrança está certa. */}
         {isAuthenticated &&
+          !planoAtivo &&
           !trialExpirado &&
           trialDiasRestantes !== null &&
           trialDiasRestantes <= 5 && <AvisoDeTeste dias={trialDiasRestantes} />}
         <ErrorBoundary>
-          {isAuthenticated && trialExpirado && ROTAS_DO_TESTE.includes(pathname) ? (
+          {/* `acessoBloqueado`, e NÃO `trialExpirado`: assinante que teve o
+              teste vencido continua liberado. Bloquear pelo prazo do teste
+              sozinho trancaria justamente quem paga, no dia seguinte ao
+              pagamento. */}
+          {isAuthenticated && acessoBloqueado && ROTAS_DO_TESTE.includes(pathname) ? (
             <TesteTerminado />
           ) : (
             <Outlet />

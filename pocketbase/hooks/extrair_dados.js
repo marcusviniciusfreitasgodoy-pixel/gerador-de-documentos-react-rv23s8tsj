@@ -24,13 +24,25 @@ routerAdd(
     // da landing. Admin nunca expira. O 402 distingue "teste vencido" de "não
     // confirmou o e-mail", que é 403, para a tela saber qual mensagem mostrar.
     if (guardAuth && guardAuth.collection().name === 'users' && !guardAuth.getBool('isAdmin')) {
-      var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
-      if (trialStr) {
-        var trialMs = new Date(trialStr.replace(' ', 'T')).getTime()
-        if (trialMs && trialMs < Date.now()) {
-          return e.json(402, {
-            error: 'Seu período de teste terminou. Fale com a gente pela página Ajuda e Suporte.',
-          })
+      // Assinante ativo passa direto. O `trial_expira_em` continua no banco e
+      // continua vencendo, mas deixou de significar alguma coisa para quem
+      // paga: checar só o teste barraria o assinante no dia seguinte ao
+      // pagamento, e do lado do SERVIDOR, onde a falha é muda e chega ao
+      // corretor como "erro ao validar".
+      var planoStr = String(guardAuth.getString('plano') || '').trim()
+      var renovaStr = String(guardAuth.getString('plano_renova_em') || '').trim()
+      var renovaMs = renovaStr ? new Date(renovaStr.replace(' ', 'T')).getTime() : 0
+      var planoAtivo = !!planoStr && !!renovaMs && renovaMs > Date.now()
+
+      if (!planoAtivo) {
+        var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
+        if (trialStr) {
+          var trialMs = new Date(trialStr.replace(' ', 'T')).getTime()
+          if (trialMs && trialMs < Date.now()) {
+            return e.json(402, {
+              error: 'Seu período de teste terminou. Fale com a gente pela página Ajuda e Suporte.',
+            })
+          }
         }
       }
     }
@@ -480,13 +492,25 @@ routerAdd(
     // da landing. Admin nunca expira. O 402 distingue "teste vencido" de "não
     // confirmou o e-mail", que é 403, para a tela saber qual mensagem mostrar.
     if (guardAuth && guardAuth.collection().name === 'users' && !guardAuth.getBool('isAdmin')) {
-      var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
-      if (trialStr) {
-        var trialMs = new Date(trialStr.replace(' ', 'T')).getTime()
-        if (trialMs && trialMs < Date.now()) {
-          return e.json(402, {
-            error: 'Seu período de teste terminou. Fale com a gente pela página Ajuda e Suporte.',
-          })
+      // Assinante ativo passa direto. O `trial_expira_em` continua no banco e
+      // continua vencendo, mas deixou de significar alguma coisa para quem
+      // paga: checar só o teste barraria o assinante no dia seguinte ao
+      // pagamento, e do lado do SERVIDOR, onde a falha é muda e chega ao
+      // corretor como "erro ao validar".
+      var planoStr = String(guardAuth.getString('plano') || '').trim()
+      var renovaStr = String(guardAuth.getString('plano_renova_em') || '').trim()
+      var renovaMs = renovaStr ? new Date(renovaStr.replace(' ', 'T')).getTime() : 0
+      var planoAtivo = !!planoStr && !!renovaMs && renovaMs > Date.now()
+
+      if (!planoAtivo) {
+        var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
+        if (trialStr) {
+          var trialMs = new Date(trialStr.replace(' ', 'T')).getTime()
+          if (trialMs && trialMs < Date.now()) {
+            return e.json(402, {
+              error: 'Seu período de teste terminou. Fale com a gente pela página Ajuda e Suporte.',
+            })
+          }
         }
       }
     }
