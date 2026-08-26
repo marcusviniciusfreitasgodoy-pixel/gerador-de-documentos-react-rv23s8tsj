@@ -67,14 +67,19 @@ export async function getNegocio(id: string): Promise<Negocio> {
   return normalize(rec)
 }
 
-export async function createNegocio(titulo: string): Promise<Negocio> {
+export async function createNegocio(
+  titulo: string,
+  dadosIniciais?: { partes?: ParteNegocio[]; imovel?: ImovelExtraido },
+): Promise<Negocio> {
   const owner = pb.authStore.record?.id
   if (!owner) throw new Error('Sessão expirada. Faça login novamente.')
   const rec = await pb.collection('negocios').create({
     owner,
     titulo,
-    partes: [],
-    imovel: { ...emptyImovel },
+    partes: dadosIniciais?.partes ?? [],
+    imovel: dadosIniciais?.imovel
+      ? { ...emptyImovel, ...dadosIniciais.imovel }
+      : { ...emptyImovel },
   })
   return normalize(rec)
 }
