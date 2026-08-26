@@ -140,14 +140,44 @@ print('ok' if not ruim else f'{ruim} arquivo(s) com o padrao que quebrou o trial
 EOF
 ```
 
+### Bloco D (página de planos): COMPLETO
+
+Os 4 arquivos foram conferidos contra o download de 26/08/2026 e a árvore
+baixada do Skip compila: `tsc -b` 0 erros, `oxlint` 18 avisos, build passando.
+
+A `/planos` foi **renderizada em Chromium a partir da árvore do Skip**, a 1440,
+820 e 390 px: sem rolagem horizontal, sem texto invisível, sem erro de JS, e os
+quatro preços em linha única. Para renderizar, `/planos` foi tirada do
+`ProtectedRoute` **só na cópia do scratchpad**, nunca na branch nem no Skip.
+
+O botão de assinar abre um chamado do tipo `assinatura`, não um checkout: o
+provedor de pagamento ainda não foi escolhido. O admin combina o pagamento e
+carimba `plano` e `plano_renova_em` no painel. Quando o provedor existir, muda a
+função `solicitar` do `Planos.tsx` e mais nada.
+
+## Renderizar antes de entregar tela nova
+
+Não vale só para o `Signup.tsx`. Nesta leva o render pegou um defeito que o diff
+não pegaria: no cartão da imobiliária o preço quebrava em duas linhas ("R$" em
+cima, "197" embaixo), porque a unidade longa espremia o número no flex em linha.
+Numa grade de preços salta aos olhos.
+
+O Playwright não está instalado no projeto. Instale `playwright-core` no
+scratchpad (não no projeto) e aponte para
+`/opt/pw-browsers/chromium-1194/chrome-linux/chrome`. O `--screenshot` do
+Chromium por linha de comando trava numa SPA: use o Playwright.
+
+Página atrás de `ProtectedRoute` não renderiza sem sessão. Tire a rota da
+proteção **na cópia do scratchpad**, nunca na branch.
+
 ## O paste inteiro falhou duas vezes; a instrução, nenhuma
 
 Placar até aqui, e ele deve guiar a escolha do método:
 
 | método | entregas | falhas |
 | ------ | -------- | ------ |
-| arquivo inteiro colado | 18 | 2 |
-| instrução de busca e substituição | 7 | 0 |
+| arquivo inteiro colado | 21 | 2 |
+| instrução de busca e substituição | 8 | 0 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
