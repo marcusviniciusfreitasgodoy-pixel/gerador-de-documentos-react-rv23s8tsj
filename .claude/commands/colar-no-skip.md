@@ -90,13 +90,47 @@ linhas do original: `mr-2 h-4 w-4` virou `mr-4 w-4` no `className` de um
 `Loader2`. Prova viva de que contagem de linha não é conferência. O conserto foi
 uma substituição de linha única, e funcionou.
 
-### Formulários de forma PLANA: PENDENTE
+### Formulários de forma PLANA: COMPLETO
 
-`PromiseForm`, o recibo do `Index.tsx` e o `IntermediationForm` usam campos
-planos (`vendedor_nome`, `comprador_nome`) em vez de arrays, e têm
-particularidades próprias: `imovel_estado` em vez de `imovel_uf`, e
-`conjuge_*_papel` decidindo se o cônjuge é anuente. Precisam de um segundo modo
-de extração em `negocioAutomatico.ts`. Nada escrito ainda.
+Recibo de sinal (`Index.tsx`), promessa simplificada (`PromiseForm`) e
+autorização de venda (`IntermediationForm`). Conferidos byte a byte contra o
+download de 26/08/2026, e a árvore baixada do Skip compila: `tsc -b` 0 erros,
+`oxlint` 18 avisos, build passando, hashes WebP do `Signup.tsx` íntegros.
+
+Recibo de comissão e corretagem, que moram no mesmo arquivo da autorização, NÃO
+criam negócio: são acessórios, mesma regra dos termos e do checklist.
+
+Com isso o negócio automático cobre os dez documentos que definem uma operação.
+
+## O paste inteiro falhou duas vezes; a instrução, nenhuma
+
+Placar até aqui, e ele deve guiar a escolha do método:
+
+| método | entregas | falhas |
+| ------ | -------- | ------ |
+| arquivo inteiro colado | 16 | 2 |
+| instrução de busca e substituição | 4 | 0 |
+
+As duas falhas do paste inteiro foram MUDAS para contagem de linha:
+
+1. `PromessaAvistaForm.tsx`: uma linha corrompida, `mr-2 h-4 w-4` virou
+   `mr-4 w-4` num `className` de `Loader2`. **1314 linhas nos dois arquivos.**
+2. `Index.tsx`: o agente do Skip apagou **48 linhas de comentário** espalhadas
+   pelo arquivo e manteve o código intacto (`+48 / -0`). Resumiu, apesar de a
+   instrução proibir. Some a memória do porquê, que é o que impede alguém de
+   desfazer a decisão meses depois.
+
+Daí duas regras práticas:
+
+- **Meça em CARACTERES, nunca em linhas**, antes de prometer que um arquivo vai
+  inteiro. O `PromessaFinanciadaForm.tsx` tem 52.696 e estourou o limite de
+  50.000 do chat.
+- **Para arquivo grande ou muito comentado, prefira a instrução de busca e
+  substituição**, com âncora verificadamente única. Ela não dá ao agente do Skip
+  a oportunidade de reescrever o que não foi pedido.
+
+Quando precisar recolar inteiro, exija a contagem no pedido: "o arquivo tem N
+linhas e o resultado precisa ter N linhas". Foi o que destravou o `Index.tsx`.
 
 ## Armadilha do JSVM (custou um bug nesta entrega)
 
