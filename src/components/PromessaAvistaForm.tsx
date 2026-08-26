@@ -84,6 +84,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import {
+  garantirNegocioDaOperacao,
+  operacaoDoFormulario,
+  PAPEIS_VENDA,
+} from '@/lib/negocioAutomatico'
 
 // C4: fora do componente para estabilidade de referência — um array literal
 // inline em cada render anularia a memoização de `calcular` dentro de
@@ -298,6 +303,15 @@ export function PromessaAvistaForm() {
       // se isto falhar, o corretor não perde o trabalho.
       setVoltaPendente(calcular())
       limparRascunho()
+      // O documento JA saiu e a volta ao dossie ja foi oferecida: so agora o
+      // negocio da operacao e garantido. `garantirNegocioDaOperacao` nunca
+      // lanca, entao falha de rede aqui nao chega ao corretor, que ja tem o
+      // arquivo na maquina. Com um negocio carregado ela nao faz nada: quem
+      // grava as correcoes continua sendo o `gravar` do useNegocioSync.
+      await garantirNegocioDaOperacao(
+        operacaoDoFormulario(data as unknown as Record<string, unknown>, { grupos: PAPEIS_VENDA }),
+        negocioAtual(),
+      )
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
@@ -1283,7 +1297,7 @@ export function PromessaAvistaForm() {
           >
             {isValidating ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-4 w-4 animate-spin" />
                 Preparando validação...
               </>
             ) : (
