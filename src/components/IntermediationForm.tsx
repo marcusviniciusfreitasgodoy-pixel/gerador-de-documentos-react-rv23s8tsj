@@ -18,6 +18,11 @@ import { Button } from '@/components/ui/button'
 import { BotaoDadosTeste, VerTextoClausula } from '@/components/Layout'
 import { CarregarDeNegocio, DocumentoGerado, useFormDraft } from '@/components/CarregarDeNegocio'
 import { aplicarAutorizacao, aplicarReciboComissao, aplicarCorretagem } from '@/lib/aplicar-negocio'
+import {
+  garantirNegocioDaOperacao,
+  operacaoDoFormularioPlano,
+  MAPA_AUTORIZACAO,
+} from '@/lib/negocioAutomatico'
 import { Textarea } from '@/components/ui/textarea'
 import {
   generateReciboComissaoDocx,
@@ -185,6 +190,16 @@ export function IntermediationForm() {
       toast.success('Documento gerado com sucesso!')
       setGerado(true)
       limparRascunho()
+      // O documento JA saiu: so agora o negocio da operacao e garantido.
+      // `garantirNegocioDaOperacao` nunca lanca, entao falha de rede aqui nao
+      // chega ao corretor, que ja tem o arquivo na maquina.
+      // Sem `negocioAtual` aqui: esta tela nao tem sincronia de volta. Nao faz
+      // falta, porque carregar de um dossie preenche contratante e imovel, e o
+      // reuso por imovel mais parte em comum reencontra o mesmo registro.
+      await garantirNegocioDaOperacao(
+        operacaoDoFormularioPlano(data as unknown as Record<string, unknown>, MAPA_AUTORIZACAO),
+        null,
+      )
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')

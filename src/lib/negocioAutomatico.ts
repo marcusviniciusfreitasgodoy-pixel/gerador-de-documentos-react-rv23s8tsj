@@ -6,7 +6,8 @@ import {
   novaParte,
 } from '@/lib/negocios'
 import type { Negocio, ParteNegocio, PapelParte } from '@/lib/negocios'
-import { mergeResults, emptyImovel } from '@/lib/extraction-types'
+import { mergeResults, emptyImovel, mesmaPessoa } from '@/lib/extraction-types'
+import type { ConfigVoltaPlano } from '@/lib/aplicar-negocio'
 import type { ImovelExtraido, PessoaExtraida } from '@/lib/extraction-types'
 
 /**
@@ -57,11 +58,6 @@ import type { ImovelExtraido, PessoaExtraida } from '@/lib/extraction-types'
  * consumir vaga ali faria o validador competir com o proprio plano.
  */
 
-/** Devolve so os digitos: CPF digitado com e sem mascara tem de casar. */
-function apenasDigitos(v: unknown): string {
-  return typeof v === 'string' ? v.replace(/\D+/g, '') : ''
-}
-
 /**
  * Normaliza texto livre para comparacao: sem acento, sem pontuacao, sem espaco
  * repetido, minusculo. "Rua Sao Joao, 120 - Apto 2" e "rua sao joao 120 apto 2"
@@ -82,13 +78,85 @@ function normalizarTexto(v: unknown): string {
 }
 
 /**
- * A parte que ancora a operacao. Os formularios usam rotulos diferentes
- * (compradores, proponentes, segundos), mas todos gravam o mesmo `papel` em
- * `ParteNegocio`, entao da para procurar por papel e nao por nome de campo.
- * Anuente nunca serve de ancora: ele acompanha a operacao sem defini-la, e o
- * mesmo conjuge anuente aparece em negocios diferentes.
+ * Os identificadores do IMOVEL, TODOS eles, nao o melhor deles.
+ *
+ * POR QUE UM CONJUNTO, E NAO UM VALOR
+ *
+ * A primeira versao devolvia "matricula se houver, senao endereco". Parecia
+ * razoavel e quebrava no caso principal: a autorizacao de venda nao coleta
+ * matricula e a promessa coleta, entao uma produzia `e:endereco` e a outra
+ * `m:matricula`, e as duas nunca se encontravam apesar de tratarem do mesmo
+ * apartamento. Precedencia so funciona quando os dois lados coletam os mesmos
+ * campos, e aqui nao coletam.
+ *
+ * Devolvendo os dois quando os dois existem, duas operacoes se reconhecem por
+ * QUALQUER identificador em comum. A matricula casa quando os dois formularios
+ * a tem; o endereco casa quando um deles nao tem.
+ *
+ * A UF fica de fora do endereco de proposito, pelo mesmo motivo: nem toda tela a
+ * coleta, e um campo que so metade preenche faz o mesmo imovel gerar
+ * identificadores diferentes conforme o documento.
+ *
+ * Lista vazia significa "nao da para comparar", e o chamador entao cria em vez
+ * de fundir.
+ *
+ * LIMITE CONHECIDO
+ *
+ * O recibo de sinal coleta matricula e NAO coleta endereco; a autorizacao de
+ * venda faz o contrario. Os dois nao tem token em comum, entao nao se
+ * reconhecem. Nao ha o que consertar aqui: nao existe dado comparavel entre as
+ * duas telas. Na pratica a lacuna e estreita, porque a promessa tem os dois
+ * tokens e serve de ponte assim que existe. `imovel_comarca` do recibo NAO
+ * serve de substituto para a cidade: comarca e distrito judiciario e pode
+ * abranger varios municipios, armadilha que `aplicar-negocio.ts` ja documenta.
  */
-function parteAncora(partes: ParteNegocio[]): ParteNegocio | null {
+export function identificadoresDoImovel(imovel: ImovelExtraido): string[] {
+  const saida: string[] = []
+  const matricula = normalizarTexto(imovel?.matricula)
+  if (matricula) saida.push(`m:${matricula}`)
+  const endereco = normalizarTexto([imovel?.endereco, imovel?.cidade].filter(Boolean).join(' '))
+  if (endereco) saida.push(`e:${endereco}`)
+  return saida
+}
+
+/**
+ * Duas operacoes sao a mesma quando tratam do MESMO IMOVEL e tem AO MENOS UMA
+ * PARTE EM COMUM.
+ *
+ * POR QUE NAO UMA PARTE ANCORA
+ *
+ * A versao anterior elegia uma parte ancora, com preferencia pelo comprador. Ela
+ * quebrava justamente na sequencia mais comum do mercado: a autorizacao de venda
+ * e assinada quando o corretor pega a captacao, semanas antes de existir
+ * comprador, entao ela ancoraria no vendedor e a promessa posterior no
+ * comprador. Duas chaves diferentes para a mesma operacao, e dois dossies onde
+ * devia haver um.
+ *
+ * Com "imovel igual mais uma parte em comum", a autorizacao e a promessa se
+ * encontram pelo vendedor, que aparece nas duas.
+ *
+ * POR QUE AS DUAS CONDICOES, E NAO UMA
+ *
+ * So o imovel fundiria a venda de hoje com a revenda do mesmo apartamento a
+ * outro comprador anos depois. So a pessoa fundiria as duas operacoes de um
+ * investidor que compra dois imoveis. Exigir as duas mata os dois casos.
+ *
+ * A comparacao de pessoa usa `mesmaPessoa` de `extraction-types.ts`, que e a
+ * unica regra de identidade de pessoa do sistema. Ela se recusa a decidir
+ * quando so um dos lados tem CPF, e essa recusa e desejada aqui tambem.
+ */
+export function mesmaOperacao(
+  a: { partes: ParteNegocio[]; imovel: ImovelExtraido },
+  b: { partes: ParteNegocio[]; imovel: ImovelExtraido },
+): boolean {
+  const ia = identificadoresDoImovel(a.imovel)
+  const ib = identificadoresDoImovel(b.imovel)
+  if (!ia.some((id) => ib.includes(id))) return false
+  return a.partes.some((pa) => b.partes.some((pb) => mesmaPessoa(semMeta(pa), semMeta(pb))))
+}
+
+/** Preferencia de exibicao: o comprador nomeia melhor a operacao que o vendedor. */
+function parteParaTitulo(partes: ParteNegocio[]): ParteNegocio | null {
   return (
     partes.find((p) => p.papel === 'comprador') ??
     partes.find((p) => p.papel !== 'anuente') ??
@@ -98,47 +166,12 @@ function parteAncora(partes: ParteNegocio[]): ParteNegocio | null {
 }
 
 /**
- * Chave de identidade da OPERACAO, montada de dois lados independentes.
- *
- * Cada lado tem um sinal forte e um fraco:
- *
- *   pessoa   forte = CPF         fraco = nome normalizado
- *   imovel   forte = matricula   fraco = endereco com cidade e UF
- *
- * A chave so vale se houver UM sinal forte, ou os DOIS fracos. Nome sozinho
- * nunca identifica operacao: dois "Joao Silva" sem CPF e sem endereco cairiam
- * na mesma chave, e o dossie de um cliente receberia os dados do outro. E a
- * mesma postura do `mesmaPessoa`, que se recusa a decidir quando o sinal e
- * fraco demais.
- *
- * `null` significa "nao da para afirmar que e a mesma operacao", e o chamador
- * cria em vez de fundir. Dossie a mais o corretor apaga; dossie fundido por
- * engano mistura dados de clientes diferentes, que e dano de LGPD e nao
- * inconveniente.
- */
-export function chaveDaOperacao(partes: ParteNegocio[], imovel: ImovelExtraido): string | null {
-  const ancora = parteAncora(partes)
-  const cpf = ancora ? apenasDigitos(ancora.cpf) : ''
-  const nome = ancora ? normalizarTexto(ancora.nome) : ''
-  const matricula = normalizarTexto(imovel?.matricula)
-  const endereco = normalizarTexto(
-    [imovel?.endereco, imovel?.cidade, imovel?.uf].filter(Boolean).join(' '),
-  )
-
-  const temSinalForte = !!cpf || !!matricula
-  const temOsDoisFracos = !!nome && !!endereco
-  if (!temSinalForte && !temOsDoisFracos) return null
-
-  return `${cpf || nome}::${matricula || endereco}`
-}
-
-/**
  * Titulo do dossie criado sozinho. O corretor vai reencontrar esse negocio numa
  * lista dias depois, entao o nome tem de dizer de quem e de qual imovel, e nao
  * "Negocio 4".
  */
 export function tituloDaOperacao(partes: ParteNegocio[], imovel: ImovelExtraido): string {
-  const ancora = parteAncora(partes)
+  const ancora = parteParaTitulo(partes)
   const pessoa = (ancora?.nome ?? '').trim()
   const lugar = (imovel?.endereco || imovel?.descricao || imovel?.cidade || '').trim()
   if (pessoa && lugar) return `${pessoa} - ${lugar}`
@@ -186,16 +219,17 @@ export async function garantirNegocioDaOperacao(
   if (jaCarregado) return { negocio: jaCarregado, criado: false }
 
   try {
-    const chave = chaveDaOperacao(dados.partes, dados.imovel)
-
-    if (chave) {
+    // Sem identificador de imovel nao ha como afirmar que e a mesma operacao, e
+    // a busca inteira e pulada: dossie a mais o corretor apaga, dossie fundido
+    // por engano mistura dados de clientes diferentes, que e dano de LGPD.
+    if (identificadoresDoImovel(dados.imovel).length > 0) {
       // `listNegocios` ja vem filtrado pelo dono na API rule da colecao, entao a
       // busca nao enxerga negocio de outro corretor. A comparacao roda no
       // cliente porque `partes` e `imovel` sao json: filtrar por dentro deles no
       // servidor exigiria indice que a colecao nao tem, e o corretor tipico tem
       // dezenas de negocios, nao milhares.
       const existentes = await listNegocios()
-      const igual = existentes.find((n) => chaveDaOperacao(n.partes, n.imovel) === chave)
+      const igual = existentes.find((n) => mesmaOperacao(n, dados))
       if (igual) {
         // `mesclarPartes` preserva _id, papel e conjuge_de do registro do
         // dossie, que e a verdade ja revisada. O `conflitosDePapel` que ela
@@ -357,4 +391,93 @@ export function operacaoDoFormulario(
   }
 
   return { partes, imovel: imovelDoFormulario(valores, config) }
+}
+
+// ─── Formularios de partes PLANAS ───────────────────────────────────────────
+//
+// Recibo de sinal, promessa simplificada e autorizacao de venda nao usam arrays
+// de partes: tem campos soltos com prefixo (`vendedor_nome`, `comprador_cpf`).
+// O mapeamento campo a campo ja existe em `aplicar-negocio.ts`, no tipo
+// `ConfigVoltaPlano`, usado pela volta ao dossie. Aqui ele e lido na direcao
+// contraria, em vez de reescrito: um segundo mapa divergiria do primeiro na
+// primeira vez que alguem renomeasse um campo, e a divergencia seria muda.
+
+/**
+ * Autorizacao de venda. Nao tem `MAPA_` em `aplicar-negocio.ts` porque nao tem
+ * volta ao dossie: mora aqui por ser configuracao so de ida.
+ *
+ * So tem contratante, que e o dono autorizando a venda, ou seja, o vendedor. Nao
+ * tem comprador, e nao deveria mesmo: quando o corretor pega a captacao ainda
+ * nao existe comprador. E o caso que motivou a regra de casar por "imovel mais
+ * parte em comum" em vez de por parte ancora.
+ */
+export const MAPA_AUTORIZACAO: ConfigVoltaPlano = {
+  vendedor: {
+    nome: 'contratante_nome',
+    cpf: 'contratante_cpf',
+    orgao_emissor: 'contratante_orgao_emissor',
+    email: 'contratante_email',
+  },
+  comprador: {},
+  imovel: {
+    endereco: 'imovel_endereco',
+    bairro: 'imovel_bairro',
+    cidade: 'imovel_cidade',
+    cep: 'imovel_cep',
+    iptu: 'imovel_iptu',
+    vagas_qtd: 'imovel_vagas',
+  },
+}
+
+/** Monta uma parte a partir de um mapa campo-do-dossie -> campo-do-formulario. */
+function parteDeMapaPlano(
+  valores: Record<string, unknown>,
+  mapa: Partial<Record<string, string>>,
+  papel: PapelParte,
+): ParteNegocio | null {
+  const parte: ParteNegocio = { ...novaParte(papel), _fonte: 'formulario' }
+  for (const [campoDoDossie, campoDoForm] of Object.entries(mapa)) {
+    if (!campoDoForm) continue
+    const valor = valores[campoDoForm]
+    if (typeof valor !== 'string' || !valor.trim()) continue
+    ;(parte as unknown as Record<string, unknown>)[campoDoDossie] = valor
+  }
+  // Sem nome nem CPF nao ha parte: o formulario aberto em branco nao pode virar
+  // gente vazia no dossie.
+  if (!parte.nome.trim() && !parte.cpf.trim()) return null
+  return parte
+}
+
+/**
+ * Monta a operacao a partir de um formulario de partes planas.
+ *
+ * LIMITE CONHECIDO, HERDADO DO MAPA
+ *
+ * Os mapas so descrevem a PRIMEIRA parte de cada papel, que e a decisao L2-a
+ * registrada no `calcularVoltaPlano`. Conjuge e interveniente da promessa
+ * simplificada, por exemplo, nao entram no dossie criado aqui, porque nao estao
+ * no mapa. Preferivel a inventar um segundo mapeamento que divergiria da volta:
+ * o corretor acrescenta o conjuge no dossie, e dali em diante ele vale para
+ * todos os documentos.
+ */
+export function operacaoDoFormularioPlano(
+  valores: Record<string, unknown>,
+  config: ConfigVoltaPlano,
+): DadosDaOperacao {
+  const partes: ParteNegocio[] = []
+  const vendedor = parteDeMapaPlano(valores, config.vendedor, 'vendedor')
+  if (vendedor) partes.push(vendedor)
+  const comprador = parteDeMapaPlano(valores, config.comprador, 'comprador')
+  if (comprador) partes.push(comprador)
+
+  const imovel: ImovelExtraido = { ...emptyImovel }
+  for (const [campoDoDossie, campoDoForm] of Object.entries(config.imovel)) {
+    if (!campoDoForm) continue
+    const valor = valores[campoDoForm]
+    if (typeof valor === 'string' && valor.trim()) {
+      ;(imovel as unknown as Record<string, unknown>)[campoDoDossie] = valor
+    }
+  }
+
+  return { partes, imovel }
 }

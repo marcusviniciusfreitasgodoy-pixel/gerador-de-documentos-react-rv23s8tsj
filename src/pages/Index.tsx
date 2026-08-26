@@ -34,6 +34,7 @@ import {
 } from '@/components/CarregarDeNegocio'
 import { aplicarRecibo, MAPA_RECIBO } from '@/lib/aplicar-negocio'
 import type { ResultadoVolta } from '@/lib/aplicar-negocio'
+import { garantirNegocioDaOperacao, operacaoDoFormularioPlano } from '@/lib/negocioAutomatico'
 import { PromessaFgtsForm } from '@/components/PromessaFgtsForm'
 import { PromessaDacaoForm } from '@/components/PromessaDacaoForm'
 import { reciboMockData } from '@/lib/form-helpers'
@@ -391,6 +392,13 @@ export default function Index() {
       setGerado(true)
       // C4: o documento JÁ saiu. Só agora oferecemos atualizar o dossiê.
       setVoltaPendente(calcular())
+      // O documento JA saiu: so agora o negocio da operacao e garantido.
+      // `garantirNegocioDaOperacao` nunca lanca, entao falha de rede aqui nao
+      // chega ao corretor, que ja tem o arquivo na maquina.
+      await garantirNegocioDaOperacao(
+        operacaoDoFormularioPlano(data as unknown as Record<string, unknown>, MAPA_RECIBO),
+        negocioAtual(),
+      )
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')

@@ -25,6 +25,7 @@ import {
 } from '@/components/CarregarDeNegocio'
 import { aplicarPromise, MAPA_SIMPLIFICADA } from '@/lib/aplicar-negocio'
 import type { ResultadoVolta } from '@/lib/aplicar-negocio'
+import { garantirNegocioDaOperacao, operacaoDoFormularioPlano } from '@/lib/negocioAutomatico'
 import {
   Form,
   FormField,
@@ -233,6 +234,13 @@ export function PromiseForm() {
       // C4: o documento JÁ saiu. Só agora oferecemos atualizar o dossiê.
       setVoltaPendente(calcular())
       limparRascunho()
+      // O documento JA saiu: so agora o negocio da operacao e garantido.
+      // `garantirNegocioDaOperacao` nunca lanca, entao falha de rede aqui nao
+      // chega ao corretor, que ja tem o arquivo na maquina.
+      await garantirNegocioDaOperacao(
+        operacaoDoFormularioPlano(data as unknown as Record<string, unknown>, MAPA_SIMPLIFICADA),
+        negocioAtual(),
+      )
     } catch (error) {
       console.error('Erro ao gerar documento:', error)
       toast.error('Ocorreu um erro ao gerar o documento.')
