@@ -304,11 +304,22 @@ import {
 } from '@/components/ui/select'
 
 const TIPOS_CHAMADO = [
+  // `assinatura` nasce na página de planos, com o nome do plano já na mensagem.
+  // Está nesta lista só para o chamado aparecer com rótulo em português na fila
+  // do admin, que é quem lê para fechar a venda. FORA do seletor do formulário
+  // abaixo (ver TIPOS_ABRIVEIS): oferecido ali, ele produziria um pedido de
+  // assinatura sem plano nenhum escrito, competindo com o fluxo que nomeia.
+  { valor: 'assinatura', rotulo: 'Quero assinar' },
   { valor: 'sugestao', rotulo: 'Sugestão de melhoria' },
   { valor: 'correcao', rotulo: 'Correção de erro' },
   { valor: 'suporte', rotulo: 'Suporte / dificuldade de uso' },
   { valor: 'duvida', rotulo: 'Dúvida sobre a plataforma' },
 ]
+
+// Os tipos que o corretor pode escolher ao abrir um chamado à mão. É a lista
+// acima menos os que nascem em outro lugar, com contexto que este formulário
+// não tem como coletar.
+const TIPOS_ABRIVEIS = TIPOS_CHAMADO.filter((t) => t.valor !== 'assinatura')
 
 const STATUS_CHAMADO: Record<string, { rotulo: string; classe: string }> = {
   aberto: { rotulo: 'Aberto', classe: 'bg-primary/10 text-primary' },
@@ -496,7 +507,7 @@ export function AjudaSuportePage() {
                   <SelectValue placeholder="Tipo do chamado" />
                 </SelectTrigger>
                 <SelectContent>
-                  {TIPOS_CHAMADO.map((t) => (
+                  {TIPOS_ABRIVEIS.map((t) => (
                     <SelectItem key={t.valor} value={t.valor}>
                       {t.rotulo}
                     </SelectItem>
