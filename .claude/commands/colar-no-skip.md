@@ -67,35 +67,36 @@ estrutura:
   `agency_members` nasceu com `termo_aceito_em` preenchido e que o negócio
   seguinte nasceu com `agency` carimbado.
 
-### Negócio automático na geração (B2): PENDENTE, 9 arquivos
+### Negócio automático na geração (B2): COMPLETO
 
-Cria o dossiê no ato da geração, nos documentos que definem uma operação. Fecha
-o buraco de o caminho padrão do produto nunca passar por um negócio.
+Os 9 arquivos foram conferidos byte a byte contra o download de 26/08/2026, e a
+árvore baixada do Skip compila: `tsc -b` 0 erros, `oxlint` 18 avisos, build
+passando. Os hashes WebP do `Signup.tsx` continuam íntegros.
 
-| #   | Arquivo                                     | Linhas | Ação       |
-| --- | ------------------------------------------- | ------ | ---------- |
-| 1   | `src/lib/negocioAutomatico.ts`              | 360    | CRIAR      |
-| 2   | `src/lib/negocios.ts`                       | 186    | substituir |
-| 3   | `src/components/PromessaFinanciadaForm.tsx` | 1426   | substituir |
-| 4   | `src/components/PromessaAvistaForm.tsx`     | 1314   | substituir |
-| 5   | `src/components/PromessaDacaoForm.tsx`      | 1309   | substituir |
-| 6   | `src/components/PromessaFgtsForm.tsx`       | 1291   | substituir |
-| 7   | `src/components/ReservaPropostaForm.tsx`    | 1162   | substituir |
-| 8   | `src/components/PermutaForm.tsx`            | 1147   | substituir |
-| 9   | `src/components/DistratoForm.tsx`           | 1100   | substituir |
+Cria o dossiê no ato da geração nos sete documentos que definem uma operação
+(à vista, dação, FGTS, financiada, distrato, permuta, reserva/proposta). Os
+acessórios (checklist, termo de chaves, termo de posse, compromisso) não criam
+negócio de propósito.
 
-**Os dois de `src/lib` vêm primeiro, nesta ordem.** O (1) é arquivo novo e os
-sete formulários importam dele: aplicados antes, o editor acusa import
-inexistente. O (2) ganhou um segundo parâmetro opcional em `createNegocio`, que
-o (1) usa.
+**Duas lições desta leva, que valem para as próximas.**
 
-Nenhum passa de 50.000 caracteres, então todos vão inteiros. Não é preciso
-instrução de busca e substituição nesta leva.
+O `PromessaFinanciadaForm.tsx` estourou o limite de 50.000 caracteres do chat do
+Skip (52.696). Confira o tamanho em CARACTERES antes de prometer que um arquivo
+vai inteiro; linha não serve de proxy. Para o que passa, a instrução de busca e
+substituição com âncora única funcionou byte a byte.
 
-Depois de aplicar, o diff tem de dar 114 inserções e nenhuma remoção de
-comportamento nos sete formulários. Cada um recebe exatamente um bloco de import
-e uma chamada `await garantirNegocioDaOperacao(...)` logo após o
-`limparRascunho()`.
+O `PromessaAvistaForm.tsx` voltou corrompido em UMA linha, com o mesmo número de
+linhas do original: `mr-2 h-4 w-4` virou `mr-4 w-4` no `className` de um
+`Loader2`. Prova viva de que contagem de linha não é conferência. O conserto foi
+uma substituição de linha única, e funcionou.
+
+### Formulários de forma PLANA: PENDENTE
+
+`PromiseForm`, o recibo do `Index.tsx` e o `IntermediationForm` usam campos
+planos (`vendedor_nome`, `comprador_nome`) em vez de arrays, e têm
+particularidades próprias: `imovel_estado` em vez de `imovel_uf`, e
+`conjuge_*_papel` decidindo se o cônjuge é anuente. Precisam de um segundo modo
+de extração em `negocioAutomatico.ts`. Nada escrito ainda.
 
 ## Armadilha do JSVM (custou um bug nesta entrega)
 
