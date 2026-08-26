@@ -13,6 +13,7 @@ import LegalKnowledgePage from './pages/LegalKnowledge'
 import MyProfilePage from './pages/MyProfile'
 import ValidarMinutaPage from './pages/ValidarMinuta'
 import ExpertSupportPage, { AjudaSuportePage } from './pages/ExpertSupport'
+import PlanosPage from './pages/Planos'
 import ExpertSupportNewPage from './pages/ExpertSupportNew'
 import ExpertSupportDetailPage from './pages/ExpertSupportDetail'
 import Layout from './components/Layout'
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/especialista/nova" element={<ExpertSupportNewPage />} />
               <Route path="/especialista/:id" element={<ExpertSupportDetailPage />} />
               <Route path="/ajuda" element={<AjudaSuportePage />} />
+              <Route path="/planos" element={<PlanosPage />} />
               <Route path="/perfil" element={<MyProfilePage />} />
               <Route path="/proposta-reserva" element={<PropostaReservaPage />} />
               <Route path="/distrato" element={<DistratoPage />} />
