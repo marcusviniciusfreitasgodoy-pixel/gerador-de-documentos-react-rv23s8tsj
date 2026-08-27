@@ -274,29 +274,44 @@ plano ou teste, operações no mês contra o teto, e as duas ações do piloto
 (estender teste, carimbar plano). Gestão de conta deixou de exigir o painel
 do PocketBase para o dia a dia.
 
-### Ícone da tela inicial do celular: PENDENTE, 2 arquivos
+### Ícone da tela inicial: PENDENTE, 2 arquivos (recolar, versão SVG)
 
-Adicionar à tela inicial mostrava a letra "P" (fallback do Android Chrome sem
-manifesto). Estado-alvo no commit `a4cb2ed`.
+| #   | Arquivo                       | Como colar             |
+| --- | ----------------------------- | ---------------------- |
+| 1   | `public/manifest.webmanifest` | inteiro (2,0 KB)       |
+| 2   | `index.html`                  | inteiro (5,9 KB)       |
 
-| #   | Arquivo                        | Como colar                    |
-| --- | ------------------------------ | ----------------------------- |
-| 1   | `public/manifest.webmanifest`  | arquivo novo, inteiro (22 KB) |
-| 2   | `index.html`                   | inteiro (9 KB)                |
+A versão que está no Skip agora está **corrompida** e precisa ser substituída.
 
-**Por que o ícone viaja como texto.** O `preventAI` do `.skip.config.json`
-bloqueia `png`, `svg`, `ico` e companhia: o agente do Skip não grava imagem, e
-o painel de código é somente leitura, então **não existe caminho para subir
-binário novo neste projeto**. A saída é embutir os PNG como data URI dentro do
-manifesto, que é texto. Quantizados em paleta de 64 cores, os três ícones
-(192 any, 512 any, 512 maskable) somam 22 KB, dentro do limite do chat.
+## LIÇÃO CARA: base64 longa NÃO sobrevive ao paste
 
-Guarde essa técnica: qualquer imagem nova que o projeto vier a precisar
-enfrenta a mesma trava, e data URI dentro de arquivo de texto é a única porta.
+A primeira tentativa embutiu os ícones como PNG em data URI base64. Voltou
+quebrada, e o modo de falha é o pior que já apareceu neste projeto: o agente
+do Skip **não trunca a string, ele reconstrói o miolo dela**. O resultado tem
+94% a 100% do comprimento, começa igual, e termina com a assinatura correta de
+fim de PNG (`RK5CYII=`).
 
-Depois de colar, a conferência é no celular: adicionar à tela inicial de novo
-e ver a marca no lugar da letra. O ícone antigo fica em cache, então pode ser
-preciso remover o atalho antes.
+Nada disso aparece nas checagens de sempre: mesmo número de linhas (118),
+estrutura idêntica, `Image.open` abre (só lê o cabeçalho). Só o **decode
+completo** pega. Medido: os quatro payloads divergiram nos caracteres 545,
+3129, 290 e 180, e o primeiro ícone do manifesto nem decodifica.
+
+**Regra que sai daí:** nunca cole base64 pelo chat do Skip. Para imagem, use
+SVG como data URI de texto: geometria pura cabe em ~700 caracteres, e texto
+curto o agente copia sem inventar (o favicon SVG do `index.html` atravessou
+dezenas de colagens intacto). Se um dia precisar mesmo de raster, ele tem de
+entrar como arquivo real em `public/`, por um caminho que não passe pelo
+agente, porque o `preventAI` bloqueia `png`, `svg` e `ico`.
+
+**E se colar base64 assim mesmo:** decodifique o payload e force o carregamento
+completo da imagem. Comprimento e cabeçalho não provam nada.
+
+O `apple-touch-icon` do iOS ficou de fora por isso: iOS não renderiza SVG nesse
+slot e base64 não chega inteira. O alvo relatado era Android, onde a letra "P"
+é o fallback do Chrome, e esse fica resolvido.
+
+Depois de colar, conferir no celular: remover o atalho antigo (o ícone fica em
+cache) e adicionar de novo.
 
 ### Fora isso, nada pende de colagem
 
