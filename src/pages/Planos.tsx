@@ -64,7 +64,7 @@ const PLANOS: Plano[] = [
     nome: 'Individual',
     preco: 'R$ 69',
     unidade: 'por mês',
-    nota: 'R$ 690 no ano, dois meses grátis. Até 10 operações por mês.',
+    nota: 'R$ 690 no ano, dois meses grátis: menos que uma promessa avulsa. Até 10 operações por mês.',
     itens: [
       'Todos os documentos, correções ilimitadas',
       'Validação de minuta, 20 por mês',
@@ -308,6 +308,15 @@ export default function PlanosPage() {
             O Prime Circle Docs organiza a operação inteira: partes, imóvel, comissão, documentos em
             Word e validação com IA no mesmo fluxo. E os seus dados continuam seus, com ou sem
             plano: nada é apagado e nada fica preso aqui dentro.
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-foreground">A conta de referência</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            No mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500 com advogado, e a análise
+            de documentos é cobrada à parte. Aqui, o Avulso cobre a operação inteira por R$ 49, e a
+            assinatura inclui a validação. O advogado continua no lugar certo: na análise do caso
+            concreto, não na papelada repetitiva.
           </p>
         </div>
       </div>

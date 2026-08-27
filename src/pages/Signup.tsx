@@ -186,7 +186,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
           <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">01</p>
           <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">A conta do advogado, documento por documento</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não tem departamento jurídico. Então ou usa um modelo de origem incerta, ou paga honorários toda vez que precisa de um contrato que já é rotina na sua carreira. Sai do mesmo bolso de onde vem a comissão.</p>
+          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não tem departamento jurídico. Então ou usa um modelo de origem incerta, ou paga honorários por peça: no mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500, por um contrato que já é rotina na sua carreira. Sai do mesmo bolso de onde vem a comissão.</p>
         </div>
         <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
           <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">02</p>
