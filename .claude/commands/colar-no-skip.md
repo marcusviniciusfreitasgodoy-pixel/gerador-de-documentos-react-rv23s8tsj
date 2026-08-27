@@ -155,37 +155,49 @@ provedor de pagamento ainda não foi escolhido. O admin combina o pagamento e
 carimba `plano` e `plano_renova_em` no painel. Quando o provedor existir, muda a
 função `solicitar` do `Planos.tsx` e mais nada.
 
-### Bloco A (renomear para Docs): PENDENTE, 8 arquivos
+### Bloco A (renomear para Docs): COMPLETO
 
-Mudou o NOME DO PRODUTO. "Prime Circle" sozinho é a marca da empresa e ficou
-intacto. O substantivo comum também: "16 documentos", "documentos em Word", a
-âncora `#documentos`, o rótulo "Documentos / todos os 16". Foram 20 ocorrências
-conferidas uma a uma antes de trocar, e um replace cego teria estragado nove.
+Os 8 arquivos foram aplicados em três levas (1 a 3, 4 a 7, e o `MELHORIAS.md`
+inteiro) e conferidos byte a byte contra três downloads de 27/08/2026. A árvore
+final baixada do Skip compila: `tsc -b` 0 erros, `oxlint` 18 avisos, build
+passando. Hashes WebP do `Signup.tsx` íntegros nas três conferências:
+`['40b6f0b3af', '40b6f0b3af', '582241ca47']`. A landing foi renderizada a 1440,
+820 e 390 px: sem rolagem horizontal, imagens carregando, wordmark "DOCS" no
+topo. O `MELHORIAS.md` chegou com as 587 linhas exatas, com a exigência da
+contagem no pedido.
 
-**Todos vão por INSTRUÇÃO**, não por paste inteiro: são mudanças pequenas em
-arquivos grandes, e é o método que está 8 por 8 sem erro.
+Os arquivos 1 a 7 foram por instrução de busca e substituição, o 8 por paste
+inteiro. Nenhuma falha nas três levas.
 
-| #   | Arquivo                               | Edição                                     |
-| --- | ------------------------------------- | ------------------------------------------ |
-| 1   | `index.html`                          | 3x `Prime Circle Documentos` → `... Docs`  |
-| 2   | `pocketbase/hooks/agencia_convites.js`| 9x a mesma substituição                    |
-| 3   | `pocketbase/hooks/extrair_dados.js`   | 5x a mesma substituição                    |
-| 4   | `src/pages/Signup.tsx`                | 2 linhas: wordmark do topo e do rodapé     |
-| 5   | `src/components/Layout.tsx`           | 2 linhas: lockup e item de menu            |
-| 6   | `src/pages/Index.tsx`                 | 1 bloco: h1 do hub                         |
-| 7   | `src/pages/Planos.tsx`                | 2 blocos: a copy com o nome do produto     |
-| 8   | `MELHORIAS.md`                        | arquivo inteiro (587 linhas)               |
+"Prime Circle" sozinho é a marca da empresa e ficou intacto. O substantivo
+comum também: "16 documentos", "documentos em Word", a âncora `#documentos`, o
+rótulo "Documentos / todos os 16". Foram 20 ocorrências conferidas uma a uma
+antes de trocar, e um replace cego teria estragado nove.
 
-Os três primeiros são "substitua todas as ocorrências de `Prime Circle
-Documentos` por `Prime Circle Docs`", sem âncora complicada.
+**Falso positivo conhecido do render:** a 820 e 390 px o detector de
+`opacity: 0` acusa o cartão dentro de `[data-hero-art]`. Não é defeito: a media
+query esconde o hero com `display: none` abaixo de 900 px, a animação CSS não
+roda, e o `opacity: 0` inline fica parado num elemento que já não é exibido.
 
-**Depois de aplicar o (4), confira os hashes WebP e renderize a landing.** Os
-hashes têm de continuar `['40b6f0b3af', '40b6f0b3af', '582241ca47']`.
+**Sugestão do agente do Skip não entra sem conferir.** Ao aplicar a leva 4 a 7
+ele sugeriu como "próximos passos" criar a rota `/planos`, expor
+`negociosNoMes` no `useAuth` e linkar a página no menu. As três coisas já
+existiam, entregues nos blocos B e D, na árvore que ele mesmo tem gravada. Ele
+olha o pedido isolado, não o estado do projeto: pedir a ele um "próximo passo"
+desses faria reescrever coisa pronta.
 
 **Uma inconsistência conhecida, que não é bug de código:** o mockup do app
 embutido na landing é uma das imagens WebP e ainda mostra a interface antiga,
 com "DOCUMENTOS". Precisa de quem faz a arte. Está registrado em MELHORIAS.md
 § 9.
+
+### Não há bloco pendente de colagem
+
+O bloco A era o último. O que segue aberto não depende do Skip: as três
+verificações que só o banco prova (carimbo de 15 dias em conta nova, aceite de
+convite ponta a ponta, contador subindo a 1 ao criar negócio), a escolha do
+provedor de pagamento, a arte do mockup, e reabrir os tetos de 10/30 quando o
+`negocios_no_mes` tiver duas ou três semanas de dado real.
 
 ## Renderizar antes de entregar tela nova
 
@@ -208,8 +220,8 @@ Placar até aqui, e ele deve guiar a escolha do método:
 
 | método | entregas | falhas |
 | ------ | -------- | ------ |
-| arquivo inteiro colado | 21 | 2 |
-| instrução de busca e substituição | 8 | 0 |
+| arquivo inteiro colado | 22 | 2 |
+| instrução de busca e substituição | 15 | 0 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
