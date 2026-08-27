@@ -214,16 +214,13 @@ conserto foi uma substituição de linha única, aplicado e conferido. Instruç�
 que insere bloco perto de uma âncora merece atenção redobrada no diff do
 caractere vizinho à âncora.
 
-### Menu mobile da landing: PENDENTE, 4 edições em 1 arquivo
+### Menu mobile da landing: COMPLETO
 
-Abaixo de 900 px a media query esconde `[data-nav-links]` e não põe nada no
-lugar: celular fica sem menu. O commit `c750db8` desta branch acrescenta um
-hambúrguer de CSS puro (checkbox), com painel de 7 itens e fechamento por JS
-progressivo. Tudo em `src/pages/Signup.tsx`, **por instrução**, 4 inserções:
-o bloco de CSS antes da regra de `prefers-reduced-motion`, o checkbox antes do
-`data-header-inner`, o label + painel no fim do header, e o trecho de JS antes
-do bloco "Cabecalho que condensa". Depois de aplicar, conferir os hashes WebP;
-já renderizado a 390, 820 e 1440 a partir desta branch.
+As 4 inserções em `src/pages/Signup.tsx` (CSS do menu, checkbox, label +
+painel, JS de fechamento) vieram byte a byte idênticas à branch no download de
+27/08/2026, hashes WebP íntegros. Hambúrguer de CSS puro (checkbox): o menu
+funciona mesmo com o script quebrado, e o JS só fecha ao tocar num link.
+Renderizado a 390, 820 e 1440 antes de colar.
 
 ### Fora isso, nada pende de colagem
 
@@ -255,7 +252,7 @@ Placar até aqui, e ele deve guiar a escolha do método:
 | método | entregas | falhas |
 | ------ | -------- | ------ |
 | arquivo inteiro colado | 22 | 2 |
-| instrução de busca e substituição | 22 | 1 |
+| instrução de busca e substituição | 26 | 1 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
