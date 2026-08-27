@@ -47,8 +47,10 @@ function ConnectionMark({ className }: { className?: string }) {
   )
 }
 
-// A Base de Conhecimento é ferramenta interna do admin (régua jurídica da
-// validação); o corretor comum não vê. A porta do corretor é "Ajuda".
+// Painel e Base de Conhecimento são as duas ferramentas internas do admin; o
+// corretor comum não vê nenhuma das duas. A porta do corretor é "Ajuda".
+// O Painel ficou fora desta lista até 27/08/2026: a rota existia e era
+// protegida, mas sem item de menu só se chegava nela digitando a URL.
 // `desc` existe só para o painel do celular: lá cabe uma linha dizendo o que a
 // tela faz, coisa que a barra do desktop nunca teve espaço para mostrar.
 const NAV_ITEMS = [
@@ -77,6 +79,13 @@ const NAV_ITEMS = [
     label: 'Validar minuta',
     icon: FileSearch,
     desc: 'Revisar um contrato de terceiros com IA antes de assinar',
+  },
+  {
+    to: '/admin',
+    label: 'Painel',
+    icon: Shield,
+    adminOnly: true,
+    desc: 'Fila de atendimento, pulso da operação, imobiliárias e usuários',
   },
   {
     to: '/legal-knowledge',
