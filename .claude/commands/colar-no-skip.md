@@ -339,34 +339,33 @@ nas próximas conferências.
 Renderizado a 1440, 1024 e 390 com `isAdmin` forçado só na cópia do
 scratchpad: aparece na barra e no painel do celular, sem rolagem horizontal.
 
-### Ações do painel de admin: PENDENTE, 4 arquivos
+### Ações do painel de admin: COMPLETO
 
-Excluir conta, reenviar confirmação, tornar admin e fechar item da fila. O
-painel era só leitura, e foi a falta da exclusão que levou ao incidente da
-migração `1900000035`.
+Excluir conta, reenviar confirmação, tornar admin e fechar item da fila. Os 4
+arquivos vieram idênticos à branch no download de 27/08/2026, **com as
+contagens exatas** (408, 94, 575 e 664 linhas). O `Admin.tsx`, que é o perfil
+de arquivo em que o agente já apagou 48 comentários, passou inteiro: a
+exigência da contagem de linhas no pedido segurou de novo.
 
-| #   | Arquivo                                 | Como colar                 |
-| --- | --------------------------------------- | -------------------------- |
-| 1   | `pocketbase/hooks/admin_usuarios.js`    | inteiro (16 KB, 476 linhas)|
-| 2   | `src/services/admin.ts`                 | inteiro (3 KB, 106 linhas) |
-| 3   | `src/components/admin/UsuariosBlock.tsx`| inteiro (22 KB, 570 linhas)|
-| 4   | `src/pages/Admin.tsx`                   | inteiro (27 KB, 700 linhas)|
+Conferências além do diff, todas na árvore baixada:
 
-**O (4) é o de maior risco**: é grande e cheio de comentário, o mesmo perfil do
-`Index.tsx`, em que o agente apagou 48 linhas de comentário num paste inteiro.
-Exija a contagem de linhas no pedido, que foi o que destravou aquele caso. Não
-dá para ir por instrução: a fila foi reestruturada (o item virou `div` com
-`Link` dentro, para o botão de fechar não ficar aninhado em link) e isso
-reindenta ~80 linhas.
+- `node --check` em hooks e migrações, auditoria do JSVM limpa.
+- **6 rotas, 6 gates `isAdmin`** no hook.
+- A exclusão **nunca toca campo de agência**: as 2 ocorrências de
+  `agency_members`/`agency_invites` com campo `agency` são LEITURA (contagem da
+  prévia e a trava). A lista que o delete percorre só tem `user`, `user_id` e
+  `member`. É a lição da migração `1900000035` virada em código.
+- Trava da própria conta presente duas vezes: na prévia e no recheque da
+  escrita.
+- `tsc -b` 0 erros, `oxlint` **16** avisos, build passando, WebP íntegros.
+- Renderizado a 1440 e 390: zero vazamento nos dois diálogos, botão de excluir
+  nasce desabilitado e só libera com o e-mail certo, e o caso da imobiliária
+  com equipe mostra o bloqueio, mantém o botão desabilitado e nem oferece o
+  campo de confirmação.
 
-**A baseline do oxlint cai para 16.** O `Loader2` do `Admin.tsx` também estava
-importado sem uso, e virou o spinner do botão de fechar. Junto com o `Shield`
-do `Layout.tsx`, são dois fósseis de funcionalidade planejada e não entregue
-que a leva resolveu.
-
-Depois de colar, conferir: 6 rotas e 6 gates `isAdmin` no hook, `node --check`,
-auditoria do JSVM, e os dois diálogos a 390 px (e-mail longo estourava a
-largura e cortava o botão; foi o render que pegou).
+**O render pegou o que o diff não pegaria**, de novo: e-mail longo não quebra
+sozinho e estourava a largura dos DOIS diálogos, cortando o título e o botão.
+Corrigido antes de entregar, com `break-all` e o e-mail fora do título.
 
 ### Fora isso, nada pende de colagem
 
@@ -397,7 +396,7 @@ Placar até aqui, e ele deve guiar a escolha do método:
 
 | método | entregas | falhas |
 | ------ | -------- | ------ |
-| arquivo inteiro colado | 26 | 2 |
+| arquivo inteiro colado | 32 | 2 |
 | instrução de busca e substituição | 28 | 1 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
