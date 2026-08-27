@@ -246,44 +246,33 @@ Quando a completa lançar, o Docs ganha uma FAQ curta mencionando a inclusão
 ("assinante Prime Circle tem o Docs incluso"). Não colar antes do lançamento
 dela: mencionar plataforma que não existe confunde o visitante.
 
-### URGENTE: neutralizar a migração 1900000035
+### Migração 1900000035 neutralizada: COMPLETO
 
 Em 27/08 o agente do Skip transformou um pedido pontual ("exclua este e-mail
-da base") numa **migração permanente** que apaga conta por e-mail fixo no
-código, com cascata larga e fallback em SQL cru. A exclusão em si já
-aconteceu e está feita; o problema é o arquivo que ficou.
+da base") numa migração permanente que apagava conta por e-mail fixo, com
+cascata que alcançava dados de terceiros e fallback em SQL cru. A exclusão em
+si já tinha acontecido e não foi desfeita; o arquivo virou no-op documentado,
+com o mesmo nome (a entrada em `_migrations` precisa continuar batendo).
+Conferido byte a byte no download de 27/08: corpo executável vazio, a única
+menção a `DELETE FROM` é o comentário que explica o que foi removido.
 
-Vai junto com o bloco de usuários abaixo, e de preferência primeiro:
+**Nunca restaure o conteúdo antigo.** O porquê está dentro do arquivo.
 
-| #   | Arquivo                                              | Como colar    |
-| --- | ---------------------------------------------------- | ------------- |
-| 0   | `pocketbase/migrations/1900000035_delete_user_marcus.js` | inteiro (2,4 KB) |
+### Bloco de usuários no /admin: COMPLETO
 
-O arquivo mantém o nome (a entrada em `_migrations` já existe e precisa
-continuar batendo) e vira no-op documentado. **Nunca restaure o conteúdo
-antigo.** O porquê está escrito dentro do próprio arquivo.
+Os 4 arquivos (hook `admin_usuarios.js`, `UsuariosBlock.tsx`, `admin.ts` e as
+duas inserções no `Admin.tsx`) vieram idênticos à branch no download de
+27/08/2026. A árvore baixada compila: `tsc -b` 0 erros, `oxlint` 18 avisos,
+build passando, hashes WebP íntegros.
 
-### Bloco de usuários no /admin: PENDENTE, 4 arquivos
+Checagens de backend além do diff: `node --check` em todos os hooks e
+migrações, auditoria do JSVM limpa, e **3 rotas com 3 gates `isAdmin`** no
+hook novo (a contagem é a prova de que nenhuma rota ficou aberta).
 
-Gestão de conta morava só no painel do PocketBase; com o piloto de corretores
-chegando, o /admin ganha o Bloco 6. Estado-alvo no commit desta branch.
-
-| #   | Arquivo                                   | Como colar          | Tamanho |
-| --- | ----------------------------------------- | ------------------- | ------- |
-| 1   | `pocketbase/hooks/admin_usuarios.js`      | arquivo NOVO        | 7 KB    |
-| 2   | `src/components/admin/UsuariosBlock.tsx`  | arquivo NOVO        | 14 KB   |
-| 3   | `src/services/admin.ts`                   | inteiro (2 KB)      | 2 KB    |
-| 4   | `src/pages/Admin.tsx`                     | 2 inserções, por INSTRUÇÃO | 25 KB |
-
-Os dois primeiros são criação ("Crie o arquivo X com exatamente este
-conteúdo"). O `admin.ts` é pequeno e vai inteiro. O `Admin.tsx` tem 25 KB e
-muito comentário: vai por instrução (import do bloco após o do AgenciasBlock,
-e `<AdminUsuariosBlock />` após `<AdminAgenciasBlock />`).
-
-Para o hook, as três checagens de backend antes de dar por pronto: `node
---check`, a auditoria do JSVM, e conferir que o gate `isAdmin` está no topo
-das TRÊS rotas. Já renderizado a 1440 e 390 a partir desta branch, com
-serviço de exemplo no scratchpad.
+O `/admin` agora tem o Bloco 6: lista de usuários com busca, situação de
+plano ou teste, operações no mês contra o teto, e as duas ações do piloto
+(estender teste, carimbar plano). Gestão de conta deixou de exigir o painel
+do PocketBase para o dia a dia.
 
 ### Fora isso, nada pende de colagem
 
@@ -314,8 +303,8 @@ Placar até aqui, e ele deve guiar a escolha do método:
 
 | método | entregas | falhas |
 | ------ | -------- | ------ |
-| arquivo inteiro colado | 22 | 2 |
-| instrução de busca e substituição | 27 | 1 |
+| arquivo inteiro colado | 26 | 2 |
+| instrução de busca e substituição | 28 | 1 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
