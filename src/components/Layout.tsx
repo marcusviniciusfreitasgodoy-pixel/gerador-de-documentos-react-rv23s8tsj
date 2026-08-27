@@ -54,7 +54,7 @@ function ConnectionMark({ className }: { className?: string }) {
 const NAV_ITEMS = [
   {
     to: '/',
-    label: 'Documentos',
+    label: 'Docs',
     icon: FileCheck,
     end: true,
     desc: 'Gerar contratos, termos e recibos da operação',
@@ -347,7 +347,7 @@ export default function Layout() {
               </span>
               {/* No celular a segunda linha sai: cada pixel do cabeçalho conta. */}
               <span className="hidden sm:inline font-mono text-[9px] tracking-[0.35em] uppercase text-[#C9A84C] mt-1">
-                Documentos
+                Docs
               </span>
             </span>
           </Link>
