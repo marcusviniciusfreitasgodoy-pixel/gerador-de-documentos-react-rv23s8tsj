@@ -322,14 +322,16 @@ caminho para subir binário no Skip por causa de ícone.
 Falta só a conferência no celular: remover o atalho antigo (o ícone fica em
 cache) e adicionar de novo.
 
-### Item do Painel no menu: PENDENTE, 1 arquivo
+### Item do Painel no menu: COMPLETO
 
 A rota `/admin` existia e era protegida, mas não estava no `NAV_ITEMS`: só se
-chegava nela digitando a URL. Estado-alvo na branch.
+chegava nela digitando a URL. Entrou por INSTRUÇÃO, porque o `Layout.tsx` é
+arquivo grande, e **voltou idêntico à branch no download de 27/08/2026** (700
+linhas), com o item no `NAV_ITEMS`:
 
-| #   | Arquivo                      | Como colar                        |
-| --- | ---------------------------- | --------------------------------- |
-| 1   | `src/components/Layout.tsx`  | por INSTRUÇÃO (arquivo grande)    |
+```
+to: '/admin', label: 'Painel', icon: Shield, adminOnly: true
+```
 
 O `Shield` já estava importado e sem uso (era um dos 18 avisos do oxlint):
 o ícone deste item, que ficou pelo caminho quando o menu foi escrito. Com ele
@@ -367,11 +369,7 @@ Conferências além do diff, todas na árvore baixada:
 sozinho e estourava a largura dos DOIS diálogos, cortando o título e o botão.
 Corrigido antes de entregar, com `break-all` e o e-mail fora do título.
 
-### Mensagens de erro em português: PENDENTE, 1 arquivo
-
-| #   | Arquivo                        | Como colar               |
-| --- | ------------------------------ | ------------------------ |
-| 1   | `src/lib/pocketbase/errors.ts` | inteiro (89 linhas, 3,7 KB)|
+### Mensagens de erro em português: COMPLETO
 
 Nasceu da queda passageira do backend em 27/08: com o gateway devolvendo HTML,
 o corretor lia `Unexpected token '<', "<html>"` na tela de login. E os textos
@@ -389,13 +387,36 @@ o `.ts`, o `tsx` resolve o pacote `pocketbase` por dois caminhos e o
 `instanceof ClientResponseError` falha, dando falso negativo em quase tudo.
 Escreva o teste como `.ts`.
 
+Conferido no download de 27/08/2026: o arquivo voltou **idêntico à branch**, 89
+linhas, e a varredura da árvore não achou mais nada mexido. Os **12 casos
+rodaram contra o arquivo que voltou do Skip** (não contra o meu; conferido com
+`cmp` antes de rodar) e passaram os 12: HTML do gateway, 502, 503, status 0,
+`TypeError` de rede, login errado, erro de campo, sessão expirada, mensagem
+nossa em português, cancelamento automático, 403 do nosso hook e objeto sem
+forma. **Zero vazias, zero em inglês, zero com lixo técnico**, e as mensagens
+dos nossos hooks passam intactas.
+
+A cilada que o teste pegou antes da entrega: eu tinha escrito `return ''` para
+o cancelamento automático, o que deixaria os 17 pontos de erro mostrando aviso
+em branco. Aviso vazio é pior do que frase errada, porque não dá nem o que
+fazer em seguida.
+
 ### Fora isso, nada pende de colagem
 
-O que segue aberto não depende do Skip: as três verificações que só o banco
-prova (carimbo de 15 dias em conta nova, aceite de convite ponta a ponta,
-contador subindo a 1 ao criar negócio), a escolha do provedor de pagamento, a
-arte do mockup, e reabrir os tetos de 10/30 quando o `negocios_no_mes` tiver
-duas ou três semanas de dado real.
+Nada pende de colagem. Duas das três verificações que só o banco prova
+fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
+dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
+depende do Skip:
+
+- o aceite de convite ponta a ponta, a verificação que ainda falta no banco;
+- medir no log o custo real de uma validação de minuta contra os tetos de
+  20/60, que é o último item antes de cobrar;
+- limpar da fila os 6 itens de teste antigos, agora com o botão de fechar;
+- convidar os primeiros corretores com 30 dias de teste;
+- a escolha do provedor de pagamento e a arte do mockup (o WebP ainda diz
+  "DOCUMENTOS");
+- reabrir os tetos de 10/30 quando o `negocios_no_mes` tiver duas ou três
+  semanas de dado real.
 
 ## Renderizar antes de entregar tela nova
 
@@ -412,14 +433,14 @@ Chromium por linha de comando trava numa SPA: use o Playwright.
 Página atrás de `ProtectedRoute` não renderiza sem sessão. Tire a rota da
 proteção **na cópia do scratchpad**, nunca na branch.
 
-## O paste inteiro falhou duas vezes; a instrução, nenhuma
+## Duas falhas do paste inteiro, uma da instrução
 
 Placar até aqui, e ele deve guiar a escolha do método:
 
 | método | entregas | falhas |
 | ------ | -------- | ------ |
-| arquivo inteiro colado | 32 | 2 |
-| instrução de busca e substituição | 28 | 1 |
+| arquivo inteiro colado | 33 | 2 |
+| instrução de busca e substituição | 29 | 1 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
