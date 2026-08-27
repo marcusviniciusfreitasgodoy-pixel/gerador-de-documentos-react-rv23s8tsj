@@ -16,6 +16,10 @@ export interface AdminOverview {
 export const getAdminOverview = (): Promise<AdminOverview> =>
   pb.send('/backend/v1/admin/overview', { method: 'GET' })
 
+// ── Usuários (gestão do piloto) ─────────────────────────────────────────────
+// Lista individual de `users` e as duas ações que antes exigiam abrir o
+// painel do PocketBase. Só admin passa (gate no hook admin_usuarios.js).
+
 export interface AdminUsuario {
   id: string
   email: string
@@ -34,10 +38,7 @@ export interface AdminUsuario {
 export const listAdminUsuarios = (): Promise<{ usuarios: AdminUsuario[] }> =>
   pb.send('/backend/v1/admin/usuarios', { method: 'GET' })
 
-export const estenderTeste = (
-  userId: string,
-  dias: number,
-): Promise<{ ok: boolean; trial_expira_em: string }> =>
+export const estenderTeste = (userId: string, dias: number): Promise<{ ok: boolean }> =>
   pb.send('/backend/v1/admin/usuarios/trial', {
     method: 'POST',
     body: { user_id: userId, dias },
@@ -45,9 +46,9 @@ export const estenderTeste = (
 
 export const carimbarPlano = (
   userId: string,
-  plano: string,
-  meses: number,
-): Promise<{ ok: boolean; plano: string; plano_renova_em?: string }> =>
+  plano: '' | 'corretor' | 'profissional' | 'imobiliaria',
+  meses: 1 | 12 = 1,
+): Promise<{ ok: boolean }> =>
   pb.send('/backend/v1/admin/usuarios/plano', {
     method: 'POST',
     body: { user_id: userId, plano, meses },
