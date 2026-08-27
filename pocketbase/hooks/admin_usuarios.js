@@ -169,3 +169,240 @@ routerAdd(
   },
   $apis.requireAuth(),
 )
+
+// ── Prévia da exclusão ───────────────────────────────────────────────────────
+// Diz o que seria apagado e se a exclusão pode acontecer. O painel chama isto
+// ANTES de mostrar a confirmação: excluir conta é irreversível e o admin
+// precisa ver o tamanho do estrago antes de digitar o e-mail.
+routerAdd(
+  'GET',
+  '/backend/v1/admin/usuarios/previa-exclusao',
+  (e) => {
+    var auth = e.auth
+    if (!auth || auth.getBool('isAdmin') !== true) {
+      return e.json(403, { error: 'Acesso restrito a administradores.' })
+    }
+
+    try {
+      var userId = String((e.requestInfo().query || {}).user_id || '')
+      if (!userId) return e.json(400, { error: 'user_id é obrigatório.' })
+
+      var conta = function (col, campo, id) {
+        try {
+          var row = new DynamicModel({ c: 0 })
+          $app
+            .db()
+            .newQuery('SELECT COUNT(*) as c FROM ' + col + ' WHERE ' + campo + ' = {:id}')
+            .bind({ id: id })
+            .one(row)
+          return row.c
+        } catch (err) {
+          return 0
+        }
+      }
+
+      var user = $app.findRecordById('users', userId)
+
+      // A trava. A imobiliária É um usuário neste projeto (não existe coleção
+      // `agencies`), então apagar a conta de uma casa com equipe vinculada
+      // deixaria os corretores órfãos. Antes de excluir, desvincule a equipe.
+      var ehImobiliaria = false
+      try {
+        var perfis = $app.findRecordsByFilter('broker_profile', 'user = {:id}', '', 1, 0, {
+          id: userId,
+        })
+        ehImobiliaria = perfis.length > 0 && perfis[0].getString('tipo_perfil') === 'imobiliaria'
+      } catch (perr) {
+        $app.logger().error('admin_usuarios: perfil nao lido na previa', 'error', String(perr))
+      }
+
+      var membros = conta('agency_members', 'agency', userId)
+      var convites = conta('agency_invites', 'agency', userId)
+      var bloqueio = ''
+      if (auth.id === userId) {
+        bloqueio = 'Você não pode excluir a própria conta.'
+      } else if (ehImobiliaria && (membros > 0 || convites > 0)) {
+        bloqueio =
+          'Esta conta é uma imobiliária com ' +
+          membros +
+          ' vínculo(s) e ' +
+          convites +
+          ' convite(s). Desvincule a equipe e cancele os convites antes de excluir.'
+      }
+
+      return e.json(200, {
+        email: user.email(),
+        pode_excluir: bloqueio === '',
+        bloqueio: bloqueio,
+        contagens: {
+          negocios: conta('negocios', 'owner', userId),
+          validacoes: conta('validation_logs', 'user', userId),
+          chamados: conta('chamados', 'user', userId),
+          suporte: conta('expert_support_requests', 'user', userId),
+          vinculos_como_membro: conta('agency_members', 'member', userId),
+        },
+      })
+    } catch (err) {
+      $app.logger().error('admin_usuarios: falha na previa de exclusao', 'error', String(err))
+      return e.json(500, { error: 'Não foi possível montar a prévia.' })
+    }
+  },
+  $apis.requireAuth(),
+)
+
+// ── Excluir conta ────────────────────────────────────────────────────────────
+// Apaga a conta e o que é DELA. Nunca toca no que é da agência.
+//
+// Esta separação é a lição da migração 1900000035, que foi neutralizada por
+// misturar as duas coisas: `negocios.agency`, `agency_members.agency`,
+// `agency_invites.agency` e `legal_knowledge.agency` apontam para o usuário
+// quando ele é uma imobiliária, e apagá-los destruiria os negócios dos
+// corretores da equipe, com CPF e RG de clientes reais. Aqui esses campos são
+// deixados intactos: ficam como referência pendurada, que é inofensiva, e a
+// trava da prévia impede o caso em que isso importaria.
+routerAdd(
+  'POST',
+  '/backend/v1/admin/usuarios/excluir',
+  (e) => {
+    var auth = e.auth
+    if (!auth || auth.getBool('isAdmin') !== true) {
+      return e.json(403, { error: 'Acesso restrito a administradores.' })
+    }
+
+    // Dentro do handler: o JSVM não enxerga escopo de módulo.
+    // A ORDEM IMPORTA: filhos antes dos pais.
+    var RELACOES_DO_USUARIO = [
+      ['rate_limits', 'user'],
+      ['access_logs', 'user'],
+      ['validation_audit', 'user_id'],
+      ['validation_logs', 'user'],
+      ['chamados', 'user'],
+      ['agency_members', 'member'],
+      ['agency_invites', 'member'],
+      ['broker_profile', 'user'],
+    ]
+    var TETO_LOTES = 40
+
+    try {
+      var body = e.requestInfo().body || {}
+      var userId = String(body.user_id || '')
+      var confirmacao = String(body.email_confirmacao || '')
+      if (!userId) return e.json(400, { error: 'user_id é obrigatório.' })
+
+      if (auth.id === userId) {
+        return e.json(400, { error: 'Você não pode excluir a própria conta.' })
+      }
+
+      var user = $app.findRecordById('users', userId)
+      if (user.email() !== confirmacao) {
+        return e.json(400, { error: 'O e-mail digitado não confere com o da conta.' })
+      }
+
+      // A trava da prévia é reconferida aqui: o painel pode estar desatualizado,
+      // e a checagem que vale é a do momento da escrita.
+      var ehImobiliaria = false
+      try {
+        var perfis = $app.findRecordsByFilter('broker_profile', 'user = {:id}', '', 1, 0, {
+          id: userId,
+        })
+        ehImobiliaria = perfis.length > 0 && perfis[0].getString('tipo_perfil') === 'imobiliaria'
+      } catch (perr) {
+        $app.logger().error('admin_usuarios: perfil nao lido na exclusao', 'error', String(perr))
+      }
+      if (ehImobiliaria) {
+        var vinc = $app.findRecordsByFilter('agency_members', 'agency = {:id}', '', 1, 0, {
+          id: userId,
+        })
+        var conv = $app.findRecordsByFilter('agency_invites', 'agency = {:id}', '', 1, 0, {
+          id: userId,
+        })
+        if (vinc.length > 0 || conv.length > 0) {
+          return e.json(400, {
+            error: 'Imobiliária com equipe ou convites. Desvincule antes de excluir.',
+          })
+        }
+      }
+
+      var apagarTudo = function (col, campo, id) {
+        for (var lote = 0; lote < TETO_LOTES; lote++) {
+          var regs = $app.findRecordsByFilter(col, campo + ' = {:id}', '', 200, 0, { id: id })
+          if (!regs || regs.length === 0) return
+          for (var i = 0; i < regs.length; i++) $app.delete(regs[i])
+        }
+      }
+
+      // Filhos que dependem dos negócios e dos pedidos de suporte, antes deles.
+      var negs = $app.findRecordsByFilter('negocios', 'owner = {:id}', '', 500, 0, { id: userId })
+      for (var n = 0; n < negs.length; n++) {
+        apagarTudo('access_logs', 'negocio', negs[n].id)
+      }
+      var reqs = $app.findRecordsByFilter('expert_support_requests', 'user = {:id}', '', 500, 0, {
+        id: userId,
+      })
+      for (var r = 0; r < reqs.length; r++) {
+        apagarTudo('expert_proposals', 'request', reqs[r].id)
+      }
+      for (var r2 = 0; r2 < reqs.length; r2++) $app.delete(reqs[r2])
+      for (var n2 = 0; n2 < negs.length; n2++) $app.delete(negs[n2])
+
+      for (var k = 0; k < RELACOES_DO_USUARIO.length; k++) {
+        apagarTudo(RELACOES_DO_USUARIO[k][0], RELACOES_DO_USUARIO[k][1], userId)
+      }
+
+      var emailApagado = user.email()
+      $app.delete(user)
+      $app
+        .logger()
+        .info(
+          'admin_usuarios: conta excluida',
+          'email',
+          emailApagado,
+          'por',
+          auth.email(),
+          'negocios',
+          negs.length,
+        )
+      return e.json(200, { ok: true, email: emailApagado, negocios_apagados: negs.length })
+    } catch (err) {
+      $app.logger().error('admin_usuarios: falha ao excluir conta', 'error', String(err))
+      return e.json(500, { error: 'Não foi possível excluir a conta.' })
+    }
+  },
+  $apis.requireAuth(),
+)
+
+// ── Tornar admin, ou tirar ───────────────────────────────────────────────────
+routerAdd(
+  'POST',
+  '/backend/v1/admin/usuarios/admin',
+  (e) => {
+    var auth = e.auth
+    if (!auth || auth.getBool('isAdmin') !== true) {
+      return e.json(403, { error: 'Acesso restrito a administradores.' })
+    }
+
+    try {
+      var body = e.requestInfo().body || {}
+      var userId = String(body.user_id || '')
+      var valor = body.is_admin === true
+      if (!userId) return e.json(400, { error: 'user_id é obrigatório.' })
+
+      // Sem isto, um admin se rebaixa sozinho e ninguém mais entra no painel.
+      if (auth.id === userId && valor === false) {
+        return e.json(400, { error: 'Você não pode remover o próprio acesso de admin.' })
+      }
+
+      var user = $app.findRecordById('users', userId)
+      user.set('isAdmin', valor)
+      $app.save(user)
+      $app
+        .logger()
+        .info('admin_usuarios: isAdmin alterado', 'email', user.email(), 'valor', String(valor))
+      return e.json(200, { ok: true, is_admin: valor })
+    } catch (err) {
+      $app.logger().error('admin_usuarios: falha ao alterar isAdmin', 'error', String(err))
+      return e.json(500, { error: 'Não foi possível alterar o acesso de admin.' })
+    }
+  },
+  $apis.requireAuth(),
+)
