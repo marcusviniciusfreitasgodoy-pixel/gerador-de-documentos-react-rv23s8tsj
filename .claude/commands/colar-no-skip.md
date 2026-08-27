@@ -371,7 +371,7 @@ Corrigido antes de entregar, com `break-all` e o e-mail fora do título.
 
 | #   | Arquivo                        | Como colar               |
 | --- | ------------------------------ | ------------------------ |
-| 1   | `src/lib/pocketbase/errors.ts` | inteiro (94 linhas, 3 KB)|
+| 1   | `src/lib/pocketbase/errors.ts` | inteiro (89 linhas, 3,7 KB)|
 
 Nasceu da queda passageira do backend em 27/08: com o gateway devolvendo HTML,
 o corretor lia `Unexpected token '<', "<html>"` na tela de login. E os textos
