@@ -191,13 +191,34 @@ embutido na landing é uma das imagens WebP e ainda mostra a interface antiga,
 com "DOCUMENTOS". Precisa de quem faz a arte. Está registrado em MELHORIAS.md
 § 9.
 
-### Não há bloco pendente de colagem
+### Âncora de preço (benchmark de honorários): PENDENTE, 3 edições
 
-O bloco A era o último. O que segue aberto não depende do Skip: as três
-verificações que só o banco prova (carimbo de 15 dias em conta nova, aceite de
-convite ponta a ponta, contador subindo a 1 ao criar negócio), a escolha do
-provedor de pagamento, a arte do mockup, e reabrir os tetos de 10/30 quando o
-`negocios_no_mes` tiver duas ou três semanas de dado real.
+Origem: o benchmark "O Honorário como Âncora" (27/08/2026), que comparou os
+planos com honorários de advogado imobiliário. A faixa usada é a mais
+conservadora da pesquisa e vai rotulada como "no mercado". OAB não entra em
+copy comercial: é piso referencial, não preço.
+
+**Todas por INSTRUÇÃO.** Âncoras conferidas como únicas na árvore do Skip de
+27/08/2026. O estado-alvo está no commit desta branch; depois de aplicar,
+baixar e diffar como sempre.
+
+| #   | Arquivo               | Edição                                            |
+| --- | --------------------- | ------------------------------------------------- |
+| 1   | `src/pages/Signup.tsx`| card 01: honorário ganha a faixa R$ 800 a 2.500   |
+| 2   | `src/pages/Planos.tsx`| nota do Individual: "menos que uma promessa avulsa" |
+| 3   | `src/pages/Planos.tsx`| bloco novo "A conta de referência" no cartão de baixo |
+
+Depois do (1), conferir os hashes WebP. As três telas já foram renderizadas a
+1440, 820 e 390 a partir desta branch: sem rolagem horizontal, preços em linha
+única, imagens ok.
+
+### Fora isso, nada pende de colagem
+
+O que segue aberto não depende do Skip: as três verificações que só o banco
+prova (carimbo de 15 dias em conta nova, aceite de convite ponta a ponta,
+contador subindo a 1 ao criar negócio), a escolha do provedor de pagamento, a
+arte do mockup, e reabrir os tetos de 10/30 quando o `negocios_no_mes` tiver
+duas ou três semanas de dado real.
 
 ## Renderizar antes de entregar tela nova
 
