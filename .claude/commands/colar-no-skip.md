@@ -34,7 +34,7 @@ não decida por ele. O diff é a única prova.
 
 Os 12 arquivos foram aplicados e conferidos byte a byte contra o download do
 Skip, e a árvore baixada compila (`tsc -b` 0 erros, `oxlint` 18 avisos, build
-passando). **A baseline passou a ser 17 em 27/08**, quando o `Shield` sem uso
+passando). **A baseline passou a ser 16 em 27/08**, quando o `Shield` sem uso
 virou o ícone do item de Painel no menu.
 
 ### Teste de 15 dias: COMPLETO
@@ -338,6 +338,35 @@ nas próximas conferências.
 
 Renderizado a 1440, 1024 e 390 com `isAdmin` forçado só na cópia do
 scratchpad: aparece na barra e no painel do celular, sem rolagem horizontal.
+
+### Ações do painel de admin: PENDENTE, 4 arquivos
+
+Excluir conta, reenviar confirmação, tornar admin e fechar item da fila. O
+painel era só leitura, e foi a falta da exclusão que levou ao incidente da
+migração `1900000035`.
+
+| #   | Arquivo                                 | Como colar                 |
+| --- | --------------------------------------- | -------------------------- |
+| 1   | `pocketbase/hooks/admin_usuarios.js`    | inteiro (16 KB, 476 linhas)|
+| 2   | `src/services/admin.ts`                 | inteiro (3 KB, 106 linhas) |
+| 3   | `src/components/admin/UsuariosBlock.tsx`| inteiro (22 KB, 570 linhas)|
+| 4   | `src/pages/Admin.tsx`                   | inteiro (27 KB, 700 linhas)|
+
+**O (4) é o de maior risco**: é grande e cheio de comentário, o mesmo perfil do
+`Index.tsx`, em que o agente apagou 48 linhas de comentário num paste inteiro.
+Exija a contagem de linhas no pedido, que foi o que destravou aquele caso. Não
+dá para ir por instrução: a fila foi reestruturada (o item virou `div` com
+`Link` dentro, para o botão de fechar não ficar aninhado em link) e isso
+reindenta ~80 linhas.
+
+**A baseline do oxlint cai para 16.** O `Loader2` do `Admin.tsx` também estava
+importado sem uso, e virou o spinner do botão de fechar. Junto com o `Shield`
+do `Layout.tsx`, são dois fósseis de funcionalidade planejada e não entregue
+que a leva resolveu.
+
+Depois de colar, conferir: 6 rotas e 6 gates `isAdmin` no hook, `node --check`,
+auditoria do JSVM, e os dois diálogos a 390 px (e-mail longo estourava a
+largura e cortava o botão; foi o render que pegou).
 
 ### Fora isso, nada pende de colagem
 
