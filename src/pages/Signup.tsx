@@ -79,11 +79,24 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   [data-mobile-only] { display: block; }
 }
 @media (min-width: 901px) { footer { padding-bottom: 0 !important; } }
+[data-menu-caixa], [data-menu-botao], [data-menu-mobile] { display: none; }
+@media (max-width: 900px) {
+  [data-menu-botao] { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: -8px; cursor: pointer; color: #F5F1E6; }
+  [data-menu-botao] svg { width: 22px; height: 22px; }
+  [data-menu-botao] [data-icone-x] { display: none; }
+  [data-menu-caixa]:checked ~ div [data-menu-botao] [data-icone-abrir] { display: none; }
+  [data-menu-caixa]:checked ~ div [data-menu-botao] [data-icone-x] { display: block; }
+  [data-menu-caixa]:checked ~ [data-menu-mobile] { display: flex; }
+  [data-menu-mobile] { flex-direction: column; padding: 6px clamp(20px,5vw,60px) 22px; border-top: 1px solid rgba(245,241,230,.10); background: #0E0E0E; }
+  [data-menu-mobile] a { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: rgba(232,224,204,.78); padding: 14px 0; border-bottom: 1px solid rgba(245,241,230,.06); }
+  [data-menu-mobile] a[data-menu-cta] { margin-top: 14px; display: inline-flex; align-items: center; justify-content: center; height: 48px; border-radius: 999px; background: #C9A84C; color: #0E0E0E; font-family: Manrope, sans-serif; font-size: 14px; font-weight: 600; letter-spacing: normal; text-transform: none; padding: 0; border-bottom: none; }
+}
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; } }`
 
 const DESIGN_HTML = `<div style="background:#F7F3EA">
 
   <header data-header style="position:sticky;top:0;z-index:50;background:#0E0E0E;border-bottom:1px solid rgba(245,241,230,.10);transition:height 220ms cubic-bezier(.22,.61,.36,1)">
+    <input type="checkbox" id="pc-menu" data-menu-caixa aria-hidden="true">
     <div data-header-inner style="max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,60px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:height 220ms cubic-bezier(.22,.61,.36,1)">
       <a href="#topo" style="display:flex;align-items:center;gap:11px;color:#F5F1E6;flex:none">
         <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:30px;height:30px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
@@ -100,7 +113,20 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <a href="/login" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Entrar</a>
         <a href="/signup" style="flex:none;display:inline-flex;align-items:center;height:40px;padding:0 22px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:13px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6">Criar conta grátis</a>
       </nav>
+      <label for="pc-menu" data-menu-botao aria-label="Abrir e fechar o menu">
+        <svg data-icone-abrir viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg data-icone-x viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
+      </label>
     </div>
+    <nav data-menu-mobile aria-label="Menu">
+      <a href="#preco">Preço</a>
+      <a href="#funciona">Como funciona</a>
+      <a href="#documentos">Documentos</a>
+      <a href="#validador">Validador</a>
+      <a href="/planos">Planos e valores</a>
+      <a href="/login">Entrar</a>
+      <a href="/signup" data-menu-cta>Criar conta grátis</a>
+    </nav>
   </header>
 
   <section id="topo" style="background:#0E0E0E;color:#F5F1E6;overflow:hidden">
@@ -794,6 +820,19 @@ export function Abertura() {
       botao.addEventListener('click', clique)
       limpar.push(() => botao.removeEventListener('click', clique))
     })
+
+    // Menu mobile: abrir e fechar e puro CSS (checkbox), para o menu existir
+    // mesmo com o script quebrado. O JS so fecha ao tocar num link; sem ele, o
+    // proprio X fecha.
+    const caixaMenu = no.querySelector<HTMLInputElement>('[data-menu-caixa]')
+    const painelMenu = no.querySelector<HTMLElement>('[data-menu-mobile]')
+    if (caixaMenu && painelMenu) {
+      const fecharMenu = () => {
+        caixaMenu.checked = false
+      }
+      painelMenu.addEventListener('click', fecharMenu)
+      limpar.push(() => painelMenu.removeEventListener('click', fecharMenu))
+    }
 
     // Cabecalho que condensa depois de 120 px de rolagem.
     const interno = no.querySelector<HTMLElement>('[data-header-inner]')
