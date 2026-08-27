@@ -897,6 +897,20 @@ onRecordAfterCreateSuccess((e) => {
     var novo = e.record
     var admins = $app.findRecordsByFilter('users', 'isAdmin = true', '', 10, 0)
     var meta = $app.settings().meta
+
+    // Link direto para a tela de resposta. Antes o e-mail mandava editar o
+    // registro no painel do PocketBase; o /admin do app existe desde 27/08/2026
+    // e responde com resposta, status e encerramento na mesma tela.
+    var baseUrl = ''
+    try {
+      baseUrl = String(meta.appURL || '')
+    } catch (_) {
+      baseUrl = ''
+    }
+    if (!baseUrl) baseUrl = 'https://www.documentos.primecircle.app.br'
+    baseUrl = baseUrl.replace(/\/+$/, '')
+    var linkChamado = baseUrl + '/chamados/' + chamado.id
+
     for (var i = 0; i < admins.length; i++) {
       var adminEmail = admins[i].email()
       if (!adminEmail) continue
@@ -1048,13 +1062,27 @@ onRecordAfterCreateSuccess((e) => {
     }
     var admins = $app.findRecordsByFilter('users', 'isAdmin = true', '', 10, 0)
     var meta = $app.settings().meta
+
+    // Link direto para a tela de resposta. Antes o e-mail mandava editar o
+    // registro no painel do PocketBase; o /admin do app existe desde 27/08/2026
+    // e responde com resposta, status e encerramento na mesma tela.
+    var baseUrl = ''
+    try {
+      baseUrl = String(meta.appURL || '')
+    } catch (_) {
+      baseUrl = ''
+    }
+    if (!baseUrl) baseUrl = 'https://www.documentos.primecircle.app.br'
+    baseUrl = baseUrl.replace(/\/+$/, '')
+    var linkChamado = baseUrl + '/chamados/' + chamado.id
+
     for (var i = 0; i < admins.length; i++) {
       var adminEmail = admins[i].email()
       if (!adminEmail) continue
       var msg = new MailerMessage({
         from: { address: meta.senderAddress, name: meta.senderName },
         to: [{ address: adminEmail }],
-        subject: 'Novo chamado no Gerador de Documentos: ' + chamado.getString('tipo'),
+        subject: 'Novo chamado no Prime Circle Docs: ' + chamado.getString('tipo'),
         html:
           '<p>Chegou um chamado novo na plataforma.</p>' +
           '<p><strong>Tipo:</strong> ' +
@@ -1065,7 +1093,10 @@ onRecordAfterCreateSuccess((e) => {
           '<p style="white-space:pre-wrap;border-left:3px solid #C9A84C;padding-left:12px;">' +
           chamado.getString('mensagem') +
           '</p>' +
-          '<p>Para responder: painel Skip Cloud, coleção chamados, campo resposta (e o status, se quiser). O corretor acompanha na página Ajuda e Suporte.</p>',
+          '<p><a href="' +
+          linkChamado +
+          '">Abrir o chamado para responder</a></p>' +
+          '<p style="font-size:12px;color:#8A8578;">A fila completa fica no Painel, no menu do Prime Circle Docs. O corretor acompanha a resposta na página Ajuda e Suporte.</p>',
       })
       $app.newMailClient().send(msg)
     }
