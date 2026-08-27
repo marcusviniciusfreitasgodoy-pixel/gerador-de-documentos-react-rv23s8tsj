@@ -401,9 +401,60 @@ o cancelamento automático, o que deixaria os 17 pontos de erro mostrando aviso
 em branco. Aviso vazio é pior do que frase errada, porque não dá nem o que
 fazer em seguida.
 
+### Avisos de pendência para o admin: PENDENTE, 4 arquivos
+
+Nasceu da pergunta "como eu sou avisado quando abre um chamado, e cobrado se
+eu não responder". A investigação achou um buraco maior do que o da pergunta.
+
+**O `expert_support_requests` não tinha hook de notificação nenhum.** O
+`chamados` avisava desde sempre (`extrair_dados.js`), o pedido de especialista
+não avisava ninguém: caía no banco em silêncio e só aparecia para quem abrisse
+o painel. É o pedido mais caro que a plataforma recebe.
+
+| #   | Arquivo                                          | Como colar               |
+| --- | ------------------------------------------------ | ------------------------ |
+| 1   | `pocketbase/migrations/1900000036_chamados_add_lembretes.js` | inteiro (65 linhas)   |
+| 2   | `pocketbase/hooks/chamados_aviso.js`             | inteiro (291 linhas)     |
+| 3   | `src/components/Layout.tsx`                      | por INSTRUÇÃO (794 linhas)|
+| 4   | `pocketbase/hooks/extrair_dados.js`              | por INSTRUÇÃO (1.207 linhas)|
+
+**A migração vai PRIMEIRO.** O hook escreve `lembretes`; sem o campo, a
+gravação não pega e o lembrete se repete todo dia.
+
+Três decisões que valem registro:
+
+**Lembrete escalonado, não resumo diário.** 24h e 72h, no máximo dois por
+pedido, e para. Duas razões: e-mail diário repetindo o mesmo número vira ruído
+(com um admin e volume baixo, dez manhãs iguais treinam a pessoa a arquivar sem
+ler), e resumo diário depende do cron ter rodado NAQUELE dia, que aqui não é
+garantia. O expurgo LGPD do `validar_minuta.js` já roda em dois lugares por
+isso mesmo. Com o contador no registro, um dia de cron perdido ATRASA o
+lembrete, não cancela.
+
+**Sem backfill do campo novo, de propósito.** A tentação era filtrar por
+`lembretes < 2`. Registro anterior à migração está vazio ali, e comparação com
+vazio no SQLite não devolve verdadeiro: o filtro esconderia justamente os
+pedidos antigos, calado. O hook não filtra pelo campo; lê com `getInt`, que
+devolve 0 para vazio.
+
+**O selo conta o MESMO que a fila.** As duas coleções, com os filtros do
+`/admin` (`status != 'resolvido'` e `status != 'completed'`). Contar só
+`status = 'aberto'`, que era o caminho óbvio, esconderia do selo o chamado que
+você começou a responder e deixou em andamento: ele continuaria no painel. A
+informação que engana é a que diz que não há nada esperando.
+
+**O render pegou o que o diff não pegaria, de novo.** O número na barra do
+desktop estourava 1024px por 12px no pior caso (conta admin que também é
+imobiliária, contador de três dígitos). Medido, não suposto. Solução: número a
+partir do `xl`, ponto absoluto abaixo disso, que não ocupa largura nenhuma.
+Conferido a 1024, 1180, 1280 e 1440: zero rolagem horizontal em todos.
+
+O e-mail de chamado ainda dizia "Gerador de Documentos" e mandava editar o
+registro no painel do PocketBase. Agora leva link direto para `/chamados/<id>`.
+
 ### Fora isso, nada pende de colagem
 
-Nada pende de colagem. Duas das três verificações que só o banco prova
+Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
