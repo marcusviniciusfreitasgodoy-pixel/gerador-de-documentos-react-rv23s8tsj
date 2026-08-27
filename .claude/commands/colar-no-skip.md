@@ -274,14 +274,15 @@ plano ou teste, operações no mês contra o teto, e as duas ações do piloto
 (estender teste, carimbar plano). Gestão de conta deixou de exigir o painel
 do PocketBase para o dia a dia.
 
-### Ícone da tela inicial: PENDENTE, 2 arquivos (recolar, versão SVG)
+### Ícone da tela inicial: COMPLETO (versão SVG)
 
-| #   | Arquivo                       | Como colar             |
-| --- | ----------------------------- | ---------------------- |
-| 1   | `public/manifest.webmanifest` | inteiro (2,0 KB)       |
-| 2   | `index.html`                  | inteiro (5,9 KB)       |
-
-A versão que está no Skip agora está **corrompida** e precisa ser substituída.
+Os 2 arquivos (`public/manifest.webmanifest` e `index.html`) vieram idênticos
+à branch no download de 27/08/2026. Verificação além do diff, porque aqui o
+diff sozinho não bastaria: os dois SVG foram desencodados e conferidos
+elemento a elemento (1 rect e 3 circles em cada), o `Page.getAppManifest` do
+Chrome leu o manifesto com ZERO erros, e cada ícone foi **rasterizado num
+canvas** para provar que renderiza de verdade (504 e 456 cores distintas, não
+um quadrado vazio). Build passando, manifesto copiado para `dist/`.
 
 ## LIÇÃO CARA: base64 longa NÃO sobrevive ao paste
 
@@ -310,7 +311,7 @@ O `apple-touch-icon` do iOS ficou de fora por isso: iOS não renderiza SVG nesse
 slot e base64 não chega inteira. O alvo relatado era Android, onde a letra "P"
 é o fallback do Chrome, e esse fica resolvido.
 
-Depois de colar, conferir no celular: remover o atalho antigo (o ícone fica em
+Falta só a conferência no celular: remover o atalho antigo (o ícone fica em
 cache) e adicionar de novo.
 
 ### Fora isso, nada pende de colagem
