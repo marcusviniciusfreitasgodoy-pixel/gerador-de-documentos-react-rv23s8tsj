@@ -242,7 +242,7 @@ export default function PlanosPage() {
           >
             {p.destaque && (
               <Badge className="absolute -top-2.5 left-4">
-                <Sparkles className="mr-1 h-3 w-3" /> Mais escolhido
+                <Sparkles className="mr-1 h-3 w-3" /> Recomendado
               </Badge>
             )}
             <CardContent className="pt-5 pb-5 flex h-full flex-col gap-3.5">
