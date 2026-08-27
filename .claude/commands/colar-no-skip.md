@@ -222,6 +222,22 @@ painel, JS de fechamento) vieram byte a byte idênticas à branch no download de
 funciona mesmo com o script quebrado, e o JS só fecha ao tocar num link.
 Renderizado a 390, 820 e 1440 antes de colar.
 
+### Selo "Recomendado" e a régua da família: COMPLETO
+
+O selo do Profissional trocou de "Mais escolhido" para "Recomendado" (sem
+assinante, a afirmação não se sustentava), conferido byte a byte no download
+de 27/08/2026. No mesmo dia foi decidida a régua da família com a plataforma
+completa (inicio.primecircle.app.br): o Docs NÃO sobe de preço; assinante da
+completa leva o Docs incluso (Start e Pro) ou pela metade (Essencial), por
+carimbo manual do admin. A régua está registrada na seção 02c da proposta de
+preço ("Lançar o Prime Circle Docs"), e os ajustes da landing da completa
+estão na branch claude/inclusao-docs do repositório prime-circle-lp, com o
+documento de handoff para a equipe de lá.
+
+Quando a completa lançar, o Docs ganha uma FAQ curta mencionando a inclusão
+("assinante Prime Circle tem o Docs incluso"). Não colar antes do lançamento
+dela: mencionar plataforma que não existe confunde o visitante.
+
 ### Fora isso, nada pende de colagem
 
 O que segue aberto não depende do Skip: as três verificações que só o banco
@@ -252,7 +268,7 @@ Placar até aqui, e ele deve guiar a escolha do método:
 | método | entregas | falhas |
 | ------ | -------- | ------ |
 | arquivo inteiro colado | 22 | 2 |
-| instrução de busca e substituição | 26 | 1 |
+| instrução de busca e substituição | 27 | 1 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
