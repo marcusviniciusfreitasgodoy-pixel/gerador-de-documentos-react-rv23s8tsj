@@ -191,26 +191,14 @@ embutido na landing é uma das imagens WebP e ainda mostra a interface antiga,
 com "DOCUMENTOS". Precisa de quem faz a arte. Está registrado em MELHORIAS.md
 § 9.
 
-### Âncora de preço (benchmark de honorários): PENDENTE, 3 edições
+### Âncora de preço (benchmark de honorários): COMPLETA
 
-Origem: o benchmark "O Honorário como Âncora" (27/08/2026), que comparou os
-planos com honorários de advogado imobiliário. A faixa usada é a mais
-conservadora da pesquisa e vai rotulada como "no mercado". OAB não entra em
-copy comercial: é piso referencial, não preço.
-
-**Todas por INSTRUÇÃO.** Âncoras conferidas como únicas na árvore do Skip de
-27/08/2026. O estado-alvo está no commit desta branch; depois de aplicar,
-baixar e diffar como sempre.
-
-| #   | Arquivo               | Edição                                            |
-| --- | --------------------- | ------------------------------------------------- |
-| 1   | `src/pages/Signup.tsx`| card 01: honorário ganha a faixa R$ 800 a 2.500   |
-| 2   | `src/pages/Planos.tsx`| nota do Individual: "menos que uma promessa avulsa" |
-| 3   | `src/pages/Planos.tsx`| bloco novo "A conta de referência" no cartão de baixo |
-
-Depois do (1), conferir os hashes WebP. As três telas já foram renderizadas a
-1440, 820 e 390 a partir desta branch: sem rolagem horizontal, preços em linha
-única, imagens ok.
+As 3 edições (card 01 do `Signup.tsx`, nota do Individual e bloco "A conta de
+referência" no `Planos.tsx`) foram aplicadas por instrução e conferidas byte a
+byte contra o download de 27/08/2026. Hashes WebP íntegros. A faixa em copy é
+a mais conservadora do benchmark "O Honorário como Âncora" (R$ 800 a R$ 2.500),
+rotulada como "no mercado"; OAB não aparece em copy comercial de propósito, e
+"substitui o advogado" continua proibido em qualquer variação.
 
 ### Fora isso, nada pende de colagem
 
@@ -304,8 +292,10 @@ quebra o build e aparece alto. Nos hooks de backend, confira um a um: lá a falh
 ## Diferenças que o diff deve ignorar
 
 `package.json` (versão), `.skip.config.json` (refs de build),
-`src/lib/pocketbase/schema.json` (dump do banco), e `docs/SPEC-IMOBILIARIAS-F1.md`
-e `F2.md`, que o formatador do Skip realinhou (`*itálico*` virou `_itálico_`).
+`src/lib/pocketbase/schema.json` (dump do banco), `docs/SPEC-IMOBILIARIAS-F1.md`
+e `F2.md`, que o formatador do Skip realinhou (`*itálico*` virou `_itálico_`),
+e `.gitignore`: o commit `faedf64` tirou os `.tsbuildinfo` do versionamento só
+no repositório, higiene de git que não existe no Skip e não precisa ir para lá.
 
 ## Se algo divergir
 
