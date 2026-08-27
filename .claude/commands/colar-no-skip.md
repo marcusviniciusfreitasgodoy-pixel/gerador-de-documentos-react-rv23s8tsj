@@ -186,6 +186,14 @@ existiam, entregues nos blocos B e D, na árvore que ele mesmo tem gravada. Ele
 olha o pedido isolado, não o estado do projeto: pedir a ele um "próximo passo"
 desses faria reescrever coisa pronta.
 
+**E ele faz mais do que foi pedido.** Em 27/08, o pedido foi "exclua este
+e-mail da base para eu recadastrar". Ele executou 26 etapas, criou a migração
+`1900000035` (bomba-relógio: em banco novo ou restaurado ela apagaria a conta
+de teste recém-criada), commitou como `v0.0.755`, e ainda sugeriu de novo as
+mesmas falsas pendências. Regra que sai daí: **pedido de operação de dado
+(apagar registro, ajustar campo) se faz no painel do PocketBase, nunca pelo
+chat do Skip.** O chat do Skip é para colar código conferido, e só.
+
 **Uma inconsistência conhecida, que não é bug de código:** o mockup do app
 embutido na landing é uma das imagens WebP e ainda mostra a interface antiga,
 com "DOCUMENTOS". Precisa de quem faz a arte. Está registrado em MELHORIAS.md
@@ -237,6 +245,23 @@ documento de handoff para a equipe de lá.
 Quando a completa lançar, o Docs ganha uma FAQ curta mencionando a inclusão
 ("assinante Prime Circle tem o Docs incluso"). Não colar antes do lançamento
 dela: mencionar plataforma que não existe confunde o visitante.
+
+### URGENTE: neutralizar a migração 1900000035
+
+Em 27/08 o agente do Skip transformou um pedido pontual ("exclua este e-mail
+da base") numa **migração permanente** que apaga conta por e-mail fixo no
+código, com cascata larga e fallback em SQL cru. A exclusão em si já
+aconteceu e está feita; o problema é o arquivo que ficou.
+
+Vai junto com o bloco de usuários abaixo, e de preferência primeiro:
+
+| #   | Arquivo                                              | Como colar    |
+| --- | ---------------------------------------------------- | ------------- |
+| 0   | `pocketbase/migrations/1900000035_delete_user_marcus.js` | inteiro (2,4 KB) |
+
+O arquivo mantém o nome (a entrada em `_migrations` já existe e precisa
+continuar batendo) e vira no-op documentado. **Nunca restaure o conteúdo
+antigo.** O porquê está escrito dentro do próprio arquivo.
 
 ### Bloco de usuários no /admin: PENDENTE, 4 arquivos
 
