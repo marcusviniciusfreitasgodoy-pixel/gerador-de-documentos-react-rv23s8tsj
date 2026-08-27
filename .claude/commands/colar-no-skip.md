@@ -200,21 +200,30 @@ a mais conservadora do benchmark "O Honorário como Âncora" (R$ 800 a R$ 2.500)
 rotulada como "no mercado"; OAB não aparece em copy comercial de propósito, e
 "substitui o advogado" continua proibido em qualquer variação.
 
-### Planos públicos (a tabela de preços no site): PENDENTE, 3 edições
+### Planos públicos (a tabela de preços no site): COMPLETO
 
-O dono do projeto notou que o site não mostra preço: a `/planos` estava atrás
-do `ProtectedRoute` e a landing só vende o teste. Três edições, **todas por
-INSTRUÇÃO**, estado-alvo no commit `1dc14c2` desta branch:
+As 3 edições (rota pública no `App.tsx`, caminho de visitante no `Planos.tsx`,
+link no § 06 do `Signup.tsx`) foram conferidas byte a byte contra o download
+de 27/08/2026, hashes WebP íntegros.
 
-| #   | Arquivo               | Edição                                              |
-| --- | --------------------- | --------------------------------------------------- |
-| 1   | `src/App.tsx`         | rota `/planos` sai do ProtectedRoute, fica pública  |
-| 2   | `src/pages/Planos.tsx`| visitante: sem banner de conta, botão vai a /signup |
-| 3   | `src/pages/Signup.tsx`| § 06 ganha o link "Ver os planos e valores"         |
+**Primeira falha do método por instrução, e a lição.** Na inserção do link, o
+agente do Skip deixou uma vírgula sobrando depois do `</a>` da âncora, dentro
+de HTML visível: renderizava como vírgula solta na tela. Mesma família do caso
+`mr-2 h-4 w-4`: corrupção muda para contagem de linha, só o diff pega. O
+conserto foi uma substituição de linha única, aplicado e conferido. Instrução
+que insere bloco perto de uma âncora merece atenção redobrada no diff do
+caractere vizinho à âncora.
 
-Depois do (3), conferir os hashes WebP. As telas já foram renderizadas a
-partir desta branch: `/planos` sem sessão mostra os quatro preços, sem o
-banner "sua conta está liberada", e o clique de visitante navega ao cadastro.
+### Menu mobile da landing: PENDENTE, 4 edições em 1 arquivo
+
+Abaixo de 900 px a media query esconde `[data-nav-links]` e não põe nada no
+lugar: celular fica sem menu. O commit `c750db8` desta branch acrescenta um
+hambúrguer de CSS puro (checkbox), com painel de 7 itens e fechamento por JS
+progressivo. Tudo em `src/pages/Signup.tsx`, **por instrução**, 4 inserções:
+o bloco de CSS antes da regra de `prefers-reduced-motion`, o checkbox antes do
+`data-header-inner`, o label + painel no fim do header, e o trecho de JS antes
+do bloco "Cabecalho que condensa". Depois de aplicar, conferir os hashes WebP;
+já renderizado a 390, 820 e 1440 a partir desta branch.
 
 ### Fora isso, nada pende de colagem
 
@@ -246,7 +255,7 @@ Placar até aqui, e ele deve guiar a escolha do método:
 | método | entregas | falhas |
 | ------ | -------- | ------ |
 | arquivo inteiro colado | 22 | 2 |
-| instrução de busca e substituição | 15 | 0 |
+| instrução de busca e substituição | 22 | 1 |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
