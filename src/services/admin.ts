@@ -15,3 +15,40 @@ export interface AdminOverview {
 
 export const getAdminOverview = (): Promise<AdminOverview> =>
   pb.send('/backend/v1/admin/overview', { method: 'GET' })
+
+export interface AdminUsuario {
+  id: string
+  email: string
+  name: string
+  verified: boolean
+  isAdmin: boolean
+  created: string
+  trial_expira_em: string
+  plano: string
+  plano_renova_em: string
+  negocios_no_mes: number
+  contador_mes: string
+  plano_limite_negocios: number
+}
+
+export const listAdminUsuarios = (): Promise<{ usuarios: AdminUsuario[] }> =>
+  pb.send('/backend/v1/admin/usuarios', { method: 'GET' })
+
+export const estenderTeste = (
+  userId: string,
+  dias: number,
+): Promise<{ ok: boolean; trial_expira_em: string }> =>
+  pb.send('/backend/v1/admin/usuarios/trial', {
+    method: 'POST',
+    body: { user_id: userId, dias },
+  })
+
+export const carimbarPlano = (
+  userId: string,
+  plano: string,
+  meses: number,
+): Promise<{ ok: boolean; plano: string; plano_renova_em?: string }> =>
+  pb.send('/backend/v1/admin/usuarios/plano', {
+    method: 'POST',
+    body: { user_id: userId, plano, meses },
+  })
