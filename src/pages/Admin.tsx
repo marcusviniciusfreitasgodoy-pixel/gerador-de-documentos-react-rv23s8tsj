@@ -18,6 +18,7 @@ import {
   UserPlus,
   AlertCircle,
   RefreshCw,
+  CheckCircle2,
 } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -269,6 +270,30 @@ export default function AdminPage() {
     }
   }, [])
 
+  // Fechar item da fila. As duas coleções usam palavras diferentes para o mesmo
+  // estado final: `chamados` fecha em 'resolvido' e `expert_support_requests`
+  // em 'completed'. É o que o `carregarFila` filtra, então o item some da fila
+  // no próximo carregamento. O admin já tem update nas duas por regra de
+  // coleção, então isto não precisa de hook.
+  const [fechando, setFechando] = useState<string | null>(null)
+
+  const fecharItem = async (item: ItemFila) => {
+    setFechando(item.id)
+    try {
+      if (item.tipo === 'chamado') {
+        await pb.collection('chamados').update(item.id, { status: 'resolvido' })
+      } else {
+        await pb.collection('expert_support_requests').update(item.id, { status: 'completed' })
+      }
+      toast.success('Item fechado e tirado da fila.')
+      await carregarFilaCB()
+    } catch (error) {
+      toast.error('Não foi possível fechar o item.', { description: getErrorMessage(error) })
+    } finally {
+      setFechando(null)
+    }
+  }
+
   const carregarFilaCB = useCallback(async () => {
     setFilaLoading(true)
     setFilaErro(null)
@@ -363,55 +388,74 @@ export default function AdminPage() {
                     const href =
                       item.tipo === 'suporte' ? `/especialista/${item.id}` : `/chamados/${item.id}`
                     return (
-                      <Link
+                      <div
                         key={`${item.tipo}-${item.id}`}
-                        to={href}
-                        className="flex items-start gap-3 rounded-lg border border-border/60 p-3 transition-colors hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="flex items-start gap-3 rounded-lg border border-border/60 p-3 transition-colors hover:bg-secondary/40"
                       >
-                        <div
-                          className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
-                            item.tipo === 'suporte'
-                              ? 'bg-indigo-500/10 text-indigo-600'
-                              : 'bg-amber-500/10 text-amber-600'
-                          }`}
+                        <Link
+                          to={href}
+                          className="flex min-w-0 flex-1 items-start gap-3 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                         >
-                          {item.tipo === 'suporte' ? (
-                            <AlertCircle className="h-4 w-4" />
-                          ) : (
-                            <Inbox className="h-4 w-4" />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <Badge
-                              variant="outline"
-                              className={`h-5 px-1.5 text-[10px] font-medium ${
-                                item.tipo === 'suporte'
-                                  ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
-                                  : 'border-amber-200 bg-amber-50 text-amber-700'
-                              }`}
-                            >
-                              {item.tipo === 'suporte' ? 'Suporte' : 'Chamado'}
-                            </Badge>
-                            <span className="text-xs text-muted-foreground">
-                              {tempoRelativo(item.created)}
-                            </span>
+                          <div
+                            className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${
+                              item.tipo === 'suporte'
+                                ? 'bg-indigo-500/10 text-indigo-600'
+                                : 'bg-amber-500/10 text-amber-600'
+                            }`}
+                          >
+                            {item.tipo === 'suporte' ? (
+                              <AlertCircle className="h-4 w-4" />
+                            ) : (
+                              <Inbox className="h-4 w-4" />
+                            )}
                           </div>
-                          <p className="mt-1 text-sm font-medium text-foreground truncate">
-                            {item.titulo}
-                          </p>
-                          {item.subtitulo && (
-                            <p className="text-xs text-muted-foreground line-clamp-1">
-                              {item.subtitulo}
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <Badge
+                                variant="outline"
+                                className={`h-5 px-1.5 text-[10px] font-medium ${
+                                  item.tipo === 'suporte'
+                                    ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
+                                    : 'border-amber-200 bg-amber-50 text-amber-700'
+                                }`}
+                              >
+                                {item.tipo === 'suporte' ? 'Suporte' : 'Chamado'}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">
+                                {tempoRelativo(item.created)}
+                              </span>
+                            </div>
+                            <p className="mt-1 text-sm font-medium text-foreground truncate">
+                              {item.titulo}
                             </p>
+                            {item.subtitulo && (
+                              <p className="text-xs text-muted-foreground line-clamp-1">
+                                {item.subtitulo}
+                              </p>
+                            )}
+                            <p className="mt-1 text-xs text-muted-foreground">
+                              {item.userName}
+                              {item.userCreci ? ` · CRECI ${item.userCreci}` : ''}
+                            </p>
+                          </div>
+                          <ArrowRight className="h-4 w-4 text-muted-foreground/50 shrink-0 mt-1" />
+                        </Link>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 shrink-0 p-0 text-muted-foreground hover:text-emerald-600"
+                          disabled={fechando === item.id}
+                          onClick={() => fecharItem(item)}
+                          title="Marcar como atendido e tirar da fila"
+                          aria-label="Fechar item da fila"
+                        >
+                          {fechando === item.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <CheckCircle2 className="h-4 w-4" />
                           )}
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {item.userName}
-                            {item.userCreci ? ` · CRECI ${item.userCreci}` : ''}
-                          </p>
-                        </div>
-                        <ArrowRight className="h-4 w-4 text-muted-foreground/50 shrink-0 mt-1" />
-                      </Link>
+                        </Button>
+                      </div>
                     )
                   })}
                 </div>

@@ -53,3 +53,42 @@ export const carimbarPlano = (
     method: 'POST',
     body: { user_id: userId, plano, meses },
   })
+
+export interface PreviaExclusao {
+  email: string
+  pode_excluir: boolean
+  bloqueio: string
+  contagens: {
+    negocios: number
+    validacoes: number
+    chamados: number
+    suporte: number
+    vinculos_como_membro: number
+  }
+}
+
+export const previaExclusao = (userId: string): Promise<PreviaExclusao> =>
+  pb.send(`/backend/v1/admin/usuarios/previa-exclusao?user_id=${encodeURIComponent(userId)}`, {
+    method: 'GET',
+  })
+
+export const excluirUsuario = (
+  userId: string,
+  emailConfirmacao: string,
+): Promise<{ ok: boolean; email: string; negocios_apagados: number }> =>
+  pb.send('/backend/v1/admin/usuarios/excluir', {
+    method: 'POST',
+    body: { user_id: userId, email_confirmacao: emailConfirmacao },
+  })
+
+export const definirAdmin = (userId: string, isAdmin: boolean): Promise<{ ok: boolean }> =>
+  pb.send('/backend/v1/admin/usuarios/admin', {
+    method: 'POST',
+    body: { user_id: userId, is_admin: isAdmin },
+  })
+
+// Reenvio da confirmação de e-mail. Não passa por hook: `requestVerification` é
+// endpoint público do PocketBase, e é o mesmo caminho que o app já usa quando o
+// próprio usuário pede o reenvio (ver ProtectedRoute e use-auth).
+export const reenviarConfirmacao = (email: string): Promise<boolean> =>
+  pb.collection('users').requestVerification(email)
