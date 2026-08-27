@@ -36,6 +36,7 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/planos" element={<PlanosPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/" element={<Index />} />
               <Route path="/legal-knowledge" element={<LegalKnowledgePage />} />
@@ -44,7 +45,6 @@ const App = () => (
               <Route path="/especialista/nova" element={<ExpertSupportNewPage />} />
               <Route path="/especialista/:id" element={<ExpertSupportDetailPage />} />
               <Route path="/ajuda" element={<AjudaSuportePage />} />
-              <Route path="/planos" element={<PlanosPage />} />
               <Route path="/perfil" element={<MyProfilePage />} />
               <Route path="/proposta-reserva" element={<PropostaReservaPage />} />
               <Route path="/distrato" element={<DistratoPage />} />

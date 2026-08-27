@@ -531,7 +531,8 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <p style="margin:24px 0 0;max-width:520px;font-size:16px;line-height:1.78;color:rgba(232,224,204,.78)">A plataforma inteira liberada por 15 dias, sem cartão de crédito e sem limite de documentos. Terminado o teste, gerar documento e validar minuta pausam, e os seus negócios continuam acessíveis: nada do que você cadastrou fica preso aqui. Como não pedimos cartão, nada é cobrado sem que você peça.</p>
         <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:32px">
           <a href="/signup" style="display:inline-flex;align-items:center;height:52px;padding:0 32px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta grátis</a>
-          <a href="#perguntas" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ler as perguntas frequentes</a>
+          <a href="#perguntas" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ler as perguntas frequentes</a>,
+          <a href="/planos" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ver os planos e valores</a>
         </div>
       </div>
       <div data-anim style="display:grid;gap:0">
