@@ -307,9 +307,16 @@ agente, porque o `preventAI` bloqueia `png`, `svg` e `ico`.
 **E se colar base64 assim mesmo:** decodifique o payload e force o carregamento
 completo da imagem. Comprimento e cabeçalho não provam nada.
 
-O `apple-touch-icon` do iOS ficou de fora por isso: iOS não renderiza SVG nesse
-slot e base64 não chega inteira. O alvo relatado era Android, onde a letra "P"
-é o fallback do Chrome, e esse fica resolvido.
+**O iOS também funciona, e isso corrige uma afirmação anterior deste arquivo.**
+Ficou registrado aqui que o iPhone não teria ícone, porque o iOS não renderiza
+SVG no slot `apple-touch-icon` e base64 não chega inteira pelo paste. A
+primeira metade é verdade; a conclusão era errada. Sem `apple-touch-icon`, o
+iOS recente cai nos ícones do **manifesto**, e ali o SVG serve. Verificado no
+aparelho em 27/08/2026: o ícone aparece no iPhone.
+
+Consequência prática: **não há pendência de PNG real em `public/`.** Android e
+iOS ficam resolvidos pelo mesmo manifesto SVG, e ninguém precisa caçar um
+caminho para subir binário no Skip por causa de ícone.
 
 Falta só a conferência no celular: remover o atalho antigo (o ícone fica em
 cache) e adicionar de novo.
