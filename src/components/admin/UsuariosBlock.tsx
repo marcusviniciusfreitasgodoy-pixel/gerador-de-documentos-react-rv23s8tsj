@@ -1,5 +1,17 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Users, Search, RefreshCw, Loader2, Clock, BadgeCheck, MailWarning } from 'lucide-react'
+import {
+  Users,
+  Search,
+  RefreshCw,
+  Loader2,
+  Clock,
+  BadgeCheck,
+  MailWarning,
+  Send,
+  ShieldCheck,
+  Trash2,
+  AlertTriangle,
+} from 'lucide-react'
 import { toast } from 'sonner'
 
 import { useAuth } from '@/hooks/use-auth'
@@ -21,7 +33,12 @@ import {
   listAdminUsuarios,
   estenderTeste,
   carimbarPlano,
+  previaExclusao,
+  excluirUsuario,
+  definirAdmin,
+  reenviarConfirmacao,
   type AdminUsuario,
+  type PreviaExclusao,
 } from '@/services/admin'
 import { getErrorMessage } from '@/lib/pocketbase/errors'
 
@@ -81,6 +98,13 @@ function UsuariosAdmin() {
   const [alvo, setAlvo] = useState<AdminUsuario | null>(null)
   const [salvando, setSalvando] = useState(false)
 
+  // Exclusão vive num segundo diálogo, de propósito: é irreversível, e o admin
+  // vê o que será apagado antes de digitar o e-mail para confirmar.
+  const [excluindo, setExcluindo] = useState<AdminUsuario | null>(null)
+  const [previa, setPrevia] = useState<PreviaExclusao | null>(null)
+  const [previaCarregando, setPreviaCarregando] = useState(false)
+  const [digitado, setDigitado] = useState('')
+
   const carregar = useCallback(async () => {
     setLoading(true)
     setErro(null)
@@ -107,6 +131,41 @@ function UsuariosAdmin() {
       (u) => u.email.toLowerCase().includes(q) || u.name.toLowerCase().includes(q),
     )
   }, [usuarios, busca])
+
+  const abrirExclusao = async (u: AdminUsuario) => {
+    setExcluindo(u)
+    setPrevia(null)
+    setDigitado('')
+    setPreviaCarregando(true)
+    try {
+      setPrevia(await previaExclusao(u.id))
+    } catch (error) {
+      toast.error('Não foi possível carregar a prévia.', { description: getErrorMessage(error) })
+      setExcluindo(null)
+    } finally {
+      setPreviaCarregando(false)
+    }
+  }
+
+  const confirmarExclusao = async () => {
+    if (!excluindo) return
+    setSalvando(true)
+    try {
+      const r = await excluirUsuario(excluindo.id, digitado.trim())
+      toast.success(`Conta ${r.email} excluída.`, {
+        description: r.negocios_apagados
+          ? `${r.negocios_apagados} negócio(s) apagado(s) junto.`
+          : undefined,
+      })
+      setExcluindo(null)
+      setAlvo(null)
+      await carregar()
+    } catch (error) {
+      toast.error('A exclusão não foi concluída.', { description: getErrorMessage(error) })
+    } finally {
+      setSalvando(false)
+    }
+  }
 
   const agir = async (fn: () => Promise<unknown>, sucesso: string) => {
     setSalvando(true)
@@ -250,7 +309,9 @@ function UsuariosAdmin() {
       <Dialog open={!!alvo} onOpenChange={(aberto) => !aberto && !salvando && setAlvo(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{alvo?.email}</DialogTitle>
+            {/* break-all pelo mesmo motivo do diálogo de exclusão: e-mail
+                longo não quebra sozinho e estoura a largura da caixa. */}
+            <DialogTitle className="break-all text-base">{alvo?.email}</DialogTitle>
             <DialogDescription>
               {alvo && situacao(alvo).rotulo}
               {alvo?.plano && alvo.plano_renova_em
@@ -352,10 +413,159 @@ function UsuariosAdmin() {
             </div>
           )}
 
+          {alvo && (
+            <div className="space-y-5 border-t border-border pt-4">
+              <div className="space-y-2">
+                <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Acesso e suporte
+                </Label>
+                <div className="flex flex-wrap gap-2">
+                  {!alvo.verified && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      disabled={salvando}
+                      onClick={() =>
+                        agir(
+                          () => reenviarConfirmacao(alvo.email),
+                          'E-mail de confirmação reenviado.',
+                        )
+                      }
+                    >
+                      <Send className="mr-1.5 h-3.5 w-3.5" />
+                      Reenviar confirmação
+                    </Button>
+                  )}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    disabled={salvando}
+                    onClick={() =>
+                      agir(
+                        () => definirAdmin(alvo.id, !alvo.isAdmin),
+                        alvo.isAdmin ? 'Acesso de admin removido.' : 'Agora é admin.',
+                      )
+                    }
+                  >
+                    <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
+                    {alvo.isAdmin ? 'Remover admin' : 'Tornar admin'}
+                  </Button>
+                </div>
+                {alvo.verified && (
+                  <p className="text-xs text-muted-foreground">
+                    O e-mail já foi confirmado, então não há o que reenviar.
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-xs uppercase tracking-wide text-muted-foreground">
+                  Excluir conta
+                </Label>
+                <p className="text-xs text-muted-foreground">
+                  Apaga a conta e os dados dela, inclusive os negócios. Não tem volta.
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-xs text-destructive hover:text-destructive"
+                  disabled={salvando}
+                  onClick={() => abrirExclusao(alvo)}
+                >
+                  <Trash2 className="mr-1.5 h-3.5 w-3.5" />
+                  Excluir esta conta
+                </Button>
+              </div>
+            </div>
+          )}
+
           <DialogFooter>
             {salvando && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
             <Button variant="outline" disabled={salvando} onClick={() => setAlvo(null)}>
               Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog
+        open={!!excluindo}
+        onOpenChange={(aberto) => !aberto && !salvando && setExcluindo(null)}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 shrink-0 text-destructive" />
+              Excluir conta
+            </DialogTitle>
+            {/* O e-mail vai aqui, e não no título: endereço longo não quebra
+                sozinho e empurrava a largura do diálogo, cortando o botão. */}
+            <DialogDescription className="break-all">{excluindo?.email}</DialogDescription>
+            <p className="text-sm text-muted-foreground">
+              A conta e os dados dela são apagados. Não tem volta.
+            </p>
+          </DialogHeader>
+
+          {previaCarregando ? (
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+            </div>
+          ) : previa ? (
+            <div className="space-y-4">
+              <div className="rounded-md border border-border bg-muted/40 p-3">
+                <p className="text-xs font-medium text-foreground">O que vai junto</p>
+                <ul className="mt-1.5 space-y-0.5 text-xs text-muted-foreground tabular-nums">
+                  <li>{previa.contagens.negocios} negócio(s), com as partes cadastradas</li>
+                  <li>{previa.contagens.validacoes} validação(ões) de minuta</li>
+                  <li>{previa.contagens.chamados} chamado(s) de suporte</li>
+                  <li>{previa.contagens.suporte} pedido(s) ao especialista</li>
+                  <li>{previa.contagens.vinculos_como_membro} vínculo(s) com imobiliária</li>
+                </ul>
+              </div>
+
+              {previa.pode_excluir ? (
+                <div className="space-y-2">
+                  <Label htmlFor="confirma-email" className="text-xs">
+                    Para confirmar, digite o e-mail da conta
+                  </Label>
+                  <p className="break-all rounded bg-muted px-2 py-1 font-mono text-xs text-foreground">
+                    {previa.email}
+                  </p>
+                  <Input
+                    id="confirma-email"
+                    value={digitado}
+                    onChange={(e) => setDigitado(e.target.value)}
+                    placeholder={previa.email}
+                    autoComplete="off"
+                    className="text-sm"
+                  />
+                </div>
+              ) : (
+                <div className="rounded-md border border-destructive/30 bg-destructive/5 p-3">
+                  <p className="text-xs leading-relaxed text-destructive">{previa.bloqueio}</p>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          <DialogFooter>
+            <Button variant="outline" disabled={salvando} onClick={() => setExcluindo(null)}>
+              Cancelar
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={
+                salvando ||
+                !previa?.pode_excluir ||
+                digitado.trim().toLowerCase() !== (previa?.email ?? '').toLowerCase()
+              }
+              onClick={confirmarExclusao}
+            >
+              {salvando && <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />}
+              Excluir
             </Button>
           </DialogFooter>
         </DialogContent>
