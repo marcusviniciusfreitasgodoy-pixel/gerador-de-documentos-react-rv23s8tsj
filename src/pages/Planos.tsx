@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Check, Clock, Loader2, ShieldCheck, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import pb from '@/lib/pocketbase/client'
@@ -103,6 +103,7 @@ const PLANOS: Plano[] = [
 export default function PlanosPage() {
   const { user, plano, planoAtivo, trialDiasRestantes, negociosNoMes, planoLimiteNegocios } =
     useAuth()
+  const navigate = useNavigate()
   const [enviando, setEnviando] = useState('')
   const [jaPediu, setJaPediu] = useState(false)
   const [carregando, setCarregando] = useState(true)
@@ -134,6 +135,12 @@ export default function PlanosPage() {
   }, [carregar])
 
   const solicitar = async (p: Plano) => {
+    // Visitante sem conta: o caminho é criar a conta primeiro. O teste de 15
+    // dias começa aí, e o pedido de assinatura pode esperar ele conhecer.
+    if (!user?.id) {
+      navigate('/signup')
+      return
+    }
     setEnviando(p.id)
     try {
       await pb.collection('chamados').create({
@@ -170,7 +177,7 @@ export default function PlanosPage() {
       {/* Onde o corretor está hoje. Uma página de preços que não diz isso obriga
           ele a sair para descobrir, e quem está prestes a pagar não deveria
           precisar procurar. */}
-      {!carregando && (
+      {user && !carregando && (
         <div className="rounded-lg border border-border bg-card p-4">
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <div className="flex items-center gap-2">
