@@ -200,6 +200,22 @@ a mais conservadora do benchmark "O Honorário como Âncora" (R$ 800 a R$ 2.500)
 rotulada como "no mercado"; OAB não aparece em copy comercial de propósito, e
 "substitui o advogado" continua proibido em qualquer variação.
 
+### Planos públicos (a tabela de preços no site): PENDENTE, 3 edições
+
+O dono do projeto notou que o site não mostra preço: a `/planos` estava atrás
+do `ProtectedRoute` e a landing só vende o teste. Três edições, **todas por
+INSTRUÇÃO**, estado-alvo no commit `1dc14c2` desta branch:
+
+| #   | Arquivo               | Edição                                              |
+| --- | --------------------- | --------------------------------------------------- |
+| 1   | `src/App.tsx`         | rota `/planos` sai do ProtectedRoute, fica pública  |
+| 2   | `src/pages/Planos.tsx`| visitante: sem banner de conta, botão vai a /signup |
+| 3   | `src/pages/Signup.tsx`| § 06 ganha o link "Ver os planos e valores"         |
+
+Depois do (3), conferir os hashes WebP. As telas já foram renderizadas a
+partir desta branch: `/planos` sem sessão mostra os quatro preços, sem o
+banner "sua conta está liberada", e o clique de visitante navega ao cadastro.
+
 ### Fora isso, nada pende de colagem
 
 O que segue aberto não depende do Skip: as três verificações que só o banco
