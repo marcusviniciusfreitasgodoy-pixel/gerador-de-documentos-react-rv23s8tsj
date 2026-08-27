@@ -238,6 +238,28 @@ Quando a completa lançar, o Docs ganha uma FAQ curta mencionando a inclusão
 ("assinante Prime Circle tem o Docs incluso"). Não colar antes do lançamento
 dela: mencionar plataforma que não existe confunde o visitante.
 
+### Bloco de usuários no /admin: PENDENTE, 4 arquivos
+
+Gestão de conta morava só no painel do PocketBase; com o piloto de corretores
+chegando, o /admin ganha o Bloco 6. Estado-alvo no commit desta branch.
+
+| #   | Arquivo                                   | Como colar          | Tamanho |
+| --- | ----------------------------------------- | ------------------- | ------- |
+| 1   | `pocketbase/hooks/admin_usuarios.js`      | arquivo NOVO        | 7 KB    |
+| 2   | `src/components/admin/UsuariosBlock.tsx`  | arquivo NOVO        | 14 KB   |
+| 3   | `src/services/admin.ts`                   | inteiro (2 KB)      | 2 KB    |
+| 4   | `src/pages/Admin.tsx`                     | 2 inserções, por INSTRUÇÃO | 25 KB |
+
+Os dois primeiros são criação ("Crie o arquivo X com exatamente este
+conteúdo"). O `admin.ts` é pequeno e vai inteiro. O `Admin.tsx` tem 25 KB e
+muito comentário: vai por instrução (import do bloco após o do AgenciasBlock,
+e `<AdminUsuariosBlock />` após `<AdminAgenciasBlock />`).
+
+Para o hook, as três checagens de backend antes de dar por pronto: `node
+--check`, a auditoria do JSVM, e conferir que o gate `isAdmin` está no topo
+das TRÊS rotas. Já renderizado a 1440 e 390 a partir desta branch, com
+serviço de exemplo no scratchpad.
+
 ### Fora isso, nada pende de colagem
 
 O que segue aberto não depende do Skip: as três verificações que só o banco
