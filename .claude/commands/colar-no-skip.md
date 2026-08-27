@@ -34,7 +34,8 @@ não decida por ele. O diff é a única prova.
 
 Os 12 arquivos foram aplicados e conferidos byte a byte contra o download do
 Skip, e a árvore baixada compila (`tsc -b` 0 erros, `oxlint` 18 avisos, build
-passando).
+passando). **A baseline passou a ser 17 em 27/08**, quando o `Shield` sem uso
+virou o ícone do item de Painel no menu.
 
 ### Teste de 15 dias: COMPLETO
 
@@ -320,6 +321,23 @@ caminho para subir binário no Skip por causa de ícone.
 
 Falta só a conferência no celular: remover o atalho antigo (o ícone fica em
 cache) e adicionar de novo.
+
+### Item do Painel no menu: PENDENTE, 1 arquivo
+
+A rota `/admin` existia e era protegida, mas não estava no `NAV_ITEMS`: só se
+chegava nela digitando a URL. Estado-alvo na branch.
+
+| #   | Arquivo                      | Como colar                        |
+| --- | ---------------------------- | --------------------------------- |
+| 1   | `src/components/Layout.tsx`  | por INSTRUÇÃO (arquivo grande)    |
+
+O `Shield` já estava importado e sem uso (era um dos 18 avisos do oxlint):
+o ícone deste item, que ficou pelo caminho quando o menu foi escrito. Com ele
+em uso, **a baseline do oxlint passa a ser 17**, não 18. Ajuste a expectativa
+nas próximas conferências.
+
+Renderizado a 1440, 1024 e 390 com `isAdmin` forçado só na cópia do
+scratchpad: aparece na barra e no painel do celular, sem rolagem horizontal.
 
 ### Fora isso, nada pende de colagem
 
