@@ -367,6 +367,28 @@ Conferências além do diff, todas na árvore baixada:
 sozinho e estourava a largura dos DOIS diálogos, cortando o título e o botão.
 Corrigido antes de entregar, com `break-all` e o e-mail fora do título.
 
+### Mensagens de erro em português: PENDENTE, 1 arquivo
+
+| #   | Arquivo                        | Como colar               |
+| --- | ------------------------------ | ------------------------ |
+| 1   | `src/lib/pocketbase/errors.ts` | inteiro (94 linhas, 3 KB)|
+
+Nasceu da queda passageira do backend em 27/08: com o gateway devolvendo HTML,
+o corretor lia `Unexpected token '<', "<html>"` na tela de login. E os textos
+de reserva estavam em inglês. Como todo erro do app sai por `getErrorMessage`,
+um arquivo alcança os **17 pontos** que mostram erro.
+
+**Conferência aqui não é render, é teste de unidade.** O arquivo é lógica pura:
+exercite os formatos reais de erro do SDK (HTML do gateway, 502, status 0,
+TypeError de fetch, erro de campo, cancelamento automático, mensagem dos nossos
+hooks) e confira que nenhuma volta vazia, em inglês ou com lixo técnico, e que
+a mensagem dos nossos hooks passa intacta.
+
+Armadilha do harness, que custou uma rodada: se o teste for `.mjs` importando
+o `.ts`, o `tsx` resolve o pacote `pocketbase` por dois caminhos e o
+`instanceof ClientResponseError` falha, dando falso negativo em quase tudo.
+Escreva o teste como `.ts`.
+
 ### Fora isso, nada pende de colagem
 
 O que segue aberto não depende do Skip: as três verificações que só o banco
