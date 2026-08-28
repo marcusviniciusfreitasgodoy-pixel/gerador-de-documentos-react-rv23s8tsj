@@ -401,7 +401,7 @@ o cancelamento automático, o que deixaria os 17 pontos de erro mostrando aviso
 em branco. Aviso vazio é pior do que frase errada, porque não dá nem o que
 fazer em seguida.
 
-### Avisos de pendência para o admin: PENDENTE, 4 arquivos
+### Avisos de pendência para o admin: COMPLETO
 
 Nasceu da pergunta "como eu sou avisado quando abre um chamado, e cobrado se
 eu não responder". A investigação achou um buraco maior do que o da pergunta.
@@ -411,15 +411,39 @@ eu não responder". A investigação achou um buraco maior do que o da pergunta.
 não avisava ninguém: caía no banco em silêncio e só aparecia para quem abrisse
 o painel. É o pedido mais caro que a plataforma recebe.
 
-| #   | Arquivo                                          | Como colar               |
-| --- | ------------------------------------------------ | ------------------------ |
-| 1   | `pocketbase/migrations/1900000036_chamados_add_lembretes.js` | inteiro (65 linhas)   |
-| 2   | `pocketbase/hooks/chamados_aviso.js`             | inteiro (291 linhas)     |
-| 3   | `src/components/Layout.tsx`                      | por INSTRUÇÃO (794 linhas)|
-| 4   | `pocketbase/hooks/extrair_dados.js`              | por INSTRUÇÃO (1.207 linhas)|
+Os quatro voltaram certos no download de 28/08/2026, com as contagens exatas:
+migração 65 linhas, `chamados_aviso.js` 291, `Layout.tsx` 794. A migração foi
+colada PRIMEIRO de propósito (o hook escreve `lembretes`; sem o campo a gravação
+não pega e o lembrete se repetiria todo dia), e **o dump do banco prova que ela
+rodou**: `lembretes` aparece nas duas coleções no `schema.json` do download, e
+não aparecia no download anterior.
 
-**A migração vai PRIMEIRO.** O hook escreve `lembretes`; sem o campo, a
-gravação não pega e o lembrete se repete todo dia.
+**A instrução do `Layout.tsx` chegou truncada no chat do Skip: o item 3 se
+perdeu.** O agente não aplicou nada e devolveu a conta: 700 + 53 = 753, faltavam
+41 linhas para as 794 que o pedido prometia, e o pedaço que faltava era
+justamente o que declara o `pendencias`. **Foi a contagem de linhas no pedido
+que segurou o código quebrado**, pela terceira vez nesta série. Reenviado o item
+3 sozinho, os sete foram aplicados de uma vez e o arquivo fechou em 794.
+
+### O erro foi MEU, e o Skip é que estava certo
+
+O `extrair_dados.js` voltou diferente do branch: 1.191 linhas contra 1.207. A
+leitura instintiva ("o agente resumiu de novo") estava errada. O bloco do link
+tinha entrado em DOIS hooks no MEU arquivo, porque o `str.replace` do Python
+troca todas as ocorrências e o trecho alvo (`var admins` / `var meta` / `for`)
+aparece duas vezes no arquivo. A segunda cópia caiu no hook de **novo cadastro**,
+onde a variável `chamado` não existe.
+
+O estrago em produção seria: `ReferenceError` dentro do `try`, log registrando
+`email cadastro: falha`, e **o aviso de cadastro novo parando de chegar em
+silêncio**, justo às vésperas de convidar os primeiros corretores. `node --check`
+passa (é erro de execução, não de sintaxe) e a auditoria do JSVM não pega. Só o
+diff contra o download pegou.
+
+Duas lições de método: no Python, `str.replace` sem `count` ou sem conferir
+`s.count(alvo) == 1` é o mesmo tipo de armadilha muda; e **quando o download
+diverge, a hipótese de que o errado é o branch entra na fila junto com a de que
+o errado é o Skip.**
 
 Três decisões que valem registro:
 
@@ -452,9 +476,49 @@ Conferido a 1024, 1180, 1280 e 1440: zero rolagem horizontal em todos.
 O e-mail de chamado ainda dizia "Gerador de Documentos" e mandava editar o
 registro no painel do PocketBase. Agora leva link direto para `/chamados/<id>`.
 
+### REGRESSÃO: as mensagens de erro voltaram ao estado antigo, 1 arquivo
+
+| #   | Arquivo                        | Como colar               |
+| --- | ------------------------------ | ------------------------ |
+| 1   | `src/lib/pocketbase/errors.ts` | inteiro (89 linhas)      |
+
+O `errors.ts` foi entregue e CONFERIDO em 27/08 (idêntico, 89 linhas, 12 casos
+de comportamento passando contra o arquivo baixado). No download do dia
+seguinte ele voltou para a versão antiga, de **29 linhas**, com
+`'An unexpected error occurred.'` em inglês e sem nenhum tratamento de HTML do
+gateway. Ninguém pediu isso: a rodada tocou em `Layout.tsx` e `extrair_dados.js`,
+e o `errors.ts` não entrou em pedido nenhum.
+
+Ou seja: **conferir uma vez não basta.** A varredura da árvore inteira contra o
+branch, que já era rotina para achar o que o agente mexeu a mais, agora também
+serve para achar o que ele desfez sozinho. Rode ela em TODO download, não só
+quando o arquivo entregue diverge.
+
+Como é o mesmo arquivo já entregue uma vez, o conteúdo está no branch e a
+conferência é a mesma: os 12 casos contra o arquivo que voltar (teste em `.ts`,
+nunca `.mjs`, pela armadilha do harness registrada acima).
+
+### Sobras do Bloco A nos e-mails: PENDENTE, 2 arquivos
+
+| #   | Arquivo                              | Como colar                    |
+| --- | ------------------------------------ | ----------------------------- |
+| 1   | `pocketbase/hooks/extrair_dados.js`  | por INSTRUÇÃO (1.190 linhas)  |
+| 2   | `pocketbase/hooks/agencia_convites.js` | por INSTRUÇÃO (1.050 linhas) |
+
+O Bloco A renomeou o produto na interface e parou ali. Nos e-mails, quatro
+lugares continuavam com o nome antigo, e e-mail é onde o corretor encontra a
+marca antes de entrar na plataforma:
+
+- `extrair_dados.js`: o assunto e o corpo do aviso de **novo cadastro** diziam
+  "Gerador de Documentos";
+- a marca no topo dos e-mails de confirmação e de senha dizia
+  `D O C U M E N T O S` (2 lugares no `extrair_dados.js`, 2 no
+  `agencia_convites.js`, este último no **convite de equipe**, que é o e-mail
+  que os corretores do piloto vão receber).
+
 ### Fora isso, nada pende de colagem
 
-Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
+Fora os dois blocos acima, nada pende de colagem. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
