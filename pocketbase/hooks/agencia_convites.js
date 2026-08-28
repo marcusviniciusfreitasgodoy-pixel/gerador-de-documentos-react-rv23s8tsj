@@ -270,7 +270,7 @@ routerAdd(
           '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
           '<div style="padding:28px 32px 0 32px;">' +
           '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
-          '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
+          '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C S</p>' +
           '</div>' +
           '<div style="padding:20px 32px 32px 32px;">' +
           '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Convite para uma equipe</h1>' +
@@ -452,7 +452,7 @@ routerAdd(
           '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
           '<div style="padding:28px 32px 0 32px;">' +
           '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
-          '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
+          '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C S</p>' +
           '</div>' +
           '<div style="padding:20px 32px 32px 32px;">' +
           '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Seu convite continua aberto</h1>' +
