@@ -537,6 +537,27 @@ Não sei o mecanismo, e não vou fingir que sei. O que fica valendo:
    módulo novo e repontam-se os 17 pontos de importação, para que o arquivo que
    retrocede deixe de ser o que o app usa.
 
+**CAIU UMA TERCEIRA, E A REGRA MUDA MESMO ASSIM.** Em 28/08/2026, na versão
+0.0.789, o `errors.ts` retrocedeu de novo. Só que dessa vez **o agente do Skip
+pegou sozinho, na mesma rodada**, pelo check automático que ele passou a rodar
+ao final de cada leva, e repôs as 89 linhas no commit seguinte. O erro não
+chegou a existir num download.
+
+Isso desarma o gatilho do item 2 acima, e vale dizer por quê em vez de só
+abandonar a regra: mover a lógica para um módulo novo mexeria em 17 pontos de
+importação para proteger contra uma falha que agora é detectada e corrigida na
+origem, sem depender de download. O risco da mudança passou a ser maior que o
+risco que ela evita. **Gatilho novo:** se uma regressão voltar a CHEGAR num
+download, ou seja, se o check do Skip falhar em pegá-la, aí sim move-se o
+módulo.
+
+**E não é um problema do `errors.ts`.** Na mesma rodada o agente relatou que a
+própria mudança do `Planos.tsx` (commit .789) também tinha revertido sozinha
+antes de ele reaplicar. Isso eu não consigo confirmar do meu lado, porque nunca
+recebi um download da .789, mas é exatamente o que a hipótese do commit parcial
+prevê: **qualquer arquivo fora da rodada corre o risco**. A varredura dos 215
+arquivos continua sendo a rede que não depende de adivinhar o alvo.
+
 **A hipótese do agente do Skip, e por que ela importa.** Perguntado, ele
 verificou que o arquivo não está no `preventAI` nem em proteção nenhuma, e
 levantou a explicação mais provável: **commit parcial a partir de um checkout
@@ -667,12 +688,27 @@ hipótese, e barrar um cliente pagante por um número que a gente inventou é o
 pior jeito de descobrir que o número estava errado. Decidir quando o
 `negocios_no_mes` tiver três semanas de dado real.
 
-### Preço: avulso a R$ 149 e o ano na frente: PENDENTE, 2 arquivos
+### Preço: avulso a R$ 149 e o ano na frente: COMPLETO
 
-| #   | Arquivo                              | Como colar                    |
-| --- | ------------------------------------ | ----------------------------- |
-| 1   | `src/pages/Planos.tsx`               | inteiro (384 linhas, 16 KB)   |
-| 2   | `pocketbase/hooks/admin_usuarios.js` | por INSTRUÇÃO (414 linhas)    |
+Entregue em três levas: o `Planos.tsx` inteiro (384 linhas), o
+`admin_usuarios.js` por instrução (414 linhas), e depois quatro inserções no
+`Planos.tsx` levando-o a 416. Tudo conferido no download 0.0.790: **215
+arquivos, zero diferenças**.
+
+A conferência das inserções foi POR ÂNCORA, o formato que substituiu a contagem
+de linhas: um script localiza cada objeto de plano e conta a frase dentro dele.
+
+```
+avulso         -> frase presente: 0
+corretor       -> frase presente: 0
+profissional   -> frase presente: 1
+imobiliaria    -> frase presente: 1
+
+ordem dos blocos do rodapé:
+  O limite é por operação | Modelos prontos resolvem um arquivo |
+  A partir do quinto negócio, o ano sai mais barato |
+  O que a gente lançar já está no seu plano | A conta de referência
+```
 
 ### A frequência real do corretor derruba o preço antigo
 
@@ -733,7 +769,7 @@ justamente na data em que ele mais confere. Passou a usar mês de calendário
 
 ### Fora isso, nada pende de colagem
 
-Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
+Nada pende de colagem: o download 0.0.790 fechou com 215 arquivos comparados e zero diferenças. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
