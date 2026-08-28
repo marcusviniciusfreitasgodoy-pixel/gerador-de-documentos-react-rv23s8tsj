@@ -153,6 +153,7 @@ routerAdd(
       if (!MESES_VALIDOS[meses]) {
         return e.json(400, { error: 'meses precisa ser 1 (mensal) ou 12 (anual).' })
       }
+
       // Avulso de 12 meses não existe: ele é uma compra única, com prazo de um
       // mês para usar. Deixar passar criaria um plano que a página de preços
       // não vende e que ninguém saberia explicar depois.
@@ -172,6 +173,7 @@ routerAdd(
       user.set('plano', plano)
       user.set('plano_renova_em', renova)
       user.set('plano_limite_negocios', LIMITES[plano])
+
       // Zera o contador de validação do avulso a cada carimbo. Ele NÃO pode ser
       // o contador mensal: o avulso dura 30 dias e atravessa a virada de mês, e
       // com o mensal quem comprasse dia 28 e validasse dia 29 ganharia outra
