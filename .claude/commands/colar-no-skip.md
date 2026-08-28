@@ -476,11 +476,7 @@ Conferido a 1024, 1180, 1280 e 1440: zero rolagem horizontal em todos.
 O e-mail de chamado ainda dizia "Gerador de Documentos" e mandava editar o
 registro no painel do PocketBase. Agora leva link direto para `/chamados/<id>`.
 
-### REGRESSÃO: as mensagens de erro voltaram ao estado antigo, 1 arquivo
-
-| #   | Arquivo                        | Como colar               |
-| --- | ------------------------------ | ------------------------ |
-| 1   | `src/lib/pocketbase/errors.ts` | inteiro (89 linhas)      |
+### REGRESSÃO do errors.ts: RESOLVIDA, e a causa da recaída era outra
 
 O `errors.ts` foi entregue e CONFERIDO em 27/08 (idêntico, 89 linhas, 12 casos
 de comportamento passando contra o arquivo baixado). No download do dia
@@ -498,13 +494,27 @@ Como é o mesmo arquivo já entregue uma vez, o conteúdo está no branch e a
 conferência é a mesma: os 12 casos contra o arquivo que voltar (teste em `.ts`,
 nunca `.mjs`, pela armadilha do harness registrada acima).
 
-**Segunda tentativa também não pegou.** No download seguinte o arquivo continua
-com 29 linhas, e byte a byte IGUAL ao download anterior: ninguém o tocou entre
-os dois. Não é um segundo retrocesso, é a colagem que não chegou nele, enquanto
-as duas instruções da mesma rodada (`extrair_dados.js` e `agencia_convites.js`)
-foram aplicadas certas. Ou seja: o problema é específico deste arquivo, e vale
-perguntar ao agente o que ele fez com o pedido em vez de repetir a colagem uma
-terceira vez às cegas.
+**A segunda tentativa não pegou, e o diagnóstico veio do dono do projeto.** No
+download seguinte o arquivo continuava com 29 linhas, byte a byte igual ao
+anterior: ninguém o tinha tocado. A causa: a substituição foi feita **direto no
+painel "Editar Código" do Skip**, que é somente leitura.
+
+Aqui está a parte que vale guardar. **O editor somente leitura não recusa nada:
+ele aceita a digitação, mostra o texto novo na tela e não grava.** Quem só olha
+o painel sai convencido de que gravou. É o mesmo modo de falha do clipboard e do
+paste resumido: silencioso, e convincente na conferência errada. O `CLAUDE.md`
+já dizia que o painel é de leitura; o que faltava dito é que uma edição ali
+**parece** ter funcionado.
+
+Terceira tentativa, pelo chat do Skip como manda o método: **arquivo idêntico,
+89 linhas, e os 12 casos passando de novo contra o arquivo baixado**. A
+varredura dos 213 arquivos voltou com ZERO diferenças, o primeiro download da
+série inteira em que o projeto no Skip e o branch estão iguais em tudo.
+
+E fica um alerta em aberto: isso explica a recaída, mas **não explica o
+retrocesso original** (de 89 para 29 linhas entre os downloads 65 e 66). Alguma
+coisa gravou o conteúdo antigo naquele intervalo. Enquanto não se souber o quê,
+a varredura da árvore em todo download é a rede que pega.
 
 ### Sobras do Bloco A nos e-mails: COMPLETO
 
@@ -524,7 +534,8 @@ marca antes de entrar na plataforma:
 
 ### Fora isso, nada pende de colagem
 
-Fora os dois blocos acima, nada pende de colagem. Duas das três verificações que só o banco prova
+Nada pende de colagem: o download de 28/08/2026 fechou com **213 arquivos
+comparados e zero diferenças**. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
