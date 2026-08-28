@@ -99,6 +99,25 @@ routerAdd(
         })
       }
 
+      // O avulso inclui UMA validação de minuta, e esta é a única trava dele.
+      // A operação não trava (o documento sai no navegador antes de o negócio
+      // existir, e quem passa do teto pagou a mais, não a menos); a validação
+      // trava porque é a única parte com custo real, que é a chamada de IA.
+      //
+      // O contador é o `avulso_validacoes`, e não o mensal: o avulso dura 30
+      // dias e atravessa a virada de mês, onde o contador mensal zeraria e daria
+      // uma segunda validação de graça.
+      if (
+        planoAtivo &&
+        planoStr === 'avulso' &&
+        (guardAuth.getInt('avulso_validacoes') || 0) >= 1
+      ) {
+        return e.json(402, {
+          error:
+            'Seu avulso inclui uma validação de minuta, e ela já foi usada. Veja os planos para validar mais.',
+        })
+      }
+
       if (!planoAtivo) {
         var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
         if (trialStr) {
