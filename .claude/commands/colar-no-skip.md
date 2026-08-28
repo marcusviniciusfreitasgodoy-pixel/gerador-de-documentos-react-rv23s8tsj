@@ -560,6 +560,18 @@ ausente da árvore, zero imports para o caminho antigo e 16 para o novo,
 `Signup.tsx` com 1.085 linhas e os três hashes WebP intactos, e os 12 casos de
 comportamento passando contra o arquivo baixado.
 
+**E ELE RESSUSCITOU DE NOVO NA RODADA SEGUINTE, DEPOIS DE APAGADO.** Na 0.0.797,
+que só pedia o `Planos.tsx`, o `errors.ts` voltou a EXISTIR com as mesmas 29
+linhas. É a prova mais forte de todas: o retrocesso não restaura conteúdo de um
+arquivo, ele **restaura a árvore inteira de um checkout velho**, incluindo
+arquivos que já tinham sido apagados. Não é um problema de um arquivo, é o
+processo de commit.
+
+O agente apagou de novo na 0.0.798 e o download veio limpo. Mas a expectativa
+correta é que **ele volte a aparecer**, e a resposta certa é dar de ombros: ele
+não é importado por ninguém. Se um dia alguém quiser parar de apagar, tudo bem
+também; o custo é um arquivo órfão no disco.
+
 **A MUDANÇA DE CASA FOI VALIDADA NA RODADA SEGUINTE, E POR ACIDENTE.** No
 download 0.0.796 o `errors.ts` **RESSUSCITOU** com as mesmas 29 linhas, numa
 rodada que só pedia mudanças em dois hooks de backend. Ou seja: o retrocesso
@@ -807,7 +819,7 @@ venceria em **360 dias**. O corretor pagaria o ano e perderia cinco dias, e
 justamente na data em que ele mais confere. Passou a usar mês de calendário
 (`setMonth`). Só virou visível quando o anual passou a ser o preço em destaque.
 
-### Abas de ciclo e contadores de IA: PENDENTE, 5 arquivos
+### Abas de ciclo e contadores de IA: COMPLETO
 
 Quatro dos cinco conferidos: a migração 1900000038 (67 linhas, e o dump do
 banco mostra os três campos em `users`), o `ia_contador.js` (86), o
@@ -815,7 +827,17 @@ banco mostra os três campos em `users`), o `ia_contador.js` (86), o
 script) e o `validar_minuta.js` (1.363, com o contador uma vez só e dentro da
 rota `/backend/v1/consultar-ia`, conferido por âncora).
 
-**Falta o `src/pages/Planos.tsx` inteiro (473 linhas).**
+O `Planos.tsx` fechou o bloco na 0.0.798: idêntico, 473 linhas, e renderizado
+**a partir da árvore baixada** (build do zip, não do repositório) nas duas abas
+a 1440, 768 e 390. Os quatro preços trocam certo e cada um cabe numa linha:
+
+```
+anual : R$ 149 | R$ 690 | R$ 970 | R$ 1.970
+mensal: R$ 149 | R$ 69  | R$ 97  | R$ 197
+rolagem horizontal: 0 nos três tamanhos | erros de página: 0
+```
+
+Varredura final: **217 arquivos, zero diferenças.**
 
 Nota sobre o ledger do Skip: na rodada dos dois hooks ele relatou "1 arquivo
 gravado", e dois tinham mudado, ambos pedidos. O ledger erra nas duas direções,
@@ -880,7 +902,7 @@ conta do cliente.
 
 ### Fora isso, nada pende de colagem
 
-Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
+Nada pende de colagem: o download 0.0.798 fechou com **217 arquivos comparados e zero diferenças**. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
