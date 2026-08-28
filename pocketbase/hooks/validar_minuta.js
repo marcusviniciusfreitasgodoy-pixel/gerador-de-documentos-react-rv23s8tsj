@@ -1319,6 +1319,44 @@ routerAdd(
       $app.logger().error('consultar-ia: falha ao salvar resposta', 'error', String(err))
     }
 
+    // Conta a consulta. Fica AQUI, e não num hook como o da validação, porque
+    // esta rota não cria registro nenhum: ela atualiza o pedido existente, e
+    // não há evento de criação para escutar. Contar comparando o `ai_response`
+    // anterior num hook de update seria mais bonito e falharia calado quando a
+    // resposta nova fosse idêntica à antiga.
+    //
+    // Só chega aqui quando a IA respondeu de verdade: acima, `if (!success)`
+    // devolve o erro e sai. Tentativa frustrada não entra na conta do corretor.
+    //
+    // O mês de referência (`ia_mes_ref`) é o mesmo dos dois contadores, então
+    // quem chega primeiro no mês novo zera o outro. Sem isso, quem consultasse
+    // em setembro sem validar carregaria o número de agosto para sempre. A
+    // lógica está repetida no `ia_contador.js` DE PROPÓSITO: handler do JSVM não
+    // enxerga escopo de módulo, e função compartilhada chegaria aqui como
+    // `undefined`.
+    try {
+      if (userId) {
+        var quemConsultou = $app.findRecordById('users', userId)
+        if (quemConsultou) {
+          var mesAtualIa = new Date().toISOString().slice(0, 7)
+          var mesGuardadoIa = quemConsultou.getString('ia_mes_ref')
+          var mesmoMesIa = mesGuardadoIa === mesAtualIa
+          var consultasAntes = mesmoMesIa ? quemConsultou.getInt('consultas_no_mes') || 0 : 0
+          if (!mesmoMesIa) {
+            quemConsultou.set('validacoes_no_mes', 0)
+          }
+          quemConsultou.set('ia_mes_ref', mesAtualIa)
+          quemConsultou.set('consultas_no_mes', consultasAntes + 1)
+          $app.saveNoValidate(quemConsultou)
+        }
+      }
+    } catch (errConta) {
+      // Sem contagem o corretor ganha uma consulta de graça; com exceção
+      // propagada ele perde a resposta que a IA já produziu. A troca não é
+      // próxima.
+      $app.logger().error('consultar-ia: falha ao contar a consulta', 'error', String(errConta))
+    }
+
     return e.json(200, { resposta: resposta, recomenda_humano: recomendaHumano })
   },
   $apis.requireAuth(),

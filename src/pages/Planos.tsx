@@ -4,6 +4,7 @@ import { Check, Clock, Loader2, ShieldCheck, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import pb from '@/lib/pocketbase/client'
 import { useAuth } from '@/hooks/use-auth'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -96,12 +97,20 @@ import { Badge } from '@/components/ui/badge'
  * Isso é verificável e casa com o preço travado por 12 meses.
  */
 
+// A aba escolhe qual par preço/unidade aparece. O Avulso repete o mesmo valor
+// nos dois lados de propósito: ele não é mensal nem anual, é por operação, e
+// tirar ele da grade só para caber no seletor deixaria o cartão órfão. Repetir
+// custa duas linhas e mantém a grade inteira sob a mesma regra.
+type PorCiclo = { anual: string; mensal: string }
+
+type Ciclo = keyof PorCiclo
+
 type Plano = {
   id: string
   nome: string
-  preco: string
-  unidade: string
-  nota?: string
+  preco: PorCiclo
+  unidade: PorCiclo
+  nota?: PorCiclo
   destaque?: boolean
   itens: string[]
 }
@@ -110,9 +119,12 @@ const PLANOS: Plano[] = [
   {
     id: 'avulso',
     nome: 'Avulso',
-    preco: 'R$ 149',
-    unidade: 'por negócio',
-    nota: 'Uma operação, 30 dias para usar. Sem assinatura e sem renovação automática.',
+    preco: { anual: 'R$ 149', mensal: 'R$ 149' },
+    unidade: { anual: 'por negócio', mensal: 'por negócio' },
+    nota: {
+      anual: 'Uma operação, 30 dias para usar. Sem assinatura e sem renovação automática.',
+      mensal: 'Uma operação, 30 dias para usar. Sem assinatura e sem renovação automática.',
+    },
     itens: [
       'Todos os documentos daquela operação',
       'Correções ilimitadas',
@@ -123,9 +135,12 @@ const PLANOS: Plano[] = [
   {
     id: 'corretor',
     nome: 'Individual',
-    preco: 'R$ 690',
-    unidade: 'por ano',
-    nota: 'Dois meses de graça, e o preço fica travado por 12 meses. Prefere mensal? R$ 69 por mês. Até 10 operações por mês.',
+    preco: { anual: 'R$ 690', mensal: 'R$ 69' },
+    unidade: { anual: 'por ano', mensal: 'por mês' },
+    nota: {
+      anual: 'Dois meses de graça, e o preço fica travado por 12 meses. Até 10 operações por mês.',
+      mensal: 'Cancela quando quiser. Até 10 operações por mês.',
+    },
     itens: [
       'Todos os documentos, correções ilimitadas',
       'Validação de minuta, 20 por mês',
@@ -136,9 +151,12 @@ const PLANOS: Plano[] = [
   {
     id: 'profissional',
     nome: 'Profissional',
-    preco: 'R$ 970',
-    unidade: 'por ano',
-    nota: 'Dois meses de graça, e o preço fica travado por 12 meses. Prefere mensal? R$ 97 por mês. Até 30 operações por mês.',
+    preco: { anual: 'R$ 970', mensal: 'R$ 97' },
+    unidade: { anual: 'por ano', mensal: 'por mês' },
+    nota: {
+      anual: 'Dois meses de graça, e o preço fica travado por 12 meses. Até 30 operações por mês.',
+      mensal: 'Cancela quando quiser. Até 30 operações por mês.',
+    },
     destaque: true,
     itens: [
       'Tudo do Individual, com três vezes o teto',
@@ -150,9 +168,13 @@ const PLANOS: Plano[] = [
   {
     id: 'imobiliaria',
     nome: 'Imobiliária',
-    preco: 'R$ 1.970',
-    unidade: 'por ano, 3 assentos',
-    nota: 'Dois meses de graça, e o preço fica travado por 12 meses. Prefere mensal? R$ 197 por mês. Assento adicional R$ 59 por mês. Cada assento tem o teto do Profissional.',
+    preco: { anual: 'R$ 1.970', mensal: 'R$ 197' },
+    unidade: { anual: 'por ano, 3 assentos', mensal: 'por mês, 3 assentos' },
+    nota: {
+      anual:
+        'Dois meses de graça, e o preço fica travado por 12 meses. Assento adicional R$ 59 por mês.',
+      mensal: 'Cancela quando quiser. Assento adicional R$ 59 por mês.',
+    },
     itens: [
       'Quem só acompanha entra de graça, sem limite de gente',
       'Equipe, com convite por e-mail e aceite do termo',
@@ -167,6 +189,11 @@ export default function PlanosPage() {
   const { user, plano, planoAtivo, trialDiasRestantes, negociosNoMes, planoLimiteNegocios } =
     useAuth()
   const navigate = useNavigate()
+  // Abre no ANUAL de propósito. Abrir no mensal reconstrói a pergunta que faz o
+  // corretor de 4 negócios por ano cancelar ("vou usar em setembro?"). No ano a
+  // pergunta é outra: "R$ 690 valem menos do que um advogado cobra por um
+  // contrato?".
+  const [ciclo, setCiclo] = useState<Ciclo>('anual')
   const [enviando, setEnviando] = useState('')
   const [jaPediu, setJaPediu] = useState(false)
   const [carregando, setCarregando] = useState(true)
@@ -209,7 +236,10 @@ export default function PlanosPage() {
       await pb.collection('chamados').create({
         user: user?.id,
         tipo: 'assinatura',
-        mensagem: `Quero assinar o plano ${p.nome} (${p.preco} ${p.unidade}).`,
+        // A unidade carrega o ciclo ("por ano" / "por mês" / "por negócio"). Sem
+        // isso chega um pedido de assinatura e ninguém sabe se a pessoa
+        // escolheu o mês ou o ano, e a cobrança ainda é fechada à mão.
+        mensagem: `Quero assinar o plano ${p.nome} (${p.preco[ciclo]} ${p.unidade[ciclo]}).`,
         status: 'aberto',
       })
       setJaPediu(true)
@@ -295,6 +325,31 @@ export default function PlanosPage() {
         </div>
       )}
 
+      {/* Seletor de ciclo. O rótulo do anual carrega o benefício e não só a
+          palavra: "Anual" sozinho é uma opção, "2 meses grátis" é um motivo. */}
+      <div
+        role="group"
+        aria-label="Escolha o ciclo de cobrança"
+        className="inline-flex rounded-lg border border-border bg-card p-1"
+      >
+        {(['anual', 'mensal'] as const).map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => setCiclo(c)}
+            aria-pressed={ciclo === c}
+            className={cn(
+              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+              ciclo === c
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:text-foreground',
+            )}
+          >
+            {c === 'anual' ? 'Anual, 2 meses grátis' : 'Mensal'}
+          </button>
+        ))}
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {PLANOS.map((p) => (
           <Card
@@ -321,12 +376,14 @@ export default function PlanosPage() {
                     ficam iguais e nenhuma unidade nova quebra o número. */}
                 <div className="mt-1">
                   <div className="font-display text-3xl font-medium text-foreground tabular-nums whitespace-nowrap">
-                    {p.preco}
+                    {p.preco[ciclo]}
                   </div>
-                  <div className="text-xs text-muted-foreground">{p.unidade}</div>
+                  <div className="text-xs text-muted-foreground">{p.unidade[ciclo]}</div>
                 </div>
                 {p.nota && (
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{p.nota}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    {p.nota[ciclo]}
+                  </p>
                 )}
               </div>
 
