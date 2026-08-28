@@ -68,6 +68,14 @@ onRecordAfterCreateSuccess((e) => {
     user.set('ia_mes_ref', mesAtual)
     user.set('validacoes_no_mes', anterior + 1)
 
+    // O avulso tem contador PRÓPRIO, porque o mensal zera na virada do mês e o
+    // avulso atravessa essa virada quase sempre: comprado dia 28 e validado dia
+    // 29, no dia 1º o corretor ganharia uma segunda validação que ninguém
+    // vendeu. Este aqui zera na compra (`admin_usuarios.js`), não no calendário.
+    if (String(user.getString('plano') || '').trim() === 'avulso') {
+      user.set('avulso_validacoes', (user.getInt('avulso_validacoes') || 0) + 1)
+    }
+
     // Escrita de sistema num registro de outra coleção: `saveNoValidate` para
     // não reprovar a contagem por causa de um campo do perfil que o corretor
     // ainda não preencheu. E é PROGRAMÁTICA de propósito: não passa pelo

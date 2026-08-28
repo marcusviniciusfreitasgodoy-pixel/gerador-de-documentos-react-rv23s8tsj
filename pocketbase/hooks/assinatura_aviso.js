@@ -100,10 +100,14 @@ try {
 
             var quando =
               dias <= 0 ? 'venceu' : dias === 1 ? 'vence amanhã' : 'vence em ' + dias + ' dias'
-            var assunto =
-              dias <= 0
-                ? 'Sua assinatura do Prime Circle Docs venceu'
-                : 'Sua assinatura do Prime Circle Docs ' + quando
+
+            // O avulso passa por aqui como qualquer plano, porque ele É um plano
+            // que ninguém renova. Só o nome muda: chamar de "assinatura" quem
+            // comprou justamente para NÃO assinar é o tipo de detalhe que faz o
+            // corretor achar que caiu numa recorrência escondida.
+            var ehAvulso = String(u.getString('plano') || '').trim() === 'avulso'
+            var oQue = ehAvulso ? 'Seu avulso' : 'Sua assinatura'
+            var assunto = oQue + ' do Prime Circle Docs ' + (dias <= 0 ? 'venceu' : quando)
 
             var emailCorretor = u.email()
             if (emailCorretor) {
@@ -112,7 +116,9 @@ try {
                 to: [{ address: emailCorretor }],
                 subject: assunto,
                 html:
-                  '<p>Sua assinatura do Prime Circle Docs ' +
+                  '<p>' +
+                  oQue +
+                  ' do Prime Circle Docs ' +
                   quando +
                   '.</p>' +
                   (dias <= 0
@@ -123,7 +129,9 @@ try {
                   '<p>Seus negócios e o cadastro das partes continuam acessíveis do mesmo jeito. Nada é apagado, e nenhum dado de cliente fica preso aqui dentro.</p>' +
                   '<p><a href="' +
                   linkPlanos +
-                  '">Renovar a assinatura</a></p>' +
+                  '">' +
+                  (ehAvulso ? 'Ver os planos e o avulso' : 'Renovar a assinatura') +
+                  '</a></p>' +
                   '<p style="font-size:12px;color:#8A8578;">Se preferir resolver falando com a gente, use a página Ajuda e Suporte.</p>',
               })
               $app.newMailClient().send(msg)
@@ -140,10 +148,13 @@ try {
                   from: { address: meta.senderAddress, name: meta.senderName },
                   to: [{ address: emailAdmin }],
                   subject:
-                    (dias <= 0 ? 'Assinatura venceu: ' : 'Assinatura ' + quando + ': ') +
+                    (ehAvulso ? 'Avulso ' : 'Assinatura ') +
+                    (dias <= 0 ? 'venceu: ' : quando + ': ') +
                     (u.getString('name') || emailCorretor),
                   html:
-                    '<p>A assinatura de um corretor ' +
+                    '<p>O ' +
+                    (ehAvulso ? 'avulso' : 'plano') +
+                    ' de um corretor ' +
                     quando +
                     '.</p>' +
                     '<p><strong>Corretor:</strong> ' +
