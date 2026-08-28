@@ -28,6 +28,44 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
+## Onde estamos (28/08/2026, versão 0.0.803 do Skip)
+
+**Nada pende de colagem.** O último download fechou com 219 arquivos comparados
+e nenhuma diferença de código: as duas únicas divergências eram linha em branco,
+e a versão do Skip foi adotada nas duas.
+
+O que entrou hoje, em ordem: mensagens de erro em português, avisos de pendência
+para o admin (o pedido de especialista não notificava ninguém), item do Painel no
+menu, bloqueio do plano vencido com aviso de 7 e 3 dias, preço do avulso a
+R$ 149 com o ano em destaque, abas mensal e anual, contadores de uso de IA, e o
+avulso como plano de primeira classe.
+
+**O que espera VOCÊ, não o Skip:**
+
+1. **Testar o avulso ponta a ponta**, na conta de teste. É a primeira trava de
+   verdade da plataforma: carimbar o Avulso no `/admin` (o botão é novo e é a
+   única peça que não foi renderizada), validar uma minuta, tentar a segunda e
+   ver a recusa, e deixar o prazo vencer para ver a tela "Seu avulso terminou".
+2. **Testar a assinatura vencida**, que também nunca rodou contra registro real:
+   `plano_renova_em` de ontem, e conferir que a TELA e o SERVIDOR barram juntos.
+   Se a tela barra e o servidor deixa passar, a metade que importa não funciona.
+3. **Login com senha errada** e os e-mails reais (redefinição de senha e convite
+   de equipe), para ver as frases novas e a marca "DOCS".
+4. **Medir o custo de uma validação** no log contra os tetos de 20 e 60. Agora
+   existe contador; é o último item antes de cobrar.
+5. **Limpar da fila os 6 itens de teste** e convidar os primeiros corretores.
+
+**Duas promessas da página que o produto ainda não cumpre**, e é decisão, não
+esquecimento: os tetos de 10 e 30 operações e as 20 e 60 validações são contados
+e avisados, mas não barram. A recomendação é continuar assim enquanto os números
+forem hipótese. O único teto que trava é o do avulso, porque ele não é hipótese:
+é o que foi vendido.
+
+**Uma coisa que continua acontecendo e não precisa de ação:** o
+`src/lib/pocketbase/errors.ts` ressuscita sozinho nos downloads, com uma versão
+antiga de 29 linhas. Ninguém o importa desde a mudança para o `mensagens.ts`.
+Aparece, não faz nada. Se quiser, apague; se não, tudo bem.
+
 ## Estado
 
 ### Fase 3 das imobiliárias: COMPLETA
