@@ -476,7 +476,7 @@ Conferido a 1024, 1180, 1280 e 1440: zero rolagem horizontal em todos.
 O e-mail de chamado ainda dizia "Gerador de Documentos" e mandava editar o
 registro no painel do PocketBase. Agora leva link direto para `/chamados/<id>`.
 
-### REGRESSÃO do errors.ts: RESOLVIDA, e a causa da recaída era outra
+### REGRESSÃO do errors.ts: JÁ ACONTECEU DUAS VEZES, causa desconhecida
 
 O `errors.ts` foi entregue e CONFERIDO em 27/08 (idêntico, 89 linhas, 12 casos
 de comportamento passando contra o arquivo baixado). No download do dia
@@ -511,10 +511,31 @@ Terceira tentativa, pelo chat do Skip como manda o método: **arquivo idêntico,
 varredura dos 213 arquivos voltou com ZERO diferenças, o primeiro download da
 série inteira em que o projeto no Skip e o branch estão iguais em tudo.
 
-E fica um alerta em aberto: isso explica a recaída, mas **não explica o
-retrocesso original** (de 89 para 29 linhas entre os downloads 65 e 66). Alguma
-coisa gravou o conteúdo antigo naquele intervalo. Enquanto não se souber o quê,
-a varredura da árvore em todo download é a rede que pega.
+**E aconteceu de novo, no download seguinte.** Voltou para as mesmas 29 linhas,
+numa rodada em que ninguém pediu nada sobre ele. Duas vezes é padrão, não
+acidente. O que se sabe de fato:
+
+| download | versão do Skip | `errors.ts` |
+| --- | --- | --- |
+| 65 | 0.0.773 | 89 linhas (o certo) |
+| 66 | 0.0.777 | 29 linhas |
+| 67 | 0.0.779 | 29 linhas |
+| 68 | 0.0.781 | 89 linhas (reposto pelo chat) |
+| 69 | 0.0.783 | 29 linhas |
+
+A versão do projeto só SOBE, então não é rollback do projeto inteiro. E é só
+este arquivo: no download 69, dos 215 arquivos, os únicos que divergiam eram os
+dois hooks que a rodada mexeu, mais este. As duas quedas aconteceram em rodadas
+em que o agente trabalhou em OUTROS arquivos.
+
+Não sei o mecanismo, e não vou fingir que sei. O que fica valendo:
+
+1. **Conferir o `errors.ts` em TODO download**, mesmo quando a rodada não tem
+   nada a ver com ele. A varredura da árvore inteira é o que pega, e pegou as
+   duas vezes.
+2. Se cair uma terceira, a saída deixa de ser recolar: move-se a lógica para um
+   módulo novo e repontam-se os 17 pontos de importação, para que o arquivo que
+   retrocede deixe de ser o que o app usa.
 
 ### Sobras do Bloco A nos e-mails: COMPLETO
 
@@ -532,19 +553,43 @@ marca antes de entrar na plataforma:
   `agencia_convites.js`, este último no **convite de equipe**, que é o e-mail
   que os corretores do piloto vão receber).
 
-### Bloqueio do plano vencido e aviso antes de vencer: PENDENTE, 6 arquivos
+### Bloqueio do plano vencido e aviso antes de vencer: 4 de 6 CONFERIDOS
 
-| #   | Arquivo                                              | Como colar                    |
-| --- | ---------------------------------------------------- | ----------------------------- |
-| 1   | `pocketbase/migrations/1900000037_users_add_avisos_plano.js` | inteiro (41 linhas)   |
-| 2   | `pocketbase/hooks/assinatura_aviso.js`               | inteiro (184 linhas)          |
-| 3   | `src/hooks/use-auth.tsx`                             | inteiro (168 linhas)          |
-| 4   | `src/components/Layout.tsx`                          | por INSTRUÇÃO (805 linhas)    |
-| 5   | `pocketbase/hooks/extrair_dados.js`                  | por INSTRUÇÃO (1.222 linhas)  |
-| 6   | `pocketbase/hooks/validar_minuta.js`                 | por INSTRUÇÃO (1.325 linhas)  |
+Voltaram idênticos no download de 28/08/2026: a migração 1900000037 (41
+linhas), o `assinatura_aviso.js` (184), o `use-auth.tsx` (168) e o `Layout.tsx`
+(805).
 
-A migração vai PRIMEIRO, mesma razão da 1900000036: o hook grava
-`avisos_plano` e sem o campo a gravação não pega.
+**Os dois hooks de backend voltaram errados, e a contagem de linhas NÃO pegou.**
+Os dois têm 1.222 e 1.325 linhas, exatamente o que o pedido dizia, e o texto
+`Sua assinatura venceu` aparece 2 vezes em cada, exatamente o que o pedido
+mandava conferir. Só que **as duas cópias caíram na MESMA rota**, uma colada na
+outra, e a segunda rota de cada arquivo ficou sem gate nenhum:
+
+| arquivo | rota protegida | rota que ficou aberta |
+| --- | --- | --- |
+| `extrair_dados.js` | `/backend/v1/extrair-dados` (2x) | `/backend/v1/extrair-conhecimento` |
+| `validar_minuta.js` | `/backend/v1/validar-minuta` (2x) | `/backend/v1/consultar-ia` |
+
+`/backend/v1/consultar-ia` é a consulta do Especialista: assinante vencido
+continuaria gastando IA por lá.
+
+**A lição de método, e ela é nova.** A contagem de linhas pega resumo e pega
+corte, que eram as duas falhas conhecidas. Não pega **posição**. Quando o pedido
+manda inserir o MESMO bloco em dois lugares, a conferência tem de ser por
+âncora, não por total: "o bloco tem de estar dentro da rota X e dentro da rota
+Y". Pedido melhor: em vez de "insira nas duas ocorrências", nomear cada rota e
+mandar conferir uma ocorrência dentro de cada uma.
+
+### Bloqueio do plano vencido: PENDENTE, 3 arquivos
+
+| #   | Arquivo                                  | Como colar                    |
+| --- | ---------------------------------------- | ----------------------------- |
+| 1   | `pocketbase/hooks/extrair_dados.js`      | por INSTRUÇÃO (1.222 linhas)  |
+| 2   | `pocketbase/hooks/validar_minuta.js`     | por INSTRUÇÃO (1.325 linhas)  |
+| 3   | `src/lib/pocketbase/errors.ts`           | inteiro (89 linhas), 3ª vez   |
+
+Nos dois hooks, mover a cópia duplicada da primeira rota para a segunda, com
+conferência POR ROTA e não por total.
 
 ### O furo que isto fecha
 
