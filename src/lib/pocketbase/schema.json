@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T16:26:32.905Z",
+  "generatedAt": "2026-08-28T17:00:03.111Z",
   "collections": [
     {
       "name": "users",
@@ -89,6 +89,24 @@
         {
           "name": "avisos_plano",
           "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "validacoes_no_mes",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "consultas_no_mes",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "ia_mes_ref",
+          "type": "text",
           "required": false,
           "system": false
         }
