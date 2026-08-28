@@ -537,6 +537,23 @@ Não sei o mecanismo, e não vou fingir que sei. O que fica valendo:
    módulo novo e repontam-se os 17 pontos de importação, para que o arquivo que
    retrocede deixe de ser o que o app usa.
 
+**A hipótese do agente do Skip, e por que ela importa.** Perguntado, ele
+verificou que o arquivo não está no `preventAI` nem em proteção nenhuma, e
+levantou a explicação mais provável: **commit parcial a partir de um checkout
+desatualizado**. O agente desenvolvedor trabalha numa árvore anterior, commita a
+rodada, e o commit leva junto a versão velha dos arquivos que ele não tocou. Bate
+com o observado: a versão do projeto sobe e um arquivo intocado volta.
+
+A consequência que ele não tirou, e que vale mais do que o diagnóstico: **se é
+isso, o risco não é do `errors.ts`, é de qualquer arquivo fora da rodada.** Ele
+ofereceu um check automático do `errors.ts`; aceito, mas é um remendo de um
+arquivo só, e a próxima vítima seria outro. A proteção que não depende de
+adivinhar o alvo é a varredura dos 215 arquivos contra o repositório em todo
+download, que pegou as duas ocorrências.
+
+Foi pedido a ele que, ao fim de cada rodada, informe a LISTA de arquivos que
+gravou. Com ela, qualquer mudança fora da lista aparece na hora.
+
 ### Sobras do Bloco A nos e-mails: COMPLETO
 
 Os dois voltaram idênticos no download de 28/08/2026, com as contagens exatas
@@ -580,16 +597,29 @@ manda inserir o MESMO bloco em dois lugares, a conferência tem de ser por
 Y". Pedido melhor: em vez de "insira nas duas ocorrências", nomear cada rota e
 mandar conferir uma ocorrência dentro de cada uma.
 
-### Bloqueio do plano vencido: PENDENTE, 3 arquivos
+### Bloqueio do plano vencido: COMPLETO
 
-| #   | Arquivo                                  | Como colar                    |
-| --- | ---------------------------------------- | ----------------------------- |
-| 1   | `pocketbase/hooks/extrair_dados.js`      | por INSTRUÇÃO (1.222 linhas)  |
-| 2   | `pocketbase/hooks/validar_minuta.js`     | por INSTRUÇÃO (1.325 linhas)  |
-| 3   | `src/lib/pocketbase/errors.ts`           | inteiro (89 linhas), 3ª vez   |
+A correção dos dois hooks (mover a cópia duplicada da primeira rota para a
+segunda) veio certa na versão 0.0.784, e desta vez a conferência foi POR ROTA:
+um script mapeia a linha de cada `routerAdd`, mapeia a linha de cada gate, e
+atribui cada gate à rota que o antecede. Resultado nas quatro rotas: um gate de
+assinatura e um gate de teste em cada.
 
-Nos dois hooks, mover a cópia duplicada da primeira rota para a segunda, com
-conferência POR ROTA e não por total.
+```
+/backend/v1/extrair-dados          gate assinatura: 1 | gate teste: 1
+/backend/v1/extrair-conhecimento   gate assinatura: 1 | gate teste: 1
+/backend/v1/validar-minuta         gate assinatura: 1 | gate teste: 1
+/backend/v1/consultar-ia           gate assinatura: 1 | gate teste: 1
+```
+
+**Esta é a conferência que substitui a contagem de linhas quando o pedido
+repete o mesmo bloco em lugares diferentes.** Guarde o formato: âncora, não
+total.
+
+E a migração 1900000037 rodou: `avisos_plano` aparece em `users` no
+`schema.json` do download. Os três crons registrados no backend baixado:
+`lgpd_retencao_validacao` (03:00), `lembrete_pendencias` (12:00) e
+`aviso_assinatura` (12:10).
 
 ### O furo que isto fecha
 
@@ -639,7 +669,8 @@ pior jeito de descobrir que o número estava errado. Decidir quando o
 
 ### Fora isso, nada pende de colagem
 
-Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
+Nada pende de colagem: o download 0.0.784 fechou com **215 arquivos comparados
+e zero diferenças**. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
