@@ -767,9 +767,78 @@ venceria em **360 dias**. O corretor pagaria o ano e perderia cinco dias, e
 justamente na data em que ele mais confere. Passou a usar mês de calendário
 (`setMonth`). Só virou visível quando o anual passou a ser o preço em destaque.
 
+### Abas de ciclo e contadores de IA: PENDENTE, 5 arquivos
+
+| #   | Arquivo                                            | Como colar                    |
+| --- | -------------------------------------------------- | ----------------------------- |
+| 1   | `pocketbase/migrations/1900000038_users_add_contadores_ia.js` | inteiro (67 linhas)  |
+| 2   | `pocketbase/hooks/ia_contador.js`                  | inteiro (86 linhas)           |
+| 3   | `pocketbase/hooks/plano_carimbo.js`                | por INSTRUÇÃO (100 linhas)    |
+| 4   | `pocketbase/hooks/validar_minuta.js`               | por INSTRUÇÃO (1.363 linhas)  |
+| 5   | `src/pages/Planos.tsx`                             | inteiro (473 linhas)          |
+
+Migração primeiro, mesma razão das duas anteriores.
+
+### As abas resolvem um problema que a mudança anterior criou
+
+Quando o ano virou o número em destaque, o mensal foi para dentro da nota e a
+nota inchou: a da Imobiliária ficou com quatro informações num parágrafo de
+12px. O seletor devolve cada preço ao lugar de número.
+
+Três decisões: **abre no anual** (abrir no mensal reconstrói a pergunta "vou
+usar em setembro?", que é a que faz o corretor de 4 negócios por ano cancelar);
+**o rótulo carrega o benefício** ("Anual, 2 meses grátis", porque "Anual"
+sozinho é uma opção e "2 meses grátis" é um motivo); e **o Avulso repete o
+mesmo valor nos dois lados** em vez de sair da grade, porque cartão que não
+pertence a nenhuma aba é o que sempre fica órfão nesse padrão.
+
+**O detalhe que quase passou:** o botão abre um chamado com a frase "Quero
+assinar o plano X (preço unidade)". Sem o ciclo ali, chegaria um pedido de
+assinatura sem dizer se a pessoa escolheu mês ou ano, e a cobrança ainda é
+fechada à mão. A unidade resolve sozinha, porque ela já diz "por ano" ou "por
+mês".
+
+### O contador vem ANTES do preço, e o motivo é medido
+
+O pedido era colocar preço na consulta de IA, avulsa ou em pacote. A resposta
+foi "ainda não", com um achado no meio: **hoje nada conta.** O único freio nas
+duas rotas de IA é uma janela de 60 segundos contra rajada, e ela é
+`fail-open`. Ou seja, os cartões prometem "20 validações por mês" e "60 por
+mês" desde que nasceram, e nunca houve régua atrás. Vender consulta avulsa
+seria a segunda promessa sem mecanismo na mesma página.
+
+Onde cada contagem mora, e por quê:
+
+- **Validação**: hook novo em cima de `validation_logs`, que a rota já cria a
+  cada chamada. Deixa o `validar_minuta.js` de 1.300 linhas intocado nessa
+  parte e não duplica a regra de quando a validação aconteceu. `status = 'fail'`
+  não conta: o corretor lê "usou 7 de 20", e cobrar tentativa frustrada é
+  errado. O custo real sai dos próprios logs, que guardam o status por 30 dias.
+- **Consulta do especialista**: dentro da rota, porque ela **não cria registro
+  nenhum**, só atualiza o pedido existente. Contar por hook de update
+  comparando o `ai_response` anterior seria mais elegante e falharia calado
+  quando a resposta nova fosse idêntica à antiga.
+
+`ia_mes_ref` é o mês de referência dos DOIS contadores, então quem chega
+primeiro no mês novo zera o outro. Sem isso, quem consultasse em setembro sem
+validar carregaria o número de agosto para sempre.
+
+### Um campo tinha ficado desprotegido, e ninguém tinha visto
+
+Ao acrescentar os três campos ao `plano_carimbo.js`, apareceu que o
+`avisos_plano` (do aviso de vencimento, entregue horas antes) **nunca tinha
+entrado na lista de campos protegidos**. No PocketBase o usuário tem update do
+próprio registro em `users`: sem a guarda, ele zeraria o próprio contador de
+avisos. Entrou junto.
+
+A restauração também passou a decidir `getInt` ou `getString` por uma lista de
+campos numéricos, em vez de um `if` com dois nomes escritos à mão. Devolver "0"
+como texto num campo numérico é o tipo de erro que passa no diff e aparece na
+conta do cliente.
+
 ### Fora isso, nada pende de colagem
 
-Nada pende de colagem: o download 0.0.790 fechou com 215 arquivos comparados e zero diferenças. Duas das três verificações que só o banco prova
+Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
