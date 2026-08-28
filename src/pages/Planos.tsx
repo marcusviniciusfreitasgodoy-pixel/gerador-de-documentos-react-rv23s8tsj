@@ -75,6 +75,25 @@ import { Badge } from '@/components/ui/badge'
  * O mensal continua existindo e continua R$ 69: ele é a referência da metade do
  * preço prometida na landing da Prime Circle ("Prime Circle Docs pela metade:
  * R$ 35 por mês"). Mexer nele quebra aquela página.
+ *
+ * "O QUE LANÇARMOS ENTRA SEM CUSTO": O QUE ESSA FRASE PROMETE E O QUE NÃO
+ *
+ * O pedido original era "toda funcionalidade futura incluída" no Profissional e
+ * no Imobiliária. A frase foi estreitada de propósito, por duas razões.
+ *
+ * A primeira: promessa aberta amarra o produto ao que ainda não existe. Se um
+ * dia um recurso tiver custo por uso (IA mais cara, base licenciada, integração
+ * paga), a escolha vira entregar no prejuízo ou voltar atrás com quem já pagou,
+ * e voltar atrás é o que este público menos perdoa. Por isso a frase fala de
+ * RECURSO DO SISTEMA e deixa serviço de gente fora, com o canal do especialista
+ * nomeado no próprio cartão como o exemplo.
+ *
+ * A segunda: o código é um só, e quase toda novidade aparece para todo mundo,
+ * Individual incluído. Prometer "novidade" só aos dois planos de cima ou não
+ * significaria nada, ou obrigaria a bloquear recurso de propósito. Então o que
+ * se promete não é RECEBER novidade, é ela NÃO VIRAR COBRANÇA: enquanto o plano
+ * estiver ativo, o que entrar não gera custo a mais nem reajuste no meio do ano.
+ * Isso é verificável e casa com o preço travado por 12 meses.
  */
 
 type Plano = {
@@ -124,6 +143,7 @@ const PLANOS: Plano[] = [
     itens: [
       'Tudo do Individual, com três vezes o teto',
       'Validação de minuta, 60 por mês',
+      'O que a gente lançar entra sem custo enquanto o plano estiver ativo',
       'Canal do especialista, orçado à parte',
     ],
   },
@@ -138,6 +158,7 @@ const PLANOS: Plano[] = [
       'Equipe, com convite por e-mail e aceite do termo',
       'Negócios da casa e trilha de acesso',
       'Régua jurídica própria da imobiliária',
+      'O que a gente lançar entra sem custo enquanto o plano estiver ativo',
     ],
   },
 ]
@@ -367,6 +388,17 @@ export default function PlanosPage() {
             Cinco negócios avulsos custam R$ 745. O ano inteiro do Individual custa R$ 690, com
             operações e validações que o avulso não dá. Quem fecha três ou quatro por ano fica bem
             no Avulso e não paga assinatura nenhuma: a conta é sua, e ela está aqui na mesa.
+          </p>
+        </div>
+        <div>
+          <p className="text-sm font-medium text-foreground">
+            O que a gente lançar já está no seu plano
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Nos planos Profissional e Imobiliária, o que for lançado no Prime Circle Docs entra sem
+            custo a mais enquanto o seu plano estiver ativo, e sem reajuste no meio do seu ano. A
+            exceção é o que é serviço de gente e não recurso do sistema: o canal do especialista
+            continua orçado caso a caso, como está dito no cartão.
           </p>
         </div>
         <div>
