@@ -560,6 +560,18 @@ ausente da árvore, zero imports para o caminho antigo e 16 para o novo,
 `Signup.tsx` com 1.085 linhas e os três hashes WebP intactos, e os 12 casos de
 comportamento passando contra o arquivo baixado.
 
+**A MUDANÇA DE CASA FOI VALIDADA NA RODADA SEGUINTE, E POR ACIDENTE.** No
+download 0.0.796 o `errors.ts` **RESSUSCITOU** com as mesmas 29 linhas, numa
+rodada que só pedia mudanças em dois hooks de backend. Ou seja: o retrocesso
+continua acontecendo, no mesmo ritmo, e desta vez **não fez absolutamente
+nada**, porque nenhum dos 16 pontos o importa (a única ocorrência do nome no
+projeto é o comentário dentro do próprio `mensagens.ts`, que explica por que ele
+existe). O `mensagens.ts` seguiu intacto com 119 linhas.
+
+É a melhor prova possível de que a decisão estava certa, e ela veio de graça: o
+mesmo evento que antes levava produção a falar inglês agora é um arquivo órfão
+no disco.
+
 **REGRA PERMANENTE: nada importa `src/lib/pocketbase/errors.ts`.** Se ele
 reaparecer, é resíduo do retrocesso. Não importe, não conserte, não unifique com
 o `mensagens.ts`. A duplicação do `extractFieldErrors` lá é o que faz o módulo
@@ -797,15 +809,17 @@ justamente na data em que ele mais confere. Passou a usar mês de calendário
 
 ### Abas de ciclo e contadores de IA: PENDENTE, 5 arquivos
 
-| #   | Arquivo                                            | Como colar                    |
-| --- | -------------------------------------------------- | ----------------------------- |
-| 1   | `pocketbase/migrations/1900000038_users_add_contadores_ia.js` | inteiro (67 linhas)  |
-| 2   | `pocketbase/hooks/ia_contador.js`                  | inteiro (86 linhas)           |
-| 3   | `pocketbase/hooks/plano_carimbo.js`                | por INSTRUÇÃO (100 linhas)    |
-| 4   | `pocketbase/hooks/validar_minuta.js`               | por INSTRUÇÃO (1.363 linhas)  |
-| 5   | `src/pages/Planos.tsx`                             | inteiro (473 linhas)          |
+Quatro dos cinco conferidos: a migração 1900000038 (67 linhas, e o dump do
+banco mostra os três campos em `users`), o `ia_contador.js` (86), o
+`plano_carimbo.js` (100, com as duas listas DENTRO do handler, conferido por
+script) e o `validar_minuta.js` (1.363, com o contador uma vez só e dentro da
+rota `/backend/v1/consultar-ia`, conferido por âncora).
 
-Migração primeiro, mesma razão das duas anteriores.
+**Falta o `src/pages/Planos.tsx` inteiro (473 linhas).**
+
+Nota sobre o ledger do Skip: na rodada dos dois hooks ele relatou "1 arquivo
+gravado", e dois tinham mudado, ambos pedidos. O ledger erra nas duas direções,
+então ele orienta, não prova. Quem prova é a varredura.
 
 ### As abas resolvem um problema que a mudança anterior criou
 
