@@ -153,9 +153,15 @@ routerAdd(
         return e.json(400, { error: 'meses precisa ser 1 (mensal) ou 12 (anual).' })
       }
 
-      var renova = new Date(Date.now() + meses * 30 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .replace('T', ' ')
+      // Mês de CALENDÁRIO, não bloco de 30 dias. Com 30 dias fixos, o plano
+      // anual venceria em 360 dias: o corretor pagaria o ano e perderia cinco
+      // dias, e ainda por cima na data em que ele mais confere, a da renovação.
+      // Detalhe pequeno que só aparece para quem paga, que é exatamente o
+      // público em que não se pode errar. Virou visível quando o anual passou a
+      // ser o preço em destaque na página de planos.
+      var dataRenova = new Date()
+      dataRenova.setMonth(dataRenova.getMonth() + meses)
+      var renova = dataRenova.toISOString().replace('T', ' ')
       user.set('plano', plano)
       user.set('plano_renova_em', renova)
       user.set('plano_limite_negocios', LIMITES[plano])

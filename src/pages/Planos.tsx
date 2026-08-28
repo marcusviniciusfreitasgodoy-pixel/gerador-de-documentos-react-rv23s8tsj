@@ -33,6 +33,48 @@ import { Badge } from '@/components/ui/badge'
  * operações um corretor abre de verdade por mês, e aí os números se recortam em
  * cima do real. Mudar valor aqui é mudar a constante `PLANOS` e a tabela
  * `LIMITES` do `negocio_limite.js`, nesta ordem.
+ *
+ * POR QUE O AVULSO CUSTA R$ 149, E NÃO R$ 49 (28/08/2026)
+ *
+ * O corretor autônomo fecha de 3 a 4 negócios POR ANO, não por mês. Três
+ * caminhos independentes dão o mesmo número: o mercado primário vendeu 426 mil
+ * unidades em 2025 (CBIC) para 730 mil corretores registrados (Cofeci); a renda
+ * média publicada pelo conselho, de R$ 3 mil a R$ 4 mil, só fecha com 3 a 4
+ * vendas anuais depois da divisão da comissão com a casa; e as pesquisas de
+ * nicho convergem em "a maioria faz menos de 10 por ano".
+ *
+ * Com essa frequência, o preço do avulso decide TUDO, porque ele define a
+ * partir de quantas operações assinar compensa:
+ *
+ *   avulso R$ 49  -> assinar só compensa a partir de 14 operações no ano
+ *   avulso R$ 99  -> a partir de 7
+ *   avulso R$ 149 -> a partir de 5
+ *
+ * A R$ 49 ninguém no mercado real alcança o ponto de virada, e a tabela inteira
+ * vira enfeite em volta do avulso: a assinatura nunca é a escolha racional. A
+ * R$ 149 a virada cai dentro da distribuição de verdade. E a receita por
+ * corretor deixa de depender de adivinhar a frequência dele: com 4 operações no
+ * ano, o avulso rende R$ 596 contra os R$ 690 do plano, quase o mesmo; a R$ 49
+ * rendia R$ 196, um quarto.
+ *
+ * O AVULSO É ÂNCORA, E ISSO É DELIBERADO
+ *
+ * A R$ 149 o avulso passa a custar mais que um mês de assinatura, então quem
+ * fizer a conta assina. É o efeito desejado, e é o papel que o `MELHORIAS.md`
+ * já dava a ele. Não espere receita de avulso: espere que ele empurre para o
+ * plano.
+ *
+ * O ANO NA FRENTE, O MÊS ATRÁS
+ *
+ * Quem faz 4 negócios por ano não pensa em mês. Pensando por mês, a pergunta
+ * vira "vou usar em setembro?", e a resposta honesta é "talvez não", que leva
+ * ao cancelamento. Pensando por ano, a pergunta vira "R$ 690 valem menos do que
+ * um advogado cobra por UM contrato?", e aí a resposta é óbvia. Por isso o
+ * número grande do cartão é o do ano e o mês virou nota.
+ *
+ * O mensal continua existindo e continua R$ 69: ele é a referência da metade do
+ * preço prometida na landing da Prime Circle ("Prime Circle Docs pela metade:
+ * R$ 35 por mês"). Mexer nele quebra aquela página.
  */
 
 type Plano = {
@@ -49,9 +91,9 @@ const PLANOS: Plano[] = [
   {
     id: 'avulso',
     nome: 'Avulso',
-    preco: 'R$ 49',
+    preco: 'R$ 149',
     unidade: 'por negócio',
-    nota: 'Uma operação, 30 dias para usar. Sem assinatura.',
+    nota: 'Uma operação, 30 dias para usar. Sem assinatura e sem renovação automática.',
     itens: [
       'Todos os documentos daquela operação',
       'Correções ilimitadas',
@@ -62,9 +104,9 @@ const PLANOS: Plano[] = [
   {
     id: 'corretor',
     nome: 'Individual',
-    preco: 'R$ 69',
-    unidade: 'por mês',
-    nota: 'R$ 690 no ano, dois meses grátis: menos que uma promessa avulsa. Até 10 operações por mês.',
+    preco: 'R$ 690',
+    unidade: 'por ano',
+    nota: 'Dois meses de graça, e o preço fica travado por 12 meses. Prefere mensal? R$ 69 por mês. Até 10 operações por mês.',
     itens: [
       'Todos os documentos, correções ilimitadas',
       'Validação de minuta, 20 por mês',
@@ -75,9 +117,9 @@ const PLANOS: Plano[] = [
   {
     id: 'profissional',
     nome: 'Profissional',
-    preco: 'R$ 97',
-    unidade: 'por mês',
-    nota: 'R$ 970 no ano. Até 30 operações por mês.',
+    preco: 'R$ 970',
+    unidade: 'por ano',
+    nota: 'Dois meses de graça, e o preço fica travado por 12 meses. Prefere mensal? R$ 97 por mês. Até 30 operações por mês.',
     destaque: true,
     itens: [
       'Tudo do Individual, com três vezes o teto',
@@ -88,9 +130,9 @@ const PLANOS: Plano[] = [
   {
     id: 'imobiliaria',
     nome: 'Imobiliária',
-    preco: 'R$ 197',
-    unidade: 'por mês, 3 assentos',
-    nota: 'Assento adicional R$ 59. Cada assento tem o teto do Profissional.',
+    preco: 'R$ 1.970',
+    unidade: 'por ano, 3 assentos',
+    nota: 'Dois meses de graça, e o preço fica travado por 12 meses. Prefere mensal? R$ 197 por mês. Assento adicional R$ 59 por mês. Cada assento tem o teto do Profissional.',
     itens: [
       'Quem só acompanha entra de graça, sem limite de gente',
       'Equipe, com convite por e-mail e aceite do termo',
@@ -169,8 +211,8 @@ export default function PlanosPage() {
           Escolha como quer usar o Prime Circle Docs
         </h1>
         <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground max-w-2xl">
-          Teste grátis por 15 dias, use em uma operação avulsa, ou assine para organizar a
-          documentação dos seus negócios todo mês.
+          Teste grátis por 15 dias, use em uma operação avulsa, ou assine o ano e resolva a
+          documentação de todos os seus negócios.
         </p>
       </div>
 
@@ -318,10 +360,20 @@ export default function PlanosPage() {
           </p>
         </div>
         <div>
+          <p className="text-sm font-medium text-foreground">
+            A partir do quinto negócio, o ano sai mais barato
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            Cinco negócios avulsos custam R$ 745. O ano inteiro do Individual custa R$ 690, com
+            operações e validações que o avulso não dá. Quem fecha três ou quatro por ano fica bem
+            no Avulso e não paga assinatura nenhuma: a conta é sua, e ela está aqui na mesa.
+          </p>
+        </div>
+        <div>
           <p className="text-sm font-medium text-foreground">A conta de referência</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             No mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500 com advogado, e a análise
-            de documentos é cobrada à parte. Aqui, o Avulso cobre a operação inteira por R$ 49, e a
+            de documentos é cobrada à parte. Aqui, o Avulso cobre a operação inteira por R$ 149, e a
             assinatura inclui a validação. O advogado continua no lugar certo: na análise do caso
             concreto, não na papelada repetitiva.
           </p>
