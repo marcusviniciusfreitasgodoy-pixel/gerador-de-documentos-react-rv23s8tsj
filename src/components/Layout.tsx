@@ -24,6 +24,8 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+import { useRealtime } from '@/hooks/use-realtime'
+import pb from '@/lib/pocketbase/client'
 import { getBrokerProfile } from '@/services/broker-profile'
 import { ConviteBanner } from '@/components/ConviteImobiliaria'
 import { Button } from '@/components/ui/button'
@@ -263,6 +265,29 @@ function AvisoDeTeto({ usados, teto }: { usados: number; teto: number }) {
   )
 }
 
+// Selo de pendências do Painel. Conta EXATAMENTE o que a fila do /admin
+// mostra: as duas coleções, com os mesmos filtros de lá. Contar só
+// `status = 'aberto'` seria mais simples e estaria errado: um chamado que você
+// começou a responder e deixou em andamento sumiria do selo e continuaria no
+// painel, e a informação que engana é justo a que diz que não há nada esperando.
+//
+// `getList(1, 1)` traz um registro só e o `totalItems`, que é tudo o que o selo
+// precisa. Erro aqui é silencioso de propósito: selo é enfeite, e não pode
+// derrubar o cabeçalho de todas as telas se o backend estiver fora.
+async function contarPendencias(): Promise<number> {
+  const [suporte, chamados] = await Promise.all([
+    pb.collection('expert_support_requests').getList(1, 1, {
+      filter: "status != 'completed'",
+      fields: 'id',
+    }),
+    pb.collection('chamados').getList(1, 1, {
+      filter: "status != 'resolvido'",
+      fields: 'id',
+    }),
+  ])
+  return suporte.totalItems + chamados.totalItems
+}
+
 export default function Layout() {
   const {
     isAuthenticated,
@@ -289,6 +314,47 @@ export default function Layout() {
   // 'imobiliaria'). O broker_profile é owner-scoped; o admin da plataforma lê
   // todos (migration 1900000026), mas a aba é do gestor, não do admin.
   const [isAgency, setIsAgency] = useState(false)
+
+  // Quantos pedidos esperam resposta. Só o admin consulta: para o corretor o
+  // item Painel nem existe, e ele não paga nenhuma requisição por isto.
+  const [pendencias, setPendencias] = useState(0)
+  const contaPendencias = isAuthenticated && isAdmin
+  useEffect(() => {
+    if (!contaPendencias) {
+      setPendencias(0)
+      return
+    }
+    let ativo = true
+    contarPendencias()
+      .then((n) => {
+        if (ativo) setPendencias(n)
+      })
+      .catch(() => {})
+    return () => {
+      ativo = false
+    }
+    // `pathname` na lista: sair do /admin depois de encerrar itens tem de
+    // atualizar o selo, e a troca de tela é o gancho mais barato para isso.
+  }, [contaPendencias, pathname])
+  // Chegou pedido novo (ou alguém encerrou um) com a tela aberta: reconta.
+  useRealtime(
+    'chamados',
+    () => {
+      contarPendencias()
+        .then(setPendencias)
+        .catch(() => {})
+    },
+    contaPendencias,
+  )
+  useRealtime(
+    'expert_support_requests',
+    () => {
+      contarPendencias()
+        .then(setPendencias)
+        .catch(() => {})
+    },
+    contaPendencias,
+  )
 
   const [dark, setDark] = useState(
     () => typeof window !== 'undefined' && localStorage.getItem('pc-theme') === 'dark',
@@ -395,7 +461,7 @@ export default function Layout() {
                     aria-label={item.label}
                     className={({ isActive }) =>
                       cn(
-                        'flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors',
+                        'relative flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium transition-colors',
                         isActive
                           ? 'text-[#C9A84C] bg-white/[0.06]'
                           : 'text-[#E8E0CC]/75 hover:text-[#F5F1E6] hover:bg-white/5',
@@ -404,6 +470,19 @@ export default function Layout() {
                   >
                     <item.icon className="h-4 w-4 shrink-0" />
                     <span>{item.label}</span>
+                    {item.to === '/admin' && pendencias > 0 && (
+                      <>
+                        {/* Entre lg e xl a barra já anda no limite: uma conta que
+                            seja admin E imobiliária, com o número de três dígitos,
+                            estoura 1024 por 12px (medido). Ali o aviso é um ponto,
+                            que não ocupa largura nenhuma por ser absoluto. Do xl
+                            para cima sobra espaço e o número aparece. */}
+                        <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-[#C9A84C] ring-2 ring-[#0E0E0E] xl:hidden" />
+                        <span className="hidden h-4 min-w-4 items-center justify-center rounded-full bg-[#C9A84C] px-[3px] text-[10px] font-bold leading-none text-[#0E0E0E] xl:inline-flex">
+                          {pendencias > 99 ? '99+' : pendencias}
+                        </span>
+                      </>
+                    )}
                   </NavLink>
                 ))}
                 <span className="hidden xl:inline text-xs text-[#E8E0CC]/50 px-2 truncate max-w-[180px]">
@@ -436,10 +515,20 @@ export default function Layout() {
                 <SheetTrigger asChild>
                   <button
                     type="button"
-                    aria-label="Abrir menu"
-                    className="lg:hidden flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-[#E8E0CC] hover:bg-white/10 active:bg-white/15 transition-colors"
+                    aria-label={
+                      pendencias > 0
+                        ? 'Abrir menu (' + pendencias + ' pedido(s) esperando resposta)'
+                        : 'Abrir menu'
+                    }
+                    className="lg:hidden relative flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-[#E8E0CC] hover:bg-white/10 active:bg-white/15 transition-colors"
                   >
                     <Menu className="h-6 w-6" />
+                    {/* No celular o painel nasce fechado, então o selo lá dentro
+                        não é visto. Este ponto é o que faz a pendência aparecer
+                        sem abrir nada. */}
+                    {pendencias > 0 && (
+                      <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#C9A84C] ring-2 ring-[#0E0E0E]" />
+                    )}
                   </button>
                 </SheetTrigger>
                 {/* [&>button] mira o "X" de fechar que o SheetContent injeta:
@@ -489,6 +578,11 @@ export default function Layout() {
                                 )}
                               >
                                 {item.label}
+                                {item.to === '/admin' && pendencias > 0 && (
+                                  <span className="ml-2 inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#C9A84C] px-1 text-[11px] font-bold leading-none text-[#0E0E0E] align-middle">
+                                    {pendencias > 99 ? '99+' : pendencias}
+                                  </span>
+                                )}
                               </span>
                               <span className="text-xs text-[#E8E0CC]/55 leading-snug mt-0.5">
                                 {item.desc}
