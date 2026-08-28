@@ -38,7 +38,7 @@ import {
   deleteLegalKnowledge,
   type LegalKnowledge,
 } from '@/services/legal-knowledge'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 import pb from '@/lib/pocketbase/client'
 import { extractTextFromDocument, isSupportedFile } from '@/lib/document-extract'
 

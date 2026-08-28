@@ -40,7 +40,7 @@ import {
   type AdminUsuario,
   type PreviaExclusao,
 } from '@/services/admin'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 // Rótulos comerciais dos planos, na mesma língua da página /planos. O id
 // interno ('corretor') não aparece para ninguém, nem para o admin.

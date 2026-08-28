@@ -53,7 +53,7 @@ import {
   ESPECIALISTA_INTRO,
   ESPECIALISTA_PILARES,
 } from '@/services/expert'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 // Objetivos que naturalmente pedem o especialista humano (Nível 2).
 const NEEDS_HUMAN_OBJECTIVES = ['full_review', 'risk_analysis', 'doc_analysis']

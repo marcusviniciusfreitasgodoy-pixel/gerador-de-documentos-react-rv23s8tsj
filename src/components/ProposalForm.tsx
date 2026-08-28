@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { createProposal, complexityLabels, type ComplexityType } from '@/services/expert'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 interface ProposalFormProps {
   requestId: string

@@ -36,7 +36,7 @@ import {
   ESPECIALISTA_PILARES,
   type EspecialistaPilarId,
 } from '@/services/expert'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 // Ícone e cor de cada pilar: layout mora aqui, texto mora em `services/expert`
 // (que é .ts e não comporta JSX). A chave é o `id` do pilar.

@@ -49,7 +49,7 @@ import {
   type MeusConvites,
   type VinculoAtual,
 } from '@/services/agencies'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 // Os dois componentes leem o mesmo endpoint e podem estar na tela ao mesmo
 // tempo: no perfil, a faixa fica logo acima do painel. Sem um aviso entre eles,

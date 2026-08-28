@@ -49,7 +49,7 @@ import {
   type BrokerCandidate,
   type AgencyInvite,
 } from '@/services/agencies'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 import type { BrokerProfile } from '@/services/broker-profile'
 
 // Hoje no formato ISO date (YYYY-MM-DD) — default do input de aceite do termo.
