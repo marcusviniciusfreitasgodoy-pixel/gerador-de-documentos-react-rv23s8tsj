@@ -122,6 +122,7 @@ routerAdd(
     // que vale no fim é o de lá, porque é recarimbado a cada operação; este
     // aqui só evita a janela entre o carimbo do plano e a primeira operação.
     var LIMITES = {
+      avulso: 1,
       corretor: 10,
       profissional: 30,
       imobiliaria: 30,
@@ -153,6 +154,13 @@ routerAdd(
         return e.json(400, { error: 'meses precisa ser 1 (mensal) ou 12 (anual).' })
       }
 
+      // Avulso de 12 meses não existe: ele é uma compra única, com prazo de um
+      // mês para usar. Deixar passar criaria um plano que a página de preços
+      // não vende e que ninguém saberia explicar depois.
+      if (plano === 'avulso' && meses !== 1) {
+        return e.json(400, { error: 'O avulso é de um mês. Para 12 meses, use um plano.' })
+      }
+
       // Mês de CALENDÁRIO, não bloco de 30 dias. Com 30 dias fixos, o plano
       // anual venceria em 360 dias: o corretor pagaria o ano e perderia cinco
       // dias, e ainda por cima na data em que ele mais confere, a da renovação.
@@ -165,6 +173,14 @@ routerAdd(
       user.set('plano', plano)
       user.set('plano_renova_em', renova)
       user.set('plano_limite_negocios', LIMITES[plano])
+
+      // Zera o contador de validação do avulso a cada carimbo. Ele NÃO pode ser
+      // o contador mensal: o avulso dura 30 dias e atravessa a virada de mês, e
+      // com o mensal quem comprasse dia 28 e validasse dia 29 ganharia outra
+      // validação no dia 1º. Aqui o marco é a compra, que é o que foi vendido.
+      // Zerar em todo carimbo, e não só no do avulso, é de propósito: assim um
+      // corretor que sai do plano e volta para um avulso começa limpo.
+      user.set('avulso_validacoes', 0)
       $app.save(user)
 
       return e.json(200, { ok: true, plano: plano, plano_renova_em: renova })

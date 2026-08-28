@@ -48,6 +48,7 @@ onRecordUpdateRequest((e) => {
     'validacoes_no_mes',
     'consultas_no_mes',
     'ia_mes_ref',
+    'avulso_validacoes',
   ]
 
   // Quais deles são número. A lista existe porque a restauração precisa saber
@@ -60,6 +61,7 @@ onRecordUpdateRequest((e) => {
     'avisos_plano',
     'validacoes_no_mes',
     'consultas_no_mes',
+    'avulso_validacoes',
   ]
 
   try {

@@ -41,6 +41,14 @@ onRecordCreate((e) => {
   // Falha muda, que só apareceria quando alguém fosse cobrar. É a mesma razão
   // de o `TRIAL_DIAS` morar dentro do handler em `trial_carimbo.js`.
   var LIMITES = {
+    // O avulso é uma operação, e é a única linha desta tabela que NÃO é
+    // hipótese: os tetos de 10 e 30 saíram de uma conta, este saiu do que foi
+    // vendido. Ele também não bloqueia, pelo mesmo motivo dos outros (o
+    // documento sai antes do negócio existir, veja abaixo), e não bloquear aqui
+    // sai barato: quem abre a segunda operação num avulso pagou R$ 149 por um
+    // mês que valeria R$ 69, ou seja, pagou A MAIS. O aviso de teto na tela
+    // transforma isso na conversa de upgrade, que é o desfecho certo.
+    avulso: 1,
     corretor: 10,
     profissional: 30,
     imobiliaria: 30,

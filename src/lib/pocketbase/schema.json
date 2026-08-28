@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T17:48:58.870Z",
+  "generatedAt": "2026-08-28T18:48:05.526Z",
   "collections": [
     {
       "name": "users",
@@ -107,6 +107,12 @@
         {
           "name": "ia_mes_ref",
           "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "avulso_validacoes",
+          "type": "number",
           "required": false,
           "system": false
         }
