@@ -172,8 +172,9 @@ const ROTAS_DO_TESTE = ['/', '/proposta-reserva', '/distrato', '/permuta', '/val
 // mentira num deles, e a mentira cai justamente em cima de quem já pagou uma
 // vez: dizer "seus 15 dias de teste acabaram" para um assinante é o tipo de
 // detalhe que faz o corretor duvidar de que a cobrança está certa.
-function TesteTerminado({ motivo }: { motivo: 'teste' | 'assinatura' }) {
+function TesteTerminado({ motivo }: { motivo: 'teste' | 'assinatura' | 'avulso' }) {
   const assinatura = motivo === 'assinatura'
+  const avulso = motivo === 'avulso'
   return (
     <div className="w-full max-w-lg animate-fade-in-up">
       <div className="rounded-lg border border-border bg-card p-6 space-y-4 shadow-elevation">
@@ -182,13 +183,19 @@ function TesteTerminado({ motivo }: { motivo: 'teste' | 'assinatura' }) {
             <Clock className="h-5 w-5" />
           </div>
           <h2 className="font-display text-2xl font-medium text-foreground">
-            {assinatura ? 'Sua assinatura venceu' : 'Seu teste terminou'}
+            {avulso
+              ? 'Seu avulso terminou'
+              : assinatura
+                ? 'Sua assinatura venceu'
+                : 'Seu teste terminou'}
           </h2>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          {assinatura
-            ? 'A assinatura chegou ao fim do prazo, então gerar documento e validar minuta estão pausados por enquanto.'
-            : 'Os 15 dias de teste acabaram, então gerar documento e validar minuta estão pausados por enquanto.'}
+          {avulso
+            ? 'O mês do avulso chegou ao fim, então gerar documento e validar minuta estão pausados por enquanto.'
+            : assinatura
+              ? 'A assinatura chegou ao fim do prazo, então gerar documento e validar minuta estão pausados por enquanto.'
+              : 'Os 15 dias de teste acabaram, então gerar documento e validar minuta estão pausados por enquanto.'}
         </p>
         <div className="rounded-md bg-primary/5 p-3">
           <p className="text-sm font-medium text-foreground">Seus dados continuam seus</p>
@@ -198,9 +205,11 @@ function TesteTerminado({ motivo }: { motivo: 'teste' | 'assinatura' }) {
           </p>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          {assinatura
-            ? 'Para voltar a gerar, renove a assinatura. Se preferir, fale com a gente que a gente resolve junto.'
-            : 'Quer continuar usando? Veja os planos: tem assinatura mensal e tem uso avulso, por operação, para quem não quer assinar.'}
+          {avulso
+            ? 'Para o próximo negócio, compre outro avulso ou assine: a partir do quinto negócio no ano, o plano sai mais barato.'
+            : assinatura
+              ? 'Para voltar a gerar, renove a assinatura. Se preferir, fale com a gente que a gente resolve junto.'
+              : 'Quer continuar usando? Veja os planos: tem assinatura mensal e tem uso avulso, por operação, para quem não quer assinar.'}
         </p>
         <div className="flex flex-wrap gap-2 pt-1">
           <Button asChild>
@@ -306,6 +315,7 @@ export default function Layout() {
     isAdmin,
     trialExpirado,
     trialDiasRestantes,
+    plano,
     planoAtivo,
     planoVencido,
     acessoBloqueado,
@@ -669,7 +679,9 @@ export default function Layout() {
               sozinho trancaria justamente quem paga, no dia seguinte ao
               pagamento. */}
           {isAuthenticated && acessoBloqueado && ROTAS_DO_TESTE.includes(pathname) ? (
-            <TesteTerminado motivo={planoVencido ? 'assinatura' : 'teste'} />
+            <TesteTerminado
+              motivo={planoVencido ? (plano === 'avulso' ? 'avulso' : 'assinatura') : 'teste'}
+            />
           ) : (
             <Outlet />
           )}

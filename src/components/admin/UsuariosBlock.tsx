@@ -45,9 +45,19 @@ import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 // Rótulos comerciais dos planos, na mesma língua da página /planos. O id
 // interno ('corretor') não aparece para ninguém, nem para o admin.
 const ROTULO_PLANO: Record<string, string> = {
+  avulso: 'Avulso',
   corretor: 'Individual',
   profissional: 'Profissional',
   imobiliaria: 'Imobiliária',
+}
+
+// O avulso é compra única, com um mês para usar. Anual de avulso não existe, e
+// o servidor recusa: sem esta lista o painel ofereceria um botão que só produz
+// erro, que é a pior forma de descobrir uma regra.
+const PLANOS_COM_ANUAL: Record<string, boolean> = {
+  corretor: true,
+  profissional: true,
+  imobiliaria: true,
 }
 
 function dataCurta(iso: string): string {
@@ -358,10 +368,10 @@ function UsuariosAdmin() {
                 </Label>
                 <p className="text-xs text-muted-foreground">
                   Use depois de combinar o pagamento (ou o benefício Prime Circle). Mensal renova em
-                  30 dias; anual, em 12 meses.
+                  30 dias; anual, em 12 meses. O Avulso é uma operação, vale um mês e não tem anual.
                 </p>
                 <div className="grid grid-cols-2 gap-2">
-                  {(['corretor', 'profissional', 'imobiliaria'] as const).map((p) => (
+                  {(['avulso', 'corretor', 'profissional', 'imobiliaria'] as const).map((p) => (
                     <div key={p} className="flex gap-1">
                       <Button
                         variant={alvo.plano === p ? 'default' : 'outline'}
@@ -377,21 +387,23 @@ function UsuariosAdmin() {
                       >
                         {ROTULO_PLANO[p]}
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="px-2 text-xs"
-                        title={`${ROTULO_PLANO[p]} anual`}
-                        disabled={salvando}
-                        onClick={() =>
-                          agir(
-                            () => carimbarPlano(alvo.id, p, 12),
-                            `Plano ${ROTULO_PLANO[p]} registrado (anual).`,
-                          )
-                        }
-                      >
-                        12m
-                      </Button>
+                      {PLANOS_COM_ANUAL[p] && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="px-2 text-xs"
+                          title={`${ROTULO_PLANO[p]} anual`}
+                          disabled={salvando}
+                          onClick={() =>
+                            agir(
+                              () => carimbarPlano(alvo.id, p, 12),
+                              `Plano ${ROTULO_PLANO[p]} registrado (anual).`,
+                            )
+                          }
+                        >
+                          12m
+                        </Button>
+                      )}
                     </div>
                   ))}
                   <Button

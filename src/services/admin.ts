@@ -46,7 +46,9 @@ export const estenderTeste = (userId: string, dias: number): Promise<{ ok: boole
 
 export const carimbarPlano = (
   userId: string,
-  plano: '' | 'corretor' | 'profissional' | 'imobiliaria',
+  // `avulso` é plano de primeira classe desde 28/08/2026: uma operação, um mês,
+  // sem anual. O servidor recusa `avulso` com 12 meses, e o painel nem oferece.
+  plano: '' | 'avulso' | 'corretor' | 'profissional' | 'imobiliaria',
   meses: 1 | 12 = 1,
 ): Promise<{ ok: boolean }> =>
   pb.send('/backend/v1/admin/usuarios/plano', {
