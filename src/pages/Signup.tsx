@@ -192,7 +192,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       </div>
       <div data-anim style="border-top:1px dashed rgba(245,241,230,.22);padding-top:18px">
         <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(38px,4vw,52px);font-weight:500;line-height:1;color:#C9A84C"><span data-count="3">3</span></p>
-        <p style="margin:10px 0 0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,224,204,.6)">fases da operação cobertas</p>
+        <p style="margin:10px 0 0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(232,224,204,.6)">fases, da captação às chaves</p>
       </div>
       <div data-anim style="border-top:1px dashed rgba(245,241,230,.22);padding-top:18px">
         <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(38px,4vw,52px);font-weight:500;line-height:1;color:#C9A84C"><span data-count="30">30</span></p>
@@ -283,7 +283,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <div data-anim style="margin-top:clamp(48px,6vw,72px);border:1px solid #DDD5C7;background:#FDFBF6;padding:clamp(30px,4vw,52px)">
         <p style="margin:0 0 16px;display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#8B7340">O dossiê do negócio<span style="display:block;width:40px;height:1px;background:rgba(201,168,76,.5)"></span></p>
         <h3 style="margin:0;max-width:840px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(26px,3.2vw,40px);line-height:1.1;letter-spacing:-.02em;color:#0E0E0E">Modelo de contrato qualquer um tem. <em style="font-style:italic;color:#7a6435">O dossiê é a diferença.</em></h3>
-        <p style="margin:22px 0 0;max-width:660px;font-size:15.5px;line-height:1.75;color:#5A544C">Uma pasta de modelos obriga você a redigitar as mesmas partes e o mesmo imóvel em cada documento, com uma chance nova de erro em cada um. Aqui a operação é cadastrada uma vez e todos os documentos daquele negócio bebem dela.</p>
+        <p style="margin:22px 0 0;max-width:660px;font-size:15.5px;line-height:1.75;color:#5A544C">Aqui a operação é cadastrada uma vez, e todos os documentos daquele negócio puxam dela: o mesmo dado nunca é digitado duas vezes.</p>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:#DDD5C7;margin-top:34px;border:1px solid #DDD5C7">
           <div style="background:#FDFBF6;padding:26px 24px">
             <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;color:#0E0E0E">Cadastrou uma vez</h4>
@@ -340,7 +340,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <h2 data-anim style="margin:0;max-width:760px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">
         16 documentos. Da autorização de venda à <em style="font-style:italic;color:#7a6435">entrega das chaves.</em>
       </h2>
-      <p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar. E nenhum deles começa em branco: todos bebem do dossiê do negócio.</p>
+      <p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar. E nenhum deles começa em branco: todos puxam do dossiê do negócio.</p>
 
       <div data-anim style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
         <div style="background:#FDFBF6;padding:clamp(28px,3.4vw,40px)">
