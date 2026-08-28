@@ -897,30 +897,15 @@ onRecordAfterCreateSuccess((e) => {
     var novo = e.record
     var admins = $app.findRecordsByFilter('users', 'isAdmin = true', '', 10, 0)
     var meta = $app.settings().meta
-
-    // Link direto para a tela de resposta. Antes o e-mail mandava editar o
-    // registro no painel do PocketBase; o /admin do app existe desde 27/08/2026
-    // e responde com resposta, status e encerramento na mesma tela.
-    var baseUrl = ''
-    try {
-      baseUrl = String(meta.appURL || '')
-    } catch (_) {
-      baseUrl = ''
-    }
-    if (!baseUrl) baseUrl = 'https://www.documentos.primecircle.app.br'
-    baseUrl = baseUrl.replace(/\/+$/, '')
-    var linkChamado = baseUrl + '/chamados/' + chamado.id
-
     for (var i = 0; i < admins.length; i++) {
       var adminEmail = admins[i].email()
       if (!adminEmail) continue
       var msg = new MailerMessage({
         from: { address: meta.senderAddress, name: meta.senderName },
         to: [{ address: adminEmail }],
-        subject:
-          'Novo cadastro no Gerador de Documentos: ' + (novo.getString('name') || novo.email()),
+        subject: 'Novo cadastro no Prime Circle Docs: ' + (novo.getString('name') || novo.email()),
         html:
-          '<p>Um novo usuário se cadastrou no Gerador de Documentos.</p>' +
+          '<p>Um novo usuário se cadastrou no Prime Circle Docs.</p>' +
           '<p><strong>Nome:</strong> ' +
           (novo.getString('name') || '(sem nome)') +
           '<br><strong>E-mail:</strong> ' +
@@ -992,7 +977,7 @@ onMailerRecordVerificationSend((e) => {
         '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
         '<div style="padding:28px 32px 0 32px;">' +
         '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
-        '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
+        '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C S</p>' +
         '</div>' +
         '<div style="padding:20px 32px 32px 32px;">' +
         '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Confirme seu e-mail</h1>' +
@@ -1025,7 +1010,7 @@ onMailerRecordPasswordResetSend((e) => {
         '<div style="max-width:480px;margin:0 auto;background:#FAF6EE;border-radius:12px;overflow:hidden;">' +
         '<div style="padding:28px 32px 0 32px;">' +
         '<p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:3px;color:#C9A84C;font-weight:bold;">PRIME CIRCLE</p>' +
-        '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C U M E N T O S</p>' +
+        '<p style="margin:2px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;color:#8A8578;">D O C S</p>' +
         '</div>' +
         '<div style="padding:20px 32px 32px 32px;">' +
         '<h1 style="margin:0 0 12px 0;font-family:Georgia,\'Times New Roman\',serif;font-size:26px;font-weight:normal;color:#0E0E0E;">Redefinir sua senha</h1>' +
@@ -1062,7 +1047,6 @@ onRecordAfterCreateSuccess((e) => {
     }
     var admins = $app.findRecordsByFilter('users', 'isAdmin = true', '', 10, 0)
     var meta = $app.settings().meta
-
     // Link direto para a tela de resposta. Antes o e-mail mandava editar o
     // registro no painel do PocketBase; o /admin do app existe desde 27/08/2026
     // e responde com resposta, status e encerramento na mesma tela.
@@ -1075,7 +1059,6 @@ onRecordAfterCreateSuccess((e) => {
     if (!baseUrl) baseUrl = 'https://www.documentos.primecircle.app.br'
     baseUrl = baseUrl.replace(/\/+$/, '')
     var linkChamado = baseUrl + '/chamados/' + chamado.id
-
     for (var i = 0; i < admins.length; i++) {
       var adminEmail = admins[i].email()
       if (!adminEmail) continue
