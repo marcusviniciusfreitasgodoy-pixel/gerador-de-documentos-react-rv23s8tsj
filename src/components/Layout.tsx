@@ -167,7 +167,13 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { erro: Error | n
 // quatro rotas de IA, que é onde está o custo.
 const ROTAS_DO_TESTE = ['/', '/proposta-reserva', '/distrato', '/permuta', '/validar']
 
-function TesteTerminado() {
+// Uma tela, dois motivos. Quem nunca assinou vê o fim do teste; quem assinou e
+// deixou vencer vê a assinatura vencida. A mesma frase para os dois casos seria
+// mentira num deles, e a mentira cai justamente em cima de quem já pagou uma
+// vez: dizer "seus 15 dias de teste acabaram" para um assinante é o tipo de
+// detalhe que faz o corretor duvidar de que a cobrança está certa.
+function TesteTerminado({ motivo }: { motivo: 'teste' | 'assinatura' }) {
+  const assinatura = motivo === 'assinatura'
   return (
     <div className="w-full max-w-lg animate-fade-in-up">
       <div className="rounded-lg border border-border bg-card p-6 space-y-4 shadow-elevation">
@@ -175,11 +181,14 @@ function TesteTerminado() {
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary/10 text-primary">
             <Clock className="h-5 w-5" />
           </div>
-          <h2 className="font-display text-2xl font-medium text-foreground">Seu teste terminou</h2>
+          <h2 className="font-display text-2xl font-medium text-foreground">
+            {assinatura ? 'Sua assinatura venceu' : 'Seu teste terminou'}
+          </h2>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Os 15 dias de teste acabaram, então gerar documento e validar minuta estão pausados por
-          enquanto.
+          {assinatura
+            ? 'A assinatura chegou ao fim do prazo, então gerar documento e validar minuta estão pausados por enquanto.'
+            : 'Os 15 dias de teste acabaram, então gerar documento e validar minuta estão pausados por enquanto.'}
         </p>
         <div className="rounded-md bg-primary/5 p-3">
           <p className="text-sm font-medium text-foreground">Seus dados continuam seus</p>
@@ -189,12 +198,13 @@ function TesteTerminado() {
           </p>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Quer continuar usando? Veja os planos: tem assinatura mensal e tem uso avulso, por
-          operação, para quem não quer assinar.
+          {assinatura
+            ? 'Para voltar a gerar, renove a assinatura. Se preferir, fale com a gente que a gente resolve junto.'
+            : 'Quer continuar usando? Veja os planos: tem assinatura mensal e tem uso avulso, por operação, para quem não quer assinar.'}
         </p>
         <div className="flex flex-wrap gap-2 pt-1">
           <Button asChild>
-            <Link to="/planos">Ver planos</Link>
+            <Link to="/planos">{assinatura ? 'Renovar assinatura' : 'Ver planos'}</Link>
           </Button>
           <Button asChild variant="outline">
             <Link to="/negocios">Ver meus negócios</Link>
@@ -297,6 +307,7 @@ export default function Layout() {
     trialExpirado,
     trialDiasRestantes,
     planoAtivo,
+    planoVencido,
     acessoBloqueado,
     negociosNoMes,
     planoLimiteNegocios,
@@ -658,7 +669,7 @@ export default function Layout() {
               sozinho trancaria justamente quem paga, no dia seguinte ao
               pagamento. */}
           {isAuthenticated && acessoBloqueado && ROTAS_DO_TESTE.includes(pathname) ? (
-            <TesteTerminado />
+            <TesteTerminado motivo={planoVencido ? 'assinatura' : 'teste'} />
           ) : (
             <Outlet />
           )}

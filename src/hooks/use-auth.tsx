@@ -19,6 +19,10 @@ interface AuthContextType {
   plano: string
   planoRenovaEm: string | null
   planoAtivo: boolean
+  // Teve plano e a data de renovação já passou. Separado de `planoAtivo` porque
+  // a tela precisa saber QUAL frase mostrar: quem nunca assinou vê "seu teste
+  // terminou", quem assinou vê "sua assinatura venceu".
+  planoVencido: boolean
   negociosNoMes: number
   planoLimiteNegocios: number
   // O gate de verdade. Existe separado de `trialExpirado` porque assinante que
@@ -74,7 +78,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // o que mantém a conta em teste sem teto de volume, já que o teste é limitado
   // por prazo.
   const planoLimiteNegocios = Number(user?.plano_limite_negocios ?? 0) || 0
-  const acessoBloqueado = !isAdmin && !planoAtivo && trialExpirado
+  // Assinatura vencida bloqueia SOZINHA, sem passar pelo prazo do teste. Sem
+  // esta linha existia um furo silencioso: a checagem antiga só barrava quem
+  // tinha `trial_expira_em` preenchido E vencido, e as contas anteriores ao
+  // teste de 15 dias têm esse campo VAZIO de propósito (migração 1900000033,
+  // para não ligar prazo retroativo em quem já estava dentro). Ou seja, uma
+  // dessas contas assinava, o mês vencia, e ela seguia com acesso total.
+  //
+  // Exige a data presente e no passado: plano carimbado SEM data de renovação é
+  // erro de cadastro do admin, e trancar quem paga por erro nosso é pior do que
+  // deixar passar um dia a mais.
+  const planoVencido = !isAdmin && !!plano && !!renovaMs && renovaMs < Date.now()
+  const acessoBloqueado = !isAdmin && !planoAtivo && (trialExpirado || planoVencido)
 
   useEffect(() => {
     const unsubscribe = pb.authStore.onChange((_token, record) => {
@@ -137,6 +152,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         plano,
         planoRenovaEm,
         planoAtivo,
+        planoVencido,
         negociosNoMes,
         planoLimiteNegocios,
         acessoBloqueado,

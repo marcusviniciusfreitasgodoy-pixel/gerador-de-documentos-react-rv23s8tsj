@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-28T13:18:19.960Z",
+  "generatedAt": "2026-08-28T14:08:42.518Z",
   "collections": [
     {
       "name": "users",
@@ -82,6 +82,12 @@
         },
         {
           "name": "plano_limite_negocios",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "avisos_plano",
           "type": "number",
           "required": false,
           "system": false
