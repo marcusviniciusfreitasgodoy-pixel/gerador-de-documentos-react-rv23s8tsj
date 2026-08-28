@@ -39,6 +39,27 @@ onRecordUpdateRequest((e) => {
     'negocios_no_mes',
     'contador_mes',
     'plano_limite_negocios',
+    // Carimbados pelo servidor depois desta lista nascer, e igualmente do
+    // servidor: o contador de avisos de vencimento (`assinatura_aviso.js`) e os
+    // contadores de uso de IA (`ia_contador.js` e a rota `consultar-ia`). Sem
+    // entrar aqui, o próprio usuário zeraria o que o sistema conta, porque no
+    // PocketBase ele tem update do próprio registro em `users`.
+    'avisos_plano',
+    'validacoes_no_mes',
+    'consultas_no_mes',
+    'ia_mes_ref',
+  ]
+
+  // Quais deles são número. A lista existe porque a restauração precisa saber
+  // se lê o valor anterior com `getInt` ou com `getString`: devolver "0" como
+  // texto num campo numérico é o tipo de erro que passa no diff e aparece na
+  // conta do cliente.
+  var CAMPOS_NUMERICOS = [
+    'negocios_no_mes',
+    'plano_limite_negocios',
+    'avisos_plano',
+    'validacoes_no_mes',
+    'consultas_no_mes',
   ]
 
   try {
@@ -65,7 +86,7 @@ onRecordUpdateRequest((e) => {
           e.record.set(campo, '')
           continue
         }
-        if (campo === 'negocios_no_mes' || campo === 'plano_limite_negocios') {
+        if (CAMPOS_NUMERICOS.indexOf(campo) !== -1) {
           e.record.set(campo, original.getInt(campo))
         } else {
           e.record.set(campo, original.getString(campo))
