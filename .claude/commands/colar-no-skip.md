@@ -667,10 +667,73 @@ hipótese, e barrar um cliente pagante por um número que a gente inventou é o
 pior jeito de descobrir que o número estava errado. Decidir quando o
 `negocios_no_mes` tiver três semanas de dado real.
 
+### Preço: avulso a R$ 149 e o ano na frente: PENDENTE, 2 arquivos
+
+| #   | Arquivo                              | Como colar                    |
+| --- | ------------------------------------ | ----------------------------- |
+| 1   | `src/pages/Planos.tsx`               | inteiro (384 linhas, 16 KB)   |
+| 2   | `pocketbase/hooks/admin_usuarios.js` | por INSTRUÇÃO (414 linhas)    |
+
+### A frequência real do corretor derruba o preço antigo
+
+O corretor autônomo fecha **3 a 4 negócios POR ANO**, não por mês. Três
+caminhos independentes dão o mesmo número:
+
+- o mercado primário vendeu **426.260 unidades em 2025** (CBIC) para **730 mil
+  corretores registrados** (Cofeci, 2026);
+- a renda média que o próprio conselho publica, de R$ 3 mil a R$ 4 mil, só
+  fecha com 3 a 4 vendas anuais depois da divisão da comissão com a casa
+  (ticket de R$ 400 mil, comissão de 6%, metade para a imobiliária);
+- as pesquisas de nicho convergem em "a maioria faz menos de 10 por ano".
+
+Com essa frequência, **o preço do avulso decide a tabela inteira**, porque ele
+define a partir de quantas operações assinar compensa:
+
+| avulso | assinar compensa a partir de |
+| --- | --- |
+| R$ 49 | 14 operações no ano |
+| R$ 99 | 7 |
+| **R$ 149** | **5** |
+
+A R$ 49 ninguém alcança o ponto de virada e a assinatura nunca é a escolha
+racional: a tabela vira enfeite em volta do avulso. A R$ 149 a virada cai
+dentro da distribuição real. E a receita por corretor para de depender de
+adivinhar a frequência dele: com 4 operações no ano, o avulso rende R$ 596
+contra os R$ 690 do plano. A R$ 49 rendia R$ 196, um quarto.
+
+**O avulso vira âncora, e isso é deliberado.** A R$ 149 ele custa mais que um
+mês de assinatura, então quem faz a conta assina. Não espere receita de avulso:
+espere que ele empurre para o plano. É o papel que o `MELHORIAS.md` já dava a
+ele.
+
+### O mensal NÃO pode mudar
+
+R$ 69 é a referência da metade prometida na landing da Prime Circle
+(`lp-prime-circle.html`: "Prime Circle Docs pela metade: R$ 35 por mês"). Mexer
+no mensal quebra aquela página. Por isso o incentivo ao anual veio de destaque
+e de razão não-monetária, não de desconto novo:
+
+- o número grande do cartão passou a ser o do ano (R$ 690, R$ 970, R$ 1.970) e
+  o mensal virou nota;
+- **preço travado por 12 meses**, que está sob o nosso controle e fala com um
+  público desconfiado, sem prometer o que não se sustenta;
+- um bloco novo com a conta na mesa: cinco avulsos custam R$ 745, o ano custa
+  R$ 690.
+
+O `R$ 1.970` era o risco de layout (o comentário do arquivo já avisava que a
+unidade longa da imobiliária quebrava o número em duas linhas). Renderizado a
+1440, 768 e 390: os quatro preços em uma linha só, zero rolagem horizontal.
+
+### A renovação usava blocos de 30 dias
+
+Achado de tabela: o carimbo de plano somava `meses * 30 dias`, então o anual
+venceria em **360 dias**. O corretor pagaria o ano e perderia cinco dias, e
+justamente na data em que ele mais confere. Passou a usar mês de calendário
+(`setMonth`). Só virou visível quando o anual passou a ser o preço em destaque.
+
 ### Fora isso, nada pende de colagem
 
-Nada pende de colagem: o download 0.0.784 fechou com **215 arquivos comparados
-e zero diferenças**. Duas das três verificações que só o banco prova
+Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
