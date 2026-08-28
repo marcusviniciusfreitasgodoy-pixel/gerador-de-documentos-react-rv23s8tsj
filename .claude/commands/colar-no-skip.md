@@ -900,9 +900,75 @@ campos numéricos, em vez de um `if` com dois nomes escritos à mão. Devolver "
 como texto num campo numérico é o tipo de erro que passa no diff e aparece na
 conta do cliente.
 
+### Avulso como plano de primeira classe: COMPLETO
+
+Dez arquivos, entregues em duas levas, e todos conferidos nos downloads 0.0.800
+e 0.0.803. A varredura fechou com **219 arquivos e uma diferença só**, que era
+linha em branco.
+
+### A decisão, e o argumento que só apareceu na terceira volta
+
+O pedido era "construir o avulso de verdade, com direito de uso amarrado a uma
+operação". Ao montar, apareceu o fato que decide tudo: **os nove formulários
+geram o `.docx` no navegador ANTES de criar o negócio**, e o comentário deles diz
+isso. Não existe ponto onde recusar "esta é a sua segunda operação" sem que o
+corretor já esteja com o arquivo na máquina. E o `negocio_limite.js` já tinha a
+decisão registrada de não bloquear ali, com o argumento certo.
+
+Sobraram duas saídas: manter "uma operação" como promessa (A) ou trocar por
+"30 dias sem assinatura" (B). **A resposta é A, e o argumento decisivo é que não
+existe caso de abuso:** o pior cenário é alguém pagar R$ 149 por um mês que
+valeria R$ 69, ou seja, pagar A MAIS. Gastar engenharia para impedir um cliente
+de pagar acima da tabela é o tipo de trava que só faz sentido quando não é dita
+em voz alta. O B ainda destruiria a âncora, porque poria o avulso e o mensal na
+mesma régua (tempo), onde o avulso perde.
+
+E "uma operação" não é mentira: descreve o que se compra. Viraria mentira se o
+cartão dissesse "o sistema libera apenas uma operação", que é afirmação sobre o
+nosso comportamento.
+
+### O avulso coube inteiro no que já existia
+
+O `MELHORIAS.md` o descrevia como "um segundo sistema de cobrança, transacional
+em vez de recorrente". Não foi preciso: **um avulso É uma assinatura que ninguém
+renova.** Plano com teto 1 e prazo de um mês herda de graça o bloqueio no
+vencimento nas quatro rotas de IA, o aviso de 7 e 3 dias, o contador de
+operações e o aviso de teto, todos já testados.
+
+O que TRAVA é a validação de minuta, a única parte com custo real (chamada de
+IA), com contador próprio (`avulso_validacoes`, migração 1900000039). Não podia
+ser o mensal: o avulso atravessa a virada de mês, e quem comprasse dia 28 e
+validasse dia 29 ganharia uma segunda validação no dia 1º.
+
+Conferido por âncora na árvore baixada, que é a checagem que substitui contagem
+quando o trecho se repete:
+
+```
+rotas: [(31, '/backend/v1/validar-minuta'), (790, '/backend/v1/consultar-ia')]
+trava do avulso na linha 117 -> pertence à rota /backend/v1/validar-minuta
+```
+
+### Duas divergências cosméticas, e a regra que elas firmam
+
+Nos dois downloads o Skip devolveu o arquivo com uma linha em branco a mais ou
+em outro lugar (`admin_usuarios.js` 430 contra 428, `assinatura_aviso.js` com a
+linha antes do comentário em vez de depois). Código idêntico nos dois casos, e o
+`oxfmt` mantém as duas formas. **Regra: quando a diferença é cosmética e o
+formatador aceita as duas, adota-se a versão do Skip.** Produção é a verdade, e
+insistir na minha só geraria uma rodada de colagem sem ganho.
+
+### O que ficou sem render, e é honesto dizer
+
+O botão novo do Avulso no painel de admin **não foi renderizado**. Ele fica
+atrás da sessão autenticada, e forçar exigiria mexer no guard de rota, no
+`useAuth` e semear dados falsos ao mesmo tempo; tentei, a montagem brigou, e
+parei em vez de insistir. O que existe é `tsc` passando e a estrutura sendo
+determinística. A tela de bloqueio do avulso, essa sim, foi renderizada a 1440 e
+390.
+
 ### Fora isso, nada pende de colagem
 
-Nada pende de colagem: o download 0.0.798 fechou com **217 arquivos comparados e zero diferenças**. Duas das três verificações que só o banco prova
+Nada pende de colagem: o download 0.0.803 fechou com 219 arquivos comparados e nenhuma diferença de código. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:

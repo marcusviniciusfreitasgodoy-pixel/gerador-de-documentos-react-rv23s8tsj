@@ -100,13 +100,13 @@ try {
 
             var quando =
               dias <= 0 ? 'venceu' : dias === 1 ? 'vence amanhã' : 'vence em ' + dias + ' dias'
-
             // O avulso passa por aqui como qualquer plano, porque ele É um plano
             // que ninguém renova. Só o nome muda: chamar de "assinatura" quem
             // comprou justamente para NÃO assinar é o tipo de detalhe que faz o
             // corretor achar que caiu numa recorrência escondida.
             var ehAvulso = String(u.getString('plano') || '').trim() === 'avulso'
             var oQue = ehAvulso ? 'Seu avulso' : 'Sua assinatura'
+
             var assunto = oQue + ' do Prime Circle Docs ' + (dias <= 0 ? 'venceu' : quando)
 
             var emailCorretor = u.email()
