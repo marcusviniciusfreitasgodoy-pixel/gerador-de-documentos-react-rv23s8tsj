@@ -537,7 +537,35 @@ Não sei o mecanismo, e não vou fingir que sei. O que fica valendo:
    módulo novo e repontam-se os 17 pontos de importação, para que o arquivo que
    retrocede deixe de ser o que o app usa.
 
-**CAIU UMA TERCEIRA, E A REGRA MUDA MESMO ASSIM.** Em 28/08/2026, na versão
+**CAIU UMA QUARTA, CHEGOU NO DOWNLOAD, E O MÓDULO MUDOU DE CASA.** Na versão
+0.0.792 o `errors.ts` retrocedeu de novo, numa rodada que só criou a migração
+1900000038 e o `ia_contador.js`. O agente reportou "sem regressão desta vez"; o
+diff dizia o contrário. **O check automático dele não pegou**, e essa é a
+informação que faltava: a defesa do lado de lá não é confiável, e a varredura
+dos 217 arquivos daqui é a única que pega sempre.
+
+Isso era exatamente o gatilho combinado, e ele foi cumprido na 0.0.794: a lógica
+foi para `src/lib/pocketbase/mensagens.ts`, os 16 imports foram repontados por
+uma substituição única de string, e o `errors.ts` foi APAGADO.
+
+**O ganho não é impedir o retrocesso, é trocar o modo de falhar.** Antes,
+retrocesso mudo: compila, sobe, e o corretor volta a ler `Unexpected token` no
+login sem nada acusar. Agora, se o arquivo velho ressuscitar, ninguém o importa
+e nada acontece; se o retrocesso apagar o `mensagens.ts`, os 16 imports quebram
+o build na hora. E o apagamento do `errors.ts` foi, ele próprio, a prova de que
+os 16 estavam repontados: se um tivesse ficado para trás, o build apontaria qual.
+
+Conferido no download: `mensagens.ts` idêntico com 119 linhas, `errors.ts`
+ausente da árvore, zero imports para o caminho antigo e 16 para o novo,
+`Signup.tsx` com 1.085 linhas e os três hashes WebP intactos, e os 12 casos de
+comportamento passando contra o arquivo baixado.
+
+**REGRA PERMANENTE: nada importa `src/lib/pocketbase/errors.ts`.** Se ele
+reaparecer, é resíduo do retrocesso. Não importe, não conserte, não unifique com
+o `mensagens.ts`. A duplicação do `extractFieldErrors` lá é o que faz o módulo
+novo não depender de um arquivo instável.
+
+**Histórico da regra anterior, mantido porque a decisão mudou duas vezes.** Em 28/08/2026, na versão
 0.0.789, o `errors.ts` retrocedeu de novo. Só que dessa vez **o agente do Skip
 pegou sozinho, na mesma rodada**, pelo check automático que ele passou a rodar
 ao final de cada leva, e repôs as 89 linhas no commit seguinte. O erro não
