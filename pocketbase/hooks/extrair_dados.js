@@ -50,22 +50,6 @@ routerAdd(
         })
       }
 
-      // Assinatura vencida barra SOZINHA, sem depender do prazo do teste. O
-      // furo que isto fecha: a checagem abaixo só barra quem tem
-      // `trial_expira_em` preenchido E vencido, e as contas anteriores ao teste
-      // de 15 dias têm esse campo VAZIO de propósito (migração 1900000033). Uma
-      // dessas contas assinava, o mês vencia, e seguia com acesso total, aqui no
-      // servidor inclusive.
-      //
-      // Exige a data presente e no passado: plano carimbado sem data de
-      // renovação é erro de cadastro do admin, e trancar quem paga por erro
-      // nosso é pior do que deixar passar um dia a mais.
-      if (!planoAtivo && planoStr && renovaMs && renovaMs < Date.now()) {
-        return e.json(402, {
-          error: 'Sua assinatura venceu. Renove pela página Planos para voltar a usar.',
-        })
-      }
-
       if (!planoAtivo) {
         var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
         if (trialStr) {
@@ -533,6 +517,22 @@ routerAdd(
       var renovaStr = String(guardAuth.getString('plano_renova_em') || '').trim()
       var renovaMs = renovaStr ? new Date(renovaStr.replace(' ', 'T')).getTime() : 0
       var planoAtivo = !!planoStr && !!renovaMs && renovaMs > Date.now()
+
+      // Assinatura vencida barra SOZINHA, sem depender do prazo do teste. O
+      // furo que isto fecha: a checagem abaixo só barra quem tem
+      // `trial_expira_em` preenchido E vencido, e as contas anteriores ao teste
+      // de 15 dias têm esse campo VAZIO de propósito (migração 1900000033). Uma
+      // dessas contas assinava, o mês vencia, e seguia com acesso total, aqui no
+      // servidor inclusive.
+      //
+      // Exige a data presente e no passado: plano carimbado sem data de
+      // renovação é erro de cadastro do admin, e trancar quem paga por erro
+      // nosso é pior do que deixar passar um dia a mais.
+      if (!planoAtivo && planoStr && renovaMs && renovaMs < Date.now()) {
+        return e.json(402, {
+          error: 'Sua assinatura venceu. Renove pela página Planos para voltar a usar.',
+        })
+      }
 
       if (!planoAtivo) {
         var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
