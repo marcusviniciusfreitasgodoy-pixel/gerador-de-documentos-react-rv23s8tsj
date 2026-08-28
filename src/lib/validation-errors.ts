@@ -1,4 +1,4 @@
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 export type ErrorCategory =
   | 'connection'

@@ -33,7 +33,7 @@ import {
   normalizeValidationResult,
   type ValidarMinutaResponse,
 } from '@/services/validar-minuta'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 import { categorizeValidationError, type ErrorCategory } from '@/lib/validation-errors'
 import {
   DOCUMENT_TYPES,

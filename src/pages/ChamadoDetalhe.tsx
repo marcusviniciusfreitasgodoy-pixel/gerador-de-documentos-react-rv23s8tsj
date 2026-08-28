@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import pb from '@/lib/pocketbase/client'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 // Detalhe de chamado para o admin: lê a mensagem, responde e atualiza o status.
 // O corretor acompanha a resposta na página Ajuda; aqui é o lado do admin.

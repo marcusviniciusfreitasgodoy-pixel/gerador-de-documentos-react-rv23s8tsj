@@ -1,5 +1,35 @@
 import { ClientResponseError } from 'pocketbase'
 
+/**
+ * Mensagens de erro que o corretor lê.
+ *
+ * POR QUE ESTE ARQUIVO EXISTE, E NÃO O `errors.ts`
+ *
+ * A lógica abaixo morava em `src/lib/pocketbase/errors.ts`. Aquele arquivo
+ * RETROCEDE SOZINHO no projeto do Skip: quatro vezes entre 27 e 28/08/2026 ele
+ * voltou para uma versão antiga de 29 linhas, em rodadas que não pediam nada
+ * sobre ele. A explicação mais provável, levantada pelo próprio agente do Skip,
+ * é commit parcial a partir de um checkout desatualizado: a rodada grava o
+ * arquivo pedido e leva junto a versão velha dos que não foram tocados.
+ *
+ * O QUE MUDA COM A MUDANÇA DE CASA
+ *
+ * Não é fuga do problema, é troca do MODO DE FALHAR. Com a lógica no
+ * `errors.ts`, o retrocesso era MUDO: o app compilava, subia, e o corretor
+ * voltava a ler `Unexpected token '<', "<html>"` na tela de login sem que nada
+ * acusasse. Com a lógica aqui e o `errors.ts` apagado, um retrocesso que
+ * ressuscite o arquivo antigo não afeta ninguém, porque ninguém o importa; e se
+ * o retrocesso apagar ESTE arquivo, os 16 pontos que o importam quebram o build
+ * na hora. Erro barulhento é melhor que erro silencioso.
+ *
+ * REGRA: NADA IMPORTA O `errors.ts`.
+ *
+ * Se ele reaparecer no projeto, é resíduo do retrocesso. Não importe, não
+ * conserte, não "unifique com este arquivo". A duplicação do
+ * `extractFieldErrors` aqui é deliberada: ela é o que faz este módulo não
+ * depender de um arquivo que se sabe instável.
+ */
+
 export type FieldErrors = Record<string, string>
 
 export function extractFieldErrors(error: unknown): FieldErrors {
@@ -68,8 +98,8 @@ export function getErrorMessage(error: unknown): string {
 
   // O SDK cancela sozinho requisições duplicadas para a mesma rota (dois
   // cliques no mesmo botão, por exemplo). Devolver string vazia aqui deixaria
-  // os 17 pontos que chamam esta função mostrando um aviso em branco, que é
-  // pior do que a frase errada. Então a frase diz o que fazer.
+  // os pontos que chamam esta função mostrando um aviso em branco, que é pior
+  // do que a frase errada. Então a frase diz o que fazer.
   if (error.isAbort) return 'O pedido foi interrompido. Tente de novo.'
 
   // Status 0 é o SDK dizendo que não chegou resposta nenhuma: host fora,

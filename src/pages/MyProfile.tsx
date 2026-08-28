@@ -18,7 +18,7 @@ import {
   type BrokerProfile,
   type ProfileType,
 } from '@/services/broker-profile'
-import { extractFieldErrors, getErrorMessage, type FieldErrors } from '@/lib/pocketbase/errors'
+import { extractFieldErrors, getErrorMessage, type FieldErrors } from '@/lib/pocketbase/mensagens'
 import { maskCpfCnpj, maskCnpj, maskPhone, maskCep } from '@/lib/utils'
 
 interface ProfileForm {

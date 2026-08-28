@@ -23,7 +23,7 @@ import {
   type ExpertObjective,
   type ExpertUrgency,
 } from '@/services/expert'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 
 const DOCUMENT_TYPES = [
   'Recibo de Sinal (Arras)',
