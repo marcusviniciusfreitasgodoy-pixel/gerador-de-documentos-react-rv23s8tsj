@@ -498,12 +498,18 @@ Como é o mesmo arquivo já entregue uma vez, o conteúdo está no branch e a
 conferência é a mesma: os 12 casos contra o arquivo que voltar (teste em `.ts`,
 nunca `.mjs`, pela armadilha do harness registrada acima).
 
-### Sobras do Bloco A nos e-mails: PENDENTE, 2 arquivos
+**Segunda tentativa também não pegou.** No download seguinte o arquivo continua
+com 29 linhas, e byte a byte IGUAL ao download anterior: ninguém o tocou entre
+os dois. Não é um segundo retrocesso, é a colagem que não chegou nele, enquanto
+as duas instruções da mesma rodada (`extrair_dados.js` e `agencia_convites.js`)
+foram aplicadas certas. Ou seja: o problema é específico deste arquivo, e vale
+perguntar ao agente o que ele fez com o pedido em vez de repetir a colagem uma
+terceira vez às cegas.
 
-| #   | Arquivo                              | Como colar                    |
-| --- | ------------------------------------ | ----------------------------- |
-| 1   | `pocketbase/hooks/extrair_dados.js`  | por INSTRUÇÃO (1.190 linhas)  |
-| 2   | `pocketbase/hooks/agencia_convites.js` | por INSTRUÇÃO (1.050 linhas) |
+### Sobras do Bloco A nos e-mails: COMPLETO
+
+Os dois voltaram idênticos no download de 28/08/2026, com as contagens exatas
+(1.190 e 1.050 linhas). Foram por INSTRUÇÃO, seis trocas de texto ao todo.
 
 O Bloco A renomeou o produto na interface e parou ali. Nos e-mails, quatro
 lugares continuavam com o nome antigo, e e-mail é onde o corretor encontra a
