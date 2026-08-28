@@ -532,10 +532,69 @@ marca antes de entrar na plataforma:
   `agencia_convites.js`, este último no **convite de equipe**, que é o e-mail
   que os corretores do piloto vão receber).
 
+### Bloqueio do plano vencido e aviso antes de vencer: PENDENTE, 6 arquivos
+
+| #   | Arquivo                                              | Como colar                    |
+| --- | ---------------------------------------------------- | ----------------------------- |
+| 1   | `pocketbase/migrations/1900000037_users_add_avisos_plano.js` | inteiro (41 linhas)   |
+| 2   | `pocketbase/hooks/assinatura_aviso.js`               | inteiro (184 linhas)          |
+| 3   | `src/hooks/use-auth.tsx`                             | inteiro (168 linhas)          |
+| 4   | `src/components/Layout.tsx`                          | por INSTRUÇÃO (805 linhas)    |
+| 5   | `pocketbase/hooks/extrair_dados.js`                  | por INSTRUÇÃO (1.222 linhas)  |
+| 6   | `pocketbase/hooks/validar_minuta.js`                 | por INSTRUÇÃO (1.325 linhas)  |
+
+A migração vai PRIMEIRO, mesma razão da 1900000036: o hook grava
+`avisos_plano` e sem o campo a gravação não pega.
+
+### O furo que isto fecha
+
+`acessoBloqueado` era `!planoAtivo && trialExpirado`. Parece certo e não é: a
+segunda metade só é verdadeira quando `trial_expira_em` está PREENCHIDO e
+vencido, e **as contas anteriores ao teste de 15 dias têm esse campo vazio de
+propósito** (migração 1900000033, para não ligar prazo retroativo em quem já
+estava dentro). Resultado: uma dessas contas assinava, o mês vencia, e ela
+seguia com acesso total, no servidor inclusive.
+
+Conta nova não tinha o problema: nasce com os 15 dias carimbados, então quando
+o plano vence o teste já ficou para trás. Ou seja, o furo pegava exatamente os
+usuários que já existiam, que são os primeiros candidatos a assinar. Achado
+respondendo à pergunta "e o bloqueio depois que a assinatura vencer, como
+funciona?", não numa varredura: **vale mais perguntar como uma coisa funciona
+do que perguntar se ela está pronta.**
+
+A correção exige a data presente E no passado. Plano carimbado sem
+`plano_renova_em` é erro de cadastro do admin, e trancar quem paga por erro
+nosso é pior do que deixar passar um dia a mais.
+
+### Duas decisões de produto que ficaram no código
+
+**A tela de bloqueio passou a ter dois motivos.** Quem nunca assinou lê "Seu
+teste terminou"; quem assinou lê "Sua assinatura venceu", com o botão virando
+"Renovar assinatura". A mesma frase para os dois casos seria mentira num deles,
+e a mentira cairia justamente em cima de quem já pagou uma vez.
+
+**O aviso vai para quem tem o que fazer.** O corretor recebe os três (7 dias, 3
+dias, vencida); o admin entra a partir do de 3 dias, que é quando a renovação
+vira tarefa de alguém. Mandar os três para o admin encheria a caixa dele de
+aviso que não pede ação, e o efeito conhecido disso é ele parar de ler os que
+pedem.
+
+**O contador se zera sozinho na renovação**, e é por isso que o cron varre TODOS
+os assinantes em vez de só os que estão perto de vencer. Filtrar pelos próximos
+7 dias pareceria mais econômico e deixaria o `avisos_plano` travado em 3 para
+sempre: o corretor renovado nunca mais seria avisado, calado.
+
+### O que NÃO entrou, de propósito
+
+O teto de 10 e 30 operações continua sendo contado, carimbado e avisado na
+tela, **sem barrar nada**. Isso não é esquecimento: os tetos ainda são
+hipótese, e barrar um cliente pagante por um número que a gente inventou é o
+pior jeito de descobrir que o número estava errado. Decidir quando o
+`negocios_no_mes` tiver três semanas de dado real.
+
 ### Fora isso, nada pende de colagem
 
-Nada pende de colagem: o download de 28/08/2026 fechou com **213 arquivos
-comparados e zero diferenças**. Duas das três verificações que só o banco prova
+Fora o bloco acima, nada pende de colagem. Duas das três verificações que só o banco prova
 fecharam quando a conta de teste foi criada: o `trial_expira_em` carimbou 15
 dias e o `negocios_no_mes` subiu a 1 na geração. Segue aberto, e nada disso
 depende do Skip:
