@@ -51,6 +51,22 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
+## FECHADO: a landing enxuta está no dev (v0.0.817)
+
+Conferido no download de 29/08 19:50: **`Signup.tsx`, `Documentos.tsx` e
+`App.tsx` idênticos byte a byte à branch**, 236 arquivos, e as quatro
+divergências são as de sempre (`package.json` só a versão, `schema.json` só o
+carimbo, `.gitignore` que é higiene só daqui, e o `errors.ts` zumbi com zero
+importadores).
+
+Rodado sobre a árvore que veio do Skip, não sobre a minha: `tsc -b` 0 erros,
+`oxlint src` 16 avisos (baseline), build passa. Hashes WebP íntegros.
+
+Os dois consertos fecharam o estrago da v0.0.815: o CTA final voltou, o
+`window.scrollTo` voltou, os comentários voltaram e a linha 362 se separou.
+
+**Falta publicar.** Continua na v0.0.807 lá embaixo.
+
 ## O SKIP APAGOU CÓDIGO, NÃO SÓ COMENTÁRIO (29/08, v0.0.815)
 
 **Terceira ocorrência do padrão do `Index.tsx`, e a pior até agora.** Nas duas
