@@ -105,6 +105,33 @@ import { Badge } from '@/components/ui/badge'
  * a R$ 149 comprou aquele avulso e acabou, então a mudança de preço não deixa
  * ninguém com preço travado para honrar depois.
  *
+ * OS 16 DOCUMENTOS, E O "100%" QUE NÃO FOI ESCRITO
+ *
+ * O que justifica R$ 349 não é o preço, é o que ele compra, e isso estava
+ * implícito demais: "todos os documentos daquela operação" não diz nada para
+ * quem está decidindo. Agora o cartão e o bloco "O que cabe num Avulso" dizem o
+ * número, quem revisou os modelos (advogado e escrevente de cartório) e o resto
+ * do fluxo que vem junto (leitura de documento com IA, o negócio montado,
+ * validação de minuta, consulta de dúvidas).
+ *
+ * O pedido original dizia que os documentos "seguem 100% do que o Código Civil
+ * orienta". O 100% ficou de fora de propósito. É garantia de conformidade
+ * jurídica, e nenhum modelo padronizado sustenta isso diante do caso concreto:
+ * é exatamente a frase que o advogado da outra parte citaria de volta se um
+ * contrato for contestado. Vale a regra do CLAUDE.md, não escreva garantia que
+ * não se sustenta, e a de nunca posar de substituto de advogado (Lei 8.906/94,
+ * art. 1º, II). "Escritos sobre o que o Código Civil orienta para cada ato e
+ * revisados por advogado e por escrevente" diz a mesma coisa, é verificável, e
+ * não promete resultado.
+ *
+ * O NÚMERO 16 É CONTAGEM DO DONO DO PROJETO, NÃO DE ARQUIVO
+ *
+ * A árvore tem 17 modelos `.docx` referenciados no `src/`. O 16 é o que o dono
+ * do projeto conta como documento distinto oferecido ao corretor, e ficou como
+ * ele disse, um a MENOS que os arquivos: errar para baixo não vira promessa que
+ * o produto não cumpre. Quem for mexer no número confere pelos formulários, não
+ * pelo `ls` da pasta de modelos.
+ *
  * O ANO NA FRENTE, O MÊS ATRÁS
  *
  * Quem faz 4 negócios por ano não pensa em mês. Pensando por mês, a pergunta
@@ -174,9 +201,10 @@ const PLANOS: Plano[] = [
         'Uma operação, 30 dias para usar. Sem assinatura e sem renovação automática. Vai para R$ 349 em 31 de dezembro de 2026.',
     },
     itens: [
-      'Todos os documentos daquela operação',
+      'Os 16 documentos da operação, em Word',
       'Correções ilimitadas',
-      'Uma validação de minuta',
+      'Uma validação de minuta com IA',
+      'Consulta de dúvidas com a IA',
       'O dossiê fica na sua conta depois',
     ],
   },
@@ -512,16 +540,26 @@ export default function PlanosPage() {
           </p>
         </div>
         <div>
+          <p className="text-sm font-medium text-foreground">O que cabe num Avulso</p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            São 16 documentos padronizados, escritos sobre o que o Código Civil orienta para cada
+            ato e revisados por advogado e por escrevente de cartório. Junto vem o resto do fluxo: a
+            leitura dos documentos com IA, o negócio montado com as partes e o imóvel, a validação
+            da minuta e a consulta de dúvidas com a IA. A operação inteira, da autorização de venda
+            ao recibo de comissão.
+          </p>
+        </div>
+        <div>
           <p className="text-sm font-medium text-foreground">
             Por que o Avulso custa R$ 149 agora e R$ 349 depois
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            R$ 349 é o preço do Avulso. Até 31 de dezembro de 2026 ele sai por R$ 149, porque a
-            ferramenta está começando e quem entra agora corre um risco que quem entrar depois não
-            corre. Não é desconto sobre preço que ninguém pagou: R$ 149 é o preço de hoje, e a data
-            em que ele muda está escrita aqui. Ele já custa mais que um mês de assinatura, e isso
-            também é de propósito: no Avulso você não deixa cartão e não tem renovação para lembrar
-            de cancelar.
+            R$ 349 é o preço do Avulso, e é o preço da operação inteira que está descrita aí em
+            cima. Até 31 de dezembro de 2026 ele sai por R$ 149, porque a ferramenta está começando
+            e quem entra agora corre um risco que quem entrar depois não corre. Não é desconto sobre
+            preço que ninguém pagou: R$ 149 é o preço de hoje, e a data em que ele muda está escrita
+            aqui. Ele já custa mais que um mês de assinatura, e isso também é de propósito: no
+            Avulso você não deixa cartão e não tem renovação para lembrar de cancelar.
           </p>
         </div>
         <div>
@@ -539,9 +577,10 @@ export default function PlanosPage() {
           <p className="text-sm font-medium text-foreground">A conta de referência</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             No mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500 com advogado, e a análise
-            de documentos é cobrada à parte. Aqui, o Avulso cobre a operação inteira por R$ 149 até
-            31 de dezembro de 2026, e a assinatura inclui a validação. O advogado continua no lugar
-            certo: na análise do caso concreto, não na papelada repetitiva.
+            de documentos é cobrada à parte. Os 16 modelos daqui já passaram por advogado e por
+            escrevente de cartório antes de chegar em você. Aqui, o Avulso cobre a operação inteira
+            por R$ 149 até 31 de dezembro de 2026, e a assinatura inclui a validação. O advogado
+            continua no lugar certo: na análise do caso concreto, não na papelada repetitiva.
           </p>
         </div>
       </div>

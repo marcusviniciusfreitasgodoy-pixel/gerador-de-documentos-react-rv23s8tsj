@@ -39,6 +39,16 @@ propósito:** R$ 349 nunca foi cobrado de ninguém, e "de R$ 349 por R$ 149" ser
 desconto sobre preço que não existiu, que é a metade do dobro que este público
 reconhece de olhos fechados.
 
+Junto foi o que justifica o preço, que estava implícito demais: o cartão passa a
+listar **os 16 documentos**, a validação com IA e a consulta de dúvidas, e um
+bloco novo ("O que cabe num Avulso") diz que os modelos foram **revisados por
+advogado e por escrevente de cartório**. O **"100%" do Código Civil ficou de
+fora de propósito**: é garantia de conformidade jurídica, é a frase que o
+advogado da outra parte citaria de volta, e cai nas duas regras do CLAUDE.md
+(nada de garantia que não se sustenta, nada de posar de substituto de advogado).
+O 16 é a contagem do dono do projeto: a árvore tem 17 modelos `.docx`, e ficou
+um a MENOS de propósito, porque errar para baixo não vira promessa descumprida.
+
 Conferido antes de entregar: `tsc -b` 0 erros, `oxlint src` 16 avisos (baseline),
 build passa, `oxfmt` aplicado, nenhum travessão. Renderizado em Chromium a 1440,
 1024 e 390: o selo aparece nas três larguras, sem rolagem horizontal e sem cartão
