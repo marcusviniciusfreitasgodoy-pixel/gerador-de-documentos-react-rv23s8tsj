@@ -5,6 +5,29 @@ description: Entrega os arquivos pendentes para colar no chat do Skip e confere 
 Este comando carrega o estado da entrega e o método. Leia a tabela, veja o que
 está pendente, e conduza dali.
 
+## PRIMEIRO: a branch é `work`
+
+Todo o trabalho vive em **`work`**, e é de lá que sai a URL do Raw. Não é a
+branch do nome da sessão.
+
+**A armadilha, que já apareceu duas vezes.** A sessão do Claude nasce com uma
+branch própria (`claude/<algo>`), e o harness às vezes deixa nela um commit
+`Auto-commit before sync` que é uma **árvore inteira antiga**. Em 29/08 a
+`claude/retomar-sessao-docs-esxxi4` apontava para a v0.0.740: ela trazia o
+`errors.ts` de volta, apagava o `mensagens.ts` e tirava 213 linhas do
+`Planos.tsx`. Commitar em cima daquilo teria desfeito o dia inteiro.
+
+Antes de qualquer coisa numa sessão nova, confira:
+
+```bash
+git log --oneline -3 work
+git log --oneline -3 <a branch da sessao>
+```
+
+Se a branch da sessão tiver `Auto-commit before sync` ou uma versão antiga no
+topo, **ignore ela e trabalhe em `work`**. Nunca faça merge da árvore velha
+para dentro do `work`.
+
 ## Como o código entra no Skip (não invente outro caminho)
 
 O painel "Editar Código" do Skip é **somente leitura** (`readOnly: true` no
@@ -1207,7 +1230,7 @@ razão da duplicação que já existe em `agencia_convites.js` e `validar_minuta
 
 1. Monte a URL do arquivo nesta branch e peça ao dono para abrir, clicar em
    **Raw** e copiar:
-   `https://github.com/marcusviniciusfreitasgodoy-pixel/gerador-de-documentos-react-rv23s8tsj/blob/claude/imobiliarias-fase-3-a3sirm/<caminho>`
+   `https://github.com/marcusviniciusfreitasgodoy-pixel/gerador-de-documentos-react-rv23s8tsj/blob/work/<caminho>`
 2. O pedido para colar junto, no chat do Skip:
 
    > Substitua todo o conteúdo de `<caminho>` por este. Não reescreva, não
