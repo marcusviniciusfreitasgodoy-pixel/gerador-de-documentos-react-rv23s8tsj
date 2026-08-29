@@ -51,7 +51,7 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
-## PENDENTE DE COLAGEM: a landing enxuta (commit `ee4abb7`)
+## PENDENTE DE COLAGEM: a landing enxuta (commit `e7a3592`)
 
 **Esta é a única coisa que pende.** Três arquivos, cinco pastes, e o roteiro
 completo saiu na sessão de 29/08 (`ROTEIRO-COLAGEM.md`, com os três blocos em
@@ -76,12 +76,21 @@ E ela se repetia: "sem cartão" 8 vezes, "15 dias" 7, "dossiê" 9, "regra de ace
 por dono do registro" 3. O pior caso era o § 06 e a primeira pergunta do FAQ
 dizendo o **mesmo parágrafo reescrito**, com 1.900 px entre os dois.
 
-Depois: **10.830 px (12,0 telas) e 13.843 px (16,4 telas)**, com 1.648 palavras.
-Duas rotas públicas novas: `/documentos` (2.574 px) e `/imobiliarias` (1.463 px).
+Depois: **10.657 px (11,8 telas) e 13.253 px (15,7 telas)**, com 1.616 palavras.
+Duas rotas públicas novas: `/documentos` (2.551 px) e `/imobiliarias` (1.448 px).
+
+Estas medidas são com **as fontes reais embutidas** (Cormorant Garamond, Manrope
+e JetBrains Mono em base64). Medir com fonte de fallback infla o resultado em
+cerca de 4% e não vale como número final.
 
 O catálogo dos 16 e a seção das imobiliárias saíram para páginas próprias: os
 dois respondem a pergunta que o visitante só faz DEPOIS de se interessar. Na
 abertura ficou a chamada curta, com os 16 nomes ainda visíveis no § 03.
+
+No § 02, "O negócio mudou?" e "Faltou um dado?" viraram um painel só: eram dois
+cartões lado a lado tratando da mesma propriedade do dossiê, com dois títulos em
+forma de pergunta competindo entre si. Virou "O negócio muda. O documento
+acompanha.", com os dois casos no mesmo parágrafo.
 
 ### A âncora de preço deixou de ficar órfã
 
