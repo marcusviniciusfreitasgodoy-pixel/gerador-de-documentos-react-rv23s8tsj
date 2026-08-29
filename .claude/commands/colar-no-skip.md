@@ -28,32 +28,68 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
-## Onde estamos (29/08/2026, versão 0.0.809 do Skip)
+## Onde estamos (29/08/2026, versão 0.0.810 do Skip)
 
-**Pende de colagem: `src/pages/Planos.tsx`, e só ele.** 606 linhas, 28.158
-caracteres. É uma rodada só de texto: os sete blocos do rodapé foram encurtados,
-e um deles mudou de sentido.
+**Nada pende de colagem.** O download 0.0.810 fechou com **234 arquivos e
+nenhuma diferença de código**. O `Planos.tsx` voltou **idêntico byte a byte**,
+606 linhas e 28.158 caracteres, e o `Signup.tsx` intacto com os três hashes
+WebP. As quatro divergências restantes são as da lista de ignorar.
 
-**A frase do risco saiu.** O texto dizia que quem entra agora "corre um risco que
-quem entrar depois não corre". Era verdade e era péssimo: dizia ao corretor, na
-frase que deveria fazê-lo comprar, que ele está pagando por algo não provado.
-O mesmo fato agora aparece pelo lado certo, que é o do benefício: "quem chega no
-começo paga menos, e continua pagando menos em cada avulso que comprar até essa
-data". O título do bloco também virou o benefício: **"Quem entra agora paga
-R$ 149, e depois são R$ 349"**.
+A frase "o canal do especialista continua orçado caso a caso" aparece **uma vez
+só** no arquivo baixado, e é dentro do comentário que explica por que ela saiu
+da tela. O bloco renderizado termina em "sem reajuste no meio do seu ano".
 
-**A ressalva do especialista saiu do rodapé.** O bloco "O que a gente lançar já
-está no seu plano" terminava com "a exceção é serviço de gente, não recurso do
-sistema: o canal do especialista continua orçado caso a caso". Saiu por decisão
-do Marcus, e o limite continua dito: o cartão do Profissional traz "Canal do
-especialista, orçado à parte", que é onde quem escolhe plano olha. O cabeçalho
-do arquivo registra que, SE o cartão um dia perder essa linha, a ressalva
-precisa voltar para o rodapé, senão a promessa fica sem limite escrito em lugar
-nenhum.
+**Placar do arquivo inteiro: 35/2.**
 
-Conferido: `tsc -b` 0 erros, `oxlint src` 16 avisos, build passa, `oxfmt`
-aplicado, nenhum travessão. Renderizado nas duas abas a 1440, 1024 e 390: zero
-rolagem, zero erro de JS, zero `opacity: 0`, preços em uma linha nos seis casos.
+### O que entrou nas três rodadas de hoje
+
+Preço do avulso: R$ 349 é o valor final, e R$ 149 é o que se cobra **até
+31/12/2026**. Selo "Preço de lançamento" no cartão, e a data escrita na nota, no
+bloco de virada, no bloco de preço e na conta de referência. **Sem preço
+riscado**: R$ 349 nunca foi cobrado de ninguém, e "de R$ 349 por R$ 149" seria
+desconto sobre preço que não existiu.
+
+O que justifica o preço passou a estar escrito: o cartão lista **os 16
+documentos**, a validação com IA e a consulta de dúvidas, e o bloco "O que cabe
+num Avulso" diz que os modelos foram **revisados por advogado e por escrevente
+de cartório**. O **"100%" do Código Civil ficou de fora de propósito** (garantia
+de conformidade jurídica é a frase que o advogado da outra parte cita de volta),
+e o 16 é a contagem do dono do projeto, um a MENOS que os 17 `.docx` da árvore.
+
+Os sete blocos do rodapé foram encurtados, e **a frase do risco saiu**. O texto
+dizia que quem entra agora "corre um risco que quem entrar depois não corre":
+verdade, e péssima, porque dizia ao corretor na frase de venda que ele paga por
+algo não provado. Virou o mesmo fato pelo lado do benefício, e o título do bloco
+também: **"Quem entra agora paga R$ 149, e depois são R$ 349"**.
+
+**A ressalva do especialista saiu do rodapé.** O limite continua dito no cartão
+do Profissional ("Canal do especialista, orçado à parte"), que é onde quem
+escolhe plano olha. O cabeçalho do arquivo registra que, SE o cartão um dia
+perder essa linha, a ressalva precisa voltar para o rodapé.
+
+### O que muda em 31/12/2026
+
+Não existe janela promocional no código. É uma rodada de colagem à mão, em
+**cinco lugares** do `Planos.tsx`: a constante `PLANOS`, o `selo` (que sai), a
+`nota` do cartão, o bloco "Quem entra agora paga R$ 149" (que muda de sentido
+inteiro) e os blocos "A partir do quinto negócio" e "A conta de referência". A
+tabela de virada do comentário também envelhece. O cabeçalho do arquivo lista os
+cinco. A data é compromisso de gente, não cron.
+
+### Os "próximos passos" que o Skip repete
+
+Ele sugeriu os mesmos três em duas rodadas seguidas, palavra por palavra, e isso
+confirma o padrão já registrado: ele olha o pedido isolado, não o estado do
+projeto, e não lembra do que foi respondido antes. Respostas, de novo:
+
+1. **Conferir a `/planos` no preview**: feito, com render medido nas seis
+   combinações (duas abas a 1440, 1024 e 390).
+2. **Linkar `/planos` no menu lateral**: não é pendência, é escolha. A página é
+   alcançada de cinco lugares no momento em que ela importa. Item fixo na barra
+   para quem já paga é ruído.
+3. **Ver se a landing menciona o preço do Avulso**: conferido duas vezes, e a
+   resposta é NÃO. A única ocorrência de preço em todo o `src/` está no
+   `Planos.tsx`.
 
 ### O download anterior (0.0.809) fechou limpo
 
