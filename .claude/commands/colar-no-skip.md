@@ -28,12 +28,45 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
-## Onde estamos (29/08/2026, versão 0.0.803 do Skip)
+## Onde estamos (29/08/2026, versão 0.0.809 do Skip)
 
-**Pende de colagem: `src/pages/Planos.tsx`, e só ele.**
+**Nada pende de colagem.** O download 0.0.809 fechou com **234 arquivos e
+nenhuma diferença de código**: o `Planos.tsx` voltou **idêntico byte a byte**,
+589 linhas e 27.281 caracteres, e o `Signup.tsx` intacto com os três hashes WebP
+(`40b6f0b3af`, `40b6f0b3af`, `582241ca47`). As quatro divergências restantes
+estão todas na lista do "diff deve ignorar": `.gitignore`, `.skip.config.json`,
+`package.json` e o carimbo de hora do `schema.json`.
 
-Preço do avulso: R$ 349 é o valor final, e R$ 149 é o que se cobra **até
-31/12/2026**. A página mostra R$ 149 como preço, com selo "Preço de lançamento"
+Renderizado em Chromium **nas duas abas** a 1440, 1024 e 390, ou seja seis
+combinações: zero rolagem horizontal, zero erro de JS, zero texto em
+`opacity: 0`, e cada um dos quatro preços numa linha só nos dois ciclos.
+
+O paste inteiro passou com a contramedida de sempre: **placar do arquivo
+inteiro vai a 34/2**, e a exigência da contagem no pedido segurou de novo um
+arquivo muito comentado (o cabeçalho dele agora tem ~130 linhas de prosa, que é
+o perfil que já custou 48 comentários no `Index.tsx`).
+
+### Os três "próximos passos" que o Skip sugeriu
+
+Padrão conhecido: ele olha o pedido isolado, não o estado do projeto.
+
+1. **Conferir a `/planos` no preview**: feito, e melhor que preview, com render
+   medido nas seis combinações.
+2. **Linkar `/planos` no menu lateral**: não é pendência, é escolha. A página é
+   alcançada de cinco lugares no momento em que ela importa (tela de bloqueio,
+   aviso de teto, bloco do admin, § 06 da landing e os e-mails de vencimento).
+   Item fixo na barra para quem já paga é ruído. Se um dia entrar, entra como
+   decisão de produto, não como conserto.
+3. **Ver se a landing menciona o preço do Avulso**: conferido, e a resposta é
+   NÃO. Nem o `Index.tsx` nem o `Signup.tsx` citam valor nenhum; a única
+   ocorrência de preço em todo o `src/` está no `Planos.tsx`. **Foi a única das
+   três que valia checar**, e ela veio negativa.
+
+### O que muda em 31/12/2026
+
+
+Preço do avulso, o que entrou nesta rodada: R$ 349 é o valor final, e R$ 149 é
+o que se cobra **até 31/12/2026**. A página mostra R$ 149 como preço, com selo "Preço de lançamento"
 no cartão e a data em que muda escrita em três lugares. **Sem preço riscado, de
 propósito:** R$ 349 nunca foi cobrado de ninguém, e "de R$ 349 por R$ 149" seria
 desconto sobre preço que não existiu, que é a metade do dobro que este público
