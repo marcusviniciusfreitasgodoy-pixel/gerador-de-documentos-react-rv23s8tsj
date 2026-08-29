@@ -18,6 +18,49 @@ import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 // Layout suprime o proprio cabecalho/rodape nessa rota (a Abertura traz os seus).
 // Logado, "/" segue mostrando o hub de documentos, intacto.
 //
+// CORTE DE 29/08/2026: A PAGINA ESTAVA LONGA DEMAIS, E ISSO FOI MEDIDO
+//
+// Antes: 14.277 px a 1440 (15,9 telas) e 19.988 px a 390 (23,7 telas), com
+// 2.666 palavras visiveis. Para um publico que decide em minutos, o preco e o
+// cadastro estavam depois da 20a tela no celular.
+//
+// A pagina se repetia: "sem cartao" aparecia 8 vezes, "15 dias" 7, "dossie" 9,
+// "nao substitui advogado" 5. O caso pior era o § 06 e a primeira pergunta do
+// FAQ dizendo o MESMO paragrafo reescrito, com 1.900 px entre os dois.
+//
+// O que saiu, e para onde:
+// A. O CATALOGO DOS 16 e a secao das IMOBILIARIAS foram para paginas proprias
+//    (/documentos e /imobiliarias, em src/pages/Documentos.tsx). Os dois
+//    respondem a pergunta que o visitante so faz DEPOIS de se interessar. Na
+//    abertura ficou a chamada curta, com os 16 nomes ainda visiveis no § 03.
+// B. FAQ de 8 para 5 perguntas. "Quanto custa?" saiu por duplicar o § 06;
+//    "Como e o cadastro?" por duplicar o hero e o CTA final; "validade
+//    juridica" foi fundida na pergunta do advogado, que passou a ser a aberta
+//    por padrao (e a objecao mais funda deste publico).
+// C. § 01 de cinco dores para tres. Saiu "Os mesmos dados, cinco vezes" (era o
+//    § 02 antecipado) e "A comissao no fio do combinado", a mais fraca.
+// D. § 02 perdeu o sub-bloco "O dossie do negocio": os tres cartoes dele
+//    repetiam o passo 02 logo acima, palavra por palavra. A frase da
+//    privacidade saiu daqui e continua dita no FAQ, uma vez so.
+// E. "A prova esta no documento" perdeu o ensaio e os tres cartoes; ficou o
+//    trecho de clausula, que MOSTRA em vez de afirmar, e o "Quem escreveu".
+// F. Apoio de especialista comprimido: eram 219 palavras vendendo forte um
+//    recurso que a /planos cobra a parte, e isso gera atrito no desconfiado.
+//
+// ANCORA DE PRECO, as duas pontas que estavam soltas. O § 01 dizia que uma
+// minuta avulsa custa R$ 800 a R$ 2.500 no mercado, e o § 06 "Preco" nao tinha
+// preco nenhum: so "15 dias gratis" e um link. A ancora e o pagamento dela
+// ficavam a 7.000 px de distancia. Agora o numero e display no cartao 01 (era
+// corpo de 14,5 px no meio de um paragrafo) e o § 06 fecha a conta com "a
+// partir de R$ 69 por mes". A TABELA continua so na /planos, de proposito: se
+// o valor mudar la, aqui muda uma frase, nao quatro cartoes.
+//
+// MOLDURA COMPARTILHADA. Cabecalho e rodape viraram `montarCabecalho()` e
+// `DESIGN_RODAPE`, e a maquinaria virou `PaginaDesign({ html })`. As tres
+// paginas usam a mesma implementacao: cabecalho copiado diverge na terceira
+// edicao e ninguem percebe ate um cliente apontar. O menu das paginas de apoio
+// NAO leva ancora de secao (#preco, #funciona), que la seria link morto.
+//
 // O QUE MUDOU NESTA REVISAO (e por que):
 //
 // 1. HERO ENXUTO. Acima da dobra ficaram cinco elementos: eyebrow, titulo,
@@ -93,12 +136,41 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; } }`
 
-const DESIGN_HTML = `<div style="background:#F7F3EA">
+// ── Moldura compartilhada ───────────────────────────────────────────────────
+// O cabeçalho e o rodapé são os mesmos na abertura e nas páginas públicas de
+// apoio (/documentos e /imobiliarias). Ficam aqui, montados por função, em vez
+// de copiados nos três arquivos: cabeçalho duplicado é o tipo de coisa que
+// diverge na terceira edição e ninguém percebe até um cliente apontar.
+//
+// A lista de itens é parâmetro porque as âncoras de seção (#preco, #funciona)
+// só existem na abertura. Numa página de apoio elas seriam link morto: clica e
+// não acontece nada. Por isso a página de apoio passa a própria lista curta.
+type ItemMenu = { href: string; texto: string }
 
-  <header data-header style="position:sticky;top:0;z-index:50;background:#0E0E0E;border-bottom:1px solid rgba(245,241,230,.10);transition:height 220ms cubic-bezier(.22,.61,.36,1)">
+const NAV_ABERTURA: ItemMenu[] = [
+  { href: '#preco', texto: 'Preço' },
+  { href: '#funciona', texto: 'Como funciona' },
+  { href: '#documentos', texto: 'Documentos' },
+  { href: '#validador', texto: 'Validador' },
+]
+
+// Páginas de apoio: sem âncora de seção, com a volta para a abertura.
+export const NAV_APOIO: ItemMenu[] = [{ href: '/', texto: 'Início' }]
+
+export function montarCabecalho(itens: ItemMenu[], inicio: string) {
+  const ESTILO_LINK =
+    "flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)"
+  const desktop = itens
+    .map(
+      (i) =>
+        `        <a href="${i.href}" style="${ESTILO_LINK}" style-hover="color:#F5F1E6">${i.texto}</a>`,
+    )
+    .join('\n')
+  const mobile = itens.map((i) => `      <a href="${i.href}">${i.texto}</a>`).join('\n')
+  return `  <header data-header style="position:sticky;top:0;z-index:50;background:#0E0E0E;border-bottom:1px solid rgba(245,241,230,.10);transition:height 220ms cubic-bezier(.22,.61,.36,1)">
     <input type="checkbox" id="pc-menu" data-menu-caixa aria-hidden="true">
     <div data-header-inner style="max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,60px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:height 220ms cubic-bezier(.22,.61,.36,1)">
-      <a href="#topo" style="display:flex;align-items:center;gap:11px;color:#F5F1E6;flex:none">
+      <a href="${inicio}" style="display:flex;align-items:center;gap:11px;color:#F5F1E6;flex:none">
         <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:30px;height:30px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
         <span style="display:flex;flex-direction:column;line-height:1">
           <span style="font-size:15px;font-weight:700;letter-spacing:-.01em;color:#F5F1E6">Prime Circle</span>
@@ -106,10 +178,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         </span>
       </a>
       <nav data-nav-links style="display:flex;align-items:center;gap:clamp(12px,2vw,26px)">
-        <a href="#preco" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Preço</a>
-        <a href="#funciona" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Como funciona</a>
-        <a href="#documentos" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Documentos</a>
-        <a href="#validador" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Validador</a>
+${desktop}
         <a href="/login" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Entrar</a>
         <a href="/signup" style="flex:none;display:inline-flex;align-items:center;height:40px;padding:0 22px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:13px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6">Criar conta grátis</a>
       </nav>
@@ -119,15 +188,35 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       </label>
     </div>
     <nav data-menu-mobile aria-label="Menu">
-      <a href="#preco">Preço</a>
-      <a href="#funciona">Como funciona</a>
-      <a href="#documentos">Documentos</a>
-      <a href="#validador">Validador</a>
+${mobile}
       <a href="/planos">Planos e valores</a>
       <a href="/login">Entrar</a>
       <a href="/signup" data-menu-cta>Criar conta grátis</a>
     </nav>
-  </header>
+  </header>`
+}
+
+export const DESIGN_RODAPE = `  <footer style="background:#0E0E0E;border-top:1px solid rgba(245,241,230,.10);color:rgba(232,224,204,.55);padding-bottom:88px">
+    <div style="max-width:1120px;margin:0 auto;padding:44px clamp(20px,5vw,60px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:11px">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:24px;height:24px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Docs</span>
+      </div>
+      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Prime Circle<br>CNPJ 58.409.058/0001-73<br>CRECI PJ 11841</p>
+      <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
+        A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
+      </p>
+    </div>
+  </footer>
+
+  <div data-cta-fixo style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0E0E0E;border-top:1px solid rgba(201,168,76,.35);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px">
+    <a href="/login" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72)">Entrar</a>
+    <a href="/signup" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:14px;font-weight:600">Criar conta grátis</a>
+  </div>`
+
+const DESIGN_HTML = `<div style="background:#F7F3EA">
+
+${montarCabecalho(NAV_ABERTURA, '#topo')}
 
   <section id="topo" style="background:#0E0E0E;color:#F5F1E6;overflow:hidden">
     <div style="max-width:1120px;margin:0 auto;padding:clamp(64px,10vw,116px) clamp(20px,5vw,60px) clamp(72px,11vw,124px);display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:clamp(36px,5vw,64px);align-items:center">
@@ -212,7 +301,9 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
           <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">01</p>
           <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">A conta do advogado, documento por documento</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não tem departamento jurídico. Então ou usa um modelo de origem incerta, ou paga honorários por peça: no mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500, por um contrato que já é rotina na sua carreira. Sai do mesmo bolso de onde vem a comissão.</p>
+          <p style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(28px,3.4vw,38px);line-height:1.05;letter-spacing:-.02em;color:#0E0E0E">R$ 800 a R$ 2.500</p>
+          <p style="margin:0 0 16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8B7340">por minuta, no mercado</p>
+          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não tem departamento jurídico. Então ou usa um modelo de origem incerta, ou paga honorários por peça, por um contrato que já é rotina na sua carreira. Sai do mesmo bolso de onde vem a comissão.</p>
         </div>
         <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
           <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">02</p>
@@ -221,24 +312,9 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         </div>
         <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
           <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">03</p>
-          <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">Os mesmos dados, cinco vezes</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Nome, RG, CPF, estado civil, matrícula, comarca. Redigitados a cada documento da mesma operação, com uma chance nova de erro em cada um.</p>
-        </div>
-        <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
-          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">04</p>
           <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">A minuta que chegou pronta</h3>
           <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">O outro lado mandou o contrato e quer resposta hoje. Ou você paga alguém para ler a tempo, ou assina sem saber, com segurança, o que está escrito ali dentro.</p>
         </div>
-        <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
-          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">05</p>
-          <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">A comissão no fio do combinado</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Sem contrato de corretagem assinado, a sua remuneração depende da memória das partes. O Código Civil protege o corretor, mas só quem tem documento consegue provar.</p>
-        </div>
-        <a href="/signup" data-card style="display:flex;flex-direction:column;justify-content:center;background:#0E0E0E;padding:32px 28px;color:#F5F1E6;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
-          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">→</p>
-          <h3 style="margin:0 0 12px;font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;font-weight:500;line-height:1.15;letter-spacing:-.01em;color:#F5F1E6">E se nada disso fosse assim?</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:rgba(232,224,204,.75)">Crie a conta e gere o próximo contrato aqui. 15 dias grátis, sem cartão.</p>
-        </a>
       </div>
     </div>
   </section>
@@ -280,36 +356,10 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         </div>
       </div>
 
-      <div data-anim style="margin-top:clamp(48px,6vw,72px);border:1px solid #DDD5C7;background:#FDFBF6;padding:clamp(30px,4vw,52px)">
-        <p style="margin:0 0 16px;display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#8B7340">O dossiê do negócio<span style="display:block;width:40px;height:1px;background:rgba(201,168,76,.5)"></span></p>
-        <h3 style="margin:0;max-width:840px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(26px,3.2vw,40px);line-height:1.1;letter-spacing:-.02em;color:#0E0E0E">Modelo de contrato qualquer um tem. <em style="font-style:italic;color:#7a6435">O dossiê é a diferença.</em></h3>
-        <p style="margin:22px 0 0;max-width:660px;font-size:15.5px;line-height:1.75;color:#5A544C">Aqui a operação é cadastrada uma vez, e todos os documentos daquele negócio puxam dela: o mesmo dado nunca é digitado duas vezes.</p>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:#DDD5C7;margin-top:34px;border:1px solid #DDD5C7">
-          <div style="background:#FDFBF6;padding:26px 24px">
-            <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;color:#0E0E0E">Cadastrou uma vez</h4>
-            <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">Partes, imóvel, valores e prazos ficam guardados no negócio, e não presos dentro de um documento.</p>
-          </div>
-          <div style="background:#FDFBF6;padding:26px 24px">
-            <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;color:#0E0E0E">Vale para os dezesseis</h4>
-            <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">Qualquer documento daquela operação abre já preenchido a partir do dossiê, do recibo de sinal ao distrato.</p>
-          </div>
-          <div style="background:#FDFBF6;padding:26px 24px">
-            <h4 style="margin:0 0 10px;font-size:15px;font-weight:600;color:#0E0E0E">Corrigiu num, corrigiu em todos</h4>
-            <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O ajuste que você faz volta para o dossiê, e o próximo documento já nasce com ele.</p>
-          </div>
-        </div>
-        <p data-anim style="margin:clamp(26px,3vw,34px) 0 0;max-width:70ch;font-size:14.5px;line-height:1.72;color:#6B645B;border-left:2px solid #C9A84C;padding-left:16px">O dossiê é seu e de mais ninguém. Nenhum outro corretor e nenhuma imobiliária têm acesso às partes, aos negócios ou aos documentos que você cadastra: a regra de acesso é por dono do registro e roda no servidor.</p>
-      </div>
-
       <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7;margin-top:clamp(40px,5vw,64px)">
         <div style="background:#FDFBF6;padding:30px 28px">
-          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O negócio mudou? O documento acompanha.</h3>
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">O financiamento não saiu e virou recurso próprio. A parcela única virou três. A posse mudou de data. Você troca o documento sem redigitar uma linha, porque as partes e o imóvel continuam no dossiê.</p>
-        </div>
-        <div style="background:#FDFBF6;padding:30px 28px">
-          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">Faltou um dado? Salva assim mesmo.</h3>
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">A certidão sai amanhã, o estado civil ainda está em confirmação, o PIX vem depois. O negócio fica salvo pela metade e você volta nele quando o dado chegar.</p>
-        </div>
+          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O negócio muda. O documento acompanha.</h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">O financiamento não saiu e virou recurso próprio, a parcela única virou três, a posse mudou de data: você troca o documento sem redigitar uma linha, porque as partes e o imóvel continuam no dossiê. E quando o dado ainda não chegou, a certidão que sai amanhã ou o PIX que vem depois, o negócio fica salvo pela metade e você volta nele quando ele chegar.</p>        </div>
       </div>
 
       <div data-anim style="margin-top:clamp(48px,6vw,72px);background:#0E0E0E;color:#F5F1E6;padding:clamp(30px,4vw,52px);display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,56px);align-items:center">
@@ -340,91 +390,27 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <h2 data-anim style="margin:0;max-width:760px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">
         16 documentos. Da autorização de venda à <em style="font-style:italic;color:#7a6435">entrega das chaves.</em>
       </h2>
-      <p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar. E nenhum deles começa em branco: todos puxam do dossiê do negócio.</p>
+      <p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar. E nenhum começa em branco: todos puxam do dossiê do negócio.</p>
 
-      <div data-anim style="margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
-        <div style="background:#FDFBF6;padding:clamp(28px,3.4vw,40px)">
-          <p style="margin:0 0 20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">Captação e pré-contrato</p>
-          <h3 style="margin:0 0 12px;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(24px,2.6vw,30px);font-weight:500;line-height:1.15;color:#0E0E0E">Autorização de Venda</h3>
-          <p style="margin:0;font-size:15px;line-height:1.72;color:#5A544C">O primeiro passo: o proprietário autoriza você a anunciar e vender o imóvel dele. Pode ser exclusiva ou não, e já define a sua comissão e o prazo.</p>
+      <div data-anim style="margin-top:52px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
+        <div style="background:#FDFBF6;padding:clamp(26px,3vw,36px)">
+          <p style="margin:0 0 8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">5 documentos</p>
+          <h3 style="margin:0 0 14px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:23px;line-height:1.15;letter-spacing:-.01em;color:#0E0E0E">Captação e pré-contrato</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.7;color:#5A544C">Autorização de Venda · Proposta e Reserva · Recibo de Sinal · Contrato de Corretagem · Checklist Documental</p>
         </div>
-        <div style="background:#FDFBF6;display:flex;flex-direction:column">
-          <div data-card style="padding:20px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Proposta e Reserva</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Registra a oferta do comprador e segura o imóvel antes da promessa.</p>
-          </div>
-          <div data-card style="padding:20px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Recibo de Sinal</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Comprova a entrada e define as arras, com a consequência de cada natureza na tela.</p>
-          </div>
-          <div data-card style="padding:20px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Contrato de Corretagem</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Fixa percentual, vencimento e exclusividade da sua remuneração.</p>
-          </div>
-          <div data-card style="padding:20px 24px;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Checklist Documental</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">A conferência das certidões antes de o cartório apontar o que falta.</p>
-          </div>
+        <div style="background:#FDFBF6;padding:clamp(26px,3vw,36px)">
+          <p style="margin:0 0 8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">6 variações</p>
+          <h3 style="margin:0 0 14px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:23px;line-height:1.15;letter-spacing:-.01em;color:#0E0E0E">Promessas de compra e venda</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.7;color:#5A544C">Financiada · À vista · Com FGTS · Com dação em pagamento · Simplificada · Permuta</p>
+        </div>
+        <div style="background:#FDFBF6;padding:clamp(26px,3vw,36px)">
+          <p style="margin:0 0 8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">5 documentos</p>
+          <h3 style="margin:0 0 14px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:23px;line-height:1.15;letter-spacing:-.01em;color:#0E0E0E">Execução e encerramento</h3>
+          <p style="margin:0;font-size:13.5px;line-height:1.7;color:#5A544C">Entrega de Chaves e Posse · Entrega das Chaves · Transmissão da Posse · Recibo de Comissão · Distrato</p>
         </div>
       </div>
 
-      <div data-anim style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
-        <div style="background:#FDFBF6;padding:clamp(28px,3.4vw,40px)">
-          <p style="margin:0 0 20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">Promessas de compra e venda</p>
-          <h3 style="margin:0 0 12px;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(24px,2.6vw,30px);font-weight:500;line-height:1.15;color:#0E0E0E">Promessa financiada</h3>
-          <p style="margin:0;font-size:15px;line-height:1.72;color:#5A544C">O comprador paga parte com recursos próprios e o restante com financiamento bancário. A promessa acompanha o processo até o banco liberar o valor. É o núcleo do negócio, e são seis variações dela.</p>
-        </div>
-        <div style="background:#FDFBF6;display:flex;flex-direction:column">
-          <div data-card style="padding:18px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">À vista</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Recursos próprios, sem banco. Sinal, reforço e saldo.</p>
-          </div>
-          <div data-card style="padding:18px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Com FGTS</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Uso do saldo do fundo, sem financiamento bancário.</p>
-          </div>
-          <div data-card style="padding:18px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Com dação em pagamento</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Parte do preço paga com outro bem, avaliado no contrato.</p>
-          </div>
-          <div data-card style="padding:18px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Simplificada</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Versão enxuta, para o negócio direto que não pede tudo.</p>
-          </div>
-          <div data-card style="padding:18px 24px;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Permuta</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Troca de imóveis, com a torna calculada quando há diferença.</p>
-          </div>
-        </div>
-      </div>
-
-      <div data-anim style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
-        <div style="background:#FDFBF6;padding:clamp(28px,3.4vw,40px)">
-          <p style="margin:0 0 20px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">Execução e encerramento</p>
-          <h3 style="margin:0 0 12px;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(24px,2.6vw,30px);font-weight:500;line-height:1.15;color:#0E0E0E">Entrega de Chaves e Posse</h3>
-          <p style="margin:0;font-size:15px;line-height:1.72;color:#5A544C">O caso mais comum: o comprador quitou, recebe as chaves e assume o imóvel na mesma data. Um documento só, com a relação de chaves, a leitura dos medidores e a autorização de mudança.</p>
-        </div>
-        <div style="background:#FDFBF6;display:flex;flex-direction:column">
-          <div data-card style="padding:20px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Entrega das Chaves</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Só a entrega física das chaves, quando a posse ainda não passa.</p>
-          </div>
-          <div data-card style="padding:20px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Transmissão da Posse</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Passa a posse ao comprador, quando as chaves já foram entregues antes.</p>
-          </div>
-          <div data-card style="padding:20px 24px;border-bottom:1px dashed #DDD5C7;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Recibo de Comissão</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Quitação por parcela recebida, amarrada ao negócio que a gerou.</p>
-          </div>
-          <div data-card style="padding:20px 24px;border-left:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)">
-            <h4 style="margin:0 0 4px;font-size:14.5px;font-weight:600;color:#0E0E0E">Distrato</h4>
-            <p style="margin:0;font-size:13.5px;line-height:1.6;color:#5A544C">Encerra o contrato de comum acordo, com quitação recíproca.</p>
-          </div>
-        </div>
-      </div>
-
-      <p data-anim style="margin:clamp(36px,4vw,52px) 0 0;font-size:15.5px;line-height:1.75;color:#5A544C">Faltou o documento que você usa? <a href="/signup" style="color:#7a6435;border-bottom:1px solid rgba(122,100,53,.4)">Diga qual, que ele entra.</a></p>
+      <p data-anim style="margin:clamp(32px,4vw,44px) 0 0;font-size:15.5px;line-height:1.75;color:#5A544C"><a href="/documentos" style="color:#7a6435;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:1px">Ver o que cada um resolve</a>, um por um, com quando usar cada modelo.</p>
     </div>
   </section>
 
@@ -433,28 +419,11 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <p data-anim style="margin:0 0 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B7340">A prova está no documento</p>
       <div data-anim style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
       <h2 data-anim style="margin:0;max-width:820px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">O documento é a primeira coisa que o cliente <em style="font-style:italic;color:#7a6435">vê do seu trabalho.</em></h2>
-      <p data-anim style="margin:26px 0 0;max-width:660px;font-size:16px;line-height:1.78;color:#5A544C">Ninguém avalia um corretor pelo esforço que ele teve para fechar. Avalia pelo que chega à mesa. O contrato que abre certo, com a qualificação completa das partes, a cláusula que responde à dúvida antes de ela ser feita e o prazo que não precisa ser explicado dizem, sem você falar nada, que ali tem método.</p>
-      <p data-anim style="margin:20px 0 0;max-width:660px;font-size:16px;line-height:1.78;color:#4A443C">É o que separa quem intermedeia de quem improvisa. E é o que faz o cliente indicar você para o próximo negócio.</p>
 
       <div data-anim style="margin-top:44px;background:#FDFBF6;border:1px solid #DDD5C7;padding:clamp(26px,3.6vw,48px)">
         <p style="margin:0 0 18px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:#8B7340">Cláusula 4ª · natureza das arras</p>
         <p style="margin:0;max-width:64ch;font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,26px);line-height:1.5;color:#0E0E0E">As arras ora pagas têm natureza confirmatória, na forma dos artigos 417 a 419 do Código Civil, imputando-se ao preço em caso de conclusão do negócio.</p>
         <p style="margin:22px 0 0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#6B645B">Recibo de sinal · saída em .docx</p>
-      </div>
-
-      <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:#DDD5C7;margin-top:40px;border:1px solid #DDD5C7">
-        <div style="background:#FDFBF6;padding:26px 24px">
-          <h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">Chega pronto</h3>
-          <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O cliente não espera você redigitar dados que ele já forneceu. O documento sai com tudo no lugar, na mesma conversa.</p>
-        </div>
-        <div style="background:#FDFBF6;padding:26px 24px">
-          <h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">Escrito para o caso</h3>
-          <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">Cláusula fundamentada no Código Civil, não texto emprestado de outro negócio com o nome trocado.</p>
-        </div>
-        <div style="background:#FDFBF6;padding:26px 24px">
-          <h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">Sem ponta solta</h3>
-          <p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O que costuma virar discussão depois, como a natureza das arras ou o prazo da escritura, já está resolvido no papel.</p>
-        </div>
       </div>
 
       <div data-anim style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(24px,3.5vw,48px);align-items:start">
@@ -463,7 +432,7 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
           <p style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:500;line-height:1.25;letter-spacing:-.01em;color:#0E0E0E">Prime Circle</p>
           <p style="margin:8px 0 0;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7a6435">CNPJ 58.409.058/0001-73</p>
         </div>
-        <p style="margin:0;font-size:15.5px;line-height:1.78;color:#5A544C">Cada modelo aqui existe porque precisou existir em uma negociação de verdade. As cláusulas vieram do que faltou em contratos anteriores, os prazos vieram do que deu problema e as conferências vieram do que o cartório apontou na hora errada. Por isso a plataforma não pergunta o que um sistema acharia importante. Ela pergunta o que o negócio exige para sair do papel.</p>
+        <p style="margin:0;font-size:15.5px;line-height:1.78;color:#5A544C">Cada modelo aqui existe porque precisou existir em uma negociação de verdade: as cláusulas vieram do que faltou em contratos anteriores, os prazos do que deu problema, e as conferências do que o cartório apontou na hora errada.</p>
       </div>
     </div>
   </section>
@@ -510,10 +479,8 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <div data-anim style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
       <h2 data-anim style="margin:0;max-width:820px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">Gerar resolve a rotina. Validar resolve o que chega pronto. <em style="font-style:italic;color:#7a6435">E o que não cabe em nenhum dos dois?</em></h2>
       <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(28px,4vw,56px);margin-top:44px;align-items:start">
-        <p style="margin:0;font-size:16px;line-height:1.78;color:#5A544C">Toda negociação tem alguma particularidade que foge do padrão: a herança que ainda não foi partilhada, o vendedor que mora fora, a cláusula que o comprador exige e você nunca viu. Nessa hora o corretor autônomo costuma ficar sozinho, ou procurar às pressas alguém que atenda no mesmo dia.<br><br>Aqui a dúvida tem dois caminhos, e você escolhe pelo tamanho dela. <strong style="font-weight:600;color:#0E0E0E">No primeiro nível</strong>, um agente especializado responde na hora, ancorado na base jurídica da plataforma: serve para a dúvida conceitual que trava a próxima linha do contrato. <strong style="font-weight:600;color:#0E0E0E">No segundo</strong>, quando o caso foge do padrão, o pedido vai para um profissional experiente, com o negócio já anexado. Sem sair da operação, sem recomeçar a explicação do zero.</p>
+        <p style="margin:0;font-size:16px;line-height:1.78;color:#5A544C">Toda negociação tem uma particularidade que foge do padrão, e é onde o corretor autônomo costuma ficar sozinho. Aqui a dúvida tem dois caminhos, e você escolhe pelo tamanho dela. <strong style="font-weight:600;color:#0E0E0E">No primeiro nível</strong>, um agente especializado responde na hora, ancorado na base jurídica da plataforma. <strong style="font-weight:600;color:#0E0E0E">No segundo</strong>, o pedido vai para um profissional experiente, com o negócio já anexado: sem sair da operação, sem recomeçar a explicação do zero.</p>
         <div style="display:flex;flex-direction:column;gap:1px;background:#DDD5C7;border:1px solid #DDD5C7">
-          <div style="background:#FDFBF6;padding:24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">O caso vai junto com o negócio</h3><p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">As partes, o imóvel e os valores já cadastrados seguem anexados ao pedido. Você descreve a dúvida, não a operação inteira.</p></div>
-          <div style="background:#FDFBF6;padding:24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#0E0E0E">A conversa fica registrada</h3><p style="margin:0;font-size:14px;line-height:1.68;color:#5A544C">O pedido e a resposta ficam guardados junto do negócio, e não perdidos num aplicativo de mensagem.</p></div>
           <div style="background:#0E0E0E;padding:24px"><h3 style="margin:0 0 8px;font-size:15px;font-weight:600;color:#F5F1E6">Isto não substitui o seu advogado</h3><p style="margin:0;font-size:14px;line-height:1.68;color:rgba(232,224,204,.75)">É apoio para decidir o próximo passo. A análise jurídica do caso concreto continua sendo caminho, e a plataforma não a dispensa.</p></div>
         </div>
       </div>
@@ -521,30 +488,13 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
   </section>
 
   <section style="background:#F3EBE0;border-top:1px solid #DDD5C7">
-    <div style="max-width:1120px;margin:0 auto;padding:clamp(80px,12vw,128px) clamp(20px,5vw,60px)">
+    <div style="max-width:1120px;margin:0 auto;padding:clamp(72px,10vw,108px) clamp(20px,5vw,60px)">
       <p data-anim style="margin:0 0 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B7340">§ 05 · Para imobiliárias</p>
       <div data-anim style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
-      <h2 data-anim style="margin:0;max-width:740px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">
+      <h2 data-anim style="margin:0;max-width:740px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(30px,4.2vw,48px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">
         Dez corretores, dez modelos de contrato diferentes. <em style="font-style:italic;color:#7a6435">Até aqui.</em>
       </h2>
-      <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(26px,3.5vw,48px);margin-top:52px">
-        <div style="border-top:1px solid #C9A84C;padding-top:22px">
-          <h3 style="margin:0 0 10px;font-size:16px;font-weight:600;color:#0E0E0E">Uma redação só na equipe</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Todo mundo parte do mesmo modelo. O que sai com a marca da imobiliária tem sempre o mesmo padrão de cláusula.</p>
-        </div>
-        <div style="border-top:1px solid #C9A84C;padding-top:22px">
-          <h3 style="margin:0 0 10px;font-size:16px;font-weight:600;color:#0E0E0E">A régua jurídica é sua</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">A base que a validação usa fica sob controle do administrador da conta. O critério de revisão é o da casa, não o de um modelo genérico.</p>
-        </div>
-        <div style="border-top:1px solid #C9A84C;padding-top:22px">
-          <h3 style="margin:0 0 10px;font-size:16px;font-weight:600;color:#0E0E0E">Apoio de especialista</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Quando o caso sai do padrão, o corretor abre um pedido de análise dentro da própria plataforma, sem sair da operação.</p>
-        </div>
-        <div style="border-top:1px solid #C9A84C;padding-top:22px">
-          <h3 style="margin:0 0 10px;font-size:16px;font-weight:600;color:#0E0E0E">Dados tratados com regra</h3>
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">CPF, RG e endereço de clientes ficam restritos ao dono do registro. Os registros de validação são expurgados em 30 dias, por compromisso de LGPD.</p>
-        </div>
-      </div>
+      <p data-anim style="margin:22px 0 0;max-width:620px;font-size:16px;line-height:1.75;color:#5A544C">Uma redação só na equipe inteira, a régua da validação sob controle do administrador da conta, e o dado do cliente restrito a quem cadastrou. <a href="/imobiliarias" style="color:#7a6435;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:1px">Ver como funciona para a equipe</a>.</p>
     </div>
   </section>
 
@@ -555,6 +505,9 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
         <div style="width:44px;height:1px;background:rgba(201,168,76,.5);margin-bottom:30px"></div>
         <h2 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(40px,5.6vw,68px);line-height:1.02;letter-spacing:-.02em;color:#F5F1E6">15 dias <em style="font-style:italic;color:#C9A84C">grátis.</em></h2>
         <p style="margin:24px 0 0;max-width:520px;font-size:16px;line-height:1.78;color:rgba(232,224,204,.78)">A plataforma inteira liberada por 15 dias, sem cartão de crédito e sem limite de documentos. Terminado o teste, gerar documento e validar minuta pausam, e os seus negócios continuam acessíveis: nada do que você cadastrou fica preso aqui. Como não pedimos cartão, nada é cobrado sem que você peça.</p>
+        <div data-anim style="margin:30px 0 0;padding:22px 0 0;max-width:560px;border-top:1px solid rgba(245,241,230,.12)">
+          <p style="margin:0;font-size:15.5px;line-height:1.72;color:rgba(232,224,204,.78)">No mercado, uma única minuta avulsa custa de <strong style="font-weight:600;color:#F5F1E6">R$ 800 a R$ 2.500</strong>. Aqui, os 16 documentos e o validador de minuta <strong style="font-weight:600;color:#C9A84C">a partir de R$ 69 por mês</strong>, com uso avulso por operação para quem não quer assinar.</p>
+        </div>
         <div style="display:flex;flex-wrap:wrap;gap:20px;align-items:center;margin-top:32px">
           <a href="/signup" style="display:inline-flex;align-items:center;height:52px;padding:0 32px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta grátis</a>
           <a href="#perguntas" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ler as perguntas frequentes</a>
@@ -588,26 +541,6 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
       <div data-anim style="width:44px;height:1px;background:#C9A84C;margin-bottom:40px"></div>
       <div data-anim style="border-top:1px solid #DDD5C7">
 
-        <div data-faq data-faq-aberto style="border-bottom:1px solid #DDD5C7">
-          <button type="button" data-faq-botao style="display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:20px;background:none;border:0;padding:24px 0;text-align:left;cursor:pointer;font-family:inherit">
-            <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,24px);font-weight:500;color:#0E0E0E">Quanto custa?</span>
-            <span data-faq-sinal style="flex:none;font-family:'JetBrains Mono',monospace;font-size:16px;color:#8B7340;transition:transform 200ms cubic-bezier(.22,.61,.36,1)">+</span>
-          </button>
-          <div data-faq-corpo style="overflow:hidden;transition:max-height 220ms cubic-bezier(.22,.61,.36,1),opacity 200ms cubic-bezier(.22,.61,.36,1)">
-            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Os primeiros 15 dias são grátis, com a plataforma inteira liberada e sem pedir cartão de crédito. Terminado o teste, gerar documento e validar minuta pausam. A sua conta continua de pé e os negócios que você cadastrou continuam acessíveis: dado de cliente não fica preso aqui dentro. Para seguir usando, é só falar com a gente pela página de ajuda. E como não pedimos cartão, nada é cobrado sem que você peça.</p>
-          </div>
-        </div>
-
-        <div data-faq style="border-bottom:1px solid #DDD5C7">
-          <button type="button" data-faq-botao style="display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:20px;background:none;border:0;padding:24px 0;text-align:left;cursor:pointer;font-family:inherit">
-            <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,24px);font-weight:500;color:#0E0E0E">Como é o cadastro? Quanto tempo até o primeiro documento?</span>
-            <span data-faq-sinal style="flex:none;font-family:'JetBrains Mono',monospace;font-size:16px;color:#8B7340;transition:transform 200ms cubic-bezier(.22,.61,.36,1)">+</span>
-          </button>
-          <div data-faq-corpo style="overflow:hidden;transition:max-height 220ms cubic-bezier(.22,.61,.36,1),opacity 200ms cubic-bezier(.22,.61,.36,1)">
-            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Não há aprovação nem fila de espera. Você informa nome, e-mail e senha, clica no link de confirmação que chega no seu e-mail e o acesso abre na hora. O CRECI e o percentual de comissão ficam para depois, no perfil, e passam a entrar sozinhos na cláusula de corretagem de tudo que você gerar. Não há instalação, não há treinamento e não há migração de nada: com os dados do negócio à mão, o primeiro documento sai na mesma sessão.</p>
-          </div>
-        </div>
-
         <div data-faq style="border-bottom:1px solid #DDD5C7">
           <button type="button" data-faq-botao style="display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:20px;background:none;border:0;padding:24px 0;text-align:left;cursor:pointer;font-family:inherit">
             <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,24px);font-weight:500;color:#0E0E0E">Sai em Word mesmo? Consigo editar depois?</span>
@@ -628,13 +561,13 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
           </div>
         </div>
 
-        <div data-faq style="border-bottom:1px solid #DDD5C7">
+        <div data-faq data-faq-aberto style="border-bottom:1px solid #DDD5C7">
           <button type="button" data-faq-botao style="display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:20px;background:none;border:0;padding:24px 0;text-align:left;cursor:pointer;font-family:inherit">
-            <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,24px);font-weight:500;color:#0E0E0E">Isso substitui o advogado?</span>
+            <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,24px);font-weight:500;color:#0E0E0E">Isso substitui o advogado? E os documentos têm validade?</span>
             <span data-faq-sinal style="flex:none;font-family:'JetBrains Mono',monospace;font-size:16px;color:#8B7340;transition:transform 200ms cubic-bezier(.22,.61,.36,1)">+</span>
           </button>
           <div data-faq-corpo style="overflow:hidden;transition:max-height 220ms cubic-bezier(.22,.61,.36,1),opacity 200ms cubic-bezier(.22,.61,.36,1)">
-            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Não, e não é essa a proposta. O que sai daqui é o documento de rotina da intermediação, redigido com fundamentação no Código Civil, que você deixa de terceirizar a cada negócio. Quando a operação foge do padrão, você leva o caso ao Especialista sem sair da plataforma, e a análise de um advogado continua sendo o caminho. A ideia não é tirar o advogado da operação, é tirar ele da papelada repetitiva.</p>
+            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Não, e não é essa a proposta. O que sai daqui é o documento de rotina da intermediação, redigido com fundamentação no Código Civil, que você deixa de terceirizar a cada negócio. Quando a operação foge do padrão, você leva o caso ao Especialista sem sair da plataforma, e a análise de um advogado continua sendo o caminho. A ideia não é tirar o advogado da operação, é tirar ele da papelada repetitiva. Sobre validade: os modelos são redigidos com fundamentação no Código Civil e nas práticas da intermediação imobiliária, e, como em qualquer contrato, ela depende das partes, do objeto e da forma no caso concreto.</p>
           </div>
         </div>
 
@@ -645,16 +578,6 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
           </button>
           <div data-faq-corpo style="overflow:hidden;transition:max-height 220ms cubic-bezier(.22,.61,.36,1),opacity 200ms cubic-bezier(.22,.61,.36,1)">
             <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Ainda não. Os dezesseis documentos cobrem compra e venda, da captação ao encerramento. Se a sua carteira é de locação, o que existe aqui hoje não vai te atender, e preferimos dizer isso antes de você criar a conta.</p>
-          </div>
-        </div>
-
-        <div data-faq style="border-bottom:1px solid #DDD5C7">
-          <button type="button" data-faq-botao style="display:flex;width:100%;align-items:baseline;justify-content:space-between;gap:20px;background:none;border:0;padding:24px 0;text-align:left;cursor:pointer;font-family:inherit">
-            <span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2.2vw,24px);font-weight:500;color:#0E0E0E">Os documentos têm validade jurídica?</span>
-            <span data-faq-sinal style="flex:none;font-family:'JetBrains Mono',monospace;font-size:16px;color:#8B7340;transition:transform 200ms cubic-bezier(.22,.61,.36,1)">+</span>
-          </button>
-          <div data-faq-corpo style="overflow:hidden;transition:max-height 220ms cubic-bezier(.22,.61,.36,1),opacity 200ms cubic-bezier(.22,.61,.36,1)">
-            <p style="margin:0 0 24px;font-size:15px;line-height:1.75;color:#5A544C">Os modelos são redigidos com fundamentação no Código Civil e nas práticas da intermediação imobiliária. Como qualquer contrato, a validade depende das partes, do objeto e da forma no caso concreto.</p>
           </div>
         </div>
 
@@ -672,117 +595,9 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
     </div>
   </section>
 
-  <section style="background:#0E0E0E;color:#F5F1E6">
-    <div style="max-width:1120px;margin:0 auto;padding:clamp(84px,12vw,136px) clamp(20px,5vw,60px);text-align:center">
-      <div data-anim style="display:flex;justify-content:center;margin-bottom:32px">
-        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:44px;height:44px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
-      </div>
-      <h2 data-anim style="margin:0 auto;max-width:760px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(34px,5vw,60px);line-height:1.04;letter-spacing:-.02em;color:#F5F1E6">
-        Gere o próximo contrato aqui e <em style="font-style:italic;color:#C9A84C">compare com o seu.</em>
-      </h2>
-      <p data-anim style="margin:24px auto 0;max-width:540px;font-size:16.5px;line-height:1.75;color:rgba(232,224,204,.75)">
-        O cadastro leva menos tempo do que trocar os nomes num modelo antigo: você cria a conta, confirma pelo link que chega no e-mail e entra. Ninguém precisa aprovar nada. Depois disso, os documentos da sua próxima operação saem prontos.
-      </p>
-      <div data-anim style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;margin-top:40px">
-        <a href="/signup" style="display:inline-flex;align-items:center;height:54px;padding:0 34px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta grátis</a>
-        <a href="#documentos" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ver os 16 documentos</a>
-      </div>
-      <p data-anim style="margin:26px 0 0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:rgba(232,224,204,.72)">15 dias grátis. Sem cartão. Sem instalação.</p>
-    </div>
-  </section>
-
-  <footer style="background:#0E0E0E;border-top:1px solid rgba(245,241,230,.10);color:rgba(232,224,204,.55);padding-bottom:88px">
-    <div style="max-width:1120px;margin:0 auto;padding:44px clamp(20px,5vw,60px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:11px">
-        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:24px;height:24px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Docs</span>
-      </div>
-      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Prime Circle<br>CNPJ 58.409.058/0001-73<br>CRECI PJ 11841</p>
-      <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
-        A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
-      </p>
-    </div>
-  </footer>
-
-  <div data-cta-fixo style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0E0E0E;border-top:1px solid rgba(201,168,76,.35);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px">
-    <a href="/login" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72)">Entrar</a>
-    <a href="/signup" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:14px;font-weight:600">Criar conta grátis</a>
-  </div>
+${DESIGN_RODAPE}
 
 </div>`
-
-export const NAV_APOIO = [
-  { href: '/', label: 'Início' },
-  { href: '/planos', label: 'Planos e valores' },
-  { href: '/login', label: 'Entrar' },
-  { href: '/signup', label: 'Criar conta grátis', cta: true },
-]
-
-export function montarCabecalho(
-  links: Array<{ href: string; label: string; cta?: boolean }>,
-  homeHref: string = '/',
-) {
-  const linksDesk = links
-    .map((l) => {
-      if (l.cta) {
-        return `<a href="${l.href}" style="flex:none;display:inline-flex;align-items:center;height:40px;padding:0 22px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:13px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6">${l.label}</a>`
-      }
-      return `<a href="${l.href}" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">${l.label}</a>`
-    })
-    .join('')
-
-  const linksMobile = links
-    .map((l) => {
-      if (l.cta) {
-        return `<a href="${l.href}" data-menu-cta>${l.label}</a>`
-      }
-      return `<a href="${l.href}">${l.label}</a>`
-    })
-    .join('')
-
-  return `
-  <header data-header style="position:sticky;top:0;z-index:50;background:#0E0E0E;border-bottom:1px solid rgba(245,241,230,.10);transition:height 220ms cubic-bezier(.22,.61,.36,1)">
-    <input type="checkbox" id="pc-menu" data-menu-caixa aria-hidden="true">
-    <div data-header-inner style="max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,60px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:height 220ms cubic-bezier(.22,.61,.36,1)">
-      <a href="${homeHref}" style="display:flex;align-items:center;gap:11px;color:#F5F1E6;flex:none">
-        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:30px;height:30px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
-        <span style="display:flex;flex-direction:column;line-height:1">
-          <span style="font-size:15px;font-weight:700;letter-spacing:-.01em;color:#F5F1E6">Prime Circle</span>
-          <span data-header-sub style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C;margin-top:5px;transition:opacity 200ms cubic-bezier(.22,.61,.36,1),max-height 200ms cubic-bezier(.22,.61,.36,1);overflow:hidden;max-height:14px">Docs</span>
-        </span>
-      </a>
-      <nav data-nav-links style="display:flex;align-items:center;gap:clamp(12px,2vw,26px)">
-        ${linksDesk}
-      </nav>
-      <label for="pc-menu" data-menu-botao aria-label="Abrir e fechar o menu">
-        <svg data-icone-abrir viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        <svg data-icone-x viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
-      </label>
-    </div>
-    <nav data-menu-mobile aria-label="Menu">
-      ${linksMobile}
-    </nav>
-  </header>`
-}
-
-export const DESIGN_RODAPE = `
-  <footer style="background:#0E0E0E;border-top:1px solid rgba(245,241,230,.10);color:rgba(232,224,204,.55);padding-bottom:88px">
-    <div style="max-width:1120px;margin:0 auto;padding:44px clamp(20px,5vw,60px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
-      <div style="display:flex;align-items:center;gap:11px">
-        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:24px;height:24px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Docs</span>
-      </div>
-      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Prime Circle<br>CNPJ 58.409.058/0001-73<br>CRECI PJ 11841</p>
-      <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
-        A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
-      </p>
-    </div>
-  </footer>
-  <div data-cta-fixo style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0E0E0E;border-top:1px solid rgba(201,168,76,.35);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px">
-    <a href="/login" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72)">Entrar</a>
-    <a href="/signup" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:14px;font-weight:600">Criar conta grátis</a>
-  </div>`
-
 export function PaginaDesign({ html }: { html: string }) {
   const navigate = useNavigate()
   const raiz = useRef<HTMLDivElement>(null)
