@@ -28,11 +28,32 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
-## Onde estamos (28/08/2026, versão 0.0.803 do Skip)
+## Onde estamos (29/08/2026, versão 0.0.803 do Skip)
 
-**Nada pende de colagem.** O último download fechou com 219 arquivos comparados
-e nenhuma diferença de código: as duas únicas divergências eram linha em branco,
-e a versão do Skip foi adotada nas duas.
+**Pende de colagem: `src/pages/Planos.tsx`, e só ele.**
+
+Preço do avulso: R$ 349 é o valor final, e R$ 149 é o que se cobra **até
+31/12/2026**. A página mostra R$ 149 como preço, com selo "Preço de lançamento"
+no cartão e a data em que muda escrita em três lugares. **Sem preço riscado, de
+propósito:** R$ 349 nunca foi cobrado de ninguém, e "de R$ 349 por R$ 149" seria
+desconto sobre preço que não existiu, que é a metade do dobro que este público
+reconhece de olhos fechados.
+
+Conferido antes de entregar: `tsc -b` 0 erros, `oxlint src` 16 avisos (baseline),
+build passa, `oxfmt` aplicado, nenhum travessão. Renderizado em Chromium a 1440,
+1024 e 390: o selo aparece nas três larguras, sem rolagem horizontal e sem cartão
+desalinhado.
+
+**O que muda em 31/12/2026, e ninguém além de você vai lembrar:** não existe
+janela promocional no código. Trocar R$ 149 por R$ 349 é uma rodada de colagem
+deste mesmo arquivo, em quatro pontos (a constante `PLANOS`, a nota do cartão, o
+bloco "A partir do quinto negócio" e "A conta de referência"), mais tirar o selo.
+O comentário de cabeçalho do arquivo lista os quatro. A data é compromisso de
+gente, não cron.
+
+Antes disso, o download anterior fechou com 219 arquivos comparados e nenhuma
+diferença de código: as duas únicas divergências eram linha em branco, e a versão
+do Skip foi adotada nas duas.
 
 O que entrou hoje, em ordem: mensagens de erro em português, avisos de pendência
 para o admin (o pedido de especialista não notificava ninguém), item do Painel no
