@@ -51,6 +51,39 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
+## PRODUÇÃO ESTÁ ATRÁS DO DEV, e não é culpa desta entrega
+
+Conferido no download da **v0.0.811** (29/08 18:41), no `.skip.config.json`:
+
+| campo | valor |
+| ----- | ----- |
+| `lastDevBuildRef` | `bfb429b` (v0.0.811) |
+| `lastPublishedRef` | `639634f`, que é a **v0.0.807** |
+| `publishedAt` | 28/08 21:29 |
+
+**Aplicar no chat do Skip não publica.** Aplicar escreve no build de dev;
+publicar é um passo separado, e o `publishedAt` é que prova que aconteceu.
+
+Ou seja: as três rodadas de 29/08 no `Planos.tsx` (v0.0.808, 809 e 810), com o
+preço do avulso a R$ 149, os 16 documentos e o rodapé encurtado, **estão em dev
+e não no ar**. Quem publicar a landing enxuta vai levar tudo isso junto, o que é
+bom, porque a âncora nova da landing ("a partir de R$ 69 por mês") depende de a
+`/planos` estar coerente.
+
+Confira o `publishedAt` depois de publicar. É o único campo que prova.
+
+## Conferência da v0.0.811: base limpa para a colagem
+
+O download de 29/08 18:41 tem **235 arquivos** e, contra a `work` (`ac6ce16`),
+**zero diferença de código**. As quatro divergências são todas conhecidas:
+`package.json` (só o número da versão), `.gitignore`, `.skip.config.json` e o
+`errors.ts`, que ressuscitou de novo com as mesmas 29 linhas e zero
+importadores.
+
+**A v0.0.811 não mexeu em código nenhum: só subiu o número de build.** O
+`Signup.tsx` e o `App.tsx` dela são byte a byte iguais aos da v0.0.810, então as
+âncoras do roteiro continuam valendo. Hashes WebP íntegros no download.
+
 ## PENDENTE DE COLAGEM: a landing enxuta (commit `e7a3592`)
 
 **Esta é a única coisa que pende.** Três arquivos, cinco pastes, e o roteiro
