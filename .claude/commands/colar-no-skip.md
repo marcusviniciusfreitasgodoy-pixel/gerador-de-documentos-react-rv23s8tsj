@@ -51,6 +51,28 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
+## NO AR: landing enxuta publicada em 29/08 20:30 (v0.0.818)
+
+`lastDevBuildRef`, `lastProdBuildRef` e `lastPublishedRef` apontam todos para
+`0021cd7`, e o `publishedAt` avançou de 28/08 21:29 para **29/08 20:30**. Dev e
+produção em sincronia pela primeira vez desde a v0.0.807.
+
+Foram junto as dez versões de dev acumuladas: as três rodadas do `Planos.tsx` de
+29/08 (avulso a R$ 149, os 16 documentos, rodapé encurtado) e a landing inteira.
+
+Conferido no download da v0.0.818: `Signup.tsx`, `Documentos.tsx` e `App.tsx`
+idênticos byte a byte à branch, 236 arquivos, só as quatro divergências da lista
+de ignorar. Sobre a árvore que veio do Skip: `tsc -b` 0 erros, `oxlint` 16
+avisos, build passa.
+
+**O que ainda não foi verificado, e é honesto dizer:** o site no ar. O proxy
+desta sessão nega `documentos.primecircle.app.br` por política (403 no CONNECT),
+então a confirmação de que `/documentos` e `/imobiliarias` respondem no domínio
+real depende de alguém abrir no navegador. As duas rotas nunca rodaram fora do
+render isolado.
+
+## Nada mais pende de colagem
+
 ## FECHADO: a landing enxuta está no dev (v0.0.817)
 
 Conferido no download de 29/08 19:50: **`Signup.tsx`, `Documentos.tsx` e
@@ -131,7 +153,7 @@ importadores.
 `Signup.tsx` e o `App.tsx` dela são byte a byte iguais aos da v0.0.810, então as
 âncoras do roteiro continuam valendo. Hashes WebP íntegros no download.
 
-## PENDENTE DE COLAGEM: a landing enxuta (commit `e7a3592`)
+## Histórico: a landing enxuta enquanto pendia (commit `e7a3592`)
 
 **Esta é a única coisa que pende.** Três arquivos, cinco pastes, e o roteiro
 completo saiu na sessão de 29/08 (`ROTEIRO-COLAGEM.md`, com os três blocos em
