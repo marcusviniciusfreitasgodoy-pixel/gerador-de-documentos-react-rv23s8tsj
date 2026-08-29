@@ -88,13 +88,26 @@ import { Badge } from '@/components/ui/badge'
  * O prazo tem fim declarado de propósito. "Preço de lançamento" sem data vira
  * preço permanente, e aí o R$ 349 seria fictício do mesmo jeito.
  *
+ * E o motivo do preço menor é BENEFÍCIO, não risco. A primeira versão do texto
+ * dizia que quem entra agora "corre um risco que quem entrar depois não corre".
+ * Era verdade e era péssimo: dizer ao corretor que ele está comprando algo não
+ * provado, na frase que deveria fazê-lo comprar. O que a página diz agora é o
+ * mesmo fato pelo lado certo: quem chega no começo paga menos, e continua
+ * pagando menos em cada avulso que comprar até 31/12/2026.
+ *
  * A DATA NÃO VIRA SOZINHA
  *
- * Não existe janela promocional no código: o preço é a constante `PLANOS` aqui
- * embaixo, e o R$ 149 aparece ainda em três textos desta página (a tabela de
- * virada logo acima, o bloco "A partir do quinto negócio" e "A conta de
- * referência"). Em 31/12/2026 isso é uma rodada de colagem no Skip, feita à
- * mão. A data é compromisso de gente, não cron.
+ * Não existe janela promocional no código. Em 31/12/2026 isso é uma rodada de
+ * colagem no Skip, feita à mão, e ela toca CINCO lugares:
+ *
+ *   1. a constante `PLANOS`, o preço em si;
+ *   2. o `selo` do avulso, que sai;
+ *   3. a `nota` do cartão, que perde o "Vai para R$ 349 em 31 de dezembro";
+ *   4. o bloco "Quem entra agora paga R$ 149", que muda de sentido inteiro;
+ *   5. os blocos "A partir do quinto negócio" e "A conta de referência".
+ *
+ * A tabela de virada aqui em cima também envelhece. A data é compromisso de
+ * gente, não cron.
  *
  * O número também aparece em comentário no `negocio_limite.js` e na migração
  * `1900000039`, onde ele explica por que a segunda operação do avulso não é
@@ -513,18 +526,17 @@ export default function PlanosPage() {
         <div>
           <p className="text-sm font-medium text-foreground">O limite é por operação</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Em cada negócio, você cadastra os dados uma vez, gera todos os documentos e corrige
-            quantas vezes precisar, sem custo adicional. Checklist, termo de chaves, termo de posse
-            e recibo de comissão não contam como operação: eles pertencem a um negócio que já
-            existe.
+            Em cada negócio você cadastra os dados uma vez, gera todos os documentos e corrige
+            quantas vezes precisar, sem custo a mais. Checklist, termo de chaves, termo de posse e
+            recibo de comissão não contam como operação: pertencem a um negócio que já existe.
           </p>
         </div>
         <div>
           <p className="text-sm font-medium text-foreground">Modelos prontos resolvem um arquivo</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             O Prime Circle Docs organiza a operação inteira: partes, imóvel, comissão, documentos em
-            Word e validação com IA no mesmo fluxo. E os seus dados continuam seus, com ou sem
-            plano: nada é apagado e nada fica preso aqui dentro.
+            Word e validação com IA no mesmo fluxo. Seus dados continuam seus, com ou sem plano:
+            nada é apagado e nada fica preso aqui dentro.
           </p>
         </div>
         <div>
@@ -532,34 +544,34 @@ export default function PlanosPage() {
             A partir do quinto negócio, o ano sai mais barato
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Cinco negócios avulsos custam R$ 745 no preço de hoje. O ano inteiro do Individual custa
-            R$ 690, com operações e validações que o avulso não dá. Quem fecha três ou quatro por
-            ano fica bem no Avulso e não paga assinatura nenhuma: a conta é sua, e ela está aqui na
-            mesa. Depois de 31 de dezembro de 2026, com o Avulso a R$ 349, a virada passa a ser no
-            segundo negócio.
+            Cinco negócios avulsos custam R$ 745. O ano do Individual custa R$ 690 e dá mais
+            operações e mais validações. Quem fecha três ou quatro por ano fica bem no Avulso, sem
+            assinar nada: a conta é sua, e ela está aqui na mesa. Depois de 31 de dezembro de 2026,
+            com o Avulso a R$ 349, a virada passa para o segundo negócio.
           </p>
         </div>
         <div>
           <p className="text-sm font-medium text-foreground">O que cabe num Avulso</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            São 16 documentos padronizados, escritos sobre o que o Código Civil orienta para cada
-            ato e revisados por advogado e por escrevente de cartório. Junto vem o resto do fluxo: a
-            leitura dos documentos com IA, o negócio montado com as partes e o imóvel, a validação
-            da minuta e a consulta de dúvidas com a IA. A operação inteira, da autorização de venda
-            ao recibo de comissão.
+            16 documentos padronizados, escritos sobre o que o Código Civil orienta para cada ato e
+            revisados por advogado e por escrevente de cartório. Junto vem o fluxo todo: leitura dos
+            documentos com IA, o negócio montado com as partes e o imóvel, a validação da minuta e a
+            consulta de dúvidas. A operação inteira, da autorização de venda ao recibo de comissão.
           </p>
         </div>
         <div>
           <p className="text-sm font-medium text-foreground">
-            Por que o Avulso custa R$ 149 agora e R$ 349 depois
+            Quem entra agora paga R$ 149, e depois são R$ 349
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            R$ 349 é o preço do Avulso, e é o preço da operação inteira que está descrita aí em
-            cima. Até 31 de dezembro de 2026 ele sai por R$ 149, porque a ferramenta está começando
-            e quem entra agora corre um risco que quem entrar depois não corre. Não é desconto sobre
-            preço que ninguém pagou: R$ 149 é o preço de hoje, e a data em que ele muda está escrita
-            aqui. Ele já custa mais que um mês de assinatura, e isso também é de propósito: no
-            Avulso você não deixa cartão e não tem renovação para lembrar de cancelar.
+            R$ 349 é o preço do Avulso, e é o preço da operação inteira descrita aí em cima. Até 31
+            de dezembro de 2026 ele sai por R$ 149: quem chega no começo paga menos, e continua
+            pagando menos em cada avulso que comprar até essa data. R$ 149 é o preço de hoje, não é
+            desconto sobre preço que ninguém pagou, e a data em que ele muda está escrita aqui.
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+            O Avulso custa mais que um mês de assinatura, e isso é de propósito: aqui você não deixa
+            cartão e não tem renovação para lembrar de cancelar.
           </p>
         </div>
         <div>
@@ -567,20 +579,19 @@ export default function PlanosPage() {
             O que a gente lançar já está no seu plano
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            Nos planos Profissional e Imobiliária, o que for lançado no Prime Circle Docs entra sem
-            custo a mais enquanto o seu plano estiver ativo, e sem reajuste no meio do seu ano. A
-            exceção é o que é serviço de gente e não recurso do sistema: o canal do especialista
-            continua orçado caso a caso, como está dito no cartão.
+            Nos planos Profissional e Imobiliária, o que for lançado entra sem custo a mais enquanto
+            o seu plano estiver ativo, e sem reajuste no meio do seu ano. A exceção é serviço de
+            gente, não recurso do sistema: o canal do especialista continua orçado caso a caso.
           </p>
         </div>
         <div>
           <p className="text-sm font-medium text-foreground">A conta de referência</p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-            No mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500 com advogado, e a análise
-            de documentos é cobrada à parte. Os 16 modelos daqui já passaram por advogado e por
-            escrevente de cartório antes de chegar em você. Aqui, o Avulso cobre a operação inteira
-            por R$ 149 até 31 de dezembro de 2026, e a assinatura inclui a validação. O advogado
-            continua no lugar certo: na análise do caso concreto, não na papelada repetitiva.
+            No mercado, uma única minuta com advogado custa de R$ 800 a R$ 2.500, e a análise de
+            documentos é cobrada à parte. Os 16 modelos daqui já passaram por advogado e por
+            escrevente de cartório. Aqui o Avulso cobre a operação inteira por R$ 149 até 31 de
+            dezembro de 2026, e a assinatura inclui a validação. O advogado continua no lugar certo:
+            na análise do caso concreto, não na papelada repetitiva.
           </p>
         </div>
       </div>

@@ -30,8 +30,25 @@ não decida por ele. O diff é a única prova.
 
 ## Onde estamos (29/08/2026, versão 0.0.809 do Skip)
 
-**Nada pende de colagem.** O download 0.0.809 fechou com **234 arquivos e
-nenhuma diferença de código**: o `Planos.tsx` voltou **idêntico byte a byte**,
+**Pende de colagem: `src/pages/Planos.tsx`, e só ele.** 600 linhas, 27.785
+caracteres. É uma rodada só de texto: os sete blocos do rodapé foram encurtados,
+e um deles mudou de sentido.
+
+**A frase do risco saiu.** O texto dizia que quem entra agora "corre um risco que
+quem entrar depois não corre". Era verdade e era péssimo: dizia ao corretor, na
+frase que deveria fazê-lo comprar, que ele está pagando por algo não provado.
+O mesmo fato agora aparece pelo lado certo, que é o do benefício: "quem chega no
+começo paga menos, e continua pagando menos em cada avulso que comprar até essa
+data". O título do bloco também virou o benefício: **"Quem entra agora paga
+R$ 149, e depois são R$ 349"**.
+
+Conferido: `tsc -b` 0 erros, `oxlint src` 16 avisos, build passa, `oxfmt`
+aplicado, nenhum travessão. Renderizado nas duas abas a 1440, 1024 e 390: zero
+rolagem, zero erro de JS, zero `opacity: 0`, preços em uma linha nos seis casos.
+
+### O download anterior (0.0.809) fechou limpo
+
+Fechou com **234 arquivos e nenhuma diferença de código**: o `Planos.tsx` voltou **idêntico byte a byte**,
 589 linhas e 27.281 caracteres, e o `Signup.tsx` intacto com os três hashes WebP
 (`40b6f0b3af`, `40b6f0b3af`, `582241ca47`). As quatro divergências restantes
 estão todas na lista do "diff deve ignorar": `.gitignore`, `.skip.config.json`,
