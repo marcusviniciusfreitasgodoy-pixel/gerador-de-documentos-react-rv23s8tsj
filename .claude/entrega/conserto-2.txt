@@ -1,0 +1,410 @@
+  <section style="background:#0E0E0E;color:#F5F1E6">
+    <div style="max-width:1120px;margin:0 auto;padding:clamp(84px,12vw,136px) clamp(20px,5vw,60px);text-align:center">
+      <div data-anim style="display:flex;justify-content:center;margin-bottom:32px">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:44px;height:44px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+      </div>
+      <h2 data-anim style="margin:0 auto;max-width:760px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(34px,5vw,60px);line-height:1.04;letter-spacing:-.02em;color:#F5F1E6">
+        Gere o próximo contrato aqui e <em style="font-style:italic;color:#C9A84C">compare com o seu.</em>
+      </h2>
+      <p data-anim style="margin:24px auto 0;max-width:540px;font-size:16.5px;line-height:1.75;color:rgba(232,224,204,.75)">
+        O cadastro leva menos tempo do que trocar os nomes num modelo antigo: você cria a conta, confirma pelo link que chega no e-mail e entra. Ninguém precisa aprovar nada. Depois disso, os documentos da sua próxima operação saem prontos.
+      </p>
+      <div data-anim style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;margin-top:40px">
+        <a href="/signup" style="display:inline-flex;align-items:center;height:54px;padding:0 34px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta grátis</a>
+        <a href="#documentos" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ver os 16 documentos</a>
+      </div>
+      <p data-anim style="margin:26px 0 0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:rgba(232,224,204,.72)">15 dias grátis. Sem cartão. Sem instalação.</p>
+    </div>
+  </section>
+
+${DESIGN_RODAPE}
+
+</div>`
+
+// A maquinaria (revelacao, hover, acordeao, cabecalho que condensa, parallax)
+// olha o DOM a partir da raiz e nao sabe qual pagina esta dentro dela. Por isso
+// ela virou componente com o HTML por parametro: a abertura e as paginas de
+// apoio usam a MESMA implementacao, e um conserto aqui vale para as tres.
+export function PaginaDesign({ html }: { html: string }) {
+  const navigate = useNavigate()
+  const raiz = useRef<HTMLDivElement>(null)
+
+  // Trocar de pagina no SPA preserva a rolagem. Sem isto, quem clica em "Ver os
+  // 16 documentos" no meio da abertura cai no meio da /documentos, sem titulo
+  // na tela, e a pagina parece quebrada.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [html])
+
+  useEffect(() => {
+    const no = raiz.current
+    if (!no) return
+    const limpar: (() => void)[] = []
+    const reduz =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    // style-hover: usado nos links do menu e nos botoes. Guarda o style base e
+    // devolve na saida, sem reescrever o atributo inteiro.
+    Array.from(no.querySelectorAll<HTMLElement>('[style-hover]')).forEach((el) => {
+      const base = el.getAttribute('style') || ''
+      const hov = el.getAttribute('style-hover') || ''
+      const entra = () => el.setAttribute('style', base + ';' + hov)
+      const sai = () => el.setAttribute('style', base)
+      el.addEventListener('mouseenter', entra)
+      el.addEventListener('mouseleave', sai)
+      el.addEventListener('focusin', entra)
+      el.addEventListener('focusout', sai)
+      limpar.push(() => {
+        el.removeEventListener('mouseenter', entra)
+        el.removeEventListener('mouseleave', sai)
+        el.removeEventListener('focusin', entra)
+        el.removeEventListener('focusout', sai)
+      })
+    })
+
+    // Superficies de cartao: fundo, filete de ouro e 1 px de subida, com a
+    // saida animada e o mesmo estado no foco por teclado.
+    Array.from(no.querySelectorAll<HTMLElement>('[data-card]')).forEach((el) => {
+      const escuro = !!el.getAttribute('href')
+      const base = {
+        background: el.style.background,
+        borderTopColor: el.style.borderTopColor,
+        borderLeftColor: el.style.borderLeftColor,
+        transform: el.style.transform,
+      }
+      const entra = () => {
+        el.style.background = escuro ? '#1A1713' : '#F3EBE0'
+        el.style.borderTopColor = '#C9A84C'
+        el.style.borderLeftColor = '#C9A84C'
+        el.style.transform = 'translateY(-1px)'
+      }
+      const sai = () => {
+        el.style.background = base.background
+        el.style.borderTopColor = base.borderTopColor
+        el.style.borderLeftColor = base.borderLeftColor
+        el.style.transform = base.transform
+      }
+      el.addEventListener('mouseenter', entra)
+      el.addEventListener('mouseleave', sai)
+      el.addEventListener('focusin', entra)
+      el.addEventListener('focusout', sai)
+      limpar.push(() => {
+        el.removeEventListener('mouseenter', entra)
+        el.removeEventListener('mouseleave', sai)
+        el.removeEventListener('focusin', entra)
+        el.removeEventListener('focusout', sai)
+      })
+    })
+
+    // FAQ em acordeao. A altura anima por max-height medido, entao a resposta
+    // continua inteira, sem corte.
+    const itens = Array.from(no.querySelectorAll<HTMLElement>('[data-faq]'))
+    const fechar = (item: HTMLElement) => {
+      const corpo = item.querySelector<HTMLElement>('[data-faq-corpo]')
+      const sinal = item.querySelector<HTMLElement>('[data-faq-sinal]')
+      const botao = item.querySelector<HTMLElement>('[data-faq-botao]')
+      if (corpo) {
+        corpo.style.maxHeight = '0px'
+        corpo.style.opacity = '0'
+      }
+      if (sinal) sinal.style.transform = 'rotate(0deg)'
+      if (botao) botao.setAttribute('aria-expanded', 'false')
+      item.removeAttribute('data-faq-aberto')
+    }
+    const abrir = (item: HTMLElement) => {
+      const corpo = item.querySelector<HTMLElement>('[data-faq-corpo]')
+      const sinal = item.querySelector<HTMLElement>('[data-faq-sinal]')
+      const botao = item.querySelector<HTMLElement>('[data-faq-botao]')
+      if (corpo) {
+        corpo.style.maxHeight = corpo.scrollHeight + 'px'
+        corpo.style.opacity = '1'
+      }
+      if (sinal) sinal.style.transform = 'rotate(45deg)'
+      if (botao) botao.setAttribute('aria-expanded', 'true')
+      item.setAttribute('data-faq-aberto', '')
+    }
+    itens.forEach((item) => {
+      const botao = item.querySelector<HTMLElement>('[data-faq-botao]')
+      if (!botao) return
+      if (item.hasAttribute('data-faq-aberto')) abrir(item)
+      else fechar(item)
+      const clique = () => {
+        const aberto = item.hasAttribute('data-faq-aberto')
+        itens.forEach((outro) => {
+          if (outro !== item) fechar(outro)
+        })
+        if (aberto) fechar(item)
+        else abrir(item)
+      }
+      botao.addEventListener('click', clique)
+      limpar.push(() => botao.removeEventListener('click', clique))
+    })
+
+    // Menu mobile: abrir e fechar e puro CSS (checkbox), para o menu existir
+    // mesmo com o script quebrado. O JS so fecha ao tocar num link; sem ele, o
+    // proprio X fecha.
+    const caixaMenu = no.querySelector<HTMLInputElement>('[data-menu-caixa]')
+    const painelMenu = no.querySelector<HTMLElement>('[data-menu-mobile]')
+    if (caixaMenu && painelMenu) {
+      const fecharMenu = () => {
+        caixaMenu.checked = false
+      }
+      painelMenu.addEventListener('click', fecharMenu)
+      limpar.push(() => painelMenu.removeEventListener('click', fecharMenu))
+    }
+
+    // Cabecalho que condensa depois de 120 px de rolagem.
+    const interno = no.querySelector<HTMLElement>('[data-header-inner]')
+    const sub = no.querySelector<HTMLElement>('[data-header-sub]')
+    if (interno) {
+      let condensado = false
+      let pedido: number | null = null
+      const aplicar = () => {
+        pedido = null
+        const alvo = (window.scrollY || 0) > 120
+        if (alvo === condensado) return
+        condensado = alvo
+        interno.style.height = alvo ? '56px' : '72px'
+        if (sub) {
+          sub.style.opacity = alvo ? '0' : '1'
+          sub.style.maxHeight = alvo ? '0px' : '14px'
+          sub.style.marginTop = alvo ? '0px' : '5px'
+        }
+      }
+      const aoRolar = () => {
+        if (pedido === null) pedido = requestAnimationFrame(aplicar)
+      }
+      window.addEventListener('scroll', aoRolar, { passive: true })
+      aplicar()
+      limpar.push(() => {
+        window.removeEventListener('scroll', aoRolar)
+        if (pedido !== null) cancelAnimationFrame(pedido)
+      })
+    }
+
+    if (!reduz) {
+      // Revelacao por elemento, em cascata de 70 ms dentro de cada grupo de irmaos.
+      const alvos = Array.from(no.querySelectorAll<HTMLElement>('[data-anim]'))
+      if (alvos.length && 'IntersectionObserver' in window) {
+        alvos.forEach((el) => {
+          el.style.opacity = '0'
+          el.style.willChange = 'opacity, transform'
+        })
+        const ordem = new Map<Element | null, number>()
+        const obs = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((e) => {
+              if (!e.isIntersecting) return
+              const el = e.target as HTMLElement
+              const pai = el.parentElement
+              const i = ordem.get(pai) || 0
+              ordem.set(pai, Math.min(i + 1, 5))
+              el.style.animation = 'pcSubir 620ms cubic-bezier(.22,.61,.36,1) ' + i * 70 + 'ms both'
+              el.addEventListener(
+                'animationend',
+                () => {
+                  el.style.willChange = 'auto'
+                },
+                { once: true },
+              )
+              obs.unobserve(el)
+            })
+          },
+          // threshold 0 + rootMargin: basta um pixel entrar na tela. Com fracao,
+          // um elemento mais alto que a viewport nunca alcanca o limite e fica
+          // preso em opacity 0.
+          { threshold: 0, rootMargin: '0px 0px -8% 0px' },
+        )
+        alvos.forEach((el) => obs.observe(el))
+        // Rede de seguranca: nada nesta pagina pode depender do observer disparar.
+        const destravar = window.setTimeout(() => {
+          obs.disconnect()
+          alvos.forEach((el) => {
+            if (el.style.opacity === '0') {
+              el.style.opacity = '1'
+              el.style.animation = ''
+            }
+          })
+        }, 2500)
+        limpar.push(() => {
+          obs.disconnect()
+          window.clearTimeout(destravar)
+        })
+      }
+
+      // Faixa de dados: cada numero conta de zero ao valor, uma unica vez.
+      const numeros = Array.from(no.querySelectorAll<HTMLElement>('[data-count]'))
+      if (numeros.length && 'IntersectionObserver' in window) {
+        const obsN = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((e) => {
+              if (!e.isIntersecting) return
+              const el = e.target as HTMLElement
+              obsN.unobserve(el)
+              const fim = parseInt(el.getAttribute('data-count') || '0', 10) || 0
+              const t0 = performance.now()
+              const passo = (t: number) => {
+                const p = Math.min((t - t0) / 900, 1)
+                el.textContent = String(Math.round(fim * (1 - Math.pow(1 - p, 3))))
+                if (p < 1) requestAnimationFrame(passo)
+              }
+              el.textContent = '0'
+              requestAnimationFrame(passo)
+            })
+          },
+          { threshold: 0.4 },
+        )
+        numeros.forEach((el) => obsN.observe(el))
+        limpar.push(() => obsN.disconnect())
+      }
+
+      // Profundidade na arte do hero: so transform, com teto de 14 px para a
+      // etiqueta nao descolar do cartao.
+      const camadas = Array.from(no.querySelectorAll<HTMLElement>('[data-parallax]'))
+      if (camadas.length) {
+        let pedido: number | null = null
+        const aplicar = () => {
+          pedido = null
+          const y = window.scrollY || 0
+          if (y > 900) return
+          camadas.forEach((el) => {
+            const f = parseFloat(el.getAttribute('data-parallax') || '0') || 0
+            const d = Math.max(-14, Math.min(14, (y * f) / 100))
+            el.style.transform = 'translate3d(0,' + d + 'px,0)'
+          })
+        }
+        const aoRolar = () => {
+          if (pedido === null) pedido = requestAnimationFrame(aplicar)
+        }
+        window.addEventListener('scroll', aoRolar, { passive: true })
+        limpar.push(() => {
+          window.removeEventListener('scroll', aoRolar)
+          if (pedido !== null) cancelAnimationFrame(pedido)
+        })
+      }
+    }
+
+    return () => limpar.forEach((fn) => fn())
+  }, [])
+
+  // CTA "/signup" e "/login" pelo router (sem reload); ancoras "#" seguem nativas.
+  const aoClicar = (e: React.MouseEvent<HTMLDivElement>) => {
+    const alvo = (e.target as HTMLElement).closest('a')
+    if (!alvo) return
+    const href = alvo.getAttribute('href') || ''
+    if (href.startsWith('/')) {
+      e.preventDefault()
+      navigate(href)
+    }
+  }
+
+  return (
+    <div ref={raiz} onClick={aoClicar}>
+      <style dangerouslySetInnerHTML={{ __html: DESIGN_CSS }} />
+      <div dangerouslySetInnerHTML={{ __html: html }} />
+    </div>
+  )
+}
+
+export function Abertura() {
+  return <PaginaDesign html={DESIGN_HTML} />
+}
+
+export default function Signup() {
+  const navigate = useNavigate()
+  const { signUp } = useAuth()
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (password.length < 8) {
+      toast.error('A senha deve ter no mínimo 8 caracteres.')
+      return
+    }
+    setLoading(true)
+    const { error } = await signUp(email, password, name)
+    if (error) {
+      toast.error(getErrorMessage(error))
+    } else {
+      // O "/" cai no ProtectedRoute, que mostra a tela "Confirme seu e-mail".
+      // O toast antecipa o próximo passo para não parecer erro.
+      toast.success('Conta criada! Enviamos um e-mail de confirmação: é só clicar no link.')
+      navigate('/')
+    }
+    setLoading(false)
+  }
+
+  return (
+    <Card className="w-full max-w-md shadow-elevation border-0 md:border md:border-border/60 animate-fade-in-up">
+      <CardHeader className="space-y-1 pb-8 text-center">
+        <div className="flex justify-center mb-2">
+          <FileText className="h-10 w-10 text-primary" />
+        </div>
+        <CardTitle className="text-2xl font-semibold tracking-tight text-primary">
+          Criar Conta
+        </CardTitle>
+        <CardDescription>
+          Cadastre-se para gerar documentos. Você recebe um e-mail de confirmação e o acesso libera
+          na hora.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Nome</Label>
+            <Input
+              id="name"
+              type="text"
+              placeholder="Seu nome"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="email">E-mail</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="seu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="password">Senha</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Mínimo 8 caracteres"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" disabled={loading} className="w-full h-11 text-base font-medium">
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Criando...
+              </>
+            ) : (
+              'Cadastrar'
+            )}
+          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            Já tem conta?{' '}
+            <Link to="/login" className="text-primary font-medium hover:underline">
+              Faça login
+            </Link>
+          </p>
+        </form>
+      </CardContent>
+    </Card>
+  )
+}

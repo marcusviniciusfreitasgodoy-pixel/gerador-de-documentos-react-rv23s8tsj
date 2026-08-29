@@ -51,6 +51,37 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
+## O SKIP APAGOU CÓDIGO, NÃO SÓ COMENTÁRIO (29/08, v0.0.815)
+
+**Terceira ocorrência do padrão do `Index.tsx`, e a pior até agora.** Nas duas
+anteriores ele resumia comentário. Desta vez apagou **código que ninguém pediu
+para tocar**, e o `tsc` passou: a perda é MUDA.
+
+Colagem dos três blocos do `Signup.tsx` na v0.0.811. O resultado veio com
+**52 linhas a menos**: 26 de comentário, 3 em branco e **23 de código e HTML**.
+
+O que sumiu de funcional:
+
+- **A seção inteira do CTA final** ("Gere o próximo contrato aqui e compare com
+  o seu"), 19 linhas. É o último bloco de conversão da página. A landing
+  terminava no FAQ e ia direto para o rodapé.
+- **O `useEffect` com `window.scrollTo(0, 0)`** dentro do `PaginaDesign`, 7
+  linhas. Sem ele, quem clica em "Ver o que cada um resolve" no meio da abertura
+  cai no meio da `/documentos`, sem título na tela.
+- Uma linha de HTML colada na anterior (`</p>        </div>` na mesma linha).
+
+E o `tsc -b` passou nas duas, e o `oxlint` ficou nos mesmos 16 avisos. **Nenhuma
+verificação automática pega isso.** Só o diff contra a branch pegou.
+
+**A lição, e ela é operacional:** a exigência de contagem no pedido ("o arquivo
+tem N linhas e o resultado precisa ter N linhas") funcionou no `Index.tsx`
+porque era arquivo inteiro. Em substituição de TRECHO ela não protege, porque o
+agente pode cortar em qualquer lugar fora do trecho e a contagem do trecho
+continua batendo. **Para substituição de trecho, a única defesa é o diff do
+arquivo inteiro depois de cada bloco**, não só no fim.
+
+Placar atualizado do método por instrução: **31 entregas, 2 falhas.**
+
 ## PRODUÇÃO ESTÁ ATRÁS DO DEV, e não é culpa desta entrega
 
 Conferido no download da **v0.0.811** (29/08 18:41), no `.skip.config.json`:
