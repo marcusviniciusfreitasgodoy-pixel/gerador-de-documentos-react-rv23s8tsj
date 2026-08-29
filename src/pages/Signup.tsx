@@ -596,12 +596,43 @@ ${montarCabecalho(NAV_ABERTURA, '#topo')}
     </div>
   </section>
 
+  <section style="background:#0E0E0E;color:#F5F1E6">
+    <div style="max-width:1120px;margin:0 auto;padding:clamp(84px,12vw,136px) clamp(20px,5vw,60px);text-align:center">
+      <div data-anim style="display:flex;justify-content:center;margin-bottom:32px">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:44px;height:44px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+      </div>
+      <h2 data-anim style="margin:0 auto;max-width:760px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(34px,5vw,60px);line-height:1.04;letter-spacing:-.02em;color:#F5F1E6">
+        Gere o próximo contrato aqui e <em style="font-style:italic;color:#C9A84C">compare com o seu.</em>
+      </h2>
+      <p data-anim style="margin:24px auto 0;max-width:540px;font-size:16.5px;line-height:1.75;color:rgba(232,224,204,.75)">
+        O cadastro leva menos tempo do que trocar os nomes num modelo antigo: você cria a conta, confirma pelo link que chega no e-mail e entra. Ninguém precisa aprovar nada. Depois disso, os documentos da sua próxima operação saem prontos.
+      </p>
+      <div data-anim style="display:flex;flex-wrap:wrap;gap:20px;justify-content:center;align-items:center;margin-top:40px">
+        <a href="/signup" style="display:inline-flex;align-items:center;height:54px;padding:0 34px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta grátis</a>
+        <a href="#documentos" style="font-size:15px;color:#F5F1E6;border-bottom:1px solid rgba(201,168,76,.5);padding-bottom:2px;transition:color 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#C9A84C;border-bottom-color:#C9A84C">Ver os 16 documentos</a>
+      </div>
+      <p data-anim style="margin:26px 0 0;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:rgba(232,224,204,.72)">15 dias grátis. Sem cartão. Sem instalação.</p>
+    </div>
+  </section>
+
 ${DESIGN_RODAPE}
 
 </div>`
+
+// A maquinaria (revelacao, hover, acordeao, cabecalho que condensa, parallax)
+// olha o DOM a partir da raiz e nao sabe qual pagina esta dentro dela. Por isso
+// ela virou componente com o HTML por parametro: a abertura e as paginas de
+// apoio usam a MESMA implementacao, e um conserto aqui vale para as tres.
 export function PaginaDesign({ html }: { html: string }) {
   const navigate = useNavigate()
   const raiz = useRef<HTMLDivElement>(null)
+
+  // Trocar de pagina no SPA preserva a rolagem. Sem isto, quem clica em "Ver os
+  // 16 documentos" no meio da abertura cai no meio da /documentos, sem titulo
+  // na tela, e a pagina parece quebrada.
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [html])
 
   useEffect(() => {
     const no = raiz.current
@@ -612,6 +643,8 @@ export function PaginaDesign({ html }: { html: string }) {
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+    // style-hover: usado nos links do menu e nos botoes. Guarda o style base e
+    // devolve na saida, sem reescrever o atributo inteiro.
     Array.from(no.querySelectorAll<HTMLElement>('[style-hover]')).forEach((el) => {
       const base = el.getAttribute('style') || ''
       const hov = el.getAttribute('style-hover') || ''
@@ -629,6 +662,8 @@ export function PaginaDesign({ html }: { html: string }) {
       })
     })
 
+    // Superficies de cartao: fundo, filete de ouro e 1 px de subida, com a
+    // saida animada e o mesmo estado no foco por teclado.
     Array.from(no.querySelectorAll<HTMLElement>('[data-card]')).forEach((el) => {
       const escuro = !!el.getAttribute('href')
       const base = {
@@ -661,6 +696,8 @@ export function PaginaDesign({ html }: { html: string }) {
       })
     })
 
+    // FAQ em acordeao. A altura anima por max-height medido, entao a resposta
+    // continua inteira, sem corte.
     const itens = Array.from(no.querySelectorAll<HTMLElement>('[data-faq]'))
     const fechar = (item: HTMLElement) => {
       const corpo = item.querySelector<HTMLElement>('[data-faq-corpo]')
@@ -703,6 +740,9 @@ export function PaginaDesign({ html }: { html: string }) {
       limpar.push(() => botao.removeEventListener('click', clique))
     })
 
+    // Menu mobile: abrir e fechar e puro CSS (checkbox), para o menu existir
+    // mesmo com o script quebrado. O JS so fecha ao tocar num link; sem ele, o
+    // proprio X fecha.
     const caixaMenu = no.querySelector<HTMLInputElement>('[data-menu-caixa]')
     const painelMenu = no.querySelector<HTMLElement>('[data-menu-mobile]')
     if (caixaMenu && painelMenu) {
@@ -713,6 +753,7 @@ export function PaginaDesign({ html }: { html: string }) {
       limpar.push(() => painelMenu.removeEventListener('click', fecharMenu))
     }
 
+    // Cabecalho que condensa depois de 120 px de rolagem.
     const interno = no.querySelector<HTMLElement>('[data-header-inner]')
     const sub = no.querySelector<HTMLElement>('[data-header-sub]')
     if (interno) {
@@ -742,6 +783,7 @@ export function PaginaDesign({ html }: { html: string }) {
     }
 
     if (!reduz) {
+      // Revelacao por elemento, em cascata de 70 ms dentro de cada grupo de irmaos.
       const alvos = Array.from(no.querySelectorAll<HTMLElement>('[data-anim]'))
       if (alvos.length && 'IntersectionObserver' in window) {
         alvos.forEach((el) => {
@@ -768,9 +810,13 @@ export function PaginaDesign({ html }: { html: string }) {
               obs.unobserve(el)
             })
           },
+          // threshold 0 + rootMargin: basta um pixel entrar na tela. Com fracao,
+          // um elemento mais alto que a viewport nunca alcanca o limite e fica
+          // preso em opacity 0.
           { threshold: 0, rootMargin: '0px 0px -8% 0px' },
         )
         alvos.forEach((el) => obs.observe(el))
+        // Rede de seguranca: nada nesta pagina pode depender do observer disparar.
         const destravar = window.setTimeout(() => {
           obs.disconnect()
           alvos.forEach((el) => {
@@ -786,6 +832,7 @@ export function PaginaDesign({ html }: { html: string }) {
         })
       }
 
+      // Faixa de dados: cada numero conta de zero ao valor, uma unica vez.
       const numeros = Array.from(no.querySelectorAll<HTMLElement>('[data-count]'))
       if (numeros.length && 'IntersectionObserver' in window) {
         const obsN = new IntersectionObserver(
@@ -811,6 +858,8 @@ export function PaginaDesign({ html }: { html: string }) {
         limpar.push(() => obsN.disconnect())
       }
 
+      // Profundidade na arte do hero: so transform, com teto de 14 px para a
+      // etiqueta nao descolar do cartao.
       const camadas = Array.from(no.querySelectorAll<HTMLElement>('[data-parallax]'))
       if (camadas.length) {
         let pedido: number | null = null
@@ -838,6 +887,7 @@ export function PaginaDesign({ html }: { html: string }) {
     return () => limpar.forEach((fn) => fn())
   }, [])
 
+  // CTA "/signup" e "/login" pelo router (sem reload); ancoras "#" seguem nativas.
   const aoClicar = (e: React.MouseEvent<HTMLDivElement>) => {
     const alvo = (e.target as HTMLElement).closest('a')
     if (!alvo) return
