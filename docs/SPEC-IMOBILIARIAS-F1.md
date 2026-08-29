@@ -22,15 +22,16 @@ a camada de equipe.
 
 ### 1.1 Coleção nova: `agency_members`
 
-| Campo | Tipo | Nota |
-|---|---|---|
-| `agency` | relation → **`users`**, required, maxSelect 1 | A conta PJ. Validar no hook que o `broker_profile` dela tem `tipo_perfil = 'imobiliaria'`. |
-| `member` | relation → **`users`**, required, maxSelect 1 | O corretor vinculado. |
-| `status` | select: `ativo`, `removido` | Default `ativo`. **Nunca deletar a linha** — remover = marcar `removido`, preservando histórico. |
-| `termo_aceito_em` | date, opcional | Consentimento LGPD. **Vazio = vínculo não vale** (ver §4). |
-| `created` / `updated` | autodate | Padrão. |
+| Campo                 | Tipo                                          | Nota                                                                                             |
+| --------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `agency`              | relation → **`users`**, required, maxSelect 1 | A conta PJ. Validar no hook que o `broker_profile` dela tem `tipo_perfil = 'imobiliaria'`.       |
+| `member`              | relation → **`users`**, required, maxSelect 1 | O corretor vinculado.                                                                            |
+| `status`              | select: `ativo`, `removido`                   | Default `ativo`. **Nunca deletar a linha** — remover = marcar `removido`, preservando histórico. |
+| `termo_aceito_em`     | date, opcional                                | Consentimento LGPD. **Vazio = vínculo não vale** (ver §4).                                       |
+| `created` / `updated` | autodate                                      | Padrão.                                                                                          |
 
 **Regras de integridade:**
+
 - Índice único em (`agency`, `member`) — não duplicar vínculo.
 - Um corretor pertence a **uma** imobiliária por vez: ao criar vínculo com
   `status = ativo`, recusar se já existir outro `ativo` para o mesmo `member`.
@@ -39,7 +40,7 @@ a camada de equipe.
 > de um `negocio` é um `users.id` (campo `owner`), e as regras de acesso comparam
 > com `@request.auth.id`, que também é um `users.id`. Apontar para
 > `broker_profile` obrigaria um join em toda regra. O `broker_profile` é o
-> *perfil* da conta, não a identidade dela.
+> _perfil_ da conta, não a identidade dela.
 
 ### 1.2 Campo novo: `negocios.agency`
 
@@ -141,6 +142,7 @@ pelo corretor. Isso não pode ser implícito.
 ### 5.1 No `/admin` (Prime Circle) — bloco novo "Imobiliárias"
 
 Lista as contas com `tipo_perfil = 'imobiliaria'`. Ao abrir uma:
+
 - membros atuais (`status = ativo`);
 - **vincular corretor**: buscar por e-mail ou CRECI, marcar o aceite do termo
   com data, criar o vínculo;
@@ -150,6 +152,7 @@ Lista as contas com `tipo_perfil = 'imobiliaria'`. Ao abrir uma:
 
 Visível apenas quando o `broker_profile` do usuário tem
 `tipo_perfil = 'imobiliaria'`. Mostra:
+
 - membros da equipe (nome, CRECI, desde quando);
 - por corretor: contagem de negócios da casa e de validações no período;
 - lista dos negócios da imobiliária, levando ao detalhe já existente.

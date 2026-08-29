@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-24T14:17:59.816Z",
+  "generatedAt": "2026-08-28T21:26:54.432Z",
   "collections": [
     {
       "name": "users",
@@ -49,11 +49,80 @@
           "type": "bool",
           "required": false,
           "system": false
+        },
+        {
+          "name": "trial_expira_em",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "plano",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "plano_renova_em",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "negocios_no_mes",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "contador_mes",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "plano_limite_negocios",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "avisos_plano",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "validacoes_no_mes",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "consultas_no_mes",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "ia_mes_ref",
+          "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "avulso_validacoes",
+          "type": "number",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": [
         "CREATE UNIQUE INDEX `idx_tokenKey__pb_users_auth_` ON `users` (`tokenKey`)",
-        "CREATE UNIQUE INDEX `idx_email__pb_users_auth_` ON `users` (`email`) WHERE `email` != ''"
+        "CREATE UNIQUE INDEX `idx_email__pb_users_auth_` ON `users` (`email`) WHERE `email` != ''",
+        "CREATE INDEX `idx_users_trial_expira_em` ON `users` (trial_expira_em)",
+        "CREATE INDEX `idx_users_plano_renova_em` ON `users` (plano_renova_em)",
+        "CREATE INDEX `idx_users_plano` ON `users` (plano)"
       ]
     },
     {
@@ -596,6 +665,12 @@
           "type": "file",
           "required": false,
           "system": false
+        },
+        {
+          "name": "lembretes",
+          "type": "number",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": []
@@ -783,6 +858,12 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onUpdate"]
+        },
+        {
+          "name": "lembretes",
+          "type": "number",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": []
@@ -945,6 +1026,91 @@
         "CREATE INDEX idx_access_logs_user ON access_logs (user)",
         "CREATE INDEX idx_access_logs_negocio ON access_logs (negocio)",
         "CREATE INDEX idx_access_logs_created ON access_logs (created DESC)"
+      ]
+    },
+    {
+      "name": "agency_invites",
+      "type": "base",
+      "apiRules": {
+        "list": "@request.auth.id != \"\" && (agency = @request.auth.id || email = @request.auth.email || @request.auth.isAdmin = true)",
+        "view": "@request.auth.id != \"\" && (agency = @request.auth.id || email = @request.auth.email || @request.auth.isAdmin = true)",
+        "create": null,
+        "update": null,
+        "delete": null
+      },
+      "fields": [
+        {
+          "name": "agency",
+          "type": "relation",
+          "required": true,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "email",
+          "type": "email",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "member",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "convidado_por",
+          "type": "relation",
+          "required": false,
+          "system": false,
+          "collectionRef": "users"
+        },
+        {
+          "name": "status",
+          "type": "select",
+          "required": true,
+          "system": false,
+          "selectValues": ["pendente", "aceito", "recusado", "cancelado", "expirado"]
+        },
+        {
+          "name": "token",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "expira_em",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "respondido_em",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_agency_invites_token ON agency_invites (token)",
+        "CREATE UNIQUE INDEX idx_agency_invites_pendente ON agency_invites (agency, email) WHERE status = 'pendente'",
+        "CREATE INDEX idx_agency_invites_email ON agency_invites (email)",
+        "CREATE INDEX idx_agency_invites_agency ON agency_invites (agency)"
       ]
     }
   ]
