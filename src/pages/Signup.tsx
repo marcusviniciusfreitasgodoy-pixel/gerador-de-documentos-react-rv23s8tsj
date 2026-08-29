@@ -358,12 +358,8 @@ ${montarCabecalho(NAV_ABERTURA, '#topo')}
 
       <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7;margin-top:clamp(40px,5vw,64px)">
         <div style="background:#FDFBF6;padding:30px 28px">
-          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O negócio mudou? O documento acompanha.</h3>
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">O financiamento não saiu e virou recurso próprio. A parcela única virou três. A posse mudou de data. Você troca o documento sem redigitar uma linha, porque as partes e o imóvel continuam no dossiê.</p>
-        </div>
-        <div style="background:#FDFBF6;padding:30px 28px">
-          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">Faltou um dado? Salva assim mesmo.</h3>
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">A certidão sai amanhã, o estado civil ainda está em confirmação, o PIX vem depois. O negócio fica salvo pela metade e você volta nele quando o dado chegar.</p>
+          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O negócio muda. O documento acompanha.</h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">O financiamento não saiu e virou recurso próprio, a parcela única virou três, a posse mudou de data: você troca o documento sem redigitar uma linha, porque as partes e o imóvel continuam no dossiê. E quando o dado ainda não chegou, a certidão que sai amanhã ou o PIX que vem depois, o negócio fica salvo pela metade e você volta nele quando ele chegar.</p>
         </div>
       </div>
 
