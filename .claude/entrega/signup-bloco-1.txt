@@ -1,0 +1,199 @@
+// CORTE DE 29/08/2026: A PAGINA ESTAVA LONGA DEMAIS, E ISSO FOI MEDIDO
+//
+// Antes: 14.277 px a 1440 (15,9 telas) e 19.988 px a 390 (23,7 telas), com
+// 2.666 palavras visiveis. Para um publico que decide em minutos, o preco e o
+// cadastro estavam depois da 20a tela no celular.
+//
+// A pagina se repetia: "sem cartao" aparecia 8 vezes, "15 dias" 7, "dossie" 9,
+// "nao substitui advogado" 5. O caso pior era o § 06 e a primeira pergunta do
+// FAQ dizendo o MESMO paragrafo reescrito, com 1.900 px entre os dois.
+//
+// O que saiu, e para onde:
+// A. O CATALOGO DOS 16 e a secao das IMOBILIARIAS foram para paginas proprias
+//    (/documentos e /imobiliarias, em src/pages/Documentos.tsx). Os dois
+//    respondem a pergunta que o visitante so faz DEPOIS de se interessar. Na
+//    abertura ficou a chamada curta, com os 16 nomes ainda visiveis no § 03.
+// B. FAQ de 8 para 5 perguntas. "Quanto custa?" saiu por duplicar o § 06;
+//    "Como e o cadastro?" por duplicar o hero e o CTA final; "validade
+//    juridica" foi fundida na pergunta do advogado, que passou a ser a aberta
+//    por padrao (e a objecao mais funda deste publico).
+// C. § 01 de cinco dores para tres. Saiu "Os mesmos dados, cinco vezes" (era o
+//    § 02 antecipado) e "A comissao no fio do combinado", a mais fraca.
+// D. § 02 perdeu o sub-bloco "O dossie do negocio": os tres cartoes dele
+//    repetiam o passo 02 logo acima, palavra por palavra. A frase da
+//    privacidade saiu daqui e continua dita no FAQ, uma vez so.
+// E. "A prova esta no documento" perdeu o ensaio e os tres cartoes; ficou o
+//    trecho de clausula, que MOSTRA em vez de afirmar, e o "Quem escreveu".
+// F. Apoio de especialista comprimido: eram 219 palavras vendendo forte um
+//    recurso que a /planos cobra a parte, e isso gera atrito no desconfiado.
+//
+// ANCORA DE PRECO, as duas pontas que estavam soltas. O § 01 dizia que uma
+// minuta avulsa custa R$ 800 a R$ 2.500 no mercado, e o § 06 "Preco" nao tinha
+// preco nenhum: so "15 dias gratis" e um link. A ancora e o pagamento dela
+// ficavam a 7.000 px de distancia. Agora o numero e display no cartao 01 (era
+// corpo de 14,5 px no meio de um paragrafo) e o § 06 fecha a conta com "a
+// partir de R$ 69 por mes". A TABELA continua so na /planos, de proposito: se
+// o valor mudar la, aqui muda uma frase, nao quatro cartoes.
+//
+// MOLDURA COMPARTILHADA. Cabecalho e rodape viraram `montarCabecalho()` e
+// `DESIGN_RODAPE`, e a maquinaria virou `PaginaDesign({ html })`. As tres
+// paginas usam a mesma implementacao: cabecalho copiado diverge na terceira
+// edicao e ninguem percebe ate um cliente apontar. O menu das paginas de apoio
+// NAO leva ancora de secao (#preco, #funciona), que la seria link morto.
+//
+// O QUE MUDOU NESTA REVISAO (e por que):
+//
+// 1. HERO ENXUTO. Acima da dobra ficaram cinco elementos: eyebrow, titulo,
+//    subtitulo, UM botao de ouro e a arte. O par "Gerar / Validar" desceu para o
+//    § 02 (onde explica, em vez de competir) e a fileira de chips mono saiu,
+//    porque a linha sob o botao ja diz "15 dias gratis, sem cartao".
+// 2. ENTRADA ENCENADA. O hero anima no carregamento, em ~900 ms, na ordem da
+//    leitura (eyebrow, regua de ouro, titulo, subtitulo, botao, arte). E CSS
+//    puro com animation-fill-mode: both, sem JavaScript: se o script falhar,
+//    nada fica invisivel.
+// 3. REVELACAO POR ELEMENTO, NAO POR SECAO. O reveal antigo animava a secao
+//    inteira, e as secoes tem milhares de pixels: dava um bloco piscando. Agora
+//    o observer olha os elementos marcados [data-anim] e entra em cascata de
+//    70 ms por grupo de irmaos. Mantida a rede de seguranca de 2,5 s.
+// 4. FAIXA DE DADOS com contagem (16 documentos, 1 cadastro, 3 fases, 30 dias),
+//    logo abaixo do hero: os numeros eram o fato mais forte da pagina e estavam
+//    soltos dentro de paragrafos.
+// 5. HOVER DE VERDADE. O style-hover reescrevia o atributo style inteiro no
+//    mouseenter: sem transicao na saida, sem teclado, sem toque. Os cartoes
+//    agora usam [data-card] e a funcao `superficie` abaixo, que toca so as
+//    propriedades do estado e responde a foco tambem.
+// 6. CABECALHO QUE CONDENSA depois de 120 px (72 -> 56 px, subtitulo fora), e
+//    PARALLAX de no maximo 14 px na arte do hero, so com transform.
+// 7. CATALOGO DO § 03: em vez de 16 cartoes iguais, um cartao ancora por grupo
+//    (titulo em Cormorant) e o resto em linhas compactas.
+// 8. SECAO DE PRECO com endereco proprio (#preco). O item "Preco" do menu
+//    apontava para o FAQ; agora aponta para a resposta.
+// 9. FAQ EM ACORDEAO, com a pergunta de preco aberta por padrao. Eram mais de
+//    mil palavras abertas logo antes do CTA final.
+// 10. FOCO VISIVEL em links e botoes, e o H1 sem <br> forcado (text-wrap:
+//     balance resolve a quebra).
+//
+// PENDENCIAS CONHECIDAS (nao dependem deste arquivo):
+// - As duas capturas de tela sairam do hero. Elas viajavam como data-URI dentro
+//   desta string (~80 KB no bundle, sem cache e sem lazy). O certo e por os
+//   arquivos em /public e voltar com <img width height loading="lazy">.
+// - O trecho de clausula da secao "A prova esta no documento" e ilustrativo.
+//   Trocar pelo texto exato que sai do gerador.
+// - Alinhar og:title do index.html com o H1 desta pagina.
+//
+// Regra de redacao do Marcus: sem travessao no texto visivel.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const DESIGN_CSS = `html { scroll-behavior: smooth; }
+body { margin: 0; background: #F7F3EA; color: #0E0E0E; font-family: Manrope, system-ui, sans-serif; font-weight: 300; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+p { text-wrap: pretty; }
+h1, h2, h3 { text-wrap: balance; }
+a { color: #7a6435; text-decoration: none; }
+a:hover { color: #0E0E0E; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid #C9A84C; outline-offset: 3px; }
+@keyframes pcSubir { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes pcRegua { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+[data-cta-fixo], [data-mobile-only] { display: none; }
+@media (max-width: 900px) {
+  [data-cta-fixo] { display: flex; }
+  [data-nav-links] { display: none !important; }
+  [data-hero-art], [data-desk-only] { display: none !important; }
+  [data-mobile-only] { display: block; }
+}
+@media (min-width: 901px) { footer { padding-bottom: 0 !important; } }
+[data-menu-caixa], [data-menu-botao], [data-menu-mobile] { display: none; }
+@media (max-width: 900px) {
+  [data-menu-botao] { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: -8px; cursor: pointer; color: #F5F1E6; }
+  [data-menu-botao] svg { width: 22px; height: 22px; }
+  [data-menu-botao] [data-icone-x] { display: none; }
+  [data-menu-caixa]:checked ~ div [data-menu-botao] [data-icone-abrir] { display: none; }
+  [data-menu-caixa]:checked ~ div [data-menu-botao] [data-icone-x] { display: block; }
+  [data-menu-caixa]:checked ~ [data-menu-mobile] { display: flex; }
+  [data-menu-mobile] { flex-direction: column; padding: 6px clamp(20px,5vw,60px) 22px; border-top: 1px solid rgba(245,241,230,.10); background: #0E0E0E; }
+  [data-menu-mobile] a { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: rgba(232,224,204,.78); padding: 14px 0; border-bottom: 1px solid rgba(245,241,230,.06); }
+  [data-menu-mobile] a[data-menu-cta] { margin-top: 14px; display: inline-flex; align-items: center; justify-content: center; height: 48px; border-radius: 999px; background: #C9A84C; color: #0E0E0E; font-family: Manrope, sans-serif; font-size: 14px; font-weight: 600; letter-spacing: normal; text-transform: none; padding: 0; border-bottom: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; } }`
+
+// ── Moldura compartilhada ───────────────────────────────────────────────────
+// O cabeçalho e o rodapé são os mesmos na abertura e nas páginas públicas de
+// apoio (/documentos e /imobiliarias). Ficam aqui, montados por função, em vez
+// de copiados nos três arquivos: cabeçalho duplicado é o tipo de coisa que
+// diverge na terceira edição e ninguém percebe até um cliente apontar.
+//
+// A lista de itens é parâmetro porque as âncoras de seção (#preco, #funciona)
+// só existem na abertura. Numa página de apoio elas seriam link morto: clica e
+// não acontece nada. Por isso a página de apoio passa a própria lista curta.
+type ItemMenu = { href: string; texto: string }
+
+const NAV_ABERTURA: ItemMenu[] = [
+  { href: '#preco', texto: 'Preço' },
+  { href: '#funciona', texto: 'Como funciona' },
+  { href: '#documentos', texto: 'Documentos' },
+  { href: '#validador', texto: 'Validador' },
+]
+
+// Páginas de apoio: sem âncora de seção, com a volta para a abertura.
+export const NAV_APOIO: ItemMenu[] = [{ href: '/', texto: 'Início' }]
+
+export function montarCabecalho(itens: ItemMenu[], inicio: string) {
+  const ESTILO_LINK =
+    "flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)"
+  const desktop = itens
+    .map(
+      (i) =>
+        `        <a href="${i.href}" style="${ESTILO_LINK}" style-hover="color:#F5F1E6">${i.texto}</a>`,
+    )
+    .join('\n')
+  const mobile = itens.map((i) => `      <a href="${i.href}">${i.texto}</a>`).join('\n')
+  return `  <header data-header style="position:sticky;top:0;z-index:50;background:#0E0E0E;border-bottom:1px solid rgba(245,241,230,.10);transition:height 220ms cubic-bezier(.22,.61,.36,1)">
+    <input type="checkbox" id="pc-menu" data-menu-caixa aria-hidden="true">
+    <div data-header-inner style="max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,60px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:height 220ms cubic-bezier(.22,.61,.36,1)">
+      <a href="${inicio}" style="display:flex;align-items:center;gap:11px;color:#F5F1E6;flex:none">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:30px;height:30px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+        <span style="display:flex;flex-direction:column;line-height:1">
+          <span style="font-size:15px;font-weight:700;letter-spacing:-.01em;color:#F5F1E6">Prime Circle</span>
+          <span data-header-sub style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C;margin-top:5px;transition:opacity 200ms cubic-bezier(.22,.61,.36,1),max-height 200ms cubic-bezier(.22,.61,.36,1);overflow:hidden;max-height:14px">Docs</span>
+        </span>
+      </a>
+      <nav data-nav-links style="display:flex;align-items:center;gap:clamp(12px,2vw,26px)">
+${desktop}
+        <a href="/login" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">Entrar</a>
+        <a href="/signup" style="flex:none;display:inline-flex;align-items:center;height:40px;padding:0 22px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:13px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6">Criar conta grátis</a>
+      </nav>
+      <label for="pc-menu" data-menu-botao aria-label="Abrir e fechar o menu">
+        <svg data-icone-abrir viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg data-icone-x viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
+      </label>
+    </div>
+    <nav data-menu-mobile aria-label="Menu">
+${mobile}
+      <a href="/planos">Planos e valores</a>
+      <a href="/login">Entrar</a>
+      <a href="/signup" data-menu-cta>Criar conta grátis</a>
+    </nav>
+  </header>`
+}
+
+export const DESIGN_RODAPE = `  <footer style="background:#0E0E0E;border-top:1px solid rgba(245,241,230,.10);color:rgba(232,224,204,.55);padding-bottom:88px">
+    <div style="max-width:1120px;margin:0 auto;padding:44px clamp(20px,5vw,60px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:11px">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:24px;height:24px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Docs</span>
+      </div>
+      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Prime Circle<br>CNPJ 58.409.058/0001-73<br>CRECI PJ 11841</p>
+      <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
+        A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
+      </p>
+    </div>
+  </footer>
+
+  <div data-cta-fixo style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0E0E0E;border-top:1px solid rgba(201,168,76,.35);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px">
+    <a href="/login" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72)">Entrar</a>
+    <a href="/signup" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:14px;font-weight:600">Criar conta grátis</a>
+  </div>`
+
+const DESIGN_HTML = `<div style="background:#F7F3EA">
+
+${montarCabecalho(NAV_ABERTURA, '#topo')}

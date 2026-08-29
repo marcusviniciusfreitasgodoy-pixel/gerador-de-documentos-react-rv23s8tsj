@@ -1,0 +1,59 @@
+          <p style="margin:0 0 10px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(28px,3.4vw,38px);line-height:1.05;letter-spacing:-.02em;color:#0E0E0E">R$ 800 a R$ 2.500</p>
+          <p style="margin:0 0 16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#8B7340">por minuta, no mercado</p>
+          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não tem departamento jurídico. Então ou usa um modelo de origem incerta, ou paga honorários por peça, por um contrato que já é rotina na sua carreira. Sai do mesmo bolso de onde vem a comissão.</p>
+        </div>
+        <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
+          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">02</p>
+          <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">O modelo que circula no grupo</h3>
+          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Um arquivo de origem incerta, trocado de mão em mão. Você substitui os nomes e torce para não ter sobrado nada do negócio anterior no meio do texto.</p>
+        </div>
+        <div data-card style="background:#FDFBF6;padding:32px 28px;border-top:2px solid transparent;transition:background 180ms cubic-bezier(.22,.61,.36,1),border-color 180ms cubic-bezier(.22,.61,.36,1),transform 180ms cubic-bezier(.22,.61,.36,1)">
+          <p style="margin:0 0 14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.2em;color:#C9A84C">03</p>
+          <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;letter-spacing:.01em;color:#0E0E0E">A minuta que chegou pronta</h3>
+          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">O outro lado mandou o contrato e quer resposta hoje. Ou você paga alguém para ler a tempo, ou assina sem saber, com segurança, o que está escrito ali dentro.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="funciona" style="background:#F3EBE0;border-top:1px solid #DDD5C7">
+    <div style="max-width:1120px;margin:0 auto;padding:clamp(80px,12vw,128px) clamp(20px,5vw,60px)">
+      <p data-anim style="margin:0 0 12px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B7340">§ 02 · Como funciona</p>
+      <div data-anim style="width:44px;height:1px;background:#C9A84C;margin-bottom:30px"></div>
+      <h2 data-anim style="margin:0;max-width:720px;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(32px,4.4vw,52px);line-height:1.06;letter-spacing:-.02em;color:#0E0E0E">
+        Você preenche uma vez. A plataforma <em style="font-style:italic;color:#7a6435">escreve o resto.</em>
+      </h2>
+
+      <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7;margin-top:48px">
+        <div style="background:#FDFBF6;padding:30px 28px">
+          <p style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#8B7340">Gerar</p>
+          <p style="margin:0;font-size:15px;line-height:1.7;color:#5A544C">16 documentos em Word, das arras à entrega das chaves. O negócio entra uma vez e alimenta todos eles.</p>
+        </div>
+        <div style="background:#FDFBF6;padding:30px 28px">
+          <p style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.3em;text-transform:uppercase;color:#8B7340">Validar</p>
+          <p style="margin:0;font-size:15px;line-height:1.7;color:#5A544C">A minuta que o outro lado mandou, lida por IA, com o que está faltando apontado antes da assinatura.</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(28px,4vw,56px);margin-top:clamp(48px,6vw,72px)">
+        <div data-anim>
+          <p style="margin:0 0 18px;font-family:'Cormorant Garamond',Georgia,serif;font-size:52px;font-weight:500;line-height:1;letter-spacing:-.03em;color:#C9A84C">01</p>
+          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">Seu perfil de corretor <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:#8B7340">uma vez, para sempre</span></h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Nome, CRECI, percentual de comissão e chave PIX. Preenchidos uma vez, entram sozinhos na cláusula de corretagem de todos os documentos que você gerar.</p>
+        </div>
+        <div data-anim>
+          <p style="margin:0 0 18px;font-family:'Cormorant Garamond',Georgia,serif;font-size:52px;font-weight:500;line-height:1;letter-spacing:-.03em;color:#C9A84C">02</p>
+          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O dossiê do negócio <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:#8B7340">uma vez por operação</span></h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Partes e imóvel cadastrados uma única vez por operação. Todos os documentos daquele negócio carregam de lá, e o que você corrigir volta para o dossiê.</p>
+        </div>
+        <div data-anim>
+          <p style="margin:0 0 18px;font-family:'Cormorant Garamond',Georgia,serif;font-size:52px;font-weight:500;line-height:1;letter-spacing:-.03em;color:#C9A84C">03</p>
+          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O documento em Word <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:#8B7340">quantas vezes precisar</span></h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">Escolha o documento e ele abre já preenchido. Confira o que é específico do caso, clique em gerar e baixe o arquivo .docx, aberto para edição final.</p>
+        </div>
+      </div>
+
+      <div data-anim style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:#DDD5C7;border:1px solid #DDD5C7;margin-top:clamp(40px,5vw,64px)">
+        <div style="background:#FDFBF6;padding:30px 28px">
+          <h3 style="margin:0 0 12px;font-size:17px;font-weight:600;color:#0E0E0E">O negócio muda. O documento acompanha.</h3>
+          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">O financiamento não saiu e virou recurso próprio, a parcela única virou três, a posse mudou de data: você troca o documento sem redigitar uma linha, porque as partes e o imóvel continuam no dossiê. E quando o dado ainda não chegou, a certidão que sai amanhã ou o PIX que vem depois, o negócio fica salvo pela metade e você volta nele quando ele chegar.</p>
