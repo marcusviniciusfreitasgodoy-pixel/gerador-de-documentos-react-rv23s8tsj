@@ -1,126 +1,120 @@
 # Roteiro de colagem no Skip: landing enxuta
 
-Branch: `work`, commit `e7a3592`. **Este roteiro substitui o anterior** (`ee4abb7`):
-o § 02 mudou depois dele, e os blocos foram regerados. Use so este.
+Branch `work`. Base conferida: **v0.0.811**, cujo `Signup.tsx` tem 1.085 linhas
+e e byte a byte igual ao da v0.0.810. Os numeros de linha abaixo valem para ela.
 
-**Base conferida: v0.0.811** (download de 29/08 18:41). O `Signup.tsx` e o
-`App.tsx` dessa versao sao byte a byte iguais aos da v0.0.810, entao as ancoras
-valem. A v0.0.811 so subiu o numero de build: zero diferenca de codigo.
+## A ORDEM MUDOU, e o motivo importa
 
-Se o Skip estiver numa versao mais nova que a 0.0.811 quando voce for colar,
-pare e peca para recalcular: ancora que nao bate e onde o agente do Skip
-inventa.
+Antes o roteiro mandava colar o `Documentos.tsx` primeiro. **Estava errado.** O
+`Documentos.tsx` importa `PaginaDesign`, que so passa a existir no bloco 3 do
+`Signup.tsx`: criar ele antes deixa o projeto sem compilar por tres pastes
+seguidos, e agente de IA que ve projeto quebrado tenta consertar sozinho.
 
-Ordem: os dois arquivos inteiros primeiro, os tres blocos do `Signup.tsx` depois,
-**um por vez**. E o mesmo arquivo, e o diff so fecha no fim dos tres.
+Na ordem abaixo **os cinco passos compilam**, um por um. Testado: `tsc -b` roda
+limpo depois de cada um dos cinco. Se o Skip acusar erro, o erro e real.
+
+| passo | o que colar | o projeto compila depois? |
+| ----- | ----------- | ------------------------- |
+| 1 | `Signup.tsx` bloco 1 de 3 | sim |
+| 2 | `Signup.tsx` bloco 2 de 3 | sim |
+| 3 | `Signup.tsx` bloco 3 de 3 | sim |
+| 4 | `Documentos.tsx` (arquivo novo, inteiro) | sim |
+| 5 | `App.tsx` (inteiro) | sim |
 
 ---
 
-## 1. `src/pages/Documentos.tsx` (arquivo NOVO, 199 linhas)
+## Passos 1 a 3: `src/pages/Signup.tsx`
 
-Abra na branch `work`, botao **Raw**, copie tudo. No chat do Skip:
+O arquivo tem cerca de 200.000 caracteres contra o limite de 50.000 do chat:
+**nao da para colar inteiro, e nao adianta pedir.** Vai por substituicao de
+trecho, com numero de linha.
+
+**O erro que o agente do Skip cometeu na primeira tentativa** foi ler o conteudo
+colado como se fosse o arquivo inteiro, achar que estava truncado (porque a
+template literal nao fecha dentro do trecho) e pedir o arquivo completo. O
+conteudo NAO estava truncado. O texto do pedido abaixo ja diz isso de forma
+explicita: use ele como esta.
+
+### Passo 1: bloco 1 de 3
+
+Conteudo: `https://raw.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/gerador-de-documentos-react-rv23s8tsj/work/.claude/entrega/signup-bloco-1.txt` (199 linhas)
+
+Pedido para colar junto (o conteudo vai logo abaixo dele):
+
+> No arquivo `src/pages/Signup.tsx`, que hoje tem 1085 linhas, apague as linhas
+> 21 a 130 (110 linhas), que vao da linha
+> `// O QUE MUDOU NESTA REVISAO (e por que):`
+> ate a linha `</header>`, as duas inclusive, e ponha exatamente
+> as 199 linhas abaixo no lugar delas.
+>
+> ATENCAO: isto e a substituicao de um TRECHO, nao o arquivo inteiro. O que vem
+> abaixo nao e um arquivo completo e nao deve ser tratado como tal. E normal ele
+> comecar e terminar no meio de uma estrutura. Nao complete, nao feche, nao
+> conserte, nao reescreva, nao reformate, nao resuma e nao implemente nada por
+> conta propria. Se algo parecer faltando, esta no resto do arquivo, que voce nao
+> deve tocar. Todas as outras linhas ficam exatamente como estao.
+
+### Passo 2: bloco 2 de 3
+
+Conteudo: `https://raw.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/gerador-de-documentos-react-rv23s8tsj/work/.claude/entrega/signup-bloco-2.txt` (59 linhas)
+
+Pedido para colar junto (o conteudo vai logo abaixo dele):
+
+> No arquivo `src/pages/Signup.tsx`, que hoje tem 1085 linhas, apague as linhas
+> 215 a 311 (97 linhas), que vao da linha
+> `<p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não`
+> ate a linha `<p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">A certidão`, as duas inclusive, e ponha exatamente
+> as 59 linhas abaixo no lugar delas.
+>
+> ATENCAO: isto e a substituicao de um TRECHO, nao o arquivo inteiro. O que vem
+> abaixo nao e um arquivo completo e nao deve ser tratado como tal. E normal ele
+> comecar e terminar no meio de uma estrutura. Nao complete, nao feche, nao
+> conserte, nao reescreva, nao reformate, nao resuma e nao implemente nada por
+> conta propria. Se algo parecer faltando, esta no resto do arquivo, que voce nao
+> deve tocar. Todas as outras linhas ficam exatamente como estao.
+
+### Passo 3: bloco 3 de 3
+
+Conteudo: `https://raw.githubusercontent.com/marcusviniciusfreitasgodoy-pixel/gerador-de-documentos-react-rv23s8tsj/work/.claude/entrega/signup-bloco-3.txt` (517 linhas)
+
+Pedido para colar junto (o conteudo vai logo abaixo dele):
+
+> No arquivo `src/pages/Signup.tsx`, que hoje tem 1085 linhas, apague as linhas
+> 343 a 987 (645 linhas), que vao da linha
+> `<p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;line-heig`
+> ate a linha `)`, as duas inclusive, e ponha exatamente
+> as 517 linhas abaixo no lugar delas.
+>
+> ATENCAO: isto e a substituicao de um TRECHO, nao o arquivo inteiro. O que vem
+> abaixo nao e um arquivo completo e nao deve ser tratado como tal. E normal ele
+> comecar e terminar no meio de uma estrutura. Nao complete, nao feche, nao
+> conserte, nao reescreva, nao reformate, nao resuma e nao implemente nada por
+> conta propria. Se algo parecer faltando, esta no resto do arquivo, que voce nao
+> deve tocar. Todas as outras linhas ficam exatamente como estao.
+
+---
+
+## Passo 4: `src/pages/Documentos.tsx` (arquivo NOVO)
+
+Raw na branch `work`: `src/pages/Documentos.tsx` (199 linhas)
 
 > Crie o arquivo `src/pages/Documentos.tsx` com exatamente este conteudo. Nao
 > reescreva, nao reformate, nao resuma e nao implemente nada por conta propria.
-> O arquivo tem 199 linhas e o resultado precisa ter o mesmo numero.
+> O arquivo tem 199 linhas e o resultado precisa ter 199 linhas.
 
-## 2. `src/App.tsx` (inteiro, 73 linhas)
+## Passo 5: `src/App.tsx` (inteiro, 73 linhas)
 
 > Substitua todo o conteudo de `src/App.tsx` por este. Nao reescreva, nao
 > reformate, nao resuma e nao implemente nada por conta propria. O arquivo tem
-> 73 linhas e o resultado precisa ter o mesmo numero.
+> 73 linhas e o resultado precisa ter 73 linhas.
 
 ---
 
-## 3. `src/pages/Signup.tsx`: TRES substituicoes
+## Conferencia final
 
-**Este arquivo nao pode ser colado inteiro**: tem cerca de 200.000 caracteres
-contra o limite de 50.000 do chat. Vai por substituicao ancorada, que e o metodo
-com o melhor placar (29 entregas, 1 falha).
-
-Foi provado antes de virar roteiro: aplicar os tres blocos no arquivo da
-v0.0.810 reproduz o arquivo da branch **byte a byte**.
-
-As tres base64 WebP ficam FORA dos tres blocos, de proposito. **Se um bloco que
-voce colou contiver `data:image/webp`, pare: e o bloco errado.**
-
-### Bloco 1 de 3 (14787 chars, arquivo `signup-bloco-1.txt`)
-
-Substitua o trecho que **comeca** aqui:
-
-```
-// O QUE MUDOU NESTA REVISAO (e por que):
-```
-
-e **termina** aqui:
-
-```
-  </header>
-```
-
-O pedido para colar junto:
-
-> Substitua, em `src/pages/Signup.tsx`, o trecho que comeca em
-> `// O QUE MUDOU NESTA REVISAO (e por que):`
-> e termina em `</header>` por este. Nao reescreva, nao
-> reformate, nao resuma e nao implemente nada por conta propria. Nao toque em
-> nenhuma outra parte do arquivo.
-
-### Bloco 2 de 3 (7194 chars, arquivo `signup-bloco-2.txt`)
-
-Substitua o trecho que **comeca** aqui:
-
-```
-          <p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Você não tem departamento jurídico. Então ou usa um modelo de origem incerta, ou paga honorários por peça: no mercado, uma única minuta avulsa custa de R$ 800 a R$ 2.500, por um contrato que já é rotina na sua carreira. Sai do mesmo bolso de onde vem a comissão.</p>
-```
-
-e **termina** aqui:
-
-```
-          <p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">A certidão sai amanhã, o estado civil ainda está em confirmação, o PIX vem depois. O negócio fica salvo pela metade e você volta nele quando o dado chegar.</p>
-```
-
-O pedido para colar junto:
-
-> Substitua, em `src/pages/Signup.tsx`, o trecho que comeca em
-> `<p style="margin:0;font-size:14.5px;line-height:1.72;color:#5A544C">Vo`
-> e termina em `<p style="margin:0;font-size:15px;line-height:1.75;color:#5A544C">A ce` por este. Nao reescreva, nao
-> reformate, nao resuma e nao implemente nada por conta propria. Nao toque em
-> nenhuma outra parte do arquivo.
-
-### Bloco 3 de 3 (37966 chars, arquivo `signup-bloco-3.txt`)
-
-Substitua o trecho que **comeca** aqui:
-
-```
-      <p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;line-height:1.75;color:#5A544C">Cada modelo é redigido para a operação brasileira, com a fundamentação do Código Civil e a cláusula de corretagem já no lugar. E nenhum deles começa em branco: todos puxam do dossiê do negócio.</p>
-```
-
-e **termina** aqui:
-
-```
-    </div>
-  )
-```
-
-O pedido para colar junto:
-
-> Substitua, em `src/pages/Signup.tsx`, o trecho que comeca em
-> `<p data-anim style="margin:22px 0 0;max-width:600px;font-size:16px;lin`
-> e termina em `)` por este. Nao reescreva, nao
-> reformate, nao resuma e nao implemente nada por conta propria. Nao toque em
-> nenhuma outra parte do arquivo.
-
----
-
-## 4. Conferencia (a unica prova)
-
-Baixe o projeto (`</>` -> Editar Codigo -> icone de download), descompacte e
-diffe contra a branch `work`. O download da v0.0.811 tem **235 arquivos**, logo
-o esperado depois da colagem e **236** (mais o `Documentos.tsx`) e nenhuma diferenca de codigo, fora as da lista de ignorar
-(`.gitignore`, `.skip.config.json`, `package.json`, carimbo do `schema.json`).
-
-No arquivo baixado, confira os tres hashes WebP:
+Baixe o projeto e diffe contra a `work`: **236 arquivos** e nenhuma diferenca de
+codigo, fora `.gitignore`, `.skip.config.json`, `package.json` e o carimbo do
+`schema.json`. Confira os tres hashes WebP:
 
 ```bash
 python3 -c "
@@ -130,6 +124,7 @@ print([hashlib.sha256(x.encode()).hexdigest()[:10] for x in re.findall(r'data:im
 # esperado: ['40b6f0b3af', '40b6f0b3af', '582241ca47']
 ```
 
-E abra `/documentos` e `/imobiliarias` no preview: sao rotas novas.
+Abra `/documentos` e `/imobiliarias` no preview: sao rotas novas.
 
-Se qualquer coisa divergir, **pare e mostre o diff**. Nao recole por conta.
+Depois **publique**: producao esta na v0.0.807 e aplicar no chat nao publica.
+Confirme que o `publishedAt` do `.skip.config.json` avancou.
