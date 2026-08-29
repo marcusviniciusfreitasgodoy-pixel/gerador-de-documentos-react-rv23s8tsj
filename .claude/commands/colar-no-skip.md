@@ -51,10 +51,80 @@ navegador, não toca no clipboard do sistema.
 relatou 1.047 para um arquivo de 1.050 que estava íntegro. Não peça o número e
 não decida por ele. O diff é a única prova.
 
+## PENDENTE DE COLAGEM: a landing enxuta (commit `ee4abb7`)
+
+**Esta é a única coisa que pende.** Três arquivos, cinco pastes, e o roteiro
+completo saiu na sessão de 29/08 (`ROTEIRO-COLAGEM.md`, com os três blocos em
+`.txt`). Ordem: `Documentos.tsx` (novo, inteiro), `App.tsx` (inteiro), e três
+substituições ancoradas no `Signup.tsx`.
+
+**O `Signup.tsx` tem 199.370 caracteres e não cabe num paste.** O limite do chat
+é 50.000. Vai por substituição ancorada, um bloco por vez, e o diff só fecha no
+fim dos três. As três base64 WebP ficam FORA dos três blocos, de propósito: se
+um bloco colado contiver `data:image/webp`, é o bloco errado.
+
+Foi provado antes de virar roteiro: aplicar os três blocos no arquivo da v0.0.810
+reproduz o arquivo da branch **byte a byte**.
+
+### O que a mudança faz, e o número que a motivou
+
+A abertura tinha **14.277 px a 1440 (15,9 telas) e 19.988 px a 390 (23,7
+telas)**, com 2.666 palavras visíveis. Medido em Chromium, não estimado. No
+celular o preço e o cadastro ficavam depois da 20ª tela.
+
+E ela se repetia: "sem cartão" 8 vezes, "15 dias" 7, "dossiê" 9, "regra de acesso
+por dono do registro" 3. O pior caso era o § 06 e a primeira pergunta do FAQ
+dizendo o **mesmo parágrafo reescrito**, com 1.900 px entre os dois.
+
+Depois: **10.830 px (12,0 telas) e 13.843 px (16,4 telas)**, com 1.648 palavras.
+Duas rotas públicas novas: `/documentos` (2.574 px) e `/imobiliarias` (1.463 px).
+
+O catálogo dos 16 e a seção das imobiliárias saíram para páginas próprias: os
+dois respondem a pergunta que o visitante só faz DEPOIS de se interessar. Na
+abertura ficou a chamada curta, com os 16 nomes ainda visíveis no § 03.
+
+### A âncora de preço deixou de ficar órfã
+
+O § 01 dizia que uma minuta avulsa custa R$ 800 a R$ 2.500 no mercado, e o § 06
+"Preço" **não tinha preço nenhum**: só "15 dias grátis" e um link. A âncora e o
+pagamento dela ficavam a 7.000 px de distância. Agora o número é display no
+cartão 01 (era corpo de 14,5 px no meio de um parágrafo) e o § 06 fecha a conta
+com "a partir de R$ 69 por mês". **A tabela continua só na `/planos`**, de
+propósito: se o valor mudar lá, aqui muda uma frase, não quatro cartões.
+
+Isso amarra os dois arquivos. **Se o preço do Individual mudar, `Planos.tsx` e
+`Signup.tsx` saem na mesma leva**, senão a landing contradiz a tabela.
+
+### Moldura compartilhada, e por que ela existe
+
+Cabeçalho e rodapé viraram `montarCabecalho()` e `DESIGN_RODAPE`, e a maquinaria
+virou `PaginaDesign({ html })`. As três páginas usam a mesma implementação:
+cabeçalho copiado diverge na terceira edição e ninguém percebe até um cliente
+apontar. O menu das páginas de apoio NÃO leva âncora de seção (`#preco`,
+`#funciona`), que lá seria link morto.
+
+As rotas novas ficam **fora do `<Layout>`** no `App.tsx`: elas trazem o próprio
+cabeçalho, e dentro do Layout o visitante veria dois cabeçalhos empilhados.
+
+### Conferido antes de virar roteiro
+
+`tsc -b` 0 erros, `oxlint src` 16 avisos (baseline), build passa, `oxfmt`
+aplicado, os três hashes WebP intactos. Renderizado a 1440, 1024 e 390 nas três
+páginas: zero rolagem horizontal, zero erro de JS, zero elemento preso em
+`opacity: 0`.
+
+**Duas armadilhas do render que valem para a próxima vez.** No Chromium headless
+o relógio de animação não avança: `getComputedStyle` devolve `opacity: 0` para o
+hero inteiro, com `playState: running` e `currentTime: 0`. Não é bug da página.
+Force `document.getAnimations().forEach(a => a.finish())` antes de contar, senão
+você persegue um defeito que não existe. E `minmax(420px,1fr)` numa grade estourou
+a viewport de 390: use `minmax(min(420px,100%),1fr)`. O render pegou; o diff não
+teria pego.
+
 ## Onde estamos (29/08/2026, versão 0.0.810 do Skip)
 
-**Nada pende de colagem.** O download 0.0.810 fechou com **234 arquivos e
-nenhuma diferença de código**. O `Planos.tsx` voltou **idêntico byte a byte**,
+**Fora a landing enxuta acima, nada pende de colagem.** O download 0.0.810
+fechou com **234 arquivos e nenhuma diferença de código**. O `Planos.tsx` voltou **idêntico byte a byte**,
 606 linhas e 28.158 caracteres, e o `Signup.tsx` intacto com os três hashes
 WebP. As quatro divergências restantes são as da lista de ignorar.
 
