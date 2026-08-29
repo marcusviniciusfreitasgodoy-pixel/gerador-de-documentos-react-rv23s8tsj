@@ -29,6 +29,11 @@ dev-dist-ssr
 # Saida incremental do tsc (gerada por `tsc -b`, nao e fonte)
 *.tsbuildinfo
 
+# Gerado por `npm install` para rodar tsc/oxlint/build neste espelho. O projeto
+# no Skip NAO tem este arquivo: versionar aqui faria o diff da conferencia
+# acusar um arquivo a mais. Mesma higiene do *.tsbuildinfo acima.
+package-lock.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

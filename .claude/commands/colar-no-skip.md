@@ -1327,7 +1327,10 @@ quebra o build e aparece alto. Nos hooks de backend, confira um a um: lá a falh
 `src/lib/pocketbase/schema.json` (dump do banco), `docs/SPEC-IMOBILIARIAS-F1.md`
 e `F2.md`, que o formatador do Skip realinhou (`*itálico*` virou `_itálico_`),
 e `.gitignore`: o commit `faedf64` tirou os `.tsbuildinfo` do versionamento só
-no repositório, higiene de git que não existe no Skip e não precisa ir para lá.
+no repositório, e 29/08 acrescentou o `package-lock.json` pelo mesmo motivo (ele
+nasce do `npm install` que você roda aqui para conferir a baseline, e o projeto
+no Skip não tem esse arquivo). Higiene de git que não existe no Skip e não
+precisa ir para lá.
 
 ## Se algo divergir
 
