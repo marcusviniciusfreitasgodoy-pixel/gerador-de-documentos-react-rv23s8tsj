@@ -30,7 +30,7 @@ não decida por ele. O diff é a única prova.
 
 ## Onde estamos (29/08/2026, versão 0.0.809 do Skip)
 
-**Pende de colagem: `src/pages/Planos.tsx`, e só ele.** 600 linhas, 27.785
+**Pende de colagem: `src/pages/Planos.tsx`, e só ele.** 606 linhas, 28.158
 caracteres. É uma rodada só de texto: os sete blocos do rodapé foram encurtados,
 e um deles mudou de sentido.
 
@@ -41,6 +41,15 @@ O mesmo fato agora aparece pelo lado certo, que é o do benefício: "quem chega 
 começo paga menos, e continua pagando menos em cada avulso que comprar até essa
 data". O título do bloco também virou o benefício: **"Quem entra agora paga
 R$ 149, e depois são R$ 349"**.
+
+**A ressalva do especialista saiu do rodapé.** O bloco "O que a gente lançar já
+está no seu plano" terminava com "a exceção é serviço de gente, não recurso do
+sistema: o canal do especialista continua orçado caso a caso". Saiu por decisão
+do Marcus, e o limite continua dito: o cartão do Profissional traz "Canal do
+especialista, orçado à parte", que é onde quem escolhe plano olha. O cabeçalho
+do arquivo registra que, SE o cartão um dia perder essa linha, a ressalva
+precisa voltar para o rodapé, senão a promessa fica sem limite escrito em lugar
+nenhum.
 
 Conferido: `tsc -b` 0 erros, `oxlint src` 16 avisos, build passa, `oxfmt`
 aplicado, nenhum travessão. Renderizado nas duas abas a 1440, 1024 e 390: zero

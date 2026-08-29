@@ -165,9 +165,16 @@ import { Badge } from '@/components/ui/badge'
  * A primeira: promessa aberta amarra o produto ao que ainda não existe. Se um
  * dia um recurso tiver custo por uso (IA mais cara, base licenciada, integração
  * paga), a escolha vira entregar no prejuízo ou voltar atrás com quem já pagou,
- * e voltar atrás é o que este público menos perdoa. Por isso a frase fala de
- * RECURSO DO SISTEMA e deixa serviço de gente fora, com o canal do especialista
- * nomeado no próprio cartão como o exemplo.
+ * e voltar atrás é o que este público menos perdoa. Por isso a frase fala do
+ * que for LANÇADO, ou seja recurso do sistema, e não de serviço de gente.
+ *
+ * O bloco do rodapé chegou a trazer essa exceção escrita ("o canal do
+ * especialista continua orçado caso a caso"), e ela saiu em 29/08 por decisão
+ * do Marcus: o cartão do Profissional já diz "Canal do especialista, orçado à
+ * parte", e repetir a ressalva embaixo transformava uma promessa boa num
+ * parágrafo defensivo. A ressalva continua dita, no lugar em que quem está
+ * escolhendo plano olha. SE UM DIA O CARTÃO PERDER ESSA LINHA, ELA PRECISA
+ * VOLTAR PARA CÁ, senão a promessa fica sem limite escrito em lugar nenhum.
  *
  * A segunda: o código é um só, e quase toda novidade aparece para todo mundo,
  * Individual incluído. Prometer "novidade" só aos dois planos de cima ou não
@@ -580,8 +587,7 @@ export default function PlanosPage() {
           </p>
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
             Nos planos Profissional e Imobiliária, o que for lançado entra sem custo a mais enquanto
-            o seu plano estiver ativo, e sem reajuste no meio do seu ano. A exceção é serviço de
-            gente, não recurso do sistema: o canal do especialista continua orçado caso a caso.
+            o seu plano estiver ativo, e sem reajuste no meio do seu ano.
           </p>
         </div>
         <div>
