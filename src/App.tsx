@@ -25,6 +25,7 @@ import NegocioDetalhePage from './pages/NegocioDetalhe'
 import EquipePage from './pages/Equipe'
 import AdminPage from './pages/Admin'
 import ChamadoDetalhePage from './pages/ChamadoDetalhe'
+import DocumentosPage, { ImobiliariasPage } from './pages/Documentos'
 
 const App = () => (
   <BrowserRouter>
@@ -56,6 +57,12 @@ const App = () => (
               <Route path="/chamados/:id" element={<ChamadoDetalhePage />} />
             </Route>
           </Route>
+          {/* Paginas publicas de apoio da abertura. Ficam FORA do <Layout>
+              de proposito: elas trazem o proprio cabecalho e rodape (os
+              mesmos da abertura), e dentro do Layout o visitante veria dois
+              cabecalhos empilhados. */}
+          <Route path="/documentos" element={<DocumentosPage />} />
+          <Route path="/imobiliarias" element={<ImobiliariasPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>

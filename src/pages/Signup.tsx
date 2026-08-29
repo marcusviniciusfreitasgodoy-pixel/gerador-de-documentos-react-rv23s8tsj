@@ -711,7 +711,79 @@ const DESIGN_HTML = `<div style="background:#F7F3EA">
 
 </div>`
 
-export function Abertura() {
+export const NAV_APOIO = [
+  { href: '/', label: 'Início' },
+  { href: '/planos', label: 'Planos e valores' },
+  { href: '/login', label: 'Entrar' },
+  { href: '/signup', label: 'Criar conta grátis', cta: true },
+]
+
+export function montarCabecalho(
+  links: Array<{ href: string; label: string; cta?: boolean }>,
+  homeHref: string = '/',
+) {
+  const linksDesk = links
+    .map((l) => {
+      if (l.cta) {
+        return `<a href="${l.href}" style="flex:none;display:inline-flex;align-items:center;height:40px;padding:0 22px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:13px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6">${l.label}</a>`
+      }
+      return `<a href="${l.href}" style="flex:none;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72);transition:color 180ms cubic-bezier(.22,.61,.36,1)" style-hover="color:#F5F1E6">${l.label}</a>`
+    })
+    .join('')
+
+  const linksMobile = links
+    .map((l) => {
+      if (l.cta) {
+        return `<a href="${l.href}" data-menu-cta>${l.label}</a>`
+      }
+      return `<a href="${l.href}">${l.label}</a>`
+    })
+    .join('')
+
+  return `
+  <header data-header style="position:sticky;top:0;z-index:50;background:#0E0E0E;border-bottom:1px solid rgba(245,241,230,.10);transition:height 220ms cubic-bezier(.22,.61,.36,1)">
+    <input type="checkbox" id="pc-menu" data-menu-caixa aria-hidden="true">
+    <div data-header-inner style="max-width:1120px;margin:0 auto;padding:0 clamp(20px,5vw,60px);height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px;transition:height 220ms cubic-bezier(.22,.61,.36,1)">
+      <a href="${homeHref}" style="display:flex;align-items:center;gap:11px;color:#F5F1E6;flex:none">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:30px;height:30px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+        <span style="display:flex;flex-direction:column;line-height:1">
+          <span style="font-size:15px;font-weight:700;letter-spacing:-.01em;color:#F5F1E6">Prime Circle</span>
+          <span data-header-sub style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C;margin-top:5px;transition:opacity 200ms cubic-bezier(.22,.61,.36,1),max-height 200ms cubic-bezier(.22,.61,.36,1);overflow:hidden;max-height:14px">Docs</span>
+        </span>
+      </a>
+      <nav data-nav-links style="display:flex;align-items:center;gap:clamp(12px,2vw,26px)">
+        ${linksDesk}
+      </nav>
+      <label for="pc-menu" data-menu-botao aria-label="Abrir e fechar o menu">
+        <svg data-icone-abrir viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <svg data-icone-x viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"></line><line x1="19" y1="5" x2="5" y2="19"></line></svg>
+      </label>
+    </div>
+    <nav data-menu-mobile aria-label="Menu">
+      ${linksMobile}
+    </nav>
+  </header>`
+}
+
+export const DESIGN_RODAPE = `
+  <footer style="background:#0E0E0E;border-top:1px solid rgba(245,241,230,.10);color:rgba(232,224,204,.55);padding-bottom:88px">
+    <div style="max-width:1120px;margin:0 auto;padding:44px clamp(20px,5vw,60px);display:flex;flex-wrap:wrap;gap:24px;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:11px">
+        <svg viewBox="0 0 100 100" role="img" aria-label="Prime Circle" style="width:24px;height:24px;flex:none"><circle cx="36" cy="50" r="30" stroke="#C9A84C" stroke-width="4" fill="none"></circle><circle cx="64" cy="50" r="30" stroke="#F5F1E6" stroke-width="4" fill="none"></circle><circle cx="50" cy="50" r="4" fill="#C9A84C"></circle></svg>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:rgba(232,224,204,.6)">Prime Circle · Docs</span>
+      </div>
+      <p style="margin:0;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.9;letter-spacing:.14em;text-transform:uppercase;color:rgba(232,224,204,.5)">Prime Circle<br>CNPJ 58.409.058/0001-73<br>CRECI PJ 11841</p>
+      <p style="margin:0;max-width:560px;font-size:12.5px;line-height:1.7;color:rgba(232,224,204,.72)">
+        A plataforma gera documentos a partir de modelos fundamentados no Código Civil. A conferência final, a adequação ao caso concreto e a validação jurídica permanecem sob responsabilidade do usuário e de sua assessoria.
+      </p>
+    </div>
+  </footer>
+  <div data-cta-fixo style="position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0E0E0E;border-top:1px solid rgba(201,168,76,.35);padding:10px 16px calc(10px + env(safe-area-inset-bottom));align-items:center;justify-content:space-between;gap:12px">
+    <a href="/login" style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(232,224,204,.72)">Entrar</a>
+    <a href="/signup" style="display:inline-flex;align-items:center;height:44px;padding:0 24px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:14px;font-weight:600">Criar conta grátis</a>
+  </div>`
+
+export function PaginaDesign({ html }: { html: string }) {
   const navigate = useNavigate()
   const raiz = useRef<HTMLDivElement>(null)
 
@@ -724,8 +796,6 @@ export function Abertura() {
       window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-    // style-hover: usado nos links do menu e nos botoes. Guarda o style base e
-    // devolve na saida, sem reescrever o atributo inteiro.
     Array.from(no.querySelectorAll<HTMLElement>('[style-hover]')).forEach((el) => {
       const base = el.getAttribute('style') || ''
       const hov = el.getAttribute('style-hover') || ''
@@ -743,8 +813,6 @@ export function Abertura() {
       })
     })
 
-    // Superficies de cartao: fundo, filete de ouro e 1 px de subida, com a
-    // saida animada e o mesmo estado no foco por teclado.
     Array.from(no.querySelectorAll<HTMLElement>('[data-card]')).forEach((el) => {
       const escuro = !!el.getAttribute('href')
       const base = {
@@ -777,8 +845,6 @@ export function Abertura() {
       })
     })
 
-    // FAQ em acordeao. A altura anima por max-height medido, entao a resposta
-    // continua inteira, sem corte.
     const itens = Array.from(no.querySelectorAll<HTMLElement>('[data-faq]'))
     const fechar = (item: HTMLElement) => {
       const corpo = item.querySelector<HTMLElement>('[data-faq-corpo]')
@@ -821,9 +887,6 @@ export function Abertura() {
       limpar.push(() => botao.removeEventListener('click', clique))
     })
 
-    // Menu mobile: abrir e fechar e puro CSS (checkbox), para o menu existir
-    // mesmo com o script quebrado. O JS so fecha ao tocar num link; sem ele, o
-    // proprio X fecha.
     const caixaMenu = no.querySelector<HTMLInputElement>('[data-menu-caixa]')
     const painelMenu = no.querySelector<HTMLElement>('[data-menu-mobile]')
     if (caixaMenu && painelMenu) {
@@ -834,7 +897,6 @@ export function Abertura() {
       limpar.push(() => painelMenu.removeEventListener('click', fecharMenu))
     }
 
-    // Cabecalho que condensa depois de 120 px de rolagem.
     const interno = no.querySelector<HTMLElement>('[data-header-inner]')
     const sub = no.querySelector<HTMLElement>('[data-header-sub]')
     if (interno) {
@@ -864,7 +926,6 @@ export function Abertura() {
     }
 
     if (!reduz) {
-      // Revelacao por elemento, em cascata de 70 ms dentro de cada grupo de irmaos.
       const alvos = Array.from(no.querySelectorAll<HTMLElement>('[data-anim]'))
       if (alvos.length && 'IntersectionObserver' in window) {
         alvos.forEach((el) => {
@@ -891,13 +952,9 @@ export function Abertura() {
               obs.unobserve(el)
             })
           },
-          // threshold 0 + rootMargin: basta um pixel entrar na tela. Com fracao,
-          // um elemento mais alto que a viewport nunca alcanca o limite e fica
-          // preso em opacity 0.
           { threshold: 0, rootMargin: '0px 0px -8% 0px' },
         )
         alvos.forEach((el) => obs.observe(el))
-        // Rede de seguranca: nada nesta pagina pode depender do observer disparar.
         const destravar = window.setTimeout(() => {
           obs.disconnect()
           alvos.forEach((el) => {
@@ -913,7 +970,6 @@ export function Abertura() {
         })
       }
 
-      // Faixa de dados: cada numero conta de zero ao valor, uma unica vez.
       const numeros = Array.from(no.querySelectorAll<HTMLElement>('[data-count]'))
       if (numeros.length && 'IntersectionObserver' in window) {
         const obsN = new IntersectionObserver(
@@ -939,8 +995,6 @@ export function Abertura() {
         limpar.push(() => obsN.disconnect())
       }
 
-      // Profundidade na arte do hero: so transform, com teto de 14 px para a
-      // etiqueta nao descolar do cartao.
       const camadas = Array.from(no.querySelectorAll<HTMLElement>('[data-parallax]'))
       if (camadas.length) {
         let pedido: number | null = null
@@ -968,7 +1022,6 @@ export function Abertura() {
     return () => limpar.forEach((fn) => fn())
   }, [])
 
-  // CTA "/signup" e "/login" pelo router (sem reload); ancoras "#" seguem nativas.
   const aoClicar = (e: React.MouseEvent<HTMLDivElement>) => {
     const alvo = (e.target as HTMLElement).closest('a')
     if (!alvo) return
@@ -982,9 +1035,13 @@ export function Abertura() {
   return (
     <div ref={raiz} onClick={aoClicar}>
       <style dangerouslySetInnerHTML={{ __html: DESIGN_CSS }} />
-      <div dangerouslySetInnerHTML={{ __html: DESIGN_HTML }} />
+      <div dangerouslySetInnerHTML={{ __html: html }} />
     </div>
   )
+}
+
+export function Abertura() {
+  return <PaginaDesign html={DESIGN_HTML} />
 }
 
 export default function Signup() {
