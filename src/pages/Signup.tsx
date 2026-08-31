@@ -18,6 +18,34 @@ import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 // Layout suprime o proprio cabecalho/rodape nessa rota (a Abertura traz os seus).
 // Logado, "/" segue mostrando o hub de documentos, intacto.
 //
+// HERO DE 31/08/2026: PROMESSA NO TOPO, DOR NO § 01
+//
+// O hero antigo fazia DOR ("O seu nao devia terminar em improviso") e o § 01,
+// tres telas abaixo, fazia dor de novo e melhor, com o R$ 800 a R$ 2.500 em
+// display. A pagina cutucava a ferida duas vezes seguidas e so prometia depois.
+// Agora o hero faz PROMESSA e o § 01 fica com a dor, sozinho.
+//
+// E o H1 antigo abria acusando o leitor de improvisar. Este publico tem orgulho
+// do oficio: acusacao na primeira frase e mau comeco.
+//
+// O H1 novo ESTREITA o hero para o autonomo, e isso foi escolha, nao descuido:
+// hero que fala com uma pessoa converte mais que hero que hedge. A imobiliaria
+// continua endereçada pelo eyebrow ("Para corretores e imobiliarias"), pelo
+// § 05 e pela /imobiliarias. Se um dia a imobiliaria virar o publico principal,
+// e este H1 que muda.
+//
+// O subtitulo manteve as duas ancoras concretas que o hero nao pode perder: a
+// fundamentacao no Codigo Civil (credibilidade verificavel) e o dossie
+// ("cadastra o negocio uma vez"), que e o diferencial de verdade. Uma versao
+// so de posicionamento, sem mecanismo, nao responde ao "como" que este publico
+// faz antes de acreditar.
+//
+// FICOU DE FORA de proposito: "os mesmos instrumentos, na mesma ordem, com a
+// MESMA CONFERENCIA" e "em minutos". A equivalencia de conferencia com uma
+// grande imobiliaria e forte demais para um parametro que ninguem confere, e
+// "em minutos" e numero testavel na primeira sessao. "Na hora" entrega a mesma
+// ideia sem cronometro.
+//
 // CORTE DE 29/08/2026: A PAGINA ESTAVA LONGA DEMAIS, E ISSO FOI MEDIDO
 //
 // Antes: 14.277 px a 1440 (15,9 telas) e 19.988 px a 390 (23,7 telas), com
@@ -224,10 +252,10 @@ ${montarCabecalho(NAV_ABERTURA, '#topo')}
         <p style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C;opacity:0;animation:pcSubir 560ms cubic-bezier(.22,.61,.36,1) 60ms both">Para corretores e imobiliárias</p>
         <div style="width:56px;height:1px;background:rgba(201,168,76,.6);transform-origin:left;margin-bottom:26px;animation:pcRegua 520ms cubic-bezier(.22,.61,.36,1) 200ms both"></div>
         <h1 style="margin:0;max-width:17ch;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(38px,4.8vw,58px);line-height:1.04;letter-spacing:-.02em;color:#F5F1E6;opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 280ms both">
-          Todo negócio termina em documento. <em style="font-style:italic;color:#C9A84C">O seu não devia terminar em improviso.</em>
+          A documentação de uma grande imobiliária, <em style="font-style:italic;color:#C9A84C">na mão do corretor autônomo.</em>
         </h1>
         <p style="margin:26px 0 0;max-width:500px;font-size:clamp(15.5px,1.4vw,17px);line-height:1.7;color:rgba(232,224,204,.80);opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 400ms both">
-          Você apresenta um contrato à altura do negócio, fundamentado no Código Civil, com segurança para todas as partes. Cadastre uma vez e gere na hora, sem esperar por ninguém.
+          Os mesmos instrumentos, na mesma ordem, fundamentados no Código Civil. Você cadastra o negócio uma vez e gera todos eles na hora, sem esperar por ninguém.
         </p>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:34px;opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 520ms both">
           <a href="/signup" style="display:inline-flex;align-items:center;height:54px;padding:0 32px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta e gerar meu primeiro documento</a>
