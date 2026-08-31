@@ -64,6 +64,7 @@ import {
   intermediationSchema,
   type IntermediationValues,
   TIPO_EXCLUSIVIDADE_OPTIONS,
+  MOMENTO_COMISSAO_OPTIONS,
   intermediationMockData,
   buildIntermediationTemplateData,
   type BrokerInfo,
