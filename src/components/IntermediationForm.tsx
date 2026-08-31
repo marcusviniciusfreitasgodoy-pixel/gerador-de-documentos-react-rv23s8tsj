@@ -590,6 +590,34 @@ export function IntermediationForm() {
             />
             <FormField
               control={control}
+              name="momento_comissao"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quando a comissão é paga *</FormLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {MOMENTO_COMISSAO_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Entra na cláusula 4. Escolha o sinal quando o combinado é receber no aceite da
+                    proposta, e não só na escritura.
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
               name="foro_comarca"
               render={({ field }) => (
                 <FormItem>
