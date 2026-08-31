@@ -64,6 +64,7 @@ import {
   intermediationSchema,
   type IntermediationValues,
   TIPO_EXCLUSIVIDADE_OPTIONS,
+  MOMENTO_COMISSAO_OPTIONS,
   intermediationMockData,
   buildIntermediationTemplateData,
   type BrokerInfo,
@@ -107,6 +108,7 @@ export function IntermediationForm() {
       tipo_exclusividade: 'COM GESTÃO EXCLUSIVA',
       prazo_vigencia_dias: '90',
       comissao_percentual: '5',
+      momento_comissao: 'escritura',
       foro_comarca: 'Rio de Janeiro',
     },
   })
@@ -582,6 +584,34 @@ export function IntermediationForm() {
                   <FormControl>
                     <Input type="number" min={0} step="0.1" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={control}
+              name="momento_comissao"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quando a comissão é paga *</FormLabel>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {MOMENTO_COMISSAO_OPTIONS.map((o) => (
+                        <SelectItem key={o.value} value={o.value}>
+                          {o.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs text-muted-foreground">
+                    Entra na cláusula 4. Escolha o sinal quando o combinado é receber no aceite da
+                    proposta, e não só na escritura.
+                  </p>
                   <FormMessage />
                 </FormItem>
               )}
