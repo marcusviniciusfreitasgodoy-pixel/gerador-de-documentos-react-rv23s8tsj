@@ -1441,6 +1441,28 @@ nasce do `npm install` que você roda aqui para conferir a baseline, e o projeto
 no Skip não tem esse arquivo). Higiene de git que não existe no Skip e não
 precisa ir para lá.
 
+E `src/lib/pocketbase/errors.ts`, que **existe no Skip e não aqui, de propósito**.
+Ele retrocede sozinho no projeto do Skip (quatro vezes entre 27 e 28/08/2026,
+sempre para a mesma versão de 29 linhas, em rodadas que não pediam nada sobre
+ele), e por isso a lógica mudou de casa para o `src/lib/pocketbase/mensagens.ts`,
+que hoje 16 arquivos importam. O cabeçalho do `mensagens.ts` conta a história
+inteira e fecha com a regra: **nada importa o `errors.ts`**; se ele reaparecer, é
+resíduo do retrocesso.
+
+Conferido no sync v0.0.828, e é o que o mantém inofensivo: o arquivo no Skip é
+byte a byte o que o commit `8434ae2` apagou, nenhum arquivo do `src` o importa (a
+única menção é o comentário dentro do `mensagens.ts`), e ele não entra no bundle,
+porque o Vite só empacota o que está no grafo de imports. A string
+`An unexpected error occurred.`, que só existe nele, tem **zero** ocorrências no
+bundle de produção.
+
+Não traga esse arquivo para o repositório e não peça ao Skip para apagá-lo. A
+ausência dele aqui é a decisão, não o descuido: trazer desfaz a escolha de 28/08 e
+faz o diff acusar divergência a cada retrocesso, que é justamente o ruído que se
+quis eliminar; e pedir para apagar gasta uma rodada de colagem em produção, que é
+a operação mais cara que temos, para remover 29 linhas que nunca executam. Já foi
+apagado uma vez, e voltou.
+
 ## Se algo divergir
 
 Pare e relate: qual arquivo, o que esperava, o que veio. Não tente consertar
