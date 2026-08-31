@@ -224,7 +224,7 @@ ${montarCabecalho(NAV_ABERTURA, '#topo')}
         <p style="margin:0 0 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#C9A84C;opacity:0;animation:pcSubir 560ms cubic-bezier(.22,.61,.36,1) 60ms both">Para corretores e imobiliárias</p>
         <div style="width:56px;height:1px;background:rgba(201,168,76,.6);transform-origin:left;margin-bottom:26px;animation:pcRegua 520ms cubic-bezier(.22,.61,.36,1) 200ms both"></div>
         <h1 style="margin:0;max-width:17ch;font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;font-size:clamp(38px,4.8vw,58px);line-height:1.04;letter-spacing:-.02em;color:#F5F1E6;opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 280ms both">
-          Todo negócio termina em documento. <em style="font-style:italic;color:#C9A84C">O seu não devia terminar em improviso.</em>
+          A documentação de uma grande imobiliária, <em style="font-style:italic;color:#C9A84C">na mão do corretor autônomo.</em>
         </h1>
         <p style="margin:26px 0 0;max-width:500px;font-size:clamp(15.5px,1.4vw,17px);line-height:1.7;color:rgba(232,224,204,.80);opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 400ms both">
           Você apresenta um contrato à altura do negócio, fundamentado no Código Civil, com segurança para todas as partes. Cadastre uma vez e gere na hora, sem esperar por ninguém.
