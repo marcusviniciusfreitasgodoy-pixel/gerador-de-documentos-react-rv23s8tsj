@@ -108,6 +108,7 @@ export function IntermediationForm() {
       tipo_exclusividade: 'COM GESTÃO EXCLUSIVA',
       prazo_vigencia_dias: '90',
       comissao_percentual: '5',
+      momento_comissao: 'escritura',
       foro_comarca: 'Rio de Janeiro',
     },
   })
