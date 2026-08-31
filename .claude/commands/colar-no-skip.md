@@ -1508,3 +1508,32 @@ do Contrato de Corretagem já trazem os arts. 725 e 727 na íntegra. Eu tinha li
 só o template da Autorização e tratado o achado como se valesse para a
 plataforma inteira. O que sobrou de verdadeiro foi só a incoerência entre os dois
 documentos, que é o que esta entrega conserta.
+
+### Publicado em v0.0.828, e o quase-desastre no caminho
+
+Entregue e conferido contra o sync v0.0.828: `intermediation-helpers.ts`,
+`intermediation-docx.ts` e `IntermediationForm.tsx` idênticos à branch. O bundle
+em produção (`index-BLPFtDId.js`) traz o sha `630d89cd…`, o `38824`, o default
+`momento_comissao: 'escritura'` e os dois rótulos do select. Render feito a
+partir da mesma URL que o bundle usa: as duas opções saem limpas, sem
+placeholder sobrando, numeração até 10.
+
+**O que quase deu errado, e é a lição que vale guardar.** Entre uma colagem e
+outra o Skip aplicou o passo 2 (schema passa a exigir `momento_comissao`) e o
+3a (o import), mas **não** o 3b (o default) nem o 3c (o campo). Isso foi ao ar.
+O resultado foi silencioso e feio: `zodResolver` reprovava o formulário num campo
+que não estava desenhado, `form.handleSubmit` nunca chamava o `onSubmit`, e o
+corretor clicava em "Gerar Documento" sem toast, sem mensagem e sem download.
+O botão "Validar" continuava funcionando, porque usa `form.getValues()` e pula a
+validação: o formulário parecia são.
+
+Duas coisas a tirar disso:
+
+1. **Schema e formulário são um passo só.** Acrescentar campo obrigatório ao
+   `z.object` sem o `defaultValues` e sem o `FormField` publica uma tela morta.
+   Se a colagem precisa ser dividida, o campo entra `.optional()` primeiro e vira
+   obrigatório na última colagem, ou os três pedaços vão juntos.
+2. **Confira a contagem de linhas do arquivo ORIGINAL, não do modificado.** Eu
+   dei 2289/2290/2318 quando o certo era 2259/2260/2288: tinha usado o `wc -l` do
+   arquivo já editado como se fosse o de partida. O erro tirou do dono do projeto
+   justamente o instrumento que teria pegado a colagem faltante no 3a.
