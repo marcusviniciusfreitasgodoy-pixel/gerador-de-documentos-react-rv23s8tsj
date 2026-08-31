@@ -227,7 +227,7 @@ ${montarCabecalho(NAV_ABERTURA, '#topo')}
           A documentação de uma grande imobiliária, <em style="font-style:italic;color:#C9A84C">na mão do corretor autônomo.</em>
         </h1>
         <p style="margin:26px 0 0;max-width:500px;font-size:clamp(15.5px,1.4vw,17px);line-height:1.7;color:rgba(232,224,204,.80);opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 400ms both">
-          Você apresenta um contrato à altura do negócio, fundamentado no Código Civil, com segurança para todas as partes. Cadastre uma vez e gere na hora, sem esperar por ninguém.
+          Os mesmos instrumentos, na mesma ordem, fundamentados no Código Civil. Você cadastra o negócio uma vez e gera todos eles na hora, sem esperar por ninguém.
         </p>
         <div style="display:flex;flex-wrap:wrap;align-items:center;gap:22px;margin-top:34px;opacity:0;animation:pcSubir 700ms cubic-bezier(.22,.61,.36,1) 520ms both">
           <a href="/signup" style="display:inline-flex;align-items:center;justify-content:center;height:54px;padding:0 32px;border-radius:999px;background:#C9A84C;color:#0E0E0E;font-size:15px;font-weight:600;transition:background 200ms cubic-bezier(.22,.61,.36,1),transform 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:#F5F1E6;transform:translateY(-1px)">Criar conta e gerar meu primeiro documento</a>
