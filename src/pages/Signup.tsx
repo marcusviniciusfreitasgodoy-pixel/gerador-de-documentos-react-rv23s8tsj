@@ -18,6 +18,34 @@ import { getErrorMessage } from '@/lib/pocketbase/mensagens'
 // Layout suprime o proprio cabecalho/rodape nessa rota (a Abertura traz os seus).
 // Logado, "/" segue mostrando o hub de documentos, intacto.
 //
+// HERO DE 31/08/2026: PROMESSA NO TOPO, DOR NO § 01
+//
+// O hero antigo fazia DOR ("O seu nao devia terminar em improviso") e o § 01,
+// tres telas abaixo, fazia dor de novo e melhor, com o R$ 800 a R$ 2.500 em
+// display. A pagina cutucava a ferida duas vezes seguidas e so prometia depois.
+// Agora o hero faz PROMESSA e o § 01 fica com a dor, sozinho.
+//
+// E o H1 antigo abria acusando o leitor de improvisar. Este publico tem orgulho
+// do oficio: acusacao na primeira frase e mau comeco.
+//
+// O H1 novo ESTREITA o hero para o autonomo, e isso foi escolha, nao descuido:
+// hero que fala com uma pessoa converte mais que hero que hedge. A imobiliaria
+// continua endereçada pelo eyebrow ("Para corretores e imobiliarias"), pelo
+// § 05 e pela /imobiliarias. Se um dia a imobiliaria virar o publico principal,
+// e este H1 que muda.
+//
+// O subtitulo manteve as duas ancoras concretas que o hero nao pode perder: a
+// fundamentacao no Codigo Civil (credibilidade verificavel) e o dossie
+// ("cadastra o negocio uma vez"), que e o diferencial de verdade. Uma versao
+// so de posicionamento, sem mecanismo, nao responde ao "como" que este publico
+// faz antes de acreditar.
+//
+// FICOU DE FORA de proposito: "os mesmos instrumentos, na mesma ordem, com a
+// MESMA CONFERENCIA" e "em minutos". A equivalencia de conferencia com uma
+// grande imobiliaria e forte demais para um parametro que ninguem confere, e
+// "em minutos" e numero testavel na primeira sessao. "Na hora" entrega a mesma
+// ideia sem cronometro.
+//
 // CORTE DE 29/08/2026: A PAGINA ESTAVA LONGA DEMAIS, E ISSO FOI MEDIDO
 //
 // Antes: 14.277 px a 1440 (15,9 telas) e 19.988 px a 390 (23,7 telas), com
