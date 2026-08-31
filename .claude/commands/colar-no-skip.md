@@ -124,11 +124,11 @@ Placar atualizado do método por instrução: **31 entregas, 2 falhas.**
 
 Conferido no download da **v0.0.811** (29/08 18:41), no `.skip.config.json`:
 
-| campo | valor |
-| ----- | ----- |
-| `lastDevBuildRef` | `bfb429b` (v0.0.811) |
+| campo              | valor                           |
+| ------------------ | ------------------------------- |
+| `lastDevBuildRef`  | `bfb429b` (v0.0.811)            |
 | `lastPublishedRef` | `639634f`, que é a **v0.0.807** |
-| `publishedAt` | 28/08 21:29 |
+| `publishedAt`      | 28/08 21:29                     |
 
 **Aplicar no chat do Skip não publica.** Aplicar escreve no build de dev;
 publicar é um passo separado, e o `publishedAt` é que prova que aconteceu.
@@ -329,7 +329,6 @@ Padrão conhecido: ele olha o pedido isolado, não o estado do projeto.
    três que valia checar**, e ela veio negativa.
 
 ### O que muda em 31/12/2026
-
 
 Preço do avulso, o que entrou nesta rodada: R$ 349 é o valor final, e R$ 149 é
 o que se cobra **até 31/12/2026**. A página mostra R$ 149 como preço, com selo "Preço de lançamento"
@@ -883,13 +882,13 @@ série inteira em que o projeto no Skip e o branch estão iguais em tudo.
 numa rodada em que ninguém pediu nada sobre ele. Duas vezes é padrão, não
 acidente. O que se sabe de fato:
 
-| download | versão do Skip | `errors.ts` |
-| --- | --- | --- |
-| 65 | 0.0.773 | 89 linhas (o certo) |
-| 66 | 0.0.777 | 29 linhas |
-| 67 | 0.0.779 | 29 linhas |
-| 68 | 0.0.781 | 89 linhas (reposto pelo chat) |
-| 69 | 0.0.783 | 29 linhas |
+| download | versão do Skip | `errors.ts`                   |
+| -------- | -------------- | ----------------------------- |
+| 65       | 0.0.773        | 89 linhas (o certo)           |
+| 66       | 0.0.777        | 29 linhas                     |
+| 67       | 0.0.779        | 29 linhas                     |
+| 68       | 0.0.781        | 89 linhas (reposto pelo chat) |
+| 69       | 0.0.783        | 29 linhas                     |
 
 A versão do projeto só SOBE, então não é rollback do projeto inteiro. E é só
 este arquivo: no download 69, dos 215 arquivos, os únicos que divergiam eram os
@@ -1023,10 +1022,10 @@ Os dois têm 1.222 e 1.325 linhas, exatamente o que o pedido dizia, e o texto
 mandava conferir. Só que **as duas cópias caíram na MESMA rota**, uma colada na
 outra, e a segunda rota de cada arquivo ficou sem gate nenhum:
 
-| arquivo | rota protegida | rota que ficou aberta |
-| --- | --- | --- |
-| `extrair_dados.js` | `/backend/v1/extrair-dados` (2x) | `/backend/v1/extrair-conhecimento` |
-| `validar_minuta.js` | `/backend/v1/validar-minuta` (2x) | `/backend/v1/consultar-ia` |
+| arquivo             | rota protegida                    | rota que ficou aberta              |
+| ------------------- | --------------------------------- | ---------------------------------- |
+| `extrair_dados.js`  | `/backend/v1/extrair-dados` (2x)  | `/backend/v1/extrair-conhecimento` |
+| `validar_minuta.js` | `/backend/v1/validar-minuta` (2x) | `/backend/v1/consultar-ia`         |
 
 `/backend/v1/consultar-ia` é a consulta do Especialista: assinante vencido
 continuaria gastando IA por lá.
@@ -1145,11 +1144,11 @@ caminhos independentes dão o mesmo número:
 Com essa frequência, **o preço do avulso decide a tabela inteira**, porque ele
 define a partir de quantas operações assinar compensa:
 
-| avulso | assinar compensa a partir de |
-| --- | --- |
-| R$ 49 | 14 operações no ano |
-| R$ 99 | 7 |
-| **R$ 149** | **5** |
+| avulso     | assinar compensa a partir de |
+| ---------- | ---------------------------- |
+| R$ 49      | 14 operações no ano          |
+| R$ 99      | 7                            |
+| **R$ 149** | **5**                        |
 
 A R$ 49 ninguém alcança o ponto de virada e a assinatura nunca é a escolha
 racional: a tabela vira enfeite em volta do avulso. A R$ 149 a virada cai
@@ -1331,8 +1330,7 @@ O botão novo do Avulso no painel de admin **não foi renderizado**. Ele fica
 atrás da sessão autenticada, e forçar exigiria mexer no guard de rota, no
 `useAuth` e semear dados falsos ao mesmo tempo; tentei, a montagem brigou, e
 parei em vez de insistir. O que existe é `tsc` passando e a estrutura sendo
-determinística. A tela de bloqueio do avulso, essa sim, foi renderizada a 1440 e
-390.
+determinística. A tela de bloqueio do avulso, essa sim, foi renderizada a 1440 e 390.
 
 ### Fora isso, nada pende de colagem
 
@@ -1370,10 +1368,10 @@ proteção **na cópia do scratchpad**, nunca na branch.
 
 Placar até aqui, e ele deve guiar a escolha do método:
 
-| método | entregas | falhas |
-| ------ | -------- | ------ |
-| arquivo inteiro colado | 33 | 2 |
-| instrução de busca e substituição | 29 | 1 |
+| método                            | entregas | falhas |
+| --------------------------------- | -------- | ------ |
+| arquivo inteiro colado            | 33       | 2      |
+| instrução de busca e substituição | 29       | 1      |
 
 As duas falhas do paste inteiro foram MUDAS para contagem de linha:
 
@@ -1447,3 +1445,66 @@ precisa ir para lá.
 
 Pare e relate: qual arquivo, o que esperava, o que veio. Não tente consertar
 colando de novo por conta própria. É produção, com CPF e RG de cliente real.
+
+## 31/08/2026: o momento do pagamento da comissão na Autorização
+
+Entrega pronta na branch `work` (commit `0b5c49d`), **ainda não colada no Skip**.
+
+O que mudou e por quê: o item 4 do template da Autorização dizia "no ato da
+assinatura da escritura" **literal**, enquanto o Contrato de Corretagem já
+deixava esse momento na mão do corretor (`{vencimento_comissao}`, campo "Quando
+a comissão é paga"). Dois documentos da mesma operação diziam coisas diferentes
+sobre o mesmo pagamento. Agora a Autorização também escolhe.
+
+Três coisas mudaram no `.docx`, e mais nada:
+
+- item 4: `no ato da assinatura da escritura de compra e venda` virou
+  `{vencimento_comissao}`. A opção "escritura" reconstitui a frase antiga byte a
+  byte, então quem não mexer no campo não vê diferença;
+- item 5 novo (art. 725: remuneração devida com o resultado conseguido, ainda
+  que as partes se arrependam), com a mesma redação que já está em produção na
+  cláusula 3ª do Contrato de Corretagem. Itens 5 a 9 viraram 6 a 10, e a
+  referência cruzada do item 9 à "Cláusula 3" continua certa;
+- item 1: a citação da Resolução-COFECI 458/95 ganhou a data certa (15/12/1995,
+  e não 17/11) e a menção à redação dada pela Resolução-COFECI 1.404/2018.
+
+Template novo: **38.824 bytes** (era 38.634), base64 de 51.768 bytes, sha256
+`df5b3ead10108c14…`. As 17 partes do zip continuam as mesmas e na mesma ordem;
+só `word/document.xml` mudou (8.842 → 9.453 bytes).
+
+### Ordem de colagem, e por que ela não tem janela de quebra
+
+`AUTORIZACAO_EXPECTED_BYTES` é conferido a cada geração: gist novo com código
+velho, ou código novo com gist velho, dá "Template corrompido" na cara do
+corretor. O que salva é a URL do gist ser **fixada num sha**: atualizar o gist
+não mexe no que o código busca. Daí a ordem:
+
+1. atualizar o arquivo `autorizacao_base64.txt` no gist (produção segue no sha
+   antigo, intacta);
+2. `src/lib/intermediation-helpers.ts` (arquivo inteiro);
+3. `src/components/IntermediationForm.tsx` (três substituições de trecho);
+4. `src/lib/intermediation-docx.ts` (arquivo inteiro) com a **Raw URL nova** e 38824. Este passo é o que vira a chave.
+
+Entre 2 e 4 o template ainda é o velho: a chave `vencimento_comissao` sobra nos
+dados e o docxtemplater ignora chave que não tem placeholder. Nada quebra.
+
+A Raw URL nova sai de `https://gist.github.com/<user>/<id>`, que é alcançável
+daqui por `curl` (a `api.github.com` **não** é: 403 na política de rede). O sha
+está no href do botão Raw:
+
+```bash
+curl -s 'https://gist.github.com/marcusviniciusfreitasgodoy-pixel/2fc9ab475e6486132bab6a43b8dc1d34' \
+  | grep -oE '/raw/[0-9a-f]{40}/autorizacao_base64.txt' | sort -u
+```
+
+### O que eu errei antes disso
+
+Eu disse que a plataforma não pedia estado civil, regime de casamento nem
+matrícula do imóvel, e que faltava a cláusula do art. 725. **Estava errado nas
+quatro.** `PartyFields.tsx` tem `estado_civil` e `regime_bens` (este condicionado
+a `regimeSeAplica`); `CorretagemForm` e `ReciboComissaoForm` têm
+`imovel_matricula`, `imovel_ri_numero` e `imovel_comarca`; e as cláusulas 3ª e 4ª
+do Contrato de Corretagem já trazem os arts. 725 e 727 na íntegra. Eu tinha lido
+só o template da Autorização e tratado o achado como se valesse para a
+plataforma inteira. O que sobrou de verdadeiro foi só a incoerência entre os dois
+documentos, que é o que esta entrega conserta.
