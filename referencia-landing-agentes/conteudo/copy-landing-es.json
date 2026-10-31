@@ -1,0 +1,298 @@
+{
+    "brand": {
+        "product": "Naia OS",
+        "productMain": "Naia",
+        "productAccent": "OS",
+        "agent": "Naia"
+    },
+    "meta": {
+        "title": "Naia OS · tu agente de IA con un equipo entero trabajando por ti",
+        "description": "Ten tu propia agente Naia con un equipo de agentes de IA que atiende, vende, crea y entrega 24 horas, o conviértete en una agencia y construye ingresos recurrentes sin contratar ni un empleado humano más."
+    },
+    "nav": {
+        "skip": "Saltar al contenido",
+        "team": "Equipo",
+        "economy": "Ahorro",
+        "proof": "Testimonios",
+        "offers": "Ofertas",
+        "login": "Área del cliente",
+        "menu": "Abrir menú",
+        "closeMenu": "Cerrar menú"
+    },
+    "hero": {
+        "kicker": "Agentes de IA que trabajan de verdad",
+        "title": "100k/mes recurrente usando y revendiendo agentes de IA.",
+        "titleAccent": "Sin contratar ni un empleado humano más.",
+        "lead": "Una agente coordina un equipo entero: copy, diseño, código, tráfico, ventas por WhatsApp, finanzas, impuestos, jurídico y RR. HH. La usas en tu negocio, la revendes a tus clientes, o haces las dos cosas.",
+        "ctaAgent": "Quiero mi agente Naia",
+        "ctaResell": "Quiero ser una agencia",
+        "ctaDemo": "Agendar demostración con el equipo",
+        "videoLabel": "Míralo antes de decidir",
+        "play": "Ver el video",
+        "videoSoon": "El video está por llegar. Mientras tanto, baja y mira al equipo trabajando.",
+        "trust": [
+            "Atiende 24 horas, no falta, no se atrasa y no pide aumento",
+            "Cada cliente con su propia agente, aislada y segura"
+        ]
+    },
+    "letter": {
+        "kicker": "Carta abierta",
+        "title": "Yo también pensaba que un agente de IA era solo un chatbot con nombre bonito.",
+        "paragraphs": [
+            "Durante años hice lo que hace todo dueño de negocio. Contraté, capacité, pagué cargas sociales, cubrí ausencias y rehice el trabajo que volvía mal. Cada real más de facturación pedía una persona más en la nómina. Crecer se volvió sinónimo de tener más gente que gestionar.",
+            "Entonces vi algo que cambió la cuenta. Una sola agente recibiendo el pedido en lenguaje simple, dividiéndolo en tareas, llamando al especialista correcto y devolviéndomelo listo. El copy salió con Jonathan. La página salió al aire con Paulo. El lead fue calificado por WhatsApp por Davi mientras yo dormía.",
+            "No lo creí el primer día. Lo probé en mi propio negocio, con mi dinero y mis clientes. Lo que vi fue el trabajo que le pagaría a un equipo entero saliendo listo, sin abrir ni una vacante nueva."
+        ],
+        "pull": "El fenómeno no es que la IA escriba un texto. Es un equipo entero trabajando junto, 24 horas al día, sin que tú te conviertas en gerente de personas.",
+        "blocksTitle": "Por qué esto se vuelve ingreso recurrente",
+        "blocks": [
+            {
+                "title": "Dejas de pagar nómina para crecer",
+                "body": "Copy, diseño, código, tráfico, atención, finanzas, impuestos, jurídico y RR. HH. se vuelven agentes. La cuenta que subía con cada contratación se queda quieta mientras la facturación avanza."
+            },
+            {
+                "title": "Vendes lo que ya usas",
+                "body": "Cada negocio que atiendes necesita el mismo equipo. Como agencia, entregas la agente a tus clientes y cobras cada mes. Cada cliente nuevo suma a la recurrencia, no a tu trabajo."
+            },
+            {
+                "title": "La cuenta de R$ 100 mil cierra sin equipo",
+                "body": "La recurrencia alta no viene de un cliente gigante. Viene de muchos clientes pagando cada mes por un servicio que funciona solo. Los agentes se encargan de la entrega, tú te encargas de vender."
+            }
+        ],
+        "closing": "No te voy a pedir que me creas. Te voy a mostrar al equipo trabajando, cuánto cuesta cada función hecha por personas y quién ya lo está usando. Después decides.",
+        "signature": "Denderson Rodrigues",
+        "signatureRole": "CEO del Instituto Avalanche"
+    },
+    "crew": {
+        "kicker": "Naia al mando",
+        "title": "Naia orquesta. Todo el equipo trabaja junto.",
+        "alt": "Naia en el centro de una sala de mando, orquestando al equipo de agentes de IA, cada uno trabajando en su puesto",
+        "flowAlt": "Flujo de marketing con el equipo de Naia: del embudo al cierre"
+    },
+    "team": {
+        "kicker": "Equipo Naia",
+        "title": "Una agente coordina. El equipo entero entrega.",
+        "lead": "Naia es la única que habla contigo. Recibe el pedido, lo pasa al especialista correcto, hace el seguimiento y solo te entrega cuando está listo. Haz clic en cualquier agente para ver el currículum completo.",
+        "groupAlt": "Naia coordinando al equipo de agentes",
+        "orchestrator": "Orquestadora del equipo",
+        "open": "Ver currículum",
+        "count": "{n} especialistas trabajando bajo el mando de Naia",
+        "close": "Cerrar"
+    },
+    "economy": {
+        "kicker": "Ahorro",
+        "title": "Cuánto cuesta cada tarea hecha por personas. Y cuánto sobra con un agente.",
+        "lead": "Cada agente hace el trabajo de una función que hoy está en la nómina. Abajo está el salario promedio brasileño de cada función, más las cargas laborales de la CLT. Es lo que dejas de pagar cada mes.",
+        "colRole": "Función",
+        "colTask": "Tarea",
+        "colSalary": "Salario promedio",
+        "colTotal": "Costo total por mes",
+        "colHour": "Costo por hora",
+        "colAgent": "Con agente",
+        "agentCell": "24 horas, sin cargas, sin vacaciones, sin ausencias",
+        "people": "{n} personas",
+        "totalLabel": "Equipo completo hecho por personas",
+        "totalNote": "{n} personas en la nómina, sumadas, por mes",
+        "yearLabel": "Por año",
+        "hourNote": "Costo por hora sobre 220 horas al mes, la jornada estándar de la CLT en Brasil.",
+        "sourcesTitle": "Fuentes",
+        "sources": "Salario promedio nacional de cada función en Salario.com.br (base Novo CAGED, de 09/2025 a 08/2026, consultado en 10/2026). SDR: Jooble (10/2026), sin código CBO propio. Cargas y costos del empleador de 68% sobre el salario, según Buk (11/2025) y Contabilizei (12/2025).",
+        "tasks": {
+            "orquestradora": [
+                "Asistente ejecutiva",
+                "Recibir pedidos, repartir tareas y cobrar entregas"
+            ],
+            "juliana-ops": [
+                "Diseñadora web",
+                "Crear landing pages, creativos y layouts"
+            ],
+            "rafael-projetos": [
+                "Gerente de proyectos",
+                "Planificar sprints y cumplir plazos"
+            ],
+            "paulo-dev": [
+                "Programador",
+                "Construir sitios, sistemas e integraciones"
+            ],
+            "jonathan-copy": [
+                "Redactor publicitario",
+                "Escribir copy, guiones y e-mails"
+            ],
+            "bianca-viral": [
+                "Social media",
+                "Analizar videos virales y armar pautas"
+            ],
+            "amanda-crm": [
+                "Analista de éxito del cliente",
+                "Cuidar embudos, conversaciones y automatizaciones"
+            ],
+            "estrategista-trafego": [
+                "Analista de tráfico",
+                "Correr y optimizar campañas pagadas"
+            ],
+            "sdr": [
+                "SDR",
+                "Atender, calificar leads y agendar reuniones"
+            ],
+            "ruth-prospeccao": [
+                "SDR de prospección",
+                "Encontrar y calentar clientes nuevos"
+            ],
+            "marcia-financeiro": [
+                "Analista financiero",
+                "Cuentas, flujo de caja e informes"
+            ],
+            "maria-tributario": [
+                "Analista tributario",
+                "Cálculo de impuestos y rutina fiscal"
+            ],
+            "aline-juridico": [
+                "Abogado",
+                "Contratos y análisis jurídico"
+            ],
+            "geane-rh": [
+                "Analista de RR. HH.",
+                "Reclutamiento, rutinas y cultura"
+            ]
+        }
+    },
+    "proof": {
+        "kicker": "Quién ya lo está usando",
+        "title": "No me creas a mí. Mira quién ya puso a los agentes a trabajar.",
+        "reseller": "Testimonio de agencia",
+        "user": "Lo que hacen los agentes",
+        "play": "Ver el testimonio de {name}",
+        "soon": "Video próximamente",
+        "people": {
+            "marcio": "Márcio",
+            "antonio": "Antônio",
+            "cadu": "Cadu",
+            "fernando": "Fernando",
+            "aluna": "Alumna del grupo de estudios"
+        },
+        "resellerSection": {
+            "kicker": "Reventa",
+            "title": "Quien ya revende Naia cuenta cómo funciona.",
+            "lead": "Márcio sumó Naia a su cartera y muestra, en la práctica, cómo es revender agentes con tu propia marca."
+        }
+    },
+    "offers": {
+        "kicker": "Elige tu camino",
+        "title": "Dos formas de poner agentes de IA a facturar por ti.",
+        "lead": "Ninguna de las dos te pide contratar a nadie. Elige una o las dos en el registro de abajo y el equipo habla contigo.",
+        "agent": {
+            "tag": "Para usar en tu negocio",
+            "title": "Tener tu propia agente Naia",
+            "body": "Tu agente con el equipo entero trabajando en tu operación. Pides en lenguaje simple, por el panel o por Telegram, y lo recibes listo.",
+            "bullets": [
+                "Orquestadora que planifica, delega y valida antes de entregar",
+                "Copy, diseño, código, tráfico y ventas por WhatsApp",
+                "Finanzas, impuestos, jurídico y RR. HH. en los niveles completos",
+                "Memoria, bóveda de contraseñas y tablero de tareas solo tuyos"
+            ],
+            "submit": "Quiero mi agente Naia"
+        },
+        "resell": {
+            "tag": "Para vender a tus clientes",
+            "title": "Convertirte en una agencia",
+            "body": "Entregas agentes de IA a tus clientes y cobras cada mes. La entrega funciona sola, tú cuidas la cartera y la recurrencia.",
+            "bullets": [
+                "Panel de reventa con tus clientes y tus ventas",
+                "Cada cliente con su propia agente, aislada de los demás",
+                "Opción con tu marca, tu dominio y tu bot",
+                "Recurrencia que crece sin aumentar tu equipo"
+            ],
+            "submit": "Quiero ser una agencia"
+        },
+        "demo": {
+            "title": "¿Prefieres verlo funcionando antes?",
+            "body": "Agenda una demostración con el equipo. Ves a Naia coordinando a los agentes en vivo y resuelves tus dudas en el momento.",
+            "cta": "Agendar demostración"
+        }
+    },
+    "form": {
+        "title": "Habla con el equipo",
+        "submit": "Enviar registro",
+        "name": "Nombre completo",
+        "email": "Tu mejor e-mail",
+        "whatsapp": "WhatsApp con código de área",
+        "whatsappHint": "Número de Brasil con código de área, por ejemplo (11) 91234-5678.",
+        "consent": "Acepto recibir contacto del equipo sobre esta solicitud, por e-mail y WhatsApp, y el uso de mis datos con ese fin, conforme a la LGPD de Brasil. Puedo pedir la eliminación en cualquier momento.",
+        "privacy": "Tus datos sirven solo para que el equipo hable contigo sobre esta solicitud. Nada se vende ni se comparte.",
+        "sending": "Enviando",
+        "demoNote": "Pediste una demostración. Llena el registro y el equipo acuerda el horario contigo.",
+        "successTitle": "Recibimos tu registro",
+        "successBody": "El equipo hablará contigo por el WhatsApp que indicaste. Mantente atento.",
+        "again": "Enviar otro registro",
+        "errors": {
+            "required": "Llena este campo.",
+            "name": "Escribe tu nombre.",
+            "email": "Revisa el e-mail.",
+            "whatsapp": "Revisa el WhatsApp: código de área y número, con 10 u 11 dígitos.",
+            "consent": "Marca el consentimiento para continuar.",
+            "rate": "Demasiados intentos ahora. Inténtalo de nuevo en unos minutos.",
+            "generic": "No se pudo enviar. Inténtalo de nuevo.",
+            "interests": "Marca al menos una opción."
+        },
+        "interests": "¿Qué quieres? Marca una o las dos.",
+        "optNaia": "Tener Mi Naia",
+        "optWhiteLabel": "Agencia de Marca Propia"
+    },
+    "faq": {
+        "kicker": "Dudas",
+        "title": "Preguntas frecuentes",
+        "items": [
+            [
+                "¿Necesito saber programar?",
+                "No. Hablas con Naia en lenguaje simple, por el panel o por Telegram, y ella coordina el resto. Cada pantalla del panel tiene un paso a paso."
+            ],
+            [
+                "¿Cuál es la diferencia entre tener la agente y ser agencia?",
+                "Con la agente, usas el equipo en tu propio negocio. Como agencia, entregas agentes a tus clientes y construyes una cartera que paga cada mes."
+            ],
+            [
+                "¿Los datos de un cliente quedan separados de los demás?",
+                "Sí. Cada cliente tiene su propia agente, su propia memoria y su propia bóveda de contraseñas, aisladas de los demás."
+            ],
+            [
+                "¿Cuánto cuesta?",
+                "Depende del tamaño de la operación y del camino que elijas. Llena el registro y el equipo te presenta la propuesta correcta."
+            ],
+            [
+                "¿El panel funciona en otros idiomas?",
+                "Sí. El panel funciona en portugués, inglés y español."
+            ],
+            [
+                "¿Cómo hablo con el equipo?",
+                "Llena uno de los registros de esta página. El equipo responde por el WhatsApp que indiques."
+            ]
+        ]
+    },
+    "final": {
+        "title": "El equipo está listo. Solo falta que decidas de qué lado de la recurrencia quieres estar.",
+        "lead": "Úsalo en tu negocio, revéndelo a tus clientes o míralo funcionando antes."
+    },
+    "footer": {
+        "rights": "© 2026 Instituto Avalanche. Todos los derechos reservados.",
+        "disclaimer": "Los valores de salario y de ahorro citados son referencias públicas de mercado. No hay promesa de facturación garantizada: el resultado depende de tu operación y de tus ventas."
+    },
+    "login": {
+        "title": "Área del cliente",
+        "subtitle": "Acceso solo para quien ya es cliente o agencia."
+    },
+    "stats": {
+        "kicker": "Números de quienes ya pusieron a Naia a trabajar",
+        "title": "No es una promesa. Es una operación funcionando.",
+        "items": {
+            "empresas": "empresas clientes ya tienen su Naia",
+            "tarefas": "tareas realizadas",
+            "tokens": "de tokens de IA",
+            "economia": "de ahorro en nómina",
+            "faturamento": "en facturación"
+        },
+        "units": {
+            "bilhoes": "mil millones",
+            "milhoes": "millones"
+        }
+    }
+}

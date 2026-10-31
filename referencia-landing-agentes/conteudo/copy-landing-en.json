@@ -1,0 +1,298 @@
+{
+    "brand": {
+        "product": "Naia OS",
+        "productMain": "Naia",
+        "productAccent": "OS",
+        "agent": "Naia"
+    },
+    "meta": {
+        "title": "Naia OS · your AI agent with a whole team working for you",
+        "description": "Get your own Naia agent with a team of AI agents that serves, sells, creates and delivers 24 hours a day, or become an agency and build recurring revenue without hiring a single new human employee."
+    },
+    "nav": {
+        "skip": "Skip to content",
+        "team": "Team",
+        "economy": "Savings",
+        "proof": "Testimonials",
+        "offers": "Offers",
+        "login": "Customer area",
+        "menu": "Open menu",
+        "closeMenu": "Close menu"
+    },
+    "hero": {
+        "kicker": "AI agents that actually work",
+        "title": "100k/month recurring using and reselling AI agents.",
+        "titleAccent": "Without hiring a single new human employee.",
+        "lead": "One agent coordinates a whole team: copy, design, code, paid ads, WhatsApp sales, finance, tax, legal and HR. Use it in your business, resell it to your clients, or do both.",
+        "ctaAgent": "I want my own Naia agent",
+        "ctaResell": "I want to be an agency",
+        "ctaDemo": "Book a demo with the team",
+        "videoLabel": "Watch before you decide",
+        "play": "Play the video",
+        "videoSoon": "The video is on its way. Meanwhile, scroll down and watch the team at work.",
+        "trust": [
+            "Works 24 hours, never misses a day, never late, never asks for a raise",
+            "Every client gets their own agent, isolated and secure"
+        ]
+    },
+    "letter": {
+        "kicker": "Open letter",
+        "title": "I also thought an AI agent was just a chatbot with a nice name.",
+        "paragraphs": [
+            "For years I did what every business owner does. I hired, trained, paid payroll taxes, covered absences and redid the work that came back wrong. Every extra real of revenue asked for one more person on payroll. Growing meant having more people to manage.",
+            "Then I saw something that changed the math. A single agent taking the request in plain language, breaking it into tasks, calling the right specialist and handing it back done. The copy came from Jonathan. The page went live with Paulo. The lead was qualified on WhatsApp by Davi while I was asleep.",
+            "I did not believe it on day one. I tested it in my own business, with my own money and my own clients. What I saw was the work I would pay a whole team for coming out ready, without opening a single new position."
+        ],
+        "pull": "The phenomenon is not AI writing a text. It is a whole team working together, 24 hours a day, without you becoming a people manager.",
+        "blocksTitle": "Why this turns into recurring revenue",
+        "blocks": [
+            {
+                "title": "You stop paying payroll to grow",
+                "body": "Copy, design, code, ads, support, finance, tax, legal and HR become agents. The bill that went up with every hire stays flat while revenue moves."
+            },
+            {
+                "title": "You sell what you already use",
+                "body": "Every business you serve needs the same team. As an agency, you deliver the agent to your clients and charge every month. Each new client adds to recurring revenue, not to your workload."
+            },
+            {
+                "title": "The R$ 100k math works without a team",
+                "body": "High recurring revenue does not come from one giant client. It comes from many clients paying every month for a service that runs by itself. The agents handle delivery, you handle sales."
+            }
+        ],
+        "closing": "I will not ask you to believe me. I will show you the team at work, what each role costs when done by people and who is already using it. Then you decide.",
+        "signature": "Denderson Rodrigues",
+        "signatureRole": "CEO of Instituto Avalanche"
+    },
+    "crew": {
+        "kicker": "Naia in command",
+        "title": "Naia orchestrates. The whole team works together.",
+        "alt": "Naia at the center of a command room, orchestrating the team of AI agents, each one working at their station",
+        "flowAlt": "Marketing flow with Naia's team: from the funnel to the close"
+    },
+    "team": {
+        "kicker": "Team Naia",
+        "title": "One agent coordinates. The whole team delivers.",
+        "lead": "Naia is the only one who talks to you. She takes the request, hands it to the right specialist, follows up and only delivers when it is done. Click any agent to see the full résumé.",
+        "groupAlt": "Naia coordinating the team of agents",
+        "orchestrator": "Team orchestrator",
+        "open": "See résumé",
+        "count": "{n} specialists working under Naia's command",
+        "close": "Close"
+    },
+    "economy": {
+        "kicker": "Savings",
+        "title": "What each task costs when done by people. And what is left with an agent.",
+        "lead": "Each agent does the work of a role that is on payroll today. Below is the Brazilian average salary for each role, plus the CLT employer costs. That is what you stop paying every month.",
+        "colRole": "Role",
+        "colTask": "Task",
+        "colSalary": "Average salary",
+        "colTotal": "Total cost per month",
+        "colHour": "Cost per hour",
+        "colAgent": "With an agent",
+        "agentCell": "24 hours, no payroll tax, no vacation, no absences",
+        "people": "{n} people",
+        "totalLabel": "Whole team done by people",
+        "totalNote": "{n} people on payroll, added up, per month",
+        "yearLabel": "Per year",
+        "hourNote": "Hourly cost based on 220 hours a month, the standard CLT workload in Brazil.",
+        "sourcesTitle": "Sources",
+        "sources": "Brazilian national average salary for each role at Salario.com.br (Novo CAGED data, 09/2025 to 08/2026, retrieved 10/2026). SDR: Jooble (10/2026), as there is no dedicated CBO code. Employer taxes and costs of 68% on top of salary, according to Buk (11/2025) and Contabilizei (12/2025).",
+        "tasks": {
+            "orquestradora": [
+                "Executive assistant",
+                "Take requests, assign tasks and chase deliveries"
+            ],
+            "juliana-ops": [
+                "Web designer",
+                "Create landing pages, ads and layouts"
+            ],
+            "rafael-projetos": [
+                "Project manager",
+                "Plan sprints and keep deadlines"
+            ],
+            "paulo-dev": [
+                "Developer",
+                "Build websites, systems and integrations"
+            ],
+            "jonathan-copy": [
+                "Copywriter",
+                "Write copy, scripts and emails"
+            ],
+            "bianca-viral": [
+                "Social media",
+                "Analyze viral videos and plan content"
+            ],
+            "amanda-crm": [
+                "Customer success analyst",
+                "Run funnels, conversations and automations"
+            ],
+            "estrategista-trafego": [
+                "Paid ads analyst",
+                "Run and optimize paid campaigns"
+            ],
+            "sdr": [
+                "SDR",
+                "Answer, qualify leads and book meetings"
+            ],
+            "ruth-prospeccao": [
+                "Prospecting SDR",
+                "Find and warm up new clients"
+            ],
+            "marcia-financeiro": [
+                "Financial analyst",
+                "Bills, cash flow and reports"
+            ],
+            "maria-tributario": [
+                "Tax analyst",
+                "Tax calculation and compliance routine"
+            ],
+            "aline-juridico": [
+                "Lawyer",
+                "Contracts and legal review"
+            ],
+            "geane-rh": [
+                "HR analyst",
+                "Recruiting, routines and culture"
+            ]
+        }
+    },
+    "proof": {
+        "kicker": "Who is already using it",
+        "title": "Do not take my word for it. See who already put the agents to work.",
+        "reseller": "Agency testimonial",
+        "user": "What the agents do",
+        "play": "Play {name}'s testimonial",
+        "soon": "Video coming soon",
+        "people": {
+            "marcio": "Márcio",
+            "antonio": "Antônio",
+            "cadu": "Cadu",
+            "fernando": "Fernando",
+            "aluna": "Study group member"
+        },
+        "resellerSection": {
+            "kicker": "Resale",
+            "title": "Someone already reselling Naia explains how it works.",
+            "lead": "Márcio added Naia to his portfolio and shows, in practice, what reselling agents under your own brand looks like."
+        }
+    },
+    "offers": {
+        "kicker": "Choose your path",
+        "title": "Two ways to put AI agents to make money for you.",
+        "lead": "Neither one asks you to hire anyone. Pick one or both in the form below and the team will reach out.",
+        "agent": {
+            "tag": "To use in your business",
+            "title": "Get your own Naia agent",
+            "body": "Your agent with the whole team working in your operation. You ask in plain language, in the panel or on Telegram, and get it done.",
+            "bullets": [
+                "Orchestrator that plans, delegates and checks before delivering",
+                "Copy, design, code, ads and WhatsApp sales",
+                "Finance, tax, legal and HR on the full levels",
+                "Memory, password vault and task board that are yours alone"
+            ],
+            "submit": "I want my own Naia agent"
+        },
+        "resell": {
+            "tag": "To sell to your clients",
+            "title": "Become an agency",
+            "body": "You deliver AI agents to your clients and charge every month. Delivery runs by itself, you take care of the portfolio and the recurring revenue.",
+            "bullets": [
+                "Agency panel with your clients and your sales",
+                "Every client with their own agent, isolated from the others",
+                "Option with your brand, your domain and your bot",
+                "Recurring revenue that grows without growing your team"
+            ],
+            "submit": "I want to be an agency"
+        },
+        "demo": {
+            "title": "Rather see it working first?",
+            "body": "Book a demo with the team. You watch Naia coordinating the agents live and get your questions answered on the spot.",
+            "cta": "Book a demo"
+        }
+    },
+    "form": {
+        "title": "Talk to the team",
+        "submit": "Send",
+        "name": "Full name",
+        "email": "Your best email",
+        "whatsapp": "WhatsApp with area code",
+        "whatsappHint": "Brazilian number with area code, for example (11) 91234-5678.",
+        "consent": "I agree to be contacted by the team about this request, by email and WhatsApp, and to the use of my data for that purpose, under Brazil's LGPD. I can ask for deletion at any time.",
+        "privacy": "Your data is used only for the team to talk to you about this request. Nothing is sold or shared.",
+        "sending": "Sending",
+        "demoNote": "You asked for a demo. Fill this in and the team will set a time with you.",
+        "successTitle": "We got your details",
+        "successBody": "The team will reach out on the WhatsApp number you gave us. Keep an eye on it.",
+        "again": "Send another form",
+        "errors": {
+            "required": "Fill in this field.",
+            "name": "Write your name.",
+            "email": "Check the email.",
+            "whatsapp": "Check the WhatsApp: area code and number, 10 or 11 digits.",
+            "consent": "Check the consent box to continue.",
+            "rate": "Too many attempts right now. Try again in a few minutes.",
+            "generic": "Could not send. Try again.",
+            "interests": "Tick at least one option."
+        },
+        "interests": "What do you want? Tick one or both.",
+        "optNaia": "Have My Own Naia",
+        "optWhiteLabel": "Private Label Agency"
+    },
+    "faq": {
+        "kicker": "Questions",
+        "title": "Frequently asked questions",
+        "items": [
+            [
+                "Do I need to know how to code?",
+                "No. You talk to Naia in plain language, in the panel or on Telegram, and she coordinates the rest. Every screen of the panel has a step by step."
+            ],
+            [
+                "What is the difference between having the agent and being an agency?",
+                "With the agent, you use the team in your own business. As an agency, you deliver agents to your clients and build a portfolio that pays every month."
+            ],
+            [
+                "Is each client's data kept apart from the others?",
+                "Yes. Each client has their own agent, their own memory and their own password vault, isolated from everyone else."
+            ],
+            [
+                "How much does it cost?",
+                "It depends on the size of the operation and the path you choose. Fill in the form and the team will present the right proposal for you."
+            ],
+            [
+                "Does the panel work in other languages?",
+                "Yes. The panel works in Portuguese, English and Spanish."
+            ],
+            [
+                "How do I talk to the team?",
+                "Fill in one of the forms on this page. The team answers on the WhatsApp number you provide."
+            ]
+        ]
+    },
+    "final": {
+        "title": "The team is ready. You only need to decide which side of recurring revenue you want to be on.",
+        "lead": "Use it in your business, resell it to your clients or see it working first."
+    },
+    "footer": {
+        "rights": "© 2026 Instituto Avalanche. All rights reserved.",
+        "disclaimer": "The salary and savings figures shown are public market references. There is no promise of guaranteed revenue: results depend on your operation and your sales."
+    },
+    "login": {
+        "title": "Customer area",
+        "subtitle": "Access only for existing customers and agencies."
+    },
+    "stats": {
+        "kicker": "Numbers from the people who already put Naia to work",
+        "title": "Not a promise. A running operation.",
+        "items": {
+            "empresas": "client companies already have their own Naia",
+            "tarefas": "tasks completed",
+            "tokens": "AI tokens",
+            "economia": "saved on payroll",
+            "faturamento": "in revenue"
+        },
+        "units": {
+            "bilhoes": "billion",
+            "milhoes": "million"
+        }
+    }
+}
