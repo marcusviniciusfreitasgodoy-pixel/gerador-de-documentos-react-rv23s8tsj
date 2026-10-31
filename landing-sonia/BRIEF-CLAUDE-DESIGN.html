@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brief para o Claude Design: landing SONIA</title>
+<style>
+body{margin:0;background:#f3ead8;color:#142030;font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:32px auto;padding:36px 40px;background:#fbf7ef;border:2px solid #142030;border-radius:16px;box-shadow:6px 6px 0 #142030}
+h1{font-size:30px;line-height:1.15;margin:0 0 16px;color:#13263b} h2{font-size:21px;margin:34px 0 10px;color:#13263b;border-bottom:2px solid #c8a24a;padding-bottom:6px}
+code{background:#eef3f7;border:1px solid #d6dde5;border-radius:5px;padding:1px 5px;font-size:.9em}
+li{margin-bottom:6px}
+.prompt{border:2px solid #142030;border-radius:12px;overflow:hidden;margin:16px 0;background:#fff}
+.prompt-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#13263b;color:#fbf7ef;padding:10px 14px;font-weight:700}
+.prompt-cab button{font:inherit;font-weight:700;background:#c8a24a;color:#142030;border:2px solid #142030;border-radius:8px;padding:8px 14px;cursor:pointer;min-height:40px}
+blockquote{margin:0;padding:6px 20px 14px}
+@media (max-width:640px){main{margin:0;border-radius:0;padding:22px 18px;box-shadow:none;border-width:0}}
+</style></head><body><main>
+<h1>Brief para o Claude Design: landing SONIA</h1>
+<p>Use este arquivo se quiser explorar outro visual no Claude Design. A página funcional já existe nesta pasta (<code>index.html</code> + <code>conteudo.json</code> + <code>editor.html</code>). O ideal é usar o Claude Design para <strong>o visual</strong> e trazer o resultado de volta para cá, para manter a edição pelo <code>conteudo.json</code>.</p>
+<h2>O que anexar no Claude Design</h2>
+<ol>
+<li>Este arquivo.</li>
+<li><code>conteudo.json</code>: todo o texto da página, já revisado.</li>
+<li>Imagens de <code>assets/agentes/</code>: pelo menos <code>avatar-sonia.webp</code> (orquestradora) e uns 8 retratos do time. São ilustrações 3D, 480x480, todas no mesmo escritório.</li>
+<li><code>assets/og-sonia.jpg</code> e um print da versão atual (<code>referencia-landing-agentes/screenshots/landing-sonia-1440.jpg</code>) como ponto de partida, se quiser evoluir em vez de recomeçar.</li>
+</ol>
+<h2>Prompt (copie e cole)</h2>
+<div class="prompt"><div class="prompt-cab"><span>Prompt para colar no Claude Design</span><button id="copiar">Copiar prompt</button></div><blockquote><p>Crie uma landing page de vendas, em português do Brasil, para a <strong>SONIA</strong> (Sistema Operacional de Negócios com Inteligência Artificial), produto da <strong>Prime Circle</strong>.</p>
+<p><strong>O que é:</strong> a Sônia é uma agente de IA que coordena um time de 21 especialistas de IA (copy, design, código, tráfego pago, vendas no WhatsApp, financeiro, tributário, jurídico e RH). O cliente pede em português, pelo painel ou pelo Telegram, e recebe o trabalho pronto.</p>
+<p><strong>Público:</strong> donos de pequenas e médias empresas de qualquer segmento, sem conhecimento técnico, desconfiados de promessa de IA. Querem saber o que recebem e quanto custa.</p>
+<p><strong>Objetivo da página:</strong> levar à assinatura de um dos 3 planos anuais ou ao formulário de contato (que abre conversa no WhatsApp).</p>
+<p><strong>Seções, nesta ordem</strong> (todo o texto está no <code>conteudo.json</code> anexo; use exatamente esse texto):</p>
+<ol>
+<li>Topo fixo: logo "SONIA" (o "IA" em dourado) com "por Prime Circle", menu, botões "Área do cliente" e "Falar com o time".</li>
+<li>Abertura: título com parte em destaque, texto, 2 botões, retrato da Sônia, um balão de "Exemplo de conversa no Telegram" e 3 selos.</li>
+<li>Sigla: as 5 letras S O N I A com a palavra de cada uma.</li>
+<li>Como funciona: 4 passos numerados.</li>
+<li>Time: a Sônia em destaque e uma grade de 21 cards (foto, área, nome, cargo, resumo, "Ver currículo"). Cada card abre um modal com o currículo completo.</li>
+<li>Economia: 2 totais grandes e uma tabela de 14 funções (salário, custo com encargos, custo por hora, "24/7" na coluna "Com agente"), com fontes no rodapé.</li>
+<li>Por que contratar com a Prime Circle: 3 cards.</li>
+<li>Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento e lista de itens.</li>
+<li>Formulário: nome, e-mail, WhatsApp, interesse (opções), consentimento LGPD obrigatório.</li>
+<li>Perguntas frequentes (acordeão).</li>
+<li>Chamada final e rodapé com aviso legal.</li>
+</ol>
+<p><strong>Visual atual (pode evoluir):</strong> blocos com borda escura de 2 px e sombra deslocada sólida; azul marinho <code>#13263b</code>, papel creme <code>#fbf7ef</code> / <code>#f3ead8</code>, dourado <code>#c8a24a</code>, botão coral <code>#e2574c</code>, tinta <code>#142030</code>. Títulos em Bricolage Grotesque, texto em DM Sans.</p>
+<p><strong>Regras obrigatórias:</strong></p>
+<ul>
+<li>Nenhum travessão (— ou –) em texto visível. Use dois-pontos, vírgula ou ponto.</li>
+<li>Nada de promessa de resultado garantido, números de clientes ou depoimentos inventados.</li>
+<li>Nada de animação que esconda conteúdo (opacity 0) até rolar: a página tem de aparecer inteira mesmo se o script falhar.</li>
+<li>Responsiva de 390 px a 1440 px, sem rolagem horizontal. A tabela pode rolar dentro do card.</li>
+<li>Contraste AA, botões com no mínimo 44 px de altura no celular.</li>
+<li>Todo o texto deve vir de um único objeto de dados (a estrutura do <code>conteudo.json</code>), não espalhado no HTML, para que os textos e preços possam ser editados sem mexer no layout.</li>
+</ul></blockquote></div>
+<h2>O que fica de fora do Claude Design</h2>
+<ul>
+<li><strong>Editor</strong> (<code>editor.html</code>), cálculo automático da economia, envio do formulário para o WhatsApp e prévia ao vivo: já funcionam aqui e não precisam ser refeitos.</li>
+<li><strong>Links de checkout:</strong> ficam vazios até você criar os novos (o botão leva ao formulário).</li>
+</ul>
+</main>
+<textarea id="prompt-texto" hidden>Crie uma landing page de vendas, em português do Brasil, para a **SONIA** (Sistema Operacional de Negócios com Inteligência Artificial), produto da **Prime Circle**.
+
+**O que é:** a Sônia é uma agente de IA que coordena um time de 21 especialistas de IA (copy, design, código, tráfego pago, vendas no WhatsApp, financeiro, tributário, jurídico e RH). O cliente pede em português, pelo painel ou pelo Telegram, e recebe o trabalho pronto.
+
+**Público:** donos de pequenas e médias empresas de qualquer segmento, sem conhecimento técnico, desconfiados de promessa de IA. Querem saber o que recebem e quanto custa.
+
+**Objetivo da página:** levar à assinatura de um dos 3 planos anuais ou ao formulário de contato (que abre conversa no WhatsApp).
+
+**Seções, nesta ordem** (todo o texto está no `conteudo.json` anexo; use exatamente esse texto):
+1. Topo fixo: logo &quot;SONIA&quot; (o &quot;IA&quot; em dourado) com &quot;por Prime Circle&quot;, menu, botões &quot;Área do cliente&quot; e &quot;Falar com o time&quot;.
+2. Abertura: título com parte em destaque, texto, 2 botões, retrato da Sônia, um balão de &quot;Exemplo de conversa no Telegram&quot; e 3 selos.
+3. Sigla: as 5 letras S O N I A com a palavra de cada uma.
+4. Como funciona: 4 passos numerados.
+5. Time: a Sônia em destaque e uma grade de 21 cards (foto, área, nome, cargo, resumo, &quot;Ver currículo&quot;). Cada card abre um modal com o currículo completo.
+6. Economia: 2 totais grandes e uma tabela de 14 funções (salário, custo com encargos, custo por hora, &quot;24/7&quot; na coluna &quot;Com agente&quot;), com fontes no rodapé.
+7. Por que contratar com a Prime Circle: 3 cards.
+8. Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento e lista de itens.
+9. Formulário: nome, e-mail, WhatsApp, interesse (opções), consentimento LGPD obrigatório.
+10. Perguntas frequentes (acordeão).
+11. Chamada final e rodapé com aviso legal.
+
+**Visual atual (pode evoluir):** blocos com borda escura de 2 px e sombra deslocada sólida; azul marinho `#13263b`, papel creme `#fbf7ef` / `#f3ead8`, dourado `#c8a24a`, botão coral `#e2574c`, tinta `#142030`. Títulos em Bricolage Grotesque, texto em DM Sans.
+
+**Regras obrigatórias:**
+- Nenhum travessão (— ou –) em texto visível. Use dois-pontos, vírgula ou ponto.
+- Nada de promessa de resultado garantido, números de clientes ou depoimentos inventados.
+- Nada de animação que esconda conteúdo (opacity 0) até rolar: a página tem de aparecer inteira mesmo se o script falhar.
+- Responsiva de 390 px a 1440 px, sem rolagem horizontal. A tabela pode rolar dentro do card.
+- Contraste AA, botões com no mínimo 44 px de altura no celular.
+- Todo o texto deve vir de um único objeto de dados (a estrutura do `conteudo.json`), não espalhado no HTML, para que os textos e preços possam ser editados sem mexer no layout.</textarea>
+<script>
+document.getElementById("copiar").addEventListener("click",function(){
+  var t=document.getElementById("prompt-texto").value,b=this;
+  function ok(){b.textContent="Copiado";setTimeout(function(){b.textContent="Copiar prompt"},2000)}
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(ok)}
+  else{var a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();ok()}
+});
+</script></body></html>
