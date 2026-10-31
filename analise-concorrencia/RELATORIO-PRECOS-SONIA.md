@@ -263,3 +263,33 @@ também para os 7 dias de arrependimento do CDC, que existem com ou sem garantia
 
 - A frase sobre custos à parte chegou cortada: "Os custos com a contrataç…".
 - No Asaas, os juros do parcelamento ficam com o cliente ou com você?
+
+---
+
+## 8. Atualização: custos à parte e juros do cartão
+
+**Custos à parte (informado em 31/10/2026):** a conta da IA (Claude, ChatGPT ou outra) e
+qualquer ferramenta ou serviço conectado aos agentes são contratados e pagos pelo cliente.
+
+- **[Certo] Isso põe a SONIA no mesmo modelo da Simbiose**, que lista "processamento de IA" e
+  tarifas de WhatsApp como custos à parte. A diferença é que a Simbiose diz isso na página de
+  planos. A landing passou a dizer também: nota abaixo dos planos, item em cada plano e uma
+  pergunta nova no FAQ.
+- **[Provável] Configurar a conta da IA é uma barreira técnica** para o dono de empresa sem
+  conhecimento de tecnologia (criar conta, gerar chave, colocar cartão internacional). É mais
+  um motivo para a sessão coletiva de implantação no Starter e no Elite.
+- **[Chutando] Quanto o cliente vai gastar de IA por mês?** Depende do uso. Peça à Avalanche
+  um consumo típico por plano. Sem esse número, o cliente não consegue calcular o custo total,
+  e o "R$ 416 por mês" da página fica incompleto.
+- **[Chutando] "Funciona com ChatGPT" quer dizer chave de API ou assinatura do ChatGPT?** São
+  custos e processos diferentes. Confirme com a Avalanche e ajuste o texto dos planos.
+
+**Juros do cartão:** você ainda não sabe, mas o checkout atual já mostra a resposta.
+
+- **[Certo] Hoje o cliente paga os juros.** O checkout exibe "12x de R$ 129,97 com juros (total
+  R$ 1.559,64)" para um plano de R$ 1.497: cerca de 4,2% a mais em 12 vezes.
+- **[Certo] Isso cria uma limitação para o desconto à vista.** O checkout tem um preço só por
+  link: o Pix cobra esse preço e o cartão soma os juros. Para ter Pix 16% mais barato que o
+  cartão, a plataforma precisa permitir um preço diferente por forma de pagamento, ou um link
+  só para Pix e outro só para cartão. Dois links sem essa restrição não resolvem: o cliente
+  pagaria o link mais barato no cartão. **Pergunte à Avalanche se a plataforma permite isso.**

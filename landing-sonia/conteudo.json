@@ -1893,7 +1893,7 @@
         "pessoas": 1
       }
     ],
-    "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT.",
+    "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT. A comparação não inclui o custo da conta de IA, que é contratada à parte.",
     "fontes": "Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026, consultados em 10/2026). SDR: Jooble (10/2026), por não haver CBO própria. Encargos e custos do empregador de 68% sobre o salário, segundo Buk (11/2025) e Contabilizei (12/2025)."
   },
   "diferenciais": {
@@ -1947,7 +1947,7 @@
         "itens": [
           "5 agentes liberados",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
-          "Cérebro ChatGPT"
+          "Funciona com ChatGPT (conta de IA contratada por você)"
         ],
         "botao": {
           "texto": "Assinar agora",
@@ -1964,7 +1964,7 @@
         "itens": [
           "16 agentes liberados",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
-          "Cérebro Claude e ChatGPT",
+          "Funciona com Claude ou ChatGPT (conta de IA contratada por você)",
           "Acesso à comunidade de estudos de IA"
         ],
         "botao": {
@@ -1982,7 +1982,7 @@
         "itens": [
           "Os 22 agentes liberados",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
-          "Cérebro Claude",
+          "Funciona com Claude (conta de IA contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
           "4 mentorias individuais de 1 hora com a Prime Circle",
           "Suporte humano pelo WhatsApp",
@@ -1994,7 +1994,7 @@
         }
       }
     ],
-    "nota": "",
+    "nota": "Não estão incluídos no preço: a conta da IA (ChatGPT, Claude ou outra), que você contrata e paga direto ao fornecedor, e qualquer ferramenta ou serviço que você queira conectar aos agentes, como a API oficial do WhatsApp.",
     "_aviso": "Cole no campo Link de cada plano o endereço do checkout. Vazio: o botão leva ao formulário de contato."
   },
   "agencia": {
@@ -2075,7 +2075,11 @@
       },
       {
         "pergunta": "Quanto custa?",
-        "resposta": "Os planos estão nesta página e são anuais, com Pix à vista ou cartão em até 12 vezes. O que muda entre eles é quantos agentes ficam liberados e quantas rotinas automáticas você pode ter."
+        "resposta": "Os planos são anuais, com Pix à vista ou cartão em até 12 vezes. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria com a Prime Circle. A conta da IA é contratada à parte."
+      },
+      {
+        "pergunta": "O que não está incluído no preço?",
+        "resposta": "A conta da inteligência artificial que os agentes usam (ChatGPT, Claude ou outra), que você contrata e paga direto ao fornecedor, e qualquer outra ferramenta ou serviço que você queira conectar, como a API oficial do WhatsApp. O valor da conta de IA depende de quanto você usa."
       },
       {
         "pergunta": "O painel funciona em outros idiomas?",
