@@ -345,3 +345,45 @@ ChatGPT Plus US$ 20, Pro US$ 100 ou US$ 200.
   30% à Avalanche. Nesse caso, a nota fiscal provavelmente é sua e a taxa da Hubla sai da sua
   parte. Confirme com o seu contador e com a Avalanche se os 30% incidem sobre o valor bruto ou
   líquido de taxas.
+
+---
+
+## 10. Atualização: respostas da Avalanche (31/10/2026)
+
+| Pergunta | Resposta | Consequência |
+|---|---|---|
+| Como o Claude é conectado? | Sempre por assinatura (OAuth) | **Claude retirado dos planos na landing.** É o uso que os termos da Anthropic proíbem em produtos de terceiros. |
+| Reembolso devolve os 30%? | O link de pagamento já separa 70/30 | Separar no pagamento não responde o reembolso. Ver abaixo. |
+| Quem emite a nota fiscal? | Você, pelo seu entendimento | Confirmar com o contador. Ver abaixo. |
+| Juros do parcelamento | Pagos pelo cliente | Bate com o checkout atual (cerca de 4,2% em 12x). |
+| Plano mínimo de IA | US$ 20 por mês, conforme o uso | Custo total abaixo. |
+
+### Custo total para o cliente com IA de US$ 20
+
+| Plano | SONIA + IA de US$ 20 | Comparação |
+|---|---|---|
+| Starter | cerca de R$ 530/mês | Abaixo do NeoCRM Starter (R$ 597) |
+| Elite | cerca de R$ 780/mês | Abaixo do NeoCRM Pro (R$ 897), com 4x mais agentes |
+| Magnata | cerca de R$ 1.447/mês | Abaixo do NeoCRM Enterprise (R$ 1.500), com mentoria |
+
+**[Provável] Com IA de US$ 20, o posicionamento de preço se mantém** abaixo da NeoSale em
+todos os planos. A ressalva é o uso: o plano de US$ 20 tem limite, e um time de 16 ou 22
+agentes rodando rotinas pode esgotá-lo. Diga isso na venda ("pode precisar de um plano maior
+se o uso for alto"), como a página já faz.
+
+### O que ainda está em aberto
+
+1. **[Chutando] Reembolso com split.** O split separa os 70/30 na entrada do dinheiro. A
+   pergunta é o que acontece na saída: se o cliente pedir reembolso, a plataforma estorna os
+   30% da Avalanche junto, ou estorna tudo da sua parte? Pergunte com essas palavras.
+2. **[Provável] Asaas ou Hubla?** O checkout da Avalanche que testamos diz "Pagamento
+   processado pelo Asaas". Se você também vai usar a Hubla, são dois meios de pagamento com
+   regras diferentes. Defina um só para a landing.
+3. **[Chutando] Nota fiscal com split.** Se 30% vai direto para a Avalanche, o seu contador
+   precisa dizer se a sua nota é sobre o valor total ou só sobre os seus 70%. Isso muda o
+   imposto.
+4. **Desconto à vista.** Com um preço só por link e juros pagos pelo cliente, a diferença
+   entre Pix e cartão fica nos 4,2% dos juros. Uma alternativa que não depende do checkout:
+   **dar um bônus no Pix em vez de desconto**, por exemplo uma sessão individual de implantação
+   de 1 hora para quem paga à vista. Custa uma hora sua, não mexe no preço e cria o incentivo
+   que o desconto de 4% não cria.

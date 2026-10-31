@@ -1964,7 +1964,7 @@
         "itens": [
           "16 agentes liberados",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
-          "Funciona com Claude ou ChatGPT (assinatura paga da IA, contratada por você)",
+          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Acesso à comunidade de estudos de IA"
         ],
         "botao": {
@@ -1982,7 +1982,7 @@
         "itens": [
           "Os 22 agentes liberados",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
-          "Funciona com Claude (assinatura paga da IA, contratada por você)",
+          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
           "4 mentorias individuais de 1 hora com a Prime Circle",
           "Suporte humano pelo WhatsApp",
@@ -1994,9 +1994,9 @@
         }
       }
     ],
-    "nota": "Não estão incluídos no preço: a assinatura da IA (ChatGPT, Claude ou outra), que você contrata e paga direto ao fornecedor, e qualquer ferramenta ou serviço que você queira conectar aos agentes, como a API oficial do WhatsApp. Recomendamos um plano pago da IA.",
+    "nota": "Não estão incluídos no preço: a assinatura da IA, que você contrata e paga direto ao fornecedor, e qualquer ferramenta ou serviço que você queira conectar aos agentes, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês, conforme o seu uso.",
     "_aviso": "Cole no campo Link de cada plano o endereço do checkout. Vazio: o botão leva ao formulário de contato.",
-    "_aviso_claude": "ANTES DE PUBLICAR: confirme com a Avalanche como o Claude é conectado. Desde fevereiro de 2026, os termos da Anthropic proíbem usar assinatura Claude Pro ou Max em produtos de terceiros; o caminho permitido é chave de API, cobrada por uso. Se a conexão for pela assinatura, tire o Claude dos planos."
+    "_aviso_claude": "Claude retirado dos planos em 31/10/2026: a Avalanche conecta o Claude por assinatura (OAuth), e os termos de consumidor da Anthropic proíbem esse uso em produtos de terceiros. Só volte a citar o Claude se a conexão passar a ser por chave de API."
   },
   "agencia": {
     "visivel": false,
@@ -2080,7 +2080,7 @@
       },
       {
         "pergunta": "O que não está incluído no preço?",
-        "resposta": "A assinatura da inteligência artificial que os agentes usam (ChatGPT, Claude ou outra), que você contrata e paga direto ao fornecedor, e qualquer outra ferramenta ou serviço que você queira conectar, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, porque os planos gratuitos têm limite de uso baixo para um time inteiro trabalhando."
+        "resposta": "A assinatura da inteligência artificial que os agentes usam, que você contrata e paga direto ao fornecedor, e qualquer outra ferramenta ou serviço que você queira conectar, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês. Se o seu uso for alto, pode valer um plano maior."
       },
       {
         "pergunta": "O painel funciona em outros idiomas?",
