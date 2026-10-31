@@ -91,13 +91,18 @@ da orquestradora é Sônia. O resto dos currículos é idêntico.
 
 ## Alertas antes de reaproveitar
 
-1. **As imagens não são da Prime Circle.** São da Naia OS / Instituto Avalanche. A orquestradora
+1. **Arte de origem Avalanche.** Uso coberto pela revenda autorizada white-label (informado pelo
+   dono em 31/10/2026). Ponto que sobra é de marca, não de direito: a orquestradora
    Naia (ruiva, centro de `time-naia.webp`) e a **Juliana** (primeiro card da grade, inclusive na
-   Prime Circle) usam moletom vermelho com um "A" dourado (logo Avalanche). Confira no contrato de agência se o uso fora do painel white-label (numa landing própria, em
-   anúncio) está liberado.
+   Prime Circle) usam moletom vermelho com um "A" dourado (logo Avalanche), o que contradiz a
+   marca própria. Vale pedir à Avalanche versões sem o "A" ou retocar.
 2. **Vazamento da marca original na versão Prime Circle:** o plano Elite promete "Acesso à
    Comunidade de Estudos de IA Avalanche".
 3. **Logo da Prime Circle quase invisível:** `logo.png` tem texto creme e dourado, feito para fundo
    escuro, mas o cabeçalho da landing é creme. Veja `screenshots/primecircle-agentes-1440.jpg`.
-4. Os números da Naia (+7.000 empresas, R$ 25 mi) são da Naia. Não podem ser usados como da Prime Circle.
+4. Os números da Naia (+7.000 empresas, R$ 25 mi) são da plataforma, não da Prime Circle. Só
+   use atribuídos à plataforma ("a tecnologia por trás da Sônia já roda em +7.000 empresas") e
+   com autorização escrita da Avalanche.
+6. Público: esta página é para qualquer empresa. Uma página específica para o mercado imobiliário
+   virá depois.
 5. As capas de depoimento são de pessoas reais. Não reutilize sem autorização delas.
