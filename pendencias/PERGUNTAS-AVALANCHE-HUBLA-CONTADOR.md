@@ -85,6 +85,10 @@ e-mail de quem responde. As marcadas com ⚠️ **travam a venda** (ou a página
 >    serviço de implantação e mentoria)? Faz diferença separar a mentoria do Magnata na nota?
 > 3. Se o cliente pedir reembolso, como fica a nota (cancelamento ou nota de devolução)?
 > 4. Preciso de algum contrato ou termo de uso próprio com o cliente final?
+> 5. ⚠️ O meu CNPJ (58.409.058/0001-73) tem como atividade principal a corretagem de imóveis.
+>    Preciso incluir CNAEs secundários para vender licença de software e mentoria (por exemplo
+>    6203-1/00, licenciamento de programas não customizáveis, e 8599-6/04, treinamento)? Isso
+>    muda o anexo do Simples Nacional e a alíquota?
 
 ---
 

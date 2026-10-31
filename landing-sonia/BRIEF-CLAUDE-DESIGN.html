@@ -18,9 +18,9 @@ blockquote{margin:0;padding:6px 20px 14px}
 <h2>O que anexar no Claude Design</h2>
 <ol>
 <li>Este arquivo.</li>
-<li><code>conteudo.json</code>: todo o texto da página, já revisado.</li>
-<li>Imagens de <code>assets/agentes/</code>: pelo menos <code>avatar-sonia.webp</code> (orquestradora) e uns 8 retratos do time. São ilustrações 3D, 480x480, todas no mesmo escritório.</li>
-<li><code>assets/og-sonia.jpg</code> e um print da versão atual (<code>referencia-landing-agentes/screenshots/landing-sonia-1440.jpg</code>) como ponto de partida, se quiser evoluir em vez de recomeçar.</li>
+<li><code>conteudo.json</code>: todo o texto da página, já revisado (versão sem as anotações internas).</li>
+<li>A pasta <code>assets/agentes/</code> com os 22 retratos (<code>avatar-sonia.webp</code> é a orquestradora). São ilustrações 3D, 480x480, todas no mesmo escritório. O campo <code>imagem</code> de cada agente no <code>conteudo.json</code> aponta para o arquivo certo.</li>
+<li>Os prints da versão atual (<code>prints/</code>), a 1440 px e a 390 px, como ponto de partida.</li>
 </ol>
 <h2>Prompt (copie e cole)</h2>
 <div class="prompt"><div class="prompt-cab"><span>Prompt para colar no Claude Design</span><button id="copiar">Copiar prompt</button></div><blockquote><p>Crie uma landing page de vendas, em português do Brasil, para a <strong>SONIA</strong> (Sistema Operacional de Negócios com Inteligência Artificial), produto da <strong>Prime Circle</strong>.</p>
@@ -35,17 +35,19 @@ blockquote{margin:0;padding:6px 20px 14px}
 <li>Como funciona: 4 passos numerados.</li>
 <li>Time: a Sônia em destaque e uma grade de 21 cards (foto, área, nome, cargo, resumo, "Ver currículo"). Cada card abre um modal com o currículo completo.</li>
 <li>Economia: 2 totais grandes e uma tabela de 14 funções (salário, custo com encargos, custo por hora, "24/7" na coluna "Com agente"), com fontes no rodapé.</li>
-<li>Por que contratar com a Prime Circle: 3 cards.</li>
-<li>Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento e lista de itens.</li>
+<li>Por que contratar com a Prime Circle: 4 cards (implantação ao vivo toda semana, mentoria e suporte no Magnata, garantia de 30 dias, revenda autorizada).</li>
+<li>Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento com juros, lista de itens e, abaixo dos cards, o aviso do que não está incluído (assinatura da IA e ferramentas conectadas). Esse aviso precisa ficar legível, não escondido.</li>
 <li>Formulário: nome, e-mail, WhatsApp, interesse (opções), consentimento LGPD obrigatório.</li>
 <li>Perguntas frequentes (acordeão).</li>
-<li>Chamada final e rodapé com aviso legal.</li>
+<li>Chamada final e rodapé com aviso legal, razão social, CNPJ, e-mail, WhatsApp e link para a política de privacidade (<code>politica-de-privacidade.html</code>, que já existe).</li>
 </ol>
 <p><strong>Visual atual (pode evoluir):</strong> blocos com borda escura de 2 px e sombra deslocada sólida; azul marinho <code>#13263b</code>, papel creme <code>#fbf7ef</code> / <code>#f3ead8</code>, dourado <code>#c8a24a</code>, botão coral <code>#e2574c</code>, tinta <code>#142030</code>. Títulos em Bricolage Grotesque, texto em DM Sans.</p>
 <p><strong>Regras obrigatórias:</strong></p>
 <ul>
 <li>Nenhum travessão (— ou –) em texto visível. Use dois-pontos, vírgula ou ponto.</li>
 <li>Nada de promessa de resultado garantido, números de clientes ou depoimentos inventados.</li>
+<li>Não citar o Claude como IA dos planos: os planos funcionam com ChatGPT.</li>
+<li>Ignore os campos do <code>conteudo.json</code> que começam com <code>_</code>: são anotações internas.</li>
 <li>Nada de animação que esconda conteúdo (opacity 0) até rolar: a página tem de aparecer inteira mesmo se o script falhar.</li>
 <li>Responsiva de 390 px a 1440 px, sem rolagem horizontal. A tabela pode rolar dentro do card.</li>
 <li>Contraste AA, botões com no mínimo 44 px de altura no celular.</li>
@@ -54,7 +56,8 @@ blockquote{margin:0;padding:6px 20px 14px}
 <h2>O que fica de fora do Claude Design</h2>
 <ul>
 <li><strong>Editor</strong> (<code>editor.html</code>), cálculo automático da economia, envio do formulário para o WhatsApp e prévia ao vivo: já funcionam aqui e não precisam ser refeitos.</li>
-<li><strong>Links de checkout:</strong> ficam vazios até você criar os novos (o botão leva ao formulário).</li>
+<li><strong>Links de checkout:</strong> ficam vazios até você criar os novos na Hubla (o botão leva ao formulário).</li>
+<li><strong>Política de privacidade:</strong> já pronta, só precisa seguir o visual.</li>
 </ul>
 </main>
 <textarea id="prompt-texto" hidden>Crie uma landing page de vendas, em português do Brasil, para a **SONIA** (Sistema Operacional de Negócios com Inteligência Artificial), produto da **Prime Circle**.
@@ -72,17 +75,19 @@ blockquote{margin:0;padding:6px 20px 14px}
 4. Como funciona: 4 passos numerados.
 5. Time: a Sônia em destaque e uma grade de 21 cards (foto, área, nome, cargo, resumo, &quot;Ver currículo&quot;). Cada card abre um modal com o currículo completo.
 6. Economia: 2 totais grandes e uma tabela de 14 funções (salário, custo com encargos, custo por hora, &quot;24/7&quot; na coluna &quot;Com agente&quot;), com fontes no rodapé.
-7. Por que contratar com a Prime Circle: 3 cards.
-8. Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento e lista de itens.
+7. Por que contratar com a Prime Circle: 4 cards (implantação ao vivo toda semana, mentoria e suporte no Magnata, garantia de 30 dias, revenda autorizada).
+8. Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento com juros, lista de itens e, abaixo dos cards, o aviso do que não está incluído (assinatura da IA e ferramentas conectadas). Esse aviso precisa ficar legível, não escondido.
 9. Formulário: nome, e-mail, WhatsApp, interesse (opções), consentimento LGPD obrigatório.
 10. Perguntas frequentes (acordeão).
-11. Chamada final e rodapé com aviso legal.
+11. Chamada final e rodapé com aviso legal, razão social, CNPJ, e-mail, WhatsApp e link para a política de privacidade (`politica-de-privacidade.html`, que já existe).
 
 **Visual atual (pode evoluir):** blocos com borda escura de 2 px e sombra deslocada sólida; azul marinho `#13263b`, papel creme `#fbf7ef` / `#f3ead8`, dourado `#c8a24a`, botão coral `#e2574c`, tinta `#142030`. Títulos em Bricolage Grotesque, texto em DM Sans.
 
 **Regras obrigatórias:**
 - Nenhum travessão (— ou –) em texto visível. Use dois-pontos, vírgula ou ponto.
 - Nada de promessa de resultado garantido, números de clientes ou depoimentos inventados.
+- Não citar o Claude como IA dos planos: os planos funcionam com ChatGPT.
+- Ignore os campos do `conteudo.json` que começam com `_`: são anotações internas.
 - Nada de animação que esconda conteúdo (opacity 0) até rolar: a página tem de aparecer inteira mesmo se o script falhar.
 - Responsiva de 390 px a 1440 px, sem rolagem horizontal. A tabela pode rolar dentro do card.
 - Contraste AA, botões com no mínimo 44 px de altura no celular.

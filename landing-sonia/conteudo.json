@@ -1898,21 +1898,25 @@
   },
   "diferenciais": {
     "visivel": true,
-    "_aviso": "Confirme cada item antes de publicar. Mentoria e suporte humano valem só para o Magnata.",
+    "_aviso": "Confirme cada item antes de publicar. Mentoria e suporte individual valem só para o Magnata; sessão coletiva semanal e garantia valem para todos.",
     "etiqueta": "Por que contratar com a Prime Circle",
     "titulo": "A mesma tecnologia, com gente de verdade do seu lado.",
     "itens": [
       {
+        "titulo": "Implantação ao vivo, toda semana",
+        "texto": "Em todos os planos, você entra numa sessão coletiva semanal para configurar a Sônia com o seu negócio e tirar dúvidas com o nosso time."
+      },
+      {
+        "titulo": "Mentoria e suporte no Magnata",
+        "texto": "4 encontros individuais de 1 hora para colocar o time na rotina da sua empresa e suporte humano pelo WhatsApp."
+      },
+      {
+        "titulo": "Garantia de 30 dias",
+        "texto": "Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir por e-mail ou WhatsApp."
+      },
+      {
         "titulo": "Revenda autorizada",
         "texto": "A Prime Circle é revendedora autorizada da plataforma. Você contrata com uma empresa brasileira e fala em português."
-      },
-      {
-        "titulo": "Mentoria no plano Magnata",
-        "texto": "4 encontros individuais de 1 hora para colocar a Sônia e o time na rotina da sua empresa, com acompanhamento dos resultados."
-      },
-      {
-        "titulo": "Suporte humano no plano Magnata",
-        "texto": "Dúvida ou ajuste, você fala com o nosso time pelo WhatsApp, não com um robô de suporte."
       }
     ]
   },
@@ -1935,7 +1939,7 @@
     "visivel": true,
     "etiqueta": "Planos",
     "titulo": "Escolha o tamanho do seu time",
-    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes. O acesso chega por e-mail assim que o pagamento é confirmado.",
+    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes, com juros. O acesso chega por e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
     "itens": [
       {
         "nome": "SONIA Starter",
@@ -1947,7 +1951,9 @@
         "itens": [
           "5 agentes liberados",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
-          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)"
+          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
+          "Sessão coletiva semanal de implantação e dúvidas, ao vivo",
+          "Garantia de 30 dias"
         ],
         "botao": {
           "texto": "Assinar agora",
@@ -1965,7 +1971,8 @@
           "16 agentes liberados",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
-          "Acesso à comunidade de estudos de IA"
+          "Sessão coletiva semanal de implantação e dúvidas, ao vivo",
+          "Garantia de 30 dias"
         ],
         "botao": {
           "texto": "Assinar agora",
@@ -1986,7 +1993,8 @@
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
           "4 mentorias individuais de 1 hora com a Prime Circle",
           "Suporte humano pelo WhatsApp",
-          "Tudo do plano Elite e mais 6 meses de grupo de estudos avançado"
+          "Tudo do plano Elite, incluindo a sessão coletiva semanal",
+          "Garantia de 30 dias"
         ],
         "botao": {
           "texto": "Assinar agora",
@@ -2052,10 +2060,11 @@
       "Ver uma demonstração",
       "Tirar uma dúvida"
     ],
-    "consentimento": "Concordo em ser contatado pelo time da Prime Circle sobre este pedido, por e-mail e WhatsApp, e com o uso dos meus dados para essa finalidade, nos termos da LGPD. Posso pedir a exclusão a qualquer momento.",
+    "consentimento": "Concordo em ser contatado pelo time da Prime Circle sobre este pedido, por e-mail e WhatsApp, e com o uso dos meus dados para essa finalidade, conforme a Política de privacidade e a LGPD. Posso pedir a exclusão a qualquer momento.",
     "botao": "Enviar",
     "mensagem_sucesso": "Recebemos. O time vai te chamar no WhatsApp.",
-    "nota": "Seus dados são usados só para o nosso time falar com você sobre este pedido. Nada é vendido."
+    "nota": "Seus dados são usados só para o nosso time falar com você sobre este pedido. Nada é vendido.",
+    "link_politica": "politica-de-privacidade.html"
   },
   "faq": {
     "visivel": true,
@@ -2076,11 +2085,15 @@
       },
       {
         "pergunta": "Quanto custa?",
-        "resposta": "Os planos são anuais, com Pix à vista ou cartão em até 12 vezes. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria com a Prime Circle. A assinatura da IA é contratada à parte."
+        "resposta": "Os planos são anuais, com Pix à vista ou cartão em até 12 vezes com juros. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
       },
       {
         "pergunta": "O que não está incluído no preço?",
         "resposta": "A assinatura da inteligência artificial que os agentes usam, que você contrata e paga direto ao fornecedor, e qualquer outra ferramenta ou serviço que você queira conectar, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês. Se o seu uso for alto, pode valer um plano maior."
+      },
+      {
+        "pergunta": "Tem garantia?",
+        "resposta": "Sim. Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir pelo e-mail atendimento@primecircle.app.br ou pelo WhatsApp."
       },
       {
         "pergunta": "O painel funciona em outros idiomas?",
@@ -2104,6 +2117,21 @@
   "rodape": {
     "aviso": "Os valores de salário e economia são referências públicas de mercado. Não há promessa de faturamento garantido: o resultado depende da sua operação e das suas vendas.",
     "copyright": "© 2026 Prime Circle. Todos os direitos reservados.",
-    "links": []
+    "links": [
+      {
+        "texto": "Política de privacidade",
+        "link": "politica-de-privacidade.html"
+      },
+      {
+        "texto": "WhatsApp (21) 99901-2520",
+        "link": "https://wa.me/5521999012520"
+      }
+    ]
+  },
+  "empresa": {
+    "razao_social": "Marcus V F Godoy Assessoria Imobiliária",
+    "cnpj": "58.409.058/0001-73",
+    "email": "atendimento@primecircle.app.br",
+    "whatsapp_exibicao": "(21) 99901-2520"
   }
 }

@@ -11,12 +11,7 @@
     <meta property="og:image" content="" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=DM+Sans:opsz,wght@9..40,400..700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="assets/fonts.css" />
     <style>
       :root {
         --destaque: #c8a24a;
@@ -607,7 +602,7 @@
                 lista(s.interesses).map(function (o, i) { return '<label><input type="checkbox" name="interesse" value="' + esc(o) + '"' + (i === 0 ? " checked" : "") + "> " + esc(o) + "</label>"; }).join("") +
                 "</div></fieldset>"
               : "") +
-            '<label class="consent campo inteiro"><input type="checkbox" name="consentimento" required> <span>' + esc(s.consentimento) + "</span></label>" +
+            '<label class="consent campo inteiro"><input type="checkbox" name="consentimento" required> <span>' + esc(s.consentimento) + (s.link_politica ? ' <a href="' + url(s.link_politica) + '" target="_blank" rel="noopener">Ler a política</a>' : "") + "</span></label>" +
             '<div class="campo inteiro"><button class="botao" type="submit">' + esc(s.botao) + '</button><p class="form-status" role="status" aria-live="polite"></p>' +
             (s.nota ? '<p class="nota" style="margin-top:4px">' + esc(s.nota) + "</p>" : "") + "</div>" +
             "</form></div></section>"
@@ -637,6 +632,11 @@
             '<footer class="container rodape"><p><b style="color:#fff">' + esc(m.produto) + "</b> · " + esc(m.significado) + "</p>" +
             (r.aviso ? "<p>" + esc(r.aviso) + "</p>" : "") +
             (lista(r.links).length ? "<p>" + lista(r.links).map(function (l) { return '<a href="' + url(l.link) + '"' + externo(l.link) + ">" + esc(l.texto) + "</a>"; }).join(" · ") + "</p>" : "") +
+            (function () {
+              var e = c.empresa || {};
+              var partes = [e.razao_social, e.cnpj ? "CNPJ " + e.cnpj : "", e.email].filter(Boolean).map(esc);
+              return partes.length ? "<p>" + partes.join(" · ") + "</p>" : "";
+            })() +
             "<p>" + esc(r.copyright) + "</p></footer>"
           );
         }

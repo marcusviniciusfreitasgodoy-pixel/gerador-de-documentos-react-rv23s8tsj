@@ -81,7 +81,7 @@
           ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["sigla", "Sigla SONIA"],
           ["numeros", "Números"], ["como_funciona", "Como funciona"], ["time", "Time e currículos"], ["economia", "Economia"],
           ["diferenciais", "Por que a Prime Circle"], ["depoimentos", "Depoimentos"], ["planos", "Planos"], ["agencia", "Agência"],
-          ["contato", "Formulário"], ["faq", "Perguntas"], ["final", "Chamada final"], ["rodape", "Rodapé"]
+          ["contato", "Formulário"], ["empresa", "Dados da empresa"], ["faq", "Perguntas"], ["final", "Chamada final"], ["rodape", "Rodapé"]
         ];
         var ROTULOS = {
           visivel: "Mostrar esta seção", destaque: "Plano em destaque", etiqueta: "Etiqueta (texto pequeno acima do título)", titulo: "Título",
@@ -288,6 +288,8 @@
           });
           if (((C.planos || {}).itens || []).some(function (pl) { return (pl.itens || []).some(function (i) { return /claude/i.test(i); }); }))
             p.push("Os planos citam Claude: confirme com a Avalanche que a conexão é por chave de API. Os termos da Anthropic proíbem usar assinatura Pro ou Max em produtos de terceiros.");
+          if (C.empresa && !String(C.empresa.cnpj || "").replace(/\D/g, "")) p.push("CNPJ não preenchido em Dados da empresa: o rodapé sai sem ele.");
+          else if (C.empresa && String(C.empresa.cnpj).replace(/\D/g, "").length !== 14) p.push("CNPJ com número de dígitos errado: um CNPJ tem 14 dígitos.");
           if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito da Avalanche.");
           if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Por que a Prime Circle\".");
           if (C.depoimentos && C.depoimentos.visivel !== false) p.push("Depoimentos visíveis: use só clientes reais com autorização.");

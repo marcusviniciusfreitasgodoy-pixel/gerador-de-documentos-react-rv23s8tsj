@@ -8,11 +8,11 @@ Design para **o visual** e trazer o resultado de volta para cá, para manter a e
 ## O que anexar no Claude Design
 
 1. Este arquivo.
-2. `conteudo.json`: todo o texto da página, já revisado.
-3. Imagens de `assets/agentes/`: pelo menos `avatar-sonia.webp` (orquestradora) e uns 8
-   retratos do time. São ilustrações 3D, 480x480, todas no mesmo escritório.
-4. `assets/og-sonia.jpg` e um print da versão atual (`referencia-landing-agentes/screenshots/landing-sonia-1440.jpg`)
-   como ponto de partida, se quiser evoluir em vez de recomeçar.
+2. `conteudo.json`: todo o texto da página, já revisado (versão sem as anotações internas).
+3. A pasta `assets/agentes/` com os 22 retratos (`avatar-sonia.webp` é a orquestradora). São
+   ilustrações 3D, 480x480, todas no mesmo escritório. O campo `imagem` de cada agente no
+   `conteudo.json` aponta para o arquivo certo.
+4. Os prints da versão atual (`prints/`), a 1440 px e a 390 px, como ponto de partida.
 
 ## Prompt (copie e cole)
 
@@ -41,11 +41,15 @@ Design para **o visual** e trazer o resultado de volta para cá, para manter a e
 >    "Ver currículo"). Cada card abre um modal com o currículo completo.
 > 6. Economia: 2 totais grandes e uma tabela de 14 funções (salário, custo com encargos,
 >    custo por hora, "24/7" na coluna "Com agente"), com fontes no rodapé.
-> 7. Por que contratar com a Prime Circle: 3 cards.
-> 8. Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento e lista de itens.
+> 7. Por que contratar com a Prime Circle: 4 cards (implantação ao vivo toda semana, mentoria e
+>    suporte no Magnata, garantia de 30 dias, revenda autorizada).
+> 8. Planos: Starter, Elite (destaque) e Magnata, com preço anual, parcelamento com juros, lista
+>    de itens e, abaixo dos cards, o aviso do que não está incluído (assinatura da IA e
+>    ferramentas conectadas). Esse aviso precisa ficar legível, não escondido.
 > 9. Formulário: nome, e-mail, WhatsApp, interesse (opções), consentimento LGPD obrigatório.
 > 10. Perguntas frequentes (acordeão).
-> 11. Chamada final e rodapé com aviso legal.
+> 11. Chamada final e rodapé com aviso legal, razão social, CNPJ, e-mail, WhatsApp e link para a
+>     política de privacidade (`politica-de-privacidade.html`, que já existe).
 >
 > **Visual atual (pode evoluir):** blocos com borda escura de 2 px e sombra deslocada
 > sólida; azul marinho `#13263b`, papel creme `#fbf7ef` / `#f3ead8`, dourado `#c8a24a`,
@@ -54,6 +58,8 @@ Design para **o visual** e trazer o resultado de volta para cá, para manter a e
 > **Regras obrigatórias:**
 > - Nenhum travessão (— ou –) em texto visível. Use dois-pontos, vírgula ou ponto.
 > - Nada de promessa de resultado garantido, números de clientes ou depoimentos inventados.
+> - Não citar o Claude como IA dos planos: os planos funcionam com ChatGPT.
+> - Ignore os campos do `conteudo.json` que começam com `_`: são anotações internas.
 > - Nada de animação que esconda conteúdo (opacity 0) até rolar: a página tem de aparecer
 >   inteira mesmo se o script falhar.
 > - Responsiva de 390 px a 1440 px, sem rolagem horizontal. A tabela pode rolar dentro do card.
@@ -65,4 +71,5 @@ Design para **o visual** e trazer o resultado de volta para cá, para manter a e
 
 - **Editor** (`editor.html`), cálculo automático da economia, envio do formulário para o
   WhatsApp e prévia ao vivo: já funcionam aqui e não precisam ser refeitos.
-- **Links de checkout:** ficam vazios até você criar os novos (o botão leva ao formulário).
+- **Links de checkout:** ficam vazios até você criar os novos na Hubla (o botão leva ao formulário).
+- **Política de privacidade:** já pronta, só precisa seguir o visual.
