@@ -70,3 +70,26 @@ Depois abra http://localhost:8000 (página) e http://localhost:8000/editor.html 
 O `editor.html` não grava nada no servidor e não tem senha: ele só edita um rascunho no
 navegador de quem abre e gera um arquivo para download. Publicar continua exigindo acesso à
 hospedagem. Se preferir que ele não fique público, não suba o `editor.html` e use-o localmente.
+
+## Publicação (Netlify)
+
+- **Site:** `sonia-primecircle` na sua conta Netlify (time `68925567d24a4aa2429b2c24`).
+- **Endereço provisório:** https://sonia-primecircle.netlify.app
+- **Painel:** https://app.netlify.com/projects/sonia-primecircle
+- Publicado em 31/10/2026 a partir desta pasta, **sem** os documentos internos (`LEIA-ME.md`,
+  `BRIEF-*`, `PROMPT-*`) e com o `conteudo.json` **sem os campos que começam com `_`**, que
+  são anotações internas (mencionam o fornecedor da plataforma).
+
+### Como publicar uma alteração de texto ou preço
+
+1. Edite em `https://sonia-primecircle.netlify.app/editor.html` e clique em **Baixar conteudo.json**.
+2. No painel da Netlify, aba **Deploys**, arraste uma pasta com `index.html`, `editor.html`,
+   `politica-de-privacidade.html`, `netlify.toml`, a pasta `assets/` e o `conteudo.json` novo.
+
+Ou mande o `conteudo.json` novo para quem mantém o site publicar.
+
+### Domínio
+
+`agentes.primecircle.app.br` **já está em uso** pela plataforma dos agentes (área do cliente e
+checkout). Apontar esse domínio para a landing derruba o acesso dos clientes. Use outro
+subdomínio (por exemplo `sonia.primecircle.app.br`) ou combine com o fornecedor antes.
