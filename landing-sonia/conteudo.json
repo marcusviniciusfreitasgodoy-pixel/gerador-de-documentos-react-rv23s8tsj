@@ -1898,20 +1898,20 @@
   },
   "diferenciais": {
     "visivel": true,
-    "_aviso": "Confirme cada item antes de publicar. Só mantenha o que a Prime Circle entrega de fato.",
+    "_aviso": "Confirme cada item antes de publicar. Mentoria e suporte humano valem só para o Magnata.",
     "etiqueta": "Por que contratar com a Prime Circle",
     "titulo": "A mesma tecnologia, com gente de verdade do seu lado.",
     "itens": [
       {
         "titulo": "Revenda autorizada",
-        "texto": "A Prime Circle é revendedora autorizada da plataforma. Você contrata com nota fiscal e contrato no Brasil."
+        "texto": "A Prime Circle é revendedora autorizada da plataforma. Você contrata com uma empresa brasileira e fala em português."
       },
       {
-        "titulo": "Implantação acompanhada",
-        "texto": "A gente configura a Sônia com os dados do seu negócio, o seu tom de voz e os seus produtos antes de ela começar a atender."
+        "titulo": "Mentoria no plano Magnata",
+        "texto": "4 encontros individuais de 1 hora para colocar a Sônia e o time na rotina da sua empresa, com acompanhamento dos resultados."
       },
       {
-        "titulo": "Atendimento em português",
+        "titulo": "Suporte humano no plano Magnata",
         "texto": "Dúvida ou ajuste, você fala com o nosso time pelo WhatsApp, não com um robô de suporte."
       }
     ]
@@ -1974,7 +1974,7 @@
       },
       {
         "nome": "SONIA Magnata",
-        "selo": "Time completo",
+        "selo": "Com mentoria",
         "destaque": false,
         "preco": "R$ 15.997",
         "periodo": "por ano",
@@ -1984,6 +1984,8 @@
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
           "Cérebro Claude",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
+          "4 mentorias individuais de 1 hora com a Prime Circle",
+          "Suporte humano pelo WhatsApp",
           "Tudo do plano Elite e mais 6 meses de grupo de estudos avançado"
         ],
         "botao": {

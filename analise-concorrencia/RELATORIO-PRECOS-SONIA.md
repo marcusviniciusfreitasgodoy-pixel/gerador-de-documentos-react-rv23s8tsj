@@ -209,3 +209,57 @@ encontra a Naia e conclui que você só cobra três vezes mais pela mesma coisa.
 3. Quais são os 5 agentes do Starter e os 16 do Elite?
 4. Existe algum custo de uso à parte (WhatsApp, tokens, limites)?
 5. No Asaas, os juros do parcelamento são repassados ao cliente ou absorvidos por você?
+
+---
+
+## 7. Atualização: a conta com o acordo de 30% (informado em 31/10/2026)
+
+O acordo: a Avalanche fica com **30% do valor vendido**. A Prime Circle faz implantação,
+suporte e **4 mentorias de 1 hora** só no plano Magnata.
+
+### Quanto sobra para você por venda (antes de impostos e taxas)
+
+| Plano | Pix à vista | Você recebe | Cartão 12x (proposta) | Você recebe | Se vendesse ao preço da Naia |
+|---|---|---|---|---|---|
+| Starter | R$ 4.997 | R$ 3.498 | 12x R$ 497 = R$ 5.964 | R$ 4.175 | R$ 1.048 |
+| Elite | R$ 7.997 | R$ 5.598 | 12x R$ 797 = R$ 9.564 | R$ 6.695 | R$ 1.748 |
+| Magnata | R$ 15.997 | R$ 11.198 | 12x R$ 1.597 = R$ 19.164 | R$ 13.415 | R$ 6.998 |
+
+- **[Certo] O desconto de 16% à vista cabe com folga.** A margem é de 70% sobre o valor
+  vendido, e a Avalanche não tem custo variável seu a cobrir.
+- **[Certo] A mentoria do Magnata se paga bem.** A diferença líquida entre Magnata e Elite é de
+  R$ 5.600 por 4 horas suas, ou R$ 1.400 por hora, antes de contar a consultoria que pode vir depois.
+
+### O ponto que muda a garantia
+
+**[Chutando] Se o cliente pedir reembolso, a Avalanche devolve os 30% dela?** Se não devolver,
+cada reembolso custa a você 30% do preço do próprio bolso: R$ 1.499 no Starter e R$ 4.799 no
+Magnata, o equivalente a 43% do que você ganharia na venda. Com 1 pedido a cada 10 vendas,
+isso custa 4,3% do seu líquido total: ainda é viável, mas precisa estar no contrato. Vale
+também para os 7 dias de arrependimento do CDC, que existem com ou sem garantia sua.
+
+### O que o acordo expõe
+
+1. **[Certo] Starter e Elite agora não têm nenhum serviço a mais que a Naia**, e custam 3,3x e
+   3,2x o preço dela. O seu diferencial ficou concentrado no Magnata. No seu lugar, eu colocaria
+   nos dois planos de baixo algo que escale sem consumir suas horas: **uma sessão coletiva de
+   implantação por semana**, de 1 hora, aberta a todos os clientes novos. Custa 1 hora por
+   semana, não 1 hora por cliente, e dá ao Starter e ao Elite uma resposta para "por que não
+   compro da Naia?". O risco de não fazer: os dois planos que mais vão vender ficam sem defesa
+   na comparação.
+2. **[Provável] A mentoria não pode virar venda de consultoria disfarçada.** Se o cliente
+   sentir que os 4 encontros foram uma apresentação comercial, você perde o cliente e a
+   indicação. Sugestão de pauta: (1) configuração e tom de voz, (2) processos e rotinas,
+   (3) revisão dos primeiros resultados, (4) próximos 90 dias. A consultoria entra no fim do 4º
+   encontro, como próximo passo natural.
+3. **[Chutando] Quem recebe o pagamento?** O checkout roda na plataforma da Avalanche. Se é ela
+   quem recebe e repassa 70%, confirme o prazo do repasse, quem emite a nota fiscal e se os 30%
+   incidem sobre o valor com juros do cartão ou sem.
+4. **[Chutando] Existe preço mínimo no contrato?** Com 30%, a Avalanche ganha mais com você
+   vendendo a R$ 4.997 (R$ 1.499) do que vendendo ela mesma a R$ 1.497. Confirme se há um piso
+   de preço, porque isso limita o seu espaço para promoção.
+
+### Ainda falta responder
+
+- A frase sobre custos à parte chegou cortada: "Os custos com a contrataç…".
+- No Asaas, os juros do parcelamento ficam com o cliente ou com você?
