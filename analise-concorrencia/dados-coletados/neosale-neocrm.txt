@@ -1,0 +1,317 @@
+NeoSale AI
+Sobre
+Método
+Produtos
+Escala Comercial
+NeoCRM
+Zelia
+Cases
+Agendar Diagnóstico
+
+NEOCRM · BY NEOSALE AI
+
+O CRM que
+trabalha sozinho.
+
+Leads, conversas, pipeline e agenda num lugar só, com agentes de IA que atendem, qualificam e movem o funil por você. Assine hoje e comece a usar.
+
+Ver planos e assinar
+
+TUDO NUM LUGAR SÓ
+
+Leads, conversas e pipeline, no automático.
+
+100% automatizado. Tudo é preenchido, movido e atualizado pelos próprios agentes, em tempo real. Você não digita, não move card, não atualiza status: só acompanha.
+
+Dashboard
+
+Métricas de captação, qualificação e vendas
+
+Chat
+
+Conversas de todos os canais e qual agente respondeu
+
+Contatos
+
+Pessoas e empresas num só lugar
+
+Leads
+
+Lista e kanban do funil completo
+
+Agenda
+
+Reuniões marcadas pela IA no seu calendário
+
+Negócios
+
+Pipeline ponderado, forecast e score ICP
+
+Agentes
+
+Seus agentes configurados e ativos
+
+Distribuição
+
+Reparte os leads entre os vendedores
+
+Tarefas
+
+Do time e criadas pela IA
+
+Broadcast
+
+Disparos em massa no WhatsApp
+
+Conhecimento
+
+O DNA do seu negócio que treina a IA
+
+Relatórios
+
+Captação, qualificação e vendas por canal e período
+
+OS AGENTES
+
+Quatro agentes, um processo só.
+
+Cada agente cuida de uma etapa do Método CQV, com o nome, o tom e as regras da sua empresa.
+
+Maya
+
+SDR
+
+Capta e responde em até 30s, 24/7
+Qualifica com SPIN e filtra fora do ICP
+Agenda e confirma a reunião
+Distribui o lead para o seu closer
+Faz follow-up e registra tudo no CRM
+
+Davi
+
+Closer
+
+Copiloto do seu vendedor
+Acompanha a conversa do vendedor
+Anda com o card no pipeline
+Marca reunião e follow-up na hora
+Lê a gravação e traz os próximos passos
+
+Iris
+
+CS
+
+Acompanha o cliente do onboarding ao resultado
+Antecipa risco de cancelamento e chance de expansão
+Tira dúvidas 24/7 e passa ao humano com contexto
+
+Caio
+
+Gestor
+
+Responde como está o seu negócio
+Pipeline, vendas e follow-up do dia
+Manda notificações e relatórios
+Cadastra e atualiza pela conversa
+
+Não é bot genérico. No onboarding coletamos áudios, scripts, FAQs, produtos e objeções e treinamos a IA para falar como a sua empresa. A Riseon batizou a dela de Luna.
+
+LINKEDIN · PROSPECÇÃO ATIVA
+
+Sem lead chegando? A IA gera a demanda.
+
+Quando o inbound é baixo ou não existe, a prospecção ativa no LinkedIn coloca o Método para rodar do zero, operada dentro do NeoCRM.
+
+01
+
+Conecta e importa sua base de 1ª conexão
+
+Traz suas conexões para o CRM com nome, cargo, empresa e telefone.
+
+02
+
+Campanha por busca, lista ou post
+
+Filtros do LinkedIn, uma lista da sua base ou quem interagiu num post do mercado.
+
+03
+
+Convite, mensagem e cadência
+
+Engaja o perfil, envia o convite com nota e faz os follow-ups no tempo certo.
+
+04
+
+Enriquece o contato
+
+Traz e-mail e telefone do lead automaticamente.
+
+05
+
+Segue no WhatsApp
+
+Demonstrou interesse, a conversa continua no WhatsApp, registrada no NeoCRM.
+
+INTEGRAÇÕES
+
+Conecta com o que você já usa.
+
+Agenda, reuniões, checkout, contratos e o seu CRM: tudo integrado, sem retrabalho e sem trocar de ferramenta. Usa outra ferramenta? A gente conecta, via API.
+
+WhatsApp Web
+
+Conexão via QR Code
+
+WhatsApp API
+
+API oficial da Meta
+
+LinkedIn
+
+Prospecção ativa
+
+Instagram
+
+Atende no Direct
+
+Meta
+
+Leads dos anúncios com formulário
+
+Google Calendar
+
+Agenda reuniões
+
+Fathom
+
+Grava, transcreve e resume calls
+
+Cal.com
+
+Links de agenda com formulário
+
+Resend
+
+E-mails e follow-up
+
+Asaas
+
+Cobrança e links de pagamento
+
+Autentique
+
+Contrato assinado sem sair do CRM
+
+Kiwify
+
+Pagamento e produtos digitais
+
+Yampi
+
+Checkout e pedidos
+
+Site e formulários
+
+Leads do seu site via API
+
+Telegram
+
+Atendimento no Telegram
+
+Seu CRM atual
+
+Pipedrive, HubSpot, RD Station e outros
+
+PLANOS
+
+Escolha o plano e comece hoje.
+
+Assinatura mensal no cartão ou no Pix Automático. Sem taxa de setup.
+
+Starter
+
+R$ 597
+por mês
+
+Plataforma NeoCRM completa
+Assinar
+
+Pro
+
+R$ 897
+por mês
+
+Tudo do Starter
+Hot Seat semanal com o time da NeoSale AI
+Assinar
+
+Enterprise
+
+Mais vendido
+
+R$ 1.500
+por mês
+
+Tudo do Pro
+Onboarding
+Implementação feita pela NeoSale AI
+Otimização contínua
+Assinar
+
+PERGUNTAS FREQUENTES
+
+Tira a dúvida antes de começar.
+Preciso de cartão de crédito?
++
+
+Não. A assinatura aceita cartão ou Pix Automático, que você autoriza uma vez.
+
+Tem fidelidade?
++
+
+A assinatura é mensal. Os detalhes de cancelamento estão nos termos de uso.
+
+Funciona com o meu WhatsApp?
++
+
+Sim. Conecta por QR Code ou pela API oficial da Meta.
+
+Já tenho um CRM. E agora?
++
+
+O NeoCRM integra com o CRM que você já usa, via API, ou substitui de vez.
+
+Prefere que a NeoSale AI opere tudo para você?
+
+No Escala Comercial, a operação completa (agentes, canais, tráfego e acompanhamento) é feita pela NeoSale AI.
+
+Conhecer o Escala Comercial
+NeoSale AI
+
+Ajudamos empresas a escalar suas vendas no automático, sem precisar contratar, operar ou aprender IA.
+
+NEOSALE TECNOLOGIA LTDA · CNPJ 66.085.208/0001-69
+
+SITE
+
+Sobre
+Método
+Produtos
+Escala Comercial
+NeoCRM
+Zelia
+Cases
+Contato
+
+FALE COM A GENTE
+
+WhatsApp · +55 11 94722-4356
+contato@neosaleai.com.br
+LinkedIn
+Instagram
+YouTube
+
+© 2026 NeoSale AI
+
+Política de Privacidade
+Termos de Uso
