@@ -1,0 +1,2101 @@
+{
+  "_leia_me": "Arquivo de conteúdo da landing SONIA. Edite pelo editor.html ou à mão. Campos 'visivel' ligam e desligam seções.",
+  "marca": {
+    "produto": "SONIA",
+    "significado": "Sistema Operacional de Negócios com Inteligência Artificial",
+    "agente": "Sônia",
+    "empresa": "Prime Circle",
+    "cor_destaque": "#c8a24a",
+    "cor_escura": "#13263b",
+    "cor_botao": "#e2574c"
+  },
+  "seo": {
+    "titulo": "SONIA · uma agente de IA com um time inteiro trabalhando pela sua empresa",
+    "descricao": "A Sônia coordena 21 especialistas de IA: copy, design, código, tráfego, vendas no WhatsApp, financeiro, tributário, jurídico e RH. Você pede em português e recebe pronto.",
+    "imagem_compartilhamento": "assets/og-sonia.jpg"
+  },
+  "topo": {
+    "menu": [
+      {
+        "texto": "Como funciona",
+        "link": "#como-funciona"
+      },
+      {
+        "texto": "Time",
+        "link": "#time"
+      },
+      {
+        "texto": "Economia",
+        "link": "#economia"
+      },
+      {
+        "texto": "Planos",
+        "link": "#planos"
+      },
+      {
+        "texto": "Dúvidas",
+        "link": "#duvidas"
+      }
+    ],
+    "botao": {
+      "texto": "Falar com o time",
+      "link": "#contato"
+    },
+    "botao_area_cliente": {
+      "visivel": true,
+      "texto": "Área do cliente",
+      "link": "https://agentes.primecircle.app.br/"
+    }
+  },
+  "hero": {
+    "etiqueta": "Agentes de IA que trabalham de verdade",
+    "titulo": "Uma agente de IA com um time inteiro trabalhando pela sua empresa.",
+    "titulo_destaque": "Sem contratar mais ninguém.",
+    "texto": "A Sônia coordena 21 especialistas: copy, design, código, tráfego pago, vendas no WhatsApp, financeiro, tributário, jurídico e RH. Você pede em português, pelo painel ou pelo Telegram, e recebe pronto.",
+    "botao_principal": {
+      "texto": "Quero a minha Sônia",
+      "link": "#planos"
+    },
+    "botao_secundario": {
+      "texto": "Ver o time",
+      "link": "#time"
+    },
+    "rotulo_avatares": "21 especialistas no seu time",
+    "selos": [
+      "Atende 24 horas, não falta, não atrasa e não pede aumento",
+      "Cada cliente com a própria agente, isolada e segura",
+      "Painel em português, inglês e espanhol"
+    ],
+    "rotulo_conversa": "Exemplo de conversa no Telegram",
+    "conversa": [
+      {
+        "de": "voce",
+        "texto": "Sônia, coloca no ar uma landing page para a minha aula gratuita."
+      },
+      {
+        "de": "agente",
+        "texto": "Combinado. O Jonathan escreve a copy, o Paulo publica a página e eu te mando o link revisado."
+      },
+      {
+        "de": "voce",
+        "texto": "E o que a equipe entregou hoje?"
+      },
+      {
+        "de": "agente",
+        "texto": "3 carrosséis, 1 proposta comercial e 14 leads qualificados no WhatsApp."
+      }
+    ]
+  },
+  "sigla": {
+    "visivel": true,
+    "titulo": "Por trás do nome",
+    "letras": [
+      {
+        "letra": "S",
+        "palavra": "Sistema"
+      },
+      {
+        "letra": "O",
+        "palavra": "Operacional de"
+      },
+      {
+        "letra": "N",
+        "palavra": "Negócios com"
+      },
+      {
+        "letra": "I",
+        "palavra": "Inteligência"
+      },
+      {
+        "letra": "A",
+        "palavra": "Artificial"
+      }
+    ],
+    "texto": "A SONIA não é um chatbot. É o sistema que organiza o trabalho da sua empresa: recebe o pedido, distribui para o especialista certo e só entrega quando está pronto."
+  },
+  "numeros": {
+    "visivel": false,
+    "_aviso": "Números da plataforma. Só ligue com autorização escrita da Avalanche e mantenha a atribuição à plataforma.",
+    "etiqueta": "A tecnologia por trás da Sônia",
+    "titulo": "Não é promessa. É operação rodando.",
+    "itens": [
+      {
+        "valor": "+7.000",
+        "rotulo": "empresas já usam a plataforma"
+      },
+      {
+        "valor": "+253.000",
+        "rotulo": "tarefas concluídas"
+      },
+      {
+        "valor": "+750 bilhões",
+        "rotulo": "tokens de IA processados"
+      },
+      {
+        "valor": "+R$ 32,6 milhões",
+        "rotulo": "de economia em folha de pagamento"
+      }
+    ],
+    "nota": "Números agregados da plataforma de agentes, não apenas de clientes Prime Circle."
+  },
+  "como_funciona": {
+    "visivel": true,
+    "etiqueta": "Como funciona",
+    "titulo": "Você fala com uma só. O time inteiro trabalha.",
+    "texto": "Nada de aprender ferramenta nova nem gerenciar gente. Você manda o pedido como mandaria para um funcionário de confiança.",
+    "passos": [
+      {
+        "titulo": "Você pede",
+        "texto": "Por texto ou áudio, no Telegram ou no painel, em português."
+      },
+      {
+        "titulo": "A Sônia planeja",
+        "texto": "Quebra o pedido em tarefas e escolhe o especialista certo para cada parte."
+      },
+      {
+        "titulo": "O time executa",
+        "texto": "Copy, design, código, anúncio, atendimento: cada especialista faz a sua parte."
+      },
+      {
+        "titulo": "Você recebe pronto",
+        "texto": "A Sônia valida o resultado e só então entrega, revisado."
+      }
+    ]
+  },
+  "time": {
+    "visivel": true,
+    "etiqueta": "Time Sônia",
+    "titulo": "Uma agente coordena. O time inteiro entrega.",
+    "texto": "A Sônia é a única que fala com você. Ela recebe o pedido, distribui para o especialista certo, acompanha e só te entrega quando está pronto. Clique em qualquer agente para ver o currículo completo.",
+    "rotulo_orquestradora": "Orquestradora do time",
+    "rotulo_especialistas": "21 especialistas trabalhando sob o comando da Sônia",
+    "botao_curriculo": "Ver currículo",
+    "rotulo_como_pedir": "Exemplos de pedido. Mande pelo Telegram ou pelo chat.",
+    "agentes": [
+      {
+        "id": "avatar-sonia",
+        "nome": "Sônia",
+        "cargo": "Orquestradora · gerente da operação de IA",
+        "area": "Comando e operação",
+        "imagem": "assets/agentes/avatar-sonia.webp",
+        "resumo": "A Sônia é a gerente da sua operação de inteligência artificial e o centro de comando da equipe. É a única que fala direto com você: recebe o pedido em português, planeja, quebra em tarefas, escolhe o especialista certo, delega, acompanha, valida o resultado e só então te entrega pronto. Trabalha o tempo todo, não dorme, não atrasa e não falta.",
+        "o_que_faz": [
+          "Orquestra a equipe inteira de ponta a ponta: distribui copy pro Jonathan, código pro Paulo, prazos pro Rafael, vídeo viral pra Bianca, CRM pra Amanda, tráfego pro Estrategista de tráfego e prospecção pro squad do Davi",
+          "Conversa com você pelo Telegram, por texto ou áudio, e te devolve cada entrega revisada",
+          "Cuida das campanhas, das automações, das conversas e dos funis dentro do CRM",
+          "Cria carrosséis, escreve e publica conteúdo, monta propostas e coloca páginas no ar",
+          "Garante privacidade e respeita os seus limites em tudo que faz"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Orquestração de equipe",
+            "texto": "Planeja, delega pro especialista certo e valida antes de entregar."
+          },
+          {
+            "titulo": "Carrossel de Instagram",
+            "texto": "Cria o carrossel do roteiro à publicação."
+          },
+          {
+            "titulo": "Análise de perfil",
+            "texto": "Lê o seu perfil do Instagram e aponta o que ajustar."
+          },
+          {
+            "titulo": "Propostas comerciais",
+            "texto": "Monta a proposta e coloca a página no ar."
+          },
+          {
+            "titulo": "Landing pages e slides",
+            "texto": "Produz páginas e apresentações prontas pra usar."
+          },
+          {
+            "titulo": "Plano de negócios",
+            "texto": "Organiza o plano de negócios a partir das suas informações."
+          }
+        ],
+        "plataformas": "Telegram · WhatsApp · Instagram · Meta Ads · CRM · Vercel",
+        "como_trabalha": "É o seu ponto único de contato e o cérebro da operação. Recebe tudo em português, aciona os especialistas, cruza informação entre as áreas e garante que cada entrega volte revisada antes de chegar nas suas mãos.",
+        "passos": [
+          "Recebe o seu pedido em português, por texto ou áudio no Telegram",
+          "Planeja e quebra o pedido em tarefas",
+          "Escolhe o especialista certo e delega cada parte",
+          "Acompanha o andamento e cruza informação entre as áreas",
+          "Valida o resultado e só então te entrega pronto"
+        ],
+        "turnos": [
+          "Diário: resumo do que a equipe entregou e do que está em andamento",
+          "Semanal: balanço das entregas da semana e das pendências de cada área"
+        ],
+        "resultados": [
+          "Entregas revisadas da equipe inteira num só ponto de contato",
+          "Carrosséis de Instagram e conteúdo publicado",
+          "Propostas comerciais e páginas no ar",
+          "Análise de perfil, slides e plano de negócios",
+          "Campanhas, automações e funis organizados no CRM"
+        ],
+        "treinamentos": [
+          "Orquestração de equipe: planejar, delegar e validar antes de entregar",
+          "Mais de uma dezena de metodologias próprias de marketing e vendas",
+          "Visão de negócio e comunicação direta, sem enrolação",
+          "Privacidade e respeito aos limites definidos por você"
+        ],
+        "como_pedir": [
+          "Sônia, monta um carrossel sobre o lançamento da semana que vem.",
+          "Sônia, faz uma proposta pro cliente da call de hoje e me manda o link.",
+          "Sônia, analisa o meu perfil do Instagram e me diz o que mudar.",
+          "Sônia, coloca no ar uma landing page pra minha aula gratuita.",
+          "Sônia, o que a equipe entregou hoje?"
+        ],
+        "visivel": true
+      },
+      {
+        "id": "juliana-ops",
+        "nome": "Juliana",
+        "cargo": "Braço direito e sub-gerente de operações",
+        "area": "Comando e operação",
+        "imagem": "assets/agentes/juliana-ops.webp",
+        "resumo": "Juliana é o braço direito da Sônia e a segunda no comando. Quando a demanda é grande demais pra um único especialista, é ela quem assume a coordenação do time: distribui as partes, alinha o padrão visual, garante a consistência e devolve o pacote pronto pra Sônia validar.",
+        "o_que_faz": [
+          "Coordena a produção entre Jonathan, Paulo e Bianca quando o trabalho é maior",
+          "Cria landing pages, criativos de anúncio e layouts de Instagram",
+          "Define os padrões da marca e mantém a consistência visual",
+          "Organiza o fluxo de produção e os processos da equipe"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Coordenação de equipe",
+            "texto": "Divide demandas grandes entre os especialistas e junta o resultado."
+          },
+          {
+            "titulo": "Direção de arte",
+            "texto": "Define e mantém os padrões visuais da marca."
+          },
+          {
+            "titulo": "Landing pages e criativos",
+            "texto": "Dirige páginas e criativos de performance."
+          },
+          {
+            "titulo": "Processos de produção",
+            "texto": "Organiza o fluxo de trabalho da equipe."
+          },
+          {
+            "titulo": "Juliana · operações",
+            "texto": "Subgerente operacional, design e coordenação do time."
+          }
+        ],
+        "plataformas": "CRM · Instagram · Vercel",
+        "como_trabalha": "É a ponte entre a estratégia da Sônia e a execução da equipe. Recebe o pacote maior, divide entre os especialistas, garante o padrão e entrega fechado pra Sônia revisar.",
+        "passos": [
+          "Recebe da Sônia a demanda grande demais pra um especialista só",
+          "Divide o trabalho entre Jonathan, Paulo e Bianca",
+          "Alinha o padrão visual e o processo de produção",
+          "Confere a consistência de cada parte",
+          "Devolve o pacote fechado pra Sônia validar"
+        ],
+        "turnos": [
+          "Semanal: revisão do fluxo de produção e dos padrões da marca",
+          "Por demanda: coordenação dos pacotes grandes que a Sônia repassar"
+        ],
+        "resultados": [
+          "Landing pages prontas",
+          "Criativos de anúncio",
+          "Layouts de Instagram",
+          "Padrões de marca e design system documentados",
+          "Pacotes de produção coordenados e consistentes"
+        ],
+        "treinamentos": [
+          "Gestão operacional e coordenação de equipe com visão de conjunto",
+          "Design system, padrões visuais e direção de arte",
+          "Direção de landing pages e criativos de performance",
+          "Organização de processos e fluxos de produção"
+        ],
+        "como_pedir": [
+          "Quero que a Juliana coordene o pacote do lançamento: página, criativos e posts.",
+          "Pede pra Juliana criar os layouts de Instagram do mês no padrão da marca.",
+          "Quero que a Juliana revise se as peças da campanha estão com a mesma identidade visual.",
+          "Pede pra Juliana organizar o fluxo de produção de conteúdo da equipe."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "rafael-projetos",
+        "nome": "Rafael",
+        "cargo": "Gestor de projetos",
+        "area": "Comando e operação",
+        "imagem": "assets/agentes/rafael-projetos.webp",
+        "resumo": "Rafael é o gestor de projetos da equipe. É ele quem transforma a estratégia da Sônia em cronograma: monta o plano, prioriza o que entra primeiro, divide em etapas, distribui as tarefas e cobra a entrega no tempo combinado.",
+        "o_que_faz": [
+          "Monta o plano de entregas e prioriza o que vem primeiro",
+          "Divide a estratégia em etapas e distribui entre as áreas",
+          "Acompanha o status de cada frente e cobra o prazo",
+          "Identifica gargalo antes de virar atraso"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Gestão de projetos",
+            "texto": "Transforma estratégia em plano executável com prazo."
+          },
+          {
+            "titulo": "Priorização de entregas",
+            "texto": "Decide o que entra primeiro e organiza a fila."
+          },
+          {
+            "titulo": "Controle de prazo",
+            "texto": "Acompanha o andamento e cobra cada entrega."
+          },
+          {
+            "titulo": "Coordenação entre áreas",
+            "texto": "Distribui as tarefas e alinha as frentes."
+          }
+        ],
+        "plataformas": "CRM · Telegram",
+        "como_trabalha": "Pega a estratégia validada pela Sônia e transforma em plano executável com prazo. Garante que nenhuma entrega fique esquecida e que tudo chegue no tempo combinado.",
+        "passos": [
+          "Recebe a estratégia validada pela Sônia",
+          "Monta o plano de entregas e define a prioridade",
+          "Divide em etapas e distribui entre as áreas",
+          "Acompanha o status de cada frente e cobra o prazo",
+          "Aponta o gargalo antes de virar atraso"
+        ],
+        "turnos": [
+          "Diário: status das entregas e prazos do dia",
+          "Semanal: revisão do plano, das prioridades e das pendências"
+        ],
+        "resultados": [
+          "Plano de entregas com prazo",
+          "Lista de prioridades",
+          "Status de cada frente do projeto",
+          "Alertas de gargalo e de atraso",
+          "Registro das pendências em aberto"
+        ],
+        "treinamentos": [
+          "Gestão de projetos ágil, sem burocracia",
+          "Roadmap e priorização",
+          "Acompanhamento de prazo e controle de andamento",
+          "Coordenação entre áreas"
+        ],
+        "como_pedir": [
+          "Quero que o Rafael monte o cronograma do lançamento do mês que vem.",
+          "Pede pro Rafael me dizer o que está atrasado nos projetos.",
+          "Quero que o Rafael priorize as entregas desta semana.",
+          "Pede pro Rafael dividir esse projeto em etapas com prazo."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "paulo-dev",
+        "nome": "Paulo",
+        "cargo": "Desenvolvedor full-stack",
+        "area": "Produção",
+        "imagem": "assets/agentes/paulo-dev.webp",
+        "resumo": "Paulo é o desenvolvedor da equipe. Quando precisa de código, é ele que entra: constrói sites, sistemas e automações, implementa funcionalidades novas, resolve problemas técnicos e coloca tudo no ar. Quando a equipe tem o Boris, os sistemas grandes (ERP, CRM, SaaS) são planejados e supervisionados por ele, e o Paulo executa as partes de código.",
+        "o_que_faz": [
+          "Constrói sites, páginas, automações e sistemas simples do zero",
+          "Implementa funcionalidades novas e resolve o que quebrou",
+          "Coloca páginas e aplicações no ar e mantém o histórico do código",
+          "Integra as suas ferramentas (por exemplo, o seu formulário com o CRM)",
+          "Valida de ponta a ponta antes de entregar"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Sites e páginas modernas",
+            "texto": "Constrói e publica páginas e sites."
+          },
+          {
+            "titulo": "Sistemas e automações",
+            "texto": "Desenvolve sistemas sob medida e automatiza processos."
+          },
+          {
+            "titulo": "Integração entre ferramentas",
+            "texto": "Conecta as suas ferramentas umas às outras."
+          },
+          {
+            "titulo": "Vídeo programático",
+            "texto": "Gera vídeo a partir de código."
+          },
+          {
+            "titulo": "Método em três fases",
+            "texto": "Planeja, executa e checa antes de entregar."
+          },
+          {
+            "titulo": "Paulo · desenvolvedor",
+            "texto": "Código de sites, automações, APIs e debug."
+          }
+        ],
+        "plataformas": "Vercel · Cloudflare · Hostinger · CRM",
+        "como_trabalha": "É acionado pela Sônia ou pela Juliana sempre que a entrega tem código. Em sistema grande, segue o plano e a revisão do Boris quando ele está na equipe. Trabalha metódico, testa antes de entregar e devolve com tudo funcionando, pra não quebrar o que já está no ar.",
+        "passos": [
+          "É acionado pela Sônia ou pela Juliana quando a entrega tem código",
+          "Em sistema grande, recebe do Boris o plano e a parte que é dele, e devolve para a revisão dele",
+          "Planeja a solução antes de escrever",
+          "Atualiza o código e implementa a funcionalidade",
+          "Testa depois de cada alteração e valida de ponta a ponta",
+          "Coloca no ar e registra o histórico do código"
+        ],
+        "turnos": [
+          "Por demanda: entra quando a entrega tem código",
+          "Semanal: checagem das páginas e integrações que já estão no ar"
+        ],
+        "resultados": [
+          "Sites e páginas no ar",
+          "Automações e sistemas simples sob medida",
+          "Integrações entre ferramentas, como formulário e CRM",
+          "Correção do que quebrou",
+          "Vídeos programáticos"
+        ],
+        "treinamentos": [
+          "Desenvolvimento full-stack com React, Next.js, Node.js, TypeScript e Python",
+          "Banco de dados PostgreSQL",
+          "Deploy e versionamento de código",
+          "Método de trabalho em três fases: planejamento, execução e checagem antes da entrega"
+        ],
+        "como_pedir": [
+          "Quero que o Paulo integre o formulário do site com o CRM.",
+          "Pede pro Paulo corrigir o botão da página de vendas que parou de funcionar.",
+          "Quero que o Paulo construa um sistema simples pra controlar meus pedidos.",
+          "Pede pro Paulo colocar essa página no ar no meu domínio."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "clone-do-dono",
+        "nome": "Clone do dono",
+        "cargo": "SDR · atendimento no Direct e no WhatsApp",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/clone-do-dono.webp",
+        "resumo": "O clone de atendimento do dono: responde nas DMs do Instagram e no WhatsApp falando como o dono fala, com o tom de voz aprendido no onboarding, qualifica quem chama e registra tudo no pipeline.",
+        "o_que_faz": [
+          "Atende nas DMs do Instagram e no WhatsApp",
+          "Qualifica com SPIN Selling e BANT",
+          "Oferece o próximo passo do funil definido pelo dono",
+          "Agenda quando faz sentido",
+          "Registra cada interação no pipeline"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Social selling",
+            "texto": "Conduz a venda pela conversa nas redes."
+          },
+          {
+            "titulo": "Qualificação SPIN e BANT",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo de quem chama."
+          },
+          {
+            "titulo": "Registro de pipeline",
+            "texto": "Anota cada interação no pipeline."
+          },
+          {
+            "titulo": "Agendamento",
+            "texto": "Marca a reunião quando o lead está pronto."
+          },
+          {
+            "titulo": "Clone do dono · SDR",
+            "texto": "Atendimento, qualificação e registro de leads."
+          }
+        ],
+        "plataformas": "Instagram Direct · WhatsApp",
+        "como_trabalha": "Usa os produtos, preços e links que a agente gravou na memória sobre o negócio do dono. O que não estiver lá, ele não inventa: pede para a agente confirmar com o dono.",
+        "passos": [
+          "Recebe quem chama nas DMs do Instagram ou no WhatsApp",
+          "Responde no seu tom de voz, aprendido no onboarding",
+          "Qualifica com SPIN Selling e BANT",
+          "Oferece o próximo passo do funil que você definiu e agenda quando faz sentido",
+          "Registra cada interação no pipeline"
+        ],
+        "turnos": [
+          "Contínuo: atende as conversas que chegam no Direct e no WhatsApp"
+        ],
+        "resultados": [
+          "Conversas respondidas no seu tom de voz",
+          "Leads qualificados",
+          "Reuniões agendadas",
+          "Pipeline com cada interação registrada"
+        ],
+        "treinamentos": [
+          "Social selling",
+          "Qualificação SPIN Selling e BANT",
+          "Tom de voz do dono aprendido no onboarding",
+          "Produtos, preços e links gravados na memória do negócio"
+        ],
+        "como_pedir": [
+          "Quero que o meu clone atenda as DMs do Instagram e qualifique quem pedir preço.",
+          "Quero que o clone ofereça a aula gratuita pra quem chamar no WhatsApp.",
+          "Quero que o clone agende uma call comigo quando o lead estiver qualificado.",
+          "Quero ver no pipeline as conversas que o clone atendeu esta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "jonathan-copy",
+        "nome": "Jonathan",
+        "cargo": "Redator e pesquisador",
+        "area": "Produção",
+        "imagem": "assets/agentes/jonathan-copy.webp",
+        "resumo": "Jonathan é o redator e pesquisador da equipe. Escreve tudo que tem palavra com intenção de venda e foi treinado nos modelos que mais convertem. Pesquisa cada referência antes de escrever.",
+        "o_que_faz": [
+          "Escreve cartas e páginas de venda",
+          "Cria roteiros de anúncio e de Reels",
+          "Produz posts de Instagram, conteúdo de carrossel e sequências de e-mail",
+          "Faz pesquisa de mercado e de concorrência pra embasar cada peça"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Copy de venda",
+            "texto": "Escreve cartas, páginas e anúncios com intenção de venda."
+          },
+          {
+            "titulo": "Roteiro de Reels",
+            "texto": "Cria roteiros com ganchos que prendem."
+          },
+          {
+            "titulo": "Conteúdo de Instagram",
+            "texto": "Produz posts e textos de carrossel."
+          },
+          {
+            "titulo": "E-mail marketing",
+            "texto": "Escreve sequências de e-mail e textos de automação."
+          },
+          {
+            "titulo": "Pesquisa de mercado",
+            "texto": "Levanta concorrência e referências antes de escrever."
+          },
+          {
+            "titulo": "Jonathan · copy",
+            "texto": "Copy, roteiros, conteúdo e pesquisa."
+          }
+        ],
+        "plataformas": "Instagram · E-mail · CRM",
+        "como_trabalha": "Recebe o briefing da Sônia ou da Juliana, pesquisa, escreve e entrega a peça pronta. Trabalha junto da produção e abastece os anúncios com a copy certa.",
+        "passos": [
+          "Recebe o briefing da Sônia ou da Juliana",
+          "Consulta o seu tom de voz antes de escrever",
+          "Pesquisa mercado, concorrência e referências",
+          "Escreve a peça no tom certo pro público",
+          "Entrega a peça pronta pra produção e pros anúncios"
+        ],
+        "turnos": [
+          "Semanal: roteiros de Reels e posts da semana",
+          "Mensal: pesquisa de mercado e de concorrência atualizada"
+        ],
+        "resultados": [
+          "Cartas e páginas de venda",
+          "Roteiros de anúncio e de Reels",
+          "Posts de Instagram e conteúdo de carrossel",
+          "Sequências de e-mail",
+          "Relatórios de pesquisa de mercado e de concorrência"
+        ],
+        "treinamentos": [
+          "Copy de venda treinado nos modelos que mais convertem",
+          "Copywriting direto e indireto",
+          "Roteiro de Reels em 7 atos: gancho, contexto, conflito, virada, expansão, CTA e encerramento",
+          "Pesquisa de mercado, concorrência e referência",
+          "Português impecável e tom certo pra cada público"
+        ],
+        "como_pedir": [
+          "Quero que o Jonathan escreva a carta de vendas do meu curso novo.",
+          "Pede pro Jonathan três roteiros de Reels sobre o tema da semana.",
+          "Quero que o Jonathan pesquise os concorrentes antes do lançamento.",
+          "Pede pro Jonathan uma sequência de cinco e-mails pra quem baixou o material gratuito."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "bianca-viral",
+        "nome": "Bianca",
+        "cargo": "Analista de vídeos virais",
+        "area": "Produção",
+        "imagem": "assets/agentes/bianca-viral.webp",
+        "resumo": "Bianca é a analista de vídeos virais do Instagram. Roda um estudo completo de descoberta, transcrição e análise por dois ângulos pra decodificar exatamente o que faz um conteúdo viralizar.",
+        "o_que_faz": [
+          "Descobre criadores de referência no seu nicho",
+          "Transcreve os vídeos de maior alcance",
+          "Analisa o que faz o conteúdo viralizar",
+          "Entrega gancho, estrutura, ritmo e padrões pra você replicar"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Descoberta de criadores",
+            "texto": "Encontra criadores de referência no seu nicho."
+          },
+          {
+            "titulo": "Transcrição de vídeo",
+            "texto": "Transcreve os vídeos de maior alcance."
+          },
+          {
+            "titulo": "Análise de viralidade",
+            "texto": "Explica por dois ângulos por que um vídeo viralizou."
+          },
+          {
+            "titulo": "Decodificação de gancho",
+            "texto": "Disseca gancho, estrutura e ritmo dos maiores vídeos."
+          },
+          {
+            "titulo": "Templates de roteiro",
+            "texto": "Transforma os padrões em roteiros prontos pra você gravar."
+          }
+        ],
+        "plataformas": "Instagram",
+        "como_trabalha": "Entra antes da produção de conteúdo: decodifica o que viraliza e entrega o material pro Jonathan virar roteiro e pra Juliana virar produção.",
+        "passos": [
+          "Recebe o perfil de Instagram ou o canal do YouTube a analisar",
+          "Valida o perfil e coleta os vídeos de maior alcance",
+          "Transcreve os vídeos",
+          "Analisa por dois ângulos o que faz o conteúdo viralizar",
+          "Monta a página do estudo e entrega pra Sônia, que publica com o seu OK"
+        ],
+        "turnos": [
+          "Mensal: estudo de um criador de referência do seu nicho",
+          "Por demanda: análise viral do perfil que você indicar"
+        ],
+        "resultados": [
+          "Página de estudo viral do criador analisado",
+          "Padrões dominantes de gancho, estrutura e ritmo",
+          "Anatomia dos comentários e combinações de gancho e chamada que funcionam",
+          "Três roteiros prontos no seu estilo pra replicar",
+          "Material pro Jonathan virar roteiro e pra Juliana virar produção"
+        ],
+        "treinamentos": [
+          "Descoberta e estudo de vídeos do Instagram e do YouTube",
+          "Transcrição de vídeo",
+          "Análise de viralidade por dois ângulos",
+          "Decodificação de gancho, estrutura e ritmo",
+          "Mecanismos psicológicos explicados em linguagem leve"
+        ],
+        "como_pedir": [
+          "Quero que a Bianca faça a análise viral do @perfil.",
+          "Pede pra Bianca analisar o canal do YouTube desse criador.",
+          "Quero que a Bianca descubra os criadores que mais viralizam no meu nicho.",
+          "Pede pra Bianca me dar os ganchos que mais funcionam nesse perfil."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "amanda-crm",
+        "nome": "Amanda",
+        "cargo": "Gerente do CRM",
+        "area": "Produção",
+        "imagem": "assets/agentes/amanda-crm.webp",
+        "resumo": "Amanda é a gerente do CRM e a especialista absoluta na plataforma. Começou como SDR e foi promovida pela performance. Hoje cuida do suporte e da estrutura do CRM por inteiro.",
+        "o_que_faz": [
+          "Dá suporte e organiza a sua base dentro do CRM",
+          "Gerencia contatos, etiquetas e anotações",
+          "Estrutura os funis e movimenta as oportunidades pelas etapas",
+          "Configura e acompanha as automações de marketing"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Gestão de contatos",
+            "texto": "Cria, atualiza, etiqueta e atribui contatos."
+          },
+          {
+            "titulo": "Funis e pipelines",
+            "texto": "Estrutura funis e move as oportunidades pelas etapas."
+          },
+          {
+            "titulo": "Agenda",
+            "texto": "Consulta horários livres e cria ou ajusta agendamentos."
+          },
+          {
+            "titulo": "Automações de marketing",
+            "texto": "Acompanha o status das automações ativas."
+          },
+          {
+            "titulo": "Suporte didático",
+            "texto": "Explica cada ajuste passo a passo."
+          }
+        ],
+        "plataformas": "CRM · WhatsApp · Instagram · E-mail · Calendários",
+        "como_trabalha": "É acionada pra suporte e organização da base. Mantém os dados limpos pra que o squad de vendas e o tráfego trabalhem em cima de informação confiável.",
+        "passos": [
+          "Entende o problema ou o pedido sobre o CRM",
+          "Verifica contatos, automações e pipelines pra achar o que está errado",
+          "Resolve direto no CRM quando é possível",
+          "Quando o ajuste é só pela interface, te orienta passo a passo",
+          "Registra o atendimento"
+        ],
+        "turnos": [
+          "Semanal: limpeza da base, com contatos, etiquetas e anotações organizados",
+          "Semanal: revisão das oportunidades paradas nas etapas do funil",
+          "Mensal: checagem das automações de marketing ativas"
+        ],
+        "resultados": [
+          "Base de contatos limpa e etiquetada",
+          "Funis estruturados com as oportunidades na etapa certa",
+          "Agendamentos criados, ajustados ou cancelados",
+          "Automações de marketing acompanhadas",
+          "Suporte passo a passo pras dúvidas de uso"
+        ],
+        "treinamentos": [
+          "Domínio de cada menu e fluxo do CRM",
+          "Gestão de contatos, etiquetas, notas e tarefas",
+          "Funis, pipelines e oportunidades",
+          "Calendários, conversas, produtos e faturas",
+          "Suporte didático passo a passo"
+        ],
+        "como_pedir": [
+          "Quero que a Amanda organize as etiquetas dos meus contatos.",
+          "Pede pra Amanda mover pra etapa de proposta os leads que já fizeram reunião.",
+          "Quero que a Amanda me explique como montar um funil novo no CRM.",
+          "Pede pra Amanda conferir por que essa automação não disparou.",
+          "Quero que a Amanda me mostre os horários livres da agenda desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "estrategista-trafego",
+        "nome": "Estrategista de tráfego",
+        "cargo": "Gestor de tráfego pago",
+        "area": "Tráfego e clientes",
+        "imagem": "assets/agentes/estrategista-trafego.webp",
+        "resumo": "O Estrategista de tráfego é o gestor de tráfego digital, treinado no método de um gestor de tráfego sênior, para pensar e decidir como ele. Cuida dos anúncios pagos de ponta a ponta, do planejamento da campanha até a otimização do resultado.",
+        "o_que_faz": [
+          "Estrutura as campanhas de anúncio no Facebook e Instagram",
+          "Cria o criativo de performance e a copy do anúncio",
+          "Monta os públicos (frio, quente e parecidos)",
+          "Acompanha as métricas e otimiza o custo por resultado",
+          "Liga o tráfego ao CRM pra fechar o ciclo do lead"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Gestão de anúncios",
+            "texto": "Cuida das campanhas no Facebook e no Instagram do planejamento à otimização."
+          },
+          {
+            "titulo": "Tráfego direto e perpétuo",
+            "texto": "Define a estratégia de captação contínua ou pontual."
+          },
+          {
+            "titulo": "Criativo de performance",
+            "texto": "Cria o criativo e a copy do anúncio."
+          },
+          {
+            "titulo": "Montagem de públicos",
+            "texto": "Monta públicos frio, quente e parecidos."
+          },
+          {
+            "titulo": "Leitura de métricas",
+            "texto": "Lê os números e otimiza o custo por resultado."
+          }
+        ],
+        "plataformas": "Meta Ads · Facebook · Instagram · CRM",
+        "como_trabalha": "Entra na frente de captação: transforma a verba em campanha rodando e entrega o lead direto no CRM pro squad de vendas atender.",
+        "passos": [
+          "Recebe o objetivo e a verba da campanha",
+          "Planeja a estrutura da campanha no Facebook e no Instagram",
+          "Cria o criativo de performance e a copy do anúncio no seu tom",
+          "Monta os públicos frio, quente e parecidos",
+          "Acompanha as métricas, otimiza o custo por resultado e entrega o lead no CRM"
+        ],
+        "turnos": [
+          "Diário: leitura das métricas das campanhas ativas",
+          "Semanal: otimização de públicos, criativos e verba",
+          "Mensal: relatório de resultado e plano do mês seguinte"
+        ],
+        "resultados": [
+          "Campanhas estruturadas e rodando no Facebook e no Instagram",
+          "Criativos de performance e copy de anúncio",
+          "Públicos frio, quente e parecidos montados",
+          "Relatórios de ROAS, CPA, CTR, CPM e frequência",
+          "Leads entregues no CRM pro squad de vendas"
+        ],
+        "treinamentos": [
+          "Método de um gestor de tráfego sênior",
+          "Meta Ads de ponta a ponta",
+          "Estratégia de tráfego direto e perpétuo",
+          "Métricas ROAS, CPA, CTR, CPM e frequência",
+          "Funis de venda e automação"
+        ],
+        "como_pedir": [
+          "Quero que o Estrategista de tráfego monte uma campanha pra captar leads da minha aula.",
+          "Pede pro Estrategista de tráfego analisar por que o custo por lead subiu.",
+          "Quero que o Estrategista de tráfego crie três criativos novos pra campanha ativa.",
+          "Pede pro Estrategista de tráfego o relatório de resultado do mês."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "davi-sdr",
+        "nome": "Davi",
+        "cargo": "Líder do squad · vendas no WhatsApp",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/davi-sdr.webp",
+        "resumo": "Davi é o líder do squad de vendas e o vendedor de WhatsApp da operação. Conduz a conversa do primeiro contato até o agendamento e coordena os outros vendedores, mantendo o padrão de atendimento.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Responde objeção e faz o acompanhamento",
+          "Agenda a reunião com o time comercial",
+          "Coordena o squad e o registro no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Liderança do squad",
+            "texto": "Coordena os vendedores e mantém o mesmo padrão de atendimento."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Recebe o lead que chega do tráfego e da prospecção, aquece pelo WhatsApp e entrega agendado pro comercial. Mantém o squad inteiro no mesmo padrão.",
+        "passos": [
+          "Recebe o lead que chega do tráfego e da prospecção",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Responde objeção e faz o acompanhamento",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam",
+          "Semanal: revisão do padrão de atendimento do squad"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Objeções respondidas e acompanhamento em dia",
+          "Interações registradas no CRM",
+          "Squad trabalhando no mesmo padrão"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Liderança e padronização do squad"
+        ],
+        "como_pedir": [
+          "Quero que o Davi chame no WhatsApp os leads que entraram hoje.",
+          "Pede pro Davi retomar os leads que pararam de responder.",
+          "Quero que o Davi agende as reuniões da semana com os leads qualificados.",
+          "Pede pro Davi me mostrar como está o squad nos agendamentos."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "amanda-sdr",
+        "nome": "Amanda",
+        "cargo": "Vendedor (SDR)",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/amanda-sdr.webp",
+        "resumo": "Amanda integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz a conversa do primeiro contato até o agendamento, seguindo o padrão do squad.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Faz o acompanhamento estruturado",
+          "Agenda a reunião com o time comercial",
+          "Atende pelo WhatsApp e registra no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Padrão do squad",
+            "texto": "Atende no mesmo padrão definido pelo Davi."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Espelho do squad, sob liderança do Davi. Pega o lead, qualifica e agenda, sempre no mesmo padrão do time.",
+        "passos": [
+          "Recebe o lead distribuído pelo squad do Davi",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Faz o acompanhamento estruturado e responde objeção",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Acompanhamento em dia",
+          "Interações registradas no CRM"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Padrão de atendimento do squad"
+        ],
+        "como_pedir": [
+          "Quero que a Amanda chame no WhatsApp os leads que entraram hoje.",
+          "Pede pra Amanda retomar os leads que pararam de responder.",
+          "Quero que a Amanda agende reuniões com os leads qualificados desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "bianca-sdr",
+        "nome": "Bianca",
+        "cargo": "Vendedor (SDR)",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/bianca-sdr.webp",
+        "resumo": "Bianca integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz a conversa do primeiro contato até o agendamento, seguindo o padrão do squad.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Faz o acompanhamento estruturado",
+          "Agenda a reunião com o time comercial",
+          "Atende pelo WhatsApp e registra no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Padrão do squad",
+            "texto": "Atende no mesmo padrão definido pelo Davi."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Espelho do squad, sob liderança do Davi. Pega o lead, qualifica e agenda, sempre no mesmo padrão do time.",
+        "passos": [
+          "Recebe o lead distribuído pelo squad do Davi",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Faz o acompanhamento estruturado e responde objeção",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Acompanhamento em dia",
+          "Interações registradas no CRM"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Padrão de atendimento do squad"
+        ],
+        "como_pedir": [
+          "Quero que a Bianca chame no WhatsApp os leads que entraram hoje.",
+          "Pede pra Bianca retomar os leads que pararam de responder.",
+          "Quero que a Bianca agende reuniões com os leads qualificados desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "carolina-sdr",
+        "nome": "Carolina",
+        "cargo": "Vendedor (SDR)",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/carolina-sdr.webp",
+        "resumo": "Carolina integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz a conversa do primeiro contato até o agendamento, seguindo o padrão do squad.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Faz o acompanhamento estruturado",
+          "Agenda a reunião com o time comercial",
+          "Atende pelo WhatsApp e registra no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Padrão do squad",
+            "texto": "Atende no mesmo padrão definido pelo Davi."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Espelho do squad, sob liderança do Davi. Pega o lead, qualifica e agenda, sempre no mesmo padrão do time.",
+        "passos": [
+          "Recebe o lead distribuído pelo squad do Davi",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Faz o acompanhamento estruturado e responde objeção",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Acompanhamento em dia",
+          "Interações registradas no CRM"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Padrão de atendimento do squad"
+        ],
+        "como_pedir": [
+          "Quero que a Carolina chame no WhatsApp os leads que entraram hoje.",
+          "Pede pra Carolina retomar os leads que pararam de responder.",
+          "Quero que a Carolina agende reuniões com os leads qualificados desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "felipe-sdr",
+        "nome": "Felipe",
+        "cargo": "Vendedor (SDR)",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/felipe-sdr.webp",
+        "resumo": "Felipe integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz a conversa do primeiro contato até o agendamento, seguindo o padrão do squad.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Faz o acompanhamento estruturado",
+          "Agenda a reunião com o time comercial",
+          "Atende pelo WhatsApp e registra no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Padrão do squad",
+            "texto": "Atende no mesmo padrão definido pelo Davi."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Espelho do squad, sob liderança do Davi. Pega o lead, qualifica e agenda, sempre no mesmo padrão do time.",
+        "passos": [
+          "Recebe o lead distribuído pelo squad do Davi",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Faz o acompanhamento estruturado e responde objeção",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Acompanhamento em dia",
+          "Interações registradas no CRM"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Padrão de atendimento do squad"
+        ],
+        "como_pedir": [
+          "Quero que o Felipe chame no WhatsApp os leads que entraram hoje.",
+          "Pede pro Felipe retomar os leads que pararam de responder.",
+          "Quero que o Felipe agende reuniões com os leads qualificados desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "lucas-sdr",
+        "nome": "Lucas",
+        "cargo": "Vendedor (SDR)",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/lucas-sdr.webp",
+        "resumo": "Lucas integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz a conversa do primeiro contato até o agendamento, seguindo o padrão do squad.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Faz o acompanhamento estruturado",
+          "Agenda a reunião com o time comercial",
+          "Atende pelo WhatsApp e registra no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Padrão do squad",
+            "texto": "Atende no mesmo padrão definido pelo Davi."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Espelho do squad, sob liderança do Davi. Pega o lead, qualifica e agenda, sempre no mesmo padrão do time.",
+        "passos": [
+          "Recebe o lead distribuído pelo squad do Davi",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Faz o acompanhamento estruturado e responde objeção",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Acompanhamento em dia",
+          "Interações registradas no CRM"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Padrão de atendimento do squad"
+        ],
+        "como_pedir": [
+          "Quero que o Lucas chame no WhatsApp os leads que entraram hoje.",
+          "Pede pro Lucas retomar os leads que pararam de responder.",
+          "Quero que o Lucas agende reuniões com os leads qualificados desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "matheus-sdr",
+        "nome": "Matheus",
+        "cargo": "Vendedor (SDR)",
+        "area": "Squad de vendas",
+        "imagem": "assets/agentes/matheus-sdr.webp",
+        "resumo": "Matheus integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz a conversa do primeiro contato até o agendamento, seguindo o padrão do squad.",
+        "o_que_faz": [
+          "Faz o primeiro contato com o lead",
+          "Qualifica com método consultivo",
+          "Faz o acompanhamento estruturado",
+          "Agenda a reunião com o time comercial",
+          "Atende pelo WhatsApp e registra no CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Qualificação consultiva",
+            "texto": "Descobre necessidade, orçamento, decisor e prazo do lead."
+          },
+          {
+            "titulo": "Condução até o agendamento",
+            "texto": "Leva a conversa do primeiro contato à reunião marcada."
+          },
+          {
+            "titulo": "Objeção e acompanhamento",
+            "texto": "Responde objeções e retoma quem não respondeu."
+          },
+          {
+            "titulo": "Padrão do squad",
+            "texto": "Atende no mesmo padrão definido pelo Davi."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendários",
+        "como_trabalha": "Espelho do squad, sob liderança do Davi. Pega o lead, qualifica e agenda, sempre no mesmo padrão do time.",
+        "passos": [
+          "Recebe o lead distribuído pelo squad do Davi",
+          "Faz o primeiro contato pelo WhatsApp",
+          "Qualifica com método consultivo e BANT",
+          "Faz o acompanhamento estruturado e responde objeção",
+          "Agenda a reunião com o time comercial e registra no CRM"
+        ],
+        "turnos": [
+          "Diário: primeiro contato com os leads novos do dia",
+          "Diário: acompanhamento dos leads que não responderam"
+        ],
+        "resultados": [
+          "Leads contatados e qualificados",
+          "Reuniões agendadas com o time comercial",
+          "Acompanhamento em dia",
+          "Interações registradas no CRM"
+        ],
+        "treinamentos": [
+          "Qualificação consultiva e BANT",
+          "Condução da conversa do contato até o agendamento",
+          "Tratamento de objeção e acompanhamento estruturado",
+          "Padrão de atendimento do squad"
+        ],
+        "como_pedir": [
+          "Quero que o Matheus chame no WhatsApp os leads que entraram hoje.",
+          "Pede pro Matheus retomar os leads que pararam de responder.",
+          "Quero que o Matheus agende reuniões com os leads qualificados desta semana."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "marcia-financeiro",
+        "nome": "Márcia",
+        "cargo": "Financeiro e contabilidade",
+        "area": "Produção",
+        "imagem": "assets/agentes/marcia-financeiro.webp",
+        "resumo": "Márcia cuida do financeiro e da contabilidade. Concilia extratos, controla contas a pagar e a receber, projeta o caixa, monta a DRE, prepara o fechamento do mês e entrega o material para o contador.",
+        "o_que_faz": [
+          "Concilia extrato, OFX e retorno CNAB com o razão",
+          "Lança e baixa contas nos ERPs, com a sua aprovação",
+          "Projeta o caixa dos próximos 30 dias",
+          "Monta a DRE e comenta as variações do mês",
+          "Prepara o pacote do fechamento para o contador"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Conciliação bancária",
+            "texto": "Casa extrato e razão e lista o que sobrou."
+          },
+          {
+            "titulo": "Contabilidade, SPED e fechamento",
+            "texto": "Prepara o fechamento e o material de ECD e ECF."
+          },
+          {
+            "titulo": "Remessa e retorno CNAB",
+            "texto": "Lê e gera arquivos CNAB 240 e 400."
+          },
+          {
+            "titulo": "Conector contábil EUA",
+            "texto": "Clientes, faturas, contas e relatórios no ERP contábil online dos EUA."
+          },
+          {
+            "titulo": "Conector contábil global",
+            "texto": "Contatos, faturas, contas e relatórios no ERP contábil online global."
+          },
+          {
+            "titulo": "Fechamento e conciliação",
+            "texto": "Conciliação contábil, provisões, rolagem e comentário de variação."
+          },
+          {
+            "titulo": "Gateway de pagamentos online",
+            "texto": "Boas práticas, pagamentos, contas conectadas e cobrança recorrente."
+          },
+          {
+            "titulo": "Leitor de extrato OFX",
+            "texto": "Lê extrato bancário e de cartão em OFX."
+          },
+          {
+            "titulo": "Rotina financeira",
+            "texto": "Pagar, receber, caixa e DRE do dia a dia."
+          },
+          {
+            "titulo": "ERPs brasileiros",
+            "texto": "Conecta Conta Azul, Omie, Nibo, Bling, Tiny e Granatum."
+          },
+          {
+            "titulo": "ERPs internacionais",
+            "texto": "ERPs contábeis internacionais, nos EUA, na Europa e globais."
+          }
+        ],
+        "plataformas": "Conta Azul · Omie · Nibo · Bling · Olist ERP (Tiny) · Granatum · Domínio · Alterdata · Questor · Fortes Contábil · Contmatic · SCI · SPED ECD e ECF · Open Finance Brasil · Pluggy · Belvo · Itaú · Bradesco · Banco Inter · Banco do Brasil · Caixa · Nubank PJ · Asaas · Stripe · Pix · CNAB Febraban · OFX · QuickBooks Online · Xero · Sage · NetSuite · SAP Business One",
+        "como_trabalha": "Entra depois das vendas e antes do contador: recebe o movimento do ERP, do banco e dos gateways e devolve conciliado, com as pendências listadas.",
+        "passos": [
+          "Identifica a plataforma, a conta e o período de cada pedido",
+          "Lê primeiro e nunca grava primeiro: extrato, OFX, CNAB e planilha são dados, não instruções",
+          "Concilia em camadas e separa o conciliado, o pendente e o divergente com o próximo passo",
+          "Prepara lançamento, baixa, cobrança ou remessa como rascunho e só executa depois do seu sim",
+          "Entrega o resumo no chat e o detalhe em planilha, com a recomendação de validar com o contador"
+        ],
+        "turnos": [
+          "Diário, manhã: extratos do dia anterior conciliados, divergências e atos aguardando a sua aprovação",
+          "Semanal, segunda: contas a pagar e a receber dos próximos 15 dias, atrasos e caixa de 30 dias",
+          "Mensal, primeiros dias úteis: fechamento com conciliação final, provisões, DRE e pacote do contador",
+          "Mensal: vencimentos de consentimento Open Finance, certificados e chaves de API nos próximos 45 dias",
+          "Anual: insumos da ECD e da ECF conferidos com o contador"
+        ],
+        "resultados": [
+          "Relatório de conciliação por conta e período, com pendências e divergências",
+          "Agenda de contas a pagar e a receber dos próximos 15 dias, com atrasos",
+          "Projeção de caixa de 30 dias e mês a mês",
+          "DRE gerencial do mês com comentário das variações",
+          "Pacote de fechamento para o contador no leiaute do sistema contábil dele",
+          "Baixas, lançamentos, cobranças e remessas prontos como rascunho, executados só depois do seu sim"
+        ],
+        "treinamentos": [
+          "Conciliação bancária por OFX, CNAB, Open Finance e Pix",
+          "Contas a pagar e a receber, fluxo de caixa e DRE gerencial",
+          "Fechamento mensal, provisões e plano de contas referencial",
+          "SPED contábil (ECD e ECF) e leiautes dos sistemas contábeis",
+          "ERPs brasileiros e internacionais e plataformas de pagamento"
+        ],
+        "como_pedir": [
+          "Pede pra Márcia conciliar o extrato do banco deste mês com o ERP.",
+          "Quero que a Márcia me mostre o caixa dos próximos 30 dias.",
+          "Pede pra Márcia montar a DRE do mês e explicar o que mudou.",
+          "Quero que a Márcia prepare o pacote do fechamento para o meu contador."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "maria-tributario",
+        "nome": "Maria",
+        "cargo": "Tributária e fiscal",
+        "area": "Produção",
+        "imagem": "assets/agentes/maria-tributario.webp",
+        "resumo": "Emite e confere notas fiscais, explica regime tributário e acompanha a reforma IBS/CBS e as obrigações acessórias.",
+        "o_que_faz": [
+          "Monta e confere os dados da nota antes de emitir",
+          "Conecta as plataformas de emissão do dono",
+          "Explica o que muda em cada regime e no calendário da reforma",
+          "Lembra prazos de obrigações acessórias"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Emissão de nota fiscal",
+            "texto": "Emite e confere NF-e, NFC-e, NFS-e e CT-e para qualquer porte e regime."
+          },
+          {
+            "titulo": "Cálculos tributários",
+            "texto": "Tributário, IRPF, trabalhista, societário e mais, em português."
+          },
+          {
+            "titulo": "Consultas e documentos fiscais",
+            "texto": "CNPJ, NF-e, NFS-e, CT-e, SPED, Simples e reforma."
+          },
+          {
+            "titulo": "Integração com emissor por API",
+            "texto": "Integra emissão de notas por API em PHP."
+          },
+          {
+            "titulo": "Leitor do SPED Fiscal",
+            "texto": "Importa EFD ICMS/IPI para banco e analisa inventário."
+          },
+          {
+            "titulo": "NFS-e nacional",
+            "texto": "Emissão e consulta no padrão nacional da NFS-e."
+          },
+          {
+            "titulo": "Referência de API de emissão",
+            "texto": "Referência completa de uma API de emissão de notas."
+          },
+          {
+            "titulo": "XML de documentos fiscais",
+            "texto": "Lê e gera XML de NF-e, NFS-e, CT-e e MDF-e pelo schema oficial."
+          }
+        ],
+        "plataformas": "Certificado digital ICP-Brasil · Emissor Nacional NFS-e · Prefeituras (NFS-e municipal) · SEFAZ (NF-e e NFC-e) · SEFAZ (CT-e e MDF-e) · Portal do Simples Nacional e MEI · Serpro Integra Contador · e-CAC · Calculadora oficial IBS/CBS · SPED · Nota Gateway (eNotas) · Focus NFe · NFE.io · PlugNotas · Nuvem Fiscal · Bling · Omie · Conta Azul · Tiny (Olist ERP)",
+        "como_trabalha": "Recebe o pedido de nota ou dúvida fiscal da agente principal, confere com o dono e entrega a nota emitida ou a orientação com a fonte.",
+        "passos": [
+          "Entende a empresa: CNPJ, regime, o que vende, município e onde emite hoje",
+          "Aponta o documento fiscal que cabe a cada operação, com a fonte",
+          "Monta a nota e mostra o resumo com códigos, valores e tributos para você conferir",
+          "Testa primeiro em homologação e só emite em produção depois do seu sim",
+          "Guarda XML e PDF e registra número, chave, protocolo e status de cada nota"
+        ],
+        "turnos": [
+          "Diário, manhã: notas rejeitadas, pendentes ou em contingência, com o motivo de cada rejeição",
+          "Semanal, segunda: notas emitidas e canceladas, numeração a inutilizar e certificados perto do vencimento",
+          "Mensal, dia 1: calendário de obrigações do seu regime com cada data conferida na fonte oficial",
+          "Anual: declarações do MEI, do Simples e do Lucro Presumido ou Real e as datas da reforma do ano seguinte"
+        ],
+        "resultados": [
+          "Diagnóstico de qual documento fiscal cabe a cada operação da empresa",
+          "Nota conferida em homologação e emitida em produção só depois do seu sim, com XML e PDF guardados",
+          "Motivo de cada rejeição da SEFAZ ou da prefeitura e a correção sugerida",
+          "Calendário mensal de obrigações acessórias do seu regime",
+          "Aviso das datas da reforma tributária (IBS, CBS e IS) que atingem a empresa",
+          "Leitura e cruzamento do SPED Fiscal e dos XMLs enviados por você ou pelo contador"
+        ],
+        "treinamentos": [
+          "NF-e, NFC-e, NFS-e nacional e municipal, CT-e e MDF-e",
+          "MEI, Simples Nacional, Lucro Presumido e Lucro Real",
+          "Reforma tributária do consumo (IBS, CBS e IS)",
+          "Obrigações acessórias: SPED, EFD-Contribuições, EFD-Reinf, DCTFWeb e DAS",
+          "Certificado digital ICP-Brasil e homologação nas plataformas de emissão"
+        ],
+        "como_pedir": [
+          "Pede pra Maria montar a nota de serviço deste cliente pra eu conferir.",
+          "Quero que a Maria me explique se vale a pena sair do Simples Nacional.",
+          "Pede pra Maria ver por que a SEFAZ rejeitou esta nota.",
+          "Quero que a Maria monte o calendário fiscal deste mês da minha empresa."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "aline-juridico",
+        "nome": "Aline",
+        "cargo": "Especialista jurídica",
+        "area": "Produção",
+        "imagem": "assets/agentes/aline-juridico.webp",
+        "resumo": "Contratos, LGPD, registro de marca no INPI e processos, com a lei como fonte.",
+        "o_que_faz": [
+          "Elabora e revisa contratos e aponta cláusulas de risco",
+          "Compara versões de contrato",
+          "Redige termos de uso e política de privacidade",
+          "Conduz o registro de marca no INPI",
+          "Monitora processos e publicações"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Base legal Brasil",
+            "texto": "Contratos, LGPD e INPI com a lei como fonte."
+          },
+          {
+            "titulo": "Análise de contrato e DJe",
+            "texto": "Análise de contrato, monitor de DJe e calculadora processual."
+          },
+          {
+            "titulo": "Consulta ao CNJ",
+            "texto": "Como consultar as APIs públicas do CNJ."
+          },
+          {
+            "titulo": "Jurídico comercial, privacidade e PI",
+            "texto": "Revisão de contratos comerciais, privacidade e propriedade intelectual."
+          },
+          {
+            "titulo": "LGPD completa",
+            "texto": "RIPD, consentimento, incidente, DPA, pedidos do titular e mais."
+          },
+          {
+            "titulo": "Processos e prazos",
+            "texto": "Processos no DataJud, DJe, prazos e monitoramento."
+          },
+          {
+            "titulo": "Redline de contrato",
+            "texto": "Gera Word com alterações rastreadas e PDF de redline."
+          },
+          {
+            "titulo": "Revisão de cláusulas de risco",
+            "texto": "Detecta cláusulas de risco por categoria."
+          },
+          {
+            "titulo": "Rotina jurídica de contratos e risco",
+            "texto": "Revisão de contrato, triagem de NDA, risco e resposta jurídica."
+          },
+          {
+            "titulo": "Plataformas do jurídico",
+            "texto": "Assinatura, processos e Diário Oficial."
+          },
+          {
+            "titulo": "Registro de marca no INPI",
+            "texto": "Da busca de anterioridade ao acompanhamento na RPI."
+          }
+        ],
+        "plataformas": "Clicksign · D4Sign · DocuSign · ZapSign · Autentique · Datajud (CNJ) · PJe e MNI · e-SAJ (TJSP) · DJEN · Domicílio Judicial Eletrônico · Diário Oficial da União (INLABS) · Jusbrasil · Escavador · Judit · JUIT · ADVBOX · Projuris ADV · Astrea · Legal One · INPI (pePI, e-INPI, GRU, e-Marcas, RPI)",
+        "como_trabalha": "Entra quando o time precisa de contrato, assinatura, marca ou política de privacidade e devolve o parecer com a fonte para o dono aprovar.",
+        "passos": [
+          "Entende o pedido e separa o assunto: contrato, assinatura, LGPD, marca, processo ou publicação",
+          "Lê a lei e a fonte oficial antes de afirmar e cita o artigo de cada ponto",
+          "Revisa o contrato com matriz de risco ALTO, MÉDIO e BAIXO e propõe redação alternativa",
+          "Mostra cada ato com efeito externo e o custo, e só executa depois do seu sim",
+          "Entrega separando o verificado, o inferido e o pendente, com a recomendação de validar com advogado"
+        ],
+        "turnos": [
+          "Diário, manhã: publicações do dia anterior, andamentos novos e lista curta de prazos abertos",
+          "Diário, fim da tarde: envelopes de assinatura parados e atos aguardando a sua aprovação",
+          "Semanal, terça: conferência da revista do INPI para os seus processos de marca",
+          "Semanal: pedidos de titular da LGPD em aberto e o prazo de cada um",
+          "Mensal: contratos com vencimento, renovação ou reajuste nos próximos 60 dias e marcas perto da prorrogação"
+        ],
+        "resultados": [
+          "Revisão de contrato com resumo, cláusulas de risco, artigo de lei e redação alternativa",
+          "Comparativo de versões com Word de alterações rastreadas ou PDF de redline",
+          "Termos de uso e política de privacidade pela LGPD, Marco Civil e CDC",
+          "Dossiê de viabilidade de marca com classe, guia de pagamento e passo a passo do depósito",
+          "Relatório diário de publicações, andamentos e prazos",
+          "Envelopes de assinatura preparados e enviados só depois do seu sim"
+        ],
+        "treinamentos": [
+          "Contratos no Código Civil, CDC e Lei de Liberdade Econômica",
+          "LGPD, Marco Civil da Internet e orientações da ANPD",
+          "Registro de marca no INPI do pedido à concessão",
+          "Assinatura eletrônica e validade jurídica no Brasil",
+          "Consulta de processos no CNJ, DJEN e Diário Oficial da União"
+        ],
+        "como_pedir": [
+          "Pede pra Aline revisar este contrato de prestação de serviço e marcar os riscos.",
+          "Quero que a Aline compare a versão nova do contrato com a anterior.",
+          "Pede pra Aline escrever a política de privacidade do meu site pela LGPD.",
+          "Quero que a Aline veja se dá pra registrar a minha marca no INPI."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "geane-rh",
+        "nome": "Geane",
+        "cargo": "Especialista em Recursos Humanos",
+        "area": "Produção",
+        "imagem": "assets/agentes/geane-rh.webp",
+        "resumo": "Cuida do ciclo completo de pessoas: contratar, admitir, pagar, controlar o ponto, desenvolver e desligar, tudo dentro da CLT.",
+        "o_que_faz": [
+          "Escreve descrição de vaga e roteiro de entrevista",
+          "Faz a triagem de currículos por critérios claros",
+          "Monta checklist de admissão e plano de onboarding",
+          "Calcula férias e rescisão com memória de cálculo",
+          "Explica prazos e eventos do eSocial e do FGTS Digital",
+          "Acompanha indicadores de pessoas"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Biblioteca de processos de RH",
+            "texto": "146 roteiros de RH, do recrutamento ao people analytics."
+          },
+          {
+            "titulo": "Cálculos trabalhistas",
+            "texto": "Salário líquido, rescisão, INSS, CLT vs PJ e aposentadoria."
+          },
+          {
+            "titulo": "Regras de RH: CLT, eSocial e ponto",
+            "texto": "Lei trabalhista, ponto, FGTS, INSS, IRRF e eSocial com a fonte oficial de cada fato."
+          },
+          {
+            "titulo": "Diagnóstico organizacional",
+            "texto": "Diagnóstico organizacional, pulso e prontidão para mudança."
+          },
+          {
+            "titulo": "Documentos corporativos de RH",
+            "texto": "Vaga, entrevista, onboarding, desempenho, remuneração e clima."
+          },
+          {
+            "titulo": "Validador de eventos do eSocial",
+            "texto": "Lista e valida eventos do eSocial sem rede."
+          },
+          {
+            "titulo": "Métodos de RH",
+            "texto": "Modelos de vaga, entrevista, onboarding, desempenho, clima e analytics."
+          },
+          {
+            "titulo": "Plataformas de RH",
+            "texto": "O que cada plataforma de RH, ponto e benefícios faz, como conectar e o passo a passo."
+          },
+          {
+            "titulo": "Playbooks de RH em 9 áreas",
+            "texto": "Mapa de departamento de RH e people analytics."
+          },
+          {
+            "titulo": "Recrutamento e triagem",
+            "texto": "Triagem, score, comparação, entrevista e oferta."
+          }
+        ],
+        "plataformas": "Gupy · Kenoby · Sólides Recrutamento · Pandapé · LinkedIn Recruiter · Indeed · InfoJobs · Workday · Greenhouse · Lever · BambooHR · Convenia · Factorial · Sólides Gestão · Tangerino · Pontomais · Ahgora · Oitchau · Senior · TOTVS RH · ADP · Feedz · Qulture.Rocks · Caju · Flash · VR Benefícios · Alelo · eSocial · FGTS Digital",
+        "como_trabalha": "Entra quando o assunto é gente: recebe o pedido da agente principal, entrega vaga, cálculo ou plano pronto e devolve ao dono para aprovar.",
+        "passos": [
+          "Entende o pedido e o contexto da empresa: empregados, convenção coletiva e sistemas em uso",
+          "Confere todo número de lei (alíquota, faixa, prazo) na base da CLT, do eSocial e do FGTS Digital",
+          "Combina com você os critérios antes de abrir currículos e nunca usa critério discriminatório",
+          "Mostra como rascunho toda mudança em sistema e só executa depois do seu sim",
+          "Entrega cálculos com memória de cálculo e artigo de lei para o contador ou o DP validar"
+        ],
+        "turnos": [
+          "Diário, manhã: ponto faltante ou inconsistente, candidatos novos e vencimentos do dia",
+          "Semanal, segunda: funil das vagas, férias a vencer, experiências que vencem em 15 dias e admissões da semana",
+          "Mensal, antes do fechamento: conferência da folha, calendário do eSocial e guia do FGTS Digital",
+          "Semestral: relatório de transparência salarial e revisão dos riscos psicossociais",
+          "Anual: capacitação sobre assédio e planejamento do ciclo de desempenho e da pesquisa de clima"
+        ],
+        "resultados": [
+          "Descrição de vaga, critérios de triagem e kit de entrevista prontos para aprovação",
+          "Ranking de candidatos com nota por critério e justificativa individual",
+          "Conferência da folha antes do fechamento, com memória de cálculo de INSS, IRRF e FGTS",
+          "Cálculo de férias, 13º e rescisão com artigo de lei, para o contador validar",
+          "Calendário de eSocial e FGTS Digital do mês e alertas de experiência, ASO e férias",
+          "Plano de onboarding de 30, 60 e 90 dias, ciclo de desempenho e pesquisa de clima"
+        ],
+        "treinamentos": [
+          "CLT, jornada, ponto eletrônico (Portaria 671) e férias",
+          "eSocial, FGTS Digital, INSS e IRRF",
+          "Recrutamento, triagem justa e entrevista estruturada",
+          "Onboarding, desempenho, clima e people analytics",
+          "LGPD aplicada a dados de candidatos e funcionários"
+        ],
+        "como_pedir": [
+          "Pede pra Geane escrever a vaga de vendedor interno e o roteiro de entrevista.",
+          "Quero que a Geane faça a triagem dos currículos desta vaga.",
+          "Pede pra Geane calcular a rescisão deste funcionário com a memória de cálculo.",
+          "Quero que a Geane monte o plano de onboarding do novo contratado."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "ruth-prospeccao",
+        "nome": "Ruth",
+        "cargo": "Prospecção · encontra e aquece novos clientes",
+        "area": "Tráfego e clientes",
+        "imagem": "assets/agentes/ruth-prospeccao.webp",
+        "resumo": "A Ruth prospecta clientes novos. Encontra contatos no seu perfil de cliente ideal, organiza as listas e aquece o primeiro contato para o time de vendas assumir.",
+        "o_que_faz": [
+          "Encontra contatos dentro do seu perfil de cliente ideal",
+          "Organiza e qualifica as listas de prospecção",
+          "Aquece o primeiro contato e passa o lead para o time de vendas"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Prospecção Google",
+            "texto": "Encontra empresas por nicho e cidade no Google Maps."
+          },
+          {
+            "titulo": "Prospecção Instagram",
+            "texto": "Capta leads de quem segue ou comenta um perfil de referência."
+          },
+          {
+            "titulo": "Prospecção Facebook",
+            "texto": "Capta páginas de negócio do Facebook por palavra-chave."
+          },
+          {
+            "titulo": "Enriquecimento e verificação",
+            "texto": "Completa e confere os dados de contato de cada lead."
+          },
+          {
+            "titulo": "Painel de leads",
+            "texto": "Publica os leads num painel com exportação em Excel."
+          },
+          {
+            "titulo": "Primeiro contato aprovado",
+            "texto": "Prepara a primeira mensagem e só envia com a sua aprovação."
+          }
+        ],
+        "plataformas": "Google Maps · Instagram · Facebook · LinkedIn Sales Navigator · Apollo · Hunter · Snov.io · Lusha · Econodata · Speedio · Casa dos Dados · CRM · WhatsApp Business · E-mail",
+        "como_trabalha": "Entra no começo do funil: encontra e qualifica os leads, publica no painel e no CRM e passa o primeiro contato aprovado pelo dono para o time de vendas.",
+        "passos": [
+          "Entende o pedido e fecha com você o perfil de cliente ideal",
+          "Escolhe a fonte certa pra esse perfil",
+          "Roda uma amostra pequena e mostra o resultado e o custo estimado antes de ampliar",
+          "Limpa, verifica e qualifica cada lead com o motivo da abordagem",
+          "Publica no painel de leads e no CRM e prepara o primeiro contato pra sua aprovação"
+        ],
+        "turnos": [
+          "Diário, manhã: captação da campanha ativa até a meta do dia e relatório curto",
+          "Diário, fim da tarde: fila de primeiros contatos aguardando a sua aprovação",
+          "Semanal, segunda: revisão do perfil de cliente ideal com os números da semana",
+          "Mensal: limpeza da base e relatório de custo por fonte"
+        ],
+        "resultados": [
+          "Listas de leads dentro do seu perfil de cliente ideal",
+          "Contatos enriquecidos e verificados",
+          "Painel de leads com exportação em Excel",
+          "Contatos criados no CRM com a etiqueta da campanha",
+          "Rascunho do primeiro contato por lead, pronto pra aprovar"
+        ],
+        "treinamentos": [
+          "Definição de perfil de cliente ideal",
+          "Prospecção B2B em Google Maps, Instagram, Facebook e bases de dados de empresas",
+          "Enriquecimento e verificação de contato",
+          "Boas práticas de e-mail frio e de primeiro contato por WhatsApp",
+          "LGPD na prospecção"
+        ],
+        "como_pedir": [
+          "Quero que a Ruth encontre clínicas odontológicas em Curitiba.",
+          "Pede pra Ruth captar quem comenta no perfil @referencia.",
+          "Quero que a Ruth monte uma lista de empresas do meu nicho pelo Facebook.",
+          "Pede pra Ruth preparar o primeiro contato dos leads da semana pra eu aprovar."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "boris-engenharia",
+        "nome": "Boris",
+        "cargo": "Engenheiro de software · planeja e constrói sistemas complexos",
+        "area": "Produção",
+        "imagem": "assets/agentes/boris-engenharia.webp",
+        "resumo": "O Boris é o engenheiro de software da equipe. Quando a ideia é um sistema de verdade, como ERP, CRM, SaaS com vários clientes ou painel de gestão, é ele quem planeja a estrutura inteira e responde pela infraestrutura, pelo banco de dados, pelo isolamento entre clientes, pela segurança, pelo deploy e pela escala.",
+        "o_que_faz": [
+          "Transforma o briefing da sua ideia de aplicativo num plano de construção com stack, arquitetura, banco, isolamento e fases",
+          "Constrói ERP, CRM, SaaS com vários clientes, painéis e sistemas internos",
+          "Desenha o banco de dados e garante que o dado de um cliente nunca aparece para outro",
+          "Prepara servidor, deploy, backup, monitoramento e segurança da infraestrutura",
+          "Supervisiona o Paulo em projetos grandes e revisa cada entrega antes de chegar a você"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Construção de sistemas",
+            "texto": "Leva o pedido até o sistema no ar, com prova."
+          },
+          {
+            "titulo": "Arquitetura de sistemas",
+            "texto": "Desenha ou revisa a arquitetura com dez princípios e um checklist."
+          },
+          {
+            "titulo": "ERP modular",
+            "texto": "Monta ERP com vários clientes, núcleo fixo e módulos instaláveis."
+          },
+          {
+            "titulo": "Isolamento entre clientes",
+            "texto": "Garante que o dado de um cliente nunca aparece para outro."
+          },
+          {
+            "titulo": "Deploy e operação",
+            "texto": "Coloca no ar com backup, monitoramento e volta rápida."
+          },
+          {
+            "titulo": "Supervisão do Paulo",
+            "texto": "Divide o trabalho de código e revisa cada entrega."
+          }
+        ],
+        "plataformas": "PostgreSQL · Redis · Docker · Caddy · Cloudflare · Hostinger · Vercel",
+        "como_trabalha": "A Sônia chama o Boris quando você manda a ideia de um aplicativo ou sistema grande. Ele planeja a estrutura, divide o trabalho em fases, coloca o Paulo para executar as partes de código quando o projeto é grande, revisa tudo e devolve o sistema no ar com prova de que funciona.",
+        "passos": [
+          "Recebe da Sônia o briefing da sua ideia de aplicativo",
+          "Entrevista você até o escopo ficar claro e escreve a especificação",
+          "Planeja stack, arquitetura, banco, isolamento entre clientes e fases",
+          "Constrói o núcleo e distribui as partes de código para o Paulo nos projetos grandes",
+          "Revisa segurança, isolamento e robustez antes de entregar",
+          "Coloca no ar com backup, monitoramento e prova de cada item"
+        ],
+        "turnos": [
+          "Por demanda: entra quando você manda a ideia de um sistema novo ou pede mudança grande num sistema que já existe",
+          "Semanal: checagem de saúde, backup e atualizações dos sistemas que ele colocou no ar",
+          "Mensal: revisão de segurança e de capacidade para o crescimento"
+        ],
+        "resultados": [
+          "Plano de construção com stack, arquitetura, banco e fases",
+          "Sistemas no ar, como ERP, CRM, SaaS e painéis",
+          "Banco de dados com cada cliente isolado dos outros",
+          "Deploy com backup, monitoramento e volta rápida em caso de falha",
+          "Relatório de entrega com a prova de cada item"
+        ],
+        "treinamentos": [
+          "Método completo de construção de sistemas: especificação, arquitetura, construção, revisão e entrega",
+          "Arquitetura de sistemas em 10 passos",
+          "Construção de ERP modular com núcleo fixo e módulos instaláveis",
+          "Banco PostgreSQL com isolamento por cliente",
+          "Infraestrutura, deploy, segurança e escala"
+        ],
+        "como_pedir": [
+          "Quero que o Boris planeje um sistema de gestão para a minha clínica.",
+          "Pede pro Boris montar a estrutura de um SaaS para eu vender para vários clientes.",
+          "Quero que o Boris revise a segurança e o isolamento do meu sistema.",
+          "Pede pro Boris construir um painel com os números da minha empresa."
+        ],
+        "visivel": true
+      }
+    ]
+  },
+  "economia": {
+    "visivel": true,
+    "etiqueta": "Economia",
+    "titulo": "Quanto custa cada função feita por gente. E o que sobra com um agente.",
+    "texto": "Cada agente faz o trabalho de uma função que hoje está na folha. Abaixo, o salário médio brasileiro de cada função, somado aos encargos da CLT.",
+    "encargos_percentual": 68,
+    "horas_mes": 220,
+    "rotulo_total_mes": "Time inteiro feito por gente, por mês",
+    "rotulo_total_ano": "Por ano",
+    "rotulo_agente": "Com agente",
+    "valor_agente": "24/7",
+    "linhas": [
+      {
+        "cargo": "Assistente executiva",
+        "tarefa": "Receber pedidos, distribuir tarefas e cobrar entregas",
+        "salario": 2894.08,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Web designer",
+        "tarefa": "Criar landing pages, anúncios e layouts",
+        "salario": 3846.43,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Gerente de projetos",
+        "tarefa": "Planejar sprints e cumprir prazos",
+        "salario": 14040.08,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Desenvolvedor",
+        "tarefa": "Construir sites, sistemas e integrações",
+        "salario": 6061.3,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Redator publicitário",
+        "tarefa": "Escrever copy, roteiros e e-mails",
+        "salario": 3092.95,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Social media",
+        "tarefa": "Analisar vídeos virais e planejar conteúdo",
+        "salario": 2885.5,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Analista de sucesso do cliente",
+        "tarefa": "Operar funis, conversas e automações",
+        "salario": 4131.66,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Analista de tráfego pago",
+        "tarefa": "Rodar e otimizar campanhas pagas",
+        "salario": 5995.28,
+        "pessoas": 1
+      },
+      {
+        "cargo": "SDR",
+        "tarefa": "Atender, qualificar leads e agendar reuniões",
+        "salario": 2530.0,
+        "pessoas": 8
+      },
+      {
+        "cargo": "SDR de prospecção",
+        "tarefa": "Encontrar e aquecer novos clientes",
+        "salario": 2530.0,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Analista financeiro",
+        "tarefa": "Contas, fluxo de caixa e relatórios",
+        "salario": 4961.11,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Analista tributário",
+        "tarefa": "Apuração de impostos e rotina fiscal",
+        "salario": 4922.89,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Advogado",
+        "tarefa": "Contratos e revisão jurídica",
+        "salario": 5710.12,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Analista de RH",
+        "tarefa": "Recrutamento, rotinas e cultura",
+        "salario": 4429.41,
+        "pessoas": 1
+      }
+    ],
+    "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT.",
+    "fontes": "Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026, consultados em 10/2026). SDR: Jooble (10/2026), por não haver CBO própria. Encargos e custos do empregador de 68% sobre o salário, segundo Buk (11/2025) e Contabilizei (12/2025)."
+  },
+  "diferenciais": {
+    "visivel": true,
+    "_aviso": "Confirme cada item antes de publicar. Só mantenha o que a Prime Circle entrega de fato.",
+    "etiqueta": "Por que contratar com a Prime Circle",
+    "titulo": "A mesma tecnologia, com gente de verdade do seu lado.",
+    "itens": [
+      {
+        "titulo": "Revenda autorizada",
+        "texto": "A Prime Circle é revendedora autorizada da plataforma. Você contrata com nota fiscal e contrato no Brasil."
+      },
+      {
+        "titulo": "Implantação acompanhada",
+        "texto": "A gente configura a Sônia com os dados do seu negócio, o seu tom de voz e os seus produtos antes de ela começar a atender."
+      },
+      {
+        "titulo": "Atendimento em português",
+        "texto": "Dúvida ou ajuste, você fala com o nosso time pelo WhatsApp, não com um robô de suporte."
+      }
+    ]
+  },
+  "depoimentos": {
+    "visivel": false,
+    "_aviso": "Use só depoimentos de clientes seus, com autorização por escrito.",
+    "etiqueta": "Quem já usa",
+    "titulo": "Veja quem já colocou a Sônia para trabalhar.",
+    "itens": [
+      {
+        "nome": "Nome do cliente",
+        "empresa": "Empresa",
+        "texto": "O que mudou na operação depois da Sônia.",
+        "imagem": "",
+        "video": ""
+      }
+    ]
+  },
+  "planos": {
+    "visivel": true,
+    "etiqueta": "Planos",
+    "titulo": "Escolha o tamanho do seu time",
+    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes. O acesso chega por e-mail assim que o pagamento é confirmado.",
+    "itens": [
+      {
+        "nome": "SONIA Starter",
+        "selo": "",
+        "destaque": false,
+        "preco": "R$ 1.497",
+        "periodo": "por ano",
+        "parcelamento": "ou até 12x de R$ 129,97 no cartão",
+        "itens": [
+          "5 agentes liberados",
+          "Até 5 rotinas (tarefas que se repetem sozinhas)",
+          "Cérebro ChatGPT"
+        ],
+        "botao": {
+          "texto": "Assinar agora",
+          "link": "#contato"
+        }
+      },
+      {
+        "nome": "SONIA Elite",
+        "selo": "Mais escolhido",
+        "destaque": true,
+        "preco": "R$ 2.497",
+        "periodo": "por ano",
+        "parcelamento": "ou até 12x de R$ 216,76 no cartão",
+        "itens": [
+          "16 agentes liberados",
+          "Até 20 rotinas (tarefas que se repetem sozinhas)",
+          "Cérebro Claude e ChatGPT",
+          "Acesso à comunidade de estudos de IA"
+        ],
+        "botao": {
+          "texto": "Assinar agora",
+          "link": "#contato"
+        }
+      },
+      {
+        "nome": "SONIA Magnata",
+        "selo": "Time completo",
+        "destaque": false,
+        "preco": "R$ 9.997",
+        "periodo": "por ano",
+        "parcelamento": "ou até 12x de R$ 867,74 no cartão",
+        "itens": [
+          "Os 22 agentes liberados",
+          "Até 50 rotinas (tarefas que se repetem sozinhas)",
+          "Cérebro Claude",
+          "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
+          "Tudo do plano Elite e mais 6 meses de grupo de estudos avançado"
+        ],
+        "botao": {
+          "texto": "Assinar agora",
+          "link": "#contato"
+        }
+      }
+    ],
+    "nota": ""
+  },
+  "agencia": {
+    "visivel": false,
+    "_aviso": "Ligue só se o seu contrato permitir sub-revenda.",
+    "etiqueta": "Escolha o seu caminho",
+    "titulo": "Duas formas de colocar agentes de IA para gerar dinheiro para você.",
+    "caminhos": [
+      {
+        "etiqueta": "Para usar no seu negócio",
+        "titulo": "Tenha a sua Sônia",
+        "itens": [
+          "Orquestradora que planeja, delega e confere antes de entregar",
+          "Copy, design, código, tráfego e vendas no WhatsApp",
+          "Financeiro, tributário, jurídico e RH",
+          "Memória, cofre de senhas e quadro de tarefas só seus"
+        ],
+        "botao": {
+          "texto": "Quero a minha Sônia",
+          "link": "#contato"
+        }
+      },
+      {
+        "etiqueta": "Para vender aos seus clientes",
+        "titulo": "Seja uma agência",
+        "itens": [
+          "Painel de agência com os seus clientes e as suas vendas",
+          "Cada cliente com a própria agente, isolada dos demais",
+          "Opção com a sua marca, o seu domínio e o seu bot",
+          "Receita recorrente que cresce sem crescer o time"
+        ],
+        "botao": {
+          "texto": "Quero ser agência",
+          "link": "#contato"
+        }
+      }
+    ]
+  },
+  "contato": {
+    "visivel": true,
+    "etiqueta": "Fale com o time",
+    "titulo": "Prefere conversar antes de assinar?",
+    "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp e mostra a Sônia funcionando.",
+    "whatsapp": "",
+    "_aviso_whatsapp": "Número com DDI e DDD, só dígitos. Exemplo: 5521912345678. Sem número (e sem endpoint), o formulário não envia.",
+    "endpoint": "",
+    "_aviso_endpoint": "Opcional. URL que recebe o formulário em JSON (Formspree, Make, n8n, webhook do CRM). Se preenchido, é usado no lugar do WhatsApp.",
+    "rotulo_nome": "Nome completo",
+    "rotulo_email": "Seu melhor e-mail",
+    "rotulo_whatsapp": "WhatsApp com DDD",
+    "rotulo_interesse": "O que você quer?",
+    "interesses": [
+      "Ter a minha Sônia",
+      "Ver uma demonstração",
+      "Tirar uma dúvida"
+    ],
+    "consentimento": "Concordo em ser contatado pelo time da Prime Circle sobre este pedido, por e-mail e WhatsApp, e com o uso dos meus dados para essa finalidade, nos termos da LGPD. Posso pedir a exclusão a qualquer momento.",
+    "botao": "Enviar",
+    "mensagem_sucesso": "Recebemos. O time vai te chamar no WhatsApp.",
+    "nota": "Seus dados são usados só para o nosso time falar com você sobre este pedido. Nada é vendido."
+  },
+  "faq": {
+    "visivel": true,
+    "etiqueta": "Dúvidas",
+    "titulo": "Perguntas frequentes",
+    "itens": [
+      {
+        "pergunta": "Preciso saber programar?",
+        "resposta": "Não. Você conversa com a Sônia em português, pelo painel ou pelo Telegram, e ela coordena o resto. Cada tela do painel tem um passo a passo."
+      },
+      {
+        "pergunta": "A Sônia serve para o meu tipo de empresa?",
+        "resposta": "O time cobre as funções que quase toda empresa tem: marketing, vendas, atendimento, financeiro, tributário, jurídico e RH. Se quiser confirmar o seu caso, fale com o time antes de assinar."
+      },
+      {
+        "pergunta": "Os dados de um cliente ficam separados dos outros?",
+        "resposta": "Sim. Cada cliente tem a própria agente, a própria memória e o próprio cofre de senhas, isolados dos demais."
+      },
+      {
+        "pergunta": "Quanto custa?",
+        "resposta": "Os planos estão nesta página e são anuais, com Pix à vista ou cartão em até 12 vezes. O que muda entre eles é quantos agentes ficam liberados e quantas rotinas automáticas você pode ter."
+      },
+      {
+        "pergunta": "O painel funciona em outros idiomas?",
+        "resposta": "Sim. O painel funciona em português, inglês e espanhol."
+      },
+      {
+        "pergunta": "Como eu falo com o time?",
+        "resposta": "Preencha o formulário desta página. O time responde pelo WhatsApp que você informar."
+      }
+    ]
+  },
+  "final": {
+    "visivel": true,
+    "titulo": "A Sônia e o time estão prontos.",
+    "texto": "Falta você escolher o tamanho do time.",
+    "botao": {
+      "texto": "Ver os planos",
+      "link": "#planos"
+    }
+  },
+  "rodape": {
+    "aviso": "Os valores de salário e economia são referências públicas de mercado. Não há promessa de faturamento garantido: o resultado depende da sua operação e das suas vendas.",
+    "copyright": "© 2026 Prime Circle. Todos os direitos reservados.",
+    "links": []
+  }
+}

@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Editor da landing SONIA</title>
+    <style>
+      :root { --tinta: #142030; --tinta-2: #5a677a; --linha: #d6dde5; --fundo: #f4f6f9; --ouro: #c8a24a; --azul: #13263b; --alerta: #fff4d6; --erro: #fde4e1; }
+      * { box-sizing: border-box; }
+      body { margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--tinta); background: var(--fundo); height: 100vh; display: flex; flex-direction: column; }
+      header { display: flex; gap: 10px; align-items: center; padding: 10px 14px; background: var(--azul); color: #fff; flex-wrap: wrap; }
+      header h1 { font-size: 16px; margin: 0 12px 0 0; }
+      header .esp { flex: 1; }
+      button, .btn { font: inherit; font-weight: 600; border: 1px solid var(--linha); background: #fff; color: var(--tinta); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+      button:hover { border-color: var(--tinta-2); }
+      .primario { background: var(--ouro); border-color: var(--ouro); color: var(--tinta); }
+      .perigo { color: #a3271d; }
+      .mini { padding: 3px 8px; font-size: 12px; }
+      #status { font-size: 12.5px; opacity: 0.85; }
+      main { flex: 1; display: grid; grid-template-columns: 200px 480px 1fr; min-height: 0; }
+      nav { background: #fff; border-right: 1px solid var(--linha); overflow: auto; padding: 8px; }
+      nav button { display: block; width: 100%; text-align: left; border: 0; border-radius: 6px; padding: 8px 10px; margin-bottom: 2px; font-weight: 500; }
+      nav button.ativo { background: var(--azul); color: #fff; }
+      nav button .off { font-size: 11px; opacity: 0.7; margin-left: 4px; }
+      #form { overflow: auto; padding: 16px; border-right: 1px solid var(--linha); }
+      #previa { width: 100%; height: 100%; border: 0; background: #0d1825; }
+      .campo { margin-bottom: 12px; }
+      .campo > label, .rot { display: block; font-size: 12px; font-weight: 700; color: var(--tinta-2); margin-bottom: 4px; }
+      input[type="text"], input[type="number"], textarea { width: 100%; font: inherit; padding: 7px 9px; border: 1px solid var(--linha); border-radius: 7px; background: #fff; }
+      textarea { resize: vertical; min-height: 64px; }
+      input:focus, textarea:focus { outline: 2px solid var(--ouro); border-color: var(--ouro); }
+      .check { display: flex; gap: 8px; align-items: center; font-weight: 600; margin-bottom: 12px; }
+      .grupo { border: 1px solid var(--linha); border-radius: 10px; padding: 12px 12px 2px; margin-bottom: 12px; background: #fff; }
+      .grupo > .rot { margin-bottom: 10px; color: var(--tinta); font-size: 13px; }
+      details.item { border: 1px solid var(--linha); border-radius: 9px; margin-bottom: 8px; background: #fafbfc; }
+      details.item > summary { cursor: pointer; padding: 8px 10px; display: flex; align-items: center; gap: 8px; font-weight: 600; }
+      details.item > summary img { width: 28px; height: 28px; border-radius: 6px; object-fit: cover; }
+      details.item > summary .t { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      details.item > .corpo { padding: 4px 10px 2px; }
+      .lista-simples .linha { display: flex; gap: 6px; margin-bottom: 6px; align-items: flex-start; }
+      .lista-simples .linha textarea, .lista-simples .linha input { flex: 1; }
+      .aviso { background: var(--alerta); border: 1px solid #ecd28a; border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; font-size: 13px; }
+      .cor { display: flex; gap: 8px; align-items: center; }
+      .cor input[type="color"] { width: 44px; height: 34px; border: 1px solid var(--linha); border-radius: 7px; padding: 2px; }
+      .thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; border: 1px solid var(--linha); margin-top: 6px; }
+      #pendencias { margin: 0 0 14px; }
+      #pendencias li { margin-bottom: 4px; }
+      .pend { background: var(--erro); border: 1px solid #f1b3ab; border-radius: 10px; padding: 10px 12px 6px; margin-bottom: 14px; }
+      .pend b { display: block; margin-bottom: 6px; }
+      .pend ul { margin: 0; padding-left: 18px; }
+      .dica { font-size: 12px; color: var(--tinta-2); margin-top: 3px; }
+      @media (max-width: 1100px) { main { grid-template-columns: 170px 1fr; } #previa-wrap { display: none; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Editor da landing SONIA</h1>
+      <span id="status"></span>
+      <span class="esp"></span>
+      <button id="b-abrir-pagina" title="Abre a prévia em uma aba nova">Ver em tela cheia</button>
+      <label class="btn" title="Carregar um conteudo.json do computador">Abrir arquivo<input id="b-arquivo" type="file" accept="application/json,.json" hidden /></label>
+      <button id="b-descartar" class="perigo" title="Apaga o rascunho deste navegador e volta ao conteúdo publicado">Descartar rascunho</button>
+      <button id="b-baixar" class="primario">Baixar conteudo.json</button>
+    </header>
+    <main>
+      <nav id="menu" aria-label="Seções"></nav>
+      <div id="form"></div>
+      <div id="previa-wrap"><iframe id="previa" title="Prévia da página" src="index.html?previa=1"></iframe></div>
+    </main>
+
+    <script>
+      (function () {
+        "use strict";
+        var CHAVE = "sonia-editor-rascunho";
+        var C = null;
+        var secaoAtual = "hero";
+        var previaPronta = false;
+
+        var SECOES = [
+          ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["sigla", "Sigla SONIA"],
+          ["numeros", "Números"], ["como_funciona", "Como funciona"], ["time", "Time e currículos"], ["economia", "Economia"],
+          ["diferenciais", "Por que a Prime Circle"], ["depoimentos", "Depoimentos"], ["planos", "Planos"], ["agencia", "Agência"],
+          ["contato", "Formulário"], ["faq", "Perguntas"], ["final", "Chamada final"], ["rodape", "Rodapé"]
+        ];
+        var ROTULOS = {
+          visivel: "Mostrar esta seção", destaque: "Plano em destaque", etiqueta: "Etiqueta (texto pequeno acima do título)", titulo: "Título",
+          titulo_destaque: "Título: parte em destaque (cor de ouro)", texto: "Texto", link: "Link (URL ou #secao)", botao: "Botão",
+          botao_principal: "Botão principal", botao_secundario: "Botão secundário", botao_area_cliente: "Botão área do cliente", selos: "Selos (frases curtas)",
+          conversa: "Conversa de exemplo", de: "Quem fala (voce ou agente)", itens: "Itens", passos: "Passos", agentes: "Agentes",
+          nome: "Nome", cargo: "Cargo", area: "Área", imagem: "Imagem (caminho do arquivo)", resumo: "Resumo", o_que_faz: "O que faz",
+          habilidades: "Habilidades", plataformas: "Plataformas", como_trabalha: "Como trabalha", turnos: "Turnos", resultados: "Resultados",
+          treinamentos: "Treinamentos", como_pedir: "Exemplos de pedido", preco: "Preço", periodo: "Período", parcelamento: "Parcelamento",
+          selo: "Selo no topo do card", pergunta: "Pergunta", resposta: "Resposta", menu: "Itens do menu", produto: "Nome do produto",
+          significado: "Significado da sigla", agente: "Nome da agente", empresa: "Empresa", cor_destaque: "Cor de destaque", cor_escura: "Cor escura dos blocos",
+          cor_botao: "Cor dos botões", descricao: "Descrição (aparece no Google)", imagem_compartilhamento: "Imagem ao compartilhar (1200x630)",
+          letras: "Letras", letra: "Letra", palavra: "Palavra", valor: "Valor", rotulo: "Rótulo", nota: "Nota de rodapé da seção",
+          encargos_percentual: "Encargos sobre o salário (%)", horas_mes: "Horas de trabalho por mês", linhas: "Funções da tabela", tarefa: "Tarefa",
+          salario: "Salário médio (R$)", pessoas: "Quantidade de pessoas", fontes: "Fontes", valor_agente: "Texto da coluna com agente",
+          whatsapp: "WhatsApp que recebe os contatos", endpoint: "Endpoint do formulário (opcional)", interesses: "Opções de interesse",
+          consentimento: "Texto de consentimento (LGPD)", mensagem_sucesso: "Mensagem depois do envio", caminhos: "Caminhos", aviso: "Aviso legal",
+          copyright: "Direitos", links: "Links", empresa_dep: "Empresa", video: "Link do vídeo"
+        };
+        var LONGOS = /^(texto|resumo|resposta|descricao|como_trabalha|fontes|aviso|consentimento|nota)$/;
+
+        function rotulo(k) {
+          if (ROTULOS[k]) return ROTULOS[k];
+          k = String(k).replace(/_/g, " ");
+          return k.charAt(0).toUpperCase() + k.slice(1);
+        }
+        function el(tag, attrs, filhos) {
+          var e = document.createElement(tag);
+          if (attrs) Object.keys(attrs).forEach(function (a) {
+            if (a === "text") e.textContent = attrs[a];
+            else if (a.slice(0, 2) === "on") e.addEventListener(a.slice(2), attrs[a]);
+            else e.setAttribute(a, attrs[a]);
+          });
+          (filhos || []).forEach(function (f) { if (f) e.appendChild(f); });
+          return e;
+        }
+        function clone(v) { return JSON.parse(JSON.stringify(v)); }
+        function vazio(v, k) {
+          if (Array.isArray(v)) return [];
+          if (v && typeof v === "object") { var o = {}; Object.keys(v).forEach(function (kk) { o[kk] = kk.charAt(0) === "_" ? v[kk] : vazio(v[kk], kk); }); return o; }
+          if (typeof v === "number") return 0;
+          if (typeof v === "boolean") return k === "visivel";
+          return "";
+        }
+
+        // ---------- estado ----------
+        var tSalvar = null;
+        function mudou() {
+          clearTimeout(tSalvar);
+          tSalvar = setTimeout(function () {
+            try { localStorage.setItem(CHAVE, JSON.stringify({ quando: Date.now(), conteudo: C })); } catch (e) {}
+            status("Rascunho salvo neste navegador. Baixe o arquivo para publicar.");
+            enviarPrevia();
+            pendencias();
+            menu();
+          }, 200);
+        }
+        function status(t) { document.getElementById("status").textContent = t; }
+        function enviarPrevia() {
+          var f = document.getElementById("previa");
+          if (previaPronta && f.contentWindow) f.contentWindow.postMessage({ tipo: "sonia-conteudo", conteudo: C }, location.origin);
+        }
+        window.addEventListener("message", function (e) {
+          if (e.origin !== location.origin) return;
+          if (e.data && e.data.tipo === "sonia-pronta") { previaPronta = true; enviarPrevia(); }
+        });
+
+        // ---------- campos ----------
+        function campo(obj, k, cam) {
+          var v = obj[k];
+          if (k.charAt(0) === "_") return typeof v === "string" ? el("div", { class: "aviso", text: v }) : null;
+          if (typeof v === "boolean") {
+            var cb = el("input", { type: "checkbox" });
+            cb.checked = v;
+            cb.addEventListener("change", function () { obj[k] = cb.checked; mudou(); });
+            return el("label", { class: "check" }, [cb, el("span", { text: rotulo(k) })]);
+          }
+          if (typeof v === "number") {
+            var n = el("input", { type: "number", step: "any" });
+            n.value = v;
+            n.addEventListener("input", function () { obj[k] = n.value === "" ? 0 : Number(n.value); mudou(); });
+            return el("div", { class: "campo" }, [el("label", { text: rotulo(k) }), n]);
+          }
+          if (typeof v === "string") {
+            if (/^cor_/.test(k)) {
+              var cor = el("input", { type: "color" }), txt = el("input", { type: "text" });
+              cor.value = /^#[0-9a-f]{6}$/i.test(v) ? v : "#000000";
+              txt.value = v;
+              cor.addEventListener("input", function () { txt.value = cor.value; obj[k] = cor.value; mudou(); });
+              txt.addEventListener("input", function () { obj[k] = txt.value; if (/^#[0-9a-f]{6}$/i.test(txt.value)) cor.value = txt.value; mudou(); });
+              return el("div", { class: "campo" }, [el("label", { text: rotulo(k) }), el("div", { class: "cor" }, [cor, txt])]);
+            }
+            var longo = LONGOS.test(k) || v.length > 90;
+            var i = el(longo ? "textarea" : "input", longo ? { rows: Math.min(8, Math.max(2, Math.ceil(v.length / 55))) } : { type: "text" });
+            i.value = v;
+            var filhos = [el("label", { text: rotulo(k) }), i];
+            if (/imagem/.test(k)) {
+              var th = el("img", { class: "thumb", alt: "" });
+              var atual = function () { th.src = i.value || ""; th.style.display = i.value ? "block" : "none"; };
+              atual();
+              i.addEventListener("input", atual);
+              filhos.push(th, el("div", { class: "dica", text: "Suba a imagem para a pasta assets/ e escreva o caminho, por exemplo assets/agentes/foto.webp." }));
+            }
+            if (k === "link") filhos.push(el("div", { class: "dica", text: "Use #planos, #contato, #time para rolar até uma seção, ou um endereço completo https://..." }));
+            i.addEventListener("input", function () { obj[k] = i.value; mudou(); });
+            return el("div", { class: "campo" }, filhos);
+          }
+          if (Array.isArray(v)) return lista(obj, k, cam);
+          if (v && typeof v === "object") {
+            var g = el("div", { class: "grupo" }, [el("span", { class: "rot", text: rotulo(k) })]);
+            Object.keys(v).forEach(function (kk) { var c = campo(v, kk, cam.concat(k)); if (c) g.appendChild(c); });
+            return g;
+          }
+          return null;
+        }
+
+        function resumoItem(it, i) {
+          if (typeof it === "string") return it || "(vazio)";
+          return it.nome || it.titulo || it.pergunta || it.cargo || it.texto || it.letra || it.valor || "Item " + (i + 1);
+        }
+
+        function lista(obj, k, cam) {
+          var arr = obj[k];
+          var g = el("div", { class: "grupo" }, [el("span", { class: "rot", text: rotulo(k) + " (" + arr.length + ")" })]);
+          var simples = arr.length === 0 ? false : arr.every(function (x) { return typeof x === "string"; });
+          if (simples || (arr.length === 0 && /^(selos|o_que_faz|turnos|resultados|treinamentos|como_pedir|interesses)$/.test(k))) {
+            var box = el("div", { class: "lista-simples" });
+            arr.forEach(function (s, i) {
+              var t = el(s.length > 70 ? "textarea" : "input", s.length > 70 ? { rows: 2 } : { type: "text" });
+              t.value = s;
+              t.addEventListener("input", function () { arr[i] = t.value; mudou(); });
+              box.appendChild(el("div", { class: "linha" }, [t,
+                el("button", { class: "mini", title: "Subir", text: "↑", onclick: function () { mover(arr, i, -1); } }),
+                el("button", { class: "mini perigo", title: "Remover", text: "×", onclick: function () { arr.splice(i, 1); redesenhar(); mudou(); } })
+              ]));
+            });
+            g.appendChild(box);
+            g.appendChild(el("p", {}, [el("button", { class: "mini", text: "+ Adicionar linha", onclick: function () { arr.push(""); redesenhar(); mudou(); } })]));
+            return g;
+          }
+          arr.forEach(function (it, i) {
+            var sumario = el("summary", {}, [
+              it && it.imagem ? el("img", { src: it.imagem, alt: "" }) : null,
+              el("span", { class: "t", text: (it && it.visivel === false ? "(oculto) " : "") + resumoItem(it, i) }),
+              el("button", { class: "mini", title: "Subir", text: "↑", onclick: function (e) { e.preventDefault(); mover(arr, i, -1); } }),
+              el("button", { class: "mini", title: "Descer", text: "↓", onclick: function (e) { e.preventDefault(); mover(arr, i, 1); } }),
+              el("button", { class: "mini", title: "Duplicar", text: "⧉", onclick: function (e) { e.preventDefault(); arr.splice(i + 1, 0, clone(it)); redesenhar(); mudou(); } }),
+              el("button", { class: "mini perigo", title: "Remover", text: "×", onclick: function (e) {
+                e.preventDefault();
+                if (confirm("Remover \"" + resumoItem(it, i) + "\"?")) { arr.splice(i, 1); redesenhar(); mudou(); }
+              } })
+            ]);
+            var corpo = el("div", { class: "corpo" });
+            if (it && typeof it === "object") Object.keys(it).forEach(function (kk) { var c = campo(it, kk, cam.concat(k)); if (c) corpo.appendChild(c); });
+            g.appendChild(el("details", { class: "item" }, [sumario, corpo]));
+          });
+          g.appendChild(el("p", {}, [el("button", { class: "mini", text: "+ Adicionar", onclick: function () {
+            arr.push(arr.length ? (typeof arr[0] === "object" ? vazio(arr[arr.length - 1]) : "") : k === "links" ? { texto: "", link: "" } : "");
+            redesenhar(); mudou();
+          } })]));
+          return g;
+        }
+        function mover(arr, i, d) {
+          var j = i + d;
+          if (j < 0 || j >= arr.length) return;
+          var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+          redesenhar(); mudou();
+        }
+
+        // ---------- telas ----------
+        function menu() {
+          var m = document.getElementById("menu");
+          m.innerHTML = "";
+          SECOES.forEach(function (s) {
+            if (!C || !C[s[0]]) return;
+            var b = el("button", { class: s[0] === secaoAtual ? "ativo" : "", onclick: function () { secaoAtual = s[0]; menu(); redesenhar(); } }, [
+              el("span", { text: s[1] }), C[s[0]].visivel === false ? el("span", { class: "off", text: "(oculta)" }) : null
+            ]);
+            m.appendChild(b);
+          });
+        }
+        function redesenhar() {
+          var f = document.getElementById("form");
+          var abertos = Array.prototype.map.call(f.querySelectorAll("details.item"), function (d) { return d.open; });
+          var rolagem = f.scrollTop;
+          f.innerHTML = "";
+          f.appendChild(el("div", { id: "pendencias" }));
+          var s = C[secaoAtual];
+          SECOES.forEach(function (x) { if (x[0] === secaoAtual) f.appendChild(el("h2", { text: x[1], style: "margin:0 0 14px;font-size:18px" })); });
+          if (secaoAtual === "time") f.appendChild(el("div", { class: "aviso", text: "O primeiro agente da lista é a orquestradora: aparece em destaque e no topo da página." }));
+          if (secaoAtual === "economia") f.appendChild(el("div", { class: "aviso", text: "Custo total, custo por hora e totais são calculados sozinhos a partir do salário, dos encargos e das horas." }));
+          Object.keys(s).forEach(function (k) { var c = campo(s, k, [secaoAtual]); if (c) f.appendChild(c); });
+          Array.prototype.forEach.call(f.querySelectorAll("details.item"), function (d, i) { if (abertos[i]) d.open = true; });
+          f.scrollTop = rolagem;
+          pendencias();
+        }
+
+        function pendencias() {
+          var p = [];
+          var ct = C.contato || {};
+          if (ct.visivel !== false && String(ct.whatsapp || "").replace(/\D/g, "").length < 10 && !ct.endpoint) p.push("Formulário sem destino: preencha o WhatsApp (ou o endpoint) em Formulário.");
+          ((C.planos || {}).itens || []).forEach(function (pl) {
+            if (pl.botao && /^#/.test(pl.botao.link || "")) p.push("Plano \"" + pl.nome + "\" sem link de pagamento: o botão leva para " + pl.botao.link + ".");
+          });
+          if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito da Avalanche.");
+          if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Por que a Prime Circle\".");
+          if (C.depoimentos && C.depoimentos.visivel !== false) p.push("Depoimentos visíveis: use só clientes reais com autorização.");
+          var tr = JSON.stringify(C).match(/"[^"]*[–—][^"]*"/g);
+          if (tr) p.push("Há " + tr.length + " texto(s) com travessão (— ou –). A regra do produto é usar dois-pontos, vírgula ou ponto.");
+          var box = document.getElementById("pendencias");
+          if (!box) return;
+          box.innerHTML = "";
+          if (p.length) box.appendChild(el("div", { class: "pend" }, [el("b", { text: "Antes de publicar (" + p.length + ")" }), el("ul", {}, p.map(function (t) { return el("li", { text: t }); }))]));
+        }
+
+        function carregar(c, origem) {
+          C = c;
+          menu();
+          redesenhar();
+          enviarPrevia();
+          status(origem);
+        }
+
+        // ---------- botões ----------
+        document.getElementById("b-baixar").addEventListener("click", function () {
+          var blob = new Blob([JSON.stringify(C, null, 2) + "\n"], { type: "application/json" });
+          var a = el("a", { href: URL.createObjectURL(blob), download: "conteudo.json" });
+          document.body.appendChild(a); a.click(); a.remove();
+          status("Arquivo baixado. Substitua o conteudo.json da hospedagem por ele.");
+        });
+        document.getElementById("b-arquivo").addEventListener("change", function (e) {
+          var f = e.target.files[0];
+          if (!f) return;
+          f.text().then(function (t) {
+            try { carregar(JSON.parse(t), "Arquivo " + f.name + " carregado."); mudou(); }
+            catch (err) { alert("Esse arquivo não é um JSON válido: " + err.message); }
+          });
+          e.target.value = "";
+        });
+        document.getElementById("b-descartar").addEventListener("click", function () {
+          if (!confirm("Descartar todas as alterações não baixadas e voltar ao conteúdo publicado?")) return;
+          localStorage.removeItem(CHAVE);
+          publicado();
+        });
+        document.getElementById("b-abrir-pagina").addEventListener("click", function () {
+          var w = window.open("index.html?previa=1", "_blank");
+          window.addEventListener("message", function enviar(e) {
+            if (e.source === w && e.data && e.data.tipo === "sonia-pronta") { w.postMessage({ tipo: "sonia-conteudo", conteudo: C }, location.origin); }
+          });
+        });
+
+        function publicado() {
+          fetch("conteudo.json", { cache: "no-cache" })
+            .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+            .then(function (c) { carregar(c, "Conteúdo publicado carregado."); })
+            .catch(function () { status("Não foi possível ler conteudo.json. Abra o editor pelo endereço do site (http), não como arquivo."); });
+        }
+
+        var r = null;
+        try { r = JSON.parse(localStorage.getItem(CHAVE) || "null"); } catch (e) {}
+        if (r && r.conteudo) carregar(r.conteudo, "Rascunho de " + new Date(r.quando).toLocaleString("pt-BR") + " aberto. Ainda não publicado.");
+        else publicado();
+      })();
+    </script>
+  </body>
+</html>
