@@ -574,7 +574,7 @@
                 "<h3>" + esc(p.nome) + '</h3><div class="preco">' + esc(p.preco) + '</div><div class="periodo">' + esc(p.periodo) + "</div>" +
                 (p.parcelamento ? '<div class="parcela">' + esc(p.parcelamento) + "</div>" : "") +
                 "<ul>" + lista(p.itens).map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" +
-                botao(p.botao, p.destaque ? "ouro" : "") + "</div>"
+                botao(p.botao && p.botao.texto ? { texto: p.botao.texto, link: p.botao.link || "#contato" } : p.botao, p.destaque ? "ouro" : "") + "</div>"
               );
             }).join("") +
             "</div>" + (s.nota ? '<p class="nota">' + esc(s.nota) + "</p>" : "") + "</div></section>"
@@ -701,7 +701,7 @@
         var preview = /[?&]previa=1/.test(location.search);
         window.addEventListener("message", function (e) {
           if (e.origin !== location.origin) return;
-          if (e.data && e.data.tipo === "sonia-conteudo") {
+          if (e.data && e.data.tipo === "sonia-conteudo" && e.data.conteudo && typeof e.data.conteudo === "object") {
             var y = window.scrollY;
             render(e.data.conteudo);
             window.scrollTo(0, y);

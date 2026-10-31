@@ -1951,7 +1951,7 @@
         ],
         "botao": {
           "texto": "Assinar agora",
-          "link": "https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc?ref=42cfa2c8135d15c8dc"
+          "link": ""
         }
       },
       {
@@ -1969,7 +1969,7 @@
         ],
         "botao": {
           "texto": "Assinar agora",
-          "link": "https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c?ref=42cfa2c8135d15c8dc"
+          "link": ""
         }
       },
       {
@@ -1988,11 +1988,12 @@
         ],
         "botao": {
           "texto": "Assinar agora",
-          "link": "https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d?ref=42cfa2c8135d15c8dc"
+          "link": ""
         }
       }
     ],
-    "nota": ""
+    "nota": "",
+    "_aviso": "Cole no campo Link de cada plano o endereço do checkout. Vazio: o botão leva ao formulário de contato."
   },
   "agencia": {
     "visivel": false,

@@ -142,7 +142,7 @@
         function status(t) { document.getElementById("status").textContent = t; }
         function enviarPrevia() {
           var f = document.getElementById("previa");
-          if (previaPronta && f.contentWindow) f.contentWindow.postMessage({ tipo: "sonia-conteudo", conteudo: C }, location.origin);
+          if (C && previaPronta && f.contentWindow) f.contentWindow.postMessage({ tipo: "sonia-conteudo", conteudo: C }, location.origin);
         }
         window.addEventListener("message", function (e) {
           if (e.origin !== location.origin) return;
@@ -284,7 +284,7 @@
           var ct = C.contato || {};
           if (ct.visivel !== false && String(ct.whatsapp || "").replace(/\D/g, "").length < 10 && !ct.endpoint) p.push("Formulário sem destino: preencha o WhatsApp (ou o endpoint) em Formulário.");
           ((C.planos || {}).itens || []).forEach(function (pl) {
-            if (pl.botao && /^#/.test(pl.botao.link || "")) p.push("Plano \"" + pl.nome + "\" sem link de pagamento: o botão leva para " + pl.botao.link + ".");
+            if (pl.botao && (!pl.botao.link || /^#/.test(pl.botao.link))) p.push("Plano \"" + pl.nome + "\" sem link de pagamento: enquanto isso, o botão leva ao formulário.");
           });
           if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito da Avalanche.");
           if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Por que a Prime Circle\".");
