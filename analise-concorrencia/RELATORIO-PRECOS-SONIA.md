@@ -293,3 +293,55 @@ qualquer ferramenta ou serviço conectado aos agentes são contratados e pagos p
   cartão, a plataforma precisa permitir um preço diferente por forma de pagamento, ou um link
   só para Pix e outro só para cartão. Dois links sem essa restrição não resolvem: o cliente
   pagaria o link mais barato no cartão. **Pergunte à Avalanche se a plataforma permite isso.**
+
+---
+
+## 9. Atualização: assinatura de IA, Claude e Hubla
+
+**Informado:** o pagamento é pela Hubla. Os agentes usam a **assinatura** do cliente (ChatGPT,
+Claude ou outra), e o recomendado é um plano pago.
+
+### Risco: o Claude por assinatura
+
+- **[Provável] Os termos de consumidor da Anthropic proíbem, desde fevereiro de 2026, usar
+  login de assinatura Claude Free, Pro ou Max em produtos de terceiros.** O bloqueio passou a
+  ser aplicado em abril de 2026. O caminho permitido para produtos de terceiros é a chave de
+  API, cobrada por uso. Fontes secundárias: The Register (20/02/2026), Gigazine (20/02/2026),
+  WinBuzzer (19/02/2026). A fonte primária é a página de conformidade legal do Claude Code e os
+  termos de consumidor da Anthropic: confira lá.
+- **[Provável] A OpenAI, ao contrário, permite login de assinatura ChatGPT em ferramentas
+  externas** (via Codex), segundo documentação de terceiros. A ressalva é que esse acesso
+  depende de um serviço interno que já quebrou pelo menos uma vez.
+- **Consequência:** se a plataforma liga o Claude pela assinatura do cliente, o Elite e o
+  Magnata vendem algo que viola os termos do fornecedor. A conta do cliente pode ser bloqueada
+  sem aviso, e quem recebe a reclamação é você. **Pergunte à Avalanche como o Claude é
+  conectado.** Se for por assinatura, tire o Claude dos planos. Se for por chave de API, o custo
+  do cliente passa a ser por uso e precisa estar explicado.
+
+### Custo total para o cliente (plano + assinatura de IA)
+
+Estimativa com US$ 1 ≈ R$ 5,70 já com IOF **[Chutando]**, preços de assinatura de 2026:
+ChatGPT Plus US$ 20, Pro US$ 100 ou US$ 200.
+
+| Plano | Só a SONIA | + IA de US$ 20 | + IA de US$ 100 | + IA de US$ 200 |
+|---|---|---|---|---|
+| Starter | R$ 416/mês | R$ 530 | R$ 986 | R$ 1.556 |
+| Elite | R$ 666/mês | R$ 780 | R$ 1.236 | R$ 1.806 |
+| Magnata | R$ 1.333/mês | R$ 1.447 | R$ 1.903 | R$ 2.473 |
+
+- **[Certo] Se o recomendado for o plano de US$ 100 ou mais, o Starter passa de R$ 416 para
+  cerca de R$ 1.000 por mês** e fica acima do NeoCRM Starter (R$ 597). A vantagem de preço
+  continua no Elite contra o NeoCRM Pro, mas fica bem menor do que a página sugere.
+- **Recomendação:** dizer na página qual plano de IA é o mínimo e quanto custa, em reais
+  aproximados. Esconder isso faz o "R$ 416 por mês" parecer isca.
+
+### Hubla
+
+- **[Chutando] Não encontrei documentação pública confirmando se a Hubla permite preço
+  diferente para Pix e cartão** ou link restrito a uma forma de pagamento. Pergunte ao suporte
+  da Hubla: "consigo dar desconto só no Pix?" e "consigo escolher se os juros do parcelamento
+  ficam com o comprador?".
+- **[Provável] Se a conta Hubla for sua, quem recebe o dinheiro é você**, e você repassa os
+  30% à Avalanche. Nesse caso, a nota fiscal provavelmente é sua e a taxa da Hubla sai da sua
+  parte. Confirme com o seu contador e com a Avalanche se os 30% incidem sobre o valor bruto ou
+  líquido de taxas.

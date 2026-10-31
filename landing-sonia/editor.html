@@ -286,6 +286,8 @@
           ((C.planos || {}).itens || []).forEach(function (pl) {
             if (pl.botao && (!pl.botao.link || /^#/.test(pl.botao.link))) p.push("Plano \"" + pl.nome + "\" sem link de pagamento: enquanto isso, o botão leva ao formulário.");
           });
+          if (((C.planos || {}).itens || []).some(function (pl) { return (pl.itens || []).some(function (i) { return /claude/i.test(i); }); }))
+            p.push("Os planos citam Claude: confirme com a Avalanche que a conexão é por chave de API. Os termos da Anthropic proíbem usar assinatura Pro ou Max em produtos de terceiros.");
           if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito da Avalanche.");
           if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Por que a Prime Circle\".");
           if (C.depoimentos && C.depoimentos.visivel !== false) p.push("Depoimentos visíveis: use só clientes reais com autorização.");
