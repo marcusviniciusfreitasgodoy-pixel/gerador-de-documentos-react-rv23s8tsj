@@ -73,6 +73,9 @@ def tpl(t):
               '<div class="pc-skills" style="max-width:640px;border-bottom:1px solid rgba(14,14,14,0.22)">\n<sc-for list="{{ soniaSkills }}"', 'habilidades')
     t = troca(t, '<p style="margin:0;font-size:16px;line-height:1.65;color:#2a2722;max-width:640px;text-wrap:pretty">{{ sonia.resumo }}</p>',
               '<p class="pc-orq-resumo" style="margin:0;font-size:16px;line-height:1.65;color:#2a2722;max-width:640px;text-wrap:pretty">{{ sonia.resumo }}</p>', 'resumo-orquestradora')
+    # botões da abertura: no celular, largura total e mesma altura (pedido de 01/11/2026)
+    t = troca(t, '<div style="display:flex;gap:12px;flex-wrap:wrap">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.hero.botao_principal.link }}"',
+              '<div class="pc-hero-btns" style="display:flex;gap:12px;flex-wrap:wrap">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.hero.botao_principal.link }}"', 'botoes-abertura')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -97,6 +100,10 @@ def tpl(t):
   .pc-skills{max-width:none!important;column-count:2;column-gap:clamp(40px,5vw,80px)}
   .pc-skills>sc-for{display:contents}
   .pc-skills>*,.pc-skills>sc-for>*{break-inside:avoid}
+}
+@media (max-width:600px){
+  .pc-hero-btns{flex-direction:column!important;align-items:stretch!important}
+  .pc-hero-btns a{display:flex!important;width:100%!important;justify-content:center!important;box-sizing:border-box;min-height:52px}
 }
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
 </style>
