@@ -76,6 +76,11 @@ def tpl(t):
     # botões da abertura: no celular, largura total e mesma altura (pedido de 01/11/2026)
     t = troca(t, '<div style="display:flex;gap:12px;flex-wrap:wrap">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.hero.botao_principal.link }}"',
               '<div class="pc-hero-btns" style="display:flex;gap:12px;flex-wrap:wrap">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.hero.botao_principal.link }}"', 'botoes-abertura')
+    # demais botões de ação seguem o mesmo padrão no celular (pedido de 01/11/2026)
+    t = troca(t, '<div style="position:relative;display:flex;gap:12px;flex-wrap:wrap;padding-top:8px">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.final.botao.link }}"',
+              '<div class="pc-hero-btns" style="position:relative;display:flex;gap:12px;flex-wrap:wrap;padding-top:8px">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.final.botao.link }}"', 'botao-final')
+    t = troca(t, '<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" type="submit"',
+              '<div class="pc-hero-btns" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" type="submit"', 'botao-enviar')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -103,7 +108,7 @@ def tpl(t):
 }
 @media (max-width:600px){
   .pc-hero-btns{flex-direction:column!important;align-items:stretch!important}
-  .pc-hero-btns a{display:flex!important;width:100%!important;justify-content:center!important;box-sizing:border-box;min-height:52px}
+  .pc-hero-btns a,.pc-hero-btns button{display:flex!important;width:100%!important;justify-content:center!important;box-sizing:border-box;min-height:52px}
 }
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
 </style>
