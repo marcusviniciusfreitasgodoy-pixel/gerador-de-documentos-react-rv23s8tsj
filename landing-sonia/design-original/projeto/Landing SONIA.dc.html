@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<meta name="ext-resource-dependency" content="conteudo.json" data-resource-id="conteudo">
+<meta name="ext-resource-dependency" content="assets/agentes/avatar-sonia.webp" data-resource-id="img-avatar-sonia">
+<meta name="ext-resource-dependency" content="assets/agentes/juliana-ops.webp" data-resource-id="img-juliana-ops">
+<meta name="ext-resource-dependency" content="assets/agentes/rafael-projetos.webp" data-resource-id="img-rafael-projetos">
+<meta name="ext-resource-dependency" content="assets/agentes/paulo-dev.webp" data-resource-id="img-paulo-dev">
+<meta name="ext-resource-dependency" content="assets/agentes/clone-do-dono.webp" data-resource-id="img-clone-do-dono">
+<meta name="ext-resource-dependency" content="assets/agentes/jonathan-copy.webp" data-resource-id="img-jonathan-copy">
+<meta name="ext-resource-dependency" content="assets/agentes/bianca-viral.webp" data-resource-id="img-bianca-viral">
+<meta name="ext-resource-dependency" content="assets/agentes/amanda-crm.webp" data-resource-id="img-amanda-crm">
+<meta name="ext-resource-dependency" content="assets/agentes/estrategista-trafego.webp" data-resource-id="img-estrategista-trafego">
+<meta name="ext-resource-dependency" content="assets/agentes/davi-sdr.webp" data-resource-id="img-davi-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/amanda-sdr.webp" data-resource-id="img-amanda-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/bianca-sdr.webp" data-resource-id="img-bianca-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/carolina-sdr.webp" data-resource-id="img-carolina-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/felipe-sdr.webp" data-resource-id="img-felipe-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/lucas-sdr.webp" data-resource-id="img-lucas-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/matheus-sdr.webp" data-resource-id="img-matheus-sdr">
+<meta name="ext-resource-dependency" content="assets/agentes/marcia-financeiro.webp" data-resource-id="img-marcia-financeiro">
+<meta name="ext-resource-dependency" content="assets/agentes/maria-tributario.webp" data-resource-id="img-maria-tributario">
+<meta name="ext-resource-dependency" content="assets/agentes/aline-juridico.webp" data-resource-id="img-aline-juridico">
+<meta name="ext-resource-dependency" content="assets/agentes/geane-rh.webp" data-resource-id="img-geane-rh">
+<meta name="ext-resource-dependency" content="assets/agentes/ruth-prospeccao.webp" data-resource-id="img-ruth-prospeccao">
+<meta name="ext-resource-dependency" content="assets/agentes/boris-engenharia.webp" data-resource-id="img-boris-engenharia">
+<template id="__bundler_thumbnail" data-bg-color="#0E0E0E"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"><rect width="100" height="100" fill="#0E0E0E"/><g transform="translate(30 30) scale(0.4)"><circle cx="36" cy="50" r="30" fill="none" stroke="#C9A84C" stroke-width="5"/><circle cx="64" cy="50" r="30" fill="none" stroke="#F5F1E6" stroke-width="5"/><circle cx="50" cy="50" r="4" fill="#C9A84C"/></g></svg></template>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/colors.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/typography.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/effects.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/texture.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/styles.css">
+<script src="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/_ds_bundle.js"></script>
+<style>html,body{margin:0;background:#0E0E0E;overflow-x:hidden}html{scroll-behavior:smooth;scroll-padding-top:84px}a{color:#C9A84C;text-decoration:none}a:hover{color:#F5F1E6}*{box-sizing:border-box}</style>
+</helmet>
+<div style="background:#0E0E0E;color:#F5F1E6;font-family:var(--pc-font-sans);min-height:100vh;overflow-x:hidden">
+
+<sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:100vh;display:grid;place-items:center;font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#9a958c">{{ loadingMsg }}</div>
+</sc-if>
+
+<sc-if value="{{ ready }}" hint-placeholder-val="{{ true }}">
+
+<header style="position:sticky;top:0;z-index:30;background:#0E0E0E;display:flex;align-items:center;gap:12px 32px;flex-wrap:wrap;padding:12px clamp(20px,4vw,56px);border-bottom:1px solid rgba(245,241,230,0.10)">
+<a href="#topo" style="display:flex;align-items:center;gap:12px;color:#F5F1E6;min-height:44px">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Mark" size="34" color="#F5F1E6" accent="#C9A84C" stroke-width="5" hint-size="34px,34px"></x-import>
+<span style="display:grid;gap:3px">
+<span style="font-family:var(--pc-font-sans);font-weight:700;font-size:20px;letter-spacing:0.14em;line-height:1">{{ logoA }}<span style="color:#C9A84C">{{ logoB }}</span></span>
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#E8E0CC">{{ porEmpresa }}</span>
+</span>
+</a>
+<nav style="display:flex;gap:0 24px;flex:1;flex-wrap:wrap;justify-content:center">
+<sc-for list="{{ c.topo.menu }}" as="m" hint-placeholder-count="5">
+<a href="{{ m.link }}" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:#E8E0CC;padding:14px 0" style-hover="color:#C9A84C">{{ m.texto }}</a>
+</sc-for>
+</nav>
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+<sc-if value="{{ showArea }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.topo.botao_area_cliente.link }}" variant="secondary" dc-props="{{ btn44 }}" hint-size="140px,44px">{{ c.topo.botao_area_cliente.texto }}</x-import>
+</sc-if>
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.topo.botao.link }}" dc-props="{{ btn44 }}" hint-size="160px,44px">{{ c.topo.botao.texto }}</x-import>
+</div>
+</header>
+
+<section id="topo" class="{{ grainClass }}" style="position:relative;overflow:hidden;padding:clamp(48px,7vw,104px) clamp(20px,4vw,56px) clamp(40px,5vw,64px);display:grid;gap:clamp(40px,5vw,64px)">
+<sc-if value="{{ showRings }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;right:-260px;top:-220px;pointer-events:none;z-index:0">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.DrawnRings" size="760" rings="7" opacity="0.12" hint-size="760px,760px"></x-import>
+</div>
+</sc-if>
+<div style="position:relative;display:flex;flex-wrap:wrap;gap:clamp(40px,5vw,72px);align-items:center">
+<div style="flex:1.5 1 340px;min-width:0;display:grid;gap:28px;align-content:start">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.hero.etiqueta }}</span>
+<h1 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:clamp(44px,6vw,100px);line-height:0.92;letter-spacing:-0.025em;text-wrap:balance">{{ c.hero.titulo }} <em style="color:#C9A84C">{{ c.hero.titulo_destaque }}</em></h1>
+<p style="margin:0;font-size:var(--pc-fs-lead);line-height:1.55;color:#E8E0CC;max-width:600px;text-wrap:pretty">{{ c.hero.texto }}</p>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.hero.botao_principal.link }}" size="lg" hint-size="220px,52px">{{ c.hero.botao_principal.texto }}</x-import>
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.hero.botao_secundario.link }}" size="lg" variant="secondary" hint-size="160px,52px">{{ c.hero.botao_secundario.texto }}</x-import>
+</div>
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+<div style="display:flex;padding-left:8px">
+<sc-for list="{{ avatares }}" as="av" hint-placeholder-count="7">
+<div role="img" aria-label="{{ av.nome }}" style="{{ av.bg }}"></div>
+</sc-for>
+</div>
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#E8E0CC">{{ c.hero.rotulo_avatares }}</span>
+</div>
+</div>
+<div style="flex:1 1 300px;min-width:0;max-width:460px;position:relative;padding-bottom:120px">
+<div style="aspect-ratio:4 / 5;border:1px solid rgba(245,241,230,0.10);border-radius:10px;overflow:hidden;background:var(--pc-surface-2)">
+<div role="img" aria-label="{{ sonia.nome }}" style="{{ soniaBg }}"></div>
+</div>
+<div style="position:absolute;left:clamp(-40px,-3vw,0px);right:16px;bottom:0;background:var(--pc-surface-3);border:1px solid rgba(245,241,230,0.10);border-radius:10px;box-shadow:0 40px 80px -30px rgba(0,0,0,.7);padding:16px;display:grid;gap:8px">
+<span style="font-family:var(--pc-font-mono);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C;padding-bottom:4px">{{ c.hero.rotulo_conversa }}</span>
+<sc-for list="{{ chat }}" as="msg" hint-placeholder-count="4">
+<div style="{{ msg.style }}">{{ msg.texto }}</div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));column-gap:32px;border-top:1px solid rgba(245,241,230,0.22);border-bottom:1px solid rgba(245,241,230,0.22)">
+<sc-for list="{{ selos }}" as="s" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:36px 1fr;gap:12px;padding:18px 0;align-items:baseline"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#C9A84C;letter-spacing:0.14em">{{ s.n }}</span><span style="font-family:var(--pc-font-display);font-style:italic;font-size:22px;line-height:1.2">{{ s.texto }}</span></div>
+</sc-for>
+</div>
+</section>
+
+<sc-if value="{{ show.sigla }}" hint-placeholder-val="{{ true }}">
+<section id="sigla" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">
+<div style="display:grid;gap:16px;max-width:860px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.sigla.titulo }}</span>
+<h2 aria-label="{{ c.marca.significado }}" style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;display:flex;flex-wrap:wrap;column-gap:0.24em;row-gap:0.08em">
+<sc-for list="{{ siglaPalavras }}" as="w" hint-placeholder-count="7">
+<span style="white-space:nowrap"><span style="{{ w.iniStyle }}">{{ w.ini }}</span>{{ w.resto }}</span>
+</sc-for>
+</h2>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#2a2722;max-width:640px;text-wrap:pretty">{{ c.sigla.texto }}</p>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.como }}" hint-placeholder-val="{{ true }}">
+<section id="como-funciona" class="{{ grainClass }}" style="padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:flex;flex-wrap:wrap;gap:40px clamp(40px,6vw,96px)">
+<div style="flex:1 1 300px;display:grid;gap:16px;align-content:start;max-width:460px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.como_funciona.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.como_funciona.titulo }}</h2>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#C8C1B0;text-wrap:pretty">{{ c.como_funciona.texto }}</p>
+</div>
+<ol style="flex:2 1 420px;list-style:none;margin:0;padding:0;border-top:1px solid rgba(245,241,230,0.22)">
+<sc-for list="{{ passos }}" as="p" hint-placeholder-count="4">
+<li style="display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:24px 0;border-bottom:1px dashed rgba(245,241,230,0.22)">
+<span style="font-family:var(--pc-font-mono);font-size:13px;letter-spacing:0.14em;color:#C9A84C;padding-top:8px">{{ p.n }}</span>
+<div style="display:grid;gap:6px">
+<span style="font-family:var(--pc-font-display);font-weight:500;font-size:clamp(26px,2.6vw,34px);line-height:1.05">{{ p.titulo }}</span>
+<span style="font-size:15px;line-height:1.6;color:#C8C1B0;max-width:560px;text-wrap:pretty">{{ p.texto }}</span>
+</div>
+</li>
+</sc-for>
+</ol>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.time }}" hint-placeholder-val="{{ true }}">
+<section id="time" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:clamp(40px,5vw,72px)">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px">
+<div style="flex:1 1 420px;display:grid;gap:16px;max-width:760px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.time.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-title);line-height:0.98;letter-spacing:-0.01em;text-wrap:balance">{{ c.time.titulo }}</h2>
+</div>
+<p style="flex:1 1 300px;margin:0;font-size:16px;line-height:1.6;color:#2a2722;max-width:480px;text-wrap:pretty">{{ c.time.texto }}</p>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:clamp(32px,5vw,72px);padding-top:32px;border-top:1px solid rgba(14,14,14,0.22)">
+<div style="flex:1 1 280px;max-width:400px;aspect-ratio:4 / 5;border-radius:10px;overflow:hidden;background:#E8E0CC">
+<div role="img" aria-label="{{ sonia.nome }}" style="{{ soniaBg }}"></div>
+</div>
+<div style="flex:1.4 1 360px;min-width:0;display:grid;align-content:start;gap:20px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.time.rotulo_orquestradora }}</span>
+<div style="display:grid;gap:8px">
+<h3 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-display);line-height:0.95;letter-spacing:-0.015em">{{ sonia.nome }}</h3>
+<span style="font-size:15px;font-weight:600">{{ sonia.cargo }}</span>
+</div>
+<p style="margin:0;font-size:16px;line-height:1.65;color:#2a2722;max-width:640px;text-wrap:pretty">{{ sonia.resumo }}</p>
+<div style="max-width:640px;border-bottom:1px solid rgba(14,14,14,0.22)">
+<sc-for list="{{ soniaSkills }}" as="k" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px dashed rgba(14,14,14,0.22)"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#8B7340;letter-spacing:0.14em;padding-top:3px">{{ k.n }}</span><span style="font-size:15px;line-height:1.5"><strong style="font-weight:700">{{ k.titulo }}.</strong> {{ k.texto }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex"><x-import component-from-global-scope="DesignSystem_0d6c1f.Button" variant="secondary" theme="light" onClick="{{ openSonia }}" dc-props="{{ btn44 }}" hint-size="150px,44px">{{ c.time.botao_curriculo }} ↗</x-import></div>
+</div>
+</div>
+</section>
+
+<section id="especialistas" class="{{ grainClass }}" style="position:relative;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">
+<div style="display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid rgba(245,241,230,0.22)">
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;max-width:760px;text-wrap:balance"><span style="font-family:var(--pc-font-mono);color:#C9A84C">{{ espNum }}</span> {{ espTexto }}</h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+<button onClick="{{ f.select }}" style="{{ f.style }}">{{ f.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">
+<sc-for list="{{ agents }}" as="a" hint-placeholder-count="12">
+<article onClick="{{ a.open }}" style="display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;min-width:0;background:var(--pc-surface-2);border:1px solid rgba(245,241,230,0.10);border-radius:10px;overflow:hidden;cursor:pointer;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:var(--pc-surface-3)">
+<div style="aspect-ratio:1 / 1;min-width:0;border-bottom:1px solid rgba(245,241,230,0.10);background:var(--pc-surface-3)">
+<img src="{{ a.imagem }}" alt="{{ a.nome }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+</div>
+<div style="display:grid;grid-template-rows:auto auto auto 1fr auto;min-width:0;gap:8px;padding:18px 18px 20px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ a.area }}</span>
+<h3 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:28px;line-height:1;letter-spacing:-0.01em">{{ a.nome }}</h3>
+<span style="font-size:13px;font-weight:600;line-height:1.35;color:#E8E0CC">{{ a.cargo }}</span>
+<p style="margin:4px 0 0;font-size:13px;line-height:1.5;color:#B5AFA3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{{ a.resumo }}</p>
+<span style="margin-top:8px;padding-top:12px;border-top:1px dashed rgba(245,241,230,0.22);font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ c.time.botao_curriculo }} ↗</span>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.economia }}" hint-placeholder-val="{{ true }}">
+<section id="economia" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:clamp(32px,4vw,56px)">
+<div style="display:grid;gap:16px;max-width:860px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.economia.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.economia.titulo }}</h2>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#2a2722;max-width:640px;text-wrap:pretty">{{ c.economia.texto }}</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));border-top:1px solid rgba(14,14,14,0.22);border-bottom:1px solid rgba(14,14,14,0.22)">
+<sc-for list="{{ totais }}" as="t" hint-placeholder-count="2">
+<div style="display:grid;gap:10px;padding:28px 24px 28px 0">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#8B7340">{{ t.rotulo }}</span>
+<span style="font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;font-size:clamp(36px,4.6vw,64px);line-height:1;letter-spacing:-0.02em">{{ t.valor }}</span>
+<span style="font-size:14px;line-height:1.5;color:#4a463f">{{ t.nota }}</span>
+</div>
+</sc-for>
+</div>
+<div style="background:#FFFFFF;border:1px solid rgba(14,14,14,0.10);border-radius:10px;overflow:hidden">
+<div style="overflow-x:auto">
+<table style="width:100%;min-width:880px;border-collapse:collapse;font-size:14px">
+<thead><tr>
+<sc-for list="{{ colunas }}" as="h" hint-placeholder-count="6">
+<th style="text-align:left;padding:14px 16px;font-family:var(--pc-font-mono);font-weight:500;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#8B7340;border-bottom:1px solid rgba(14,14,14,0.22);white-space:nowrap">{{ h }}</th>
+</sc-for>
+</tr></thead>
+<tbody>
+<sc-for list="{{ linhas }}" as="r" hint-placeholder-count="14">
+<tr>
+<td style="padding:12px 16px;border-bottom:1px dashed rgba(14,14,14,0.14);font-weight:600;line-height:1.35">{{ r.cargo }}<sc-if value="{{ r.multi }}" hint-placeholder-val="{{ false }}"><span style="display:block;font-weight:400;font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.14em;color:#8B7340;margin-top:2px">{{ r.pessoas }}</span></sc-if></td>
+<td style="padding:12px 16px;border-bottom:1px dashed rgba(14,14,14,0.14);color:#4a463f;line-height:1.4">{{ r.tarefa }}</td>
+<td style="padding:12px 16px;border-bottom:1px dashed rgba(14,14,14,0.14);font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;white-space:nowrap">{{ r.salario }}</td>
+<td style="padding:12px 16px;border-bottom:1px dashed rgba(14,14,14,0.14);font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;white-space:nowrap">{{ r.custo }}</td>
+<td style="padding:12px 16px;border-bottom:1px dashed rgba(14,14,14,0.14);font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;white-space:nowrap">{{ r.hora }}</td>
+<td style="padding:12px 16px;border-bottom:1px dashed rgba(14,14,14,0.14);font-family:var(--pc-font-mono);color:#8B7340;font-weight:600">{{ r.agente }}</td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</div>
+<div style="display:grid;gap:8px;max-width:920px">
+<p style="margin:0;font-size:13px;line-height:1.6;color:#4a463f">{{ c.economia.nota }}</p>
+<p style="margin:0;font-family:var(--pc-font-mono);font-size:11px;line-height:1.7;letter-spacing:0.02em;color:#4a463f">{{ c.economia.fontes }}</p>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.diferenciais }}" hint-placeholder-val="{{ true }}">
+<section id="por-que" class="{{ grainClass }}" style="padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">
+<div style="display:grid;gap:16px;max-width:860px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.diferenciais.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.diferenciais.titulo }}</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">
+<sc-for list="{{ diferenciais }}" as="w" hint-placeholder-count="3">
+<div style="display:grid;align-content:start;gap:14px;padding:28px 24px;background:var(--pc-surface-2);border:1px solid rgba(245,241,230,0.10);border-radius:10px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.2em;color:#C9A84C">{{ w.n }}</span>
+<span style="font-family:var(--pc-font-display);font-weight:500;font-size:30px;line-height:1.05">{{ w.titulo }}</span>
+<span style="font-size:15px;line-height:1.6;color:#C8C1B0;text-wrap:pretty">{{ w.texto }}</span>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">
+<section id="planos" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">
+<div style="display:grid;gap:16px;max-width:860px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.planos.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.planos.titulo }}</h2>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#2a2722;max-width:640px;text-wrap:pretty">{{ c.planos.texto }}</p>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:16px;align-items:stretch">
+<sc-for list="{{ planos }}" as="pl" hint-placeholder-count="3">
+<div style="{{ pl.card }}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;min-height:24px">
+<span style="{{ pl.label }}">{{ pl.nome }}</span>
+<sc-if value="{{ pl.temSelo }}" hint-placeholder-val="{{ false }}">
+<span style="{{ pl.seloStyle }}">{{ pl.selo }}</span>
+</sc-if>
+</div>
+<div style="display:grid;gap:6px;padding-bottom:18px;border-bottom:1px solid;border-color:inherit">
+<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap">
+<span style="font-family:var(--pc-font-mono);font-size:16px;letter-spacing:0.04em">{{ pl.vezes }}</span>
+<span style="font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;font-size:clamp(34px,3.4vw,46px);line-height:1;letter-spacing:-0.02em">{{ pl.parcela }}</span>
+</div>
+<span style="{{ pl.sub }}">{{ pl.condicao }}</span>
+<span style="{{ pl.anual }}">{{ pl.anualTexto }}</span>
+</div>
+<ul style="list-style:none;margin:0;padding:0;display:grid">
+<sc-for list="{{ pl.itens }}" as="it" hint-placeholder-count="4">
+<li style="{{ pl.item }}"><span style="{{ pl.dot }}">+</span><span>{{ it }}</span></li>
+</sc-for>
+</ul>
+<div style="margin-top:auto;display:flex;padding-top:8px">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ pl.href }}" variant="{{ pl.variant }}" theme="{{ pl.theme }}" dc-props="{{ btnFull }}" hint-size="100%,48px">{{ pl.botao }}</x-import>
+</div>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ temDetalhes }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));column-gap:32px;border-top:1px solid rgba(14,14,14,0.22);border-bottom:1px solid rgba(14,14,14,0.22)">
+<sc-for list="{{ detalhes }}" as="dt" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:36px minmax(0,1fr);gap:12px;padding:24px 0;align-content:start">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.14em;color:#8B7340;padding-top:6px">{{ dt.n }}</span>
+<div style="display:grid;gap:8px">
+<span style="font-family:var(--pc-font-display);font-weight:500;font-size:24px;line-height:1.1">{{ dt.titulo }}</span>
+<span style="font-size:14px;line-height:1.6;color:#2a2722;text-wrap:pretty">{{ dt.texto }}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ c.planos.nota }}" hint-placeholder-val="{{ true }}">
+<p style="margin:0;max-width:920px;padding:18px 20px;border:1px dashed rgba(14,14,14,0.3);border-radius:10px;font-size:15px;line-height:1.6;color:#2a2722;text-wrap:pretty">{{ c.planos.nota }}</p>
+</sc-if>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.contato }}" hint-placeholder-val="{{ true }}">
+<section id="contato" class="{{ grainClass }}" style="padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:flex;flex-wrap:wrap;gap:40px clamp(40px,6vw,96px)">
+<div style="flex:1 1 300px;display:grid;gap:16px;align-content:start;max-width:460px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.contato.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.contato.titulo }}</h2>
+<p style="margin:0;font-size:16px;line-height:1.6;color:#C8C1B0;text-wrap:pretty">{{ c.contato.texto }}</p>
+</div>
+<form onSubmit="{{ submit }}" style="flex:1.4 1 360px;min-width:0;display:grid;gap:20px;padding:clamp(24px,3vw,36px);background:var(--pc-surface-2);border:1px solid rgba(245,241,230,0.10);border-radius:10px">
+<sc-if value="{{ enviado }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;gap:10px;padding:8px 0">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#C9A84C">{{ c.contato.etiqueta }}</span>
+<span style="font-family:var(--pc-font-display);font-size:32px;line-height:1.1">{{ c.contato.mensagem_sucesso }}</span>
+</div>
+</sc-if>
+<sc-if value="{{ naoEnviado }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:18px">
+<label style="display:grid;gap:8px"><span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#C9A84C">{{ c.contato.rotulo_nome }}</span><input required="required" value="{{ f.nome }}" onChange="{{ setNome }}" autocomplete="name" style="min-height:48px;padding:12px 14px;background:#0E0E0E;color:#F5F1E6;border:1px solid rgba(245,241,230,0.22);border-radius:6px;font:inherit;font-size:15px;outline:none;width:100%" style-focus="border-color:#C9A84C"></label>
+<label style="display:grid;gap:8px"><span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#C9A84C">{{ c.contato.rotulo_email }}</span><input required="required" type="email" value="{{ f.email }}" onChange="{{ setEmail }}" autocomplete="email" style="min-height:48px;padding:12px 14px;background:#0E0E0E;color:#F5F1E6;border:1px solid rgba(245,241,230,0.22);border-radius:6px;font:inherit;font-size:15px;outline:none;width:100%" style-focus="border-color:#C9A84C"></label>
+</div>
+<label style="display:grid;gap:8px"><span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#C9A84C">{{ c.contato.rotulo_whatsapp }}</span><input required="required" type="tel" value="{{ f.whats }}" onChange="{{ setWhats }}" autocomplete="tel" placeholder="(11) 91234-5678" style="min-height:48px;padding:12px 14px;background:#0E0E0E;color:#F5F1E6;border:1px solid rgba(245,241,230,0.22);border-radius:6px;font:inherit;font-size:15px;outline:none;width:100%" style-focus="border-color:#C9A84C"></label>
+<div style="display:grid;gap:10px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#C9A84C">{{ c.contato.rotulo_interesse }}</span>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ interesses }}" as="o" hint-placeholder-count="3">
+<button type="button" onClick="{{ o.toggle }}" aria-pressed="{{ o.on }}" style="{{ o.style }}">{{ o.label }}</button>
+</sc-for>
+</div>
+</div>
+<label style="display:grid;grid-template-columns:24px 1fr;gap:12px;align-items:start;cursor:pointer;padding:4px 0"><input type="checkbox" required="required" checked="{{ f.lgpd }}" onChange="{{ setLgpd }}" style="width:20px;height:20px;margin:2px 0 0;accent-color:#C9A84C"><span style="font-size:13px;line-height:1.55;color:#C8C1B0">{{ c.contato.consentimento }} <a href="{{ c.contato.link_politica }}" target="_blank" style="color:#C9A84C;text-decoration:underline">Ler a política</a></span></label>
+<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" type="submit" size="lg" hint-size="160px,52px">{{ c.contato.botao }}</x-import>
+<span style="flex:1 1 220px;font-size:12px;line-height:1.5;color:#9a958c">{{ c.contato.nota }}</span>
+</div>
+<sc-if value="{{ erroForm }}" hint-placeholder-val="{{ false }}">
+<span role="alert" style="font-size:13px;color:#E0A089">{{ erroForm }}</span>
+</sc-if>
+</sc-if>
+</form>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.faq }}" hint-placeholder-val="{{ true }}">
+<section id="duvidas" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:flex;flex-wrap:wrap;gap:40px clamp(40px,6vw,96px)">
+<div style="flex:1 1 280px;display:grid;gap:16px;align-content:start;max-width:420px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.faq.etiqueta }}</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em">{{ c.faq.titulo }}</h2>
+</div>
+<div style="flex:2 1 420px;min-width:0;border-top:1px solid rgba(14,14,14,0.22)">
+<sc-for list="{{ faq }}" as="q" hint-placeholder-count="6">
+<div style="border-bottom:1px solid rgba(14,14,14,0.14)">
+<button onClick="{{ q.toggle }}" aria-expanded="{{ q.aberto }}" style="width:100%;min-height:64px;display:grid;grid-template-columns:minmax(0,1fr) 32px;gap:16px;align-items:center;padding:18px 0;background:transparent;border:0;cursor:pointer;text-align:left;color:#0E0E0E;font-family:var(--pc-font-display);font-weight:500;font-size:clamp(22px,2.2vw,28px);line-height:1.15">
+<span>{{ q.pergunta }}</span>
+<span style="font-family:var(--pc-font-mono);font-size:18px;color:#8B7340;text-align:center">{{ q.sinal }}</span>
+</button>
+<sc-if value="{{ q.aberto }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;padding:0 48px 24px 0;font-size:16px;line-height:1.65;color:#2a2722;max-width:680px;text-wrap:pretty">{{ q.resposta }}</p>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</section>
+</sc-if>
+
+<sc-if value="{{ show.final }}" hint-placeholder-val="{{ true }}">
+<section id="final" class="{{ grainClass }}" style="position:relative;overflow:hidden;padding:clamp(72px,10vw,144px) clamp(20px,4vw,56px);display:grid;gap:24px">
+<sc-if value="{{ showRings }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;left:-280px;bottom:-320px;pointer-events:none">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.DrawnRings" size="720" rings="6" opacity="0.10" hint-size="720px,720px"></x-import>
+</div>
+</sc-if>
+<h2 style="position:relative;margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:clamp(44px,6vw,96px);line-height:0.95;letter-spacing:-0.02em;max-width:1000px;text-wrap:balance">{{ c.final.titulo }}</h2>
+<p style="position:relative;margin:0;font-family:var(--pc-font-display);font-style:italic;font-size:clamp(24px,2.4vw,32px);line-height:1.2;color:#C9A84C">{{ c.final.texto }}</p>
+<div style="position:relative;display:flex;gap:12px;flex-wrap:wrap;padding-top:8px">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.final.botao.link }}" size="lg" hint-size="180px,52px">{{ c.final.botao.texto }}</x-import>
+</div>
+</section>
+</sc-if>
+
+<footer style="display:grid;gap:16px;padding:32px clamp(20px,4vw,56px) 40px;border-top:1px solid rgba(245,241,230,0.10)">
+<div style="display:flex;gap:8px 16px;flex-wrap:wrap;align-items:baseline">
+<span style="font-family:var(--pc-font-sans);font-weight:700;font-size:15px;letter-spacing:0.14em">{{ logoA }}<span style="color:#C9A84C">{{ logoB }}</span></span>
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#9a958c">{{ c.marca.significado }}</span>
+</div>
+<p style="margin:0;font-size:12px;line-height:1.7;color:#9a958c;max-width:900px">{{ c.rodape.aviso }}</p>
+<div style="display:flex;gap:4px 24px;flex-wrap:wrap">
+<sc-for list="{{ c.rodape.links }}" as="lk" hint-placeholder-count="2">
+<a href="{{ lk.link }}" style="font-size:13px;color:#C9A84C;text-decoration:underline;padding:10px 0">{{ lk.texto }}</a>
+</sc-for>
+</div>
+<span style="font-size:12px;line-height:1.7;color:#9a958c">{{ empresaLinha }}</span>
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#7d786f">{{ c.rodape.copyright }}</span>
+</footer>
+
+<sc-if value="{{ modalOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px">
+<div onClick="{{ stop }}" role="dialog" aria-modal="true" aria-label="{{ m.nome }}" style="width:100%;max-width:760px;max-height:calc(100vh - 32px);overflow:auto;background:var(--pc-surface-3);border:1px solid rgba(245,241,230,0.10);border-radius:16px;box-shadow:0 40px 80px -30px rgba(0,0,0,.7)">
+<div style="position:sticky;top:0;z-index:1;display:flex;gap:20px;align-items:center;padding:20px 24px;background:var(--pc-surface-3);border-bottom:1px solid rgba(245,241,230,0.10)">
+<div role="img" aria-label="{{ m.nome }}" style="{{ m.bg }}"></div>
+<div style="flex:1;min-width:0;display:grid;gap:6px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ m.area }}</span>
+<span style="font-family:var(--pc-font-display);font-weight:500;font-size:clamp(28px,3vw,38px);line-height:1">{{ m.nome }}</span>
+<span style="font-size:14px;font-weight:600;color:#E8E0CC;line-height:1.35">{{ m.cargo }}</span>
+</div>
+<button onClick="{{ closeModal }}" aria-label="Fechar" style="align-self:start;width:44px;height:44px;flex:none;border-radius:999px;border:1px solid rgba(245,241,230,0.22);background:transparent;color:#F5F1E6;font-size:20px;cursor:pointer">×</button>
+</div>
+<div style="display:grid;gap:28px;padding:24px 24px 32px">
+<p style="margin:0;font-size:16px;line-height:1.7;color:#E8E0CC;text-wrap:pretty">{{ m.resumo }}</p>
+<sc-for list="{{ m.blocos }}" as="b" hint-placeholder-count="4">
+<div style="display:grid;gap:10px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ b.titulo }}</span>
+<sc-if value="{{ b.texto }}" hint-placeholder-val="{{ false }}">
+<p style="margin:0;font-size:15px;line-height:1.65;color:#E8E0CC;text-wrap:pretty">{{ b.texto }}</p>
+</sc-if>
+<sc-if value="{{ b.temItens }}" hint-placeholder-val="{{ true }}">
+<div style="border-bottom:1px solid rgba(245,241,230,0.18)">
+<sc-for list="{{ b.itens }}" as="k" hint-placeholder-count="4">
+<div style="display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;padding:11px 0;border-top:1px dashed rgba(245,241,230,0.18)"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#C9A84C;letter-spacing:0.12em;padding-top:2px">{{ k.n }}</span><span style="font-size:14px;line-height:1.55;color:#F5F1E6"><sc-if value="{{ k.titulo }}" hint-placeholder-val="{{ false }}"><strong style="font-weight:700">{{ k.titulo }}. </strong></sc-if>{{ k.texto }}</span></div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ m.temPedidos }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;gap:10px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ c.time.rotulo_como_pedir }}</span>
+<div style="display:grid;gap:8px">
+<sc-for list="{{ m.como_pedir }}" as="pp" hint-placeholder-count="3">
+<div style="justify-self:start;max-width:92%;background:#C9A84C;color:#0E0E0E;padding:10px 14px;border-radius:12px 12px 12px 2px;font-size:14px;line-height:1.45">{{ pp }}</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ m.plataformas }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;gap:10px;padding-top:4px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">Plataformas</span>
+<p style="margin:0;font-family:var(--pc-font-mono);font-size:12px;line-height:1.8;letter-spacing:0.04em;color:#C8C1B0">{{ m.plataformas }}</p>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showRings&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;grain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const RES_ID = (u) => u === "conteudo.json" ? "conteudo" : "img-" + String(u).split("/").pop().replace(/\.\w+$/, "");
+const res = (u) => (u && window.__resources && window.__resources[RES_ID(u)]) || u;
+const pad = (n) => String(n).padStart(2, "0");
+const brl0 = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+const brl2 = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const vis = (s) => !!s && s.visivel !== false;
+const chip = (on) => ({
+  fontFamily: "var(--pc-font-mono)", fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase",
+  minHeight: 44, padding: "0 16px", borderRadius: 999, whiteSpace: "nowrap", cursor: "pointer",
+  transition: "all 180ms cubic-bezier(.22,.61,.36,1)",
+  background: on ? "#C9A84C" : "transparent", color: on ? "#0E0E0E" : "#E8E0CC",
+  border: "1px solid " + (on ? "#C9A84C" : "rgba(245,241,230,0.22)")
+});
+const BLOCOS = [
+  ["o_que_faz", "O que faz"], ["como_trabalha", "Como trabalha"], ["habilidades", "Habilidades"],
+  ["passos", "Passo a passo"], ["turnos", "Rotinas"], ["resultados", "O que entrega"], ["treinamentos", "Treinamentos"]
+];
+
+class Component extends DCLogic {
+  state = { c: null, err: null, group: "Todos", modal: null, faqOpen: 0, enviado: false, erroForm: "",
+    f: { nome: "", email: "", whats: "", interesses: [], lgpd: false } };
+  componentDidMount() {
+    fetch(res("conteudo.json"), { cache: "no-store" }).then(r => r.json())
+      .then(c => { (c.time.agentes || []).forEach(a => { a.imagem = res(a.imagem); }); this.setState({ c, f: { ...this.state.f, interesses: c.contato && c.contato.interesses ? [c.contato.interesses[0]] : [] } }); })
+      .catch(() => this.setState({ err: "Não foi possível carregar conteudo.json" }));
+    this.onKey = (e) => { if (e.key === "Escape" && this.state.modal) this.setState({ modal: null }); };
+    window.addEventListener("keydown", this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener("keydown", this.onKey); }
+  setF = (k, v) => this.setState(s => ({ f: { ...s.f, [k]: v } }));
+  submit = (e) => {
+    e.preventDefault();
+    const ct = this.state.c.contato, f = this.state.f;
+    if (!f.lgpd) return this.setState({ erroForm: "Marque o consentimento para enviar." });
+    const dados = { nome: f.nome, email: f.email, whatsapp: f.whats, interesse: f.interesses.join(", ") };
+    if (ct.endpoint) {
+      fetch(ct.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dados) })
+        .then(() => this.setState({ enviado: true, erroForm: "" }))
+        .catch(() => this.setState({ erroForm: "Não foi possível enviar. Tente de novo." }));
+      return;
+    }
+    if (ct.whatsapp) {
+      const msg = `Olá! Sou ${dados.nome}. E-mail: ${dados.email}. WhatsApp: ${dados.whatsapp}. Interesse: ${dados.interesse || "não informado"}.`;
+      window.open(`https://wa.me/${ct.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+    this.setState({ enviado: true, erroForm: "" });
+  };
+  renderVals() {
+    const { c, err, group, modal, faqOpen, f, enviado, erroForm } = this.state;
+    if (!c) return { ready: false, loading: true, loadingMsg: err || "Carregando" };
+    const ags = (c.time.agentes || []).filter(a => a.visivel !== false);
+    const sonia = ags.find(a => a.id === "avatar-sonia") || ags[0];
+    const esp = ags.filter(a => a !== sonia);
+    const areas = ["Todos", ...Array.from(new Set(esp.map(a => a.area)))];
+    const rotEsp = c.time.rotulo_especialistas || "";
+    const mEsp = rotEsp.match(/^(\d+)\s+(.*)$/);
+    const ec = c.economia, enc = 1 + (ec.encargos_percentual || 0) / 100, horas = ec.horas_mes || 220;
+    const linhas = ec.linhas.map(r => {
+      const p = r.pessoas || 1, custo = r.salario * enc * p;
+      return { cargo: r.cargo, tarefa: r.tarefa, multi: p > 1, pessoas: p + " pessoas", salario: brl2(r.salario), custo: brl2(custo), hora: brl2(r.salario * enc / horas), agente: ec.valor_agente, _c: custo, _p: p };
+    });
+    const totalMes = linhas.reduce((s, r) => s + r._c, 0), totalPessoas = linhas.reduce((s, r) => s + r._p, 0);
+    const logo = c.marca.produto || "SONIA";
+    const ag = modal ? ags.find(a => a.id === modal) : null;
+    const lista = (arr, comTitulo) => (arr || []).map((x, i) => typeof x === "string" ? { n: pad(i + 1), texto: x, titulo: "" } : { n: pad(i + 1), titulo: x.titulo, texto: x.texto });
+    return {
+      ready: true, loading: false, c,
+      showRings: this.props.showRings ?? true,
+      grainClass: (this.props.grain ?? true) ? "pc-grain" : "",
+      empresaLinha: c.empresa ? [c.empresa.razao_social, "CNPJ " + c.empresa.cnpj, c.empresa.email].filter(Boolean).join(" · ") : "",
+      logoA: logo.slice(0, -2), logoB: logo.slice(-2), porEmpresa: "por " + c.marca.empresa,
+      showArea: c.topo.botao_area_cliente && c.topo.botao_area_cliente.visivel !== false,
+      btn44: { style: { minHeight: 44 } }, btnFull: { style: { minHeight: 48, width: "100%" } },
+      show: { sigla: vis(c.sigla), como: vis(c.como_funciona), time: vis(c.time), economia: vis(c.economia), diferenciais: vis(c.diferenciais), planos: vis(c.planos), contato: vis(c.contato), faq: vis(c.faq), final: vis(c.final) },
+      sonia,
+      avatares: esp.slice(0, 7).map(a => ({ nome: a.nome, bg: { width: 36, height: 36, borderRadius: 999, marginLeft: -8, border: "2px solid #0E0E0E", background: "#1a1a1a url(\"" + a.imagem + "\") center / cover no-repeat" } })),
+      soniaBg: { width: "100%", height: "100%", background: "url(\"" + sonia.imagem + "\") center / cover no-repeat" },
+      chat: c.hero.conversa.map(m => ({
+        texto: m.texto,
+        style: m.de === "voce"
+          ? { justifySelf: "end", maxWidth: "85%", background: "#C9A84C", color: "#0E0E0E", padding: "9px 12px", borderRadius: "12px 12px 2px 12px", fontSize: 13, lineHeight: 1.45 }
+          : { justifySelf: "start", maxWidth: "90%", background: "#0E0E0E", color: "#F5F1E6", border: "1px solid rgba(245,241,230,0.10)", padding: "9px 12px", borderRadius: "12px 12px 12px 2px", fontSize: 13, lineHeight: 1.45 }
+      })),
+      selos: c.hero.selos.map((texto, i) => ({ n: pad(i + 1), texto })),
+      passos: c.como_funciona.passos.map((p, i) => ({ ...p, n: pad(i + 1) })),
+      soniaSkills: (sonia.habilidades || []).map((h, i) => ({ n: "S." + pad(i + 1), titulo: h.titulo, texto: h.texto })),
+      openSonia: () => this.setState({ modal: sonia.id }),
+      espNum: mEsp ? mEsp[1] : "", espTexto: mEsp ? mEsp[2] : rotEsp,
+      filters: areas.map(label => ({ label, style: chip(label === group), select: () => this.setState({ group: label }) })),
+      agents: esp.filter(a => group === "Todos" || a.area === group).map(a => ({ ...a, open: () => this.setState({ modal: a.id }) })),
+      modalOpen: !!ag,
+      m: ag ? {
+        nome: ag.nome, area: ag.area, cargo: ag.cargo, bg: { width: 88, height: 88, flex: "none", borderRadius: 8, background: "url(\"" + ag.imagem + "\") center / cover no-repeat" }, resumo: ag.resumo, plataformas: ag.plataformas || "",
+        como_pedir: ag.como_pedir || [], temPedidos: !!(ag.como_pedir && ag.como_pedir.length),
+        blocos: BLOCOS.filter(([k]) => ag[k] && (typeof ag[k] === "string" || ag[k].length)).map(([k, titulo]) =>
+          typeof ag[k] === "string" ? { titulo, texto: ag[k], temItens: false, itens: [] } : { titulo, texto: "", temItens: true, itens: lista(ag[k]) })
+      } : {},
+      closeModal: () => this.setState({ modal: null }),
+      stop: (e) => e.stopPropagation(),
+      colunas: ["Função", "Tarefa", "Salário médio", "Custo total por mês", "Custo por hora", ec.rotulo_agente],
+      linhas,
+      totais: [
+        { rotulo: ec.rotulo_total_mes, valor: brl0(totalMes), nota: totalPessoas + " pessoas na folha" },
+        { rotulo: ec.rotulo_total_ano, valor: brl0(totalMes * 12), nota: "Salário mais " + ec.encargos_percentual + "% de encargos" }
+      ],
+      diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),
+      siglaPalavras: (c.marca.significado || "").split(/\s+/).filter(Boolean).map(w => {
+        const on = w.length > 3 && /^[A-ZÀ-Ý]/.test(w);
+        return { ini: w.charAt(0), resto: w.slice(1), iniStyle: on ? { color: "#8B7340", fontStyle: "italic", fontWeight: 600 } : {} };
+      }),
+      detalhes: (c.planos.detalhes || []).map((w, i) => ({ ...w, n: pad(i + 1) })),
+      temDetalhes: !!(c.planos.detalhes && c.planos.detalhes.length),
+      planos: c.planos.itens.map(p => {
+        const d = !!p.destaque;
+        const mp = (p.parcelamento || "").match(/(\d+\s*x)\s*de\s*(R\$\s*[\d.,]+)\s*(.*)$/i);
+        return {
+          vezes: mp ? mp[1].replace(/\s/g, "") + " de" : "", parcela: mp ? mp[2] : p.preco,
+          condicao: mp ? mp[3] : p.periodo,
+          anualTexto: mp ? "ou " + p.preco + " " + (p.periodo || "") : p.parcelamento,
+          anual: { fontFamily: "var(--pc-font-mono)", fontSize: 13, letterSpacing: "0.04em", paddingTop: 6, color: d ? "#E8E0CC" : "#2a2722" },
+          nome: p.nome, selo: p.selo, temSelo: !!p.selo, preco: p.preco, periodo: p.periodo, parcelamento: p.parcelamento,
+          itens: p.itens, href: (p.botao && p.botao.link) || "#contato", botao: p.botao ? p.botao.texto : "",
+          variant: d ? "primary" : "secondary", theme: d ? "dark" : "light",
+          card: { display: "flex", flexDirection: "column", gap: 20, padding: "28px 24px", borderRadius: 10, minWidth: 0,
+            background: d ? "#0E0E0E" : "#FFFFFF", color: d ? "#F5F1E6" : "#0E0E0E",
+            border: "1px solid", borderColor: d ? "#C9A84C" : "rgba(14,14,14,0.14)",
+            boxShadow: d ? "0 40px 80px -30px rgba(0,0,0,.45)" : "none" },
+          label: { fontFamily: "var(--pc-font-mono)", fontSize: 12, letterSpacing: "0.24em", textTransform: "uppercase", color: d ? "#C9A84C" : "#8B7340" },
+          seloStyle: { fontFamily: "var(--pc-font-mono)", fontSize: 9, letterSpacing: "0.24em", textTransform: "uppercase", padding: "5px 10px", borderRadius: 999, whiteSpace: "nowrap",
+            background: d ? "#C9A84C" : "transparent", color: d ? "#0E0E0E" : "#8B7340", border: "1px solid " + (d ? "#C9A84C" : "#8B7340") },
+          sub: { fontSize: 14, lineHeight: 1.5, color: d ? "#C8C1B0" : "#4a463f" },
+          item: { display: "grid", gridTemplateColumns: "20px 1fr", gap: 10, padding: "10px 0", fontSize: 14, lineHeight: 1.5, borderBottom: "1px dashed " + (d ? "rgba(245,241,230,0.18)" : "rgba(14,14,14,0.14)") },
+          dot: { fontFamily: "var(--pc-font-mono)", color: d ? "#C9A84C" : "#8B7340" }
+        };
+      }),
+      f, enviado, naoEnviado: !enviado, erroForm, submit: this.submit,
+      interesses: (c.contato.interesses || []).map(label => {
+        const on = f.interesses.includes(label);
+        return { label, on, style: chip(on), toggle: () => this.setF("interesses", on ? f.interesses.filter(x => x !== label) : [...f.interesses, label]) };
+      }),
+      setNome: e => this.setF("nome", e.target.value), setEmail: e => this.setF("email", e.target.value),
+      setWhats: e => this.setF("whats", e.target.value), setLgpd: e => { this.setF("lgpd", e.target.checked); this.setState({ erroForm: "" }); },
+      faq: c.faq.itens.map((q, i) => ({ ...q, aberto: faqOpen === i, sinal: faqOpen === i ? "−" : "+", toggle: () => this.setState({ faqOpen: faqOpen === i ? -1 : i }) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

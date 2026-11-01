@@ -93,3 +93,26 @@ Ou mande o `conteudo.json` novo para quem mantém o site publicar.
 `agentes.primecircle.app.br` **já está em uso** pela plataforma dos agentes (área do cliente e
 checkout). Apontar esse domínio para a landing derruba o acesso dos clientes. Use outro
 subdomínio (por exemplo `sonia.primecircle.app.br`) ou combine com o fornecedor antes.
+
+## Visual do Claude Design (desde 01/11/2026)
+
+- `index.html` é o export do Claude Design **adaptado** por `ferramentas/adaptar-design.py`:
+  1. tira a cópia do `conteudo.json` que vem embutida no export, para a página ler o
+     `conteudo.json` do servidor (é isso que mantém o editor funcionando);
+  2. coloca título, descrição e imagem de compartilhamento no `<head>`;
+  3. liga a prévia ao vivo do editor (`?previa=1` lê o rascunho do editor);
+  4. reforça a validação do formulário (nome, e-mail e WhatsApp com DDD).
+- O export original está em `design-original/`, e o projeto-fonte do Claude Design em
+  `design-original/projeto/`.
+- `index-classico.html` é a versão anterior, sem o visual novo. Fica como reserva e não é
+  publicada.
+- As imagens dos agentes vêm embutidas no `index.html`. Trocar uma imagem que já existe exige
+  um export novo do Claude Design. Agente novo com imagem nova funciona pelo `conteudo.json`.
+
+### Para publicar um export novo do Claude Design
+
+```bash
+python3 ferramentas/adaptar-design.py "design-original/<export>.html" index.html conteudo.json
+```
+
+Depois disso, confira se o `conteudo.json` desta pasta é o que você quer no ar, porque é ele que vale, e não a cópia embutida.

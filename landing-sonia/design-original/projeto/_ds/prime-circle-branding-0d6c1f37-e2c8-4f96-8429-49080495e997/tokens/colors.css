@@ -1,0 +1,83 @@
+/* Prime Circle — Color tokens (v2)
+   Palette: Ink (near-black), Gold (brass), Ivory (warm paper), Sand.
+   Dark-first. v2 adds OKLCH ramps, a 4-step dark surface stack and warm status colors. */
+:root {
+  /* ── Base palette (v1, unchanged) */
+  --pc-ink: #0E0E0E;
+  --pc-ink-2: #1C1C1C;
+  --pc-ink-3: #171513;
+  --pc-gold: #C9A84C;
+  --pc-gold-deep: #8B7340;
+  --pc-ivory: #F5F1E6;
+  --pc-ivory-2: #E8E0CC;
+
+  /* ── Gold ramp (OKLCH) — 500 = Gold, 700 = Gold Deep */
+  --pc-gold-50: oklch(0.975 0.018 90);
+  --pc-gold-100: oklch(0.945 0.038 90);
+  --pc-gold-200: oklch(0.895 0.068 89);
+  --pc-gold-300: oklch(0.835 0.098 88);
+  --pc-gold-400: oklch(0.785 0.112 87);
+  --pc-gold-500: #C9A84C;
+  --pc-gold-600: oklch(0.645 0.098 86);
+  --pc-gold-700: #8B7340;
+  --pc-gold-800: oklch(0.445 0.058 84);
+  --pc-gold-900: oklch(0.325 0.038 82);
+
+  /* ── Warm neutral ramp — 50 = Ivory, 100 = Sand, 950 = Ink */
+  --pc-neutral-50: #F5F1E6;
+  --pc-neutral-100: #E8E0CC;
+  --pc-neutral-200: oklch(0.86 0.022 85);
+  --pc-neutral-300: oklch(0.76 0.018 82);
+  --pc-neutral-400: oklch(0.64 0.014 80);
+  --pc-neutral-500: oklch(0.52 0.011 78);
+  --pc-neutral-600: oklch(0.42 0.009 76);
+  --pc-neutral-700: oklch(0.33 0.007 74);
+  --pc-neutral-800: oklch(0.255 0.006 72);
+  --pc-neutral-900: oklch(0.2 0.005 70);
+  --pc-neutral-950: #0E0E0E;
+
+  /* ── Dark surface stack — page → section → card → raised (popover, dialog) */
+  --pc-surface-0: #0A0A09;
+  --pc-surface-1: #0E0E0E;
+  --pc-surface-2: #161513;
+  --pc-surface-3: #201E1B;
+  --pc-surface-overlay: rgba(10, 10, 9, 0.72);
+
+  /* ── Status — warm, desaturated; never pure green/red */
+  --pc-success: oklch(0.74 0.085 150);
+  --pc-success-bg: oklch(0.74 0.085 150 / 0.12);
+  --pc-warning: oklch(0.8 0.115 72);
+  --pc-warning-bg: oklch(0.8 0.115 72 / 0.12);
+  --pc-danger: oklch(0.66 0.125 32);
+  --pc-danger-bg: oklch(0.66 0.125 32 / 0.12);
+  --pc-info: oklch(0.74 0.045 235);
+  --pc-info-bg: oklch(0.74 0.045 235 / 0.12);
+  --pc-success-deep: oklch(0.48 0.08 150);
+  --pc-warning-deep: oklch(0.52 0.1 65);
+  --pc-danger-deep: oklch(0.5 0.13 32);
+  --pc-info-deep: oklch(0.48 0.05 235);
+
+  /* ── Semantic · dark theme (default) */
+  --pc-bg: var(--pc-ink);
+  --pc-bg-elevated: var(--pc-ink-2);
+  --pc-text: var(--pc-ivory);
+  --pc-text-muted: var(--pc-ivory-2);
+  --pc-text-subtle: var(--pc-neutral-400);
+  --pc-accent: var(--pc-gold);
+  --pc-accent-strong: var(--pc-gold-deep);
+  --pc-accent-soft: oklch(0.74 0.115 87 / 0.14);
+  --pc-border: rgba(245, 241, 230, 0.10);
+  --pc-border-strong: rgba(245, 241, 230, 0.22);
+  --pc-border-accent: oklch(0.74 0.115 87 / 0.45);
+  --pc-surface-card: var(--pc-surface-2);
+  --pc-surface-raised: var(--pc-surface-3);
+
+  /* ── Semantic · light theme */
+  --pc-bg-light: var(--pc-ivory);
+  --pc-bg-light-elevated: #ffffff;
+  --pc-text-light: var(--pc-ink);
+  --pc-text-light-muted: #2a2722;
+  --pc-accent-light: var(--pc-gold-deep);
+  --pc-border-light: rgba(14, 14, 14, 0.10);
+  --pc-border-light-strong: rgba(14, 14, 14, 0.22);
+}

@@ -1,0 +1,19 @@
+/* Prime Circle — Spacing & radius tokens. 4px base grid. */
+:root {
+  --pc-space-1: 4px;
+  --pc-space-2: 8px;
+  --pc-space-3: 12px;
+  --pc-space-4: 16px;
+  --pc-space-5: 24px;
+  --pc-space-6: 32px;
+  --pc-space-7: 48px;
+  --pc-space-8: 64px;
+  --pc-space-9: 96px;
+
+  /* Radii — sharp on print/premium, soft on UI */
+  --pc-radius-sm: 4px;
+  --pc-radius-md: 6px;
+  --pc-radius-lg: 10px;
+  --pc-radius-xl: 16px;
+  --pc-radius-pill: 999px;
+}

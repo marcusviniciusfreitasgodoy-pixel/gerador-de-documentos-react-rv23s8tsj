@@ -1,0 +1,47 @@
+/* Prime Circle — Typography tokens (v2). Three voices:
+   Cormorant Garamond (editorial display, often italic),
+   Manrope (wordmark, body, UI),
+   JetBrains Mono (labels, IDs, prices, metadata).
+   v2: fluid display sizes with a much larger top end. */
+:root {
+  --pc-font-display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --pc-font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pc-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Fluid type scale */
+  --pc-fs-hero: clamp(64px, 7.5vw + 16px, 168px); /* @kind other */
+  --pc-fs-display: clamp(52px, 4.2vw + 24px, 112px); /* @kind other */
+  --pc-fs-title: clamp(38px, 2.4vw + 22px, 64px); /* @kind other */
+  --pc-fs-h1: clamp(30px, 1.4vw + 20px, 44px); /* @kind other */
+  --pc-fs-h2: clamp(24px, 0.8vw + 18px, 32px); /* @kind other */
+  --pc-fs-h3: 22px;
+  --pc-fs-lead: clamp(18px, 0.4vw + 15px, 21px); /* @kind other */
+  --pc-fs-body: 16px;
+  --pc-fs-small: 14px;
+  --pc-fs-label: 12px;
+  --pc-fs-micro: 10px;
+
+  /* Weights */
+  --pc-fw-light: 300; /* @kind font */
+  --pc-fw-regular: 400; /* @kind font */
+  --pc-fw-medium: 500; /* @kind font */
+  --pc-fw-semibold: 600; /* @kind font */
+  --pc-fw-bold: 700; /* @kind font */
+
+  /* Display tuning */
+  --pc-display-tracking: -0.01em;
+  --pc-display-leading: 0.98;
+  --pc-hero-tracking: -0.025em;
+  --pc-hero-leading: 0.88;
+
+  /* Mono eyebrow tuning */
+  --pc-eyebrow-tracking: 0.4em;
+}
+
+.pc-hero { font-family: var(--pc-font-display); font-weight: var(--pc-fw-medium); font-size: var(--pc-fs-hero); letter-spacing: var(--pc-hero-tracking); line-height: var(--pc-hero-leading); text-wrap: balance; }
+.pc-display { font-family: var(--pc-font-display); font-weight: var(--pc-fw-medium); letter-spacing: var(--pc-display-tracking); line-height: var(--pc-display-leading); text-wrap: balance; }
+.pc-italic { font-style: italic; }
+.pc-sans { font-family: var(--pc-font-sans); }
+.pc-mono { font-family: var(--pc-font-mono); }
+.pc-num { font-family: var(--pc-font-mono); font-variant-numeric: tabular-nums; }
+.pc-eyebrow { font-family: var(--pc-font-mono); font-size: var(--pc-fs-label); letter-spacing: var(--pc-eyebrow-tracking); text-transform: uppercase; color: var(--pc-accent); }

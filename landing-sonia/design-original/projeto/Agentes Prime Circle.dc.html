@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/colors.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/typography.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/effects.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/tokens/texture.css">
+<link rel="stylesheet" href="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/styles.css">
+<script src="_ds/prime-circle-branding-0d6c1f37-e2c8-4f96-8429-49080495e997/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>html,body{margin:0;background:#0E0E0E}a{color:#C9A84C;text-decoration:none}a:hover{color:#F5F1E6}</style>
+</helmet>
+<div style="background:#0E0E0E;color:#F5F1E6;font-family:var(--pc-font-sans);min-height:100vh">
+
+<header style="position:sticky;top:0;z-index:20;background:#0E0E0E;display:flex;align-items:center;gap:32px;flex-wrap:wrap;min-height:72px;padding:12px clamp(20px,4vw,56px);border-bottom:1px solid rgba(245,241,230,0.10)">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Lockup" layout="inline" size="150" color="var(--pc-ivory)" hint-size="150px,28px"></x-import>
+<nav style="display:flex;gap:28px;flex:1;flex-wrap:wrap;justify-content:center">
+<a href="#time" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#F5F1E6">Time</a>
+<a href="#economia" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#9a958c">Economia</a>
+<a href="#planos" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#9a958c">Planos</a>
+</nav>
+<div style="display:flex;align-items:center;gap:16px">
+<div style="display:flex;gap:4px;font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.2em">
+<sc-for list="{{ langs }}" as="l" hint-placeholder-count="3">
+<button onClick="{{ l.select }}" style="{{ l.style }}">{{ l.code }}</button>
+</sc-for>
+</div>
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" variant="secondary" size="sm" hint-size="190px,34px">Acessar área do cliente</x-import>
+</div>
+</header>
+
+<section class="{{ grainClass }}" style="position:relative;overflow:hidden;padding:clamp(56px,9vw,128px) clamp(20px,4vw,56px) clamp(40px,5vw,72px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:40px">
+<sc-if value="{{ showRings }}" hint-placeholder-val="{{ true }}">
+<div style="position:absolute;right:-240px;top:-200px;pointer-events:none;z-index:0">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.DrawnRings" size="760" rings="7" opacity="0.14" hint-size="760px,760px"></x-import>
+</div>
+</sc-if>
+<div style="position:relative;grid-column:1 / span 12;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C;padding-bottom:16px;border-bottom:1px solid rgba(245,241,230,0.22)">
+<span>Agentes de IA que trabalham de verdade</span>
+<span style="color:#9a958c">Prime Circle · Agentes</span>
+</div>
+<h1 style="position:relative;grid-column:1 / span 11;margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:clamp(52px,7.4vw,128px);line-height:0.9;letter-spacing:-0.025em;text-wrap:balance">Uma agente de IA com um time inteiro trabalhando por você. <em style="color:#C9A84C">Sem contratar mais nenhum funcionário humano.</em></h1>
+<p style="position:relative;grid-column:1 / span 6;margin:0;font-size:var(--pc-fs-lead);line-height:1.55;color:#E8E0CC;max-width:580px;text-wrap:pretty">A Sônia coordena um time inteiro: copy, design, código, tráfego, vendas no WhatsApp, financeiro, tributário, jurídico e RH. Você pede em português, pelo painel ou pelo Telegram, e recebe pronto.</p>
+<div style="position:relative;grid-column:1 / span 12;display:flex;gap:16px;flex-wrap:wrap;align-items:center">
+<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="#time" size="lg" hint-size="220px,52px">Quero a minha Sônia ↓</x-import>
+</div>
+<div style="position:relative;grid-column:1 / span 12;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));column-gap:24px;border-top:1px solid rgba(245,241,230,0.22);border-bottom:1px solid rgba(245,241,230,0.22)">
+<div style="display:grid;grid-template-columns:40px 1fr;gap:12px;padding:18px 0;align-items:baseline"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#C9A84C;letter-spacing:0.14em">01</span><span style="font-family:var(--pc-font-display);font-style:italic;font-size:24px;line-height:1.2">Atende 24 horas, não falta, não atrasa e não pede aumento</span></div>
+<div style="display:grid;grid-template-columns:40px 1fr;gap:12px;padding:18px 0;align-items:baseline"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#C9A84C;letter-spacing:0.14em">02</span><span style="font-family:var(--pc-font-display);font-style:italic;font-size:24px;line-height:1.2">Cada cliente com a própria agente, isolada e segura</span></div>
+</div>
+</section>
+
+<section id="time" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:clamp(48px,6vw,88px)">
+<div style="grid-column:1 / span 12;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:24px;align-items:end">
+<div style="grid-column:1 / span 7;display:grid;gap:16px;min-width:280px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">Time Sônia</span>
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-title);line-height:0.98;letter-spacing:-0.01em;text-wrap:balance">Uma agente coordena. <em>O time inteiro entrega.</em></h2>
+</div>
+<p style="grid-column:8 / span 5;margin:0;font-size:16px;line-height:1.6;color:#2a2722;text-wrap:pretty;min-width:260px">A Sônia é a única que fala com você. Ela recebe o pedido, distribui para o especialista certo, acompanha e só te entrega quando está pronto. Clique em qualquer agente para ver o currículo completo.</p>
+</div>
+
+<div style="grid-column:1 / span 12;display:flex;flex-wrap:wrap;gap:clamp(32px,5vw,72px);padding-top:32px;border-top:1px solid rgba(14,14,14,0.22)">
+<div style="flex:1 1 300px;max-width:440px;aspect-ratio:4 / 5;position:relative">
+<image-slot id="agente-sonia" shape="rect" placeholder="Retrato da Sônia · 4:5"></image-slot>
+</div>
+<div style="flex:1.4 1 420px;display:grid;align-content:start;gap:20px">
+<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">Orquestradora do time</span>
+<div style="display:grid;gap:8px">
+<h3 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-display);line-height:0.95;letter-spacing:-0.015em">Sônia</h3>
+<span style="font-size:15px;font-weight:600">Orquestradora · gerente da operação de IA</span>
+</div>
+<p style="margin:0;font-size:16px;line-height:1.65;color:#2a2722;max-width:620px;text-wrap:pretty">A Sônia é a gerente da sua operação de inteligência artificial e o centro de comando da equipe. É a única que fala direto com você: recebe o pedido em português, planeja, quebra em tarefas, escolhe o especialista certo, delega, acompanha, valida o resultado e só então te entrega pronto. Trabalha o tempo todo, não dorme, não atrasa e não falta.</p>
+<div style="max-width:620px">
+<div style="display:grid;grid-template-columns:48px 1fr;gap:16px;padding:14px 0;border-top:1px solid rgba(14,14,14,0.22)"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#8B7340;letter-spacing:0.14em">S.01</span><span style="font-size:15px;line-height:1.5">Orquestração de equipe: planejar, delegar pro especialista certo e validar antes de entregar</span></div>
+<div style="display:grid;grid-template-columns:48px 1fr;gap:16px;padding:14px 0;border-top:1px dashed rgba(14,14,14,0.22)"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#8B7340;letter-spacing:0.14em">S.02</span><span style="font-size:15px;line-height:1.5">Domínio de mais de uma dezena de metodologias próprias de marketing e vendas</span></div>
+<div style="display:grid;grid-template-columns:48px 1fr;gap:16px;padding:14px 0;border-top:1px dashed rgba(14,14,14,0.22)"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#8B7340;letter-spacing:0.14em">S.03</span><span style="font-size:15px;line-height:1.5">Carrossel de Instagram, análise de perfil, propostas, landing pages, slides e plano de negócios</span></div>
+<div style="display:grid;grid-template-columns:48px 1fr;gap:16px;padding:14px 0;border-top:1px dashed rgba(14,14,14,0.22);border-bottom:1px solid rgba(14,14,14,0.22)"><span style="font-family:var(--pc-font-mono);font-size:11px;color:#8B7340;letter-spacing:0.14em">S.04</span><span style="font-size:15px;line-height:1.5">Visão de negócio e tom direto, em português, sem enrolação</span></div>
+</div>
+<div style="display:flex"><x-import component-from-global-scope="DesignSystem_0d6c1f.Button" variant="secondary" theme="light" hint-size="150px,44px">Ver currículo ↗</x-import></div>
+</div>
+</div>
+</section>
+
+<section id="especialistas" class="{{ grainClass }}" style="position:relative;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">
+<div style="display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;padding-bottom:16px;border-bottom:1px solid rgba(245,241,230,0.22)">
+<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;max-width:760px;text-wrap:balance"><span style="font-family:var(--pc-font-mono);color:#C9A84C">21</span> especialistas trabalhando <em style="color:#C9A84C">sob o comando da Sônia.</em></h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+<button onClick="{{ f.select }}" style="{{ f.style }}">{{ f.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px">
+<sc-for list="{{ agents }}" as="a" hint-placeholder-count="12">
+<article style="display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;min-width:0;background:var(--pc-surface-2);border:1px solid rgba(245,241,230,0.10);border-radius:10px;overflow:hidden;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:var(--pc-surface-3)">
+<div style="aspect-ratio:1 / 1;position:relative;min-width:0;border-bottom:1px solid rgba(245,241,230,0.10)">
+<image-slot id="{{ a.slot }}" shape="rect" placeholder="{{ a.placeholder }}"></image-slot>
+</div>
+<div style="display:grid;grid-template-rows:auto auto auto 1fr auto;min-width:0;gap:8px;padding:18px 18px 20px">
+<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ a.group }}</span>
+<h3 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:28px;line-height:1;letter-spacing:-0.01em">{{ a.name }}</h3>
+<span style="font-size:13px;font-weight:600;line-height:1.35;color:#E8E0CC">{{ a.role }}</span>
+<p style="margin:4px 0 0;font-size:13px;line-height:1.5;color:#9a958c;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">{{ a.desc }}</p>
+<a href="#" style="margin-top:8px;padding-top:12px;border-top:1px dashed rgba(245,241,230,0.22);font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">Ver currículo ↗</a>
+</div>
+</article>
+</sc-for>
+</div>
+</section>
+
+<footer style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:28px clamp(20px,4vw,56px);border-top:1px solid rgba(245,241,230,0.10);font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:#9a958c">
+<span>Prime Circle · Agentes</span>
+<span>primecircle.app.br</span>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showRings&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;grain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const AGENTS = [
+  ["juliana","Comando e operação","Juliana","Braço direito e sub-gerente de operações","Juliana é o braço direito da Sônia e a segunda no comando. Quando a demanda é grande"],
+  ["rafael","Comando e operação","Rafael","Gestor de projetos","Rafael é o gestor de projetos da equipe. É ele quem transforma a estratégia da Sônia em"],
+  ["paulo","Produção","Paulo","Desenvolvedor full-stack","Paulo é o desenvolvedor da equipe. Quando precisa de código, é ele que entra"],
+  ["clone","Squad de vendas","Clone do dono","SDR · atendimento no Direct e no WhatsApp","O clone de atendimento do dono: responde nas DMs do Instagram e no WhatsApp"],
+  ["jonathan","Produção","Jonathan","Redator e pesquisador","Jonathan é o redator e pesquisador da equipe. Escreve tudo que tem palavra com"],
+  ["bianca-video","Produção","Bianca","Analista de vídeos virais","Bianca é a analista de vídeos virais do Instagram. Roda um estudo completo de"],
+  ["amanda-crm","Produção","Amanda","Gerente do CRM","Amanda é a gerente do CRM e a especialista absoluta na plataforma. Começou como"],
+  ["trafego","Tráfego e clientes","Estrategista de tráfego","Gestor de tráfego pago","O Estrategista de tráfego é o gestor de tráfego digital, treinado no método de um"],
+  ["davi","Squad de vendas","Davi","Líder do squad · vendas no WhatsApp","Davi é o líder do squad de vendas e o vendedor de WhatsApp da operação."],
+  ["amanda-sdr","Squad de vendas","Amanda","Vendedor (SDR)","Amanda integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz"],
+  ["bianca-sdr","Squad de vendas","Bianca","Vendedor (SDR)","Bianca integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz"],
+  ["carolina","Squad de vendas","Carolina","Vendedor (SDR)","Carolina integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz"],
+  ["felipe","Squad de vendas","Felipe","Vendedor (SDR)","Felipe integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz"],
+  ["lucas","Squad de vendas","Lucas","Vendedor (SDR)","Lucas integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz"],
+  ["matheus","Squad de vendas","Matheus","Vendedor (SDR)","Matheus integra o squad de vendas liderado pelo Davi. Prospecta, qualifica e conduz"],
+  ["marcia","Produção","Márcia","Financeiro e contabilidade","Márcia cuida do financeiro e da contabilidade. Concilia extratos, controla contas a pagar e a"],
+  ["maria","Produção","Maria","Tributária e fiscal","Emite e confere notas fiscais, explica regime tributário e acompanha a reforma IBS/CBS"],
+  ["aline","Produção","Aline","Especialista jurídica","Contratos, LGPD, registro de marca no INPI e processos, com a lei como fonte."]
+];
+const GROUPS = ["Todos","Comando e operação","Produção","Squad de vendas","Tráfego e clientes"];
+const chip = (on) => ({
+  fontFamily: "var(--pc-font-mono)", fontSize: 10, letterSpacing: "0.24em", textTransform: "uppercase",
+  padding: "7px 12px", borderRadius: 999, whiteSpace: "nowrap", cursor: "pointer", transition: "all 180ms cubic-bezier(.22,.61,.36,1)",
+  background: on ? "#C9A84C" : "transparent", color: on ? "#0E0E0E" : "#E8E0CC",
+  border: "1px solid " + (on ? "#C9A84C" : "rgba(245,241,230,0.22)")
+});
+class Component extends DCLogic {
+  state = { lang: "PT", group: "Todos" };
+  renderVals() {
+    const { lang, group } = this.state;
+    return {
+      showRings: this.props.showRings ?? true,
+      grainClass: (this.props.grain ?? true) ? "pc-grain" : "",
+      langs: ["PT","EN","ES"].map(code => ({ code, style: { ...chip(code === lang), padding: "7px 10px" }, select: () => this.setState({ lang: code }) })),
+      filters: GROUPS.map(label => ({ label, style: chip(label === group), select: () => this.setState({ group: label }) })),
+      agents: AGENTS.filter(a => group === "Todos" || a[1] === group).map(([id, g, name, role, desc]) => ({
+        slot: "agente-" + id, placeholder: "Retrato · " + name, group: g, name, role, desc
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

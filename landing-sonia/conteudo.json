@@ -114,8 +114,8 @@
     "texto": "A SONIA não é um chatbot. É o sistema que organiza o trabalho da sua empresa: recebe o pedido, distribui para o especialista certo e só entrega quando está pronto."
   },
   "numeros": {
-    "visivel": false,
     "_aviso": "Números da plataforma. Só ligue com autorização escrita da Avalanche e mantenha a atribuição à plataforma.",
+    "visivel": false,
     "etiqueta": "A tecnologia por trás da Sônia",
     "titulo": "Não é promessa. É operação rodando.",
     "itens": [
@@ -1853,19 +1853,19 @@
       {
         "cargo": "Analista de tráfego pago",
         "tarefa": "Rodar e otimizar campanhas pagas",
-        "salario": 5995.28,
+        "salario": 4914.34,
         "pessoas": 1
       },
       {
         "cargo": "SDR",
         "tarefa": "Atender, qualificar leads e agendar reuniões",
-        "salario": 2530.0,
+        "salario": 2451,
         "pessoas": 8
       },
       {
         "cargo": "SDR de prospecção",
         "tarefa": "Encontrar e aquecer novos clientes",
-        "salario": 2530.0,
+        "salario": 2451,
         "pessoas": 1
       },
       {
@@ -1894,11 +1894,12 @@
       }
     ],
     "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT. A comparação não inclui o custo da assinatura da IA, que é contratada à parte.",
-    "fontes": "Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026, consultados em 10/2026). SDR: Jooble (10/2026), por não haver CBO própria. Encargos e custos do empregador de 68% sobre o salário, segundo Buk (11/2025) e Contabilizei (12/2025)."
+    "fontes": "Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026, consultados em 10/2026). Tráfego pago: Analista de Marketing (CBO 1423-35), por não haver CBO própria. SDR: Jooble, SDR júnior (06/2026), por não haver CBO própria. Encargos e custos do empregador de 68% sobre o salário, segundo Buk (11/2025) e Contabilizei (12/2025).",
+    "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar."
   },
   "diferenciais": {
-    "visivel": true,
     "_aviso": "Confirme cada item antes de publicar. Mentoria e suporte individual valem só para o Magnata; sessão coletiva semanal e garantia valem para todos.",
+    "visivel": false,
     "etiqueta": "Por que contratar com a Prime Circle",
     "titulo": "A mesma tecnologia, com gente de verdade do seu lado.",
     "itens": [
@@ -1913,16 +1914,12 @@
       {
         "titulo": "Garantia de 30 dias",
         "texto": "Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir por e-mail ou WhatsApp."
-      },
-      {
-        "titulo": "Revenda autorizada",
-        "texto": "A Prime Circle é revendedora autorizada da plataforma. Você contrata com uma empresa brasileira e fala em português."
       }
     ]
   },
   "depoimentos": {
-    "visivel": false,
     "_aviso": "Use só depoimentos de clientes seus, com autorização por escrito.",
+    "visivel": false,
     "etiqueta": "Quem já usa",
     "titulo": "Veja quem já colocou a Sônia para trabalhar.",
     "itens": [
@@ -1936,10 +1933,12 @@
     ]
   },
   "planos": {
+    "_aviso": "Cole no campo Link de cada plano o endereço do checkout. Vazio: o botão leva ao formulário de contato.",
+    "_aviso_claude": "Claude retirado dos planos em 31/10/2026: a Avalanche conecta o Claude por assinatura (OAuth), e os termos de consumidor da Anthropic proíbem esse uso em produtos de terceiros. Só volte a citar o Claude se a conexão passar a ser por chave de API.",
     "visivel": true,
     "etiqueta": "Planos",
     "titulo": "Escolha o tamanho do seu time",
-    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes, com juros. O acesso chega por e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
+    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes. O acesso chega por e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
     "itens": [
       {
         "nome": "SONIA Starter",
@@ -1947,7 +1946,7 @@
         "destaque": false,
         "preco": "R$ 4.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 433,78 no cartão, com juros",
+        "parcelamento": "ou 12x de R$ 433,78 no cartão",
         "itens": [
           "5 agentes liberados",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
@@ -1966,7 +1965,7 @@
         "destaque": true,
         "preco": "R$ 7.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 694,21 no cartão, com juros",
+        "parcelamento": "ou 12x de R$ 694,21 no cartão",
         "itens": [
           "16 agentes liberados",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
@@ -1985,7 +1984,7 @@
         "destaque": false,
         "preco": "R$ 15.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 1.388,67 no cartão, com juros",
+        "parcelamento": "ou 12x de R$ 1.388,67 no cartão",
         "itens": [
           "Os 22 agentes liberados",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
@@ -2002,13 +2001,11 @@
         }
       }
     ],
-    "nota": "Não estão incluídos no preço: a assinatura da IA, que você contrata e paga direto ao fornecedor, e qualquer ferramenta ou serviço que você queira conectar aos agentes, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês, conforme o seu uso.",
-    "_aviso": "Cole no campo Link de cada plano o endereço do checkout. Vazio: o botão leva ao formulário de contato.",
-    "_aviso_claude": "Claude retirado dos planos em 31/10/2026: a Avalanche conecta o Claude por assinatura (OAuth), e os termos de consumidor da Anthropic proíbem esse uso em produtos de terceiros. Só volte a citar o Claude se a conexão passar a ser por chave de API."
+    "nota": "Não estão incluídos no preço: a assinatura da IA, que você contrata e paga direto ao fornecedor, e qualquer ferramenta ou serviço que você queira conectar aos agentes, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês, conforme o seu uso."
   },
   "agencia": {
-    "visivel": false,
     "_aviso": "Ligue só se o seu contrato permitir sub-revenda.",
+    "visivel": false,
     "etiqueta": "Escolha o seu caminho",
     "titulo": "Duas formas de colocar agentes de IA para gerar dinheiro para você.",
     "caminhos": [
@@ -2043,14 +2040,14 @@
     ]
   },
   "contato": {
+    "_aviso_whatsapp": "Número com DDI e DDD, só dígitos. Exemplo: 5521912345678. Sem número (e sem endpoint), o formulário não envia.",
+    "_aviso_endpoint": "Opcional. URL que recebe o formulário em JSON (Formspree, Make, n8n, webhook do CRM). Se preenchido, é usado no lugar do WhatsApp.",
     "visivel": true,
     "etiqueta": "Fale com o time",
     "titulo": "Prefere conversar antes de assinar?",
     "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp e mostra a Sônia funcionando.",
     "whatsapp": "5521999012520",
-    "_aviso_whatsapp": "Número com DDI e DDD, só dígitos. Exemplo: 5521912345678. Sem número (e sem endpoint), o formulário não envia.",
     "endpoint": "",
-    "_aviso_endpoint": "Opcional. URL que recebe o formulário em JSON (Formspree, Make, n8n, webhook do CRM). Se preenchido, é usado no lugar do WhatsApp.",
     "rotulo_nome": "Nome completo",
     "rotulo_email": "Seu melhor e-mail",
     "rotulo_whatsapp": "WhatsApp com DDD",
@@ -2085,7 +2082,7 @@
       },
       {
         "pergunta": "Quanto custa?",
-        "resposta": "Os planos são anuais, com Pix à vista ou cartão em até 12 vezes com juros. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
+        "resposta": "Os planos são anuais, com Pix à vista ou cartão em até 12 vezes. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
       },
       {
         "pergunta": "O que não está incluído no preço?",

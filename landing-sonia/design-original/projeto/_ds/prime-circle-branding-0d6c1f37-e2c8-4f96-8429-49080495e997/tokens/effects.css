@@ -1,0 +1,49 @@
+/* Prime Circle — Shadows, borders, focus, motion (v2). */
+:root {
+  --pc-shadow-sm: 0 2px 4px rgba(14, 14, 14, 0.06);
+  --pc-shadow-md: 0 12px 30px -10px rgba(14, 14, 14, 0.18);
+  --pc-shadow-lg: 0 40px 80px -30px rgba(14, 14, 14, 0.35);
+  --pc-shadow-dark-lg: 0 40px 80px -30px rgba(0, 0, 0, 0.7);
+
+  /* Dark elevation: top hairline highlight + deep soft drop */
+  --pc-elev-1: inset 0 1px 0 rgba(245, 241, 230, 0.05), 0 1px 2px rgba(0, 0, 0, 0.4);
+  --pc-elev-2: inset 0 1px 0 rgba(245, 241, 230, 0.07), 0 18px 40px -18px rgba(0, 0, 0, 0.75);
+  --pc-elev-3: inset 0 1px 0 rgba(245, 241, 230, 0.09), 0 40px 90px -30px rgba(0, 0, 0, 0.85);
+
+  /* Focus — keyboard only, gold double ring */
+  --pc-focus-ring: 0 0 0 2px var(--pc-ink), 0 0 0 4px var(--pc-gold);
+  --pc-focus-ring-light: 0 0 0 2px var(--pc-ivory), 0 0 0 4px var(--pc-gold-deep);
+
+  /* Dashed metadata divider — a recurring motif */
+  --pc-divider-dashed: 1px dashed var(--pc-border-strong);
+  --pc-divider-dashed-light: 1px dashed var(--pc-border-light-strong);
+
+  /* Motion */
+  --pc-ease: cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --pc-ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --pc-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --pc-dur-fast: 140ms; /* @kind other */
+  --pc-dur: 240ms; /* @kind other */
+  --pc-dur-slow: 600ms; /* @kind other */
+  --pc-dur-reveal: 900ms; /* @kind other */
+  --pc-stagger: 80ms; /* @kind other */
+
+  /* Photography grade — warm, desaturated, neutralizes green interior casts. Calibrated on Quintas do Rio. */
+  --pc-photo-filter: saturate(0.78) sepia(0.15) hue-rotate(-6deg) contrast(1.06) brightness(0.95); /* @kind other */
+  --pc-photo-scrim: linear-gradient(to top, rgba(10, 10, 9, 0.78), rgba(10, 10, 9, 0) 55%); /* @kind other */
+}
+
+.pc-photo { filter: var(--pc-photo-filter); object-fit: cover; display: block; }
+
+/* Motion is drafting, not floating: lines are drawn, rules extend, numbers settle.
+   Everything plays ONCE. No loops, no parallax, no glow. */
+@keyframes pc-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pc-draw { from { stroke-dashoffset: var(--pc-draw-len, 400); } to { stroke-dashoffset: 0; } }
+@keyframes pc-rule-extend { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes pc-toast-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.pc-focusable:focus-visible { outline: none; box-shadow: var(--pc-focus-ring); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

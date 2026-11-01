@@ -1,0 +1,727 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SONIA</title>
+    <meta name="description" content="" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="" />
+    <meta property="og:image" content="" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="assets/fonts.css" />
+    <style>
+      :root {
+        --destaque: #c8a24a;
+        --escura: #13263b;
+        --botao: #e2574c;
+        --papel: #fbf7ef;
+        --papel-2: #f3ead8;
+        --gelo: #eef3f7;
+        --tinta: #142030;
+        --tinta-2: #46546a;
+        --linha: #142030;
+        --sombra: 4px 4px 0 var(--linha);
+        --raio: 14px;
+        --f-titulo: "Bricolage Grotesque", system-ui, sans-serif;
+        --f-texto: "DM Sans", system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: #0d1825;
+        color: var(--tinta);
+        font: 16px/1.55 var(--f-texto);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      img { max-width: 100%; display: block; }
+      a { color: inherit; }
+      h1, h2, h3, h4 { font-family: var(--f-titulo); line-height: 1.08; margin: 0; letter-spacing: -0.01em; }
+      p { margin: 0; }
+      .container { width: min(1200px, 100% - 32px); margin-inline: auto; }
+      section { scroll-margin-top: 90px; }
+
+      /* Topo */
+      .topo { position: sticky; top: 0; z-index: 40; padding: 12px 0; }
+      .topo-barra {
+        display: flex; align-items: center; gap: 16px; justify-content: space-between;
+        background: var(--papel); border: 2px solid var(--linha); border-radius: var(--raio);
+        padding: 10px 14px; box-shadow: var(--sombra);
+      }
+      .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+      .logo-marca { font: 800 22px/1 var(--f-titulo); letter-spacing: 0.06em; }
+      .logo-marca span { color: var(--destaque); }
+      .logo-por { font-size: 12px; color: var(--tinta-2); border-left: 1px solid #cfc6b3; padding-left: 10px; line-height: 1.2; }
+      .menu { display: flex; gap: 22px; }
+      .menu a { text-decoration: none; font-weight: 600; font-size: 14px; }
+      .menu a:hover { color: var(--destaque); }
+      .topo-acoes { display: flex; gap: 8px; align-items: center; }
+
+      .botao {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        font: 700 15px/1 var(--f-texto); text-decoration: none; cursor: pointer;
+        padding: 14px 20px; border-radius: 11px; border: 2px solid var(--linha);
+        background: var(--botao); color: #fff; box-shadow: 3px 3px 0 var(--linha);
+        transition: transform 0.12s, box-shadow 0.12s;
+      }
+      .botao:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--linha); }
+      .botao:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--linha); }
+      .botao.claro { background: var(--papel); color: var(--tinta); }
+      .botao.ouro { background: var(--destaque); color: var(--tinta); }
+      .botao.pequeno { padding: 10px 14px; font-size: 13px; }
+      .botao.contorno { background: transparent; color: var(--papel); border-color: var(--papel); box-shadow: 3px 3px 0 var(--papel); }
+
+      .etiqueta {
+        display: inline-block; font: 800 11px/1 var(--f-texto); letter-spacing: 0.12em; text-transform: uppercase;
+        background: var(--destaque); color: var(--tinta); border: 1.5px solid var(--linha);
+        padding: 6px 10px; border-radius: 99px;
+      }
+      .etiqueta.escura { background: var(--escura); color: var(--papel); }
+
+      /* Blocos */
+      .bloco {
+        margin: 28px auto; border: 2px solid var(--linha); border-radius: 18px;
+        box-shadow: 6px 6px 0 #000; overflow: hidden; background: var(--papel);
+      }
+      .bloco-escuro { background: var(--escura); color: var(--papel); }
+      .bloco-cab { padding: 56px 56px 32px; }
+      .bloco-cab h2 { font-size: clamp(30px, 4vw, 48px); margin-top: 16px; max-width: 22ch; }
+      .bloco-cab p { margin-top: 14px; max-width: 64ch; font-size: 17px; color: inherit; opacity: 0.86; }
+      .bloco-corpo { padding: 0 56px 56px; }
+
+      /* Hero */
+      .hero { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; padding: 56px; align-items: center; }
+      .hero h1 { font-size: clamp(36px, 5.2vw, 66px); margin-top: 18px; }
+      .hero h1 em { font-style: normal; color: var(--destaque); display: block; }
+      .hero-texto { margin-top: 20px; font-size: 18px; opacity: 0.88; max-width: 56ch; }
+      .hero-botoes { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+      .hero-visual { position: relative; }
+      .hero-foto {
+        border: 2px solid var(--papel); border-radius: 18px; overflow: hidden; aspect-ratio: 1;
+        box-shadow: 6px 6px 0 var(--destaque); max-width: 420px; margin-left: auto;
+      }
+      .hero-foto img { width: 100%; height: 100%; object-fit: cover; }
+      .conversa {
+        position: relative; z-index: 2; margin: -96px 0 0 -28px; width: min(340px, 92%);
+        background: var(--papel); color: var(--tinta); border: 2px solid var(--linha); border-radius: 14px;
+        box-shadow: var(--sombra); padding: 12px; display: grid; gap: 8px; font-size: 13.5px;
+      }
+      .conversa-rotulo { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-2); }
+      .msg { padding: 8px 11px; border-radius: 12px; max-width: 88%; line-height: 1.4; }
+      .msg.voce { background: #e4ecf3; justify-self: end; border-bottom-right-radius: 3px; }
+      .msg.agente { background: var(--papel-2); border: 1px solid #e0d3b5; border-bottom-left-radius: 3px; }
+      .selos {
+        display: flex; flex-wrap: wrap; gap: 10px 28px; padding: 18px 56px; background: var(--papel); color: var(--tinta);
+        border-top: 2px solid var(--linha); font-weight: 700; font-size: 14px;
+      }
+      .selos span::before { content: "✓"; color: var(--destaque); margin-right: 8px; font-weight: 800; }
+      .avatares { display: flex; align-items: center; margin-top: 30px; }
+      .avatares img { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--escura); margin-left: -10px; object-fit: cover; }
+      .avatares img:first-child { margin-left: 0; }
+      .avatares small { margin-left: 12px; font-weight: 600; opacity: 0.85; }
+
+      /* Sigla */
+      .sigla { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 8px; }
+      .sigla div { background: var(--papel); border: 2px solid var(--linha); border-radius: 12px; padding: 16px; box-shadow: var(--sombra); }
+      .sigla b { display: block; font: 800 44px/1 var(--f-titulo); color: var(--destaque); -webkit-text-stroke: 1px var(--linha); }
+      .sigla span { display: block; margin-top: 8px; font-weight: 700; }
+
+      /* Números */
+      .numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+      .numero { background: #fff; border: 2px solid var(--linha); border-radius: 12px; padding: 18px; box-shadow: var(--sombra); }
+      .numero b { font: 800 30px/1.1 var(--f-titulo); display: block; }
+      .numero:first-child { background: var(--escura); color: var(--papel); }
+      .nota { font-size: 13px; color: var(--tinta-2); margin-top: 16px; }
+      .bloco-escuro .nota { color: #b6c2d2; }
+
+      /* Como funciona */
+      .passos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: p; }
+      .passo { background: #fff; border: 2px solid var(--linha); border-radius: 14px; padding: 20px; box-shadow: var(--sombra); position: relative; }
+      .passo::before {
+        counter-increment: p; content: counter(p);
+        display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%;
+        background: var(--destaque); border: 2px solid var(--linha); font: 800 16px var(--f-titulo); margin-bottom: 14px;
+      }
+      .passo h3 { font-size: 20px; }
+      .passo p { margin-top: 8px; color: var(--tinta-2); font-size: 15px; }
+
+      /* Time */
+      .orq { display: grid; grid-template-columns: 340px 1fr; gap: 40px; padding: 48px 56px; background: var(--papel); color: var(--tinta); border-top: 2px solid var(--linha); }
+      .orq-foto { border: 2px solid var(--linha); border-radius: 16px; overflow: hidden; box-shadow: var(--sombra); aspect-ratio: 1; }
+      .orq-foto img { width: 100%; height: 100%; object-fit: cover; }
+      .rotulo { font-size: 12px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #8d6d1f; }
+      .orq h3 { font-size: 40px; margin-top: 6px; }
+      .orq .cargo { font-weight: 700; margin-top: 6px; }
+      .orq p.resumo { margin-top: 14px; color: var(--tinta-2); }
+      .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+      .chip { font-size: 13px; font-weight: 600; background: var(--gelo); border: 1.5px solid var(--linha); border-radius: 99px; padding: 5px 11px; }
+      .grade-wrap { background: var(--gelo); padding: 40px 56px 56px; border-top: 2px solid var(--linha); color: var(--tinta); }
+      .grade { --cols: 5; --gap: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin-top: 18px; }
+      .grade > .card { width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); }
+      .card {
+        background: #fff; border: 2px solid var(--linha); border-radius: 14px; overflow: hidden; box-shadow: var(--sombra);
+        display: flex; flex-direction: column; text-align: left; cursor: pointer; font: inherit; color: inherit; padding: 0;
+        transition: transform 0.12s;
+      }
+      .card:hover { transform: translateY(-3px); }
+      .card:focus-visible { outline: 3px solid var(--destaque); outline-offset: 3px; }
+      .card img { aspect-ratio: 1; object-fit: cover; width: 100%; border-bottom: 2px solid var(--linha); background: #dde5ec; }
+      .card-corpo { padding: 12px 13px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+      .card-area { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-2); }
+      .card h4 { font-size: 18px; }
+      .card-cargo { font-size: 13px; font-weight: 700; line-height: 1.3; }
+      .card-resumo { font-size: 12.5px; color: var(--tinta-2); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-top: 2px; }
+      .card-link { margin-top: auto; padding-top: 8px; font-size: 13px; font-weight: 800; color: #8d6d1f; }
+
+      /* Modal */
+      dialog.cv {
+        width: min(860px, 100% - 24px); max-height: calc(100dvh - 40px); padding: 0; border: 2px solid var(--linha);
+        border-radius: 18px; box-shadow: 8px 8px 0 #000; background: var(--papel); color: var(--tinta);
+      }
+      dialog.cv::backdrop { background: rgba(8, 14, 22, 0.72); }
+      .cv-cab { display: grid; grid-template-columns: 150px 1fr auto; gap: 22px; padding: 26px; background: var(--escura); color: var(--papel); align-items: center; }
+      .cv-cab img { border-radius: 12px; border: 2px solid var(--papel); aspect-ratio: 1; object-fit: cover; }
+      .cv-cab h3 { font-size: 34px; }
+      .cv-cab .rotulo { color: var(--destaque); }
+      .cv-fechar { align-self: start; background: var(--papel); border: 2px solid var(--linha); border-radius: 10px; width: 40px; height: 40px; font-size: 20px; cursor: pointer; }
+      .cv-corpo { padding: 26px; display: grid; gap: 26px; }
+      .cv-corpo h5 { font: 800 12px/1 var(--f-texto); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 10px; color: #8d6d1f; }
+      .cv-corpo ul, .cv-corpo ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+      .cv-dupla { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+      .habs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+      .hab { background: #fff; border: 1.5px solid var(--linha); border-radius: 10px; padding: 11px 12px; }
+      .hab b { display: block; font-size: 14.5px; }
+      .hab span { font-size: 13.5px; color: var(--tinta-2); }
+      .pedidos { display: grid; gap: 8px; }
+      .pedidos div { background: #e4ecf3; border-radius: 12px 12px 12px 3px; padding: 9px 12px; font-size: 14.5px; }
+
+      /* Economia */
+      .totais { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+      .total { border: 2px solid var(--linha); border-radius: 14px; padding: 20px; box-shadow: var(--sombra); background: #fff; }
+      .total:first-child { background: var(--escura); color: var(--papel); }
+      .total b { font: 800 clamp(30px, 4vw, 44px)/1.1 var(--f-titulo); display: block; margin-top: 6px; }
+      .tabela-wrap { overflow-x: auto; border: 2px solid var(--linha); border-radius: 14px; background: #fff; box-shadow: var(--sombra); }
+      table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 720px; }
+      th { text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; background: var(--papel-2); padding: 12px 14px; border-bottom: 2px solid var(--linha); }
+      td { padding: 12px 14px; border-bottom: 1px solid #e6dfcf; vertical-align: top; }
+      td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+      td.ag { font-weight: 800; color: #2b7a4b; }
+      td small { display: block; color: var(--tinta-2); }
+
+      /* Diferenciais / caminhos / depoimentos */
+      .tres { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+      .item { background: #fff; color: var(--tinta); border: 2px solid var(--linha); border-radius: 14px; padding: 22px; box-shadow: var(--sombra); }
+      .item h3 { font-size: 21px; }
+      .item p { margin-top: 8px; color: var(--tinta-2); }
+      .item ul { margin: 14px 0 20px; padding-left: 20px; display: grid; gap: 6px; }
+      .dep img { border-radius: 10px; border: 1.5px solid var(--linha); margin-bottom: 12px; aspect-ratio: 16/9; object-fit: cover; width: 100%; }
+
+      /* Planos */
+      .planos { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; align-items: stretch; }
+      .plano { background: #fff; border: 2px solid var(--linha); border-radius: 16px; padding: 26px; box-shadow: var(--sombra); display: flex; flex-direction: column; position: relative; }
+      .plano.destaque { background: var(--escura); color: var(--papel); box-shadow: 6px 6px 0 var(--destaque); }
+      .plano-selo { position: absolute; top: -14px; left: 22px; }
+      .plano h3 { font-size: 22px; }
+      .preco { font: 800 42px/1 var(--f-titulo); margin-top: 18px; }
+      .periodo { font-size: 14px; opacity: 0.75; margin-top: 4px; }
+      .parcela { font-size: 14px; margin-top: 8px; font-weight: 600; }
+      .plano ul { list-style: none; padding: 0; margin: 20px 0 24px; display: grid; gap: 9px; }
+      .plano li { padding-left: 24px; position: relative; font-size: 15px; }
+      .plano li::before { content: "✓"; position: absolute; left: 0; font-weight: 800; color: var(--destaque); }
+      .plano .botao { margin-top: auto; }
+
+      /* Contato */
+      .form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: #fff; border: 2px solid var(--linha); border-radius: 16px; padding: 26px; box-shadow: var(--sombra); color: var(--tinta); }
+      .campo { display: grid; gap: 6px; }
+      .campo.inteiro { grid-column: 1 / -1; }
+      .campo label, .campo legend { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .campo input[type="text"], .campo input[type="email"], .campo input[type="tel"] {
+        font: inherit; padding: 12px 13px; border: 2px solid var(--linha); border-radius: 10px; background: var(--gelo); width: 100%;
+      }
+      fieldset.campo { border: 0; padding: 0; margin: 0; }
+      .opcoes { display: flex; flex-wrap: wrap; gap: 10px; }
+      .opcoes label { text-transform: none; letter-spacing: 0; font-weight: 600; font-size: 14.5px; display: flex; gap: 8px; align-items: center; border: 1.5px solid var(--linha); border-radius: 99px; padding: 7px 13px; cursor: pointer; }
+      .consent { display: flex; gap: 10px; font-size: 13.5px; color: var(--tinta-2); align-items: flex-start; }
+      .consent input { margin-top: 3px; }
+      .form-status { font-weight: 700; }
+
+      /* FAQ */
+      .faq { display: grid; gap: 10px; }
+      .faq details { background: #fff; border: 2px solid var(--linha); border-radius: 12px; box-shadow: 3px 3px 0 var(--linha); }
+      .faq summary { cursor: pointer; padding: 16px 18px; font: 700 17px/1.3 var(--f-titulo); list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+      .faq summary::after { content: "+"; font-size: 22px; line-height: 1; }
+      .faq details[open] summary::after { content: "−"; }
+      .faq details p { padding: 0 18px 18px; color: var(--tinta-2); }
+
+      /* Final e rodapé */
+      .final { text-align: center; padding: 64px 32px; }
+      .final h2 { font-size: clamp(30px, 4.4vw, 52px); max-width: 20ch; margin: 0 auto; }
+      .final p { margin: 14px auto 26px; font-size: 18px; opacity: 0.86; }
+      .rodape { color: #a8b4c4; font-size: 13px; padding: 10px 0 48px; display: grid; gap: 10px; }
+      .rodape a { color: #d9e1ea; }
+      .erro { color: var(--papel); padding: 80px 24px; text-align: center; font-size: 18px; }
+
+      @media (max-width: 1080px) {
+        .grade { --cols: 3; }
+        .passos { grid-template-columns: repeat(2, 1fr); }
+        .menu { display: none; }
+      }
+      @media (max-width: 820px) {
+        .hero { grid-template-columns: 1fr; padding: 36px 24px 56px; }
+        .hero-foto { margin: 0 auto; max-width: 340px; }
+        .conversa { margin: -70px auto 0; }
+        .bloco-cab { padding: 36px 24px 24px; }
+        .bloco-corpo { padding: 0 24px 32px; }
+        .selos { padding: 18px 24px; margin-top: 30px; }
+        .orq { grid-template-columns: 1fr; padding: 28px 24px; gap: 22px; }
+        .orq-foto { max-width: 300px; }
+        .grade-wrap { padding: 28px 24px 32px; }
+        .grade { --cols: 2; --gap: 12px; }
+        .sigla { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+        .sigla div { padding: 10px 6px; text-align: center; }
+        .sigla b { font-size: 30px; }
+        .sigla span { font-size: 11.5px; }
+        .totais { grid-template-columns: 1fr; }
+        .form { grid-template-columns: 1fr; padding: 20px; }
+        .cv-cab { grid-template-columns: 84px 1fr auto; gap: 14px; padding: 18px; }
+        .cv-cab h3 { font-size: 26px; }
+        .cv-corpo { padding: 18px; }
+        .cv-dupla { grid-template-columns: 1fr; }
+        .logo-por { display: none; }
+        .topo-acoes .area { display: none; }
+      }
+      @media (max-width: 480px) {
+        .passos { grid-template-columns: 1fr; }
+        .card-resumo { display: none; }
+        .card h4 { font-size: 16px; }
+        .botao { padding: 13px 16px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .card, .botao { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"><p class="erro">Carregando…</p></div>
+    <dialog class="cv" id="cv" aria-labelledby="cv-nome"></dialog>
+    <noscript><p class="erro">Ative o JavaScript para ver esta página.</p></noscript>
+
+    <script>
+      (function () {
+        "use strict";
+        var C = null;
+
+        function esc(s) {
+          return String(s == null ? "" : s).replace(/[&<>"']/g, function (ch) {
+            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch];
+          });
+        }
+        // Link seguro: só http(s), âncora, mailto, tel e caminho relativo.
+        function url(u) {
+          u = String(u || "").trim();
+          if (!u) return "#";
+          if (/^(https?:|mailto:|tel:|#|\/|\.\/|assets\/)/i.test(u)) return esc(u);
+          if (!/^[a-z][a-z0-9+.-]*:/i.test(u)) return esc(u);
+          return "#";
+        }
+        function externo(u) { return /^https?:/i.test(String(u || "")) ? ' target="_blank" rel="noopener"' : ""; }
+        function vis(s) { return s && s.visivel !== false; }
+        function lista(a) { return Array.isArray(a) ? a : []; }
+        function brl(n) { return Number(n || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
+        function brl0(n) { return Number(n || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }); }
+        function botao(b, classe) {
+          if (!b || !b.texto) return "";
+          return '<a class="botao ' + (classe || "") + '" href="' + url(b.link) + '"' + externo(b.link) + ">" + esc(b.texto) + "</a>";
+        }
+        function cab(s, escuro) {
+          return (
+            '<div class="bloco-cab">' +
+            (s.etiqueta ? '<span class="etiqueta' + (escuro ? "" : " escura") + '">' + esc(s.etiqueta) + "</span>" : "") +
+            (s.titulo ? "<h2>" + esc(s.titulo) + "</h2>" : "") +
+            (s.texto ? "<p>" + esc(s.texto) + "</p>" : "") +
+            "</div>"
+          );
+        }
+        function marcaHTML(m) {
+          var p = String(m.produto || "");
+          var corpo = p.length > 2 ? esc(p.slice(0, -2)) + "<span>" + esc(p.slice(-2)) + "</span>" : esc(p);
+          return corpo;
+        }
+
+        function topo(c) {
+          var t = c.topo || {};
+          var m = c.marca || {};
+          var area = t.botao_area_cliente;
+          return (
+            '<header class="topo"><div class="container topo-barra">' +
+            '<a class="logo" href="#inicio" aria-label="' + esc(m.produto) + '"><span class="logo-marca">' + marcaHTML(m) + "</span>" +
+            (m.empresa ? '<span class="logo-por">por<br><b>' + esc(m.empresa) + "</b></span>" : "") + "</a>" +
+            '<nav class="menu" aria-label="Seções">' +
+            lista(t.menu).map(function (i) { return '<a href="' + url(i.link) + '">' + esc(i.texto) + "</a>"; }).join("") +
+            "</nav>" +
+            '<div class="topo-acoes">' +
+            (vis(area) && area.texto ? '<a class="botao claro pequeno area" href="' + url(area.link) + '"' + externo(area.link) + ">" + esc(area.texto) + "</a>" : "") +
+            botao(t.botao, "pequeno") +
+            "</div></div></header>"
+          );
+        }
+
+        function hero(c) {
+          var h = c.hero || {};
+          var ag = lista((c.time || {}).agentes);
+          var orq = ag[0] || {};
+          var mini = ag.slice(1).filter(function (a) { return a.visivel !== false; }).slice(0, 7);
+          return (
+            '<section id="inicio" class="container bloco bloco-escuro">' +
+            '<div class="hero"><div>' +
+            (h.etiqueta ? '<span class="etiqueta">' + esc(h.etiqueta) + "</span>" : "") +
+            "<h1>" + esc(h.titulo) + (h.titulo_destaque ? " <em>" + esc(h.titulo_destaque) + "</em>" : "") + "</h1>" +
+            (h.texto ? '<p class="hero-texto">' + esc(h.texto) + "</p>" : "") +
+            '<div class="hero-botoes">' + botao(h.botao_principal) + botao(h.botao_secundario, "contorno") + "</div>" +
+            (mini.length
+              ? '<div class="avatares">' +
+                mini.map(function (a) { return '<img src="' + url(a.imagem) + '" alt="" loading="lazy" width="38" height="38">'; }).join("") +
+                "<small>" + esc(h.rotulo_avatares || "e mais especialistas no time") + "</small></div>"
+              : "") +
+            "</div>" +
+            '<div class="hero-visual">' +
+            (orq.imagem ? '<div class="hero-foto"><img src="' + url(orq.imagem) + '" alt="' + esc(orq.nome) + '" width="420" height="420" fetchpriority="high"></div>' : "") +
+            (lista(h.conversa).length
+              ? '<div class="conversa" aria-label="Exemplo de conversa">' +
+                '<span class="conversa-rotulo">' + esc(h.rotulo_conversa || "Exemplo de conversa") + "</span>" +
+                lista(h.conversa).map(function (m) { return '<div class="msg ' + (m.de === "agente" ? "agente" : "voce") + '">' + esc(m.texto) + "</div>"; }).join("") +
+                "</div>"
+              : "") +
+            "</div></div>" +
+            (lista(h.selos).length ? '<div class="selos">' + lista(h.selos).map(function (s) { return "<span>" + esc(s) + "</span>"; }).join("") + "</div>" : "") +
+            "</section>"
+          );
+        }
+
+        function sigla(c) {
+          var s = c.sigla;
+          if (!vis(s)) return "";
+          return (
+            '<section class="container bloco" style="background:var(--papel-2)">' +
+            cab({ etiqueta: s.titulo, titulo: (c.marca || {}).significado, texto: s.texto }) +
+            '<div class="bloco-corpo"><div class="sigla">' +
+            lista(s.letras).map(function (l) { return "<div><b>" + esc(l.letra) + "</b><span>" + esc(l.palavra) + "</span></div>"; }).join("") +
+            "</div></div></section>"
+          );
+        }
+
+        function numeros(c) {
+          var s = c.numeros;
+          if (!vis(s)) return "";
+          return (
+            '<section class="container bloco">' + cab(s) +
+            '<div class="bloco-corpo"><div class="numeros">' +
+            lista(s.itens).map(function (i) { return '<div class="numero"><b>' + esc(i.valor) + "</b><span>" + esc(i.rotulo) + "</span></div>"; }).join("") +
+            "</div>" + (s.nota ? '<p class="nota">' + esc(s.nota) + "</p>" : "") + "</div></section>"
+          );
+        }
+
+        function comoFunciona(c) {
+          var s = c.como_funciona;
+          if (!vis(s)) return "";
+          return (
+            '<section id="como-funciona" class="container bloco">' + cab(s) +
+            '<div class="bloco-corpo"><div class="passos">' +
+            lista(s.passos).map(function (p) { return '<div class="passo"><h3>' + esc(p.titulo) + "</h3><p>" + esc(p.texto) + "</p></div>"; }).join("") +
+            "</div></div></section>"
+          );
+        }
+
+        function time(c) {
+          var s = c.time;
+          if (!vis(s)) return "";
+          var ag = lista(s.agentes);
+          var orq = ag[0];
+          var resto = ag.slice(1).map(function (a, i) { return { a: a, i: i + 1 }; }).filter(function (x) { return x.a.visivel !== false; });
+          var html = '<section id="time" class="container bloco bloco-escuro">' + cab(s, true);
+          if (orq && orq.visivel !== false) {
+            html +=
+              '<div class="orq"><div class="orq-foto"><img src="' + url(orq.imagem) + '" alt="' + esc(orq.nome) + '" loading="lazy" width="340" height="340"></div><div>' +
+              '<span class="rotulo">' + esc(s.rotulo_orquestradora) + "</span>" +
+              "<h3>" + esc(orq.nome) + '</h3><p class="cargo">' + esc(orq.cargo) + "</p>" +
+              '<p class="resumo">' + esc(orq.resumo) + "</p>" +
+              '<div class="chips">' + lista(orq.habilidades).slice(0, 6).map(function (h) { return '<span class="chip">' + esc(h.titulo) + "</span>"; }).join("") + "</div>" +
+              '<p style="margin-top:20px"><button class="botao claro pequeno" data-cv="0">' + esc(s.botao_curriculo) + " ↗</button></p>" +
+              "</div></div>";
+          }
+          html +=
+            '<div class="grade-wrap"><span class="rotulo">' + esc(s.rotulo_especialistas) + '</span><div class="grade">' +
+            resto.map(function (x) {
+              var a = x.a;
+              return (
+                '<button class="card" data-cv="' + x.i + '" aria-label="' + esc(s.botao_curriculo + ": " + a.nome + ", " + a.cargo) + '">' +
+                '<img src="' + url(a.imagem) + '" alt="" loading="lazy" width="240" height="240">' +
+                '<span class="card-corpo"><span class="card-area">' + esc(a.area) + "</span><h4>" + esc(a.nome) + "</h4>" +
+                '<span class="card-cargo">' + esc(a.cargo) + '</span><span class="card-resumo">' + esc(a.resumo) + "</span>" +
+                '<span class="card-link">' + esc(s.botao_curriculo) + " ↗</span></span></button>"
+              );
+            }).join("") +
+            "</div></div></section>";
+          return html;
+        }
+
+        function curriculo(i) {
+          var s = C.time || {};
+          var a = lista(s.agentes)[i];
+          if (!a) return;
+          function ul(t, arr, tag) {
+            arr = lista(arr);
+            if (!arr.length) return "";
+            tag = tag || "ul";
+            return "<div><h5>" + esc(t) + "</h5><" + tag + ">" + arr.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</" + tag + "></div>";
+          }
+          var d = document.getElementById("cv");
+          d.innerHTML =
+            '<div class="cv-cab"><img src="' + url(a.imagem) + '" alt=""><div><span class="rotulo">' + esc(a.area) + '</span><h3 id="cv-nome">' + esc(a.nome) + "</h3><p>" + esc(a.cargo) + "</p></div>" +
+            '<button class="cv-fechar" aria-label="Fechar" data-fechar>×</button></div>' +
+            '<div class="cv-corpo"><p>' + esc(a.resumo) + "</p>" +
+            '<div class="cv-dupla">' + ul("O que faz", a.o_que_faz) + ul("Resultados", a.resultados) + "</div>" +
+            (lista(a.habilidades).length
+              ? '<div><h5>Habilidades</h5><div class="habs">' + lista(a.habilidades).map(function (h) { return '<div class="hab"><b>' + esc(h.titulo) + "</b><span>" + esc(h.texto) + "</span></div>"; }).join("") + "</div></div>"
+              : "") +
+            '<div class="cv-dupla"><div><h5>Como trabalha</h5><p>' + esc(a.como_trabalha) + "</p>" +
+            (lista(a.passos).length ? '<ol style="margin-top:12px">' + lista(a.passos).map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("") + "</ol>" : "") +
+            "</div><div>" + (a.plataformas ? "<h5>Plataformas</h5><p>" + esc(a.plataformas) + "</p><br>" : "") + ul("Turnos", a.turnos) + "</div></div>" +
+            ul("Treinamentos", a.treinamentos) +
+            (lista(a.como_pedir).length
+              ? "<div><h5>Como pedir</h5><p class=\"nota\" style=\"margin:0 0 10px\">" + esc(s.rotulo_como_pedir) + '</p><div class="pedidos">' +
+                lista(a.como_pedir).map(function (p) { return "<div>" + esc(p) + "</div>"; }).join("") + "</div></div>"
+              : "") +
+            "</div>";
+          if (typeof d.showModal === "function") d.showModal();
+          else d.setAttribute("open", "");
+        }
+
+        function economia(c) {
+          var s = c.economia;
+          if (!vis(s)) return "";
+          var enc = 1 + Number(s.encargos_percentual || 0) / 100;
+          var horas = Number(s.horas_mes || 220);
+          var totalMes = 0, pessoas = 0;
+          var linhas = lista(s.linhas).map(function (l) {
+            var n = Number(l.pessoas || 1);
+            var custo = Number(l.salario || 0) * enc * n;
+            totalMes += custo;
+            pessoas += n;
+            return (
+              "<tr><td><b>" + esc(l.cargo) + "</b>" + (n > 1 ? "<small>" + n + " pessoas</small>" : "") + "</td><td>" + esc(l.tarefa) + "</td>" +
+              '<td class="num">' + brl(l.salario) + '</td><td class="num">' + brl(custo) + '</td><td class="num">' + brl(custo / n / horas) + '</td><td class="ag">' + esc(s.valor_agente) + "</td></tr>"
+            );
+          }).join("");
+          return (
+            '<section id="economia" class="container bloco">' + cab(s) +
+            '<div class="bloco-corpo"><div class="totais">' +
+            '<div class="total"><span class="rotulo" style="color:var(--destaque)">' + esc(s.rotulo_total_mes) + "</span><b>" + brl0(totalMes) + "</b><span>" + pessoas + " pessoas na folha</span></div>" +
+            '<div class="total"><span class="rotulo">' + esc(s.rotulo_total_ano) + "</span><b>" + brl0(totalMes * 12) + "</b><span>Salário mais " + esc(s.encargos_percentual) + "% de encargos</span></div></div>" +
+            '<div class="tabela-wrap"><table><thead><tr><th>Função</th><th>Tarefa</th><th>Salário médio</th><th>Custo total por mês</th><th>Custo por hora</th><th>' + esc(s.rotulo_agente) + "</th></tr></thead><tbody>" +
+            linhas + "</tbody></table></div>" +
+            (s.nota ? '<p class="nota">' + esc(s.nota) + "</p>" : "") + (s.fontes ? '<p class="nota">' + esc(s.fontes) + "</p>" : "") +
+            "</div></section>"
+          );
+        }
+
+        function diferenciais(c) {
+          var s = c.diferenciais;
+          if (!vis(s)) return "";
+          return (
+            '<section class="container bloco bloco-escuro">' + cab(s, true) +
+            '<div class="bloco-corpo"><div class="tres">' +
+            lista(s.itens).map(function (i) { return '<div class="item"><h3>' + esc(i.titulo) + "</h3><p>" + esc(i.texto) + "</p></div>"; }).join("") +
+            "</div></div></section>"
+          );
+        }
+
+        function depoimentos(c) {
+          var s = c.depoimentos;
+          if (!vis(s)) return "";
+          return (
+            '<section id="depoimentos" class="container bloco">' + cab(s) +
+            '<div class="bloco-corpo"><div class="tres">' +
+            lista(s.itens).map(function (i) {
+              var img = i.imagem ? '<img src="' + url(i.imagem) + '" alt="" loading="lazy">' : "";
+              if (img && i.video) img = '<a href="' + url(i.video) + '"' + externo(i.video) + ">" + img + "</a>";
+              return '<div class="item dep">' + img + "<p>“" + esc(i.texto) + "”</p><h3 style=\"margin-top:14px;font-size:17px\">" + esc(i.nome) + "</h3><p style=\"margin-top:2px\">" + esc(i.empresa) + "</p></div>";
+            }).join("") +
+            "</div></div></section>"
+          );
+        }
+
+        function planos(c) {
+          var s = c.planos;
+          if (!vis(s)) return "";
+          return (
+            '<section id="planos" class="container bloco" style="background:var(--papel-2)">' + cab(s) +
+            '<div class="bloco-corpo"><div class="planos">' +
+            lista(s.itens).filter(function (p) { return p.visivel !== false; }).map(function (p) {
+              return (
+                '<div class="plano' + (p.destaque ? " destaque" : "") + '">' +
+                (p.selo ? '<span class="etiqueta plano-selo">' + esc(p.selo) + "</span>" : "") +
+                "<h3>" + esc(p.nome) + '</h3><div class="preco">' + esc(p.preco) + '</div><div class="periodo">' + esc(p.periodo) + "</div>" +
+                (p.parcelamento ? '<div class="parcela">' + esc(p.parcelamento) + "</div>" : "") +
+                "<ul>" + lista(p.itens).map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" +
+                botao(p.botao && p.botao.texto ? { texto: p.botao.texto, link: p.botao.link || "#contato" } : p.botao, p.destaque ? "ouro" : "") + "</div>"
+              );
+            }).join("") +
+            "</div>" + (s.nota ? '<p class="nota">' + esc(s.nota) + "</p>" : "") + "</div></section>"
+          );
+        }
+
+        function agencia(c) {
+          var s = c.agencia;
+          if (!vis(s)) return "";
+          return (
+            '<section class="container bloco">' + cab(s) + '<div class="bloco-corpo"><div class="tres">' +
+            lista(s.caminhos).map(function (k) {
+              return '<div class="item"><span class="etiqueta escura">' + esc(k.etiqueta) + '</span><h3 style="margin-top:14px">' + esc(k.titulo) + "</h3><ul>" +
+                lista(k.itens).map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" + botao(k.botao) + "</div>";
+            }).join("") + "</div></div></section>"
+          );
+        }
+
+        function contato(c) {
+          var s = c.contato;
+          if (!vis(s)) return "";
+          return (
+            '<section id="contato" class="container bloco bloco-escuro">' + cab(s, true) +
+            '<div class="bloco-corpo"><form class="form" id="form-contato" novalidate>' +
+            '<div class="campo"><label for="f-nome">' + esc(s.rotulo_nome) + '</label><input id="f-nome" name="nome" type="text" autocomplete="name" required></div>' +
+            '<div class="campo"><label for="f-email">' + esc(s.rotulo_email) + '</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>' +
+            '<div class="campo inteiro"><label for="f-wa">' + esc(s.rotulo_whatsapp) + '</label><input id="f-wa" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="(11) 91234-5678" required></div>' +
+            (lista(s.interesses).length
+              ? '<fieldset class="campo inteiro"><legend>' + esc(s.rotulo_interesse) + '</legend><div class="opcoes">' +
+                lista(s.interesses).map(function (o, i) { return '<label><input type="checkbox" name="interesse" value="' + esc(o) + '"' + (i === 0 ? " checked" : "") + "> " + esc(o) + "</label>"; }).join("") +
+                "</div></fieldset>"
+              : "") +
+            '<label class="consent campo inteiro"><input type="checkbox" name="consentimento" required> <span>' + esc(s.consentimento) + (s.link_politica ? ' <a href="' + url(s.link_politica) + '" target="_blank" rel="noopener">Ler a política</a>' : "") + "</span></label>" +
+            '<div class="campo inteiro"><button class="botao" type="submit">' + esc(s.botao) + '</button><p class="form-status" role="status" aria-live="polite"></p>' +
+            (s.nota ? '<p class="nota" style="margin-top:4px">' + esc(s.nota) + "</p>" : "") + "</div>" +
+            "</form></div></section>"
+          );
+        }
+
+        function faq(c) {
+          var s = c.faq;
+          if (!vis(s)) return "";
+          return (
+            '<section id="duvidas" class="container bloco">' + cab(s) + '<div class="bloco-corpo"><div class="faq">' +
+            lista(s.itens).map(function (q, i) { return "<details" + (i === 0 ? " open" : "") + "><summary>" + esc(q.pergunta) + "</summary><p>" + esc(q.resposta) + "</p></details>"; }).join("") +
+            "</div></div></section>"
+          );
+        }
+
+        function final(c) {
+          var s = c.final;
+          if (!vis(s)) return "";
+          return '<section class="container bloco bloco-escuro"><div class="final"><h2>' + esc(s.titulo) + "</h2><p>" + esc(s.texto) + "</p>" + botao(s.botao, "ouro") + "</div></section>";
+        }
+
+        function rodape(c) {
+          var r = c.rodape || {};
+          var m = c.marca || {};
+          return (
+            '<footer class="container rodape"><p><b style="color:#fff">' + esc(m.produto) + "</b> · " + esc(m.significado) + "</p>" +
+            (r.aviso ? "<p>" + esc(r.aviso) + "</p>" : "") +
+            (lista(r.links).length ? "<p>" + lista(r.links).map(function (l) { return '<a href="' + url(l.link) + '"' + externo(l.link) + ">" + esc(l.texto) + "</a>"; }).join(" · ") + "</p>" : "") +
+            (function () {
+              var e = c.empresa || {};
+              var partes = [e.razao_social, e.cnpj ? "CNPJ " + e.cnpj : "", e.email].filter(Boolean).map(esc);
+              return partes.length ? "<p>" + partes.join(" · ") + "</p>" : "";
+            })() +
+            "<p>" + esc(r.copyright) + "</p></footer>"
+          );
+        }
+
+        function meta(c) {
+          var s = c.seo || {};
+          document.title = s.titulo || (c.marca || {}).produto || "";
+          function set(sel, v) { var el = document.querySelector(sel); if (el) el.setAttribute("content", v || ""); }
+          set('meta[name="description"]', s.descricao);
+          set('meta[property="og:title"]', s.titulo);
+          set('meta[property="og:description"]', s.descricao);
+          set('meta[property="og:image"]', s.imagem_compartilhamento ? new URL(s.imagem_compartilhamento, location.href).href : "");
+          var m = c.marca || {};
+          var r = document.documentElement.style;
+          if (m.cor_destaque) r.setProperty("--destaque", m.cor_destaque);
+          if (m.cor_escura) r.setProperty("--escura", m.cor_escura);
+          if (m.cor_botao) r.setProperty("--botao", m.cor_botao);
+        }
+
+        function render(c) {
+          C = c;
+          meta(c);
+          document.getElementById("app").innerHTML =
+            topo(c) + "<main>" + hero(c) + sigla(c) + numeros(c) + comoFunciona(c) + time(c) + economia(c) + diferenciais(c) +
+            depoimentos(c) + planos(c) + agencia(c) + contato(c) + faq(c) + final(c) + "</main>" + rodape(c);
+        }
+
+        // Cliques: currículo e fechar modal
+        document.addEventListener("click", function (e) {
+          var t = e.target.closest("[data-cv]");
+          if (t) { curriculo(Number(t.getAttribute("data-cv"))); return; }
+          var d = document.getElementById("cv");
+          if (e.target.closest("[data-fechar]") || e.target === d) d.close ? d.close() : d.removeAttribute("open");
+        });
+
+        // Formulário
+        document.addEventListener("submit", function (e) {
+          if (e.target.id !== "form-contato") return;
+          e.preventDefault();
+          var f = e.target;
+          var s = C.contato || {};
+          var st = f.querySelector(".form-status");
+          var nome = f.nome.value.trim(), email = f.email.value.trim(), wa = f.whatsapp.value.trim();
+          var interesses = Array.prototype.slice.call(f.querySelectorAll('input[name="interesse"]:checked')).map(function (i) { return i.value; });
+          if (!nome || !/^\S+@\S+\.\S+$/.test(email) || wa.replace(/\D/g, "").length < 10) { st.textContent = "Preencha nome, e-mail e WhatsApp com DDD."; return; }
+          if (!f.consentimento.checked) { st.textContent = "Para enviar, marque a autorização de contato."; return; }
+          var dados = { nome: nome, email: email, whatsapp: wa, interesse: interesses, origem: location.href, data: new Date().toISOString() };
+          if (!s.endpoint && String(s.whatsapp || "").replace(/\D/g, "").length < 10) { st.textContent = "Formulário ainda não configurado. Tente de novo mais tarde."; return; }
+          if (s.endpoint) {
+            st.textContent = "Enviando…";
+            fetch(s.endpoint, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(dados) })
+              .then(function (r) { if (!r.ok) throw new Error(r.status); st.textContent = s.mensagem_sucesso; f.reset(); })
+              .catch(function () { st.textContent = "Não deu para enviar agora. Tente de novo em instantes."; });
+            return;
+          }
+          var txt = "Olá! Vim pela página da " + ((C.marca || {}).produto || "") + ".\nNome: " + nome + "\nE-mail: " + email + "\nWhatsApp: " + wa + (interesses.length ? "\nQuero: " + interesses.join(", ") : "");
+          window.open("https://wa.me/" + String(s.whatsapp).replace(/\D/g, "") + "?text=" + encodeURIComponent(txt), "_blank", "noopener");
+          st.textContent = s.mensagem_sucesso;
+        });
+
+        // Prévia ao vivo pelo editor
+        var preview = /[?&]previa=1/.test(location.search);
+        window.addEventListener("message", function (e) {
+          if (e.origin !== location.origin) return;
+          if (e.data && e.data.tipo === "sonia-conteudo" && e.data.conteudo && typeof e.data.conteudo === "object") {
+            var y = window.scrollY;
+            render(e.data.conteudo);
+            window.scrollTo(0, y);
+          }
+        });
+        if (preview && window.parent !== window) {
+          window.parent.postMessage({ tipo: "sonia-pronta" }, location.origin);
+          return;
+        }
+
+        fetch("conteudo.json", { cache: "no-cache" })
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (c) {
+            render(c);
+            if (location.hash) { var el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+          })
+          .catch(function () {
+            document.getElementById("app").innerHTML = '<p class="erro">Não foi possível carregar o conteúdo da página (conteudo.json).</p>';
+          });
+      })();
+    </script>
+  </body>
+</html>

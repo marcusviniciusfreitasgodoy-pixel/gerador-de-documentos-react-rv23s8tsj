@@ -1,0 +1,13 @@
+/* Prime Circle — Film grain (v2).
+   A 2–4% monochrome grain over Ink surfaces. Apply `.pc-grain` to a positioned container;
+   content stays above via z-index. Never on Ivory body copy areas, never over photos. */
+:root {
+  --pc-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); /* @kind other */
+  --pc-grain-opacity: 0.035; /* @kind other */
+  --pc-grain-opacity-strong: 0.06; /* @kind other */
+}
+
+.pc-grain { position: relative; isolation: isolate; }
+.pc-grain::after { content: ""; position: absolute; inset: 0; background-image: var(--pc-grain); background-size: 220px; opacity: var(--pc-grain-opacity); mix-blend-mode: overlay; pointer-events: none; z-index: 1; }
+.pc-grain > * { position: relative; z-index: 2; }
+.pc-grain-strong::after { opacity: var(--pc-grain-opacity-strong); }
