@@ -49,9 +49,9 @@
   },
   "hero": {
     "etiqueta": "Agentes de IA que trabalham de verdade",
-    "titulo": "Peça em português. Receba pronto.",
-    "titulo_destaque": "Um time de 21 especialistas de IA, coordenado pela Sônia.",
-    "texto": "A Sônia coordena 21 especialistas: copy, design, código, tráfego pago, vendas no WhatsApp, financeiro, tributário, jurídico e RH. Você pede em português, pelo painel ou pelo Telegram, e recebe pronto.",
+    "titulo": "Até 21 especialistas na sua equipe",
+    "titulo_destaque": "e nenhum na folha de pagamento.",
+    "texto": "Enquanto você cuida do negócio, o time escreve, publica, atende no WhatsApp, organiza o financeiro e revisa contratos. A qualquer hora, pelo Telegram ou pelo painel.",
     "botao_principal": {
       "texto": "Quero a minha Sônia",
       "link": "#planos"
@@ -60,7 +60,7 @@
       "texto": "Ver o time",
       "link": "#time"
     },
-    "rotulo_avatares": "21 especialistas no seu time",
+    "rotulo_avatares": "Até 21 especialistas no seu time",
     "selos": [
       "Atende 24 horas, não falta, não atrasa e não pede aumento",
       "Cada cliente com a própria agente, isolada e segura",
