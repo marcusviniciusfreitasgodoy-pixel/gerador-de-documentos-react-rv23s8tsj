@@ -48,8 +48,65 @@ def tpl(t):
     a2 = 'window.open(`https://wa.me/${ct.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");'
     b2 = 'window.open(`https://wa.me/${String(ct.whatsapp).replace(/\\D/g, "")}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");'
     assert t.count(a2) == 1; t = t.replace(a2, b2)
+    # 2b) ajustes de layout pedidos pelo dono em 01/11/2026
+    def troca(t, a, b, nome):
+        assert t.count(a) == 1, 'trecho do design mudou: ' + nome
+        return t.replace(a, b)
+    # menu hambúrguer no celular
+    t = troca(t, '<header style="position:sticky;', '<header class="pc-hdr" style="position:sticky;', 'header')
+    t = troca(t, '</a>\n<nav style="display:flex;gap:0 24px;flex:1;flex-wrap:wrap;justify-content:center">',
+              '</a>\n<input type="checkbox" id="pc-menu" class="pc-menu-chk" aria-label="Abrir o menu">'
+              '<label for="pc-menu" class="pc-burger" aria-hidden="true"><span></span><span></span><span></span></label>\n'
+              '<nav class="pc-nav" aria-label="Seções" style="display:flex;gap:0 24px;flex:1;flex-wrap:wrap;justify-content:center">', 'nav')
+    t = troca(t, '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">\n<sc-if value="{{ showArea }}"',
+              '<div class="pc-acoes" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">\n<sc-if value="{{ showArea }}"', 'acoes')
+    # conversa de exemplo fora da imagem no celular
+    t = troca(t, '<div style="flex:1 1 300px;min-width:0;max-width:460px;position:relative;padding-bottom:120px">',
+              '<div class="pc-hero-vis" style="flex:1 1 300px;min-width:0;max-width:460px;position:relative;padding-bottom:120px">', 'hero-vis')
+    t = troca(t, '<div style="position:absolute;left:clamp(-40px,-3vw,0px);right:16px;bottom:0;',
+              '<div class="pc-chat" style="position:absolute;left:clamp(-40px,-3vw,0px);right:16px;bottom:0;', 'chat')
+    # uma imagem só da Sônia: sai a da seção "Orquestradora do time"
+    t = troca(t, '<div style="flex:1 1 280px;max-width:400px;aspect-ratio:4 / 5;border-radius:10px;overflow:hidden;background:#E8E0CC">\n'
+                 '<div role="img" aria-label="{{ sonia.nome }}" style="{{ soniaBg }}"></div>\n</div>\n', '', 'imagem-orquestradora')
+    css = """<style>
+.pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
+.pc-burger{display:none}
+@media (max-width:900px){
+  .pc-hdr{justify-content:space-between}
+  .pc-burger{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:44px;height:44px;margin-left:auto;border:1px solid rgba(245,241,230,.22);border-radius:8px;cursor:pointer}
+  .pc-burger span{display:block;width:20px;height:2px;border-radius:2px;background:#F5F1E6;transition:transform .2s,opacity .2s}
+  .pc-nav,.pc-acoes{display:none!important}
+  .pc-menu-chk:checked~.pc-nav{display:flex!important;flex-direction:column;flex:1 1 100%;gap:0!important;padding:4px 0;border-top:1px solid rgba(245,241,230,.10)}
+  .pc-menu-chk:checked~.pc-nav a{padding:14px 0!important;border-bottom:1px solid rgba(245,241,230,.06)}
+  .pc-menu-chk:checked~.pc-acoes{display:flex!important;flex:1 1 100%;padding:8px 0 12px}
+  .pc-menu-chk:checked~.pc-acoes>*{flex:1 1 0}
+  .pc-menu-chk:checked+.pc-burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .pc-menu-chk:checked+.pc-burger span:nth-child(2){opacity:0}
+  .pc-menu-chk:checked+.pc-burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .pc-menu-chk:focus-visible+.pc-burger{outline:2px solid #C9A84C;outline-offset:2px}
+  .pc-hero-vis{padding-bottom:0!important}
+  .pc-chat{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin-top:16px}
+}
+@media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
+</style>
+"""
+    t = troca(t, '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n',
+              '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n' + css, 'css')
     return json.dumps(t).replace('</', '<\\/')
 sub_script('template', tpl)
+
+FECHA_MENU = r'''<script>
+document.addEventListener("click", function (e) {
+  var alvo = e.target.closest && e.target.closest(".pc-nav a, .pc-acoes a");
+  var chk = document.getElementById("pc-menu");
+  if (alvo && chk) chk.checked = false;
+});
+document.addEventListener("keydown", function (e) {
+  var chk = document.getElementById("pc-menu");
+  if (e.key === "Escape" && chk && chk.checked) chk.checked = false;
+});
+</script>
+'''
 
 # 3) prévia ao vivo: em ?previa=1, o conteudo.json vem do rascunho do editor
 previa = r'''<script>
@@ -79,7 +136,7 @@ previa = r'''<script>
 })();
 </script>
 '''
-s = s.replace('<title>Bundled Page</title>', '<title>' + html.escape(seo.get('titulo', 'SONIA')) + '</title>\n' + previa, 1)
+s = s.replace('<title>Bundled Page</title>', '<title>' + html.escape(seo.get('titulo', 'SONIA')) + '</title>\n' + previa + FECHA_MENU, 1)
 assert 'sonia-editor-rascunho' in s
 open(dst, 'w', encoding='utf-8').write(s)
 print('ok', len(s), 'conteudo removido:', uuid_conteudo)
