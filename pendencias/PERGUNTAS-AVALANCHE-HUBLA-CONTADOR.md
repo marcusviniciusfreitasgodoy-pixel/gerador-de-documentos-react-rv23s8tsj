@@ -1,75 +1,85 @@
-# Perguntas a esclarecer antes de vender a SONIA
+# Pendências antes de vender a SONIA
 
-Atualizado em 31/10/2026. Cada bloco foi escrito para você copiar e colar no WhatsApp ou no
-e-mail de quem responde. As marcadas com ⚠️ **travam a venda** (ou a página) até ter resposta.
+Atualizado em 01/11/2026. Cada bloco está pronto para copiar e colar no WhatsApp ou no e-mail
+de quem responde. ⚠️ marca o que **trava a venda** até ter resposta. Peça as respostas **por
+escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
+
+## O que já está resolvido (não precisa perguntar de novo)
+
+| Assunto | Resposta | O que foi feito |
+|---|---|---|
+| Repasse | 30% do valor vendido para a Avalanche | Contas no relatório de preços |
+| Conexão do Claude | Por assinatura (OAuth) | Claude retirado dos planos na página |
+| Custo da IA | Pago pelo cliente, plano mínimo de US$ 20 | Aviso nos planos e no FAQ |
+| Comunidade de estudos e grupo avançado | Não valem para os seus clientes | Retirados dos planos |
+| Renomear planos no checkout e tirar "Comunidade Avalanche" | Dá para fazer | Falta fazer no checkout |
+| Checkout | Hubla | Links ainda não criados |
+| Garantia | 30 dias, em todos os planos | Na página e no FAQ |
+| CNPJ | 58.409.058/0001-73, ativo | No rodapé e na política |
 
 ---
 
 ## 1. Para a Avalanche
 
 > Olá! Estou finalizando a página de vendas da minha revenda white label e preciso fechar
-> alguns pontos antes de começar a vender. Podem me responder, de preferência por escrito?
+> alguns pontos antes de começar a vender. Podem me responder por escrito?
 >
 > **Pagamento e repasse**
-> 1. ⚠️ Os links de pagamento dos meus planos serão gerados pela plataforma de vocês (o
->    checkout que vi hoje diz "processado pelo Asaas") ou eu devo usar a minha conta na Hubla?
-> 2. ⚠️ Preciso dos 3 links com os meus preços: Starter R$ 4.997, Elite R$ 7.997 e Magnata
->    R$ 15.997 por ano. Hoje os links cobram R$ 1.497, R$ 2.497 e R$ 9.997.
-> 3. ⚠️ Se o cliente pedir reembolso (inclusive nos 7 dias de arrependimento do Código de Defesa
->    do Consumidor), os 30% de vocês são estornados junto, ou o estorno sai inteiro da minha
->    parte?
-> 4. Em quanto tempo os meus 70% caem na minha conta? Os 30% incidem sobre o valor com os
->    juros do cartão ou sem?
-> 5. A plataforma permite preço diferente no Pix e no cartão, ou um link só para Pix e outro
->    só para cartão?
-> 6. O plano anual renova sozinho no fim dos 12 meses? Com qual preço? O cliente pode cancelar
->    antes, e com qual regra?
-> 7. Quem emite a nota fiscal ao cliente: eu, vocês, ou cada um sobre a sua parte?
+> 1. ⚠️ Vou vender pela minha conta na Hubla. Como os 30% de vocês chegam até vocês: split
+>    automático na Hubla, ou eu repasso depois? Vocês me disseram que o link de vocês já
+>    separa 70/30, mas esse link é do Asaas, não da Hubla.
+> 2. ⚠️ Se o cliente pedir reembolso (na garantia de 30 dias ou nos 7 dias de arrependimento
+>    do Código de Defesa do Consumidor), os 30% de vocês são estornados junto, ou o estorno
+>    sai inteiro da minha parte?
+> 3. Os 30% incidem sobre o valor com os juros do cartão ou sem?
+> 4. O plano anual renova sozinho no fim dos 12 meses? Com qual preço? O cliente pode
+>    cancelar antes, e com qual regra?
+> 5. O contrato de revenda tem preço mínimo ou máximo, exclusividade ou território?
 >
-> **Checkout e marca**
-> 8. ⚠️ Dá para renomear os planos no checkout para "SONIA Starter", "SONIA Elite" e "SONIA
->    Magnata"? Hoje aparece "Prime Circle Agentes".
-> 9. ⚠️ O checkout do Elite mostra "Acesso à Comunidade Avalanche de Estudos em IA". Dá para
->    tirar ou trocar esse texto?
-> 10. Posso usar na minha página as imagens, os nomes e os currículos dos agentes? Existem
->     versões das imagens sem o "A" no moletom (Juliana e a orquestradora)?
-> 11. Os números da plataforma (+7.000 empresas, +253.000 tarefas) podem ser citados por mim,
->     como números da plataforma? Preciso dessa autorização por escrito.
+> **Página atual e domínio**
+> 6. ⚠️ A página que roda hoje em https://agentes.primecircle.app.br/ ainda mostra os preços
+>    de R$ 1.497, R$ 2.497 e R$ 9.997 e os links antigos. Dá para tirar essa página do ar, ou
+>    trocar por um redirecionamento para a minha landing nova, mantendo o acesso dos clientes
+>    à área do cliente?
+> 7. Meus clientes entram por https://agentes.primecircle.app.br/? Posso usar outro domínio
+>    meu para a área do cliente?
 >
 > **Produto**
-> 12. ⚠️ Quais são os 5 agentes do Starter e os 16 do Elite? O cliente escolhe ou é fixo?
-> 13. ⚠️ A "comunidade de estudos de IA" do Elite e o "grupo de estudos avançado por 6 meses" do
->     Magnata valem para os meus clientes? Com a marca de quem?
-> 14. ⚠️ O Claude é conectado pela assinatura do cliente (OAuth). Desde fevereiro de 2026, os
->     termos de consumidor da Anthropic proíbem usar assinatura Claude Pro ou Max em produtos de
->     terceiros. Vocês têm plano de passar a conexão para chave de API? O que acontece com o
->     cliente se a conta dele for bloqueada?
-> 15. O ChatGPT também é conectado pela assinatura? Qual o consumo típico por plano? Um plano
->     de US$ 20 dá conta de 16 ou 22 agentes com rotinas?
-> 16. Existe algum outro custo para o cliente além da assinatura de IA (API do WhatsApp,
->     telefone, armazenamento, limite de mensagens)?
+> 8. ⚠️ Quais são os 5 agentes do Starter e os 16 do Elite? O cliente escolhe ou é fixo?
+> 9. ⚠️ O Claude é conectado pela assinatura do cliente (OAuth). Desde fevereiro de 2026, os
+>    termos de consumidor da Anthropic proíbem usar assinatura Claude Pro ou Max em produtos
+>    de terceiros, e o bloqueio começou a ser aplicado em abril. Vocês pretendem passar para
+>    chave de API? Se a conta Claude de um cliente meu for bloqueada, o que acontece com ele?
+> 10. A conexão do ChatGPT também é pela assinatura? Ela é estável? Um plano de US$ 20 dá
+>     conta de 16 ou 22 agentes rodando rotinas, ou o cliente vai bater no limite?
+> 11. Existe algum outro custo para o cliente além da assinatura de IA: API oficial do
+>     WhatsApp, número de telefone, armazenamento, limite de mensagens ou de rotinas?
 >
-> **Suporte, dados e contrato**
-> 17. Quem dá o suporte técnico ao meu cliente quando algo falha na plataforma: vocês ou eu?
->     Com que prazo de resposta?
-> 18. Meus clientes entram por https://agentes.primecircle.app.br/? Posso usar um domínio meu
->     (por exemplo sonia.primecircle.app.br)?
-> 19. Pela LGPD, quem é o controlador e quem é o operador dos dados dos meus clientes dentro da
->     plataforma? Preciso disso para a política de privacidade.
-> 20. O contrato de revenda tem preço mínimo ou máximo, exclusividade ou território?
-> 21. Vocês podem me mandar o contrato de revenda por escrito com esses pontos?
+> **Suporte, dados e marca**
+> 12. Quando algo falha na plataforma, quem atende o meu cliente: vocês ou eu? Em quanto
+>     tempo?
+> 13. Pela LGPD, quem é o controlador e quem é o operador dos dados dos meus clientes dentro da
+>     plataforma? Vocês têm um contrato de tratamento de dados para assinarmos?
+> 14. Posso usar na minha página, por escrito, as imagens, os nomes e os currículos dos
+>     agentes? Posso alterar as imagens (troquei o logo no moletom da Juliana)?
+> 15. Posso citar os números da plataforma (+7.000 empresas, +253.000 tarefas) como números
+>     da plataforma? Preciso dessa autorização por escrito.
+> 16. Meus clientes podem revender para os clientes deles (sub-revenda)?
+> 17. Se vocês encerrarem ou mudarem a plataforma, o que acontece com os meus clientes que já
+>     pagaram o ano?
+> 18. Vocês podem me mandar o contrato de revenda com esses pontos?
 
 ---
 
-## 2. Para a Hubla (só se você for usar a sua conta Hubla)
+## 2. Para a Hubla
 
 > Olá! Vou vender planos anuais de software pela Hubla e tenho algumas dúvidas:
 >
-> 1. ⚠️ Consigo cobrar um preço menor no Pix do que no cartão no mesmo produto?
-> 2. ⚠️ No parcelamento em 12x, consigo escolher se os juros ficam com o comprador? Qual a taxa?
-> 3. Quais são as taxas por venda no Pix e no cartão, e em quanto tempo recebo?
-> 4. Consigo fazer split automático de 30% para um parceiro (a Avalanche) em cada venda?
-> 5. ⚠️ Se houver reembolso com split, o valor do parceiro é estornado junto?
+> 1. ⚠️ Consigo cobrar um preço menor no Pix do que no cartão, no mesmo produto?
+> 2. ⚠️ No parcelamento em 12x, os juros podem ficar com o comprador? Qual a taxa por parcela?
+> 3. ⚠️ Consigo fazer split automático de 30% de cada venda para um parceiro?
+> 4. ⚠️ Num reembolso com split, o valor do parceiro é estornado junto?
+> 5. Quais são as taxas por venda no Pix e no cartão, e em quanto tempo recebo?
 > 6. A Hubla emite a nota fiscal automaticamente ou eu emito?
 > 7. Plano anual: a cobrança é única ou renova sozinha no ano seguinte?
 
@@ -77,26 +87,44 @@ e-mail de quem responde. As marcadas com ⚠️ **travam a venda** (ou a página
 
 ## 3. Para o seu contador
 
-> Vou revender um software (assinatura anual) com repasse de 30% para o fornecedor, que pode
-> ser descontado direto no pagamento (split). Preciso saber:
+> Vou revender um software em assinatura anual, com repasse de 30% para o fornecedor
+> (possivelmente descontado direto no pagamento, por split), e oferecer mentoria no plano mais
+> caro. Preciso saber:
 >
 > 1. ⚠️ A minha nota fiscal é sobre o valor total da venda ou só sobre os meus 70%?
-> 2. Qual imposto incide no meu regime atual sobre esse tipo de venda (licença de software,
->    serviço de implantação e mentoria)? Faz diferença separar a mentoria do Magnata na nota?
-> 3. Se o cliente pedir reembolso, como fica a nota (cancelamento ou nota de devolução)?
-> 4. Preciso de algum contrato ou termo de uso próprio com o cliente final?
-> 5. ⚠️ O meu CNPJ (58.409.058/0001-73) tem como atividade principal a corretagem de imóveis.
+> 2. ⚠️ Meu CNPJ (58.409.058/0001-73) tem como atividade principal a corretagem de imóveis.
 >    Preciso incluir CNAEs secundários para vender licença de software e mentoria (por exemplo
->    6203-1/00, licenciamento de programas não customizáveis, e 8599-6/04, treinamento)? Isso
->    muda o anexo do Simples Nacional e a alíquota?
+>    6203-1/00 e 8599-6/04)? Isso muda o anexo do Simples Nacional e a alíquota?
+> 3. Faz diferença separar a mentoria do Magnata na nota?
+> 4. Se o cliente pedir reembolso, como fica a nota (cancelamento ou devolução)?
 
 ---
 
-## 4. Decisões que são suas (não dependem de ninguém)
+## 4. Para um advogado (novo)
 
-1. **Garantia:** oferecer 30 dias, só citar os 7 dias legais, ou não citar? Depende da
-   pergunta 3 da Avalanche.
-2. **Bônus no Pix:** dar uma sessão individual de implantação de 1 hora para quem paga à vista?
-3. **Sessão coletiva semanal de implantação** no Starter e no Elite?
-4. **Visual:** publicar a versão atual hoje e refinar depois, ou esperar o Claude Design?
-5. **Juliana:** manter a imagem com o "A" ou esconder até ter uma versão sem ele?
+> Vou vender, com a minha marca, uma plataforma de agentes de IA para empresas. Entre os
+> agentes há um "jurídico" (contratos, LGPD, marcas no INPI) e um "tributário" (notas,
+> impostos). Preciso que você revise:
+>
+> 1. ⚠️ Os termos de uso e o contrato com o cliente: garantia de 30 dias, renovação, o fato de
+>    a assinatura de IA ser paga pelo cliente, e limitação de responsabilidade pelo que os
+>    agentes produzem.
+> 2. ⚠️ Preciso de algum aviso de que o agente jurídico e o tributário não substituem advogado
+>    e contador? Existe risco de exercício irregular da profissão?
+> 3. A política de privacidade da página (rascunho pronto).
+> 4. O anúncio de parcelas sem a palavra "juros", se eu decidir manter assim.
+
+---
+
+## 5. Decisões que são suas
+
+| # | Decisão | Situação hoje | Minha recomendação |
+|---|---|---|---|
+| 1 | "com juros" no parcelamento | Retirado da página | Voltar com "com juros" ou com o total, por exemplo "(total R$ 5.205,36)" |
+| 2 | Seção "Por que contratar com a Prime Circle" | Escondida | Mostrar: é a resposta para "por que não compro direto da fonte" |
+| 3 | Salários do tráfego pago (R$ 4.914,34) e dos SDRs (R$ 2.451,00) | Na página | Conferir a fonte antes de anunciar |
+| 4 | Domínio | `sonia-primecircle.netlify.app` | Criar `sonia.primecircle.app.br` (eu passo o registro DNS) |
+| 5 | Título do site no Google | Ainda o antigo | "SONIA · até 21 especialistas de IA na sua equipe, nenhum na folha" |
+| 6 | Conversa de exemplo ("14 leads qualificados") | Na página | Manter como exemplo ou trocar por um caso real |
+| 7 | Links de checkout | Vazios (botão leva ao formulário) | Criar na Hubla e me mandar |
+| 8 | Depoimentos | Seção desligada | Fechar os 5 primeiros clientes com condição especial em troca de depoimento |
