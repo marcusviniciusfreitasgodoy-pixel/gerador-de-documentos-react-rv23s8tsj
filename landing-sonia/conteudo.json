@@ -1933,7 +1933,7 @@
     ]
   },
   "planos": {
-    "_aviso": "Cole no campo Link de cada plano o endereço do checkout. Vazio: o botão leva ao formulário de contato.",
+    "_aviso": "Links de pagamento: checkout da plataforma na conta Asaas do dono (agentes.primecircle.app.br/assinar/...). Só colar depois que preço e nome no checkout baterem com esta página. Vazio: o botão leva ao formulário.",
     "_aviso_claude": "Claude retirado dos planos em 31/10/2026: a Avalanche conecta o Claude por assinatura (OAuth), e os termos de consumidor da Anthropic proíbem esse uso em produtos de terceiros. Só volte a citar o Claude se a conexão passar a ser por chave de API.",
     "visivel": true,
     "etiqueta": "Planos",

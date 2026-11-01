@@ -12,8 +12,10 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 | Conexão do Claude | Por assinatura (OAuth) | Claude retirado dos planos na página |
 | Custo da IA | Pago pelo cliente, plano mínimo de US$ 20 | Aviso nos planos e no FAQ |
 | Comunidade de estudos e grupo avançado | Não valem para os seus clientes | Retirados dos planos |
-| Renomear planos no checkout e tirar "Comunidade Avalanche" | Dá para fazer | Falta fazer no checkout |
-| Checkout | Hubla | Links ainda não criados |
+| Renomear planos no checkout e tirar "Comunidade Avalanche" | Dá para fazer | **Falta fazer** (conferido em 01/11: ainda aparece) |
+| Checkout | **Asaas, pelo checkout da plataforma** (links `agentes.primecircle.app.br/assinar/...`). Hubla fora. | Falta ajustar os preços no painel |
+| Como a Avalanche recebe os 30% | Divisão automática do Asaas, na sua conta Asaas (carteira final 33c4) | Nada a fazer |
+| Quem recebe o dinheiro | A sua empresa, na sua conta Asaas | Nada a fazer |
 | Garantia | 30 dias, em todos os planos | Na página e no FAQ |
 | CNPJ | 58.409.058/0001-73, ativo | No rodapé e na política |
 
@@ -25,9 +27,10 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 > alguns pontos antes de começar a vender. Podem me responder por escrito?
 >
 > **Pagamento e repasse**
-> 1. ⚠️ Vou vender pela minha conta na Hubla. Como os 30% de vocês chegam até vocês: split
->    automático na Hubla, ou eu repasso depois? Vocês me disseram que o link de vocês já
->    separa 70/30, mas esse link é do Asaas, não da Hubla.
+> 1. ⚠️ Vou vender pelo checkout de vocês, na minha conta Asaas. Como eu altero o preço e o nome
+>    dos meus 3 planos? Hoje os links cobram R$ 1.497, R$ 2.497 e R$ 9.997, e preciso de R$ 4.997,
+>    R$ 7.997 e R$ 15.997, com os nomes "SONIA Starter", "SONIA Elite" e "SONIA Magnata", e sem a
+>    "Comunidade Avalanche" no Elite.
 > 2. ⚠️ Se o cliente pedir reembolso (na garantia de 30 dias ou nos 7 dias de arrependimento
 >    do Código de Defesa do Consumidor), os 30% de vocês são estornados junto, ou o estorno
 >    sai inteiro da minha parte?
@@ -71,17 +74,31 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 
 ---
 
-## 2. Para a Hubla
+## 2. Para o suporte do Asaas (a Hubla saiu em 01/11/2026)
 
-> Olá! Vou vender planos anuais de software pela Hubla e tenho algumas dúvidas:
+> Olá! Recebo cobranças na minha conta com divisão automática (split) de 30% para um parceiro.
+> Preciso confirmar:
 >
-> 1. ⚠️ Consigo cobrar um preço menor no Pix do que no cartão, no mesmo produto?
-> 2. ⚠️ No parcelamento em 12x, os juros podem ficar com o comprador? Qual a taxa por parcela?
-> 3. ⚠️ Consigo fazer split automático de 30% de cada venda para um parceiro?
-> 4. ⚠️ Num reembolso com split, o valor do parceiro é estornado junto?
-> 5. Quais são as taxas por venda no Pix e no cartão, e em quanto tempo recebo?
-> 6. A Hubla emite a nota fiscal automaticamente ou eu emito?
-> 7. Plano anual: a cobrança é única ou renova sozinha no ano seguinte?
+> 1. ⚠️ Se eu estornar uma cobrança com split, o valor da divisão do parceiro é estornado junto,
+>    ou o estorno inteiro sai do meu saldo?
+> 2. ⚠️ A chave de API que eu dei a uma plataforma parceira consegue fazer transferências ou
+>    saques da minha conta? Como restrinjo as permissões dela (por exemplo, por IP)?
+> 3. O Asaas pode emitir a nota fiscal de serviço automaticamente a cada pagamento? A nota sai
+>    sobre o valor total ou só sobre a minha parte do split?
+> 4. Quais são as taxas por venda no Pix e no cartão em 12x, e em quanto tempo o dinheiro fica
+>    disponível?
+> 5. Consigo dar desconto só para quem paga no Pix, numa cobrança que também aceita cartão?
+
+### Teste antes de divulgar
+
+Depois que os preços estiverem certos, faça **uma compra de teste** num dos links (no Pix,
+que é estornável no mesmo dia) e confira:
+
+1. o valor cobrado é o da landing;
+2. o nome do plano é "SONIA ...";
+3. a sua conta recebeu 70% e a Avalanche 30%;
+4. o acesso do cliente foi liberado sozinho;
+5. ao estornar, o que acontece com os 30% da Avalanche.
 
 ---
 
@@ -126,5 +143,5 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 | 4 | Domínio | `sonia-primecircle.netlify.app` | Criar `sonia.primecircle.app.br` (eu passo o registro DNS) |
 | 5 | Título do site no Google | Ainda o antigo | "SONIA · até 21 especialistas de IA na sua equipe, nenhum na folha" |
 | 6 | Conversa de exemplo ("14 leads qualificados") | Na página | Manter como exemplo ou trocar por um caso real |
-| 7 | Links de checkout | Vazios (botão leva ao formulário) | Criar na Hubla e me mandar |
+| 7 | Links de checkout | Vazios (botão leva ao formulário) | Ajustar preços e nomes no painel do Asaas da plataforma e me avisar: eu confiro e coloco na landing |
 | 8 | Depoimentos | Seção desligada | Fechar os 5 primeiros clientes com condição especial em troca de depoimento |
