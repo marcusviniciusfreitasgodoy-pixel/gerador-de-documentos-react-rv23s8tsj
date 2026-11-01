@@ -68,6 +68,11 @@ def tpl(t):
     # uma imagem só da Sônia: sai a da seção "Orquestradora do time"
     t = troca(t, '<div style="flex:1 1 280px;max-width:400px;aspect-ratio:4 / 5;border-radius:10px;overflow:hidden;background:#E8E0CC">\n'
                  '<div role="img" aria-label="{{ sonia.nome }}" style="{{ soniaBg }}"></div>\n</div>\n', '', 'imagem-orquestradora')
+    # habilidades da Sônia em duas colunas no computador (pedido de 01/11/2026)
+    t = troca(t, '<div style="max-width:640px;border-bottom:1px solid rgba(14,14,14,0.22)">\n<sc-for list="{{ soniaSkills }}"',
+              '<div class="pc-skills" style="max-width:640px;border-bottom:1px solid rgba(14,14,14,0.22)">\n<sc-for list="{{ soniaSkills }}"', 'habilidades')
+    t = troca(t, '<p style="margin:0;font-size:16px;line-height:1.65;color:#2a2722;max-width:640px;text-wrap:pretty">{{ sonia.resumo }}</p>',
+              '<p class="pc-orq-resumo" style="margin:0;font-size:16px;line-height:1.65;color:#2a2722;max-width:640px;text-wrap:pretty">{{ sonia.resumo }}</p>', 'resumo-orquestradora')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -86,6 +91,12 @@ def tpl(t):
   .pc-menu-chk:focus-visible+.pc-burger{outline:2px solid #C9A84C;outline-offset:2px}
   .pc-hero-vis{padding-bottom:0!important}
   .pc-chat{position:relative!important;left:auto!important;right:auto!important;bottom:auto!important;margin-top:16px}
+}
+@media (min-width:1000px){
+  .pc-orq-resumo{max-width:880px!important}
+  .pc-skills{max-width:none!important;column-count:2;column-gap:clamp(40px,5vw,80px)}
+  .pc-skills>sc-for{display:contents}
+  .pc-skills>*,.pc-skills>sc-for>*{break-inside:avoid}
 }
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
 </style>
