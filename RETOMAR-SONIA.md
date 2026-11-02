@@ -36,7 +36,8 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
   dos planos**: a plataforma o conecta pela assinatura (OAuth), o que os termos da Anthropic
   proíbem em produtos de terceiros.
 - Empresa: Marcus V F Godoy Assessoria Imobiliária, CNPJ 58.409.058/0001-73,
-  atendimento@primecircle.app.br, WhatsApp (21) 99901-2520.
+  atendimento@primecircle.app.br, WhatsApp (21) 99901-2520 (número exclusivo da SONIA, não é o pessoal do
+  dono: recebe os contatos do formulário e o suporte de todos os planos).
 
 ## Estado da página
 
