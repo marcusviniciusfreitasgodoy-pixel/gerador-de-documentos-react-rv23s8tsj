@@ -94,6 +94,20 @@ def tpl(t):
               '<track kind="captions" srclang="pt-BR" label="Português" src="assets/video/sonia-apresentacao.pt-BR.vtt" default></video>\n'
               '<div class="pc-legenda" aria-hidden="true"></div>\n'
               '<button type="button" class="pc-som" aria-pressed="false"><span class="pc-som-ico" aria-hidden="true"></span><span class="pc-som-txt">Ouvir a Sônia</span></button>\n</div>', 'video-abertura')
+    # formulário: grava na planilha (endpoint) E abre o WhatsApp, em vez de um ou outro (02/11/2026).
+    # Envio sem esperar resposta e em text/plain, o formato que o Google Apps Script aceita de outro site.
+    t = troca(t, '''    if (ct.endpoint) {
+      fetch(ct.endpoint, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(dados) })
+        .then(() => this.setState({ enviado: true, erroForm: "" }))
+        .catch(() => this.setState({ erroForm: "Não foi possível enviar. Tente de novo." }));
+      return;
+    }''',
+    '''    if (ct.endpoint) {
+      try {
+        fetch(ct.endpoint, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(Object.assign({ pagina: location.href, consentimento: "sim" }, dados)) }).catch(function () {});
+      } catch (e) {}
+    }''', 'formulario-planilha')
     # retrato dos especialistas por srcset: antes de o conteúdo carregar, o navegador
     # descarta o valor "{{ a.imagem }}" (descritor inválido) em vez de pedi-lo ao servidor e
     # receber 404, como acontecia com src (corrigido em 02/11/2026)

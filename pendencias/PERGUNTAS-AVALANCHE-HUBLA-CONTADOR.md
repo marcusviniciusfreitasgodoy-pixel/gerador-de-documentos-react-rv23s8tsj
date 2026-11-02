@@ -54,8 +54,10 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
       `.htaccess` e sem o selo da Netlify.
 - [ ] **Renovação do certificado:** o certificado vence em 02/12/2026. Confira no cPanel (Status SSL/TLS) que o AutoSSL
       está ligado para `sonia.primecircle.app.br`.
-- [ ] **Leads do formulário:** hoje só existem no WhatsApp. Decidir se guarda um histórico (planilha ou CRM).
-- [ ] **Editor público:** decidir se tira o `editor.html` da HostGator (recomendado) ou protege com senha.
+- [ ] **Planilha de leads:** siga `landing-sonia/ferramentas/planilha-leads/COMO-INSTALAR.md` e mande a URL do app da
+      Web (termina em `/exec`). Depois, suba só o `conteudo.json` novo.
+- [ ] **Apagar o `editor.html` do servidor** (Gerenciador de Arquivos). O pacote novo já não o traz; o editor roda no
+      seu computador.
 - [ ] **Testar no celular**, inclusive no iPhone (Safari).
 
 ### Benefícios para colar no painel (até 120 caracteres cada)

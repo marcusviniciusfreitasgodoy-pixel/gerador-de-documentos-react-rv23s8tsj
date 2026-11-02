@@ -95,6 +95,8 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 `python3 ferramentas/montar-publicacao.py /tmp/sonia-hostgator hostgator`, compacte o conteúdo da pasta
 (com o `.htaccess`) e o dono sobe pelo Gerenciador de Arquivos do cPanel, extraindo por cima.
 Não existe envio automático para a HostGator a partir desta sessão.
+O pacote da HostGator não leva o `editor.html` (ele roda no computador de quem edita). O formulário grava
+numa planilha do Google (`contato.endpoint`, ver `ferramentas/planilha-leads/`) e abre o WhatsApp.
 
 **Netlify (reserva):**
 
