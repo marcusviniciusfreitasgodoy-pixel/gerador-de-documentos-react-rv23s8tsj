@@ -50,8 +50,13 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 - [ ] **Agente de atendimento no WhatsApp (21) 99901-2520 e no e-mail funcionando antes da primeira
       venda.** A página já promete resposta a qualquer hora em todos os planos.
 - [x] **Atendimento humano do Magnata:** em dias úteis, das 9h às 18h (definido em 02/11/2026).
-- [ ] **Subir a página na HostGator** (`sonia.primecircle.app.br`, subdomínio criado em 02/11/2026), ligar o SSL e
-      o redirecionamento HTTPS. Na HostGator o selo da Netlify some.
+- [x] **Página na HostGator:** no ar em https://sonia.primecircle.app.br desde 02/11/2026, com HTTPS forçado pelo
+      `.htaccess` e sem o selo da Netlify.
+- [ ] **Renovação do certificado:** o certificado vence em 02/12/2026. Confira no cPanel (Status SSL/TLS) que o AutoSSL
+      está ligado para `sonia.primecircle.app.br`.
+- [ ] **Leads do formulário:** hoje só existem no WhatsApp. Decidir se guarda um histórico (planilha ou CRM).
+- [ ] **Editor público:** decidir se tira o `editor.html` da HostGator (recomendado) ou protege com senha.
+- [ ] **Testar no celular**, inclusive no iPhone (Safari).
 
 ### Benefícios para colar no painel (até 120 caracteres cada)
 

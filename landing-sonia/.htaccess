@@ -1,6 +1,13 @@
 # HostGator (Apache): as mesmas regras do netlify.toml.
-# Para forçar HTTPS, use no cPanel: Domínios > "Forçar redirecionamento HTTPS",
-# depois que o SSL gratuito estiver ativo.
+
+# HTTPS forçado aqui, porque o botão do cPanel fica bloqueado (www.sonia não tem certificado).
+# A pasta .well-known fica de fora para não atrapalhar a renovação do certificado.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
 
 Options -Indexes
 DirectoryIndex index.html
