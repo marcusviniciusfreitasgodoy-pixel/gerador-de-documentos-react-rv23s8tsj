@@ -54,8 +54,8 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
       `.htaccess` e sem o selo da Netlify.
 - [ ] **Renovação do certificado:** o certificado vence em 02/12/2026. Confira no cPanel (Status SSL/TLS) que o AutoSSL
       está ligado para `sonia.primecircle.app.br`.
-- [ ] **Planilha de leads:** siga `landing-sonia/ferramentas/planilha-leads/COMO-INSTALAR.md` e mande a URL do app da
-      Web (termina em `/exec`). Depois, suba só o `conteudo.json` novo.
+- [x] **Planilha de leads:** instalada e testada em 02/11/2026 (aba "Leads"). Falta subir o `conteudo.json` com o
+      endereço e apagar a linha "TESTE Claude (pode apagar)". Confirme que o acionador mensal `apagarAntigos` está ligado.
 - [ ] **Apagar o `editor.html` do servidor** (Gerenciador de Arquivos). O pacote novo já não o traz; o editor roda no
       seu computador.
 - [ ] **Testar no celular**, inclusive no iPhone (Safari).

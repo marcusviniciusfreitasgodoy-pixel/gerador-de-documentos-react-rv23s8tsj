@@ -2077,7 +2077,7 @@
     "titulo": "Prefere conversar antes de assinar?",
     "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp e mostra a Sônia funcionando.",
     "whatsapp": "5521999012520",
-    "endpoint": "",
+    "endpoint": "https://script.google.com/macros/s/AKfycby2YqnLILR8g_TAchSajMimLHhTkTJ7bK0DVaaoscHBeLN1rKL78PcPkYYXDjyfbi89YQ/exec",
     "rotulo_nome": "Nome completo",
     "rotulo_email": "Seu melhor e-mail",
     "rotulo_whatsapp": "WhatsApp com DDD",

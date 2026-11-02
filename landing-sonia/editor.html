@@ -283,6 +283,7 @@
           var p = [];
           var ct = C.contato || {};
           if (ct.visivel !== false && String(ct.whatsapp || "").replace(/\D/g, "").length < 10 && !ct.endpoint) p.push("Formulário sem destino: preencha o WhatsApp (ou o endpoint) em Formulário.");
+          if (ct.visivel !== false && !ct.endpoint) p.push("Formulário sem planilha: o campo endpoint está vazio, então os contatos não ficam gravados na planilha de leads.");
           ((C.planos || {}).itens || []).forEach(function (pl) {
             if (pl.botao && (!pl.botao.link || /^#/.test(pl.botao.link))) p.push("Plano \"" + pl.nome + "\" sem link de pagamento: enquanto isso, o botão leva ao formulário.");
           });
