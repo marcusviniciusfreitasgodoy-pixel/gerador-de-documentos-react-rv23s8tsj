@@ -88,7 +88,9 @@ def tpl(t):
               '<video class="pc-hero-video" poster="assets/video/sonia-apresentacao.webp" '
               'autoplay muted loop playsinline preload="auto" aria-label="Vídeo de apresentação da Sônia">'
               '<source src="assets/video/sonia-apresentacao.mp4" type="video/mp4">'
-              '<source src="assets/video/sonia-apresentacao.webm" type="video/webm"></video>\n'
+              '<source src="assets/video/sonia-apresentacao.webm" type="video/webm">'
+              '<track kind="captions" srclang="pt-BR" label="Português" src="assets/video/sonia-apresentacao.pt-BR.vtt" default></video>\n'
+              '<div class="pc-legenda" aria-hidden="true"></div>\n'
               '<button type="button" class="pc-som" aria-pressed="false"><span class="pc-som-ico" aria-hidden="true"></span><span class="pc-som-txt">Ouvir a Sônia</span></button>\n</div>', 'video-abertura')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
@@ -120,6 +122,9 @@ def tpl(t):
   .pc-hero-btns a,.pc-hero-btns button{display:flex!important;width:100%!important;justify-content:center!important;box-sizing:border-box;min-height:52px}
 }
 .pc-hero-foto{position:relative}
+.pc-legenda{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;display:flex;justify-content:center;pointer-events:none}
+.pc-legenda span{max-width:100%;padding:6px 12px;border-radius:8px;background:rgba(10,10,9,.78);color:#F5F1E6;font:600 15px/1.35 var(--pc-font-sans,system-ui);text-align:center;text-wrap:balance}
+@media (min-width:901px){.pc-legenda span{font-size:16px}}
 .pc-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#161513}
 .pc-som{position:absolute;left:12px;top:12px;z-index:2;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(245,241,230,.35);background:rgba(14,14,14,.72);color:#F5F1E6;font:600 14px/1 var(--pc-font-sans,system-ui);cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 .pc-som:hover{border-color:#C9A84C}
@@ -152,7 +157,50 @@ document.addEventListener("click", function (e) {
     v.defaultMuted = true;
     if (semMov && !somLigado) { v.removeAttribute("autoplay"); v.autoplay = false; v.pause(); }
     else { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    legendas(v);
   }
+  // legendas desenhadas por cima do vídeo, iguais em qualquer navegador.
+  // O arquivo .vtt é lido uma vez; a cada atualização de tempo mostra a frase do momento.
+  var cues = null;
+  fetch("assets/video/sonia-apresentacao.pt-BR.vtt").then(function (r) { return r.ok ? r.text() : ""; }).then(function (txt) {
+    var seg = function (h) { var p = h.split(":").map(parseFloat); return p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p[0] * 60 + p[1]; };
+    cues = [];
+    txt.replace(/\r/g, "").split("\n\n").forEach(function (bloco) {
+      var linhas = bloco.split("\n"), i = linhas.findIndex(function (l) { return l.indexOf("-->") > -1; });
+      if (i < 0) return;
+      var t = linhas[i].split("-->");
+      cues.push({ a: seg(t[0].trim()), b: seg(t[1].trim().split(" ")[0]), texto: linhas.slice(i + 1).join(" ").trim() });
+    });
+    atualizar();
+  }).catch(function () {});
+  var ultimo = null;
+  function atualizar() {
+    var v = document.querySelector(".pc-hero-video"), caixa = document.querySelector(".pc-legenda");
+    if (!v || !caixa || !cues) return;
+    if (v.textTracks && v.textTracks[0] && v.textTracks[0].mode !== "hidden") v.textTracks[0].mode = "hidden";
+    var t = v.currentTime, texto = "";
+    for (var k = cues.length - 1; k >= 0; k--) { if (t >= cues[k].a && t < cues[k].b) { texto = cues[k].texto; break; } }
+    if (texto !== ultimo || !caixa.firstChild === !!texto) {
+      ultimo = texto;
+      caixa.innerHTML = "";
+      if (texto) { var sp = document.createElement("span"); sp.textContent = texto; caixa.appendChild(sp); }
+    }
+    posicionar();
+  }
+  function legendas() { atualizar(); }
+  ["timeupdate", "seeked", "loadedmetadata", "play"].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { if (e.target.classList && e.target.classList.contains("pc-hero-video")) atualizar(); }, true);
+  });
+  // no computador a conversa de exemplo cobre a parte de baixo do vídeo: a legenda sobe
+  function posicionar() {
+    var foto = document.querySelector(".pc-hero-foto"), chat = document.querySelector(".pc-chat"), caixa = document.querySelector(".pc-legenda");
+    if (!foto || !caixa) return;
+    var f = foto.getBoundingClientRect(), extra = 12;
+    if (chat && getComputedStyle(chat).position === "absolute") { var c = chat.getBoundingClientRect(); if (c.top < f.bottom && c.bottom > f.top) extra = Math.round(f.bottom - c.top) + 12; }
+    var px = extra + "px";
+    if (caixa.style.bottom !== px) caixa.style.bottom = px;
+  }
+  window.addEventListener("resize", posicionar);
   function varrer() { document.querySelectorAll(".pc-hero-video").forEach(preparar); }
   new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
   // o design reaplica as propriedades do <video> a cada redesenho e pode tirar o mudo:
