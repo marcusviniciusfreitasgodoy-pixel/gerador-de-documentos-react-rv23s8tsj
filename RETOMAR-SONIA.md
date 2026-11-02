@@ -50,6 +50,10 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
   "Mais escolhido" retirado (não há clientes ainda), idiomas do painel retirados (sem confirmação
   por escrito), Magnata como "A Sônia e os 21 especialistas", 6 especialistas no celular com botão
   "Ver os 21" e retrato por `srcset` (acabou o 404 de `{{ a.imagem }}`). Celular: 24.700 px para 15.500 px.
+  Tabela de economia no celular só com função e custo por mês. Publicado e conferido no ar.
+- A Netlify (plano gratuito) injeta um selo fixo "Powered by Netlify" que cobre o conteúdo no celular.
+  Não vem do nosso código. Decisão do dono: plano pago, opção no painel ou outra hospedagem.
+- O circunflexo alto em "Sônia" e "Você" nos títulos é o desenho da fonte Cormorant, não defeito.
 - Os botões "Assinar agora" levam ao formulário do WhatsApp, porque os links de checkout
   ainda cobram o preço antigo (R$ 1.497 / 2.497 / 9.997) e mostram "Comunidade Avalanche".
 

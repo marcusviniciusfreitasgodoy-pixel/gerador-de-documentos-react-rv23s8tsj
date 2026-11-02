@@ -100,6 +100,9 @@ def tpl(t):
     # no celular a grade mostra 6 especialistas e um botão abre o resto (pedido de 02/11/2026)
     t = troca(t, '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">\n<sc-for list="{{ agents }}"',
               '<div class="pc-esp-grade" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">\n<sc-for list="{{ agents }}"', 'grade-especialistas')
+    # tabela de economia no celular: só função e custo por mês, sem rolar para o lado (02/11/2026)
+    t = troca(t, '<div style="overflow-x:auto">\n<sc-raw-table style="width:100%;min-width:880px;',
+              '<div class="pc-eco" style="overflow-x:auto">\n<sc-raw-table style="width:100%;min-width:880px;', 'tabela-economia')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -141,6 +144,12 @@ def tpl(t):
 .pc-som[aria-pressed="true"] .pc-som-ico{--pc-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16 9l6 6M22 9l-6 6' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E")}
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
 .pc-esp-mais{display:none}
+@media (max-width:600px){
+  .pc-eco table{min-width:0!important}
+  .pc-eco th:nth-child(2),.pc-eco td:nth-child(2),.pc-eco th:nth-child(3),.pc-eco td:nth-child(3),
+  .pc-eco th:nth-child(5),.pc-eco td:nth-child(5),.pc-eco th:nth-child(6),.pc-eco td:nth-child(6){display:none!important}
+  .pc-eco th:nth-child(4),.pc-eco td:nth-child(4){text-align:right!important}
+}
 @media (max-width:600px){
   html:not(.pc-esp-todos) .pc-esp-grade article:nth-of-type(n+7){display:none!important}
   .pc-esp-mais{display:flex;justify-content:center;align-items:center;width:100%;min-height:52px;padding:0 24px;border-radius:999px;border:1px solid rgba(245,241,230,.35);background:transparent;color:#F5F1E6;font:600 15px/1 var(--pc-font-sans,system-ui);cursor:pointer}
