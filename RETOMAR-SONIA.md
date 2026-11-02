@@ -16,6 +16,7 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 | Painel Netlify | https://app.netlify.com/projects/sonia-primecircle (site id `47374dbb-75f2-401c-9d79-26164ceb5a87`) |
 | Landing (código e conteúdo) | `landing-sonia/` (leia `landing-sonia/LEIA-ME.md`) |
 | Pendências e perguntas | `pendencias/PERGUNTAS-AVALANCHE-HUBLA-CONTADOR.md` (**é o arquivo atual**) |
+| Roteiro do onboarding (60 min) | `operacao/ROTEIRO-ONBOARDING-SONIA.md` |
 | Análise de concorrência e preço | `analise-concorrencia/RELATORIO-PRECOS-SONIA.md` |
 | Material de referência (Naia OS) | `referencia-landing-agentes/` |
 

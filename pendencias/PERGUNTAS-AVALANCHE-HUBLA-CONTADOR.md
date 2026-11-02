@@ -41,7 +41,7 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 - [ ] **Instalação do WhatsApp (Evolution API) como serviço pago da Prime Circle.** Defina se vai
       oferecer e por quanto.
 - [ ] **Quem envia o link do onboarding** a cada venda (você à mão ou o e-mail da plataforma).
-- [ ] **Roteiro do onboarding de 60 min.** Peça e eu escrevo.
+- [x] **Roteiro do onboarding de 60 min:** pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md`. Falta ensaiar com a sua conta e definir o horário da sessão semanal.
 - [ ] **Calendly:** marcar "SONIA: onboarding do cliente" como secreto e separar a agenda de
       horários da SONIA da agenda da Godoy Prime.
 - [ ] **Reescrever os currículos dos agentes** (recomendação comercial: as frases idênticas levam
