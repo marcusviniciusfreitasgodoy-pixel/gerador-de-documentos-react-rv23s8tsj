@@ -62,6 +62,9 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 
 ## 0. Pauta da reunião com o time da Avalanche
 
+> **Versão completa para levar à reunião** (26 entendimentos para confirmar e 24 perguntas): documento
+> "SONIA: pauta e entendimentos para confirmar com a Avalanche", https://claude.ai/artifact/Kd8VqfM4KTLnfyguEoxrbF
+
 Leve nesta ordem. As três primeiras travam a venda.
 
 1. ⚠️ **Prazo para liberar a alteração do preço dos planos no painel.** Até lá os links cobram
