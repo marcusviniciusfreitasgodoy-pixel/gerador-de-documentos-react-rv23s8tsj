@@ -63,8 +63,7 @@
     "rotulo_avatares": "Até 21 especialistas no seu time",
     "selos": [
       "Atende 24 horas, não falta, não atrasa e não pede aumento",
-      "Cada cliente com a própria agente, isolada e segura",
-      "Painel em português, inglês e espanhol"
+      "Cada cliente com a própria agente, isolada e segura"
     ],
     "rotulo_conversa": "Exemplo de conversa no Telegram",
     "conversa": [
@@ -87,7 +86,7 @@
     ]
   },
   "sigla": {
-    "visivel": true,
+    "visivel": false,
     "titulo": "Por trás do nome",
     "letras": [
       {
@@ -1961,7 +1960,7 @@
       },
       {
         "nome": "SONIA Elite",
-        "selo": "Mais escolhido",
+        "selo": "",
         "destaque": true,
         "preco": "R$ 7.997",
         "periodo": "por ano",
@@ -1986,7 +1985,7 @@
         "periodo": "por ano",
         "parcelamento": "ou 12x de R$ 1.388,67 no cartão",
         "itens": [
-          "Os 22 agentes liberados",
+          "A Sônia e os 21 especialistas liberados",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
@@ -2091,10 +2090,6 @@
       {
         "pergunta": "Tem garantia?",
         "resposta": "Sim. Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir pelo e-mail atendimento@primecircle.app.br ou pelo WhatsApp."
-      },
-      {
-        "pergunta": "O painel funciona em outros idiomas?",
-        "resposta": "Sim. O painel funciona em português, inglês e espanhol."
       },
       {
         "pergunta": "Como eu falo com o time?",

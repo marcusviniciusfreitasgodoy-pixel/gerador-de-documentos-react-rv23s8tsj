@@ -45,6 +45,11 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
   rode de novo.
 - Todo texto, preço e plano vem de `landing-sonia/conteudo.json`. Campos que começam com `_`
   são anotações internas e **não podem ir ao ar**.
+- Ajustes de 02/11/2026, depois de comparar com uma cópia da página antiga (preços velhos, Claude nos
+  planos, links vazios: descartada): seção "Por trás do nome" desligada (`sigla.visivel`), selo
+  "Mais escolhido" retirado (não há clientes ainda), idiomas do painel retirados (sem confirmação
+  por escrito), Magnata como "A Sônia e os 21 especialistas", 6 especialistas no celular com botão
+  "Ver os 21" e retrato por `srcset` (acabou o 404 de `{{ a.imagem }}`). Celular: 24.700 px para 15.500 px.
 - Os botões "Assinar agora" levam ao formulário do WhatsApp, porque os links de checkout
   ainda cobram o preço antigo (R$ 1.497 / 2.497 / 9.997) e mostram "Comunidade Avalanche".
 

@@ -92,6 +92,14 @@ def tpl(t):
               '<track kind="captions" srclang="pt-BR" label="Português" src="assets/video/sonia-apresentacao.pt-BR.vtt" default></video>\n'
               '<div class="pc-legenda" aria-hidden="true"></div>\n'
               '<button type="button" class="pc-som" aria-pressed="false"><span class="pc-som-ico" aria-hidden="true"></span><span class="pc-som-txt">Ouvir a Sônia</span></button>\n</div>', 'video-abertura')
+    # retrato dos especialistas por srcset: antes de o conteúdo carregar, o navegador
+    # descarta o valor "{{ a.imagem }}" (descritor inválido) em vez de pedi-lo ao servidor e
+    # receber 404, como acontecia com src (corrigido em 02/11/2026)
+    t = troca(t, '<img src="{{ a.imagem }}" alt="{{ a.nome }}" loading="lazy"',
+              '<img srcset="{{ a.imagem }}" alt="{{ a.nome }}" loading="lazy"', 'img-especialista')
+    # no celular a grade mostra 6 especialistas e um botão abre o resto (pedido de 02/11/2026)
+    t = troca(t, '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">\n<sc-for list="{{ agents }}"',
+              '<div class="pc-esp-grade" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">\n<sc-for list="{{ agents }}"', 'grade-especialistas')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -132,6 +140,13 @@ def tpl(t):
 .pc-som-ico{width:16px;height:16px;background:#C9A84C;-webkit-mask:var(--pc-ico) center/contain no-repeat;mask:var(--pc-ico) center/contain no-repeat;--pc-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16 8.5a5 5 0 0 1 0 7' stroke='black' stroke-width='2' fill='none'/%3E%3Cpath d='M18.5 6a8.5 8.5 0 0 1 0 12' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E")}
 .pc-som[aria-pressed="true"] .pc-som-ico{--pc-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16 9l6 6M22 9l-6 6' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E")}
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
+.pc-esp-mais{display:none}
+@media (max-width:600px){
+  html:not(.pc-esp-todos) .pc-esp-grade article:nth-of-type(n+7){display:none!important}
+  .pc-esp-mais{display:flex;justify-content:center;align-items:center;width:100%;min-height:52px;padding:0 24px;border-radius:999px;border:1px solid rgba(245,241,230,.35);background:transparent;color:#F5F1E6;font:600 15px/1 var(--pc-font-sans,system-ui);cursor:pointer}
+  .pc-esp-mais[hidden],html.pc-esp-todos .pc-esp-mais{display:none}
+  .pc-esp-mais:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+}
 </style>
 """
     t = troca(t, '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n',
@@ -235,6 +250,31 @@ document.addEventListener("click", function (e) {
     if (somLigado) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
     botao(b);
   });
+})();
+// especialistas no celular: o botão "Ver todos" fica logo depois da grade. O design pode
+// redesenhar a grade (filtros); por isso o botão é recolocado e a contagem refeita.
+(function () {
+  function montar() {
+    var grade = document.querySelector(".pc-esp-grade");
+    if (!grade) return;
+    var b = grade.nextElementSibling;
+    if (!b || !b.classList.contains("pc-esp-mais")) {
+      b = document.createElement("button");
+      b.type = "button";
+      b.className = "pc-esp-mais";
+      grade.insertAdjacentElement("afterend", b);
+    }
+    var n = grade.querySelectorAll("article").length;
+    var txt = "Ver os " + n + " especialistas";
+    if (b.textContent !== txt) b.textContent = txt;
+    var esconder = n <= 6;
+    if (b.hidden !== esconder) b.hidden = esconder;
+  }
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest(".pc-esp-mais")) document.documentElement.classList.add("pc-esp-todos");
+  });
+  new MutationObserver(montar).observe(document, { childList: true, subtree: true });
+  montar();
 })();
 document.addEventListener("keydown", function (e) {
   var chk = document.getElementById("pc-menu");
