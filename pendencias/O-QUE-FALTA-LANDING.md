@@ -1,3 +1,5 @@
+> **Arquivo histórico (31/10/2026).** O estado atual está em `RETOMAR-SONIA.md` e em `pendencias/PERGUNTAS-AVALANCHE-HUBLA-CONTADOR.md`.
+
 # O que falta para publicar a landing SONIA hoje
 
 Atualizado em 31/10/2026.
