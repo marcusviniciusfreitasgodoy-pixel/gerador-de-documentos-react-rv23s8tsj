@@ -160,7 +160,7 @@ A parte mais importante. A Sônia entrega melhor quanto mais sabe.
 3. Mostre onde tirar dúvidas daqui em diante, em qualquer plano: o manual de cada tela do painel,
    o WhatsApp (21) 99901-2520 e o e-mail atendimento@primecircle.app.br, onde o agente de
    atendimento responde a qualquer hora. Peça para ele salvar o número na hora. **Magnata:** diga
-   que há também atendimento humano das 9h às 18h e marque a data da primeira mentoria.
+   que há também atendimento humano em dias úteis, das 9h às 18h, e marque a data da primeira mentoria.
 4. Pergunte: "De 0 a 10, o quanto você se sente pronto para usar a Sônia sozinho amanhã?" Abaixo
    de 7, anote o que falta e mande no resumo o passo a passo por escrito, com o caminho de
    cada tela no painel.
@@ -184,7 +184,7 @@ A parte mais importante. A Sônia entrega melhor quanto mais sabe.
 > **Dúvidas daqui em diante:** cada tela do painel tem o manual do que ela faz. Se precisar,
 > fale com a gente pelo WhatsApp (21) 99901-2520 ou pelo e-mail atendimento@primecircle.app.br:
 > o nosso agente de atendimento responde a qualquer hora.
-> [Magnata: atendimento humano das 9h às 18h no mesmo número.]
+> [Magnata: atendimento humano em dias úteis, das 9h às 18h no mesmo número.]
 > [Magnata: sua primeira mentoria individual fica para (data).]
 > [Se quiser WhatsApp: a gente marca a sessão técnica (ver o que você precisa providenciar
 > abaixo).]
@@ -205,7 +205,7 @@ passos e se quer o WhatsApp. É o histórico que vai servir para o depoimento e 
 | Agentes para mostrar | Sônia, Juliana, Paulo, Jonathan, clone do dono | + Rafael, Bianca, Amanda (CRM), estrategista de tráfego, Davi e 6 vendedores | + Márcia, Maria, Aline, Geane, Boris, Ruth |
 | Primeira tarefa sugerida | Legendas (Jonathan) ou página (Paulo) | Ideias de vídeo (Bianca) ou plano de campanha (tráfego) | O gargalo dele; financeiro costuma impressionar |
 | Rotinas | Até 5 | Até 20 | Até 50 |
-| Extra | | | Marcar a 1ª das 4 mentorias; avisar do atendimento humano das 9h às 18h |
+| Extra | | | Marcar a 1ª das 4 mentorias; avisar do atendimento humano em dias úteis, das 9h às 18h |
 
 ---
 
@@ -244,5 +244,5 @@ no Instagram" ainda não foi aberta na auditoria: confira o passo a passo antes 
 - [ ] Ensaiar o roteiro inteiro com a sua conta de cliente e cronometrar.
 - [ ] Conferir os passos marcados com ⚠️.
 - [ ] Atualizar a parte do bot e da "Sofia" quando a Avalanche corrigir a marca.
-- [ ] Confirmar os dias do atendimento humano (das 9h às 18h: só dias úteis?) e o que o agente faz
+- [ ] Definir o que o agente faz
       quando um cliente do Starter ou do Elite precisa de uma pessoa.

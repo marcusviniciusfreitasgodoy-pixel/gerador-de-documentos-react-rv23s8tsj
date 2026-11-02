@@ -1922,7 +1922,7 @@
     "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar."
   },
   "diferenciais": {
-    "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Manual: o cliente vê o manual de cada tela do painel (não há Manual do Dono para o cliente; esse é do revendedor). Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split. Sem sessões semanais ao vivo (decisão do dono em 02/11/2026): Starter e Elite têm uma sessão de onboarding. Suporte: agente de atendimento a qualquer hora em todos os planos; humano das 9h às 18h só no Magnata (decisão do dono em 02/11/2026). O agente precisa estar no ar antes da primeira venda.",
+    "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Manual: o cliente vê o manual de cada tela do painel (não há Manual do Dono para o cliente; esse é do revendedor). Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split. Sem sessões semanais ao vivo (decisão do dono em 02/11/2026): Starter e Elite têm uma sessão de onboarding. Suporte: agente de atendimento a qualquer hora em todos os planos; humano em dias úteis, das 9h às 18h só no Magnata (decisão do dono em 02/11/2026). O agente precisa estar no ar antes da primeira venda.",
     "visivel": true,
     "etiqueta": "Depois que você paga",
     "titulo": "Você não fica sozinho com a ferramenta.",
@@ -1937,7 +1937,7 @@
       },
       {
         "titulo": "Suporte em todos os planos",
-        "texto": "Ficou alguma dúvida? O nosso agente de atendimento responde a qualquer hora pelo WhatsApp (21) 99901-2520 e pelo e-mail atendimento@primecircle.app.br. No Magnata, também atendimento humano das 9h às 18h e 4 mentorias individuais de 1 hora."
+        "texto": "Ficou alguma dúvida? O nosso agente de atendimento responde a qualquer hora pelo WhatsApp (21) 99901-2520 e pelo e-mail atendimento@primecircle.app.br. No Magnata, também atendimento humano em dias úteis, das 9h às 18h, e 4 mentorias individuais de 1 hora."
       },
       {
         "titulo": "Garantia de 30 dias",
@@ -2021,7 +2021,7 @@
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
           "4 mentorias individuais de 1 hora com a Prime Circle",
-          "Suporte pelo WhatsApp e por e-mail: agente de atendimento a qualquer hora e atendimento humano das 9h às 18h",
+          "Suporte pelo WhatsApp e por e-mail: agente de atendimento a qualquer hora e atendimento humano em dias úteis, das 9h às 18h",
           "Tudo do plano Elite, incluindo a sessão de onboarding",
           "Garantia de 30 dias"
         ],
@@ -2132,7 +2132,7 @@
       },
       {
         "pergunta": "Como eu falo com o time?",
-        "resposta": "Antes de assinar, pelo formulário desta página ou agendando uma demonstração. Depois de assinar, pelo WhatsApp (21) 99901-2520 ou pelo e-mail atendimento@primecircle.app.br: o nosso agente de atendimento responde a qualquer hora, em todos os planos, e no Magnata há também atendimento humano das 9h às 18h."
+        "resposta": "Antes de assinar, pelo formulário desta página ou agendando uma demonstração. Depois de assinar, pelo WhatsApp (21) 99901-2520 ou pelo e-mail atendimento@primecircle.app.br: o nosso agente de atendimento responde a qualquer hora, em todos os planos, e no Magnata há também atendimento humano em dias úteis, das 9h às 18h."
       }
     ]
   },
