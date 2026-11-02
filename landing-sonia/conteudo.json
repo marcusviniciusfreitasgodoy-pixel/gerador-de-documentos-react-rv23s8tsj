@@ -1978,7 +1978,7 @@
         "itens": [
           "5 agentes: Sônia, Juliana, Paulo, Jonathan e o clone do dono",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
-          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
+          "Usa o ChatGPT como cérebro (assinatura paga da IA, contratada por você)",
           "1 sessão de onboarding ao vivo, no horário que você escolher",
           "Suporte pelo WhatsApp e por e-mail, com agente de atendimento a qualquer hora",
           "Garantia de 30 dias"
@@ -1998,7 +1998,7 @@
         "itens": [
           "16 agentes: os do Starter, mais Rafael, Bianca, Amanda, o estrategista de tráfego, o Davi e 6 vendedores",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
-          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
+          "Funciona com o ChatGPT ou com outros modelos de IA, à sua escolha (assinatura ou chave da IA, contratada por você)",
           "1 sessão de onboarding ao vivo, no horário que você escolher",
           "Suporte pelo WhatsApp e por e-mail, com agente de atendimento a qualquer hora",
           "Garantia de 30 dias"
@@ -2018,7 +2018,7 @@
         "itens": [
           "A Sônia e os 21 especialistas: os do Elite, mais financeiro, tributário, jurídico, RH, prospecção e engenharia de software",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
-          "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
+          "Funciona com o ChatGPT ou com outros modelos de IA, à sua escolha (assinatura ou chave da IA, contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
           "4 mentorias individuais de 1 hora com a Prime Circle",
           "Suporte pelo WhatsApp e por e-mail: agente de atendimento a qualquer hora e atendimento humano em dias úteis, das 9h às 18h",
@@ -2031,7 +2031,7 @@
         }
       }
     ],
-    "nota": "Não estão incluídos no preço: a assinatura da IA (ChatGPT, a partir de cerca de US$ 20 por mês), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
+    "nota": "Não estão incluídos no preço: a assinatura da IA (no Starter, o ChatGPT, a partir de cerca de US$ 20 por mês; no Elite e no Magnata, o modelo que você escolher), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
   },
   "agencia": {
     "_aviso": "Ligue só se o seu contrato permitir sub-revenda.",
@@ -2120,7 +2120,7 @@
       },
       {
         "pergunta": "O que não está incluído no preço?",
-        "resposta": "A assinatura da IA (ChatGPT, a partir de cerca de US$ 20 por mês), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
+        "resposta": "A assinatura da IA (no Starter, o ChatGPT, a partir de cerca de US$ 20 por mês; no Elite e no Magnata, o modelo que você escolher), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
       },
       {
         "pergunta": "E se a IA sair do ar?",
