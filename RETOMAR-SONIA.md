@@ -69,6 +69,9 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 - Os botões "Assinar agora" levam ao formulário do WhatsApp, porque os links de checkout
   ainda cobram o preço antigo (R$ 1.497 / 2.497 / 9.997) e mostram "Comunidade Avalanche".
 
+> **Lembretes do dono:** a lista do que ficou com ele está no topo de
+> `pendencias/PERGUNTAS-AVALANCHE-HUBLA-CONTADOR.md`, seção "Lembretes do dono".
+
 ## Próximos passos (em ordem)
 
 1. **Links de pagamento.** O dono ajusta preço e nome dos 3 planos no painel da plataforma.

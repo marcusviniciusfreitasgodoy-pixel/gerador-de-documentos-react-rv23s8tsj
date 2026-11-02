@@ -25,6 +25,38 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 
 ---
 
+## Lembretes do dono (anotados em 02/11/2026)
+
+O que ficou com você depois da revisão da página. Risque conforme fizer.
+
+- [ ] **E-mail de acesso.** A tela Marca mostra "E-mail saindo do seu domínio: ESPERANDO". Configure o
+      DNS do Resend (Sua marca → Como configurar o Resend) e confirme numa compra de teste que o
+      e-mail chega. É o primeiro passo prometido em "Depois que você paga".
+- [ ] **Botão "Área do cliente".** Abra https://agentes.primecircle.app.br/ deslogado. Se mostrar a
+      página de vendas com R$ 1.497, me avise: tiro o botão do topo ou aponto para a tela de login.
+- [ ] **Benefícios dos planos no painel** (Sua marca → Marca, hoje vazios). Cole os textos abaixo.
+- [ ] **Reunião com a Avalanche:** a pauta logo abaixo, na ordem.
+- [ ] **Pixel e analytics** antes de anunciar. Quando decidir, eu coloco, com aviso de cookies e
+      política atualizada.
+- [ ] **Instalação do WhatsApp (Evolution API) como serviço pago da Prime Circle.** Defina se vai
+      oferecer e por quanto.
+- [ ] **Quem envia o link do onboarding** a cada venda (você à mão ou o e-mail da plataforma).
+- [ ] **Roteiro do onboarding de 60 min.** Peça e eu escrevo.
+- [ ] **Calendly:** marcar "SONIA: onboarding do cliente" como secreto e separar a agenda de
+      horários da SONIA da agenda da Godoy Prime.
+- [ ] **Reescrever os currículos dos agentes** (recomendação comercial: as frases idênticas levam
+      o comprador à oferta de origem).
+- [ ] **5 primeiros clientes com condição especial em troca de depoimento.**
+- [ ] **Domínio** `sonia.primecircle.app.br` e **selo da Netlify** (plano pago ou outra hospedagem).
+
+### Benefícios para colar no painel (até 120 caracteres cada)
+
+| Plano | Texto | Caracteres |
+|---|---|---|
+| Starter | Sônia e mais 4: Juliana, Paulo, Jonathan e o clone do dono. Até 5 rotinas, onboarding e sessão semanal ao vivo. | 111 |
+| Elite | 16 agentes: os do Starter, mais projetos, vídeos virais, CRM, tráfego e o squad de vendas. Até 20 rotinas. | 106 |
+| Magnata | A Sônia e os 21 especialistas, com financeiro, fiscal, jurídico e RH. Até 50 rotinas, 4 mentorias e suporte humano. | 115 |
+
 ## 0. Pauta da reunião com o time da Avalanche
 
 Leve nesta ordem. As três primeiras travam a venda.

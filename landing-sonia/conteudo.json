@@ -17,8 +17,8 @@
   "topo": {
     "menu": [
       {
-        "texto": "Como funciona",
-        "link": "#como-funciona"
+        "texto": "Por onde começar",
+        "link": "#por-onde-comecar"
       },
       {
         "texto": "Time",
@@ -51,7 +51,7 @@
     "etiqueta": "Agentes de IA que trabalham de verdade",
     "titulo": "Até 21 especialistas na sua equipe",
     "titulo_destaque": "e nenhum na folha de pagamento.",
-    "texto": "Enquanto você cuida do negócio, o time escreve, publica, atende no WhatsApp, organiza o financeiro e revisa contratos. A qualquer hora, pelo Telegram ou pelo painel.",
+    "texto": "Enquanto você cuida do negócio, o time escreve, publica e atende no WhatsApp. No Magnata, também organiza o financeiro e revisa contratos. A qualquer hora, pelo Telegram ou pelo painel.",
     "botao_principal": {
       "texto": "Quero a minha Sônia",
       "link": "#planos"
@@ -163,7 +163,7 @@
     "nota": "Números agregados da plataforma de agentes, não apenas de clientes Prime Circle."
   },
   "como_funciona": {
-    "visivel": true,
+    "visivel": false,
     "etiqueta": "Como funciona",
     "titulo": "Você fala com uma só. O time inteiro trabalha.",
     "texto": "Nada de aprender ferramenta nova nem gerenciar gente. Você manda o pedido como mandaria para um funcionário de confiança.",

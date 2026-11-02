@@ -78,16 +78,16 @@
         var previaPronta = false;
 
         var SECOES = [
-          ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["sigla", "Sigla SONIA"],
+          ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["gargalos", "Por onde começar"], ["sigla", "Sigla SONIA"],
           ["numeros", "Números"], ["como_funciona", "Como funciona"], ["time", "Time e currículos"], ["economia", "Economia"],
-          ["diferenciais", "Por que a Prime Circle"], ["depoimentos", "Depoimentos"], ["planos", "Planos"], ["agencia", "Agência"],
+          ["diferenciais", "Depois que você paga"], ["depoimentos", "Depoimentos"], ["planos", "Planos"], ["agencia", "Agência"],
           ["contato", "Formulário"], ["empresa", "Dados da empresa"], ["faq", "Perguntas"], ["final", "Chamada final"], ["rodape", "Rodapé"]
         ];
         var ROTULOS = {
           visivel: "Mostrar esta seção", destaque: "Plano em destaque", etiqueta: "Etiqueta (texto pequeno acima do título)", titulo: "Título",
           titulo_destaque: "Título: parte em destaque (cor de ouro)", texto: "Texto", link: "Link (URL ou #secao)", botao: "Botão",
           botao_principal: "Botão principal", botao_secundario: "Botão secundário", botao_area_cliente: "Botão área do cliente", selos: "Selos (frases curtas)",
-          conversa: "Conversa de exemplo", de: "Quem fala (voce ou agente)", itens: "Itens", passos: "Passos", agentes: "Agentes",
+          conversa: "Conversa de exemplo", de: "Quem fala (voce ou agente)", itens: "Itens", quem: "Quem cuida (agentes e plano)", passos: "Passos", agentes: "Agentes",
           nome: "Nome", cargo: "Cargo", area: "Área", imagem: "Imagem (caminho do arquivo)", resumo: "Resumo", o_que_faz: "O que faz",
           habilidades: "Habilidades", plataformas: "Plataformas", como_trabalha: "Como trabalha", turnos: "Turnos", resultados: "Resultados",
           treinamentos: "Treinamentos", como_pedir: "Exemplos de pedido", preco: "Preço", periodo: "Período", parcelamento: "Parcelamento",
@@ -291,7 +291,7 @@
           if (C.empresa && !String(C.empresa.cnpj || "").replace(/\D/g, "")) p.push("CNPJ não preenchido em Dados da empresa: o rodapé sai sem ele.");
           else if (C.empresa && String(C.empresa.cnpj).replace(/\D/g, "").length !== 14) p.push("CNPJ com número de dígitos errado: um CNPJ tem 14 dígitos.");
           if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito do fornecedor da plataforma.");
-          if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Por que a Prime Circle\".");
+          if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Depois que você paga\".");
           if (C.depoimentos && C.depoimentos.visivel !== false) p.push("Depoimentos visíveis: use só clientes reais com autorização.");
           var tr = JSON.stringify(C).match(/"[^"]*[–—][^"]*"/g);
           if (tr) p.push("Há " + tr.length + " texto(s) com travessão (— ou –). A regra do produto é usar dois-pontos, vírgula ou ponto.");
