@@ -54,9 +54,10 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
       `.htaccess` e sem o selo da Netlify.
 - [ ] **Renovação do certificado:** o certificado vence em 02/12/2026. Confira no cPanel (Status SSL/TLS) que o AutoSSL
       está ligado para `sonia.primecircle.app.br`.
-- [x] **Planilha de leads:** instalada e testada em 02/11/2026 (aba "Leads"). Página gravando desde 18:49 de 02/11.
-      Falta: apagar as 2 linhas de teste, atualizar o script (WhatsApp num formato só: Implantar → Gerenciar
-      implantações → editar → Nova versão), confirmar o acionador mensal `apagarAntigos` e enviar um teste pelo celular.
+- [x] **Planilha de leads:** instalada e testada em 02/11/2026 (aba "Leads"). Página gravando desde 18:49 de 02/11. Script na
+      versão 2 (WhatsApp num formato só) e acionador mensal `apagarAntigos` ligados.
+- [ ] **Apagar as linhas de teste 2, 3 e 4** da aba "Leads".
+- [ ] **Enviar um teste pelo celular** (consentimento, vídeo no Safari, WhatsApp abrindo no aparelho) e apagar a linha.
 - [ ] **Apagar o `editor.html` do servidor** (Gerenciador de Arquivos). O pacote novo já não o traz; o editor roda no
       seu computador.
 - [ ] **Testar no celular**, inclusive no iPhone (Safari).
