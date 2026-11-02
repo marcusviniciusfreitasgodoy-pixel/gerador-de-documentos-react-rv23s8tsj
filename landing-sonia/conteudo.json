@@ -39,7 +39,7 @@
     ],
     "botao": {
       "texto": "Ver a Sônia funcionando",
-      "link": "#contato"
+      "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
     },
     "botao_area_cliente": {
       "visivel": true,
@@ -235,7 +235,7 @@
             "texto": "Organiza o plano de negócios a partir das suas informações."
           }
         ],
-        "plataformas": "Telegram · WhatsApp · Instagram · Meta Ads · CRM · Vercel",
+        "plataformas": "Telegram · Painel · Instagram · Meta Ads · CRM · Vercel",
         "como_trabalha": "É o seu ponto único de contato e o cérebro da operação. Recebe tudo em português, aciona os especialistas, cruza informação entre as áreas e garante que cada entrega volte revisada antes de chegar nas suas mãos.",
         "passos": [
           "Recebe o seu pedido em português, por texto ou áudio no Telegram",
@@ -1921,18 +1921,18 @@
     "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar."
   },
   "diferenciais": {
-    "_aviso": "Ligada em 02/11/2026 como \"Depois que você paga\". Só o que já está prometido nos planos. Garantia depende da resposta do Asaas sobre estorno com split.",
+    "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split.",
     "visivel": true,
     "etiqueta": "Depois que você paga",
     "titulo": "Você não fica sozinho com a ferramenta.",
     "itens": [
       {
         "titulo": "O acesso chega no seu e-mail",
-        "texto": "Assim que o pagamento é confirmado, você recebe o acesso ao painel e conecta a sua assinatura do ChatGPT."
+        "texto": "Assim que o pagamento é confirmado, você recebe o acesso ao painel e o link para agendar o seu onboarding no horário que preferir."
       },
       {
-        "titulo": "Implantação ao vivo, toda semana",
-        "texto": "Em todos os planos, você entra numa sessão coletiva semanal para configurar a Sônia com o seu negócio e tirar dúvidas com o nosso time."
+        "titulo": "Onboarding e sessões ao vivo",
+        "texto": "No onboarding, configuramos a Sônia com o seu negócio. Depois, toda semana, há uma sessão coletiva ao vivo. Cada sessão traz orientações práticas e o Manual do Dono."
       },
       {
         "titulo": "No Magnata, mentoria individual",
@@ -2109,7 +2109,7 @@
       },
       {
         "pergunta": "Funciona com o meu WhatsApp?",
-        "resposta": "Sim. Os especialistas de vendas atendem no WhatsApp e no Direct do Instagram. Conexões com custo próprio, como a API oficial do WhatsApp, são cobradas à parte pelo fornecedor."
+        "resposta": "Sim, no atendimento: os especialistas de vendas respondem os seus clientes no WhatsApp e no Direct do Instagram. Para pedir tarefas à Sônia, você usa o Telegram ou o painel. Conexões com custo próprio, como a API oficial do WhatsApp, são cobradas à parte pelo fornecedor."
       },
       {
         "pergunta": "Quanto custa?",
