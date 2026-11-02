@@ -81,6 +81,15 @@ def tpl(t):
               '<div class="pc-hero-btns" style="position:relative;display:flex;gap:12px;flex-wrap:wrap;padding-top:8px">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.final.botao.link }}"', 'botao-final')
     t = troca(t, '<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" type="submit"',
               '<div class="pc-hero-btns" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">\n<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" type="submit"', 'botao-enviar')
+    # vídeo de apresentação da Sônia no lugar da foto da abertura (pedido de 02/11/2026)
+    t = troca(t, '<div style="aspect-ratio:4 / 5;border:1px solid rgba(245,241,230,0.10);border-radius:10px;overflow:hidden;background:var(--pc-surface-2)">\n'
+                 '<div role="img" aria-label="{{ sonia.nome }}" style="{{ soniaBg }}"></div>\n</div>',
+              '<div class="pc-hero-foto" style="aspect-ratio:4 / 5;border:1px solid rgba(245,241,230,0.10);border-radius:10px;overflow:hidden;background:var(--pc-surface-2)">\n'
+              '<video class="pc-hero-video" poster="assets/video/sonia-apresentacao.webp" '
+              'autoplay muted loop playsinline preload="auto" aria-label="Vídeo de apresentação da Sônia">'
+              '<source src="assets/video/sonia-apresentacao.mp4" type="video/mp4">'
+              '<source src="assets/video/sonia-apresentacao.webm" type="video/webm"></video>\n'
+              '<button type="button" class="pc-som" aria-pressed="false"><span class="pc-som-ico" aria-hidden="true"></span><span class="pc-som-txt">Ouvir a Sônia</span></button>\n</div>', 'video-abertura')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -110,6 +119,13 @@ def tpl(t):
   .pc-hero-btns{flex-direction:column!important;align-items:stretch!important}
   .pc-hero-btns a,.pc-hero-btns button{display:flex!important;width:100%!important;justify-content:center!important;box-sizing:border-box;min-height:52px}
 }
+.pc-hero-foto{position:relative}
+.pc-hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#161513}
+.pc-som{position:absolute;left:12px;top:12px;z-index:2;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid rgba(245,241,230,.35);background:rgba(14,14,14,.72);color:#F5F1E6;font:600 14px/1 var(--pc-font-sans,system-ui);cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.pc-som:hover{border-color:#C9A84C}
+.pc-som:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+.pc-som-ico{width:16px;height:16px;background:#C9A84C;-webkit-mask:var(--pc-ico) center/contain no-repeat;mask:var(--pc-ico) center/contain no-repeat;--pc-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16 8.5a5 5 0 0 1 0 7' stroke='black' stroke-width='2' fill='none'/%3E%3Cpath d='M18.5 6a8.5 8.5 0 0 1 0 12' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E")}
+.pc-som[aria-pressed="true"] .pc-som-ico{--pc-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16 9l6 6M22 9l-6 6' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E")}
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
 </style>
 """
@@ -124,6 +140,54 @@ document.addEventListener("click", function (e) {
   var chk = document.getElementById("pc-menu");
   if (alvo && chk) chk.checked = false;
 });
+// vídeo da abertura: começa mudo (regra dos navegadores) e o botão liga o som do início.
+// O design pode recriar o <video>; por isso cada vídeo novo é preparado de novo.
+(function () {
+  var semMov = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var somLigado = false, jaOuviu = false;
+  function preparar(v) {
+    if (v.dataset.pronto) return;
+    v.dataset.pronto = "1";
+    v.muted = !somLigado;
+    v.defaultMuted = true;
+    if (semMov && !somLigado) { v.removeAttribute("autoplay"); v.autoplay = false; v.pause(); }
+    else { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+  function varrer() { document.querySelectorAll(".pc-hero-video").forEach(preparar); }
+  new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
+  // o design reaplica as propriedades do <video> a cada redesenho e pode tirar o mudo:
+  // enquanto a pessoa não pedir som, o vídeo volta a ficar mudo e segue tocando
+  function manterMudo(e) {
+    var v = e.target;
+    if (!v.classList || !v.classList.contains("pc-hero-video") || somLigado) return;
+    if (!v.muted) v.muted = true;
+  }
+  document.addEventListener("volumechange", manterMudo, true);
+  document.addEventListener("play", manterMudo, true);
+  document.addEventListener("loadedmetadata", function (e) {
+    var v = e.target;
+    if (!v.classList || !v.classList.contains("pc-hero-video")) return;
+    v.muted = !somLigado;
+    if (!(semMov && !somLigado)) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  }, true);
+  varrer();
+  function botao(b) {
+    b.setAttribute("aria-pressed", somLigado ? "true" : "false");
+    var txt = b.querySelector(".pc-som-txt");
+    if (txt) txt.textContent = somLigado ? "Desligar o som" : "Ouvir a Sônia";
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".pc-som");
+    if (!b) return;
+    var v = document.querySelector(".pc-hero-video");
+    if (!v) return;
+    somLigado = !somLigado;
+    if (somLigado && !jaOuviu) { v.currentTime = 0; jaOuviu = true; }
+    v.muted = !somLigado;
+    if (somLigado) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    botao(b);
+  });
+})();
 document.addEventListener("keydown", function (e) {
   var chk = document.getElementById("pc-menu");
   if (e.key === "Escape" && chk && chk.checked) chk.checked = false;
