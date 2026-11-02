@@ -47,6 +47,9 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 - [ ] **Reescrever os currículos dos agentes** (recomendação comercial: as frases idênticas levam
       o comprador à oferta de origem).
 - [ ] **5 primeiros clientes com condição especial em troca de depoimento.**
+- [ ] **Agente de atendimento no WhatsApp (21) 99901-2520 e no e-mail funcionando antes da primeira
+      venda.** A página já promete resposta a qualquer hora em todos os planos.
+- [ ] **Dias do atendimento humano do Magnata** (das 9h às 18h: só dias úteis?).
 - [ ] **Domínio** `sonia.primecircle.app.br` e **selo da Netlify** (plano pago ou outra hospedagem).
 
 ### Benefícios para colar no painel (até 120 caracteres cada)
@@ -55,7 +58,7 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 |---|---|---|
 | Starter | Sônia e mais 4: Juliana, Paulo, Jonathan e o clone do dono. 5 rotinas, onboarding e suporte por WhatsApp e e-mail. | 114 |
 | Elite | 16 agentes: os do Starter, mais projetos, vídeos virais, CRM, tráfego e squad de vendas. 20 rotinas e suporte. | 110 |
-| Magnata | A Sônia e os 21, com financeiro, fiscal, jurídico e RH. 50 rotinas, 4 mentorias e suporte por WhatsApp e e-mail. | 112 |
+| Magnata | A Sônia e os 21, com financeiro, fiscal, jurídico e RH. 50 rotinas, 4 mentorias e suporte humano das 9h às 18h. | 111 |
 
 ## 0. Pauta da reunião com o time da Avalanche
 
