@@ -35,7 +35,9 @@ def tpl(t):
         '<meta property="og:type" content="website">\n'
         '<meta property="og:title" content="' + html.escape(seo.get('titulo', '')) + '">\n'
         '<meta property="og:description" content="' + html.escape(seo.get('descricao', '')) + '">\n'
-        '<meta property="og:image" content="https://sonia-primecircle.netlify.app/assets/og-sonia.jpg">\n'
+        '<link rel="canonical" href="https://sonia.primecircle.app.br/">\n'
+        '<meta property="og:url" content="https://sonia.primecircle.app.br/">\n'
+        '<meta property="og:image" content="https://sonia.primecircle.app.br/assets/og-sonia.jpg">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
         '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n')
     assert '<meta name="viewport"' in t

@@ -1,6 +1,9 @@
-"""Monta a pasta que vai para a Netlify, a partir de landing-sonia/.
+"""Monta a pasta pública da landing, a partir de landing-sonia/.
 
-Uso:  python3 ferramentas/montar-publicacao.py /caminho/da/pasta-publica
+Uso:  python3 ferramentas/montar-publicacao.py /caminho/da/pasta-publica [hostgator]
+
+- Sem "hostgator": pasta para a Netlify (leva o netlify.toml).
+- Com "hostgator": pasta para a HostGator (leva o .htaccess no lugar do netlify.toml).
 
 - Copia só o que é público: index.html, editor.html, politica-de-privacidade.html,
   netlify.toml e a pasta assets/.
@@ -15,7 +18,8 @@ destino = sys.argv[1] if len(sys.argv) > 1 else sys.exit('informe a pasta de des
 if os.path.exists(destino):
     shutil.rmtree(destino)
 os.makedirs(destino)
-for f in ['index.html', 'editor.html', 'politica-de-privacidade.html', 'netlify.toml']:
+hostgator = len(sys.argv) > 2 and sys.argv[2] == 'hostgator'
+for f in ['index.html', 'editor.html', 'politica-de-privacidade.html', '.htaccess' if hostgator else 'netlify.toml']:
     shutil.copy2(os.path.join(AQUI, f), destino)
 shutil.copytree(os.path.join(AQUI, 'assets'), os.path.join(destino, 'assets'))
 
@@ -33,7 +37,7 @@ proibido = re.compile(r'avalanche|naia\b|denderson|anthropic', re.I)
 achados = []
 for raiz, _, arquivos in os.walk(destino):
     for a in arquivos:
-        if a.endswith(('.json', '.toml', '.vtt', '.css')) or a in ('editor.html', 'politica-de-privacidade.html'):
+        if a.endswith(('.json', '.toml', '.vtt', '.css', '.htaccess')) or a in ('editor.html', 'politica-de-privacidade.html'):
             txt = open(os.path.join(raiz, a), encoding='utf-8', errors='ignore').read()
             if proibido.search(txt):
                 achados.append(os.path.join(raiz, a))

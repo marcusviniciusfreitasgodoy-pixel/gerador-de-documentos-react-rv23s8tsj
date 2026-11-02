@@ -12,7 +12,7 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 | O quê | Onde |
 |---|---|
 | Branch | `claude/busy-mayer-ypu8q0` (não está no `main`) |
-| Site no ar | https://sonia-primecircle.netlify.app |
+| Site no ar | https://sonia.primecircle.app.br (HostGator, desde 02/11/2026). Reserva: https://sonia-primecircle.netlify.app |
 | Painel Netlify | https://app.netlify.com/projects/sonia-primecircle (site id `47374dbb-75f2-401c-9d79-26164ceb5a87`) |
 | Landing (código e conteúdo) | `landing-sonia/` (leia `landing-sonia/LEIA-ME.md`) |
 | Pendências e perguntas | `pendencias/PERGUNTAS-AVALANCHE-HUBLA-CONTADOR.md` (**é o arquivo atual**) |
@@ -83,13 +83,20 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 2. **Compra de teste no Pix com estorno.** Ela confirma se o estorno devolve os 30% da
    Avalanche, o que decide se a garantia de 30 dias se sustenta. A garantia está também na fala
    do vídeo.
-3. **Domínio** `sonia.primecircle.app.br`, configurado na Netlify. O dono cria o registro DNS.
-   Não use `agentes.primecircle.app.br`: é a área do cliente da plataforma.
+3. **Domínio:** `sonia.primecircle.app.br`, na HostGator (criado em 02/11/2026). Não use
+   `agentes.primecircle.app.br`: aponta para o servidor da plataforma (área do cliente e checkout).
 4. Pendências com Avalanche, Asaas, contador e advogado: ver o arquivo de pendências.
 5. Decisões em aberto do dono: "com juros" no parcelamento, mostrar a seção "Por que a Prime
    Circle", conferir a fonte dos salários do tráfego e dos SDRs, título do site no Google.
 
 ## Como publicar uma mudança
+
+**HostGator (endereço oficial, `sonia.primecircle.app.br`, pasta `/home2/marcu362/sonia.primecircle.app.br`):**
+`python3 ferramentas/montar-publicacao.py /tmp/sonia-hostgator hostgator`, compacte o conteúdo da pasta
+(com o `.htaccess`) e o dono sobe pelo Gerenciador de Arquivos do cPanel, extraindo por cima.
+Não existe envio automático para a HostGator a partir desta sessão.
+
+**Netlify (reserva):**
 
 ```bash
 cd landing-sonia
