@@ -2160,7 +2160,9 @@
     ]
   },
   "empresa": {
-    "razao_social": "Marcus V F Godoy Assessoria Imobiliária",
+    "_razao_social": "Marcus V F Godoy Assessoria Imobiliária",
+    "_aviso_razao_social": "Retirada do rodapé a pedido do dono em 02/11/2026: o rodapé mostra só o CNPJ. A política de privacidade mantém o nome do controlador (LGPD).",
+    "razao_social": "",
     "cnpj": "58.409.058/0001-73",
     "email": "atendimento@primecircle.app.br",
     "whatsapp_exibicao": "(21) 99901-2520"
