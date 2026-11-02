@@ -62,6 +62,10 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 - Calendly (conta marcus-godoyprime, a mesma da Godoy Prime): "SONIA: ver a Sônia funcionando" (30 min,
   ligado ao botão do topo) e "SONIA: onboarding do cliente" (60 min, link só por e-mail ao cliente pagante).
 - Pedidos à Sônia só pelo Telegram e pelo painel. No WhatsApp funcionam o atendimento e as respostas dos agentes.
+- Auditoria do painel (02/11/2026, doc "Prime Circle Agentes: auditoria do painel Naia OS" no Claude Docs): agentes
+  fixos por plano, WhatsApp por Evolution API (não oficial) com chaves de API pagas, termos da Propulsor de
+  Vendas, bot @naia_os_bot, sem campo de preço no painel. A página foi corrigida; perguntas 19 a 27 no arquivo
+  de pendências. `montar-publicacao.py` barra "anthropic" de propósito: não cite a marca na página.
 - Os botões "Assinar agora" levam ao formulário do WhatsApp, porque os links de checkout
   ainda cobram o preço antigo (R$ 1.497 / 2.497 / 9.997) e mostram "Comunidade Avalanche".
 

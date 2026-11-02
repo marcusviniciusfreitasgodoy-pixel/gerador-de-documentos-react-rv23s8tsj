@@ -74,6 +74,28 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 
 ---
 
+### 1b. Perguntas novas depois da auditoria do painel (02/11/2026)
+
+> 19. ⚠️ No painel de agência não existe campo para alterar o preço dos planos. Como eu vendo a
+>     R$ 4.997, R$ 7.997 e R$ 15.997? Vocês ajustam, ou eu cobro por fora e vocês liberam o acesso?
+> 20. ⚠️ Os termos de uso que o meu cliente aceita são da PROPULSOR DE VENDAS LTDA, descrita como
+>     "titular e operadora da plataforma Prime Circle Agentes". Preciso que os termos tragam a
+>     Propulsor como operadora licenciante e deixem claro que a marca Prime Circle é minha.
+> 21. ⚠️ O bot do Telegram é @naia_os_bot. O manual de parceiro diz que seria da minha marca. Como
+>     coloco um bot com o meu nome?
+> 22. ⚠️ O painel do cliente ainda mostra "Sofia" (no diagnóstico), "equipe Avalanche" (na
+>     Assinatura) e "imersão" (no Starter). Quando isso sai?
+> 23. O atendimento no WhatsApp usa a Evolution API, não a API oficial. Vocês instalam para o
+>     cliente ou é por conta dele? Quem responde se o número for bloqueado?
+> 24. A comissão de afiliado diz "25% de cada pagamento mensal", mas os planos são anuais. E a
+>     agência recebe "50% da comissão" ou "50% de cada venda"? Por escrito, por favor.
+> 25. Os meus clientes podem virar agência por R$ 6.000 por ano e revender o mesmo produto. Posso
+>     desligar isso para a minha carteira?
+> 26. ⚠️ O Claude e o ChatGPT entram pela assinatura do cliente, por OAuth. Vocês confirmam por
+>     escrito que isso é permitido pelos termos da Anthropic e da OpenAI?
+> 27. O painel mostra "Agentes na equipe: 19 de 22" e "Rotinas 6 de 50", mas a Equipe mostra 22 e
+>     só 2 rotinas. Qual número vale?
+
 ## 2. Para o suporte do Asaas (a Hubla saiu em 01/11/2026)
 
 > Olá! Recebo cobranças na minha conta com divisão automática (split) de 30% para um parceiro.

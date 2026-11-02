@@ -62,8 +62,9 @@
     },
     "rotulo_avatares": "Até 21 especialistas no seu time",
     "selos": [
-      "Atende 24 horas, não falta, não atrasa e não pede aumento",
-      "Cada cliente com a própria agente, isolada e segura"
+      "Trabalha a qualquer hora, inclusive à noite e no fim de semana",
+      "Cada cliente com a própria agente, a própria memória e os próprios dados",
+      "Painel em português, inglês e espanhol"
     ],
     "rotulo_conversa": "Exemplo de conversa no Telegram",
     "conversa": [
@@ -86,7 +87,7 @@
     ]
   },
   "gargalos": {
-    "_aviso": "Seção nova de 02/11/2026. Não cite plano por cenário até a plataforma confirmar quais agentes entram no Starter e no Elite.",
+    "_aviso": "Planos por agente conferidos no painel em 02/11/2026: Starter = Sônia, Juliana, Paulo, Jonathan, Clone do dono; Elite soma Rafael, Bianca, Amanda, Estrategista, Davi e 6 SDRs; Magnata soma Márcia, Maria, Aline, Geane, Boris, Ruth.",
     "visivel": true,
     "etiqueta": "Por onde começar",
     "titulo": "Comece pelo que trava a sua empresa.",
@@ -95,17 +96,17 @@
       {
         "titulo": "Falta tempo para conteúdo e anúncio",
         "texto": "O Jonathan escreve, a Bianca estuda o que viraliza no seu nicho, o Paulo coloca a página no ar e o estrategista de tráfego cuida dos anúncios. Você aprova antes de publicar.",
-        "quem": "Jonathan, Bianca, Paulo e o estrategista de tráfego"
+        "quem": "Jonathan e Paulo desde o Starter. Bianca e o estrategista de tráfego a partir do Elite."
       },
       {
         "titulo": "O cliente chama e demora para ter resposta",
         "texto": "O clone do dono responde no Direct e no WhatsApp do seu jeito, qualifica quem chama, e o Davi conduz a conversa até o agendamento. Tudo fica registrado no CRM.",
-        "quem": "Clone do dono, Davi e o squad de vendas, Amanda no CRM"
+        "quem": "Clone do dono desde o Starter. Davi, o squad e a Amanda a partir do Elite."
       },
       {
         "titulo": "Financeiro, nota e contrato comem o seu dia",
         "texto": "A Márcia concilia o extrato e projeta o caixa, a Maria confere as notas fiscais e a Aline revisa contratos. Eles preparam; o seu contador e o seu advogado continuam assinando.",
-        "quem": "Márcia, Maria e Aline"
+        "quem": "Márcia, Maria e Aline, só no Magnata."
       }
     ]
   },
@@ -1823,13 +1824,13 @@
     "visivel": true,
     "etiqueta": "Economia",
     "titulo": "Quanto custaria fazer isso com gente.",
-    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só um SDR, um social media e uma assistente custam R$ 13.827 por mês, com os encargos da CLT. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente.",
+    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só uma assistente, um redator e um SDR custam R$ 14.176 por mês, com os encargos da CLT. O Starter, que já traz essas três funções (Sônia, Jonathan e o clone do dono), custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
     "encargos_percentual": 68,
     "horas_mes": 220,
     "rotulo_total_mes": "Se você contratasse gente para todas as funções, por mês",
     "rotulo_total_ano": "Por ano",
     "rotulo_agente": "Com agente",
-    "valor_agente": "24/7",
+    "valor_agente": "Sem encargos",
     "linhas": [
       {
         "cargo": "Assistente executiva",
@@ -1975,7 +1976,7 @@
         "periodo": "por ano",
         "parcelamento": "ou 12x de R$ 433,78 no cartão (total R$ 5.205,36)",
         "itens": [
-          "5 agentes liberados",
+          "5 agentes: Sônia, Juliana, Paulo, Jonathan e o clone do dono",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Sessão coletiva semanal de implantação e dúvidas, ao vivo",
@@ -1994,7 +1995,7 @@
         "periodo": "por ano",
         "parcelamento": "ou 12x de R$ 694,21 no cartão (total R$ 8.330,52)",
         "itens": [
-          "16 agentes liberados",
+          "16 agentes: os do Starter, mais Rafael, Bianca, Amanda, o estrategista de tráfego, o Davi e 6 vendedores",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Sessão coletiva semanal de implantação e dúvidas, ao vivo",
@@ -2013,7 +2014,7 @@
         "periodo": "por ano",
         "parcelamento": "ou 12x de R$ 1.388,67 no cartão (total R$ 16.664,04)",
         "itens": [
-          "A Sônia e os 21 especialistas liberados",
+          "A Sônia e os 21 especialistas: os do Elite, mais financeiro, tributário, jurídico, RH, prospecção e engenharia de software",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
@@ -2028,7 +2029,7 @@
         }
       }
     ],
-    "nota": "Não estão incluídos no preço: a assinatura da IA, que você contrata e paga direto ao fornecedor, e qualquer ferramenta ou serviço que você queira conectar aos agentes, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês, conforme o seu uso."
+    "nota": "Não estão incluídos no preço: a assinatura da IA (ChatGPT, a partir de cerca de US$ 20 por mês), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
   },
   "agencia": {
     "_aviso": "Ligue só se o seu contrato permitir sub-revenda.",
@@ -2101,7 +2102,7 @@
       },
       {
         "pergunta": "A Sônia serve para o meu tipo de empresa?",
-        "resposta": "O time cobre as funções que quase toda empresa tem: marketing, vendas, atendimento, financeiro, tributário, jurídico e RH. Se quiser confirmar o seu caso, fale com o time antes de assinar."
+        "resposta": "O time cobre as funções que quase toda empresa tem: marketing, vendas e atendimento desde o Starter, e financeiro, tributário, jurídico e RH no Magnata. Se quiser confirmar o seu caso, fale com o time antes de assinar."
       },
       {
         "pergunta": "Os dados de um cliente ficam separados dos outros?",
@@ -2109,7 +2110,7 @@
       },
       {
         "pergunta": "Funciona com o meu WhatsApp?",
-        "resposta": "Sim, no atendimento: os especialistas de vendas respondem os seus clientes no WhatsApp e no Direct do Instagram. Para pedir tarefas à Sônia, você usa o Telegram ou o painel. Conexões com custo próprio, como a API oficial do WhatsApp, são cobradas à parte pelo fornecedor."
+        "resposta": "Sim, para atender os seus clientes: os especialistas de vendas respondem no WhatsApp e no Direct do Instagram. A conexão do WhatsApp usa a Evolution API, um sistema não oficial instalado num servidor seu, e o atendimento usa duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Por não ser a conexão oficial do WhatsApp, existe risco de bloqueio do número. Para pedir tarefas à Sônia, você usa o Telegram ou o painel."
       },
       {
         "pergunta": "Quanto custa?",
@@ -2117,7 +2118,11 @@
       },
       {
         "pergunta": "O que não está incluído no preço?",
-        "resposta": "A assinatura da inteligência artificial que os agentes usam, que você contrata e paga direto ao fornecedor, e qualquer outra ferramenta ou serviço que você queira conectar, como a API oficial do WhatsApp. Recomendamos um plano pago da IA, a partir de cerca de US$ 20 por mês. Se o seu uso for alto, pode valer um plano maior."
+        "resposta": "A assinatura da IA (ChatGPT, a partir de cerca de US$ 20 por mês), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
+      },
+      {
+        "pergunta": "E se a IA sair do ar?",
+        "resposta": "A Sônia depende dos provedores de IA, como o ChatGPT, e da cota da sua assinatura. Se um provedor ficar fora do ar ou a cota acabar, ela fica sem responder até o serviço voltar. Por isso não prometemos funcionamento sem nenhuma interrupção."
       },
       {
         "pergunta": "Tem garantia?",
