@@ -55,8 +55,9 @@ deste roteiro). Diga isso logo na abertura, para ninguém sair frustrado.
 - Apresente-se e diga o objetivo em uma frase: "Hoje a gente sai com a Sônia conhecendo o seu
   negócio e entregando a primeira tarefa."
 - Mostre as 5 entregas da lista acima.
-- Avise o que fica para depois: WhatsApp numa sessão técnica, e as dúvidas de uso na sessão
-  coletiva semanal.
+- Avise o que fica para depois: o WhatsApp, numa sessão técnica. E deixe claro que, no Starter e
+  no Elite, **esta é a única sessão ao vivo**: o objetivo é ele sair usando sozinho. Depois, as
+  dúvidas se resolvem pelo manual de cada tela do painel e pelo canal de atendimento.
 - Peça para ele compartilhar a tela. **É ele quem clica.** Quem clica aprende; quem assiste esquece.
 
 ### 5 a 15 min · Acesso e cérebro
@@ -156,9 +157,12 @@ A parte mais importante. A Sônia entrega melhor quanto mais sabe.
 
 1. Releia as 5 entregas e marque o que ficou pronto.
 2. Combine os próximos passos, por escrito, no resumo que você manda depois.
-3. Convide para a **sessão coletiva semanal** e passe dia e horário.
+3. Mostre onde tirar dúvidas daqui em diante: o manual de cada tela do painel e o e-mail
+   atendimento@primecircle.app.br. ⚠️ Confirme se esse é o canal do Starter e do Elite.
+   **Magnata:** suporte humano pelo WhatsApp e a data da primeira mentoria.
 4. Pergunte: "De 0 a 10, o quanto você se sente pronto para usar a Sônia sozinho amanhã?" Abaixo
-   de 7, marque 20 minutos de reforço na mesma semana.
+   de 7, anote o que falta e mande no resumo o passo a passo por escrito, com o caminho de
+   cada tela no painel.
 
 ---
 
@@ -176,7 +180,8 @@ A parte mais importante. A Sônia entrega melhor quanto mais sabe.
 > 2. Mandar para a memória o que faltou: [itens].
 > 3. [Outro combinado.]
 >
-> **Próximos encontros:** sessão coletiva toda [dia] às [hora], pelo link [link].
+> **Dúvidas daqui em diante:** cada tela do painel tem o manual do que ela faz. Se precisar,
+> escreva para atendimento@primecircle.app.br.
 > [Magnata: sua primeira mentoria individual fica para (data).]
 > [Se quiser WhatsApp: a gente marca a sessão técnica (ver o que você precisa providenciar
 > abaixo).]
@@ -236,4 +241,4 @@ no Instagram" ainda não foi aberta na auditoria: confira o passo a passo antes 
 - [ ] Ensaiar o roteiro inteiro com a sua conta de cliente e cronometrar.
 - [ ] Conferir os passos marcados com ⚠️.
 - [ ] Atualizar a parte do bot e da "Sofia" quando a Avalanche corrigir a marca.
-- [ ] Definir o dia e o horário da sessão coletiva semanal.
+- [ ] Definir o canal de dúvidas do Starter e do Elite depois do onboarding (e-mail?).

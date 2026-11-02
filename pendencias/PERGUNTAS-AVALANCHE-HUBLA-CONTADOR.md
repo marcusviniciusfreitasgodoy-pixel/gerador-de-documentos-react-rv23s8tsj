@@ -41,7 +41,7 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 - [ ] **Instalação do WhatsApp (Evolution API) como serviço pago da Prime Circle.** Defina se vai
       oferecer e por quanto.
 - [ ] **Quem envia o link do onboarding** a cada venda (você à mão ou o e-mail da plataforma).
-- [x] **Roteiro do onboarding de 60 min:** pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md`. Falta ensaiar com a sua conta e definir o horário da sessão semanal.
+- [x] **Roteiro do onboarding de 60 min:** pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md`. Falta ensaiar com a sua conta e definir o canal de dúvidas do Starter e do Elite.
 - [ ] **Calendly:** marcar "SONIA: onboarding do cliente" como secreto e separar a agenda de
       horários da SONIA da agenda da Godoy Prime.
 - [ ] **Reescrever os currículos dos agentes** (recomendação comercial: as frases idênticas levam
@@ -53,7 +53,7 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 
 | Plano | Texto | Caracteres |
 |---|---|---|
-| Starter | Sônia e mais 4: Juliana, Paulo, Jonathan e o clone do dono. Até 5 rotinas, onboarding e sessão semanal ao vivo. | 111 |
+| Starter | Sônia e mais 4: Juliana, Paulo, Jonathan e o clone do dono. Até 5 rotinas e sessão de onboarding ao vivo. | 105 |
 | Elite | 16 agentes: os do Starter, mais projetos, vídeos virais, CRM, tráfego e o squad de vendas. Até 20 rotinas. | 106 |
 | Magnata | A Sônia e os 21 especialistas, com financeiro, fiscal, jurídico e RH. Até 50 rotinas, 4 mentorias e suporte humano. | 115 |
 
