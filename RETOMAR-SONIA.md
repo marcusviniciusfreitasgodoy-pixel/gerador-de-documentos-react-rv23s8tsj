@@ -54,6 +54,11 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 - A Netlify (plano gratuito) injeta um selo fixo "Powered by Netlify" que cobre o conteúdo no celular.
   Não vem do nosso código. Decisão do dono: plano pago, opção no painel ou outra hospedagem.
 - O circunflexo alto em "Sônia" e "Você" nos títulos é o desenho da fonte Cormorant, não defeito.
+- Reposicionamento de 02/11/2026, depois de comparar com NeoCRM e Simbiose: seção nova "Por onde começar"
+  (3 gargalos, `gargalos` no `conteudo.json`, injetada pelo `adaptar-design.py`), 6 vendedores dentro do
+  cartão do Davi (15 cartões, 21 especialistas), economia com a conta realista de 3 funções antes do total,
+  "Depois que você paga" (seção `diferenciais`), total do parcelamento, FAQ do WhatsApp, título no Google
+  e botão do topo "Ver a Sônia funcionando". O editor ainda não tem campo para `gargalos`: edite à mão.
 - Os botões "Assinar agora" levam ao formulário do WhatsApp, porque os links de checkout
   ainda cobram o preço antigo (R$ 1.497 / 2.497 / 9.997) e mostram "Comunidade Avalanche".
 

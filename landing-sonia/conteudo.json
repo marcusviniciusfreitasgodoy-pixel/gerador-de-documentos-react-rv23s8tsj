@@ -10,8 +10,8 @@
     "cor_botao": "#e2574c"
   },
   "seo": {
-    "titulo": "SONIA · uma agente de IA com um time inteiro trabalhando pela sua empresa",
-    "descricao": "A Sônia coordena 21 especialistas de IA: copy, design, código, tráfego, vendas no WhatsApp, financeiro, tributário, jurídico e RH. Você pede em português e recebe pronto.",
+    "titulo": "SONIA · até 21 especialistas de IA na sua equipe, nenhum na folha",
+    "descricao": "A Sônia coordena até 21 especialistas de IA: conteúdo, anúncios, atendimento no WhatsApp, financeiro, notas fiscais, contratos e RH. Você pede em português e recebe pronto.",
     "imagem_compartilhamento": "assets/og-sonia.jpg"
   },
   "topo": {
@@ -38,7 +38,7 @@
       }
     ],
     "botao": {
-      "texto": "Falar com o time",
+      "texto": "Ver a Sônia funcionando",
       "link": "#contato"
     },
     "botao_area_cliente": {
@@ -82,6 +82,30 @@
       {
         "de": "agente",
         "texto": "3 carrosséis, 1 proposta comercial e 14 leads qualificados no WhatsApp."
+      }
+    ]
+  },
+  "gargalos": {
+    "_aviso": "Seção nova de 02/11/2026. Não cite plano por cenário até a plataforma confirmar quais agentes entram no Starter e no Elite.",
+    "visivel": true,
+    "etiqueta": "Por onde começar",
+    "titulo": "Comece pelo que trava a sua empresa.",
+    "texto": "Ninguém precisa dos 21 no primeiro dia. Escolha o problema que mais custa hoje e veja quem cuida dele.",
+    "itens": [
+      {
+        "titulo": "Falta tempo para conteúdo e anúncio",
+        "texto": "O Jonathan escreve, a Bianca estuda o que viraliza no seu nicho, o Paulo coloca a página no ar e o estrategista de tráfego cuida dos anúncios. Você aprova antes de publicar.",
+        "quem": "Jonathan, Bianca, Paulo e o estrategista de tráfego"
+      },
+      {
+        "titulo": "O cliente chama e demora para ter resposta",
+        "texto": "O clone do dono responde no Direct e no WhatsApp do seu jeito, qualifica quem chama, e o Davi conduz a conversa até o agendamento. Tudo fica registrado no CRM.",
+        "quem": "Clone do dono, Davi e o squad de vendas, Amanda no CRM"
+      },
+      {
+        "titulo": "Financeiro, nota e contrato comem o seu dia",
+        "texto": "A Márcia concilia o extrato e projeta o caixa, a Maria confere as notas fiscais e a Aline revisa contratos. Eles preparam; o seu contador e o seu advogado continuam assinando.",
+        "quem": "Márcia, Maria e Aline"
       }
     ]
   },
@@ -814,10 +838,10 @@
       {
         "id": "davi-sdr",
         "nome": "Davi",
-        "cargo": "Líder do squad · vendas no WhatsApp",
+        "cargo": "Líder do squad de vendas · com 6 vendedores",
         "area": "Squad de vendas",
         "imagem": "assets/agentes/davi-sdr.webp",
-        "resumo": "Davi é o líder do squad de vendas e o vendedor de WhatsApp da operação. Conduz a conversa do primeiro contato até o agendamento e coordena os outros vendedores, mantendo o padrão de atendimento.",
+        "resumo": "Davi lidera o squad de vendas no WhatsApp. Ele e mais 6 vendedores (Amanda, Bianca, Carolina, Felipe, Lucas e Matheus) conduzem a conversa do primeiro contato até o agendamento, no mesmo padrão de atendimento.",
         "o_que_faz": [
           "Faz o primeiro contato com o lead",
           "Qualifica com método consultivo",
@@ -940,7 +964,7 @@
           "Pede pra Amanda retomar os leads que pararam de responder.",
           "Quero que a Amanda agende reuniões com os leads qualificados desta semana."
         ],
-        "visivel": true
+        "visivel": false
       },
       {
         "id": "bianca-sdr",
@@ -1004,7 +1028,7 @@
           "Pede pra Bianca retomar os leads que pararam de responder.",
           "Quero que a Bianca agende reuniões com os leads qualificados desta semana."
         ],
-        "visivel": true
+        "visivel": false
       },
       {
         "id": "carolina-sdr",
@@ -1068,7 +1092,7 @@
           "Pede pra Carolina retomar os leads que pararam de responder.",
           "Quero que a Carolina agende reuniões com os leads qualificados desta semana."
         ],
-        "visivel": true
+        "visivel": false
       },
       {
         "id": "felipe-sdr",
@@ -1132,7 +1156,7 @@
           "Pede pro Felipe retomar os leads que pararam de responder.",
           "Quero que o Felipe agende reuniões com os leads qualificados desta semana."
         ],
-        "visivel": true
+        "visivel": false
       },
       {
         "id": "lucas-sdr",
@@ -1196,7 +1220,7 @@
           "Pede pro Lucas retomar os leads que pararam de responder.",
           "Quero que o Lucas agende reuniões com os leads qualificados desta semana."
         ],
-        "visivel": true
+        "visivel": false
       },
       {
         "id": "matheus-sdr",
@@ -1260,7 +1284,7 @@
           "Pede pro Matheus retomar os leads que pararam de responder.",
           "Quero que o Matheus agende reuniões com os leads qualificados desta semana."
         ],
-        "visivel": true
+        "visivel": false
       },
       {
         "id": "marcia-financeiro",
@@ -1798,11 +1822,11 @@
   "economia": {
     "visivel": true,
     "etiqueta": "Economia",
-    "titulo": "Quanto custa cada função feita por gente. E o que sobra com um agente.",
-    "texto": "Cada agente faz o trabalho de uma função que hoje está na folha. Abaixo, o salário médio brasileiro de cada função, somado aos encargos da CLT.",
+    "titulo": "Quanto custaria fazer isso com gente.",
+    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só um SDR, um social media e uma assistente custam R$ 13.827 por mês, com os encargos da CLT. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente.",
     "encargos_percentual": 68,
     "horas_mes": 220,
-    "rotulo_total_mes": "Time inteiro feito por gente, por mês",
+    "rotulo_total_mes": "Se você contratasse gente para todas as funções, por mês",
     "rotulo_total_ano": "Por ano",
     "rotulo_agente": "Com agente",
     "valor_agente": "24/7",
@@ -1897,18 +1921,22 @@
     "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar."
   },
   "diferenciais": {
-    "_aviso": "Confirme cada item antes de publicar. Mentoria e suporte individual valem só para o Magnata; sessão coletiva semanal e garantia valem para todos.",
-    "visivel": false,
-    "etiqueta": "Por que contratar com a Prime Circle",
-    "titulo": "A mesma tecnologia, com gente de verdade do seu lado.",
+    "_aviso": "Ligada em 02/11/2026 como \"Depois que você paga\". Só o que já está prometido nos planos. Garantia depende da resposta do Asaas sobre estorno com split.",
+    "visivel": true,
+    "etiqueta": "Depois que você paga",
+    "titulo": "Você não fica sozinho com a ferramenta.",
     "itens": [
+      {
+        "titulo": "O acesso chega no seu e-mail",
+        "texto": "Assim que o pagamento é confirmado, você recebe o acesso ao painel e conecta a sua assinatura do ChatGPT."
+      },
       {
         "titulo": "Implantação ao vivo, toda semana",
         "texto": "Em todos os planos, você entra numa sessão coletiva semanal para configurar a Sônia com o seu negócio e tirar dúvidas com o nosso time."
       },
       {
-        "titulo": "Mentoria e suporte no Magnata",
-        "texto": "4 encontros individuais de 1 hora para colocar o time na rotina da sua empresa e suporte humano pelo WhatsApp."
+        "titulo": "No Magnata, mentoria individual",
+        "texto": "4 encontros individuais de 1 hora para colocar o time na rotina da sua empresa, e suporte humano pelo WhatsApp."
       },
       {
         "titulo": "Garantia de 30 dias",
@@ -1945,7 +1973,7 @@
         "destaque": false,
         "preco": "R$ 4.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 433,78 no cartão",
+        "parcelamento": "ou 12x de R$ 433,78 no cartão (total R$ 5.205,36)",
         "itens": [
           "5 agentes liberados",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
@@ -1964,7 +1992,7 @@
         "destaque": true,
         "preco": "R$ 7.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 694,21 no cartão",
+        "parcelamento": "ou 12x de R$ 694,21 no cartão (total R$ 8.330,52)",
         "itens": [
           "16 agentes liberados",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
@@ -1983,7 +2011,7 @@
         "destaque": false,
         "preco": "R$ 15.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 1.388,67 no cartão",
+        "parcelamento": "ou 12x de R$ 1.388,67 no cartão (total R$ 16.664,04)",
         "itens": [
           "A Sônia e os 21 especialistas liberados",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
@@ -2078,6 +2106,10 @@
       {
         "pergunta": "Os dados de um cliente ficam separados dos outros?",
         "resposta": "Sim. Cada cliente tem a própria agente, a própria memória e o próprio cofre de senhas, isolados dos demais."
+      },
+      {
+        "pergunta": "Funciona com o meu WhatsApp?",
+        "resposta": "Sim. Os especialistas de vendas atendem no WhatsApp e no Direct do Instagram. Conexões com custo próprio, como a API oficial do WhatsApp, são cobradas à parte pelo fornecedor."
       },
       {
         "pergunta": "Quanto custa?",

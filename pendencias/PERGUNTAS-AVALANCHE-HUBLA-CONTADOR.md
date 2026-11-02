@@ -137,11 +137,11 @@ que é estornável no mesmo dia) e confira:
 
 | # | Decisão | Situação hoje | Minha recomendação |
 |---|---|---|---|
-| 1 | "com juros" no parcelamento | Retirado da página | Voltar com "com juros" ou com o total, por exemplo "(total R$ 5.205,36)" |
-| 2 | Seção "Por que contratar com a Prime Circle" | Escondida | Mostrar: é a resposta para "por que não compro direto da fonte" |
+| 1 | "com juros" no parcelamento | **Feito em 02/11:** total ao lado da parcela, "(total R$ 5.205,36)" | Voltar com "com juros" ou com o total, por exemplo "(total R$ 5.205,36)" |
+| 2 | Seção "Por que contratar com a Prime Circle" | **Feito em 02/11:** ligada como "Depois que você paga" | Mostrar: é a resposta para "por que não compro direto da fonte" |
 | 3 | Salários do tráfego pago (R$ 4.914,34) e dos SDRs (R$ 2.451,00) | Na página | Conferir a fonte antes de anunciar |
 | 4 | Domínio | `sonia-primecircle.netlify.app` | Criar `sonia.primecircle.app.br` (eu passo o registro DNS) |
-| 5 | Título do site no Google | Ainda o antigo | "SONIA · até 21 especialistas de IA na sua equipe, nenhum na folha" |
+| 5 | Título do site no Google | **Feito em 02/11** | "SONIA · até 21 especialistas de IA na sua equipe, nenhum na folha" |
 | 6 | Conversa de exemplo ("14 leads qualificados") | Na página | Manter como exemplo ou trocar por um caso real |
 | 7 | Links de checkout | Vazios (botão leva ao formulário) | Ajustar preços e nomes no painel do Asaas da plataforma e me avisar: eu confiro e coloco na landing |
 | 8 | Depoimentos | Seção desligada | Fechar os 5 primeiros clientes com condição especial em troca de depoimento |

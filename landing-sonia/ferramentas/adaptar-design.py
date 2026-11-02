@@ -103,6 +103,26 @@ def tpl(t):
     # tabela de economia no celular: só função e custo por mês, sem rolar para o lado (02/11/2026)
     t = troca(t, '<div style="overflow-x:auto">\n<sc-raw-table style="width:100%;min-width:880px;',
               '<div class="pc-eco" style="overflow-x:auto">\n<sc-raw-table style="width:100%;min-width:880px;', 'tabela-economia')
+    # seção "Por onde começar" (gargalos), logo depois da abertura (02/11/2026)
+    secao = ('<sc-if value="{{ show.gargalos }}" hint-placeholder-val="{{ true }}">\n'
+      '<section id="por-onde-comecar" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">\n'
+      '<div style="display:grid;gap:16px;max-width:860px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.gargalos.etiqueta }}</span>\n'
+      '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.gargalos.titulo }}</h2>\n'
+      '<p style="margin:0;font-size:17px;line-height:1.6;color:#2a2722;max-width:640px;text-wrap:pretty">{{ c.gargalos.texto }}</p>\n'
+      '</div>\n'
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">\n'
+      '<sc-for list="{{ gargalos }}" as="g" hint-placeholder-count="3">\n'
+      '<div style="display:grid;grid-template-rows:auto auto 1fr auto;gap:14px;padding:28px 24px;background:#FFFFFF;border:1px solid rgba(14,14,14,0.14);border-radius:10px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.2em;color:#8B7340">{{ g.n }}</span>\n'
+      '<span style="font-family:var(--pc-font-display);font-weight:500;font-size:30px;line-height:1.05;text-wrap:balance">{{ g.titulo }}</span>\n'
+      '<span style="font-size:15px;line-height:1.6;color:#2a2722;text-wrap:pretty">{{ g.texto }}</span>\n'
+      '<span style="padding-top:14px;border-top:1px dashed rgba(14,14,14,0.22);font-size:13px;line-height:1.5;color:#4a463f"><span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#8B7340">Quem cuida</span><br>{{ g.quem }}</span>\n'
+      '</div>\n</sc-for>\n</div>\n</section>\n</sc-if>\n\n')
+    t = troca(t, '<sc-if value="{{ show.sigla }}"', secao + '<sc-if value="{{ show.sigla }}"', 'secao-gargalos')
+    t = troca(t, 'diferenciais: vis(c.diferenciais),', 'diferenciais: vis(c.diferenciais), gargalos: vis(c.gargalos),', 'show-gargalos')
+    t = troca(t, 'diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),',
+              'diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),\n      gargalos: ((c.gargalos && c.gargalos.itens) || []).map((w, i) => ({ ...w, n: pad(i + 1) })),', 'lista-gargalos')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -274,7 +294,7 @@ document.addEventListener("click", function (e) {
       grade.insertAdjacentElement("afterend", b);
     }
     var n = grade.querySelectorAll("article").length;
-    var txt = "Ver os " + n + " especialistas";
+    var txt = "Ver o time todo";
     if (b.textContent !== txt) b.textContent = txt;
     var esconder = n <= 6;
     if (b.hidden !== esconder) b.hidden = esconder;
