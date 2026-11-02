@@ -18,8 +18,32 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 | Quem recebe o dinheiro | A sua empresa, na sua conta Asaas | Nada a fazer |
 | Garantia | 30 dias, em todos os planos | Na página e no FAQ |
 | CNPJ | 58.409.058/0001-73, ativo | No rodapé e na política |
+| Preço de revenda | Livre, desde que não fique abaixo do preço da Avalanche (R$ 1.497, 2.497 e 9.997) | Preços da SONIA acima do piso. **Peça por escrito** |
+| Uso de nomes e conteúdos | Pode usar tudo da Avalanche (nomes, textos, conteúdos) em nome da Prime Circle · SONIA | Mantidos na página. **Peça por escrito**, incluindo imagens e números da plataforma |
+| Alterar o preço dos planos no painel | A Avalanche vai liberar a alteração | **Aguardando a liberação** |
+| Manual do cliente | O cliente vê o manual de cada tela no próprio painel; o Manual do Dono é só do revendedor | Página e Calendly ajustados |
 
 ---
+
+## 0. Pauta da reunião com o time da Avalanche
+
+Leve nesta ordem. As três primeiras travam a venda.
+
+1. ⚠️ **Prazo para liberar a alteração do preço dos planos no painel.** Até lá os links cobram
+   R$ 1.497, 2.497 e 9.997.
+2. ⚠️ **O nome de vocês aparece para o meu cliente.** O bot do Telegram é @naia_os_bot; o
+   diagnóstico chama a agente de "Sofia"; a tela Assinatura cita calls "com equipe Avalanche";
+   o Starter é descrito como "pacote da imersão". Como deixo tudo com a marca SONIA (bot com o
+   meu nome, agente "Sônia" em todas as telas, sem "Avalanche" e sem "imersão")? Em quanto tempo?
+3. ⚠️ **Termos de uso:** hoje são da PROPULSOR DE VENDAS LTDA, "titular e operadora da plataforma
+   Prime Circle Agentes". Preciso da Propulsor como operadora licenciante e da marca Prime
+   Circle como minha.
+4. Confirmar por escrito: preço livre acima do piso e uso de nomes, textos, imagens e números.
+5. Estorno: os 30% de vocês voltam junto no reembolso da garantia?
+6. WhatsApp pela Evolution API: quem instala, e quem responde se o número for bloqueado.
+7. Claude e ChatGPT por OAuth: está dentro dos termos da Anthropic e da OpenAI?
+8. Comissões: base do afiliado (mensal ou anual) e "50% da comissão" ou "50% da venda".
+9. Meus clientes virando agência: posso desligar para a minha carteira?
 
 ## 1. Para a Avalanche
 
@@ -76,8 +100,7 @@ escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
 
 ### 1b. Perguntas novas depois da auditoria do painel (02/11/2026)
 
-> 19. ⚠️ No painel de agência não existe campo para alterar o preço dos planos. Como eu vendo a
->     R$ 4.997, R$ 7.997 e R$ 15.997? Vocês ajustam, ou eu cobro por fora e vocês liberam o acesso?
+> 19. ~~Alterar o preço dos planos no painel~~ (respondido: a Avalanche vai liberar; falta o prazo).
 > 20. ⚠️ Os termos de uso que o meu cliente aceita são da PROPULSOR DE VENDAS LTDA, descrita como
 >     "titular e operadora da plataforma Prime Circle Agentes". Preciso que os termos tragam a
 >     Propulsor como operadora licenciante e deixem claro que a marca Prime Circle é minha.

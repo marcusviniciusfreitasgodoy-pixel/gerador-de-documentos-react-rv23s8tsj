@@ -1922,7 +1922,7 @@
     "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar."
   },
   "diferenciais": {
-    "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split.",
+    "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Manual: o cliente vê o manual de cada tela do painel (não há Manual do Dono para o cliente; esse é do revendedor). Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split.",
     "visivel": true,
     "etiqueta": "Depois que você paga",
     "titulo": "Você não fica sozinho com a ferramenta.",
@@ -1933,7 +1933,7 @@
       },
       {
         "titulo": "Onboarding e sessões ao vivo",
-        "texto": "No onboarding, configuramos a Sônia com o seu negócio. Depois, toda semana, há uma sessão coletiva ao vivo. Cada sessão traz orientações práticas e o Manual do Dono."
+        "texto": "No onboarding, configuramos a Sônia com o seu negócio. Depois, toda semana, há uma sessão coletiva ao vivo com orientações práticas. E cada tela do painel traz o manual do que ela faz."
       },
       {
         "titulo": "No Magnata, mentoria individual",
