@@ -57,7 +57,7 @@ deste roteiro). Diga isso logo na abertura, para ninguém sair frustrado.
 - Mostre as 5 entregas da lista acima.
 - Avise o que fica para depois: o WhatsApp, numa sessão técnica. E deixe claro que, no Starter e
   no Elite, **esta é a única sessão ao vivo**: o objetivo é ele sair usando sozinho. Depois, as
-  dúvidas se resolvem pelo manual de cada tela do painel e pelo canal de atendimento.
+  dúvidas se resolvem pelo manual de cada tela do painel e pelo suporte (WhatsApp e e-mail).
 - Peça para ele compartilhar a tela. **É ele quem clica.** Quem clica aprende; quem assiste esquece.
 
 ### 5 a 15 min · Acesso e cérebro
@@ -157,9 +157,9 @@ A parte mais importante. A Sônia entrega melhor quanto mais sabe.
 
 1. Releia as 5 entregas e marque o que ficou pronto.
 2. Combine os próximos passos, por escrito, no resumo que você manda depois.
-3. Mostre onde tirar dúvidas daqui em diante: o manual de cada tela do painel e o e-mail
-   atendimento@primecircle.app.br. ⚠️ Confirme se esse é o canal do Starter e do Elite.
-   **Magnata:** suporte humano pelo WhatsApp e a data da primeira mentoria.
+3. Mostre onde tirar dúvidas daqui em diante, em qualquer plano: o manual de cada tela do painel,
+   o WhatsApp (21) 99901-2520 e o e-mail atendimento@primecircle.app.br. Peça para ele salvar o
+   número na hora. **Magnata:** marque também a data da primeira mentoria.
 4. Pergunte: "De 0 a 10, o quanto você se sente pronto para usar a Sônia sozinho amanhã?" Abaixo
    de 7, anote o que falta e mande no resumo o passo a passo por escrito, com o caminho de
    cada tela no painel.
@@ -181,7 +181,7 @@ A parte mais importante. A Sônia entrega melhor quanto mais sabe.
 > 3. [Outro combinado.]
 >
 > **Dúvidas daqui em diante:** cada tela do painel tem o manual do que ela faz. Se precisar,
-> escreva para atendimento@primecircle.app.br.
+> fale com a gente pelo WhatsApp (21) 99901-2520 ou pelo e-mail atendimento@primecircle.app.br.
 > [Magnata: sua primeira mentoria individual fica para (data).]
 > [Se quiser WhatsApp: a gente marca a sessão técnica (ver o que você precisa providenciar
 > abaixo).]
@@ -202,7 +202,7 @@ passos e se quer o WhatsApp. É o histórico que vai servir para o depoimento e 
 | Agentes para mostrar | Sônia, Juliana, Paulo, Jonathan, clone do dono | + Rafael, Bianca, Amanda (CRM), estrategista de tráfego, Davi e 6 vendedores | + Márcia, Maria, Aline, Geane, Boris, Ruth |
 | Primeira tarefa sugerida | Legendas (Jonathan) ou página (Paulo) | Ideias de vídeo (Bianca) ou plano de campanha (tráfego) | O gargalo dele; financeiro costuma impressionar |
 | Rotinas | Até 5 | Até 20 | Até 50 |
-| Extra | | | Marcar a 1ª das 4 mentorias e passar o canal do suporte humano no WhatsApp |
+| Extra | | | Marcar a 1ª das 4 mentorias |
 
 ---
 
@@ -241,4 +241,4 @@ no Instagram" ainda não foi aberta na auditoria: confira o passo a passo antes 
 - [ ] Ensaiar o roteiro inteiro com a sua conta de cliente e cronometrar.
 - [ ] Conferir os passos marcados com ⚠️.
 - [ ] Atualizar a parte do bot e da "Sofia" quando a Avalanche corrigir a marca.
-- [ ] Definir o canal de dúvidas do Starter e do Elite depois do onboarding (e-mail?).
+- [ ] Definir o horário de atendimento do suporte e o prazo de resposta, para dizer ao cliente.

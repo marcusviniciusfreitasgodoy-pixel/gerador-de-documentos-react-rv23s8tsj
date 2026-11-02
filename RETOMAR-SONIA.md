@@ -29,7 +29,7 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
   virá depois.
 - Planos anuais: Starter R$ 4.997 (5 agentes), Elite R$ 7.997 (16), Magnata R$ 15.997 (22, com
   4 mentorias de 1 hora e suporte humano). Todos têm uma sessão de onboarding
-  (sem sessões semanais ao vivo). Garantia de 30 dias em todos.
+  e suporte por WhatsApp e e-mail (sem sessões semanais ao vivo). Garantia de 30 dias em todos.
 - A Avalanche fica com 30% de cada venda, pela **divisão automática do Asaas**. O pagamento é
   pelo **checkout da plataforma, na conta Asaas do dono**. A Hubla foi descartada.
 - A assinatura da IA (ChatGPT, US$ 20 ou mais) é paga pelo cliente. **O Claude foi retirado

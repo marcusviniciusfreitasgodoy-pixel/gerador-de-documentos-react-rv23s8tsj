@@ -1936,8 +1936,8 @@
         "texto": "No onboarding, configuramos a Sônia com o seu negócio. E cada tela do painel traz o manual do que ela faz."
       },
       {
-        "titulo": "No Magnata, mentoria individual",
-        "texto": "4 encontros individuais de 1 hora para colocar o time na rotina da sua empresa, e suporte humano pelo WhatsApp."
+        "titulo": "Suporte em todos os planos",
+        "texto": "Ficou alguma dúvida? Fale com o nosso time pelo WhatsApp (21) 99901-2520 ou pelo e-mail atendimento@primecircle.app.br. No Magnata, também 4 mentorias individuais de 1 hora."
       },
       {
         "titulo": "Garantia de 30 dias",
@@ -1980,6 +1980,7 @@
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "1 sessão de onboarding ao vivo, no horário que você escolher",
+          "Suporte pelo WhatsApp e por e-mail",
           "Garantia de 30 dias"
         ],
         "botao": {
@@ -1999,6 +2000,7 @@
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "1 sessão de onboarding ao vivo, no horário que você escolher",
+          "Suporte pelo WhatsApp e por e-mail",
           "Garantia de 30 dias"
         ],
         "botao": {
@@ -2019,7 +2021,7 @@
           "Funciona com ChatGPT (assinatura paga da IA, contratada por você)",
           "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
           "4 mentorias individuais de 1 hora com a Prime Circle",
-          "Suporte humano pelo WhatsApp",
+          "Suporte humano pelo WhatsApp e por e-mail",
           "Tudo do plano Elite, incluindo a sessão de onboarding",
           "Garantia de 30 dias"
         ],
@@ -2130,7 +2132,7 @@
       },
       {
         "pergunta": "Como eu falo com o time?",
-        "resposta": "Preencha o formulário desta página. O time responde pelo WhatsApp que você informar."
+        "resposta": "Antes de assinar, pelo formulário desta página ou agendando uma demonstração. Depois de assinar, em qualquer plano, pelo WhatsApp (21) 99901-2520 ou pelo e-mail atendimento@primecircle.app.br."
       }
     ]
   },
