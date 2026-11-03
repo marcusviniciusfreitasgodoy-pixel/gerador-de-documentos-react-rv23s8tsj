@@ -7,13 +7,21 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 - **A página está pronta e no ar** em https://sonia.primecircle.app.br (HostGator). O formulário grava
   os leads na planilha do Google "SONIA · Leads da página" e abre o WhatsApp. Ainda **não vende**: os
   botões "Assinar agora" levam ao formulário até a Avalanche liberar a troca de preço no checkout.
-- **A próxima etapa é a reunião com a Avalanche.** A pauta está numa página de respostas:
-  https://claude.ai/artifact/Sy6rV96CvmkuCtTvaJCU5h (fonte `pendencias/pauta-avalanche.html`). O time da
-  Avalanche marca Confirmado/Corrigir e responde ali; as respostas ficam na coleção `respostas` do banco da
-  página (ler com a ferramenta ArtifactData, ação `list`). As 5 perguntas da Parte 2 travam a venda.
-- **Ao retomar depois da reunião:** ler as respostas, resumir para o dono, ajustar a página ao que for
-  confirmado ou corrigido, colocar os links de checkout novos em `planos.itens[].botao.link` e montar o
-  pacote da HostGator.
+- **A próxima etapa é a Avalanche responder a pauta, antes da reunião.** O dono só tem o WhatsApp deles,
+  então a pauta vai no site, sem login:
+  - **Página para eles:** `https://sonia.primecircle.app.br/pauta-avalanche/` (fonte
+    `pendencias/pauta-avalanche-site/index.html`, zip entregue em 03/11). Cada resposta vai para a planilha
+    Google **"SONIA · Respostas da Avalanche"**, aba "Respostas", uma linha por pessoa e item (atualizada se a
+    pessoa responder de novo). Script: `pendencias/pauta-avalanche-site/planilha/Codigo.gs`, implantação
+    versão 2 com acesso "Qualquer pessoa" (a versão 1 pedia login e não é usada).
+  - **Falta (03/11):** subir a pasta `pauta-avalanche/` no cPanel e fazer o teste real do item 2.10 (na
+    planilha: uma linha só, "2.10" e não 2,1, resposta nova). Só depois mandar o link no WhatsApp.
+  - **Página para a reunião ao vivo** (o dono preenche): https://claude.ai/artifact/Sy6rV96CvmkuCtTvaJCU5h
+    (fonte `pendencias/pauta-avalanche.html`, respostas na coleção `respostas` do banco da página, lidas com
+    a ferramenta ArtifactData). As 5 perguntas da Parte 2 travam a venda.
+- **Ao retomar com as respostas:** o dono cola aqui o conteúdo da planilha (ou exporta em CSV). Ler,
+  resumir o que foi confirmado, corrigido e ficou sem resposta, ajustar a página da SONIA, colocar os links
+  de checkout novos em `planos.itens[].botao.link` e montar o pacote da HostGator.
 - Auditoria do painel (o que o produto entrega de fato): doc "Prime Circle Agentes: auditoria do painel
   Naia OS", https://claude.ai/artifact/1V43xv5uR1FMASANpBA3iH (Claude Docs).
 - Roteiro de onboarding de 60 min pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md` (ensaiar antes).
