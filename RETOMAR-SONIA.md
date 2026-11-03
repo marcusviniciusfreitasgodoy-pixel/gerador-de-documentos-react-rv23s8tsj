@@ -1,10 +1,26 @@
 # Retomar o projeto da landing SONIA
 
-Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
+Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
+
+## Onde paramos (03/11/2026)
+
+- **A página está pronta e no ar** em https://sonia.primecircle.app.br (HostGator). O formulário grava
+  os leads na planilha do Google "SONIA · Leads da página" e abre o WhatsApp. Ainda **não vende**: os
+  botões "Assinar agora" levam ao formulário até a Avalanche liberar a troca de preço no checkout.
+- **A próxima etapa é a reunião com a Avalanche.** A pauta está numa página de respostas:
+  https://claude.ai/artifact/Sy6rV96CvmkuCtTvaJCU5h (fonte `pendencias/pauta-avalanche.html`). O time da
+  Avalanche marca Confirmado/Corrigir e responde ali; as respostas ficam na coleção `respostas` do banco da
+  página (ler com a ferramenta ArtifactData, ação `list`). As 5 perguntas da Parte 2 travam a venda.
+- **Ao retomar depois da reunião:** ler as respostas, resumir para o dono, ajustar a página ao que for
+  confirmado ou corrigido, colocar os links de checkout novos em `planos.itens[].botao.link` e montar o
+  pacote da HostGator.
+- Auditoria do painel (o que o produto entrega de fato): doc "Prime Circle Agentes: auditoria do painel
+  Naia OS", https://claude.ai/artifact/1V43xv5uR1FMASANpBA3iH (Claude Docs).
+- Roteiro de onboarding de 60 min pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md` (ensaiar antes).
 
 > **Este trabalho não é o app de documentos.** O `CLAUDE.md` da raiz fala do app Prime Circle
 > Documentos, que roda no Skip. A landing SONIA é um site estático separado, publicado na
-> Netlify. As regras de escrita do `CLAUDE.md` (sem travessão, linguagem simples, nada de
+> HostGator (antes, Netlify). As regras de escrita do `CLAUDE.md` (sem travessão, linguagem simples, nada de
 > garantia que não se sustenta) valem também aqui.
 
 ## Onde está tudo
@@ -33,10 +49,13 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
   em dias úteis, das 9h às 18h só no Magnata (sem sessões semanais ao vivo). Garantia de 30 dias em todos.
 - A Avalanche fica com 30% de cada venda, pela **divisão automática do Asaas**. O pagamento é
   pelo **checkout da plataforma, na conta Asaas do dono**. A Hubla foi descartada.
-- A assinatura da IA (ChatGPT, US$ 20 ou mais) é paga pelo cliente. **O Claude foi retirado
-  dos planos**: a plataforma o conecta pela assinatura (OAuth), o que os termos da Anthropic
-  proíbem em produtos de terceiros.
-- Empresa: Marcus V F Godoy Assessoria Imobiliária, CNPJ 58.409.058/0001-73,
+- A IA é paga pelo cliente. Starter: só ChatGPT. Elite e Magnata: ChatGPT ou outros modelos, à escolha
+  do cliente (a confirmar com a Avalanche). A página não cita o Claude: a plataforma o conecta pela
+  assinatura (OAuth), o que os termos da Anthropic proíbem em produtos de terceiros (pergunta 2.5).
+- Revenda: preço livre acima do piso da Avalanche (R$ 1.497 / 2.497 / 9.997) e uso de nomes e conteúdos
+  da plataforma autorizados pelo dono (pedir por escrito). A Avalanche vai liberar a troca de preço.
+- Empresa: Marcus V F Godoy Assessoria Imobiliária (a página mostra só o CNPJ; a política de privacidade
+  mantém o nome), CNPJ 58.409.058/0001-73,
   atendimento@primecircle.app.br, WhatsApp (21) 99901-2520 (número exclusivo da SONIA, não é o pessoal do
   dono: recebe os contatos do formulário e o suporte de todos os planos).
 
@@ -54,8 +73,7 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
   por escrito), Magnata como "A Sônia e os 21 especialistas", 6 especialistas no celular com botão
   "Ver os 21" e retrato por `srcset` (acabou o 404 de `{{ a.imagem }}`). Celular: 24.700 px para 15.500 px.
   Tabela de economia no celular só com função e custo por mês. Publicado e conferido no ar.
-- A Netlify (plano gratuito) injeta um selo fixo "Powered by Netlify" que cobre o conteúdo no celular.
-  Não vem do nosso código. Decisão do dono: plano pago, opção no painel ou outra hospedagem.
+- A Netlify (plano gratuito) injetava um selo "Powered by Netlify": resolvido com a mudança para a HostGator.
 - O circunflexo alto em "Sônia" e "Você" nos títulos é o desenho da fonte Cormorant, não defeito.
 - Reposicionamento de 02/11/2026, depois de comparar com NeoCRM e Simbiose: seção nova "Por onde começar"
   (3 gargalos, `gargalos` no `conteudo.json`, injetada pelo `adaptar-design.py`), 6 vendedores dentro do
@@ -77,17 +95,15 @@ Guia para uma sessão nova continuar de onde a anterior parou (02/11/2026).
 
 ## Próximos passos (em ordem)
 
-1. **Links de pagamento.** O dono ajusta preço e nome dos 3 planos no painel da plataforma.
-   Depois: conferir os 3 links (`agentes.primecircle.app.br/assinar/...`) com Playwright e
-   colar cada um em `planos.itens[].botao.link` do `conteudo.json`.
-2. **Compra de teste no Pix com estorno.** Ela confirma se o estorno devolve os 30% da
-   Avalanche, o que decide se a garantia de 30 dias se sustenta. A garantia está também na fala
-   do vídeo.
-3. **Domínio:** `sonia.primecircle.app.br`, na HostGator (criado em 02/11/2026). Não use
-   `agentes.primecircle.app.br`: aponta para o servidor da plataforma (área do cliente e checkout).
-4. Pendências com Avalanche, Asaas, contador e advogado: ver o arquivo de pendências.
-5. Decisões em aberto do dono: "com juros" no parcelamento, mostrar a seção "Por que a Prime
-   Circle", conferir a fonte dos salários do tráfego e dos SDRs, título do site no Google.
+1. **Reunião com a Avalanche** (página de respostas acima). Depois, ler as respostas e ajustar a página.
+2. **Links de checkout** com preço e nome novos: conferir os 3 links e colar em `planos.itens[].botao.link`.
+3. **Agente de atendimento** no WhatsApp (21) 99901-2520 e no e-mail funcionando: a página promete
+   resposta a qualquer hora.
+4. **Compra de teste no Pix com estorno**, para provar a garantia de 30 dias (também dita no vídeo).
+5. Contador (nota fiscal e CNAE) e advogado (termos, Decreto 7.962 sobre razão social no rodapé, avisos
+   do agente jurídico e tributário): ver o arquivo de pendências.
+6. Lembretes do dono (certificado vence em 02/12/2026, teste no celular, linhas de teste da planilha):
+   seção "Lembretes do dono" do arquivo de pendências.
 
 ## Como publicar uma mudança
 
@@ -106,6 +122,8 @@ cd landing-sonia
 # 2. monta a pasta pública (tira as anotações internas e confere menções ao fornecedor)
 python3 ferramentas/montar-publicacao.py /tmp/sonia-dist
 ```
+
+Para testar qualquer pacote antes de subir:
 
 3. Teste a pasta com `python3 -m http.server` e Playwright, a 390, 820 e 1440 px. Confira que
    não há rolagem horizontal, que as imagens carregam, que o vídeo começa mudo e que a legenda
