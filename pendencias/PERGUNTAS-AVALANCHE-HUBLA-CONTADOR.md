@@ -72,6 +72,10 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 
 ## 0. Pauta da reunião com o time da Avalanche
 
+> **Página de respostas para a Avalanche** (versão de 03/11/2026, a partir do .docx revisado pelo dono):
+> https://claude.ai/artifact/Sy6rV96CvmkuCtTvaJCU5h · fonte em `pendencias/pauta-avalanche.html`. As respostas ficam na
+> coleção `respostas` do banco da página.
+
 > **Versão completa para levar à reunião** (26 entendimentos para confirmar e 24 perguntas): documento
 > "SONIA: pauta e entendimentos para confirmar com a Avalanche", https://claude.ai/artifact/Kd8VqfM4KTLnfyguEoxrbF
 
