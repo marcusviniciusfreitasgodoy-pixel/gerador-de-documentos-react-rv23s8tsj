@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Pauta SONIA e Avalanche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: questionário de due diligence. Barra fixa com o progresso, índice das partes à esquerda,
+   cada item é uma linha numerada com a resposta ao lado. Cores da Prime Circle (tinta, marfim, ouro). */
+:root {
+  --bg: #F7F5EF;
+  --surface: #FFFFFF;
+  --ink: #15140F;
+  --muted: #5F5A4E;
+  --line: #E2DDCF;
+  --gold: #9A7A2E;
+  --gold-soft: #F1E8D0;
+  --ok: #2F6B45;
+  --ok-soft: #E3F0E6;
+  --warn: #9A4A1F;
+  --warn-soft: #F7E6DA;
+  --focus: #9A7A2E;
+  --f-display: "Cormorant Garamond", "Times New Roman", Georgia, serif;
+  --f-body: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F0F0D; --surface: #18171A; --ink: #F2EEE3; --muted: #A8A293; --line: #2C2A26;
+    --gold: #D4B15A; --gold-soft: #2A2416; --ok: #7FC796; --ok-soft: #16261B; --warn: #E8A47C; --warn-soft: #2B1A12;
+    --focus: #D4B15A; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F0F0D; --surface: #18171A; --ink: #F2EEE3; --muted: #A8A293; --line: #2C2A26;
+  --gold: #D4B15A; --gold-soft: #2A2416; --ok: #7FC796; --ok-soft: #16261B; --warn: #E8A47C; --warn-soft: #2B1A12;
+  --focus: #D4B15A; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+body { margin: 0; -webkit-text-size-adjust: 100%; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--f-body); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+a { color: var(--gold); }
+button, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); }
+header.top .wrap { padding-block: 28px 22px; display: grid; gap: 10px; }
+.eyebrow { font: 500 11px/1 var(--f-mono); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); }
+h1 { margin: 0; font: 600 clamp(30px, 4vw, 44px)/1.05 var(--f-display); text-wrap: balance; }
+.lead { margin: 0; max-width: 68ch; color: var(--muted); }
+.how { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 13.5px; color: var(--muted); }
+.how b { color: var(--ink); font-weight: 600; }
+.who { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 6px; }
+.who label { font-weight: 600; font-size: 14px; }
+.who input { flex: 1 1 220px; max-width: 360px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; font-size: 15px; }
+.who input:focus { border-color: var(--gold); outline: none; }
+.who.falta input { border-color: var(--warn); }
+.who.falta .meta { color: var(--warn); }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--surface); border-bottom: 1px solid var(--line); }
+.bar .wrap { padding-block: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.progress { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 260px; }
+.meter { flex: 1; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; min-width: 80px; }
+.meter i { display: block; height: 100%; width: 0; background: var(--gold); transition: width .3s; }
+.count { font: 500 12.5px var(--f-mono); color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.filters { display: flex; gap: 4px; padding: 3px; border: 1px solid var(--line); border-radius: 8px; }
+.filters button { border: 0; background: transparent; padding: 6px 11px; border-radius: 6px; font-size: 13px; cursor: pointer; color: var(--muted); }
+.filters button[aria-pressed="true"] { background: var(--gold-soft); color: var(--ink); font-weight: 600; }
+.copy { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 7px 12px; font-size: 13px; cursor: pointer; }
+.copy:hover { border-color: var(--gold); }
+
+.notice { margin: 16px 0 0; padding: 10px 14px; border-radius: 8px; background: var(--gold-soft); font-size: 13.5px; }
+.notice[hidden] { display: none; }
+
+.layout { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 32px; padding-block: 24px 80px; }
+nav.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 72px); align-self: start; display: grid; gap: 2px; }
+nav.toc a { display: flex; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 6px; color: var(--ink); text-decoration: none; font-size: 13.5px; }
+nav.toc a:hover { background: var(--surface); }
+nav.toc .n { font: 500 12px var(--f-mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+nav.toc .done .n { color: var(--ok); }
+
+main { display: grid; gap: 40px; min-width: 0; }
+section.part { display: grid; gap: 14px; scroll-margin-top: 80px; }
+.part-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
+.part-head h2 { margin: 0; font: 600 26px/1.15 var(--f-display); text-wrap: balance; }
+.part-head p { margin: 0; flex-basis: 100%; color: var(--muted); font-size: 14px; max-width: 70ch; }
+.tag-block { font: 500 10.5px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--warn); background: var(--warn-soft); padding: 5px 8px; border-radius: 4px; }
+h3.group { margin: 10px 0 0; font: 600 12px/1 var(--f-body); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+.item { display: grid; grid-template-columns: 52px minmax(0, 1fr) minmax(0, 380px); gap: 14px 20px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.item[data-state="confirmado"], .item[data-state="sim"] { border-left: 3px solid var(--ok); }
+.item[data-state="corrigir"], .item[data-state="nao"] { border-left: 3px solid var(--warn); }
+.item[data-state="respondido"] { border-left: 3px solid var(--gold); }
+.num { font: 500 13px/1.6 var(--f-mono); color: var(--gold); font-variant-numeric: tabular-nums; }
+.text { min-width: 0; }
+.text p { margin: 0; }
+.text ul { margin: 8px 0 0; padding-left: 18px; }
+.text li { margin: 2px 0; }
+.answer { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.choices { display: flex; flex-wrap: wrap; gap: 6px; }
+.choice { border: 1px solid var(--line); background: transparent; padding: 6px 12px; border-radius: 99px; font-size: 13px; cursor: pointer; }
+.choice:hover { border-color: var(--gold); }
+.choice[aria-pressed="true"][data-v="confirmado"], .choice[aria-pressed="true"][data-v="sim"] { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); font-weight: 600; }
+.choice[aria-pressed="true"][data-v="corrigir"], .choice[aria-pressed="true"][data-v="nao"] { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); font-weight: 600; }
+textarea { width: 100%; min-height: 64px; resize: vertical; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 14px; line-height: 1.5; }
+textarea:focus { border-color: var(--gold); outline: none; }
+.row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; }
+.meta { font-size: 12px; color: var(--muted); }
+.save { border: 0; background: var(--ink); color: var(--surface); padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.save[hidden] { display: none; }
+.item.hide { display: none; }
+
+footer.end { border-top: 1px solid var(--line); padding-block: 20px 40px; color: var(--muted); font-size: 13px; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  nav.toc { position: static; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .item { grid-template-columns: 40px minmax(0, 1fr); }
+  .answer { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .bar .wrap { gap: 8px; padding-block: 8px; }
+  .progress { flex-basis: 100%; }
+  .filters button { padding: 5px 8px; font-size: 12.5px; }
+  .copy { padding: 6px 10px; font-size: 12.5px; }
+  #tudo { margin-left: auto; }
+  body.envia #copy { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .meter i { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow">Prime Circle · SONIA · para o time da Avalanche</span>
+    <h1>Pauta e entendimentos para confirmar</h1>
+    <p class="lead">A Prime Circle vai vender a plataforma como SONIA. Precisamos que vocês confirmem se entendemos o funcionamento e respondam às perguntas. As 5 da Parte 2 travam a primeira venda.</p>
+    <ul class="how">
+      <li><b>Parte 1:</b> marquem Confirmado ou Corrigir em cada item.</li>
+      <li><b>Partes 2 e 3:</b> escrevam a resposta embaixo de cada pergunta.</li>
+      <li><b>Parte 4:</b> digam se cada ponto pode vir por escrito.</li>
+      <li>Cada resposta vai para a Prime Circle assim que você salva o item.</li>
+    </ul>
+    <div class="who">
+      <label for="quem">Seu nome</label>
+      <input id="quem" type="text" autocomplete="name" maxlength="80" placeholder="Para sabermos quem respondeu">
+      <span class="meta" id="quem-aviso"></span>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="progress">
+      <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+      <span class="count" id="count">0 de 0 respondidos</span>
+    </div>
+    <div class="filters" role="group" aria-label="Filtrar itens">
+      <button type="button" data-f="todos" aria-pressed="true">Todos</button>
+      <button type="button" data-f="pendentes" aria-pressed="false">Pendentes</button>
+      <button type="button" data-f="respondidos" aria-pressed="false">Respondidos</button>
+    </div>
+    <button type="button" class="copy" id="tudo">Enviar tudo de novo</button>
+    <button type="button" class="copy" id="copy">Copiar respostas</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <p class="notice" id="notice" hidden></p>
+  <div class="layout">
+    <nav class="toc" id="toc" aria-label="Partes"></nav>
+    <main id="main"></main>
+  </div>
+</div>
+
+<footer class="end">
+  <div class="wrap">O que foi visto no painel vem de uma revisão feita em 02/11/2026 na conta de agência e na conta de cliente da Prime Circle, só para leitura. Dúvidas sobre esta pauta: atendimento@primecircle.app.br · WhatsApp (21) 99901-2520.</div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var PARTS = [
+    { n: 1, id: "parte-1", nav: "Parte 1 · Entendimentos", title: "Parte 1: o que entendemos", sub: "Confirmem ou corrijam. Se algo estiver errado, digam como é de fato.", kind: "confirm" },
+    { n: 2, id: "parte-2", nav: "Parte 2 · Travam a venda", title: "Parte 2: perguntas que travam a venda", sub: "Sem estas cinco respostas a Prime Circle não abre vendas.", kind: "question", block: true },
+    { n: 3, id: "parte-3", nav: "Parte 3 · Demais perguntas", title: "Parte 3: demais perguntas", sub: "Em ordem de prioridade dentro de cada grupo.", kind: "question" },
+    { n: 4, id: "parte-4", nav: "Parte 4 · Por escrito", title: "Parte 4: o que precisamos por escrito", sub: "Numa disputa de reembolso ou de marca, só vale o que estiver escrito. Estes pontos podem vir por e-mail ou aditivo ao contrato?", kind: "written" }
+  ];
+  var ITEMS = [
+    // Parte 1
+    { id: "1.1", p: 1, g: "Modelo comercial", t: "A Prime Circle é revendedora white label (agência de marca própria). O produto se chama SONIA e a agente orquestradora, Sônia." },
+    { id: "1.2", p: 1, g: "Modelo comercial", t: "O preço de revenda é livre, desde que não fique abaixo do preço da Avalanche: R$ 1.497 (Starter), R$ 2.497 (Elite) e R$ 9.997 (Magnata) por ano." },
+    { id: "1.3", p: 1, g: "Modelo comercial", t: "Os preços da SONIA serão R$ 4.997, R$ 7.997 e R$ 15.997 por ano, Pix à vista ou cartão em até 12x, com outros nomes por plano." },
+    { id: "1.4", p: 1, g: "Modelo comercial", t: "A Prime Circle pode usar nomes, textos, imagens e conteúdos da plataforma em nome da Prime Circle · SONIA." },
+    { id: "1.5", p: 1, g: "Modelo comercial", t: "A Avalanche vai liberar no painel a alteração dos valores dos planos. Hoje não existe esse campo." },
+    { id: "1.6", p: 1, g: "Modelo comercial", t: "A cobrança sai pelo checkout da plataforma (links agentes.primecircle.app.br/assinar/...), na conta Asaas da Prime Circle." },
+    { id: "1.7", p: 1, g: "Modelo comercial", t: "A Avalanche recebe 30% de cada venda pela divisão automática (split) do Asaas, na carteira final 33c4. A Prime Circle recebe 70%." },
+    { id: "1.8", p: 1, g: "Modelo comercial", t: "A comunidade de estudos e o grupo de estudos avançados não valem para os clientes da Prime Circle." },
+    { id: "1.9", p: 1, g: "Produto", t: "Os agentes são fixos por plano; o cliente não escolhe.", list: ["Starter (5): Sônia, Juliana, Paulo, Jonathan e o clone do dono.", "Elite (16): os do Starter, mais Rafael, Bianca (vídeos), Amanda (CRM), estrategista de tráfego, Davi e 6 vendedores.", "Magnata (22): os do Elite, mais Márcia, Maria, Aline, Geane, Boris e Ruth."] },
+    { id: "1.10", p: 1, g: "Produto", t: "Ao subir de plano, os agentes novos entram sozinhos." },
+    { id: "1.11", p: 1, g: "Produto", t: "Rotinas: até 5 no Starter, 20 no Elite e 50 no Magnata." },
+    { id: "1.12", p: 1, g: "Produto", t: "No WhatsApp, os agentes só atendem os clientes do dono. Pedidos à Sônia não funcionam pelo WhatsApp." },
+    { id: "1.13", p: 1, g: "Produto", t: "O WhatsApp não usa a API oficial da Meta: usa a Evolution API, num servidor do cliente, e a skill \"SDR completo\" exige chaves de API pagas por uso (Anthropic e Google Gemini)." },
+    { id: "1.14", p: 1, g: "Produto", t: "O Instagram usa o Zernio, grátis até 10 mil mensagens por mês." },
+    { id: "1.15", p: 1, g: "Produto", t: "Cada cliente tem a própria agente, memória (Cérebro), Cofre de senhas cifrado e Kanban, isolados dos outros clientes." },
+    { id: "1.16", p: 1, g: "Produto", t: "O cliente final vê o manual do dono em cada tela do painel." },
+    { id: "1.17", p: 1, g: "Revenda e painel de agência", t: "No painel de agência a Prime Circle configura marca, domínio, e-mail (Resend), página de vendas, pixel do Meta e links de venda, e vê clientes e comissões." },
+    { id: "1.18", p: 1, g: "Revenda e painel de agência", t: "Os clientes finais têm o menu Revenda: afiliado com 25% de cada pagamento mensal por 6 meses, e agência por R$ 6.000 por ano, até 100 contas, com \"50% da comissão\"." },
+    { id: "1.19", p: 1, g: "Revenda e painel de agência", t: "O suporte ao cliente final é da Prime Circle: agente de atendimento a qualquer hora em todos os planos e atendimento humano em dias úteis, das 9h às 18h, no Magnata." },
+    { id: "1.20", p: 1, g: "Termos de uso que o cliente aceita", t: "Os termos são firmados com a PROPULSOR DE VENDAS LTDA, descrita como \"titular e operadora da plataforma\"." },
+    { id: "1.21", p: 1, g: "Termos de uso que o cliente aceita", t: "Não há garantia de operação ininterrupta (14.1); pode haver manutenção sem aviso (14.2); a plataforma não responde pela disponibilidade dos provedores de IA nem dos canais de mensagem (7.2)." },
+    { id: "1.22", p: 1, g: "Termos de uso que o cliente aceita", t: "A responsabilidade da plataforma fica limitada ao valor pago nos últimos 12 meses (15.2), e o usuário é o controlador, pela LGPD, dos dados de terceiros que inserir (11.2 e 11.3)." },
+    // Parte 2
+    { id: "2.1", p: 2, h: "Preço dos planos", t: "Qual o prazo para liberar a alteração de valores no painel? Junto, precisamos trocar o nome dos planos no checkout e tirar a \"Comunidade Avalanche\" do Elite. Hoje os links cobram R$ 1.497, R$ 2.497 e R$ 9.997." },
+    { id: "2.2", p: 2, h: "Marca da origem visível ao cliente", t: "O cliente da SONIA vê hoje:", list: ["o bot do Telegram @naia_os_bot (o manual de parceiro diz que seria da marca do revendedor);", "a agente chamada de \"Sofia\" no diagnóstico, 4 vezes;", "calls \"com equipe Avalanche\" na tela Assinatura;", "o Starter descrito como \"pacote da imersão\"."], after: "Como deixamos tudo com a marca SONIA (bot com o nosso nome, \"Sônia\" em todas as telas)?" },
+    { id: "2.3", p: 2, h: "Termos de uso", t: "Hoje são da PROPULSOR DE VENDAS LTDA, \"titular e operadora da plataforma\", enquanto a cobrança sai na conta da Prime Circle. Precisamos da Propulsor como operadora licenciante e da marca Prime Circle como da Prime Circle. Podem ajustar?" },
+    { id: "2.4", p: 2, h: "Estorno com split", t: "Se o cliente pedir reembolso (garantia de 30 dias ou arrependimento de 7 dias do CDC), os 30% da Avalanche são estornados junto, ou o estorno inteiro sai da parte da Prime Circle?" },
+    { id: "2.5", p: 2, h: "Claude e ChatGPT por assinatura (OAuth)", t: "Vimos que os termos da Anthropic não permitem usar a assinatura em sistemas de terceiros fora da API, e que os da OpenAI permitem usar a assinatura de consumidor do cliente dentro da plataforma. Se a conta de um cliente for bloqueada, o que acontece com ele? Vamos alertar os clientes sobre esse risco?" },
+    // Parte 3
+    { id: "3.1", p: 3, g: "Contrato, cobrança e comissões", t: "Os 30% incidem sobre o valor com os juros do cartão ou sem?" },
+    { id: "3.2", p: 3, g: "Contrato, cobrança e comissões", t: "O plano anual renova sozinho no fim dos 12 meses? Com qual preço? O cliente pode cancelar antes, e com qual regra?" },
+    { id: "3.3", p: 3, g: "Contrato, cobrança e comissões", t: "Vamos ter um contrato de revenda? Se tivermos, ele terá exclusividade, território ou preço máximo?" },
+    { id: "3.4", p: 3, g: "Contrato, cobrança e comissões", t: "A comissão de afiliado fala em \"25% de cada pagamento mensal\", mas os planos são anuais. Sobre o que o afiliado recebe? E a agência recebe \"50% da comissão\" ou \"50% de cada venda\"?" },
+    { id: "3.5", p: 3, g: "Contrato, cobrança e comissões", t: "Os clientes da Prime Circle podem virar agência por R$ 6.000 por ano e revender o mesmo produto. Dá para desligar essa opção para a nossa carteira?" },
+    { id: "3.6", p: 3, g: "Contrato, cobrança e comissões", t: "O que é o plano \"Agência\" (R$ 6.000 por ano) que aparece nos nossos links de venda? Podemos vendê-lo?" },
+    { id: "3.7", p: 3, g: "Produto e custos para o cliente", t: "Um plano de US$ 20 do ChatGPT dá conta de 16 ou 22 agentes rodando rotinas, ou o cliente vai bater no limite? O que devemos falar ao cliente?" },
+    { id: "3.8", p: 3, g: "Produto e custos para o cliente", t: "Existe outro custo para o cliente além da IA, do WhatsApp e do Instagram: armazenamento, mensagens, as 13 skills pagas do catálogo? Quem recebe o valor das skills pagas?" },
+    { id: "3.9", p: 3, g: "Produto e custos para o cliente", t: "Quais e-mails saem sozinhos para o cliente depois do pagamento? Dá para incluir no e-mail de boas-vindas o link de agendamento do onboarding?" },
+    { id: "3.10", p: 3, g: "Produto e custos para o cliente", t: "Podemos montar o agente de atendimento do suporte da Prime Circle com a própria plataforma (por exemplo, o clone do dono no nosso WhatsApp de suporte)?" },
+    { id: "3.11", p: 3, g: "Suporte, dados e continuidade", t: "Quando algo falha na plataforma, qual o canal do revendedor e em quanto tempo vocês respondem?" },
+    { id: "3.12", p: 3, g: "Suporte, dados e continuidade", t: "Pela LGPD, quem é controlador e quem é operador entre a Propulsor, a Prime Circle e o cliente? Têm um contrato de tratamento de dados para assinarmos?" },
+    { id: "3.13", p: 3, g: "Suporte, dados e continuidade", t: "Podemos citar os números da plataforma (+7.000 empresas, +253.000 tarefas) como números da plataforma?" },
+    { id: "3.14", p: 3, g: "Suporte, dados e continuidade", t: "O painel mostra números diferentes para a mesma coisa. Qual vale?", list: ["\"Agentes na equipe: 19 de 22\" na Assinatura e 22 na Equipe;", "\"Rotinas 6 de 50\" com só 2 rotinas na Equipe;", "Amanda e Bianca aparecem duas vezes, com funções diferentes;", "o Elite é descrito como \"a equipe completa de hoje\", mas o Magnata soma mais 6."] },
+    { id: "3.15", p: 3, g: "Suporte, dados e continuidade", t: "Podemos usar outro domínio nosso para a área do cliente?" },
+    { id: "3.16", p: 3, g: "Suporte, dados e continuidade", t: "Se a plataforma encerrar ou mudar, o que acontece com os clientes que já pagaram o ano?" },
+    // Parte 4
+    { id: "4.1", p: 4, t: "Preço de revenda livre acima do piso da Avalanche (item 1.2)." },
+    { id: "4.2", p: 4, t: "Autorização para usar nomes, textos, imagens e números da plataforma em nome da Prime Circle · SONIA (itens 1.4 e 3.13)." },
+    { id: "4.3", p: 4, t: "Termos de uso com a Propulsor como operadora licenciante e a marca Prime Circle como da Prime Circle (pergunta 2.3)." },
+    { id: "4.4", p: 4, t: "Regra do estorno com split (pergunta 2.4)." },
+    { id: "4.5", p: 4, t: "Regra das comissões de afiliado e de agência (pergunta 3.4)." },
+    { id: "4.6", p: 4, t: "Contrato de revenda e contrato de tratamento de dados (perguntas 3.3 e 3.12)." }
+  ];
+  var CHOICES = {
+    confirm: [["confirmado", "Confirmado"], ["corrigir", "Corrigir"]],
+    written: [["sim", "Sim, por escrito"], ["nao", "Ainda não"]]
+  };
+  var PLACEHOLDER = {
+    confirm: { "": "Comentário (opcional)", confirmado: "Comentário (opcional)", corrigir: "Como é de fato?" },
+    question: "Resposta",
+    written: "Quando e como? (opcional)"
+  };
+
+  var saved = {};       // respostas guardadas: id -> {status, texto, quem, em}
+  var drafts = {};      // o que está sendo escrito e ainda não foi salvo
+  var ENDPOINT = "";  // URL do app da Web do Apps Script (planilha/COMO-INSTALAR.md)
+  var canWrite = !!ENDPOINT;
+  var filtro = "todos";
+  var DRAFT_KEY = "pauta-sonia-rascunho", SENT_KEY = "pauta-sonia-enviadas", NAME_KEY = "pauta-sonia-nome";
+  try { drafts = JSON.parse(localStorage.getItem(DRAFT_KEY) || "{}") || {}; } catch (e) { drafts = {}; }
+  try { saved = JSON.parse(localStorage.getItem(SENT_KEY) || "{}") || {}; } catch (e) { saved = {}; }
+  var quemEl = document.getElementById("quem"), quemBox = quemEl.parentNode;
+  try { quemEl.value = localStorage.getItem(NAME_KEY) || ""; } catch (e) {}
+  quemEl.addEventListener("input", function () { try { localStorage.setItem(NAME_KEY, quemEl.value); } catch (e) {} if (quemEl.value.trim()) { quemBox.classList.remove("falta"); document.getElementById("quem-aviso").textContent = ""; } });
+  function nome() { return quemEl.value.trim().slice(0, 80); }
+  function pedirNome() { quemBox.classList.add("falta"); document.getElementById("quem-aviso").textContent = "Escreva o seu nome para enviar as respostas."; quemEl.scrollIntoView({ block: "center" }); quemEl.focus(); }
+  function keepSent() { try { localStorage.setItem(SENT_KEY, JSON.stringify(saved)); } catch (e) {} }
+
+  var main = document.getElementById("main"), toc = document.getElementById("toc"), notice = document.getElementById("notice");
+  function el(tag, attrs, kids) {
+    var n = document.createElement(tag);
+    if (attrs) for (var k in attrs) { if (k === "text") n.textContent = attrs[k]; else if (k === "class") n.className = attrs[k]; else n.setAttribute(k, attrs[k]); }
+    (kids || []).forEach(function (c) { if (c) n.appendChild(c); });
+    return n;
+  }
+  function kindOf(it) { return PARTS[it.p - 1].kind; }
+  function docId(id) { return "i" + id.replace(".", "-"); }
+  function current(id) {
+    var s = saved[id] || {}, d = drafts[id];
+    return { status: d && d.status !== undefined ? d.status : (s.status || ""), texto: d && d.texto !== undefined ? d.texto : (s.texto || "") };
+  }
+  function isAnswered(it) {
+    var s = saved[it.id];
+    if (!s) return false;
+    return kindOf(it) === "question" ? !!(s.texto && s.texto.trim()) : !!s.status;
+  }
+  function stateOf(it) {
+    var s = saved[it.id];
+    if (!s) return "";
+    if (kindOf(it) === "question") return s.texto && s.texto.trim() ? "respondido" : "";
+    return s.status || "";
+  }
+  function dirty(it) {
+    var d = drafts[it.id]; if (!d) return false;
+    var s = saved[it.id] || {};
+    return (d.status !== undefined && d.status !== (s.status || "")) || (d.texto !== undefined && d.texto !== (s.texto || ""));
+  }
+  function keepDrafts() { try { localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts)); } catch (e) {} }
+
+  // ---------- montagem ----------
+  var refs = {};
+  PARTS.forEach(function (part) {
+    var head = el("div", { class: "part-head" }, [
+      el("h2", { text: part.title }), part.block ? el("span", { class: "tag-block", text: "Trava a venda" }) : null, el("p", { text: part.sub })
+    ]);
+    var sec = el("section", { class: "part", id: part.id }, [head]);
+    var lastGroup = null;
+    ITEMS.filter(function (it) { return it.p === part.n; }).forEach(function (it) {
+      if (it.g && it.g !== lastGroup) { sec.appendChild(el("h3", { class: "group", text: it.g })); lastGroup = it.g; }
+      sec.appendChild(buildItem(it, part.kind));
+    });
+    main.appendChild(sec);
+    var a = el("a", { href: "#" + part.id }, [el("span", { text: part.nav }), el("span", { class: "n", text: "" })]);
+    a.dataset.part = part.n;
+    toc.appendChild(a);
+  });
+
+  function buildItem(it, kind) {
+    var textKids = [];
+    var p = el("p");
+    if (it.h) { var b = el("b", { text: it.h + ". " }); p.appendChild(b); }
+    p.appendChild(document.createTextNode(it.t));
+    textKids.push(p);
+    if (it.list) textKids.push(el("ul", null, it.list.map(function (x) { return el("li", { text: x }); })));
+    if (it.after) textKids.push(el("p", { text: it.after, style: "margin-top:8px" }));
+    var answer = el("div", { class: "answer" });
+    var choices = null;
+    if (CHOICES[kind]) {
+      choices = el("div", { class: "choices", role: "group", "aria-label": "Resposta ao item " + it.id });
+      CHOICES[kind].forEach(function (c) {
+        var btn = el("button", { type: "button", class: "choice", "data-v": c[0], "aria-pressed": "false", text: c[1] });
+        btn.addEventListener("click", function () {
+          var cur = current(it.id).status;
+          setDraft(it, { status: cur === c[0] ? "" : c[0] });
+          if (kind === "confirm" && c[0] === "corrigir" && cur !== "corrigir") { refs[it.id].ta.focus(); }
+          else save(it);
+        });
+        choices.appendChild(btn);
+      });
+      answer.appendChild(choices);
+    }
+    var ta = el("textarea", { id: "r-" + docId(it.id), rows: kind === "question" ? "3" : "2", "aria-label": "Resposta ao item " + it.id });
+    ta.addEventListener("input", function () { setDraft(it, { texto: ta.value }, true); });
+    ta.addEventListener("keydown", function (e) { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") save(it); });
+    ta.addEventListener("blur", function () { if (dirty(it)) save(it); });
+    answer.appendChild(ta);
+    var meta = el("span", { class: "meta" });
+    var sv = el("button", { type: "button", class: "save", text: "Salvar" });
+    sv.hidden = true;
+    sv.addEventListener("click", function () { save(it); });
+    answer.appendChild(el("div", { class: "row" }, [meta, sv]));
+    var row = el("article", { class: "item", id: "item-" + docId(it.id) }, [el("span", { class: "num", text: it.id }), el("div", { class: "text" }, textKids), answer]);
+    refs[it.id] = { row: row, ta: ta, meta: meta, save: sv, choices: choices, kind: kind };
+    return row;
+  }
+
+  function setDraft(it, patch, fromTyping) {
+    var d = drafts[it.id] || {};
+    for (var k in patch) d[k] = patch[k];
+    drafts[it.id] = d;
+    keepDrafts();
+    paint(it, fromTyping);
+  }
+
+  // ---------- desenho do estado ----------
+  function when(iso) {
+    try { var d = new Date(iso); return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) + " às " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; }
+  }
+  function paint(it, fromTyping) {
+    var r = refs[it.id], cur = current(it.id), s = saved[it.id];
+    if (r.choices) Array.prototype.forEach.call(r.choices.children, function (b) { b.setAttribute("aria-pressed", String(b.dataset.v === cur.status)); });
+    if (!fromTyping && document.activeElement !== r.ta && r.ta.value !== cur.texto) r.ta.value = cur.texto;
+    var ph = PLACEHOLDER[r.kind];
+    r.ta.placeholder = typeof ph === "string" ? ph : (ph[cur.status] || ph[""]);
+    r.row.dataset.state = stateOf(it);
+    var isDirty = dirty(it);
+    r.save.hidden = !isDirty || !canWrite;
+    if (isDirty) r.meta.textContent = canWrite ? "Não salvo" : "Só neste navegador";
+    else if (s && s.em) r.meta.textContent = "Enviado " + when(s.em);
+    else r.meta.textContent = "";
+    r.ta.readOnly = false;
+    applyFilter(it);
+  }
+  function applyFilter(it) {
+    var a = isAnswered(it);
+    refs[it.id].row.classList.toggle("hide", (filtro === "pendentes" && a) || (filtro === "respondidos" && !a));
+  }
+  function totals() {
+    var total = ITEMS.length, done = ITEMS.filter(isAnswered).length;
+    document.getElementById("count").textContent = done + " de " + total + " respondidos";
+    document.getElementById("meter").style.width = (total ? (100 * done / total) : 0) + "%";
+    Array.prototype.forEach.call(toc.children, function (a) {
+      var n = +a.dataset.part, its = ITEMS.filter(function (x) { return x.p === n; }), d = its.filter(isAnswered).length;
+      a.querySelector(".n").textContent = d + "/" + its.length;
+      a.classList.toggle("done", d === its.length);
+    });
+  }
+  function paintAll() { ITEMS.forEach(function (it) { paint(it); }); totals(); }
+
+  document.querySelectorAll(".filters button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      filtro = b.dataset.f;
+      document.querySelectorAll(".filters button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      ITEMS.forEach(applyFilter);
+    });
+  });
+
+  // ---------- enviar ----------
+  function send(list) {
+    return fetch(ENDPOINT, { method: "POST", mode: "no-cors", keepalive: true, headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ pagina: location.href, itens: list }) });
+  }
+  function save(it) {
+    if (!dirty(it)) { paint(it); return; }
+    if (!canWrite) { paint(it); totals(); return; }
+    if (!nome()) { pedirNome(); refs[it.id].meta.textContent = "Falta o seu nome no topo"; return; }
+    var cur = current(it.id);
+    var body = { quem: nome(), item: it.id, status: cur.status, texto: cur.texto.slice(0, 4000) };
+    refs[it.id].meta.textContent = "Enviando...";
+    send([body]).then(function () {
+      saved[it.id] = { status: cur.status, texto: cur.texto, em: new Date().toISOString() };
+      delete drafts[it.id]; keepDrafts(); keepSent(); paint(it); totals();
+    }).catch(function () {
+      refs[it.id].meta.textContent = "Não enviou. Confira a internet e toque em Salvar de novo.";
+      refs[it.id].save.hidden = false;
+    });
+  }
+  document.getElementById("tudo").addEventListener("click", function () {
+    var btn = this;
+    if (!canWrite) return;
+    if (!nome()) { pedirNome(); return; }
+    ITEMS.forEach(function (it) { if (dirty(it)) { var c = current(it.id); saved[it.id] = { status: c.status, texto: c.texto, em: "" }; } });
+    var list = ITEMS.filter(function (it) { var x = saved[it.id]; return x && (x.status || (x.texto && x.texto.trim())); })
+      .map(function (it) { var x = saved[it.id]; return { quem: nome(), item: it.id, status: x.status || "", texto: (x.texto || "").slice(0, 4000) }; });
+    if (!list.length) { btn.textContent = "Nada para enviar"; setTimeout(function () { btn.textContent = "Enviar tudo de novo"; }, 2000); return; }
+    btn.textContent = "Enviando...";
+    send(list).then(function () {
+      var agora = new Date().toISOString();
+      list.forEach(function (r) { saved[r.item].em = agora; delete drafts[r.item]; });
+      keepDrafts(); keepSent(); paintAll();
+      btn.textContent = "Enviado (" + list.length + ")";
+      setTimeout(function () { btn.textContent = "Enviar tudo de novo"; }, 2500);
+    }).catch(function () { btn.textContent = "Não enviou. Tente de novo"; });
+  });
+
+  // ---------- copiar ----------
+  function rotulo(it, st) {
+    var c = CHOICES[kindOf(it)]; if (!c || !st) return "";
+    for (var i = 0; i < c.length; i++) if (c[i][0] === st) return " [" + c[i][1] + "]";
+    return "";
+  }
+  document.getElementById("copy").addEventListener("click", function () {
+    var lines = ["SONIA: pauta com a Avalanche · respostas", ""];
+    PARTS.forEach(function (part) {
+      lines.push(part.title.toUpperCase());
+      ITEMS.filter(function (it) { return it.p === part.n; }).forEach(function (it) {
+        var cur = current(it.id);
+        lines.push(it.id + (it.h ? " " + it.h + ":" : "") + " " + it.t + rotulo(it, cur.status));
+        lines.push("   Resposta: " + (cur.texto.trim() || (cur.status ? "" : "(sem resposta)")));
+      });
+      lines.push("");
+    });
+    var txt = lines.join("\n"), btn = this;
+    function ok() { btn.textContent = "Copiado"; setTimeout(function () { btn.textContent = "Copiar respostas"; }, 2000); }
+    try {
+      navigator.clipboard.writeText(txt).then(ok, fallback);
+    } catch (e) { fallback(); }
+    function fallback() {
+      var t = el("textarea"); t.value = txt; t.style.position = "fixed"; t.style.opacity = "0"; document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); ok(); } catch (e2) { btn.textContent = "Selecione e copie"; }
+      setTimeout(function () { t.remove(); }, 0);
+    }
+  });
+
+  // ---------- avisos ----------
+  function showNotice(kind) {
+    var msg = {
+      local: "As respostas ainda não estão sendo enviadas para a Prime Circle. O que você escrever fica só neste navegador. Ao terminar, use \"Copiar respostas\" e envie por e-mail (atendimento@primecircle.app.br) ou WhatsApp (21) 99901-2520.",
+      readonly: "Você pode ler a pauta, mas este acesso não permite salvar respostas. Peça acesso de edição a quem enviou o link, ou use \"Copiar respostas\" e envie por e-mail ou WhatsApp."
+    }[kind];
+    notice.textContent = msg; notice.hidden = false;
+  }
+
+  // ---------- início ----------
+  if (canWrite) document.body.classList.add("envia");
+  else document.getElementById("tudo").hidden = true;
+  paintAll();
+  if (!canWrite) showNotice("local");
+})();
+</script>
+</body>
+</html>
