@@ -110,6 +110,61 @@
       }
     ]
   },
+  "videos": {
+    "_aviso": "Série da Sônia (03/11/2026). R1, R3 e R8 ficaram de fora até serem refeitos: R1 diz \"24 horas\", R3 promete sessão semanal e R8 fala em conexão oficial do WhatsApp. R2 exige a nota do plano Magnata.",
+    "visivel": true,
+    "etiqueta": "A Sônia responde",
+    "titulo": "Escolha a dúvida e ouça a resposta.",
+    "texto": "Vídeos curtos, com até 40 segundos e legenda. Toque no assunto para ver.",
+    "itens": [
+      {
+        "id": "r5-mais-um-chatbot",
+        "titulo": "Parece mais um chatbot?",
+        "resumo": "Um pedido no Telegram vira página no ar.",
+        "duracao": "0:34",
+        "video": "assets/video/serie/r5-mais-um-chatbot.mp4",
+        "capa": "assets/video/serie/r5-mais-um-chatbot.webp",
+        "legenda": "assets/video/serie/r5-mais-um-chatbot.pt-BR.vtt"
+      },
+      {
+        "id": "r6-os-crachas",
+        "titulo": "Quem faz parte do time?",
+        "resumo": "Um crachá por vez. Quantos ficam com você depende do plano.",
+        "duracao": "0:38",
+        "video": "assets/video/serie/r6-os-crachas.mp4",
+        "capa": "assets/video/serie/r6-os-crachas.webp",
+        "legenda": "assets/video/serie/r6-os-crachas.pt-BR.vtt"
+      },
+      {
+        "id": "r7-o-ciclo-de-cada-contratacao",
+        "titulo": "Por que não contratar gente?",
+        "resumo": "O ciclo de cada contratação e o que muda com a Sônia.",
+        "duracao": "0:40",
+        "video": "assets/video/serie/r7-o-ciclo-de-cada-contratacao.mp4",
+        "capa": "assets/video/serie/r7-o-ciclo-de-cada-contratacao.webp",
+        "legenda": "assets/video/serie/r7-o-ciclo-de-cada-contratacao.pt-BR.vtt"
+      },
+      {
+        "id": "r4-a-conta-da-folha",
+        "titulo": "Quanto custaria fazer com gente?",
+        "resumo": "A conta da folha comparada ao plano Magnata.",
+        "duracao": "0:38",
+        "video": "assets/video/serie/r4-a-conta-da-folha.mp4",
+        "capa": "assets/video/serie/r4-a-conta-da-folha.webp",
+        "legenda": "assets/video/serie/r4-a-conta-da-folha.pt-BR.vtt"
+      },
+      {
+        "id": "r2-depois-do-expediente",
+        "titulo": "E depois do expediente?",
+        "resumo": "O WhatsApp, o post, o extrato e o contrato.",
+        "duracao": "0:36",
+        "video": "assets/video/serie/r2-depois-do-expediente.mp4",
+        "capa": "assets/video/serie/r2-depois-do-expediente.webp",
+        "legenda": "assets/video/serie/r2-depois-do-expediente.pt-BR.vtt",
+        "nota": "A Márcia (financeiro) e a Aline (contratos) estão no plano Magnata."
+      }
+    ]
+  },
   "sigla": {
     "visivel": false,
     "titulo": "Por trás do nome",

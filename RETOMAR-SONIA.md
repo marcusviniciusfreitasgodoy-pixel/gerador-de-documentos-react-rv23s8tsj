@@ -25,6 +25,12 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 - Auditoria do painel (o que o produto entrega de fato): doc "Prime Circle Agentes: auditoria do painel
   Naia OS", https://claude.ai/artifact/1V43xv5uR1FMASANpBA3iH (Claude Docs).
 - Roteiro de onboarding de 60 min pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md` (ensaiar antes).
+- **Seção "A Sônia responde"** (03/11/2026), logo depois de "Por onde começar": 5 vídeos da Série da Sônia
+  (R5, R6, R7, R4, R2) em `landing-sonia/assets/video/serie/` (720x1280, ~2 MB cada, capa .webp e legenda .vtt
+  corrigida à mão), dados em `videos` do `conteudo.json`. A casca da seção está no design (`adaptar-design.py`,
+  troca "secao-videos") e o miolo é montado pelo script da página. **Fora de propósito:** R1 ("24 horas"), R3
+  (sessão semanal) e R8 ("conexão oficial do WhatsApp") até o dono refazer. Originais em
+  https://serie-pc-2m0ioj.vercel.app/ . Para incluir um vídeo: comprimir igual, gerar capa e legenda, somar em `videos.itens`.
 
 > **Este trabalho não é o app de documentos.** O `CLAUDE.md` da raiz fala do app Prime Circle
 > Documentos, que roda no Skip. A landing SONIA é um site estático separado, publicado na

@@ -136,7 +136,10 @@ def tpl(t):
       '<span style="padding-top:14px;border-top:1px dashed rgba(14,14,14,0.22);font-size:13px;line-height:1.5;color:#4a463f"><span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:#8B7340">Quem cuida</span><br>{{ g.quem }}</span>\n'
       '</div>\n</sc-for>\n</div>\n</section>\n</sc-if>\n\n')
     t = troca(t, '<sc-if value="{{ show.sigla }}"', secao + '<sc-if value="{{ show.sigla }}"', 'secao-gargalos')
-    t = troca(t, 'diferenciais: vis(c.diferenciais),', 'diferenciais: vis(c.diferenciais), gargalos: vis(c.gargalos),', 'show-gargalos')
+    # casca da seção "A Sônia responde" (vídeos); o miolo é montado pelo script da página
+    t = troca(t, '<sc-if value="{{ show.sigla }}"',
+              '<sc-if value="{{ show.videos }}" hint-placeholder-val="{{ true }}">\n<section id="sonia-responde" class="pc-vid" aria-label="Vídeos da Sônia"><div class="pc-vid-in" data-pc-vid></div></section>\n</sc-if>\n\n<sc-if value="{{ show.sigla }}"', 'secao-videos')
+    t = troca(t, 'diferenciais: vis(c.diferenciais),', 'diferenciais: vis(c.diferenciais), gargalos: vis(c.gargalos), videos: vis(c.videos),', 'show-gargalos')
     t = troca(t, 'diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),',
               'diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),\n      gargalos: ((c.gargalos && c.gargalos.itens) || []).map((w, i) => ({ ...w, n: pad(i + 1) })),', 'lista-gargalos')
     css = """<style>
@@ -180,6 +183,40 @@ def tpl(t):
 .pc-som[aria-pressed="true"] .pc-som-ico{--pc-ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M3 9v6h4l5 4V5L7 9H3z'/%3E%3Cpath d='M16 9l6 6M22 9l-6 6' stroke='black' stroke-width='2' fill='none'/%3E%3C/svg%3E")}
 @media (prefers-reduced-motion:reduce){.pc-burger span{transition:none}}
 .pc-esp-mais{display:none}
+.pc-vid{background:#0E0E0E;color:#F5F1E6;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px)}
+.pc-vid-in{max-width:1180px;margin:0 auto;display:grid;gap:36px}
+.pc-vid-head{display:grid;gap:14px;max-width:760px}
+.pc-vid-eb{font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#C9A84C}
+.pc-vid-head h2{margin:0;font-family:var(--pc-font-display,serif);font-weight:500;font-size:var(--pc-fs-h1,44px);line-height:1;letter-spacing:-.01em;text-wrap:balance}
+.pc-vid-head p{margin:0;font-size:16px;line-height:1.6;color:#C8C1B0}
+.pc-vid-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,380px);gap:clamp(24px,4vw,56px);align-items:start}
+.pc-vid-lista{list-style:none;margin:0;padding:0;display:grid;gap:8px;border-top:1px solid rgba(245,241,230,.14)}
+.pc-vid-lista button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:4px 14px;padding:16px 14px;border-radius:10px;cursor:pointer;border:1px solid transparent}
+.pc-vid-lista button:hover{background:#161513}
+.pc-vid-lista button:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+.pc-vid-lista button[aria-pressed="true"]{background:#161513;border-color:rgba(201,168,76,.55)}
+.pc-vid-n{font-family:var(--pc-font-mono,monospace);font-size:12px;color:#C9A84C;padding-top:6px}
+.pc-vid-t{font-family:var(--pc-font-display,serif);font-weight:500;font-size:clamp(22px,2.2vw,28px);line-height:1.1}
+.pc-vid-d{font-family:var(--pc-font-mono,monospace);font-size:12px;color:#8F897C;padding-top:6px}
+.pc-vid-r{grid-column:2/4;font-size:14px;line-height:1.5;color:#B5AFA3}
+.pc-vid-player{margin:0;display:grid;gap:10px;justify-items:center}
+.pc-vid-tela{position:relative;width:100%;max-width:380px;aspect-ratio:9/16;border-radius:12px;overflow:hidden;background:#161513;border:1px solid rgba(245,241,230,.10)}
+.pc-vid-tela video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#161513}
+.pc-vid-leg{position:absolute;left:12px;right:12px;bottom:64px;display:flex;justify-content:center;pointer-events:none;z-index:2}
+.pc-vid-leg span{max-width:100%;padding:6px 12px;border-radius:8px;background:rgba(10,10,9,.8);color:#F5F1E6;font:600 15px/1.35 var(--pc-font-sans,system-ui);text-align:center;text-wrap:balance}
+.pc-vid-play{all:unset;position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18%;box-sizing:border-box;cursor:pointer;z-index:3}
+.pc-vid-play span{width:72px;height:72px;border-radius:999px;background:rgba(201,168,76,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.pc-vid-play span::before{content:"";margin-left:5px;border-style:solid;border-width:13px 0 13px 21px;border-color:transparent transparent transparent #0E0E0E}
+.pc-vid-play:focus-visible span{outline:2px solid #F5F1E6;outline-offset:3px}
+.pc-vid-nota{font-size:13px;line-height:1.5;color:#B5AFA3;text-align:center;max-width:380px}
+@media (max-width:900px){
+  .pc-vid-grid{grid-template-columns:minmax(0,1fr)}
+  .pc-vid-lista{display:flex;overflow-x:auto;gap:8px;border-top:0;padding-bottom:6px;scroll-snap-type:x mandatory}
+  .pc-vid-lista li{flex:0 0 auto;scroll-snap-align:start}
+  .pc-vid-lista button{grid-template-columns:auto;padding:10px 14px;border:1px solid rgba(245,241,230,.22);border-radius:999px;width:auto}
+  .pc-vid-n,.pc-vid-d,.pc-vid-r{display:none}
+  .pc-vid-t{font-family:var(--pc-font-sans,system-ui);font-size:14px;font-weight:600;white-space:nowrap}
+}
 @media (max-width:600px){
   .pc-eco table{min-width:0!important}
   .pc-eco th:nth-child(2),.pc-eco td:nth-child(2),.pc-eco th:nth-child(3),.pc-eco td:nth-child(3),
@@ -320,6 +357,100 @@ document.addEventListener("click", function (e) {
   });
   new MutationObserver(montar).observe(document, { childList: true, subtree: true });
   montar();
+})();
+// "A Sônia responde": vídeos por assunto, depois de "Por onde começar" (03/11/2026).
+// A casca está no design; aqui o miolo é montado a partir de conteudo.json. Cliques e eventos do vídeo são
+// ouvidos na página inteira, para continuar funcionando se o design redesenhar ou copiar a seção.
+(function () {
+  var dados = null, atual = 0, cues = {};
+  function el(t, c, txt) { var n = document.createElement(t); if (c) n.className = c; if (txt != null) n.textContent = txt; return n; }
+  function itens() { return (dados && dados.videos && dados.videos.itens) || []; }
+  function lerVtt(txt) {
+    var seg = function (h) { var p = h.split(":").map(parseFloat); return p.length === 3 ? p[0] * 3600 + p[1] * 60 + p[2] : p[0] * 60 + p[1]; };
+    var out = [];
+    txt.replace(/\r/g, "").split("\n\n").forEach(function (b) {
+      var l = b.split("\n"), i = l.findIndex(function (x) { return x.indexOf("-->") > -1; });
+      if (i < 0) return;
+      var t = l[i].split("-->");
+      out.push({ a: seg(t[0].trim()), b: seg(t[1].trim().split(" ")[0]), texto: l.slice(i + 1).join(" ").trim() });
+    });
+    return out;
+  }
+  function preencher(box) {
+    var v = dados.videos;
+    box.textContent = "";
+    var head = el("div", "pc-vid-head");
+    head.appendChild(el("span", "pc-vid-eb", v.etiqueta || ""));
+    head.appendChild(el("h2", "", v.titulo || ""));
+    if (v.texto) head.appendChild(el("p", "", v.texto));
+    var grid = el("div", "pc-vid-grid"), lista = el("ol", "pc-vid-lista");
+    itens().forEach(function (it, i) {
+      var li = el("li"), b = el("button", "pc-vid-item");
+      b.type = "button"; b.dataset.i = i;
+      b.appendChild(el("span", "pc-vid-n", String(i + 1).padStart(2, "0")));
+      b.appendChild(el("span", "pc-vid-t", it.titulo));
+      b.appendChild(el("span", "pc-vid-d", it.duracao || ""));
+      if (it.resumo) b.appendChild(el("span", "pc-vid-r", it.resumo));
+      li.appendChild(b); lista.appendChild(li);
+    });
+    var fig = el("figure", "pc-vid-player"), tela = el("div", "pc-vid-tela");
+    var video = el("video", "pc-vid-video"); video.setAttribute("playsinline", ""); video.preload = "none";
+    video.setAttribute("aria-label", "Vídeo da Sônia");
+    var leg = el("div", "pc-vid-leg"); leg.setAttribute("aria-hidden", "true");
+    var play = el("button", "pc-vid-play"); play.type = "button"; play.setAttribute("aria-label", "Assistir"); play.appendChild(el("span"));
+    tela.appendChild(video); tela.appendChild(leg); tela.appendChild(play);
+    fig.appendChild(tela); fig.appendChild(el("figcaption", "pc-vid-nota"));
+    grid.appendChild(lista); grid.appendChild(fig);
+    box.appendChild(head); box.appendChild(grid);
+    box.dataset.pronto = "1";
+    escolher(atual, false);
+  }
+  function caixa() { return document.querySelector("[data-pc-vid]"); }
+  function escolher(i, iniciar) {
+    var box = caixa(), it = itens()[i];
+    if (!box || !it) return;
+    atual = i;
+    box.querySelectorAll(".pc-vid-item").forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.i === i)); });
+    var video = box.querySelector(".pc-vid-video"), play = box.querySelector(".pc-vid-play"), nota = box.querySelector(".pc-vid-nota");
+    if (video.getAttribute("src") !== it.video) { video.pause(); video.poster = it.capa; video.src = it.video; }
+    video.controls = false; play.hidden = false;
+    box.querySelector(".pc-vid-leg").textContent = "";
+    nota.textContent = it.nota || ""; nota.hidden = !it.nota;
+    if (!cues[it.legenda]) { cues[it.legenda] = []; fetch(it.legenda).then(function (x) { return x.ok ? x.text() : ""; }).then(function (t) { cues[it.legenda] = lerVtt(t); }).catch(function () {}); }
+    if (iniciar) tocar();
+  }
+  function tocar() {
+    var box = caixa(); if (!box) return;
+    var video = box.querySelector(".pc-vid-video"), play = box.querySelector(".pc-vid-play");
+    var hero = document.querySelector(".pc-hero-video"), som = document.querySelector('.pc-som[aria-pressed="true"]');
+    if (hero && som) som.click();
+    play.hidden = true; video.controls = true; video.muted = false;
+    var p = video.play(); if (p && p.catch) p.catch(function () { play.hidden = false; video.controls = false; });
+  }
+  function legenda(video) {
+    var box = video.closest("[data-pc-vid]"), it = itens()[atual]; if (!box || !it) return;
+    var c = cues[it.legenda] || [], t = video.currentTime, txt = "", leg = box.querySelector(".pc-vid-leg");
+    for (var k = c.length - 1; k >= 0; k--) if (t >= c[k].a && t < c[k].b) { txt = c[k].texto; break; }
+    if ((leg.textContent || "") !== txt) { leg.textContent = ""; if (txt) leg.appendChild(el("span", "", txt)); }
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".pc-vid-item");
+    if (b) { escolher(+b.dataset.i, true); return; }
+    if (e.target.closest && e.target.closest(".pc-vid-play")) tocar();
+  });
+  ["timeupdate", "seeked"].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { if (e.target.classList && e.target.classList.contains("pc-vid-video")) legenda(e.target); }, true);
+  });
+  document.addEventListener("ended", function (e) {
+    var v = e.target; if (!v.classList || !v.classList.contains("pc-vid-video")) return;
+    var box = v.closest("[data-pc-vid]"); v.controls = false; box.querySelector(".pc-vid-play").hidden = false; box.querySelector(".pc-vid-leg").textContent = "";
+  }, true);
+  function varrer() {
+    if (!dados) return;
+    document.querySelectorAll("[data-pc-vid]").forEach(function (box) { if (!box.dataset.pronto || !box.querySelector(".pc-vid-video")) preencher(box); });
+  }
+  fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; varrer(); }).catch(function () {});
+  new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
 })();
 document.addEventListener("keydown", function (e) {
   var chk = document.getElementById("pc-menu");
