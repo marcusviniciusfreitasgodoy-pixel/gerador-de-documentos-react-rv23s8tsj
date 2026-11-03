@@ -20,7 +20,9 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e s
 | `skills/vender-para-a-carteira/` | skill da Lívia |
 | `skills/raio-x-do-caixa/` | skill do Fernando |
 | `skills/checkup-de-sistemas-e-dados/` | skill da Nina |
-| `FICHA-DE-VENDA.md` | o que é, para quem, limites, preço sugerido, argumentos e objeções |
+| `FICHA-DE-VENDA.md` | preço por plano, objetivos, benefícios, diferenças, para quem é e o que não prometer |
+| `ROTEIRO-DE-VENDA.md` | perguntas de qualificação, apresentação, oferta por plano, objeções e mensagens prontas |
+| `COPY-LANDING.md` | textos prontos para planos, "Por onde começar", seção nova e perguntas frequentes |
 | `PACOTE-PARA-AVALANCHE.md` | o texto para mandar junto com os arquivos na submissão |
 | `curriculos.json` | os quatro currículos no formato da seção "Time" do `conteudo.json`, com `visivel: false` |
 
@@ -39,13 +41,13 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e s
 ## Escolhas que você pode mudar
 
 - **Nomes:** Otávio, Lívia, Fernando e Nina não colidem com nenhum dos 21 agentes da SONIA. Trocar é só editar os arquivos e o `curriculos.json`.
-- **Preço:** a ficha recomenda R$ 1.997 por ano. A decisão é sua.
+- **Preço (decidido em 03/11/2026):** R$ 1.997 por ano como adicional no Starter e no Elite. Incluído no Magnata como bônus e diferencial.
 - **`model: inherit`:** o conselheiro usa a IA do plano do cliente. Se a plataforma pedir um modelo fixo, ajuste.
 
 ## Próximos passos
 
-1. Ler a ficha e decidir preço e nomes.
+1. Ler a ficha e o roteiro, e confirmar os nomes.
 2. Testar na sua própria empresa: dossiê, uma reunião do Conselho, uma diretriz.
 3. Gerar os quatro avatares no Google AI Studio, no estilo dos agentes atuais.
 4. Submeter à Avalanche com o `PACOTE-PARA-AVALANCHE.md`.
-5. Depois da aprovação: checkout, seção na landing a partir do `curriculos.json`, pergunta no FAQ.
+5. Depois da aprovação: checkout do adicional, textos do `COPY-LANDING.md` na página e no painel, seção nova no gerador da landing.

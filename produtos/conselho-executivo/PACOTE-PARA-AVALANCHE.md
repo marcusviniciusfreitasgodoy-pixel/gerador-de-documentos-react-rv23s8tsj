@@ -2,7 +2,7 @@
 
 Revendedor: Prime Circle (SONIA)
 Data: 03/11/2026
-Tipo: adicional pago, vendido a clientes de qualquer plano
+Tipo: adicional pago no Starter e no Elite (R$ 1.997 por ano) e incluído no Magnata, sem cobrança à parte
 
 ## O que está sendo submetido
 
@@ -57,4 +57,6 @@ Texto escrito do zero pela Prime Circle para o dono de pequena e média empresa 
 1. Os quatro conselheiros entram além da quantidade de agentes do plano, sem ocupar vaga?
 2. Uma skill do adicional pode ser instalada na Sônia do cliente que comprou, como `conselho-executivo` e `dossie-da-empresa`?
 3. Qual o caminho da base de conhecimento do cliente para o dossiê e as diretrizes?
-4. O adicional ganha link próprio no checkout, ou entra como item de um plano?
+4. O adicional ganha link próprio no checkout para o Starter e o Elite?
+5. Podemos incluir o adicional no Magnata sem cobrança à parte? Nesse caso, a divisão de 30% fica só sobre o preço do Magnata?
+6. Um cliente que já assinou o Starter ou o Elite pode comprar o adicional depois, no meio do ano?

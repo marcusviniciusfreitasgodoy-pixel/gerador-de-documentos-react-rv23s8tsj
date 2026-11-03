@@ -1,102 +1,110 @@
 # Conselho Executivo SONIA: ficha de venda
 
-Adicional para clientes de qualquer plano da SONIA. Rascunho de 03/11/2026, para uso interno. **Não divulgar antes da aprovação da Avalanche.**
+Uso interno. Versão de 03/11/2026. **Não divulgar antes da aprovação da Avalanche.**
+Roteiro de conversa e objeções em `ROTEIRO-DE-VENDA.md`. Textos para a página em `COPY-LANDING.md`.
+
+## Decisão de preço (dono, 03/11/2026)
+
+| Plano | Conselho Executivo | Total por ano |
+|---|---|---|
+| Starter | adicional de R$ 1.997 por ano | R$ 6.994 |
+| Elite | adicional de R$ 1.997 por ano | R$ 9.994 |
+| Magnata | incluído, como bônus e diferencial do plano | R$ 15.997 |
+
+No Starter e no Elite, o adicional segue as condições de pagamento dos planos. No Magnata, o Conselho aparece na lista do plano com o valor de referência de R$ 1.997 por ano, que é o preço real cobrado nos outros dois planos.
 
 ## O que é, em uma frase
 
-Quatro conselheiros que ajudam o dono a decidir antes de agir: operação e gente, marketing e vendas, finanças, tecnologia e dados. A Sônia reúne o Conselho, junta as opiniões e transforma a decisão aprovada em tarefas para o time que o cliente já tem.
+Quatro conselheiros que ajudam o dono a decidir antes de agir, nas quatro áreas que mais pesam numa empresa: operação e equipe, marketing e vendas, finanças, tecnologia e dados. A Sônia reúne o Conselho, junta as opiniões e, com a aprovação do dono, transforma a decisão em tarefas para o time.
 
-## Para quem
+## Por que o Conselho existe dentro da SONIA
 
-- Dono de pequena ou média empresa que já usa a SONIA para executar e quer ajuda para decidir o que executar.
-- Quem está diante de uma decisão que mexe no caixa ou na equipe: contratar, subir preço, abrir unidade, trocar de sistema, investir em anúncio.
-- Quem sente que faz tudo sozinho e não tem com quem pensar o negócio.
+Hoje a SONIA é um time de execução. O dono pede, a Sônia distribui e os especialistas entregam. Isso funciona bem quando o pedido está certo.
 
-Para quem ainda não tem um plano SONIA, o Conselho não é vendido sozinho. Ele depende da Sônia para funcionar.
+O problema aparece quando o dono pede a coisa errada. Ele encomenda mais posts quando o que trava a venda é o preço. Pede uma landing nova quando o caixa não aguenta o anúncio que vai levar gente até ela. O time entrega com capricho, e o resultado não vem, porque a decisão de cima estava errada.
 
-## O que vem no adicional
+O Conselho é a camada que faltava entre o dono e o time: a hora de pensar antes de mandar fazer.
 
-| Conselheiro | Cuida de | Skill própria |
+## Objetivos
+
+1. **Evitar decisão cara tomada no impulso.** Contratar, dar desconto, pegar empréstimo e assinar sistema anual são decisões que o dono costuma tomar sozinho, tarde da noite, com a planilha aberta. O Conselho olha o caixa, a operação e o cliente antes do sim.
+2. **Pôr o time para trabalhar no que importa.** Cada diretriz diz o que fazer primeiro e o que pode esperar. Os agentes passam a trabalhar numa prioridade que o dono escolheu com calma.
+3. **Dar ao dono com quem pensar.** Dono de empresa pequena raramente tem um sócio de finanças, um diretor comercial e alguém de tecnologia na mesma conversa. O Conselho põe os quatro olhares na mesa e mostra onde eles discordam.
+4. **Guardar a memória das decisões.** Toda diretriz fica registrada com o motivo e a data de revisão. Daqui a seis meses o dono sabe por que decidiu, e se deu certo.
+
+## Benefícios, no momento em que o dono precisa
+
+| Quando | O que o Conselho faz | O que o dono leva |
 |---|---|---|
-| Otávio | operação, rotina, metas, equipe, tirar o dono da operação | Plano de 90 dias |
-| Lívia | público, mensagem, canais, conteúdo, vender para quem já comprou | Vender para a carteira |
-| Fernando | caixa, margem, preço, contratação, empréstimo | Raio-x do caixa |
-| Nina | sistemas, segurança, LGPD, automação e IA | Checkup de sistemas e dados |
+| "Será que contrato mais alguém?" | Otávio vê se o gargalo é falta de gente ou de processo. Fernando projeta o caixa com o novo salário. | Um sim, um não ou um "ainda não", com a semana em que o caixa aperta |
+| "O concorrente baixou o preço" | Lívia avalia se o cliente compra por preço. Fernando mostra quanto a mais seria preciso vender para pagar o desconto. | Uma resposta de preço defendida com conta |
+| "O dinheiro some e eu vendo bem" | Fernando faz o raio-x do caixa das próximas 13 semanas. | Onde o dinheiro vai e o que fazer antes do aperto |
+| "Os clientes compram uma vez e somem" | Lívia separa a carteira em grupos e monta oferta e mensagem para cada um. | Um plano de recompra que o time executa |
+| "Vou trocar de sistema?" | Nina compara opções, custo e como sair depois. | A escolha mais simples que resolve, com fonte e data dos preços |
+| "Tenho medo de vazar dado de cliente" | Nina faz o checkup de segurança e do essencial da LGPD. | O que arrumar primeiro e o que levar ao advogado |
+| "Faço tudo sozinho" | Otávio mapeia a semana do dono e monta o plano de 90 dias. | O que parar de fazer, o que delegar e as metas do trimestre |
 
-Mais duas skills para a Sônia:
+## O que o cliente recebe
 
-- **Reunião do Conselho:** escolhe os conselheiros certos, junta os pareceres, mostra as divergências, pede a aprovação do dono e escreve a diretriz.
-- **Dossiê da empresa:** uma conversa de onboarding que registra o essencial do negócio uma vez, para ninguém perguntar tudo de novo.
+- **Uma recomendação só**, curta, com o ponto de discordância à vista. O dono não precisa ler quatro relatórios.
+- **Uma diretriz escrita** quando aprova: decisão, motivo, riscos, ações com responsável e prazo, data para conferir.
+- **O dossiê da empresa**, preenchido uma vez no onboarding do Conselho e atualizado quando algo muda.
+- **A execução** pelos agentes que ele tem no plano.
 
-## Como funciona, na prática
+## O que diferencia o Conselho de uma conversa no ChatGPT
 
-```
-Dono: Sônia, chama o conselho. Tô pensando em contratar mais uma atendente.
+- **Conhece a empresa.** Lê o dossiê e as decisões anteriores antes de opinar. O dono não explica tudo de novo a cada pergunta.
+- **Olha por quatro lados ao mesmo tempo**, e diz quando um conselheiro discorda do outro.
+- **Termina em tarefa.** A decisão aprovada vai direto para o time de agentes, com prazo.
+- **Sabe onde parar.** Imposto, folha e contrato vão para o contador e o advogado, com a pergunta certa já escrita.
 
-Sônia: O Otávio e o Fernando avaliaram.
-Recomendação: antes de contratar, separar as contas e organizar o atendimento
-por horário de pico. O caixa projetado fica apertado na terceira semana do mês
-que vem.
-Ponto de atenção: o Otávio acha que a fila de orçamentos já justifica a vaga;
-o Fernando pede para esperar o caixa da próxima projeção.
-Precisa de profissional: conversar com o contador sobre o custo total da vaga.
-Ações propostas: 1. Juliana organiza a escala de atendimento até sexta.
-2. Márcia atualiza a projeção de caixa toda segunda. 3. Revisão em 30 dias.
-Aprova assim?
-```
+## Como o Conselho rende em cada plano
 
-O exemplo é ilustrativo. Os números e recomendações reais saem do dossiê e dos dados de cada cliente.
+- **Starter:** o Conselho decide e a execução cai sobre a Sônia, a Juliana, o Paulo, o Jonathan e o clone do dono. Ações de financeiro e de RH voltam para o dono e o contador, já organizadas.
+- **Elite:** a parte comercial ganha braço. Lívia recomenda, e a Amanda, o Davi, os vendedores, a Bianca e o estrategista de tráfego executam.
+- **Magnata:** cada conselheiro tem quem execute na própria área. Fernando recomenda e a Márcia e a Maria cuidam do caixa e das notas. Otávio recomenda e a Geane cuida de vagas e rotinas de RH. Nina recomenda e o Boris constrói. É o único plano em que a decisão e a execução se fecham nas quatro áreas, e por isso o Conselho entra no Magnata como parte do plano.
 
-## O que o cliente leva
+Junto com as quatro mentorias individuais do Magnata, o Conselho cobre o intervalo entre uma mentoria e outra. A mentoria é a conversa de rumo com uma pessoa. O Conselho está disponível a qualquer hora para a decisão da semana.
 
-- Uma **diretriz escrita** para cada decisão aprovada: o que foi decidido, por quê, os riscos, as ações com responsável e prazo, e a data para conferir se funcionou.
-- O **dossiê da empresa**, que ele pode reler e atualizar.
-- A execução das ações pelos agentes que ele já tem no plano.
+## Para quem o Conselho é bom e para quem não é
 
-## Funciona com qualquer plano
+Bom para quem:
+- tem uma decisão em aberto que mexe no caixa ou na equipe;
+- sente que decide sozinho e quer alguém para pensar junto;
+- aceita compartilhar os números básicos da empresa, mesmo aproximados.
 
-O Conselho recomenda e a Sônia distribui as ações para os agentes ativos do cliente. Quanto mais agentes o plano tem, mais ações saem prontas. No Starter, ações de financeiro e de RH vão para o dono, a Juliana e o contador. No Magnata, a Márcia, a Maria, a Geane e a Aline executam a parte delas.
+Não é para quem:
+- só quer execução e não tem decisão para tomar agora;
+- quer resposta de imposto, contrato ou causa trabalhista (isso é do contador e do advogado);
+- não quer contar quanto fatura e quanto gasta. Sem números, o Fernando não trabalha.
 
-## O que o Conselho não faz
+Dizer isso na venda protege a garantia de 30 dias e a reputação do produto.
 
-- Não substitui contador nem advogado. Imposto, folha, contrato e LGPD aplicada a um caso concreto são encaminhados a eles.
-- Não decide pelo dono. Nenhuma ação começa sem aprovação.
-- Não garante faturamento, venda ou resultado de anúncio.
-- Não recomenda investimento financeiro.
+## O que não prometer
+
+- Faturamento, lucro, venda ou retorno de anúncio.
+- Que o Conselho substitui contador, advogado ou consultor com registro.
+- Que a recomendação está sempre certa. Ela é tão boa quanto os dados que o dono passar, e cada diretriz mostra de onde vieram os números.
+- Depoimento ou caso de sucesso antes de existir. O primeiro caso vem do teste na sua própria empresa ou de um cliente que autorize.
 
 ## O que não está incluído no preço
 
-- A assinatura da IA do cliente. Cada reunião do Conselho chama até quatro conselheiros e consome mais da cota da IA do que uma tarefa comum.
-- Rotinas automáticas extras. Se o cliente quiser lembretes automáticos do Conselho, eles contam no limite de rotinas do plano dele.
+- **A assinatura da IA do cliente.** Cada reunião chama até quatro conselheiros e consome mais da cota do que uma tarefa comum.
+- **Rotinas extras.** Lembretes automáticos do Conselho contam no limite de rotinas do plano do cliente.
 
-## Preço: recomendação, decisão sua
+## Contas para você
 
-Referência: os planos custam R$ 4.997 (Starter), R$ 7.997 (Elite) e R$ 15.997 (Magnata) por ano. A Avalanche fica com 30% de cada venda.
+| Venda | Preço | Avalanche (30%) | Fica para você, antes de impostos e taxas |
+|---|---|---|---|
+| Adicional no Starter ou no Elite | R$ 1.997 | R$ 599,10 | R$ 1.397,90 |
+| Magnata com o Conselho incluído | R$ 15.997 | R$ 4.799,10 | R$ 11.197,90, sem receita extra pelo Conselho |
 
-Recomendação: **R$ 1.997 por ano**, igual para todos os planos, com as mesmas condições de pagamento dos planos.
-
-- É menos da metade do Starter, então não compete com o plano principal.
-- Preço único é mais fácil de explicar e de colocar no checkout.
-- O valor que fica com você, antes de impostos e taxas do cartão, é de R$ 1.397,90 por venda (70% de R$ 1.997). Confirme com o contador o imposto sobre essa receita.
-
-Para os primeiros clientes, uma alternativa: oferecer o Conselho sem custo no primeiro ano para os cinco primeiros assinantes do Elite ou do Magnata, em troca de depoimento. Isso conversa com a meta já anotada dos primeiros cinco clientes. Antes, confirme com a Avalanche como fica o split quando o adicional sai com preço zero.
-
-## Argumentos de venda
-
-- "A Sônia executa. O Conselho ajuda você a decidir o que vale executar."
-- "Antes de contratar, investir ou mexer no preço, você ouve operação, marketing, finanças e tecnologia, e recebe uma recomendação só."
-- "Toda decisão aprovada vira tarefa para o time que você já tem."
-
-## Objeções prováveis
-
-- **"Eu já tenho a Sônia, para que mais?"** A Sônia faz o que você pede. O Conselho entra quando você não sabe o que pedir, ou quando a decisão mexe no caixa e na equipe.
-- **"Isso é consultoria?"** É um apoio para decidir, com base nos dados que você passar. Para imposto, contrato e LGPD aplicada ao seu caso, o Conselho manda você ao contador ou ao advogado.
-- **"E se a recomendação estiver errada?"** Cada diretriz mostra de onde vieram os números e marca o que é estimativa. A decisão é sua, e a data de revisão existe para corrigir o rumo.
+O custo do bônus no Magnata é o tempo de onboarding do Conselho e o suporte. Não há custo de IA para você, porque o Conselho roda na assinatura do cliente. Confirme com o contador o imposto sobre cada receita.
 
 ## Antes de vender
 
-1. Aprovação da Avalanche (pacote em `PACOTE-PARA-AVALANCHE.md`).
-2. Preço decidido e link de checkout criado.
-3. Avatares dos quatro conselheiros gerados.
-4. Teste completo com um cliente real ou com a sua própria empresa: dossiê, uma reunião, uma diretriz e a execução de uma ação.
-5. Seção na landing, a partir de `curriculos.json`, só depois dos itens acima.
+1. Aprovação da Avalanche, inclusive para incluir o adicional no Magnata sem cobrança à parte.
+2. Link de checkout do adicional para o Starter e o Elite.
+3. Avatares dos quatro conselheiros.
+4. Teste completo na sua própria empresa: dossiê, uma reunião, uma diretriz e a execução de uma ação. Esse teste vira o exemplo real mostrado na venda.
+5. Textos da página a partir de `COPY-LANDING.md`.
