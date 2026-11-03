@@ -52,9 +52,9 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 - [x] **Atendimento humano do Magnata:** em dias úteis, das 9h às 18h (definido em 02/11/2026).
 - [x] **Página na HostGator:** no ar em https://sonia.primecircle.app.br desde 02/11/2026, com HTTPS forçado pelo
       `.htaccess` e sem o selo da Netlify.
-- [ ] **Pauta da Avalanche no site:** criar a planilha "SONIA · Respostas da Avalanche" seguindo
-      `pendencias/pauta-avalanche-site/planilha/COMO-INSTALAR.md` e mandar a URL `/exec`. Depois, subir a pasta
-      `pauta-avalanche/` e mandar o link `https://sonia.primecircle.app.br/pauta-avalanche/` no WhatsApp.
+- [ ] **Pauta da Avalanche no site:** planilha "SONIA · Respostas da Avalanche" e script (versão 2, acesso
+      Qualquer pessoa) prontos em 03/11. Falta subir a pasta `pauta-avalanche/`, fazer o teste real do item 2.10
+      (uma linha só, "2.10" e não 2,1) e então mandar `https://sonia.primecircle.app.br/pauta-avalanche/` no WhatsApp.
 - [ ] **Renovação do certificado:** o certificado vence em 02/12/2026. Confira no cPanel (Status SSL/TLS) que o AutoSSL
       está ligado para `sonia.primecircle.app.br`.
 - [x] **Planilha de leads:** instalada e testada em 02/11/2026 (aba "Leads"). Página gravando desde 18:49 de 02/11. Script na
