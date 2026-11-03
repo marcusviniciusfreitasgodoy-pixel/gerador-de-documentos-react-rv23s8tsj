@@ -37,7 +37,7 @@ function acharLinha_(aba, quem, item) {
   if (n < 2) return 0;
   var valores = aba.getRange(2, 2, n - 1, 2).getValues();
   for (var i = 0; i < valores.length; i++) {
-    if (String(valores[i][0]) === quem && String(valores[i][1]).replace(/^'/, '') === item) return i + 2;
+    if (String(valores[i][0]) === quem && String(valores[i][1]).replace(/^'/, '').trim() === item) return i + 2;
   }
   return 0;
 }
@@ -46,6 +46,8 @@ function pegarAba_() {
   var planilha = SpreadsheetApp.getActiveSpreadsheet();
   var aba = planilha.getSheetByName(ABA) || planilha.insertSheet(ABA);
   if (aba.getLastRow() === 0) { aba.appendRow(CABECALHO); aba.setFrozenRows(1); }
+  // coluna Item como texto puro: senão "2.10" vira o número 2,1 e "1.5" vira data, e a busca falha
+  aba.getRange('C:C').setNumberFormat('@');
   return aba;
 }
 
