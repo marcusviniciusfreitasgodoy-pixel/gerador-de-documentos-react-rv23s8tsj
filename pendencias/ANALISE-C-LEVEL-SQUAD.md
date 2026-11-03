@@ -30,9 +30,8 @@ da Synkra não tem esse squad. O que está escrito é "by Synkra · MIT".
 2. **Nomes de terceiros.** O Vision Chief cita um `hormozi-squad` e "Hormozi frameworks". Alex Hormozi é uma pessoa
    real e a marca é da empresa dele. Usar nome de pessoa em propaganda comercial sem autorização é vedado (Código
    Civil, art. 18). Tem de sair. Também não use "BMAD", "AIOS", "AIOX", "Synkra" nem "Xquads" na venda.
-3. **A plataforma é da Avalanche.** A auditoria do painel mostrou agentes fixos por plano e nenhum campo de preço.
-   Antes de vender um opcional "na plataforma", é preciso saber se o revendedor pode subir agentes próprios, cobrar
-   à parte e se os 30% da Avalanche incidem sobre ele. **Esta é a pergunta que trava**, não a licença.
+3. **A plataforma é da Avalanche.** ~~Antes de vender um opcional "na plataforma", é preciso saber se o revendedor
+   pode subir agentes próprios.~~ **Resolvido em 03/11/2026** (ver a seção 5).
 
 As citações de método (Technology Radar da ThoughtWorks, quadrante de dívida técnica de Martin Fowler, TOGAF, ITIL,
 OKR) e os exemplos de marca (Google, P&G, Marriott) são uso didático com atribuição. Ideias e métodos não têm
@@ -92,12 +91,21 @@ segurança. Para um produto pago, isso tem de estar escrito, no mesmo tom do avi
 **j) O CIO e o CAIO têm pouco uso no começo.** Para o dono de pequena empresa, segurança, sistemas e IA cabem num só
 conselheiro de tecnologia. Cinco conselheiros mais o coordenador pode virar quatro, mais fácil de explicar e de vender.
 
-## 5. Perguntas para a Avalanche (somar à pauta)
+## 5. O que a Avalanche respondeu (03/11/2026, pelo dono)
 
-1. O revendedor pode criar e subir agentes próprios no painel do cliente?
-2. Esses agentes podem ser vendidos como adicional, com preço próprio, no checkout da plataforma?
-3. Os 30% da divisão do Asaas incidem também sobre um adicional criado pelo revendedor?
-4. Um agente adicional consome a mesma assinatura de IA do cliente ou exige chave separada?
+- O revendedor pode vender agentes adicionais com as respectivas skills.
+- Cada adicional é submetido à aprovação da Avalanche antes de ir para venda.
+- A Avalanche recebe 30% do valor de qualquer venda.
+- O cliente pode trocar os agentes do plano, mas mantém a quantidade de agentes e de rotinas do plano.
+
+Ficaram abertas quatro perguntas de detalhe, listadas no fim de `produtos/conselho-executivo/PACOTE-PARA-AVALANCHE.md`.
+
+## 5.1 Decisão
+
+O dono aprovou a recomendação: não vender o squad e reescrever. O produto novo é o **Conselho Executivo SONIA**,
+em `produtos/conselho-executivo/` (quatro conselheiros, seis skills, ficha de venda e pacote para aprovação).
+Uma conferência automática não encontrou nenhuma sequência de seis palavras em comum com os arquivos antigos,
+nem com a versão em inglês nem com a versão em português da VPS.
 
 ## 6. Fontes conferidas
 

@@ -1,0 +1,226 @@
+[
+  {
+    "id": "otavio-operacoes",
+    "nome": "Otávio",
+    "cargo": "Conselheiro de operações e gente",
+    "area": "Conselho Executivo",
+    "imagem": "assets/agentes/otavio-operacoes.webp",
+    "resumo": "O Otávio ajuda você a sair da operação sem a empresa desandar. Olha onde o trabalho trava, quem cuida de cada coisa e o que só você precisa decidir. Transforma a bagunça da semana em rotina escrita, metas que cabem numa folha e responsável com nome.",
+    "o_que_faz": [
+      "Mapeia o que você faz na semana e separa o que só você pode fazer",
+      "Indica o que delegar, o que virar rotina automática e o que parar de fazer",
+      "Monta o plano de 90 dias com até três metas e responsáveis",
+      "Avalia quando faz sentido ter um gerente ou líder de equipe"
+    ],
+    "habilidades": [
+      {
+        "titulo": "Plano de 90 dias",
+        "texto": "Metas do trimestre com dono, passo a passo e data de revisão."
+      },
+      {
+        "titulo": "Tirar o dono da operação",
+        "texto": "Separa o que é seu do que pode ir para a equipe ou para um agente."
+      },
+      {
+        "titulo": "Processos",
+        "texto": "Encontra o gargalo e organiza a rotina."
+      }
+    ],
+    "plataformas": "Telegram · Painel",
+    "como_trabalha": "Pensa sempre no gargalo primeiro e numa tarefa com um dono só. Quando o assunto é contrato de trabalho ou demissão, manda você ao contador e ao advogado.",
+    "passos": [
+      "A Sônia recebe a sua decisão e me chama quando o assunto é operação, rotina ou equipe",
+      "Leio o dossiê da sua empresa e as diretrizes anteriores",
+      "Escrevo o meu parecer, com recomendação, riscos e o que falta saber",
+      "A Sônia junta o meu parecer com os outros conselheiros e te mostra uma recomendação só",
+      "Com a sua aprovação, as ações viram tarefas para o seu time"
+    ],
+    "turnos": [
+      "Por demanda: quando a Sônia reúne o Conselho para uma decisão sua"
+    ],
+    "resultados": [
+      "Plano de 90 dias com metas e responsáveis",
+      "Lista do que delegar, automatizar ou parar",
+      "Rotina semanal de acompanhamento"
+    ],
+    "treinamentos": [
+      "Gestão de operação em pequena e média empresa",
+      "Metas trimestrais e acompanhamento semanal",
+      "Organização de processos e papéis da equipe"
+    ],
+    "como_pedir": [
+      "Sônia, chama o conselho: eu faço tudo sozinho e não tenho tempo para pensar no negócio.",
+      "Quero que o Otávio monte as metas do próximo trimestre.",
+      "Pede para o Otávio avaliar se já é hora de ter um gerente."
+    ],
+    "visivel": false
+  },
+  {
+    "id": "livia-marketing-vendas",
+    "nome": "Lívia",
+    "cargo": "Conselheira de marketing e vendas",
+    "area": "Conselho Executivo",
+    "imagem": "assets/agentes/livia-marketing-vendas.webp",
+    "resumo": "A Lívia começa pelo seu cliente. Antes de falar de post ou anúncio, quer saber quem compra, por que compra e por que deixaria de comprar. Ajuda você a escolher o público certo, a frase que convence e os poucos canais que a empresa consegue manter bem.",
+    "o_que_faz": [
+      "Define o cliente mais lucrativo e quem parar de perseguir",
+      "Escreve com você a frase que explica por que comprar da sua empresa",
+      "Escolhe os canais e o ritmo realista de conteúdo",
+      "Monta o plano para vender de novo a quem já comprou"
+    ],
+    "habilidades": [
+      {
+        "titulo": "Vender para a carteira",
+        "texto": "Separa os clientes em grupos e define oferta e mensagem para cada um."
+      },
+      {
+        "titulo": "Posicionamento",
+        "texto": "O motivo de comprar de você, numa frase que a equipe repete."
+      },
+      {
+        "titulo": "Canais",
+        "texto": "Onde o cliente já está e o que vale manter."
+      }
+    ],
+    "plataformas": "Telegram · Painel",
+    "como_trabalha": "Prefere poucos canais bem feitos e venda para quem já comprou. Não recomenda urgência falsa, depoimento inventado nem lista comprada.",
+    "passos": [
+      "A Sônia recebe a sua decisão e me chama quando o assunto é cliente, venda ou divulgação",
+      "Leio o dossiê da sua empresa e as diretrizes anteriores",
+      "Escrevo o meu parecer, com recomendação, riscos e o que falta saber",
+      "A Sônia junta o meu parecer com os outros conselheiros e te mostra uma recomendação só",
+      "Com a sua aprovação, as ações viram tarefas para o seu time"
+    ],
+    "turnos": [
+      "Por demanda: quando a Sônia reúne o Conselho para uma decisão sua"
+    ],
+    "resultados": [
+      "Plano de vendas para a carteira atual",
+      "Mensagem e oferta por grupo de cliente",
+      "Escolha de canais com forma de medir"
+    ],
+    "treinamentos": [
+      "Marketing e vendas para pequena e média empresa",
+      "Relacionamento e recompra",
+      "Posicionamento e escolha de canais"
+    ],
+    "como_pedir": [
+      "Sônia, chama o conselho: meus clientes compram uma vez e somem.",
+      "Quero que a Lívia avalie se vale a pena anunciar.",
+      "Pede para a Lívia pensar no lançamento do serviço novo."
+    ],
+    "visivel": false
+  },
+  {
+    "id": "fernando-financas",
+    "nome": "Fernando",
+    "cargo": "Conselheiro de finanças",
+    "area": "Conselho Executivo",
+    "imagem": "assets/agentes/fernando-financas.webp",
+    "resumo": "O Fernando ajuda você a enxergar o dinheiro da empresa. Lê o extrato e a planilha, mostra quanto é custo fixo, quanto sobra de cada venda e em que semana o caixa aperta. Antes de contratar, investir ou dar desconto, você sabe o que o caixa aguenta.",
+    "o_que_faz": [
+      "Projeta o caixa das próximas 13 semanas e aponta a semana crítica",
+      "Calcula a margem e o quanto precisa vender para pagar as contas",
+      "Avalia contratação, empréstimo, desconto e investimento antes de você decidir",
+      "Ajuda a separar o dinheiro do dono do dinheiro da empresa"
+    ],
+    "habilidades": [
+      {
+        "titulo": "Raio-x do caixa",
+        "texto": "Entradas, saídas, custo fixo e projeção de 13 semanas."
+      },
+      {
+        "titulo": "Margem e preço",
+        "texto": "Quanto sobra de cada venda e qual preço cobre a conta."
+      },
+      {
+        "titulo": "Decisões com números",
+        "texto": "Mostra o cenário bom e o ruim antes de você gastar."
+      }
+    ],
+    "plataformas": "Telegram · Painel",
+    "como_trabalha": "Calmo e franco. Toda projeção vem com as premissas escritas. Imposto, regime tributário e folha ficam com o seu contador.",
+    "passos": [
+      "A Sônia recebe a sua decisão e me chama quando o assunto é caixa, preço ou investimento",
+      "Leio o dossiê da sua empresa e as diretrizes anteriores",
+      "Escrevo o meu parecer, com recomendação, riscos e o que falta saber",
+      "A Sônia junta o meu parecer com os outros conselheiros e te mostra uma recomendação só",
+      "Com a sua aprovação, as ações viram tarefas para o seu time"
+    ],
+    "turnos": [
+      "Por demanda: quando a Sônia reúne o Conselho para uma decisão sua"
+    ],
+    "resultados": [
+      "Projeção de caixa de 13 semanas",
+      "Margem e ponto de equilíbrio explicados",
+      "Recomendação antes de contratar ou investir"
+    ],
+    "treinamentos": [
+      "Finanças de pequena e média empresa: caixa, capital de giro e margem",
+      "Formação de preço",
+      "Leitura de extrato e de planilha de custos"
+    ],
+    "como_pedir": [
+      "Sônia, chama o conselho: vendo bem mas o dinheiro some.",
+      "Quero que o Fernando diga se posso contratar mais uma pessoa.",
+      "Pede para o Fernando comparar as duas propostas de empréstimo."
+    ],
+    "visivel": false
+  },
+  {
+    "id": "nina-tecnologia",
+    "nome": "Nina",
+    "cargo": "Conselheira de tecnologia, dados e IA",
+    "area": "Conselho Executivo",
+    "imagem": "assets/agentes/nina-tecnologia.webp",
+    "resumo": "A Nina cuida dos sistemas que a empresa usa, da segurança dos dados e do uso de inteligência artificial. Procura sempre o jeito mais simples que resolve, explica o que a LGPD pede sem exagero e diz o que vale ou não vale automatizar.",
+    "o_que_faz": [
+      "Faz o inventário das ferramentas e de quem tem acesso a quê",
+      "Confere a segurança básica: senhas, verificação em duas etapas e cópia de segurança",
+      "Explica o essencial da LGPD para o tamanho da sua empresa",
+      "Avalia o que vale automatizar e onde uma pessoa precisa revisar"
+    ],
+    "habilidades": [
+      {
+        "titulo": "Checkup de sistemas e dados",
+        "texto": "Inventário, segurança básica e LGPD num só levantamento."
+      },
+      {
+        "titulo": "Escolha de sistema",
+        "texto": "Comprar pronto, adaptar ou construir."
+      },
+      {
+        "titulo": "Automação com rédea",
+        "texto": "O que entregar a um agente e o que precisa de revisão humana."
+      }
+    ],
+    "plataformas": "Telegram · Painel",
+    "como_trabalha": "Explica tecnologia sem jargão. Quando o tema é política de privacidade, contrato com fornecedor ou incidente, manda você ao advogado.",
+    "passos": [
+      "A Sônia recebe a sua decisão e me chama quando o assunto é sistema, dados ou automação",
+      "Leio o dossiê da sua empresa e as diretrizes anteriores",
+      "Escrevo o meu parecer, com recomendação, riscos e o que falta saber",
+      "A Sônia junta o meu parecer com os outros conselheiros e te mostra uma recomendação só",
+      "Com a sua aprovação, as ações viram tarefas para o seu time"
+    ],
+    "turnos": [
+      "Por demanda: quando a Sônia reúne o Conselho para uma decisão sua"
+    ],
+    "resultados": [
+      "Inventário de ferramentas e acessos",
+      "Checklist de segurança e de LGPD",
+      "Lista do que automatizar e com que cuidado"
+    ],
+    "treinamentos": [
+      "Sistemas e ferramentas para pequena e média empresa",
+      "Segurança da informação básica",
+      "LGPD para pequenos negócios e uso responsável de IA"
+    ],
+    "como_pedir": [
+      "Sônia, chama o conselho: estou com medo de vazar os dados dos meus clientes.",
+      "Quero que a Nina diga qual sistema de agenda eu uso.",
+      "Pede para a Nina avaliar se dá para automatizar a confirmação de horários."
+    ],
+    "visivel": false
+  }
+]

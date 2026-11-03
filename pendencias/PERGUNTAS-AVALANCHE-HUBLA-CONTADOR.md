@@ -64,6 +64,8 @@ O que ficou com você depois da revisão da página. Risque conforme fizer.
 - [ ] **Apagar o `editor.html` do servidor** (Gerenciador de Arquivos). O pacote novo já não o traz; o editor roda no
       seu computador.
 - [ ] **Testar no celular**, inclusive no iPhone (Safari).
+- [ ] **Conselho Executivo (adicional, anotado em 03/11/2026).** Decidir preço e nomes, testar na própria empresa,
+      gerar os 4 avatares e submeter à Avalanche. Tudo em `produtos/conselho-executivo/LEIA-ME.md`.
 
 ### Benefícios para colar no painel (até 120 caracteres cada)
 

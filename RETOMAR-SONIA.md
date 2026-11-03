@@ -44,6 +44,7 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 | Análise de concorrência e preço | `analise-concorrencia/RELATORIO-PRECOS-SONIA.md` |
 | Material de referência (Naia OS) | `referencia-landing-agentes/` |
 | C-Level Squad como opcional (licença, origem, melhorias) | `pendencias/ANALISE-C-LEVEL-SQUAD.md` |
+| Conselho Executivo (adicional pago que substitui o C-Level Squad): agentes, skills, ficha de venda, pacote para a Avalanche | `produtos/conselho-executivo/LEIA-ME.md` |
 
 ## O negócio, em 10 linhas
 
