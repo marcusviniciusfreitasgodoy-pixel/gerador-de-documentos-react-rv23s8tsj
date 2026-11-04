@@ -11,14 +11,14 @@ Versão em vídeo do doc "Conselho Executivo SONIA: proposta para aprovação da
 
 | Personagem | Como fazer no HeyGen | Voz |
 |---|---|---|
-| Sônia, a narradora | Photo Avatar a partir de `landing-sonia/assets/agentes/avatar-sonia.webp` | feminina, calma e segura |
-| Otávio, operações e equipe | Photo Avatar de `otavio-operacoes.webp` | masculina, madura e prática |
-| Lívia, marketing e vendas | Photo Avatar de `livia-marketing-vendas.webp` | feminina, enérgica |
-| Fernando, finanças | Photo Avatar de `fernando-financas.webp` | masculina, pausada e precisa |
-| Nina, tecnologia, dados e IA | Photo Avatar de `nina-tecnologia.webp` | feminina, jovem e direta |
+| Sônia, a narradora | Photo Avatar a partir de `video/retratos/sonia.jpg` | feminina, calma e segura |
+| Otávio, operações e equipe | Photo Avatar de `video/retratos/otavio.jpg` | masculina, madura e prática |
+| Lívia, marketing e vendas | Photo Avatar de `video/retratos/livia.jpg` | feminina, enérgica |
+| Fernando, finanças | Photo Avatar de `video/retratos/fernando.jpg` | masculina, pausada e precisa |
+| Nina, tecnologia, dados e IA | Photo Avatar de `video/retratos/nina.jpg` | feminina, jovem e direta |
 | Carla, dona da confeitaria | sem avatar: aparece como mensagens de WhatsApp na tela | sem voz |
 
-Os retratos estão em `landing-sonia/assets/agentes/`. Os quatro conselheiros têm 480 x 480 pixels e a Sônia 640 x 640, pouco para um avatar em tela cheia. Antes de criar os avatares, gere versões de pelo menos 1024 x 1024 pelo mesmo caminho dos retratos originais, o Gemini na VPS, para os rostos continuarem iguais aos da landing.
+Os retratos em `video/retratos/` têm 1024 x 1024 pixels e são os originais de onde saíram as imagens da landing, então os rostos são os mesmos. Uma cópia está em `~/Downloads/retratos-heygen/` para subir no HeyGen. Eles são ilustrações em 3D, não fotos: crie primeiro um avatar só, gere uma fala curta e veja se a boca e a expressão ficam naturais antes de criar os outros quatro.
 
 Use uma voz diferente para cada personagem, todas em português do Brasil. Se preferir as vozes do ElevenLabs, o HeyGen permite conectá-las.
 
@@ -165,7 +165,7 @@ Os arquivos dos quatro conselheiros e das dez skills vão junto com a proposta. 
 ## Antes de gerar
 
 1. **Créditos.** Na última checagem, em 26/08/2026, a conta HeyGen estava no plano gratuito, sem créditos. Avatar a partir de foto usa a faixa mais cara: cerca de 20 créditos por minuto, então este vídeo deve pedir de 70 a 80 créditos. Confira o saldo antes.
-2. **Imagens.** Gere os retratos em resolução maior, como explicado em "Elenco".
+2. **Imagens.** Use os retratos de `video/retratos/` e teste um avatar antes dos outros, como explicado em "Elenco".
 3. **Pronúncia.** Ouça a prévia de cada fala. Atenção a "LGPD", "SONIA" e "Avalanche". Se a voz ler errado, escreva do jeito que se fala, por exemplo "éle gê pê dê".
 4. **Legendas.** Ligue as legendas automáticas e confira os números escritos nelas.
 5. **Prévia.** Revise o vídeo inteiro antes de mandar. A cena 10 cita os testes, e o texto tem de continuar dizendo "num ambiente próprio": o teste no painel da Avalanche ainda não foi feito.
