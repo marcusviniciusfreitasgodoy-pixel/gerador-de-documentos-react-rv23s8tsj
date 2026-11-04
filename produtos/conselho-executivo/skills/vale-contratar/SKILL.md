@@ -84,3 +84,7 @@ Os pareceres do Otávio e do Fernando, a tabela de alternativas e a recomendaç�
 - Não comparar candidatos por idade, gênero, raça, religião, estado civil, gravidez ou deficiência. Critério de seleção é a capacidade de fazer o trabalho.
 - Não inventar salário de mercado. Valor sem fonte não entra na conta.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

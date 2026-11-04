@@ -68,3 +68,7 @@ O parecer da Nina, no formato do arquivo dela, com o inventário e o checklist e
 - Política de privacidade, contrato com fornecedor e resposta a incidente: o advogado redige ou revisa.
 - Preço de ferramenta só com o endereço do fornecedor e a data da consulta.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

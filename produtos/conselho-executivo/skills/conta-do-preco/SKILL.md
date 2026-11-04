@@ -71,3 +71,7 @@ O parecer do Fernando, no formato do arquivo dele, com a tabela de margem por pr
 - Não sugerir preço "de/por" com um "de" que nunca foi cobrado. É publicidade enganosa (Código de Defesa do Consumidor, art. 37).
 - Toda simulação leva as premissas escritas. Sem custo direto informado, não simular.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

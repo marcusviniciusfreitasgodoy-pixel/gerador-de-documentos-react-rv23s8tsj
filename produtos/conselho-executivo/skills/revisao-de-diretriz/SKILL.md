@@ -81,3 +81,7 @@ Seguimos assim?
 - Não apagar nem reescrever o histórico da diretriz. Revisão nova é acrescentada embaixo.
 - Não procurar culpado. A revisão olha o processo e o resultado, não a pessoa.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

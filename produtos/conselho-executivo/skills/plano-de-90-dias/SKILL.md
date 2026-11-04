@@ -60,3 +60,7 @@ O parecer do Otávio, no formato do arquivo dele, com a lista dos quatro grupos 
 - Mudança de função, salário, jornada ou desligamento de funcionário: levar ao contador e ao advogado.
 - Não inventar meta numérica. O número vem do dono ou do histórico que ele mostrar.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

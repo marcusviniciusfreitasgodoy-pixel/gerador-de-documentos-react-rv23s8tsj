@@ -52,3 +52,7 @@ Registre a data da última atualização no topo do arquivo.
 
 - Português do Brasil. Nunca use travessão.
 - Escreva o que o dono disse, sem enfeitar. Onde for estimativa, marque "aproximado".
+
+## Exemplo
+
+Veja `exemplo-dossie.md` nesta pasta: um dossiê bem preenchido, de uma empresa fictícia. Os exemplos das outras skills do Conselho usam essa mesma empresa. Nunca copie os dados dele para o dossiê de um cliente.

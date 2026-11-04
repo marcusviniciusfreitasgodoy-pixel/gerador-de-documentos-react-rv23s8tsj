@@ -76,3 +76,7 @@ O parecer do Fernando, no formato do arquivo dele, com a tabela de 13 semanas e 
 - Não recomendar investimento financeiro.
 - Toda projeção leva as premissas escritas ao lado. Sem dados, não projetar.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

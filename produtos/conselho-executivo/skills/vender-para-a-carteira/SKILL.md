@@ -67,3 +67,7 @@ O parecer da Lívia, no formato do arquivo dela, com os grupos, as ofertas e os 
 - Não usar lista comprada nem contato de quem não é cliente.
 - Não inventar taxa de resposta ou de conversão. O resultado é medido depois.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

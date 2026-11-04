@@ -23,6 +23,8 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e d
 | `skills/conta-do-preco/` | skill do Fernando: margem, ponto de equilíbrio, preço mínimo e efeito do desconto (04/11/2026) |
 | `skills/vale-contratar/` | a Sônia com o Otávio e o Fernando: gente ou processo, custo e caixa, sim, não ou ainda não (04/11/2026) |
 | `skills/revisao-de-diretriz/` | a Sônia na data de revisão: manter, ajustar ou encerrar, e o painel `diretrizes/PAINEL.md` (04/11/2026) |
+| `skills/*/exemplo.md` e `skills/dossie-da-empresa/exemplo-dossie.md` | um caso resolvido por skill, todos com a mesma empresa fictícia, a Confeitaria Ponto Doce (04/11/2026) |
+| `testes/CASOS-DE-TESTE.md` | 12 casos para conferir o Conselho numa conta de teste, com o que a resposta tem de ter e o que não pode ter (04/11/2026) |
 | `skills/incidente-de-dados/` | skill da Nina, urgente: conter, registrar, avaliar com o advogado, prazos da ANPD e rascunhos (04/11/2026) |
 | `FICHA-DE-VENDA.md` | preço por plano, objetivos, benefícios, diferenças, para quem é e o que não prometer |
 | `ROTEIRO-DE-VENDA.md` | perguntas de qualificação, apresentação, oferta por plano, objeções e mensagens prontas |

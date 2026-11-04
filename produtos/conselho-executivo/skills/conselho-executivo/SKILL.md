@@ -21,7 +21,16 @@ Abra `dossie-da-empresa.md` na base de conhecimento do cliente.
 - Se não existir, rode a skill `dossie-da-empresa` antes. Sem dossiê, os conselheiros dão conselho genérico, e isso não serve.
 - Se existir mas estiver desatualizado no ponto da decisão (por exemplo, a equipe mudou), pergunte ao dono só o que mudou e atualize o dossiê.
 
-## Passo 2: escolher quem participa
+## Passo 2: o peso da decisão
+
+Antes de chamar alguém, classifique a decisão:
+
+- **Leve:** dá para desfazer em poucas semanas e sem prejuízo grande. Exemplos: testar um canal novo, mudar o horário de atendimento, trocar o texto de uma oferta. Chame o conselheiro da área, peça um parecer curto e não faça pré-mortem.
+- **Pesada:** é difícil ou cara de desfazer, ou compromete o caixa por mais de um mês. Exemplos: contratar, assinar contrato longo de aluguel ou de sistema, pegar empréstimo, abrir unidade, mudar o preço do produto principal, demitir. Chame todos os conselheiros que o tema toca e inclua o pré-mortem no briefing (Passo 4).
+
+Na dúvida, trate como pesada e diga ao dono por quê.
+
+## Passo 3: escolher quem participa
 
 | Se a decisão envolve | Chame |
 |---|---|
@@ -39,7 +48,7 @@ Regras de combinação:
 - Automação que fala com cliente ou usa lista de contatos leva Nina.
 - Chame o mínimo que cobre a decisão. Uma pergunta de um tema só pode ter um conselheiro só.
 
-## Passo 3: preparar o pedido aos conselheiros
+## Passo 4: preparar o pedido aos conselheiros
 
 Mande a cada conselheiro escolhido o mesmo briefing:
 
@@ -53,20 +62,30 @@ Leia o dossiê e as diretrizes anteriores antes de responder.
 Responda no formato de parecer do seu arquivo.
 ```
 
+Em decisão pesada, acrescente ao briefing o pré-mortem:
+
+```
+Pré-mortem: imagine que estamos daqui a seis meses e essa decisão deu errado.
+Qual é o motivo mais provável, na sua área? Que sinal apareceria primeiro?
+O que dá para fazer agora para evitar ou para perceber cedo?
+Responda isso dentro de "O que eu evitaria agora".
+```
+
 Se a plataforma permitir, chame os conselheiros ao mesmo tempo. Espere todos responderem antes de seguir.
 
-## Passo 4: juntar os pareceres
+## Passo 5: juntar os pareceres
 
 Leia os pareceres e monte a síntese:
 
 1. **Onde concordam.** Vira a recomendação principal.
 2. **Onde discordam.** Não esconda a divergência. Mostre as duas posições e diga qual você recomenda e por quê. Quando a divergência é sobre dinheiro, o parecer do Fernando pesa mais. Quando é sobre o que a operação aguenta, o do Otávio.
 3. **O que falta saber.** Junte as perguntas de todos, sem repetir.
-4. **O que pede profissional.** Se algum conselheiro escreveu "levar ao contador" ou "levar ao advogado", isso vai em destaque.
+4. **O principal risco**, em decisão pesada: o motivo de fracasso que mais conselheiros apontaram no pré-mortem, com o sinal que avisa cedo. Esse sinal vira uma das ações da diretriz ou entra em "Como saber se funcionou".
+5. **O que pede profissional.** Se algum conselheiro escreveu "levar ao contador" ou "levar ao advogado", isso vai em destaque.
 
 Se faltar informação essencial para decidir, pare aqui. Mande ao dono só as perguntas, explicando por que cada uma importa, e retome depois da resposta.
 
-## Passo 5: apresentar ao dono e pedir aprovação
+## Passo 6: apresentar ao dono e pedir aprovação
 
 Mande ao dono uma mensagem curta:
 
@@ -75,7 +94,7 @@ O Conselho avaliou: <a decisão>.
 
 Recomendação: <uma ou duas frases>.
 Por quê: <o argumento principal>.
-Ponto de atenção: <a divergência ou o risco, se houver>.
+Ponto de atenção: <a divergência, ou o principal risco do pré-mortem com o sinal que avisa cedo>.
 Precisa de profissional: <contador ou advogado, se houver>.
 
 Ações propostas:
@@ -87,13 +106,13 @@ Aprova assim, quer mudar alguma coisa ou prefere não seguir?
 
 Não emita a diretriz antes de o dono aprovar. A diretriz é uma ordem de execução. Recomendação o Conselho faz. Decisão é do dono.
 
-## Passo 6: escrever a diretriz
+## Passo 7: escrever a diretriz
 
 Com a aprovação, crie o arquivo `diretrizes/AAAA-MM-DD-tema-curto.md` na base de conhecimento do cliente, usando o `modelo-diretriz.md` desta skill. Status inicial: PENDENTE.
 
 Se o dono mudou algo na aprovação, a diretriz registra a versão aprovada, não a recomendação original.
 
-## Passo 7: distribuir e acompanhar
+## Passo 8: distribuir e acompanhar
 
 1. Mude o status para EM EXECUÇÃO.
    Inclua a diretriz no painel `diretrizes/PAINEL.md` (formato na skill `revisao-de-diretriz`).
@@ -116,3 +135,7 @@ Para lembrar a data de revisão, use uma rotina da plataforma só se o plano do 
 
 - Português do Brasil. Nunca use travessão.
 - Mensagem ao dono curta. A diretriz é onde fica o detalhe.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.

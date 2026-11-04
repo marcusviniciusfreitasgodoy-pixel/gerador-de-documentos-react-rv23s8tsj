@@ -27,6 +27,8 @@ Quatro agentes adicionais e dez skills (as quatro últimas da tabela entraram em
 | `skills/revisao-de-diretriz/` | skill | Sônia, na data de revisão de cada diretriz |
 | `skills/incidente-de-dados/` | skill | Nina, em caso de vazamento ou invasão |
 
+Cada skill traz um `exemplo.md` com um caso resolvido, todos com a mesma empresa fictícia (o dossiê dela está em `skills/dossie-da-empresa/exemplo-dossie.md`). Em `testes/CASOS-DE-TESTE.md` vão 12 casos para a conta de teste. A reunião do Conselho separa decisão leve de pesada, e a pesada leva pré-mortem.
+
 Os arquivos de agente seguem o formato de subagente com cabeçalho `name`, `description`, `tools` e `model`. As skills seguem o formato `SKILL.md`. Se o painel usa outro formato, adaptamos.
 
 ## Como funciona

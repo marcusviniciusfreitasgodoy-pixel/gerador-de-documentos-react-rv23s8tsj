@@ -92,3 +92,7 @@ Quando o incidente estiver contido e comunicado, ou decidido que não se comunic
 - Não prometer ao dono nem aos clientes que nada vazou ou que não vai acontecer de novo.
 - Invasão de sistema é crime. O registro de ocorrência na polícia é decisão do dono com o advogado.
 - Nunca use travessão.
+
+## Exemplo
+
+Veja `exemplo.md` nesta pasta: um caso resolvido do começo ao fim, com a empresa fictícia do `exemplo-dossie.md` da skill `dossie-da-empresa`. Siga o formato e o raciocínio, nunca os números: eles são inventados.
