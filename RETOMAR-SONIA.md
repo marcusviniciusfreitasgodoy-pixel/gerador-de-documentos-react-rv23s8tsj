@@ -30,12 +30,16 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 - Auditoria do painel (o que o produto entrega de fato): doc "Prime Circle Agentes: auditoria do painel
   Naia OS", https://claude.ai/artifact/1V43xv5uR1FMASANpBA3iH (Claude Docs).
 - Roteiro de onboarding de 60 min pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md` (ensaiar antes).
-- **Seção "A Sônia responde"** (03/11/2026), logo depois de "Por onde começar": 5 vídeos da Série da Sônia
-  (R5, R6, R7, R4, R2) em `landing-sonia/assets/video/serie/` (720x1280, ~2 MB cada, capa .webp e legenda .vtt
-  corrigida à mão), dados em `videos` do `conteudo.json`. A casca da seção está no design (`adaptar-design.py`,
-  troca "secao-videos") e o miolo é montado pelo script da página. **Fora de propósito:** R1 ("24 horas"), R3
-  (sessão semanal) e R8 ("conexão oficial do WhatsApp") até o dono refazer. Originais em
-  https://serie-pc-2m0ioj.vercel.app/ . Para incluir um vídeo: comprimir igual, gerar capa e legenda, somar em `videos.itens`.
+- **Seção "A Sônia responde"** (03/11/2026, completa em 04/11), logo depois de "Por onde começar": os 8 vídeos
+  da Série da Sônia (ordem R1, R5, R6, R7, R4, R2, R3, R8) em `landing-sonia/assets/video/serie/` (720x1280,
+  ~2 MB cada, capa .webp e legenda .vtt corrigida à mão), dados em `videos` do `conteudo.json`. A casca da seção
+  está no design (`adaptar-design.py`, troca "secao-videos") e o miolo é montado pelo script da página. R1, R3 e
+  R8 foram refeitos pelo dono e entraram em 04/11; R3 leva nota do horário do atendimento humano e R8 nota da
+  conexão não oficial do WhatsApp. Originais em https://serie-pc-2m0ioj.vercel.app/ . Para incluir um vídeo:
+  `ffmpeg -vf scale=720:1280 -r 30 -c:v libx264 -profile:v main -preset slow -crf 27 -c:a aac -b:a 96k
+  -movflags +faststart`, capa com `cwebp -q 80 -resize 540 960` a partir do .jpg do site, tempos das palavras com
+  `ferramentas/legendas/reconhecer-fala.py` (faster-whisper "small", roda na VPS) e legenda com
+  `gerar-vtt-serie.py` + um .tsv em `ferramentas/legendas/serie/`; somar em `videos.itens`.
 
 > **Este trabalho não é o app de documentos.** O `CLAUDE.md` da raiz fala do app Prime Circle
 > Documentos, que roda no Skip. A landing SONIA é um site estático separado, publicado na

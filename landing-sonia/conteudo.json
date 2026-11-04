@@ -120,12 +120,21 @@
     ]
   },
   "videos": {
-    "_aviso": "Série da Sônia (03/11/2026). R1, R3 e R8 ficaram de fora até serem refeitos: R1 diz \"24 horas\", R3 promete sessão semanal e R8 fala em conexão oficial do WhatsApp. R2 exige a nota do plano Magnata.",
+    "_aviso": "Série da Sônia, os 8 vídeos (R1 a R8). R1, R3 e R8 entraram em 04/11/2026, refeitos sem \"24 horas\", sem sessão semanal e sem \"conexão oficial do WhatsApp\". R2 exige a nota do plano Magnata; R3 leva a nota do horário do atendimento humano; R8, a nota da conexão não oficial.",
     "visivel": true,
     "etiqueta": "A Sônia responde",
     "titulo": "Escolha a dúvida e ouça a resposta.",
-    "texto": "Vídeos curtos, com até 40 segundos e legenda. Toque no assunto para ver.",
+    "texto": "Vídeos de menos de um minuto, com legenda. Toque no assunto para ver.",
     "itens": [
+      {
+        "id": "r1-a-entrevista",
+        "titulo": "Quem é a Sônia?",
+        "resumo": "Uma entrevista de emprego com a gerente que traz o time.",
+        "duracao": "0:39",
+        "video": "assets/video/serie/r1-a-entrevista.mp4",
+        "capa": "assets/video/serie/r1-a-entrevista.webp",
+        "legenda": "assets/video/serie/r1-a-entrevista.pt-BR.vtt"
+      },
       {
         "id": "r5-mais-um-chatbot",
         "titulo": "Parece mais um chatbot?",
@@ -171,6 +180,26 @@
         "capa": "assets/video/serie/r2-depois-do-expediente.webp",
         "legenda": "assets/video/serie/r2-depois-do-expediente.pt-BR.vtt",
         "nota": "A Márcia (financeiro) e a Aline (contratos) estão no plano Magnata."
+      },
+      {
+        "id": "r3-tres-tamanhos-de-time",
+        "titulo": "Qual plano escolher?",
+        "resumo": "Starter, Elite e Magnata: o que muda entre os três.",
+        "duracao": "0:41",
+        "video": "assets/video/serie/r3-tres-tamanhos-de-time.mp4",
+        "capa": "assets/video/serie/r3-tres-tamanhos-de-time.webp",
+        "legenda": "assets/video/serie/r3-tres-tamanhos-de-time.pt-BR.vtt",
+        "nota": "O atendimento humano do Magnata é em dias úteis, das 9h às 18h."
+      },
+      {
+        "id": "r8-tres-duvidas",
+        "titulo": "Preciso saber programar?",
+        "resumo": "E o que fica fora do preço.",
+        "duracao": "0:35",
+        "video": "assets/video/serie/r8-tres-duvidas.mp4",
+        "capa": "assets/video/serie/r8-tres-duvidas.webp",
+        "legenda": "assets/video/serie/r8-tres-duvidas.pt-BR.vtt",
+        "nota": "A conexão do WhatsApp usa um sistema não oficial. Os detalhes estão nas perguntas frequentes."
       }
     ]
   },
