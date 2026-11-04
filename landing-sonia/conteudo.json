@@ -2176,12 +2176,12 @@
     ]
   },
   "quem": {
-    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: salve em assets/quem/marcus.jpg (de 1200 px para cima, retrato 4:5) e preencha o campo imagem; sem imagem a seção sai só com texto. A prova 3 cita a base de escrituras: número agregado, sem dado individual.",
+    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: assets/quem/marcus.jpg (800 x 800, a mesma do guia de imóveis internacionais, escolhida pelo dono em 04/11/2026); a seção recorta em 4:5. Se trocar, use retrato de 1200 px para cima. A prova 3 cita a base de escrituras: número agregado, sem dado individual.",
     "visivel": true,
     "etiqueta": "Quem está por trás da Sônia",
     "nome": "Marcus Godoy",
     "cargo": "Fundador da Godoy Prime Realty. Personal Shopper Imobiliário e perito avaliador credenciado pelo TJRJ. CRECI PF 80.199 RJ.",
-    "imagem": "",
+    "imagem": "assets/quem/marcus.jpg",
     "numeros": [
       {
         "valor": "30+",
