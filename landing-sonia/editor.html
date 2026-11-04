@@ -78,9 +78,9 @@
         var previaPronta = false;
 
         var SECOES = [
-          ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["gargalos", "Por onde começar"], ["videos", "Vídeos da Sônia"], ["sigla", "Sigla SONIA"],
-          ["numeros", "Números"], ["como_funciona", "Como funciona"], ["time", "Time e currículos"], ["conselho", "Conselho Executivo"], ["economia", "Economia"],
-          ["diferenciais", "Depois que você paga"], ["depoimentos", "Depoimentos"], ["planos", "Planos"], ["agencia", "Agência"],
+          ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["realidade", "A realidade"], ["gargalos", "Por onde começar"], ["videos", "Vídeos da Sônia"], ["sigla", "Sigla SONIA"],
+          ["numeros", "Números"], ["como_funciona", "Como funciona"], ["time", "Time e currículos"], ["comando", "Você no comando"], ["conselho", "Conselho Executivo"], ["economia", "Economia"],
+          ["diferenciais", "Depois que você paga"], ["depoimentos", "Depoimentos"], ["quem", "Quem está por trás"], ["planos", "Planos"], ["agencia", "Agência"],
           ["contato", "Formulário"], ["empresa", "Dados da empresa"], ["faq", "Perguntas"], ["final", "Chamada final"], ["rodape", "Rodapé"]
         ];
         var ROTULOS = {
@@ -99,7 +99,8 @@
           salario: "Salário médio (R$)", pessoas: "Quantidade de pessoas", fontes: "Fontes", valor_agente: "Texto da coluna com agente",
           whatsapp: "WhatsApp que recebe os contatos", endpoint: "Endpoint do formulário (opcional)", interesses: "Opções de interesse",
           consentimento: "Texto de consentimento (LGPD)", mensagem_sucesso: "Mensagem depois do envio", caminhos: "Caminhos", aviso: "Aviso legal",
-          copyright: "Direitos", links: "Links", empresa_dep: "Empresa", video: "Link do vídeo"
+          copyright: "Direitos", links: "Links", empresa_dep: "Empresa", video: "Link do vídeo",
+          fonte: "Fonte (aparece embaixo do número)", zonas: "Zonas", cor: "Cor da zona (verde, amarela ou vermelha)", provas: "Onde isso já roda", rotulo_provas: "Rótulo da lista de provas", rotulo_link: "Texto do link"
         };
         var LONGOS = /^(texto|resumo|resposta|descricao|como_trabalha|fontes|aviso|consentimento|nota)$/;
 
@@ -292,6 +293,8 @@
           if (C.empresa && !String(C.empresa.cnpj || "").replace(/\D/g, "")) p.push("CNPJ não preenchido em Dados da empresa: o rodapé sai sem ele.");
           else if (C.empresa && String(C.empresa.cnpj).replace(/\D/g, "").length !== 14) p.push("CNPJ com número de dígitos errado: um CNPJ tem 14 dígitos.");
           if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito do fornecedor da plataforma.");
+          if (C.quem && C.quem.visivel !== false && !C.quem.imagem) p.push("Quem está por trás sem foto: suba a imagem para assets/quem/ e preencha o campo imagem, senão a seção sai só com texto.");
+          if (C.realidade && C.realidade.visivel !== false) p.push("A realidade: confira cada número na fonte citada antes de publicar.");
           if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Depois que você paga\".");
           if (C.depoimentos && C.depoimentos.visivel !== false) p.push("Depoimentos visíveis: use só clientes reais com autorização.");
           var tr = JSON.stringify(C).match(/"[^"]*[–—][^"]*"/g);

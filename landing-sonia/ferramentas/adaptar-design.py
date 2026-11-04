@@ -184,6 +184,88 @@ def tpl(t):
               "gargalos: ((c.gargalos && c.gargalos.itens) || []).map((w, i) => ({ ...w, n: pad(i + 1) })),\n"
               "      conselheiros: ((c.conselho && c.conselho.conselheiros) || []),\n"
               "      conselhoPassos: ((c.conselho && c.conselho.passos) || []).map((x, i) => ({ texto: x, n: pad(i + 1) })),", 'lista-conselho')
+
+    # ---- 04/11/2026: itens 1 a 4 da análise comparativa (landing-sonia/ANALISE-CAROLINA-MENEZES.md) ----
+    # (4a) "A realidade": quatro números com fonte, logo depois da abertura. Escura, como a abertura.
+    secao_r = ('<sc-if value="{{ show.realidade }}" hint-placeholder-val="{{ true }}">\n'
+      '<section id="realidade" class="pc-sec" style="background:#0E0E0E;color:#F5F1E6;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:clamp(32px,4vw,56px)">\n'
+      '<div style="display:grid;gap:16px;max-width:860px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.realidade.etiqueta }}</span>\n'
+      '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.realidade.titulo }}</h2>\n'
+      '<p style="margin:0;font-size:17px;line-height:1.6;color:#C8C1B0;max-width:640px;text-wrap:pretty">{{ c.realidade.texto }}</p>\n'
+      '</div>\n'
+      '<div class="pc-real" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));border-top:1px solid rgba(245,241,230,0.14)">\n'
+      '<sc-for list="{{ realidadeItens }}" as="r" hint-placeholder-count="4">\n'
+      '<div class="pc-real-item" style="display:grid;align-content:start;gap:10px;padding:28px 24px 28px 0">\n'
+      '<span class="pc-num" style="font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;font-size:clamp(40px,5vw,72px);line-height:1;letter-spacing:-0.02em;color:#C9A84C">{{ r.valor }}</span>\n'
+      '<span style="font-family:var(--pc-font-display);font-weight:500;font-size:24px;line-height:1.1">{{ r.titulo }}</span>\n'
+      '<span style="font-size:15px;line-height:1.55;color:#C8C1B0;text-wrap:pretty">{{ r.texto }}</span>\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.14em;line-height:1.6;color:#8F897C;text-transform:uppercase">{{ r.fonte }}</span>\n'
+      '</div>\n</sc-for>\n</div>\n</section>\n</sc-if>\n\n')
+    t = troca(t, '<sc-if value="{{ show.gargalos }}" hint-placeholder-val="{{ true }}">', secao_r + '<sc-if value="{{ show.gargalos }}" hint-placeholder-val="{{ true }}">', 'secao-realidade')
+    # (4b) "Você no comando": três zonas, entre os especialistas (escura) e o Conselho (escura). Clara.
+    secao_z = ('<sc-if value="{{ show.comando }}" hint-placeholder-val="{{ true }}">\n'
+      '<section id="comando" class="pc-sec" style="background:#F5F1E6;color:#0E0E0E;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:40px">\n'
+      '<div style="display:grid;gap:16px;max-width:860px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.comando.etiqueta }}</span>\n'
+      '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.comando.titulo }}</h2>\n'
+      '<p style="margin:0;font-size:17px;line-height:1.6;color:#2a2722;max-width:680px;text-wrap:pretty">{{ c.comando.texto }}</p>\n'
+      '</div>\n'
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">\n'
+      '<sc-for list="{{ comandoZonas }}" as="z" hint-placeholder-count="3">\n'
+      '<div class="pc-zona {{ z.classe }}" style="display:grid;align-content:start;gap:14px;padding:28px 24px;background:#FFFFFF;border:1px solid rgba(14,14,14,0.14);border-top:4px solid #C9A84C;border-radius:10px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#8B7340">{{ z.nome }}</span>\n'
+      '<span style="font-family:var(--pc-font-display);font-weight:500;font-size:30px;line-height:1.05;text-wrap:balance">{{ z.titulo }}</span>\n'
+      '<ul style="margin:0;padding:0;list-style:none;display:grid;gap:10px">\n'
+      '<sc-for list="{{ z.lista }}" as="i" hint-placeholder-count="4">\n'
+      '<li style="display:grid;grid-template-columns:14px 1fr;gap:10px;font-size:15px;line-height:1.5;color:#2a2722;text-wrap:pretty"><span class="pc-zona-pt" aria-hidden="true" style="width:8px;height:8px;border-radius:999px;background:#C9A84C;margin-top:7px"></span><span>{{ i.texto }}</span></li>\n'
+      '</sc-for>\n</ul>\n</div>\n</sc-for>\n</div>\n'
+      '<p style="margin:0;font-size:13px;line-height:1.6;color:#4a463f;max-width:720px">{{ c.comando.nota }}</p>\n'
+      '</section>\n</sc-if>\n\n')
+    t = troca(t, '<sc-if value="{{ show.conselho }}" hint-placeholder-val="{{ true }}">', secao_z + '<sc-if value="{{ show.conselho }}" hint-placeholder-val="{{ true }}">', 'secao-comando')
+    # (1) "Quem está por trás": antes dos planos. Clara, com borda em cima porque os planos também são claros.
+    secao_q = ('<sc-if value="{{ show.quem }}" hint-placeholder-val="{{ true }}">\n'
+      '<section id="quem" class="pc-sec" style="background:#F5F1E6;color:#0E0E0E;border-top:1px solid rgba(14,14,14,0.14);padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:clamp(32px,4vw,56px)">\n'
+      '<div class="pc-quem" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(28px,5vw,72px);align-items:start">\n'
+      '<sc-if value="{{ quemTemFoto }}" hint-placeholder-val="{{ true }}">\n'
+      '<div class="pc-quem-foto" style="aspect-ratio:4 / 5;border-radius:10px;overflow:hidden;background:#E8E0CC;max-width:520px">\n'
+      '<img srcset="{{ quemFoto }}" alt="{{ c.quem.nome }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">\n'
+      '</div>\n</sc-if>\n'
+      '<div style="display:grid;gap:20px;align-content:start;max-width:640px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.quem.etiqueta }}</span>\n'
+      '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.quem.nome }}</h2>\n'
+      '<p style="margin:0;font-family:var(--pc-font-mono);font-size:12px;letter-spacing:0.08em;line-height:1.7;color:#8B7340;text-transform:uppercase">{{ c.quem.cargo }}</p>\n'
+      '<div style="display:grid;gap:14px">\n'
+      '<sc-for list="{{ quemParagrafos }}" as="pg" hint-placeholder-count="3">\n'
+      '<p style="margin:0;font-size:17px;line-height:1.65;color:#2a2722;text-wrap:pretty">{{ pg.texto }}</p>\n'
+      '</sc-for>\n</div>\n'
+      '<sc-if value="{{ quemTemLinks }}" hint-placeholder-val="{{ true }}">\n'
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;padding-top:4px">\n'
+      '<sc-for list="{{ quemLinks }}" as="lk" hint-placeholder-count="2">\n'
+      '<a href="{{ lk.link }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(14,14,14,0.22);color:#0E0E0E;text-decoration:none;font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase">{{ lk.texto }}</a>\n'
+      '</sc-for>\n</div>\n</sc-if>\n'
+      '</div>\n</div>\n'
+      '<div style="display:grid;gap:16px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.quem.rotulo_provas }}</span>\n'
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">\n'
+      '<sc-for list="{{ quemProvas }}" as="pv" hint-placeholder-count="3">\n'
+      '<div style="display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;padding:26px 24px;background:#FFFFFF;border:1px solid rgba(14,14,14,0.14);border-radius:10px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.2em;color:#8B7340">{{ pv.n }}</span>\n'
+      '<span style="font-family:var(--pc-font-display);font-weight:500;font-size:28px;line-height:1.05;text-wrap:balance">{{ pv.titulo }}</span>\n'
+      '<span style="font-size:15px;line-height:1.6;color:#2a2722;text-wrap:pretty">{{ pv.texto }}</span>\n'
+      '<sc-if value="{{ pv.temLink }}" hint-placeholder-val="{{ false }}"><a href="{{ pv.link }}" target="_blank" rel="noopener" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8B7340;text-decoration:none;padding-top:6px">{{ pv.rotulo_link }} ↗</a></sc-if>\n'
+      '</div>\n</sc-for>\n</div>\n</div>\n'
+      '</section>\n</sc-if>\n\n')
+    t = troca(t, '<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">', secao_q + '<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">', 'secao-quem')
+    t = troca(t, 'conselho: vis(c.conselho),', 'conselho: vis(c.conselho), realidade: vis(c.realidade), comando: vis(c.comando), quem: vis(c.quem),', 'show-novas')
+    t = troca(t, "      conselhoPassos: ((c.conselho && c.conselho.passos) || []).map((x, i) => ({ texto: x, n: pad(i + 1) })),",
+              "      conselhoPassos: ((c.conselho && c.conselho.passos) || []).map((x, i) => ({ texto: x, n: pad(i + 1) })),\n"
+              "      realidadeItens: ((c.realidade && c.realidade.itens) || []),\n"
+              "      comandoZonas: ((c.comando && c.comando.zonas) || []).map((z) => ({ ...z, classe: 'pc-zona-' + (z.cor || 'amarela'), lista: (z.itens || []).map((x) => ({ texto: x })) })),\n"
+              "      quemTemFoto: !!(c.quem && c.quem.imagem), quemFoto: (c.quem && c.quem.imagem) || '',\n"
+              "      quemParagrafos: String((c.quem && c.quem.texto) || '').split(/\\n\\s*\\n/).filter(Boolean).map((x) => ({ texto: x })),\n"
+              "      quemLinks: ((c.quem && c.quem.links) || []).filter((l) => l && l.link), quemTemLinks: ((c.quem && c.quem.links) || []).some((l) => l && l.link),\n"
+              "      quemProvas: ((c.quem && c.quem.provas) || []).map((x, i) => ({ ...x, n: pad(i + 1), temLink: !!x.link })),", 'lista-novas')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}
@@ -271,6 +353,27 @@ def tpl(t):
   .pc-esp-mais[hidden],html.pc-esp-todos .pc-esp-mais{display:none}
   .pc-esp-mais:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
 }
+/* 04/11/2026: zonas, aparecer ao rolar, contadores e calculadora */
+.pc-zona-verde{border-top-color:#3E7C59!important}.pc-zona-verde .pc-zona-pt{background:#3E7C59!important}
+.pc-zona-amarela{border-top-color:#C9A84C!important}
+.pc-zona-vermelha{border-top-color:#B5473C!important}.pc-zona-vermelha .pc-zona-pt{background:#B5473C!important}
+.pc-real-item{border-bottom:1px solid rgba(245,241,230,.10)}
+@media (min-width:1000px){.pc-real-item{border-bottom:0;border-right:1px solid rgba(245,241,230,.10);padding-right:24px!important;padding-left:24px!important}.pc-real-item:first-child{padding-left:0!important}.pc-real-item:last-child{border-right:0}}
+.pc-rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .7s cubic-bezier(.22,.61,.36,1);transition-delay:var(--pc-d,0ms)}
+.pc-rv-on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.pc-rv{opacity:1;transform:none;transition:none}}
+.pc-calc{display:grid;gap:12px}
+.pc-calc-rot{font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:#8B7340}
+.pc-calc-chips{display:flex;flex-wrap:wrap;gap:8px}
+.pc-calc-chip{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:0 14px;border-radius:999px;border:1px solid rgba(14,14,14,.22);font:600 13px/1 var(--pc-font-sans,system-ui);color:#0E0E0E;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.pc-calc-chip::before{content:"";width:8px;height:8px;border-radius:999px;border:1px solid #8B7340;background:transparent}
+.pc-calc-chip[aria-pressed="true"]{background:#0E0E0E;border-color:#0E0E0E;color:#F5F1E6}
+.pc-calc-chip[aria-pressed="true"]::before{background:#C9A84C;border-color:#C9A84C}
+.pc-calc-chip:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+.pc-calc-acoes{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:13px;color:#4a463f}
+.pc-calc-acoes button{all:unset;cursor:pointer;font:600 13px/1 var(--pc-font-sans,system-ui);color:#8B7340;text-decoration:underline;text-underline-offset:3px}
+.pc-calc-acoes button:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+.pc-eco-off{display:none!important}
 </style>
 """
     t = troca(t, '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n',
@@ -493,6 +596,141 @@ document.addEventListener("click", function (e) {
   }
   fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; varrer(); }).catch(function () {});
   new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
+})();
+// 04/11/2026: aparecer ao rolar, contadores e calculadora da Economia (itens 2 e 3 da análise comparativa).
+(function () {
+  var semMov = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var io = null, ioNum = null, dados = null, contados = {};
+  // --- aparecer ao rolar: só o que ainda está abaixo da tela quando é encontrado
+  function marcar() {
+    if (semMov || !("IntersectionObserver" in window)) return;
+    if (!io) io = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("pc-rv-on"); io.unobserve(e.target); } });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    var sel = "section:not(#topo) h2, section:not(#topo) article, section:not(#topo) .pc-vid-item, section:not(#topo) .pc-real-item, section:not(#topo) .pc-zona, section:not(#topo) > div > div[style*='border-radius']";
+    var alt = window.innerHeight || 800;
+    document.querySelectorAll(sel).forEach(function (el) {
+      if (el.dataset.pcRv) return;
+      el.dataset.pcRv = "1";
+      var r = el.getBoundingClientRect();
+      if (r.top > alt) {
+        var irm = el.parentElement ? Array.prototype.indexOf.call(el.parentElement.children, el) : 0;
+        el.style.setProperty("--pc-d", Math.min(irm, 5) * 70 + "ms");
+        el.classList.add("pc-rv");
+        io.observe(el);
+      }
+    });
+  }
+  // quem pula por um link do menu passa reto por elementos que o observador nunca vê cruzar a tela:
+  // a cada rolagem, o que já ficou para cima aparece sem animação
+  var tPassados = 0;
+  function revelarPassados() {
+    tPassados = 0;
+    document.querySelectorAll(".pc-rv:not(.pc-rv-on)").forEach(function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.bottom < 0 || r.top < (window.innerHeight || 800) * 0.92) { el.style.transition = r.bottom < 0 ? "none" : ""; el.classList.add("pc-rv-on"); if (io) io.unobserve(el); }
+    });
+  }
+  function aoRolar() { if (!tPassados) tPassados = setTimeout(revelarPassados, 60); }
+  document.addEventListener("scroll", aoRolar, true);
+  window.addEventListener("hashchange", function () { setTimeout(revelarPassados, 50); });
+  // --- contadores: sobem do zero quando entram na tela, uma vez por seção
+  function formatar(n, casas, pre, pos) {
+    return pre + n.toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas }) + pos;
+  }
+  function animarNumero(el) {
+    var txt = el.textContent, m = txt.match(/^([^\d]*)(\d{1,3}(?:\.\d{3})*|\d+)(,\d+)?(.*)$/);
+    if (!m) return;
+    var alvo = parseFloat(m[2].replace(/\./g, "") + (m[3] ? m[3].replace(",", ".") : "")), casas = m[3] ? m[3].length - 1 : 0;
+    if (!isFinite(alvo) || alvo === 0) return;
+    var ini = performance.now(), dur = 1100;
+    function passo(agora) {
+      var p = Math.min(1, (agora - ini) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = formatar(alvo * e, casas, m[1], m[4]);
+      if (p < 1) requestAnimationFrame(passo); else el.textContent = txt;
+    }
+    requestAnimationFrame(passo);
+  }
+  function marcarNumeros() {
+    if (semMov || !("IntersectionObserver" in window)) return;
+    if (!ioNum) ioNum = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        ioNum.unobserve(e.target);
+        var sec = e.target.closest("section"), id = (sec && sec.id) || "x";
+        if (!contados[id]) contados[id] = {};
+        var k = e.target.dataset.pcNumK;
+        if (contados[id][k]) return;
+        contados[id][k] = 1;
+        animarNumero(e.target);
+      });
+    }, { threshold: 0.4 });
+    var lista = Array.prototype.slice.call(document.querySelectorAll(".pc-num"));
+    document.querySelectorAll("#economia span[style*='clamp(36px']").forEach(function (el) { lista.push(el); });
+    lista.forEach(function (el, i) {
+      if (el.dataset.pcNum) return;
+      el.dataset.pcNum = "1";
+      var sec = el.closest("section"), irm = sec ? Array.prototype.indexOf.call(sec.querySelectorAll(".pc-num, span[style*='clamp(36px']"), el) : i;
+      el.dataset.pcNumK = String(irm);
+      var r = el.getBoundingClientRect();
+      if (r.top > (window.innerHeight || 800) * 0.9) ioNum.observe(el);
+      else { var s2 = sec && sec.id || "x"; contados[s2] = contados[s2] || {}; contados[s2][irm] = 1; }
+    });
+  }
+  // --- calculadora: chips por função em cima da tabela da Economia
+  var desligadas = {};
+  function brl0(v) { return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }); }
+  function linhasEco() { return (dados && dados.economia && dados.economia.linhas) || []; }
+  function recalcular() {
+    var sec = document.getElementById("economia"); if (!sec || !dados) return;
+    var ec = dados.economia, enc = 1 + (Number(ec.encargos_percentual) || 0) / 100, mes = 0, pessoas = 0, ligadas = 0;
+    linhasEco().forEach(function (l, i) {
+      if (desligadas[i]) return;
+      var n = Number(l.pessoas) || 1; mes += (Number(l.salario) || 0) * enc * n; pessoas += n; ligadas++;
+    });
+    var vals = sec.querySelectorAll("span[style*='clamp(36px']");
+    if (vals[0]) vals[0].textContent = brl0(mes);
+    if (vals[1]) vals[1].textContent = brl0(mes * 12);
+    var notas = sec.querySelectorAll("span[style*='clamp(36px'] + span");
+    if (notas[0]) notas[0].textContent = pessoas + (pessoas === 1 ? " pessoa na folha" : " pessoas na folha") + (ligadas < linhasEco().length ? ", " + ligadas + " de " + linhasEco().length + " funções" : "");
+    sec.querySelectorAll("tbody tr").forEach(function (tr, i) { tr.classList.toggle("pc-eco-off", !!desligadas[i]); });
+    sec.querySelectorAll(".pc-calc-chip").forEach(function (b) { b.setAttribute("aria-pressed", String(!desligadas[+b.dataset.i])); });
+    var res = sec.querySelector(".pc-calc-res");
+    if (res) res.textContent = ligadas === linhasEco().length ? "Todas as funções marcadas." : ligadas + " de " + linhasEco().length + " funções marcadas.";
+  }
+  function montarCalc() {
+    var sec = document.getElementById("economia"); if (!sec || !dados || !linhasEco().length) return;
+    if (sec.querySelector(".pc-calc")) { recalcular(); return; }
+    var cab = sec.firstElementChild; if (!cab) return;
+    var box = document.createElement("div"); box.className = "pc-calc";
+    var rot = document.createElement("span"); rot.className = "pc-calc-rot"; rot.textContent = "Monte a conta da sua empresa: toque nas funções que você tem ou precisaria contratar"; box.appendChild(rot);
+    var chips = document.createElement("div"); chips.className = "pc-calc-chips";
+    linhasEco().forEach(function (l, i) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "pc-calc-chip"; b.dataset.i = i;
+      b.textContent = l.cargo + ((Number(l.pessoas) || 1) > 1 ? " ×" + l.pessoas : ""); b.setAttribute("aria-pressed", "true");
+      chips.appendChild(b);
+    });
+    box.appendChild(chips);
+    var ac = document.createElement("div"); ac.className = "pc-calc-acoes";
+    var res = document.createElement("span"); res.className = "pc-calc-res"; ac.appendChild(res);
+    var bt = document.createElement("button"); bt.type = "button"; bt.className = "pc-calc-todas"; bt.textContent = "Marcar todas"; ac.appendChild(bt);
+    var bn = document.createElement("button"); bn.type = "button"; bn.className = "pc-calc-nenhuma"; bn.textContent = "Desmarcar todas"; ac.appendChild(bn);
+    box.appendChild(ac);
+    cab.insertAdjacentElement("afterend", box);
+    recalcular();
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".pc-calc-chip");
+    if (b) { desligadas[+b.dataset.i] = !desligadas[+b.dataset.i]; recalcular(); return; }
+    if (e.target.closest && e.target.closest(".pc-calc-todas")) { desligadas = {}; recalcular(); return; }
+    if (e.target.closest && e.target.closest(".pc-calc-nenhuma")) { linhasEco().forEach(function (_, i) { desligadas[i] = true; }); recalcular(); }
+  });
+  var tm = null;
+  function varrer() { clearTimeout(tm); tm = setTimeout(function () { marcar(); marcarNumeros(); montarCalc(); }, 60); }
+  fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; varrer(); }).catch(function () {});
+  new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
+  window.addEventListener("load", varrer);
+  varrer();
 })();
 document.addEventListener("keydown", function (e) {
   var chk = document.getElementById("pc-menu");

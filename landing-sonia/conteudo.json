@@ -91,6 +91,39 @@
       }
     ]
   },
+  "realidade": {
+    "_aviso": "Números conferidos em 04/11/2026 nas fontes citadas em cada item (busca na web; o relatório original de cada fonte não foi aberto). Antes de trocar um número, confira na fonte. Nada aqui é número da plataforma.",
+    "visivel": true,
+    "etiqueta": "A realidade",
+    "titulo": "Contratar está difícil. Treinar custa caro. E quem foi treinado vai embora.",
+    "texto": "Não é impressão sua. É o que o dono de empresa vive hoje, em qualquer ramo.",
+    "itens": [
+      {
+        "valor": "80%",
+        "titulo": "Não acham gente",
+        "texto": "dos empregadores no Brasil têm dificuldade para contratar. A média mundial é 72%.",
+        "fonte": "ManpowerGroup, Pesquisa de Escassez de Talentos 2026"
+      },
+      {
+        "valor": "33,6%",
+        "titulo": "De rotatividade",
+        "texto": "foi a taxa de rotatividade do emprego formal no país em 2025.",
+        "fonte": "Novo CAGED, Ministério do Trabalho e Emprego"
+      },
+      {
+        "valor": "11,8 mi",
+        "titulo": "Precisam de treino",
+        "texto": "de trabalhadores já empregados vão precisar de requalificação até 2027, só na indústria.",
+        "fonte": "CNI e SENAI, Mapa do Trabalho Industrial 2025 a 2027"
+      },
+      {
+        "valor": "52%",
+        "titulo": "Já usam IA",
+        "texto": "dos pequenos negócios usaram inteligência artificial nas duas semanas anteriores à pesquisa. E 60% querem ampliar o uso.",
+        "fonte": "Sebrae e Meta, Transformação Digital nos Pequenos Negócios, 2026"
+      }
+    ]
+  },
   "gargalos": {
     "_aviso": "Planos por agente conferidos no painel em 02/11/2026: Starter = Sônia, Juliana, Paulo, Jonathan, Clone do dono; Elite soma Rafael, Bianca, Amanda, Estrategista, Davi e 6 SDRs; Magnata soma Márcia, Maria, Aline, Geane, Boris, Ruth.",
     "visivel": true,
@@ -1914,6 +1947,49 @@
       }
     ]
   },
+  "comando": {
+    "_aviso": "As três zonas descrevem como a Sônia é configurada na implantação. Não prometa comportamento que a plataforma não tenha: se mudar um item, confira no painel.",
+    "visivel": true,
+    "etiqueta": "Você no comando",
+    "titulo": "A IA trabalha. Quem decide é você.",
+    "texto": "Cada ação da Sônia tem uma regra combinada na implantação. O que é rotina, ela resolve. O que é sensível, ela prepara e espera o seu OK. O que é perigoso, ela não faz.",
+    "zonas": [
+      {
+        "cor": "verde",
+        "nome": "Zona verde",
+        "titulo": "Faz sozinha",
+        "itens": [
+          "Pesquisar, organizar e resumir",
+          "Escrever rascunhos de texto, post e proposta",
+          "Responder dúvidas com base no que foi treinada",
+          "Acompanhar prazos e avisar o que está parado"
+        ]
+      },
+      {
+        "cor": "amarela",
+        "nome": "Zona amarela",
+        "titulo": "Prepara e pede o seu OK",
+        "itens": [
+          "Enviar proposta ou orçamento a cliente",
+          "Publicar nas redes e disparar mensagens",
+          "Agendar compromisso na sua agenda",
+          "Contratar, demitir, dar desconto e qualquer gasto"
+        ]
+      },
+      {
+        "cor": "vermelha",
+        "nome": "Zona vermelha",
+        "titulo": "Nunca faz",
+        "itens": [
+          "Expor senha ou dado de cliente",
+          "Apagar dados ou misturar informação de uma empresa com outra",
+          "Inventar preço, prazo ou número",
+          "Dar parecer de imposto, contrato ou investimento no lugar do profissional habilitado"
+        ]
+      }
+    ],
+    "nota": "As regras exatas de cada zona são definidas na implantação, com você, e podem mudar depois."
+  },
   "conselho": {
     "_aviso": "Adicional AGUARDANDO aprovação da Avalanche (proposta enviada em 04/11/2026). A seção fica no ar por decisão do dono, de 04/11. Preço: incluído no Magnata, R$ 1.997 por ano no Starter e no Elite. Sem link de checkout do adicional ainda: o botão leva à demonstração. Material de venda em produtos/conselho-executivo/.",
     "visivel": true,
@@ -2096,6 +2172,46 @@
         "texto": "O que mudou na operação depois da Sônia.",
         "imagem": "",
         "video": ""
+      }
+    ]
+  },
+  "quem": {
+    "_aviso": "Foto: salve em assets/quem/marcus.jpg (de 1200 px para cima, retrato 4:5) e preencha o campo imagem; sem imagem a seção sai só com texto. Confirmar com o dono antes de publicar: anos como corretor, CRECI e formação (não estão no texto porque não foram confirmados). A prova 3 cita a base de escrituras: número agregado, sem dado individual.",
+    "visivel": true,
+    "etiqueta": "Quem está por trás da Sônia",
+    "nome": "Marcus Godoy",
+    "cargo": "Corretor de imóveis no Rio de Janeiro. Dono da Godoy Prime Realty e criador da Prime Circle.",
+    "imagem": "",
+    "texto": "Sou corretor de imóveis na Barra da Tijuca e criei a Prime Circle para resolver o que me travava na minha própria operação: documento que demora, dado de mercado que ninguém tem e tarefa repetida que ninguém quer fazer.\n\nOs agentes de IA entraram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia.\n\nEu configuro a sua, treino o time com os seus processos e a sua linguagem, e acompanho a operação com você.",
+    "rotulo_provas": "Onde isso já roda",
+    "provas": [
+      {
+        "titulo": "Godoy Prime Realty",
+        "texto": "Imobiliária na Barra da Tijuca. Os agentes de IA trabalham aqui todos os dias: atendimento, conteúdo, vídeo e um conselho interno.",
+        "link": "",
+        "rotulo_link": ""
+      },
+      {
+        "titulo": "Prime Circle Documentos",
+        "texto": "Plataforma em produção, com clientes reais, que gera os documentos da intermediação imobiliária e valida minutas de terceiros com IA.",
+        "link": "https://documentos.primecircle.app.br",
+        "rotulo_link": "Ver a plataforma"
+      },
+      {
+        "titulo": "Índice de preço real",
+        "texto": "Base com mais de 330 mil escrituras do Rio de Janeiro, de fonte oficial, para mostrar quanto de fato se pagou por metro quadrado.",
+        "link": "",
+        "rotulo_link": ""
+      }
+    ],
+    "links": [
+      {
+        "texto": "Instagram",
+        "link": ""
+      },
+      {
+        "texto": "Godoy Prime Realty",
+        "link": ""
       }
     ]
   },
