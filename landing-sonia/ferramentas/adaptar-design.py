@@ -235,6 +235,12 @@ def tpl(t):
       '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.quem.etiqueta }}</span>\n'
       '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.quem.nome }}</h2>\n'
       '<p style="margin:0;font-family:var(--pc-font-mono);font-size:12px;letter-spacing:0.08em;line-height:1.7;color:#8B7340;text-transform:uppercase">{{ c.quem.cargo }}</p>\n'
+      '<sc-if value="{{ quemTemNumeros }}" hint-placeholder-val="{{ true }}">\n'
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:16px 24px;padding:18px 0;border-top:1px solid rgba(14,14,14,0.22);border-bottom:1px solid rgba(14,14,14,0.22)">\n'
+      '<sc-for list="{{ quemNumeros }}" as="nm" hint-placeholder-count="3">\n'
+      '<div style="display:grid;gap:6px"><span class="pc-num" style="font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;font-size:clamp(32px,3.6vw,48px);line-height:1;letter-spacing:-0.02em">{{ nm.valor }}</span>'
+      '<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#8B7340;line-height:1.5">{{ nm.rotulo }}</span></div>\n'
+      '</sc-for>\n</div>\n</sc-if>\n'
       '<div style="display:grid;gap:14px">\n'
       '<sc-for list="{{ quemParagrafos }}" as="pg" hint-placeholder-count="3">\n'
       '<p style="margin:0;font-size:17px;line-height:1.65;color:#2a2722;text-wrap:pretty">{{ pg.texto }}</p>\n'
@@ -265,7 +271,8 @@ def tpl(t):
               "      quemTemFoto: !!(c.quem && c.quem.imagem), quemFoto: (c.quem && c.quem.imagem) || '',\n"
               "      quemParagrafos: String((c.quem && c.quem.texto) || '').split(/\\n\\s*\\n/).filter(Boolean).map((x) => ({ texto: x })),\n"
               "      quemLinks: ((c.quem && c.quem.links) || []).filter((l) => l && l.link), quemTemLinks: ((c.quem && c.quem.links) || []).some((l) => l && l.link),\n"
-              "      quemProvas: ((c.quem && c.quem.provas) || []).map((x, i) => ({ ...x, n: pad(i + 1), temLink: !!x.link })),", 'lista-novas')
+              "      quemProvas: ((c.quem && c.quem.provas) || []).map((x, i) => ({ ...x, n: pad(i + 1), temLink: !!x.link })),\n"
+              "      quemNumeros: ((c.quem && c.quem.numeros) || []), quemTemNumeros: !!(c.quem && c.quem.numeros && c.quem.numeros.length),", 'lista-novas')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}

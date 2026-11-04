@@ -2176,13 +2176,27 @@
     ]
   },
   "quem": {
-    "_aviso": "Foto: salve em assets/quem/marcus.jpg (de 1200 px para cima, retrato 4:5) e preencha o campo imagem; sem imagem a seção sai só com texto. Confirmar com o dono antes de publicar: anos como corretor, CRECI e formação (não estão no texto porque não foram confirmados). A prova 3 cita a base de escrituras: número agregado, sem dado individual.",
+    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: salve em assets/quem/marcus.jpg (de 1200 px para cima, retrato 4:5) e preencha o campo imagem; sem imagem a seção sai só com texto. A prova 3 cita a base de escrituras: número agregado, sem dado individual.",
     "visivel": true,
     "etiqueta": "Quem está por trás da Sônia",
     "nome": "Marcus Godoy",
-    "cargo": "Corretor de imóveis no Rio de Janeiro. Dono da Godoy Prime Realty e criador da Prime Circle.",
+    "cargo": "Fundador da Godoy Prime Realty. Personal Shopper Imobiliário e perito avaliador credenciado pelo TJRJ. CRECI PF 80.199 RJ.",
     "imagem": "",
-    "texto": "Sou corretor de imóveis na Barra da Tijuca e criei a Prime Circle para resolver o que me travava na minha própria operação: documento que demora, dado de mercado que ninguém tem e tarefa repetida que ninguém quer fazer.\n\nOs agentes de IA entraram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia.\n\nEu configuro a sua, treino o time com os seus processos e a sua linguagem, e acompanho a operação com você.",
+    "numeros": [
+      {
+        "valor": "30+",
+        "rotulo": "anos em áreas comerciais"
+      },
+      {
+        "valor": "6",
+        "rotulo": "anos à frente da Godoy Prime Realty"
+      },
+      {
+        "valor": "330 mil",
+        "rotulo": "escrituras do Rio na base de preços"
+      }
+    ],
+    "texto": "Passei mais de 30 anos em áreas comerciais antes de abrir a Godoy Prime Realty, em 2020. Foram quase duas décadas em telecomunicações, com passagem longa pela Nextel, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing. Tenho MBA em Gestão do Conhecimento e Inteligência Empresarial pela UFRJ.\n\nHoje represento só o comprador de imóveis de alto padrão na Barra da Tijuca e avalio imóveis como perito credenciado pelo Tribunal de Justiça do Rio. Foi para a minha própria operação que criei a Prime Circle: documento que demora, dado de mercado que ninguém tem e tarefa repetida que ninguém quer fazer.\n\nOs agentes de IA entraram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua, treino o time com os seus processos e a sua linguagem, e acompanho a operação com você.",
     "rotulo_provas": "Onde isso já roda",
     "provas": [
       {
@@ -2206,8 +2220,8 @@
     ],
     "links": [
       {
-        "texto": "Instagram",
-        "link": ""
+        "texto": "LinkedIn",
+        "link": "https://www.linkedin.com/in/marcusgodoy"
       },
       {
         "texto": "Godoy Prime Realty",
