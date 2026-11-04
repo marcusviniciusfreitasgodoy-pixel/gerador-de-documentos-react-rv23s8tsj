@@ -24,20 +24,32 @@ os clientes entram por `agentes`.
    automáticos, retornos de pagamento (Asaas), conexões que usam endereço de retorno (WhatsApp,
    Google e outras) e o app instalado na tela do celular dos clientes.
 3. **Os clientes atuais recebem o endereço novo** do painel, com alguns dias de antecedência.
-4. **Dia da troca, no cPanel:**
-   1. Editor de Zona: apagar o CNAME `agentes`.
-   2. Domínios, Criar um domínio: `agentes.primecircle.app.br`, **desmarcar** "compartilhar a raiz
-      do documento" e apontar a raiz para `sonia.primecircle.app.br` (a mesma pasta da landing).
-      Assim os dois endereços servem a mesma pasta e não existe segunda cópia do site.
-   3. SSL/TLS Status: clicar em **Executar AutoSSL** e esperar o cadeado de `agentes` ficar verde.
-5. **Dia da troca, no repositório** (o Claude faz):
+4. **Véspera da troca, no repositório** (o Claude faz). Pacote pronto, **mas ainda não sobe**:
    - `conteudo.json`, `seo.endereco` passa a `https://agentes.primecircle.app.br/`;
    - o botão "Área do cliente" (`menu`, hoje `https://agentes.primecircle.app.br/`) passa ao
      endereço novo do painel, e os links de checkout dos planos também, quando houver;
    - regenerar o `index.html` (`ferramentas/adaptar-design.py`) e montar o pacote
      (`ferramentas/montar-publicacao.py <pasta> hostgator`).
-6. **O dono sobe o pacote** na pasta `sonia.primecircle.app.br`, como sempre.
-7. **Conferir no ar:** `agentes` abre a landing com cadeado; `sonia` redireciona para `agentes`
+
+   Por que não sobe antes: com esse pacote, o `.htaccess` manda quem abre `sonia` para `agentes`.
+   Enquanto `agentes` ainda for a plataforma, o visitante da landing cairia no painel.
+5. **Dia da troca, no cPanel, tudo na mesma sessão:**
+   1. Editor de Zona: apagar o CNAME `agentes`.
+   2. Domínios, Criar um domínio: `agentes.primecircle.app.br`, **desmarcar** "compartilhar a raiz
+      do documento" e apontar a raiz para `sonia.primecircle.app.br` (a mesma pasta da landing).
+      Assim os dois endereços servem a mesma pasta e não existe segunda cópia do site.
+   3. SSL/TLS Status: clicar em **Executar AutoSSL** e esperar o cadeado de `agentes` ficar verde.
+      A regra do `.htaccess` deixa a pasta `.well-known` de fora, então o certificado sai mesmo com
+      o redirecionamento ligado. Se o AutoSSL falhar, esperar a propagação do DNS (o CNAME antigo
+      tinha validade de cerca de 1 hora) e rodar de novo.
+   4. **Só com o cadeado verde, subir o pacote do passo 4** na pasta `sonia.primecircle.app.br` e
+      extrair. Antes disso, o pacote novo mandaria quem abre `sonia` para um `agentes` ainda sem
+      certificado, e o navegador mostraria alerta de site inseguro.
+
+   **O que esperar no meio do caminho:** entre o passo 5.2 e o 5.4, quem abre `agentes` é mandado
+   para `sonia`, porque o pacote antigo ainda diz que o endereço oficial é `sonia`. Não é erro: a
+   landing continua aparecendo, e a troca se completa quando o pacote novo sobe.
+6. **Conferir no ar:** `agentes` abre a landing com cadeado; `sonia` redireciona para `agentes`
    (301, então links já divulgados continuam valendo); o painel abre no endereço novo.
 
 ## O que já ficou pronto no código (04/11/2026)
@@ -46,14 +58,17 @@ os clientes entram por `agentes`.
   O `adaptar-design.py` usa esse campo no canonical, no `og:url` e no `og:image`.
 - O `.htaccess` manda todo outro nome de domínio para o endereço oficial (301). O
   `montar-publicacao.py` preenche o nome a partir de `seo.endereco`. Hoje o oficial é `sonia`,
-  então a regra não muda nada. No dia da troca, trocar o campo já faz `sonia` levar a `agentes`.
+  então a regra só junta variações do próprio nome (como `www.sonia`). No dia da troca, trocar o campo já faz `sonia` levar a `agentes`.
 - Simulado em 04/11: com `seo.endereco` em `agentes`, o canonical, o `og:url` e o `og:image` saem
-  com `agentes` e o `.htaccess` redireciona para `agentes`. A regra do Apache ainda não foi
-  testada num servidor; conferir no ar no dia.
+  com `agentes` e o `.htaccess` redireciona para `agentes`. A regra foi conferida na HostGator em
+  04/11, com o pacote atual: um pedido por `www.sonia.primecircle.app.br` recebe 301 para
+  `https://sonia.primecircle.app.br/`.
 
 ## Riscos
 
-- **Fazer o passo 4 antes do 1 e do 2 tira os clientes do painel e quebra o checkout.**
+- **Fazer o passo 5 antes do 1 e do 2 tira os clientes do painel e quebra o checkout.**
+- **Subir o pacote do passo 4 antes de criar o domínio `agentes` manda os visitantes da landing para
+  o painel.** Ele só sobe no passo 5.4, com o cadeado de `agentes` já verde.
 - O app instalado na tela do celular guarda o endereço antigo. O cliente vai precisar reinstalar
   pelo endereço novo.
 - A marca Prime Circle é de outra empresa (INPI). Se o domínio mudar por causa da marca, esta
