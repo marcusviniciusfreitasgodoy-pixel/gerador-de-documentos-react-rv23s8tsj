@@ -4,6 +4,8 @@ Revendedor: Prime Circle (SONIA)
 Data: 03/11/2026
 Tipo: adicional pago no Starter e no Elite (R$ 1.997 por ano) e incluído no Magnata, sem cobrança à parte
 
+Situação: aprovado em 03/11/2026, segundo o dono.
+
 ## O que está sendo submetido
 
 Quatro agentes adicionais e seis skills.

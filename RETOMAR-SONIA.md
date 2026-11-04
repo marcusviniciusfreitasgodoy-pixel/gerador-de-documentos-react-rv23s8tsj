@@ -4,6 +4,11 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 
 ## Onde paramos (03/11/2026)
 
+- **Conselho Executivo implantado na página (03/11, ainda não subido).** O dono informou a aprovação da Avalanche.
+  Seção nova depois do "Time", textos nos planos (incluído no Magnata, R$ 1.997 por ano no Starter e no Elite),
+  quarto item de "Por onde começar", duas perguntas frequentes e os quatro avatares. Pacote pronto em
+  `~/Downloads/sonia-hostgator-conselho.zip`: o dono sobe no cPanel e extrai por cima. Detalhes em
+  `produtos/conselho-executivo/LEIA-ME.md`.
 - **A página está pronta e no ar** em https://sonia.primecircle.app.br (HostGator). O formulário grava
   os leads na planilha do Google "SONIA · Leads da página" e abre o WhatsApp. Ainda **não vende**: os
   botões "Assinar agora" levam ao formulário até a Avalanche liberar a troca de preço no checkout.

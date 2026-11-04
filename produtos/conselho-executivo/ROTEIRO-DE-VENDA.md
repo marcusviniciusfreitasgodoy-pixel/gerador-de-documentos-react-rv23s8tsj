@@ -1,6 +1,6 @@
 # Conselho Executivo: roteiro de venda
 
-Uso interno. Versão de 03/11/2026. Vale depois da aprovação da Avalanche.
+Uso interno. Versão de 03/11/2026. Aprovado pela Avalanche em 03/11/2026, segundo o dono.
 
 ## Onde o Conselho entra na conversa
 

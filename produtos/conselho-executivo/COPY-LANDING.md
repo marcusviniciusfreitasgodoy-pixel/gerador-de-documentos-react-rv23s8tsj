@@ -1,6 +1,6 @@
 # Conselho Executivo: textos para a página
 
-Versão de 03/11/2026. **Não publicar antes da aprovação da Avalanche.** Os trechos abaixo seguem a estrutura do `landing-sonia/conteudo.json`.
+Versão de 03/11/2026. **Aplicado no `landing-sonia/conteudo.json` e no gerador em 03/11/2026**, depois da aprovação da Avalanche informada pelo dono. Os trechos abaixo seguem a estrutura do `landing-sonia/conteudo.json`.
 
 ## 1. Planos (lista de cada plano)
 

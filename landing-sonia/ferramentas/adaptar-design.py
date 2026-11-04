@@ -142,6 +142,46 @@ def tpl(t):
     t = troca(t, 'diferenciais: vis(c.diferenciais),', 'diferenciais: vis(c.diferenciais), gargalos: vis(c.gargalos), videos: vis(c.videos),', 'show-gargalos')
     t = troca(t, 'diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),',
               'diferenciais: c.diferenciais.itens.map((w, i) => ({ ...w, n: pad(i + 1) })),\n      gargalos: ((c.gargalos && c.gargalos.itens) || []).map((w, i) => ({ ...w, n: pad(i + 1) })),', 'lista-gargalos')
+    # seção "Conselho Executivo", logo depois do "Time" (03/11/2026). Escura, para separar do Time e da Economia.
+    secao_c = ('<sc-if value="{{ show.conselho }}" hint-placeholder-val="{{ true }}">\n'
+      '<section id="conselho" style="background:#0E0E0E;color:#F5F1E6;padding:clamp(56px,8vw,112px) clamp(20px,4vw,56px);display:grid;gap:clamp(32px,4vw,56px)">\n'
+      '<div style="display:grid;gap:16px;max-width:860px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.conselho.etiqueta }}</span>\n'
+      '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.conselho.titulo }}</h2>\n'
+      '<p style="margin:0;font-size:17px;line-height:1.6;color:#C8C1B0;max-width:680px;text-wrap:pretty">{{ c.conselho.texto }}</p>\n'
+      '</div>\n'
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:clamp(10px,2vw,16px)">\n'
+      '<sc-for list="{{ conselheiros }}" as="k" hint-placeholder-count="4">\n'
+      '<article style="display:grid;grid-template-rows:auto 1fr;min-width:0;background:var(--pc-surface-2);border:1px solid rgba(245,241,230,0.10);border-radius:10px;overflow:hidden">\n'
+      '<div style="aspect-ratio:1 / 1;min-width:0;border-bottom:1px solid rgba(245,241,230,0.10);background:var(--pc-surface-3)">\n'
+      '<img srcset="{{ k.imagem }}" alt="{{ k.nome }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">\n'
+      '</div>\n'
+      '<div style="display:grid;align-content:start;gap:8px;padding:18px 18px 22px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.28em;text-transform:uppercase;color:#C9A84C">{{ k.area }}</span>\n'
+      '<h3 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:28px;line-height:1;letter-spacing:-0.01em">{{ k.nome }}</h3>\n'
+      '<p style="margin:4px 0 0;font-size:14px;line-height:1.55;color:#B5AFA3;text-wrap:pretty">{{ k.texto }}</p>\n'
+      '</div>\n</article>\n</sc-for>\n</div>\n'
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,4vw,56px);align-items:start">\n'
+      '<div style="display:grid;gap:16px">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#C9A84C">{{ c.conselho.rotulo_passos }}</span>\n'
+      '<ol style="margin:0;padding:0;list-style:none;display:grid;border-top:1px solid rgba(245,241,230,0.14)">\n'
+      '<sc-for list="{{ conselhoPassos }}" as="p" hint-placeholder-count="3">\n'
+      '<li style="display:grid;grid-template-columns:44px 1fr;gap:12px;padding:16px 0;border-bottom:1px solid rgba(245,241,230,0.14)">'
+      '<span style="font-family:var(--pc-font-mono);font-size:12px;letter-spacing:0.2em;color:#C9A84C;padding-top:3px">{{ p.n }}</span>'
+      '<span style="font-size:16px;line-height:1.55;color:#E8E0CC;text-wrap:pretty">{{ p.texto }}</span></li>\n'
+      '</sc-for>\n</ol>\n</div>\n'
+      '<div style="display:grid;gap:16px;padding:28px 24px;border:1px solid rgba(201,168,76,0.35);border-radius:10px;background:rgba(201,168,76,0.06)">\n'
+      '<span style="font-family:var(--pc-font-display);font-weight:500;font-size:26px;line-height:1.15;text-wrap:balance">{{ c.conselho.preco }}</span>\n'
+      '<span style="font-size:14px;line-height:1.6;color:#C8C1B0;text-wrap:pretty">{{ c.conselho.limite }}</span>\n'
+      '<div class="pc-hero-btns" style="display:flex;gap:12px;flex-wrap:wrap;padding-top:4px">\n'
+      '<x-import component-from-global-scope="DesignSystem_0d6c1f.Button" as="a" href="{{ c.conselho.botao.link }}" size="lg" hint-size="180px,52px">{{ c.conselho.botao.texto }}</x-import>\n'
+      '</div>\n</div>\n</div>\n</section>\n</sc-if>\n\n')
+    t = troca(t, '<sc-if value="{{ show.economia }}"', secao_c + '<sc-if value="{{ show.economia }}"', 'secao-conselho')
+    t = troca(t, 'gargalos: vis(c.gargalos),', 'gargalos: vis(c.gargalos), conselho: vis(c.conselho),', 'show-conselho')
+    t = troca(t, "gargalos: ((c.gargalos && c.gargalos.itens) || []).map((w, i) => ({ ...w, n: pad(i + 1) })),",
+              "gargalos: ((c.gargalos && c.gargalos.itens) || []).map((w, i) => ({ ...w, n: pad(i + 1) })),\n"
+              "      conselheiros: ((c.conselho && c.conselho.conselheiros) || []),\n"
+              "      conselhoPassos: ((c.conselho && c.conselho.passos) || []).map((x, i) => ({ texto: x, n: pad(i + 1) })),", 'lista-conselho')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
 .pc-burger{display:none}

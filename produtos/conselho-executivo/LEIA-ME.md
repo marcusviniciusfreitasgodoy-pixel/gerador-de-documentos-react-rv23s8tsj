@@ -44,6 +44,22 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e s
 - **Preço (decidido em 03/11/2026):** R$ 1.997 por ano como adicional no Starter e no Elite. Incluído no Magnata como bônus e diferencial.
 - **`model: inherit`:** o conselheiro usa a IA do plano do cliente. Se a plataforma pedir um modelo fixo, ajuste.
 
+## Implantação (03/11/2026)
+
+O dono informou que a Avalanche aprovou. Já está feito:
+
+- Os quatro avatares em `landing-sonia/assets/agentes/` (gerados com o Gemini, no estilo dos agentes atuais).
+- Os textos do `COPY-LANDING.md` no `landing-sonia/conteudo.json`: linhas dos planos, selo do Magnata, quarto item de "Por onde começar", abertura, item "Conselho" no menu e duas perguntas frequentes.
+- A seção nova "Conselho Executivo", logo depois do "Time", criada no `ferramentas/adaptar-design.py` e editável no `editor.html`.
+- Conferido no navegador a 1440, 820 e 390 px: sem rolagem para o lado, imagens carregando, sem erro no console.
+
+Falta:
+
+- Subir o pacote no cPanel (`sonia-hostgator-conselho.zip`, em Downloads).
+- Instalar os agentes e as skills no painel, como a Avalanche orientar.
+- Link de checkout do adicional. Até lá, o botão da seção leva à demonstração.
+- Respostas às perguntas 1, 2, 3, 4 e 6 do `PACOTE-PARA-AVALANCHE.md`.
+
 ## Próximos passos
 
 1. Ler a ficha e o roteiro, e confirmar os nomes.

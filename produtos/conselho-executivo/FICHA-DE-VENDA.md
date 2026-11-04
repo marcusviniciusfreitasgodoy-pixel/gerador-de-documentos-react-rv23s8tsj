@@ -1,6 +1,6 @@
 # Conselho Executivo SONIA: ficha de venda
 
-Uso interno. Versão de 03/11/2026. **Não divulgar antes da aprovação da Avalanche.**
+Uso interno. Versão de 03/11/2026. **Aprovado pela Avalanche em 03/11/2026, segundo o dono.**
 Roteiro de conversa e objeções em `ROTEIRO-DE-VENDA.md`. Textos para a página em `COPY-LANDING.md`.
 
 ## Decisão de preço (dono, 03/11/2026)
