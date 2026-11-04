@@ -1,0 +1,11 @@
+1
+00:00:00,300 --> 00:00:02,560
+Sou o Otávio, de operações e equipe.
+
+2
+00:00:02,770 --> 00:00:05,030
+Meu trabalho é tirar o dono da operação
+
+3
+00:00:05,210 --> 00:00:06,500
+sem a empresa desandar.

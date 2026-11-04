@@ -1,0 +1,11 @@
+1
+00:00:00,300 --> 00:00:02,150
+Sou o Fernando, de finanças.
+
+2
+00:00:02,600 --> 00:00:04,780
+Antes do sim, eu mostro a semana em que
+
+3
+00:00:04,820 --> 00:00:05,630
+o caixa aperta.

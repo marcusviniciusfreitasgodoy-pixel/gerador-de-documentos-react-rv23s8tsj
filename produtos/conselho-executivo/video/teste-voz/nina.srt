@@ -1,0 +1,15 @@
+1
+00:00:00,260 --> 00:00:03,160
+Sou a Nina, de tecnologia, dados e
+
+2
+00:00:03,200 --> 00:00:04,570
+inteligência artificial.
+
+3
+00:00:04,820 --> 00:00:07,380
+Eu cuido dos sistemas, da segurança e da
+
+4
+00:00:07,420 --> 00:00:08,070
+LGPD.

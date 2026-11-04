@@ -1,0 +1,31 @@
+1
+00:00:00,300 --> 00:00:02,350
+Toda semana, o dono de uma empresa
+
+2
+00:00:02,430 --> 00:00:04,610
+pequena toma sozinho uma decisão que
+
+3
+00:00:04,650 --> 00:00:06,020
+pesa o ano inteiro.
+
+4
+00:00:06,140 --> 00:00:07,230
+Contratar alguém.
+
+5
+00:00:07,470 --> 00:00:08,430
+Dar desconto.
+
+6
+00:00:08,660 --> 00:00:10,430
+Assinar um contrato longo.
+
+7
+00:00:10,670 --> 00:00:12,420
+Quase sempre à noite, com a planilha
+
+8
+00:00:12,460 --> 00:00:13,100
+aberta.

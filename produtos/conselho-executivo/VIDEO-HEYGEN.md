@@ -182,7 +182,7 @@ Para Reels e Stories, refaça o enquadramento em 1080 x 1920 e coloque um consel
 
 ## Estado da produção (04/11/2026, para continuar em outra sessão)
 
-**Autorização do dono:** em 04/11/2026 o Marcus autorizou gastar cerca de 85 créditos neste vídeo (teste de voz e vídeo completo). Nada foi gerado ainda: o saldo continua intacto.
+**Autorização do dono:** em 04/11/2026 o Marcus autorizou gastar cerca de 85 créditos neste vídeo (teste de voz e vídeo completo). O teste de voz foi feito no fim do dia 04/11 (ver "Teste de voz: resultado" abaixo) e gastou 18 créditos: saldo em 446.
 
 **Conta HeyGen:** plano Creator, 464 créditos, renovação em 2026-11-22. Avatar a partir de foto: de 16 a 20 créditos por minuto (a ferramenta não informa; fontes de outubro de 2026 dizem 16).
 
@@ -194,7 +194,7 @@ Para Reels e Stories, refaça o enquadramento em 1080 x 1920 e coloque um consel
 | Lívia | 7c6ef66050a944bdaae486017d61ef81 | e808da2329754929803c8bd98dc36857 (Lucilene, português) |
 | Fernando | 9a475672d1ca4a34836ed350a4505272 | 14be84ff0ad848d79bd867a79a870f4a |
 | Nina | 5440687d1a2349e196a177a75c8ca5cb | 0d23c5b2f6004e909802a2e8bfcd52c2 |
-| Sônia | d64a5f1beb5946e79157cf332dfd48c8 (grupo com 6 looks, 1024 x 1280) | 90938dd5581044b69592f22d1620940b |
+| Sônia | **057432043e2d49c5a91719eb85660ee4** (close-up do rosto, usar este; o d64a5f1b... do teste é corpo inteiro e o rosto fica pequeno) | 90938dd5581044b69592f22d1620940b (Amelia, idioma desconhecido: NÃO usar; usar Lucilene e808da23...) |
 
 **Vozes em português da biblioteca** (a API não confirma o sotaque; pelos nomes, as quatro primeiras parecem brasileiras): Murilo `d703f08d1ef34302a36945aa3efc7b3f`, Lucilene `e808da2329754929803c8bd98dc36857`, Afonso `9ce5f601f9e04382bb26141d5a3f839d`, Thaís `a8c7b58e38c44719b3ab36342f080e95`, Giles `7d5dfb068b534baa996aef0ab3468a8d`, Oscar `f6dabcabaabe47dab19a39c7dd926cbb`, Mark `c8810dc6f3904500b89d934dcd99b94b`. Antes do teste, conferir o idioma das vozes padrão de Otávio, Fernando, Nina e Sônia com `get_voice`.
 
@@ -213,3 +213,25 @@ ssh root@2.25.199.39 'cd /opt/conselho-teste/heygen && TOKEN=$(grep "^CLAUDE_COD
 3. **Com o ok do dono, as falas de todas as cenas:** um vídeo por fala, com os mesmos parâmetros, cerca de 60 a 73 créditos.
 4. **Montagem na VPS com ffmpeg** (que lá tem drawtext): juntar as falas na ordem das cenas, com os textos de tela, a reunião com os quatro quadros lado a lado (usar `xstack`; o `tile` falha em silêncio) e as mensagens de WhatsApp como imagens sobrepostas. Legenda a partir do `subtitle_url` de cada fala.
 5. **Conferir o vídeo final** e entregar ao dono.
+
+## Teste de voz: resultado (04/11/2026, fim do dia)
+
+Feito pela VPS com o comando acima, 5 chamadas de `create_video_from_avatar` (engine avatar_iv, 1080p, 16:9, fundo cor #0E0E0E, fit contain, expressiveness medium, legenda srt). Os 5 ficaram `completed` em menos de 3 minutos. Custo medido: 18 créditos (464 → 446) para 41,7 s de vídeo, ou seja, cerca de 26 créditos por minuto, acima dos 16 a 20 estimados. Com isso, as falas de todas as cenas (cerca de 3 min 40 s) devem custar de 90 a 100 créditos, não 60 a 73. O orçamento autorizado (85) não cobre o vídeo inteiro: pedir ao dono mais uns 20 créditos ou cortar cenas.
+
+| Personagem | video_id | Voz usada | Duração | Whisper (faster-whisper small) |
+|---|---|---|---|---|
+| Otávio | f51079fcf94e910571b61e3adb55ced5 | Will (padrão) f8ae4c0d... | 6,7 s | fala idêntica ao roteiro |
+| Lívia | 36365d894aa974fdc65b4145b2e9ff58 | Thaís a8c7b58e... (trocada: a Lucilene foi para a Sônia) | 7,5 s | idêntica |
+| Fernando | c29f809fcc01ffc584e6aab44ab5a62a | Yuri (padrão) 14be84ff... | 5,9 s | idêntica |
+| Nina | e7f7befb7ec717b64bff494fd4cf6db8 | Ana Carvalho (padrão) 0d23c5b2... | 8,3 s | idêntica, "LGPD" reconhecido como sigla |
+| Sônia | 6ea0f36bfac5fe71321315925d2fdd60 | Lucilene e808da23... | 13,3 s | idêntica |
+
+Arquivos: na VPS em `/opt/conselho-teste/heygen/teste-voz/` (mp4, srt, quadros, transcrição por palavra) e cópia em `video/teste-voz/` deste repositório (mp4 fora do git). Os previews dos 6 looks da Sônia estão em `video/teste-voz/sonia-looks-mosaico.jpg`.
+
+**O que vi nos quadros:**
+1. Boca e expressão ficaram naturais nos quatro conselheiros (ilustração 3D animou bem; Lívia gesticula com as mãos).
+2. A Sônia saiu de corpo inteiro andando, rosto pequeno demais para narradora. O grupo dela tem 6 looks e o sexto (057432043e2d49c5a91719eb85660ee4) é um close-up: usar esse nas cenas 1, 2, 3, 5, 7, 8, 9, 10 e 11.
+3. O fundo #0E0E0E só preenche as laterais: a imagem quadrada do avatar vem com o escritório ilustrado dentro. Para o visual escuro do roteiro, há duas saídas: (a) `removeBackground: true` ou `outputFormat: webm` (fundo transparente), se o photo avatar aceitar matting, e aí a montagem no ffmpeg põe o fundo; ou (b) aceitar o escritório como "sala de reunião" de cada um e usar o preto só na moldura. Testar (a) com UM clipe curto antes de gerar tudo (cerca de 3 créditos).
+4. Com `fit: contain` e fonte 1:1 em tela 16:9, o avatar ocupa o terço central (1080 x 1080) e sobra 420 px de cada lado: é exatamente o espaço para os textos de tela do roteiro.
+
+**Pendente de ouvir (o dono):** sotaque das vozes Will, Yuri e Ana Carvalho (a API não informa a variante) e a leitura de "SONIA" e dos números por extenso. O whisper só confirma que as palavras saíram certas, não o sotaque.
