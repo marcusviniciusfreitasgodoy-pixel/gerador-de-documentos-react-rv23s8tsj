@@ -68,3 +68,16 @@ Texto escrito do zero pela Prime Circle para o dono de pequena e média empresa 
 4. O adicional ganha link próprio no checkout para o Starter e o Elite?
 5. Podemos incluir o adicional no Magnata sem cobrança à parte? Nesse caso, a divisão de 30% fica só sobre o preço do Magnata?
 6. Um cliente que já assinou o Starter ou o Elite pode comprar o adicional depois, no meio do ano?
+7. A Sônia pode chamar outros agentes durante a conversa e receber o parecer de cada um? A skill `conselho-executivo` depende disso.
+8. A data de revisão de uma diretriz pode usar uma rotina da plataforma? Ela conta no limite de rotinas do plano?
+
+Os 8 pontos acima estão, na mesma ordem do doc enviado, na seção "Pontos para a Avalanche validar".
+
+## Fora do Conselho, no mesmo envio (04/11/2026)
+
+- Podemos mostrar na página de venda imagens reais da tela do painel da plataforma?
+- Existe um widget de chat da plataforma para colocar na página de venda, com a conversa rodando na infraestrutura de vocês?
+
+## Por que o adicional importa agora (04/11/2026)
+
+Pelo menos um outro revendedor da mesma plataforma vende os mesmos 21 especialistas e os mesmos três planos, com preços quase iguais aos nossos (`landing-sonia/ANALISE-CAROLINA-MENEZES.md`). O Conselho é o que a SONIA tem e ele não tem. O doc enviado à Avalanche diz isso sem citar o nome do revendedor.
