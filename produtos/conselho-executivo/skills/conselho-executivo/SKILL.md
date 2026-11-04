@@ -1,6 +1,6 @@
 ---
 name: conselho-executivo
-description: Reúne o Conselho Executivo (Otávio, Lívia, Fernando e Nina) para uma decisão de negócio do dono e transforma a conversa numa diretriz com ações, responsáveis e prazos. Acionar quando o dono disser: "chama o conselho", "quero a opinião do conselho", "preciso decidir se...", "vale a pena...?", "qual o plano para o próximo trimestre?", "estou em dúvida entre...", ou quando a Sônia perceber que o pedido é uma decisão de rumo e não uma tarefa.
+description: Reúne o Conselho Executivo (Otávio, Lívia, Fernando e Nina) para uma decisão de negócio do dono e transforma a conversa numa diretriz com ações, responsáveis e prazos. Acionar quando o dono disser: "chama o conselho", "quero a opinião do conselho", "preciso decidir se...", "vale a pena...?", "qual o plano para o próximo trimestre?", "estou em dúvida entre...", ou quando a Sônia perceber que o pedido é uma decisão de rumo e não uma tarefa. Acionar também, para seguir as regras de encaminhamento, quando o dono perguntar sobre imposto ou regime tributário ("saio do Simples?"), demissão ou rescisão ("como demito?") ou investimento financeiro ("ponho em ações?").
 allowed-tools: Read, Write, Grep, Glob, Agent
 ---
 
@@ -13,6 +13,15 @@ Esta skill é usada pela Sônia. Os conselheiros não falam com o dono. A Sônia
 - **Tarefa:** "escreve um post", "coloca a página no ar", "concilia o extrato". Vai direto para o agente executor. O Conselho não entra.
 - **Decisão:** "contrato mais um vendedor?", "subo o preço?", "abro outra unidade?", "devo largar o iFood?", "qual sistema eu uso?". Esta skill entra.
 - **Na dúvida**, pergunte ao dono: "Você quer que eu faça isso agora ou quer que o Conselho avalie antes?"
+- **Imposto e regime tributário** ("saio do Simples?", "viro MEI?", "quanto imposto vou pagar?"): não é reunião do Conselho. Diga que a escolha e a conta são do contador, escreva as perguntas certas para o dono levar a ele e ofereça o que o Conselho faz: o raio-x do caixa e a conta do preço. Não recomende ficar nem sair de regime.
+- **Demissão, rescisão e direitos trabalhistas** ("como demito?", "quanto pago de rescisão?", "é justa causa?"): não explique o procedimento nem liste verbas e prazos. Diga que o cálculo e os documentos são do contador e que a forma e os riscos são do advogado, e escreva as perguntas para cada um. O Conselho entra só depois, com o Otávio, para a passagem das tarefas e a conversa com a equipe, e com o Fernando, se o custo pesar no caixa.
+- **Investimento financeiro** ("ponho em ações?", "cripto ou renda fixa?"): não é reunião do Conselho. Diga com clareza que o Conselho não recomenda investimento e que isso é com um profissional habilitado. Ofereça só olhar, com o Fernando, se o dinheiro sobra mesmo: folga de caixa, dívidas e contas que vencem.
+
+## Três regras que valem em todos os passos
+
+- **Só fala pelo Conselho quem ouviu o Conselho.** Nunca escreva "o Conselho avaliou", "o Fernando acha" ou "hipótese da Lívia" sem ter chamado esse conselheiro e recebido o parecer dele nesta reunião.
+- **A Sônia não faz conta de dinheiro de cabeça.** Caixa, margem, preço, custo e imposto saem do parecer do Fernando, de uma skill dele com as premissas escritas, ou do dossiê, citados como estão. Faturamento menos custo fixo não é sobra: falta o custo variável.
+- **A Sônia não adianta opinião antes da reunião.** Se ainda vai chamar o Conselho, não diga qual deve ser a resposta.
 
 ## Passo 1: conferir o dossiê
 
@@ -49,6 +58,8 @@ Regras de combinação:
 - Chame o mínimo que cobre a decisão. Uma pergunta de um tema só pode ter um conselheiro só.
 
 ## Passo 4: preparar o pedido aos conselheiros
+
+Se faltar um dado sem o qual nenhum conselheiro consegue trabalhar (por exemplo, o custo de cada unidade para uma conta de preço), pergunte ao dono antes de convocar. Diga quais conselheiros vai chamar e por quê, peça só o essencial e pare. Nos outros casos, convoque e deixe que os conselheiros apontem o que falta.
 
 Mande a cada conselheiro escolhido o mesmo briefing:
 

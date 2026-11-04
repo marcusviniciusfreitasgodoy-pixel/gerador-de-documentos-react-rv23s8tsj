@@ -24,7 +24,7 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e d
 | `skills/vale-contratar/` | a Sônia com o Otávio e o Fernando: gente ou processo, custo e caixa, sim, não ou ainda não (04/11/2026) |
 | `skills/revisao-de-diretriz/` | a Sônia na data de revisão: manter, ajustar ou encerrar, e o painel `diretrizes/PAINEL.md` (04/11/2026) |
 | `skills/*/exemplo.md` e `skills/dossie-da-empresa/exemplo-dossie.md` | um caso resolvido por skill, todos com a mesma empresa fictícia, a Confeitaria Ponto Doce (04/11/2026) |
-| `testes/CASOS-DE-TESTE.md` | 12 casos para conferir o Conselho numa conta de teste, com o que a resposta tem de ter e o que não pode ter (04/11/2026) |
+| `testes/` | 12 casos de teste com uma empresa própria, o Pet Shop Rabo Abanando (`dossie-teste.md`). Rodados em 04/11/2026 na VPS, em `/opt/conselho-teste`, separado da Sofia: 12 de 12 passaram depois de três rodadas de correção. Respostas em `testes/resultados-2026-11-04/`. Para rodar de novo: `ssh root@2.25.199.39 'cd /opt/conselho-teste && ./rodar-caso.sh 2'` |
 | `skills/incidente-de-dados/` | skill da Nina, urgente: conter, registrar, avaliar com o advogado, prazos da ANPD e rascunhos (04/11/2026) |
 | `FICHA-DE-VENDA.md` | preço por plano, objetivos, benefícios, diferenças, para quem é e o que não prometer |
 | `ROTEIRO-DE-VENDA.md` | perguntas de qualificação, apresentação, oferta por plano, objeções e mensagens prontas |

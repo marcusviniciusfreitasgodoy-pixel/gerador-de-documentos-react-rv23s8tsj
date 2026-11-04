@@ -69,4 +69,4 @@ Preenchido com: Sérgio, dono
 3. O Sérgio acha que precisa de mais um tosador.
 
 ## Mudanças registradas
-- 2026-10-05: diretriz da agenda de terça e quarta aprovada.
+- 2026-11-04: dossiê criado no onboarding do Conselho.

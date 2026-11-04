@@ -6,6 +6,8 @@ allowed-tools: Read, Write, Grep, Glob
 
 # Skill: A conta do preço
 
+**Quem usa:** o subagente Fernando, chamado pela Sônia numa reunião do Conselho. Se a Sônia chegou a esta skill direto, ela não faz o trabalho sozinha: convoca o Fernando pela skill `conselho-executivo` e passa esta skill no briefing.
+
 Usada pelo Fernando dentro de uma reunião do Conselho. Quando o assunto é como apresentar ou defender o preço para o cliente, a Lívia participa junto. A conta é do Fernando, e a decisão do preço é do dono.
 
 ## Etapa 1: o material
@@ -13,7 +15,7 @@ Usada pelo Fernando dentro de uma reunião do Conselho. Quando o assunto é como
 Peça à Sônia que levante com o dono, para cada produto ou serviço em pauta:
 
 - Preço de venda atual.
-- Custo direto de cada unidade em reais: mercadoria, insumo, embalagem, hora de quem executa o serviço.
+- Custo direto de cada unidade em reais: mercadoria, insumo, embalagem. A mão de obra só entra aqui quando é paga por unidade (comissão, diária, freelancer por serviço). Salário fixo já está no custo fixo e não entra de novo no custo de cada venda.
 - Custos que acompanham cada venda em percentual do preço: taxa da maquininha ou do aplicativo, comissão, frete pago pela empresa e a alíquota de imposto sobre a venda informada pelo contador.
 - Quantas unidades vende por mês, em média.
 - O custo fixo do mês. Se o raio-x do caixa já foi feito, use o número de lá.

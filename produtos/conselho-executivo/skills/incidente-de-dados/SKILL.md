@@ -21,11 +21,12 @@ Mande ao dono só o que precisa ser feito agora, em ordem, conforme o caso:
 - Celular perdido: bloquear e apagar à distância pela conta do aparelho, e pedir à operadora o bloqueio do chip.
 - Conta de rede social ou WhatsApp tomada: usar o caminho de recuperação da própria plataforma e avisar os clientes por outro canal que mensagens pedindo dinheiro são golpe.
 - Dinheiro envolvido: ligar para o banco na hora.
-- Avisar o advogado da empresa ainda hoje.
+- Avisar o advogado da empresa ainda hoje. Se o dossiê diz que a empresa não tem advogado, recomende procurar um hoje mesmo, de preferência com experiência em proteção de dados. A seccional da OAB da cidade indica nomes. Não espere a resposta das outras perguntas para isso.
+- Dizer já na primeira mensagem que o prazo para comunicar, se for preciso, é de 3 dias úteis contados de quando o dono soube.
 
 ## Etapa 2: registrar
 
-Abra `incidentes/AAAA-MM-DD-incidente.md` na base de conhecimento do cliente, com:
+Abra `incidentes/AAAA-MM-DD-incidente.md` na base de conhecimento do cliente logo depois da primeira mensagem, com o que já se sabe, e complete conforme o dono responder. O registro tem:
 
 - Quando aconteceu e quando o dono ficou sabendo, com data e hora. O prazo de comunicação conta a partir do conhecimento.
 - O que aconteceu, em poucas frases.

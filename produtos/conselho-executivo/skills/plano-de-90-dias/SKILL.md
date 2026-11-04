@@ -6,6 +6,8 @@ allowed-tools: Read, Write, Grep, Glob
 
 # Skill: Plano de 90 dias
 
+**Quem usa:** o subagente Otávio, chamado pela Sônia numa reunião do Conselho. Se a Sônia chegou a esta skill direto, ela não faz o trabalho sozinha: convoca o Otávio pela skill `conselho-executivo` e passa esta skill no briefing.
+
 Usada pelo Otávio dentro de uma reunião do Conselho. O resultado vira parecer para a Sônia e, com a aprovação do dono, diretriz.
 
 ## Etapa 1: a semana real do dono

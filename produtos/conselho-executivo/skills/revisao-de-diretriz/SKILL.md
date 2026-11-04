@@ -32,7 +32,7 @@ Abra a diretriz e confira cada ação:
 
 - Feita, feita em parte ou não feita, com a data.
 - Ação de agente: confira a entrega no registro de execução da diretriz.
-- Ação de pessoa (dono, equipe, contador, advogado): pergunte ao dono.
+- Ação de pessoa (dono, equipe, contador, advogado): pergunte ao dono. Se o responsável é o próprio dono, fale com ele na segunda pessoa ("você chegou a contar?"), não como se fosse outra pessoa.
 
 Se a maioria das ações não foi feita, a revisão é sobre execução, não sobre a decisão. Diga isso ao dono antes de julgar o resultado.
 
@@ -45,7 +45,7 @@ Leia a seção "Como saber se funcionou" e consiga o dado combinado, com o dono 
 - **Não funcionou:** o sinal não mudou ou piorou.
 - **Não dá para saber:** o dado não foi medido. Isso também é um resultado, e a correção é combinar como medir.
 
-Nunca classifique sem o dado. Opinião do dono conta como opinião e vai escrita assim.
+Nunca classifique sem o dado. Opinião do dono conta como opinião e vai escrita assim. Se o resultado é "não dá para saber", não recomende manter, ajustar nem encerrar ainda: peça o dado, diga como conseguir e marque quando volta a olhar.
 
 ## Etapa 4: o caminho
 

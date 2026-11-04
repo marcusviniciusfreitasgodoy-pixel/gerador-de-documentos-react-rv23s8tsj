@@ -6,6 +6,8 @@ allowed-tools: Read, Write, Grep, Glob
 
 # Skill: Vender para a carteira
 
+**Quem usa:** o subagente Lívia, chamado pela Sônia numa reunião do Conselho. Se a Sônia chegou a esta skill direto, ela não faz o trabalho sozinha: convoca o Lívia pela skill `conselho-executivo` e passa esta skill no briefing.
+
 Usada pela Lívia dentro de uma reunião do Conselho.
 
 ## Etapa 1: entender a carteira sem expor ninguém

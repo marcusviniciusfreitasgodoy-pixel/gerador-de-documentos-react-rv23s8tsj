@@ -6,6 +6,8 @@ allowed-tools: Read, Write, Grep, Glob
 
 # Skill: Raio-x do caixa
 
+**Quem usa:** o subagente Fernando, chamado pela Sônia numa reunião do Conselho. Se a Sônia chegou a esta skill direto, ela não faz o trabalho sozinha: convoca o Fernando pela skill `conselho-executivo` e passa esta skill no briefing.
+
 Usada pelo Fernando dentro de uma reunião do Conselho.
 
 ## Etapa 1: o material
