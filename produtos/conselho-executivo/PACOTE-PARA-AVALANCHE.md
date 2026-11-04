@@ -4,7 +4,7 @@ Revendedor: Prime Circle (SONIA)
 Data: 03/11/2026
 Tipo: adicional pago no Starter e no Elite (R$ 1.997 por ano) e incluído no Magnata, sem cobrança à parte
 
-Situação: aprovado em 03/11/2026, segundo o dono.
+Situação: aguardando aprovação. A proposta completa foi para a Avalanche em 04/11/2026, como documento: "Conselho Executivo SONIA: proposta para aprovação da Avalanche" (https://claude.ai/artifact/XrPZCnGeSH3QXBu8CBcBZC), com `conselho-executivo-arquivos.zip` (pastas `agentes/` e `skills/`). O documento tem 8 pontos para validar: os 6 daqui e mais dois (chamada entre agentes e rotinas).
 
 ## O que está sendo submetido
 

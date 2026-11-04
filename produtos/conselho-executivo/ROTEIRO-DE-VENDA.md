@@ -1,6 +1,6 @@
 # Conselho Executivo: roteiro de venda
 
-Uso interno. Versão de 03/11/2026. Aprovado pela Avalanche em 03/11/2026, segundo o dono.
+Uso interno. Versão de 03/11/2026. **Aguardando aprovação da Avalanche** (proposta enviada em 04/11/2026). Em 03/11 o "está aprovado" do dono foi lido como aprovação da Avalanche, e não era.
 
 ## Onde o Conselho entra na conversa
 

@@ -46,7 +46,7 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e s
 
 ## Implantação (03/11/2026)
 
-O dono informou que a Avalanche aprovou. Já está feito:
+A seção foi ao ar em 04/11/2026 **antes** da aprovação da Avalanche. Em 03/11, o "está aprovado" do dono foi lido como aprovação da Avalanche, e não era. Em 04/11 o dono decidiu manter a seção no ar enquanto a Avalanche analisa a proposta (`PACOTE-PARA-AVALANCHE.md`). Já está feito:
 
 - Os quatro avatares em `landing-sonia/assets/agentes/` (gerados com o Gemini, no estilo dos agentes atuais).
 - Os textos do `COPY-LANDING.md` no `landing-sonia/conteudo.json`: linhas dos planos, selo do Magnata, quarto item de "Por onde começar", abertura, item "Conselho" no menu e duas perguntas frequentes.
@@ -55,7 +55,7 @@ O dono informou que a Avalanche aprovou. Já está feito:
 
 Falta:
 
-- Subir o pacote no cPanel (`sonia-hostgator-conselho.zip`, em Downloads).
+- A aprovação da Avalanche e as respostas aos 8 pontos da proposta.
 - Instalar os agentes e as skills no painel, como a Avalanche orientar.
 - Link de checkout do adicional. Até lá, o botão da seção leva à demonstração.
 - Respostas às perguntas 1, 2, 3, 4 e 6 do `PACOTE-PARA-AVALANCHE.md`.
