@@ -30,6 +30,8 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 - Auditoria do painel (o que o produto entrega de fato): doc "Prime Circle Agentes: auditoria do painel
   Naia OS", https://claude.ai/artifact/1V43xv5uR1FMASANpBA3iH (Claude Docs).
 - Roteiro de onboarding de 60 min pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md` (ensaiar antes).
+- **Conselho Executivo, estado em 04/11/2026:** 4 conselheiros e 10 skills, com exemplos resolvidos e 12 casos de teste rodados na VPS (`/opt/conselho-teste`, 12 de 12 depois de três rodadas de correção). No ar na landing **sem aprovação da Avalanche**, por decisão do dono. Proposta como Claude Doc https://claude.ai/artifact/XrPZCnGeSH3QXBu8CBcBZC, com o anexo `~/Downloads/conselho-executivo-arquivos.zip`. Aguarda resposta aos 8 pontos.
+- **Vídeo da proposta no HeyGen, em andamento:** roteiro, script, avatares e próximos passos em `produtos/conselho-executivo/VIDEO-HEYGEN.md`, seção "Estado da produção". O dono autorizou cerca de 85 créditos e ainda não foi gerado nada. Próximo passo: o teste de voz.
 - **Troca de endereço (decidida em 04/11/2026):** a landing vai sair de `sonia.primecircle.app.br` para
   `agentes.primecircle.app.br`, que hoje é a plataforma (painel e checkout, no servidor do fornecedor). Nada
   foi trocado: primeiro a plataforma ganha outro endereço. Passo a passo e mensagem para o fornecedor em

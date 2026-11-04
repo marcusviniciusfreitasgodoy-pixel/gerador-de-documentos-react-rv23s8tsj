@@ -179,3 +179,37 @@ Quer ver o Conselho trabalhando na sua empresa? Fale com a gente.
 ```
 
 Para Reels e Stories, refaça o enquadramento em 1080 x 1920 e coloque um conselheiro por vez na tela, sem os quadros lado a lado.
+
+## Estado da produção (04/11/2026, para continuar em outra sessão)
+
+**Autorização do dono:** em 04/11/2026 o Marcus autorizou gastar cerca de 85 créditos neste vídeo (teste de voz e vídeo completo). Nada foi gerado ainda: o saldo continua intacto.
+
+**Conta HeyGen:** plano Creator, 464 créditos, renovação em 2026-11-22. Avatar a partir de foto: de 16 a 20 créditos por minuto (a ferramenta não informa; fontes de outubro de 2026 dizem 16).
+
+**Avatares criados pelo dono (todos `photo_avatar`, motores avatar_v, avatar_iv e avatar_iii):**
+
+| Personagem | Look id para `avatarId` | Voz padrão do avatar |
+|---|---|---|
+| Otávio | 07cc3aa0dcb3484cbecd3918ca2b30e1 | f8ae4c0d76fa4f5ebd133bbef14e1c67 |
+| Lívia | 7c6ef66050a944bdaae486017d61ef81 | e808da2329754929803c8bd98dc36857 (Lucilene, português) |
+| Fernando | 9a475672d1ca4a34836ed350a4505272 | 14be84ff0ad848d79bd867a79a870f4a |
+| Nina | 5440687d1a2349e196a177a75c8ca5cb | 0d23c5b2f6004e909802a2e8bfcd52c2 |
+| Sônia | d64a5f1beb5946e79157cf332dfd48c8 (grupo com 6 looks, 1024 x 1280) | 90938dd5581044b69592f22d1620940b |
+
+**Vozes em português da biblioteca** (a API não confirma o sotaque; pelos nomes, as quatro primeiras parecem brasileiras): Murilo `d703f08d1ef34302a36945aa3efc7b3f`, Lucilene `e808da2329754929803c8bd98dc36857`, Afonso `9ce5f601f9e04382bb26141d5a3f839d`, Thaís `a8c7b58e38c44719b3ab36342f080e95`, Giles `7d5dfb068b534baa996aef0ab3468a8d`, Oscar `f6dabcabaabe47dab19a39c7dd926cbb`, Mark `c8810dc6f3904500b89d934dcd99b94b`. Antes do teste, conferir o idioma das vozes padrão de Otávio, Fernando, Nina e Sônia com `get_voice`.
+
+O levantamento completo, com os esquemas das ferramentas de vídeo, está em `video/heygen-levantamento.md`.
+
+**Como chamar o HeyGen:** só pela VPS, onde o MCP `heygen` (https://mcp.heygen.com/mcp/v1/) está ligado. Rodar o Claude Code sem tela numa pasta fora de `/opt/AGENTE`, para não carregar o CLAUDE.md da Sofia, e liberar ferramenta por ferramenta. O modo de permissões liberadas é bloqueado pelo classificador.
+
+```bash
+ssh root@2.25.199.39 'cd /opt/conselho-teste/heygen && TOKEN=$(grep "^CLAUDE_CODE_OAUTH_TOKEN=" /opt/AGENTE-bot/.env | cut -d= -f2- | tr -d "\""); CLAUDE_CODE_OAUTH_TOKEN="$TOKEN" claude --print --output-format json --allowedTools "mcp__heygen__get_voice" "mcp__heygen__create_video_from_avatar" "mcp__heygen__get_video" "Write" --max-budget-usd 2 "<pedido>" < /dev/null'
+```
+
+**Próximos passos:**
+
+1. **Teste de voz** (cerca de 10 a 12 créditos): um `create_video_from_avatar` por personagem, com a fala da cena 4 (para a Sônia, a fala da cena 1). Parâmetros: `engine` avatar_iv, `resolution` 1080p, `aspectRatio` 16:9, `background` cor `#0E0E0E`, `fit` contain, `expressiveness` medium. Acompanhar com `get_video` até ficar pronto.
+2. **Conferir o teste:** baixar os MP4 na VPS, transcrever com `landing-sonia/ferramentas/legendas/reconhecer-fala.py` (faster-whisper "small", já instalado lá) para checar a pronúncia de LGPD, SONIA e números, e tirar um quadro de cada para ver boca e fundo. Mostrar ao dono e parar.
+3. **Com o ok do dono, as falas de todas as cenas:** um vídeo por fala, com os mesmos parâmetros, cerca de 60 a 73 créditos.
+4. **Montagem na VPS com ffmpeg** (que lá tem drawtext): juntar as falas na ordem das cenas, com os textos de tela, a reunião com os quatro quadros lado a lado (usar `xstack`; o `tile` falha em silêncio) e as mensagens de WhatsApp como imagens sobrepostas. Legenda a partir do `subtitle_url` de cada fala.
+5. **Conferir o vídeo final** e entregar ao dono.
