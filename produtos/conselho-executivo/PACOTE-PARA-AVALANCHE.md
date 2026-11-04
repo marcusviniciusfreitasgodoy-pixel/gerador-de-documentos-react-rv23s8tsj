@@ -8,7 +8,7 @@ Situação: aguardando aprovação. A proposta completa foi para a Avalanche em 
 
 ## O que está sendo submetido
 
-Quatro agentes adicionais e seis skills.
+Quatro agentes adicionais e dez skills (as quatro últimas da tabela entraram em 04/11/2026).
 
 | Arquivo | Tipo | Usado por |
 |---|---|---|
@@ -22,6 +22,10 @@ Quatro agentes adicionais e seis skills.
 | `skills/vender-para-a-carteira/` | skill | Lívia |
 | `skills/raio-x-do-caixa/` | skill | Fernando |
 | `skills/checkup-de-sistemas-e-dados/` | skill | Nina |
+| `skills/conta-do-preco/` | skill | Fernando, com a Lívia quando o assunto é apresentar o preço |
+| `skills/vale-contratar/` | skill | Sônia, com o Otávio e o Fernando |
+| `skills/revisao-de-diretriz/` | skill | Sônia, na data de revisão de cada diretriz |
+| `skills/incidente-de-dados/` | skill | Nina, em caso de vazamento ou invasão |
 
 Os arquivos de agente seguem o formato de subagente com cabeçalho `name`, `description`, `tools` e `model`. As skills seguem o formato `SKILL.md`. Se o painel usa outro formato, adaptamos.
 
@@ -37,7 +41,7 @@ Os arquivos de agente seguem o formato de subagente com cabeçalho `name`, `desc
 
 - Os conselheiros só leem e escrevem arquivos na base de conhecimento do cliente. Lívia e Nina também pesquisam na internet para comparar concorrentes e ferramentas.
 - Nenhum conselheiro executa comando, envia mensagem a terceiros ou movimenta dinheiro.
-- Arquivos criados: `dossie-da-empresa.md` e a pasta `diretrizes/`, na base de conhecimento do próprio cliente.
+- Arquivos criados: `dossie-da-empresa.md`, a pasta `diretrizes/` (com o painel `PAINEL.md`) e, só se houver incidente, a pasta `incidentes/`, na base de conhecimento do próprio cliente. O registro de incidente descreve o que aconteceu e não copia os dados vazados.
 - O dossiê não guarda senha, token, dado bancário completo, lista nominal de clientes nem dado sensível. As skills orientam o agente a não registrar isso.
 - O modelo de IA é o do plano do cliente (`model: inherit`).
 

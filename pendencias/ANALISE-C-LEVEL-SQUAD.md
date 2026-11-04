@@ -103,7 +103,7 @@ Ficaram abertas quatro perguntas de detalhe, listadas no fim de `produtos/consel
 ## 5.1 Decisão
 
 O dono aprovou a recomendação: não vender o squad e reescrever. O produto novo é o **Conselho Executivo SONIA**,
-em `produtos/conselho-executivo/` (quatro conselheiros, seis skills, ficha de venda e pacote para aprovação).
+em `produtos/conselho-executivo/` (quatro conselheiros, dez skills desde 04/11/2026, ficha de venda e pacote para aprovação).
 Uma conferência automática não encontrou nenhuma sequência de seis palavras em comum com os arquivos antigos,
 nem com a versão em inglês nem com a versão em português da VPS.
 

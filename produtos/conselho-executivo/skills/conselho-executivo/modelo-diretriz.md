@@ -39,6 +39,12 @@ O sinal que o dono vai olhar e quando. Exemplo do formato: "orçamentos respondi
 
 Os números e fatos usados e de onde vieram (dossiê, arquivo do dono, parecer de qual conselheiro, endereço na internet com data).
 
+## Revisão
+
+Preenchida pela skill `revisao-de-diretriz` na data de revisar_em. Cada revisão nova vai embaixo da anterior.
+
+- AAAA-MM-DD: ações feitas (x de y); resultado (funcionou, em parte, não funcionou ou não dá para saber) com o dado; caminho escolhido pelo dono (manter, ajustar ou encerrar); aprendizado em uma frase.
+
 ## Registro de execução
 
 - AAAA-MM-DD: (preenchido pela Sônia a cada entrega)

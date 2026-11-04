@@ -39,7 +39,7 @@ Comece a recomendação pelo item mais fraco. Na maioria das vezes, é o e-mail 
 - Existe política de privacidade no site ou na página de cadastro?
 - Algum dado é sensível (saúde, por exemplo)? Se sim, o cuidado é maior e o enquadramento como pequeno porte pode não valer. Recomendar conversa com o advogado.
 
-Explique ao dono com as regras do arquivo da Nina: não há registro na ANPD, o encarregado pode ser dispensado no pequeno porte mas o canal é obrigatório, e incidente com risco ao titular exige comunicação rápida e advogado no mesmo dia.
+Explique ao dono com as regras do arquivo da Nina: não há registro na ANPD, o encarregado pode ser dispensado no pequeno porte mas o canal é obrigatório, e incidente com risco ao titular exige comunicação rápida e advogado no mesmo dia. Se o incidente já aconteceu, pare o checkup e use a skill `incidente-de-dados`.
 
 ## Etapa 4: o que automatizar
 

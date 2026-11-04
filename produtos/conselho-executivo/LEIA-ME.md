@@ -1,6 +1,6 @@
 # Conselho Executivo SONIA
 
-Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e seis skills que fazem o Conselho funcionar dentro do time do cliente. Criado em 03/11/2026 para substituir o C-Level Squad, que não pode ser vendido como estava (ver `pendencias/ANALISE-C-LEVEL-SQUAD.md`).
+Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e dez skills que fazem o Conselho funcionar dentro do time do cliente. Criado em 03/11/2026 para substituir o C-Level Squad, que não pode ser vendido como estava (ver `pendencias/ANALISE-C-LEVEL-SQUAD.md`).
 
 ## O que a Avalanche confirmou (03/11/2026, pelo dono)
 
@@ -20,6 +20,10 @@ Produto adicional da SONIA: quatro conselheiros que ajudam o dono a decidir, e s
 | `skills/vender-para-a-carteira/` | skill da Lívia |
 | `skills/raio-x-do-caixa/` | skill do Fernando |
 | `skills/checkup-de-sistemas-e-dados/` | skill da Nina |
+| `skills/conta-do-preco/` | skill do Fernando: margem, ponto de equilíbrio, preço mínimo e efeito do desconto (04/11/2026) |
+| `skills/vale-contratar/` | a Sônia com o Otávio e o Fernando: gente ou processo, custo e caixa, sim, não ou ainda não (04/11/2026) |
+| `skills/revisao-de-diretriz/` | a Sônia na data de revisão: manter, ajustar ou encerrar, e o painel `diretrizes/PAINEL.md` (04/11/2026) |
+| `skills/incidente-de-dados/` | skill da Nina, urgente: conter, registrar, avaliar com o advogado, prazos da ANPD e rascunhos (04/11/2026) |
 | `FICHA-DE-VENDA.md` | preço por plano, objetivos, benefícios, diferenças, para quem é e o que não prometer |
 | `ROTEIRO-DE-VENDA.md` | perguntas de qualificação, apresentação, oferta por plano, objeções e mensagens prontas |
 | `COPY-LANDING.md` | textos prontos para planos, "Por onde começar", seção nova e perguntas frequentes |

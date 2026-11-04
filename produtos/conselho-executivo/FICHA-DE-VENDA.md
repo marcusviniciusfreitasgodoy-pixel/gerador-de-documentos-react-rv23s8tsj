@@ -37,11 +37,13 @@ O Conselho é a camada que faltava entre o dono e o time: a hora de pensar antes
 | Quando | O que o Conselho faz | O que o dono leva |
 |---|---|---|
 | "Será que contrato mais alguém?" | Otávio vê se o gargalo é falta de gente ou de processo. Fernando projeta o caixa com o novo salário. | Um sim, um não ou um "ainda não", com a semana em que o caixa aperta |
-| "O concorrente baixou o preço" | Lívia avalia se o cliente compra por preço. Fernando mostra quanto a mais seria preciso vender para pagar o desconto. | Uma resposta de preço defendida com conta |
+| "O concorrente baixou o preço" | Lívia avalia se o cliente compra por preço. Fernando faz a conta do preço e mostra quanto a mais seria preciso vender para pagar o desconto. | Uma resposta de preço defendida com conta |
 | "O dinheiro some e eu vendo bem" | Fernando faz o raio-x do caixa das próximas 13 semanas. | Onde o dinheiro vai e o que fazer antes do aperto |
 | "Os clientes compram uma vez e somem" | Lívia separa a carteira em grupos e monta oferta e mensagem para cada um. | Um plano de recompra que o time executa |
 | "Vou trocar de sistema?" | Nina compara opções, custo e como sair depois. | A escolha mais simples que resolve, com fonte e data dos preços |
 | "Tenho medo de vazar dado de cliente" | Nina faz o checkup de segurança e do essencial da LGPD. | O que arrumar primeiro e o que levar ao advogado |
+| "Vazou a planilha de clientes" | Nina entra na hora: o que fazer na primeira hora, o registro, a avaliação de risco e os prazos da ANPD. | Os passos certos sob pressão e os rascunhos prontos para o advogado |
+| "Aquela decisão deu certo?" | A Sônia revisa a diretriz na data marcada, com o dado combinado. | Manter, ajustar ou encerrar, e o aprendizado guardado |
 | "Faço tudo sozinho" | Otávio mapeia a semana do dono e monta o plano de 90 dias. | O que parar de fazer, o que delegar e as metas do trimestre |
 
 ## O que o cliente recebe

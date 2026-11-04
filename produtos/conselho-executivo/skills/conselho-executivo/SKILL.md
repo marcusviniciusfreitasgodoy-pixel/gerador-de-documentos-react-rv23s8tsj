@@ -33,8 +33,9 @@ Abra `dossie-da-empresa.md` na base de conhecimento do cliente.
 Regras de combinação:
 
 - Qualquer decisão que gaste dinheiro ou mude preço leva o Fernando junto.
-- Contratação leva Otávio e Fernando.
-- Preço leva Lívia e Fernando.
+- Contratação leva Otávio e Fernando, pela skill `vale-contratar`.
+- Preço leva Lívia e Fernando. O Fernando usa a skill `conta-do-preco`.
+- Vazamento, invasão ou perda de dados não espera reunião: chame só a Nina, na hora, pela skill `incidente-de-dados`.
 - Automação que fala com cliente ou usa lista de contatos leva Nina.
 - Chame o mínimo que cobre a decisão. Uma pergunta de um tema só pode ter um conselheiro só.
 
@@ -95,10 +96,11 @@ Se o dono mudou algo na aprovação, a diretriz registra a versão aprovada, nã
 ## Passo 7: distribuir e acompanhar
 
 1. Mude o status para EM EXECUÇÃO.
+   Inclua a diretriz no painel `diretrizes/PAINEL.md` (formato na skill `revisao-de-diretriz`).
 2. Envie cada ação ao agente responsável, com o trecho da diretriz que ele precisa.
 3. Ações de pessoa (dono, equipe, contador, advogado) viram lembrete para o dono com a data.
 4. Registre cada entrega no fim da diretriz, com data.
-5. Na data de "como saber se funcionou", avise o dono e mostre o resultado. Se não funcionou, ofereça nova reunião do Conselho sobre o mesmo tema.
+5. Na data de revisão, rode a skill `revisao-de-diretriz`: ela confere as ações, compara o resultado com o sinal combinado e fecha com o dono se a decisão fica, muda ou acaba.
 6. Quando todas as ações terminarem, status CONCLUÍDA.
 
 Para lembrar a data de revisão, use uma rotina da plataforma só se o plano do cliente ainda tiver rotina livre. Se não tiver, registre a data na diretriz e cite no resumo semanal.
