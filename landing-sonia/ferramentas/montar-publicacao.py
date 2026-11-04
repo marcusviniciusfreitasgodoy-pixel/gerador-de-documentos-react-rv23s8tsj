@@ -33,6 +33,15 @@ def limpa(o):
     return o
 
 c = json.load(open(os.path.join(AQUI, 'conteudo.json'), encoding='utf-8'))
+if hostgator:
+    # o .htaccess manda todo outro nome de domínio para o endereço oficial (seo.endereco)
+    from urllib.parse import urlparse
+    host = urlparse(c.get('seo', {}).get('endereco', 'https://sonia.primecircle.app.br/')).hostname
+    assert host and re.fullmatch(r'[a-z0-9.-]+', host), host
+    ht = os.path.join(destino, '.htaccess'); txt = open(ht, encoding='utf-8').read()
+    assert txt.count('HOST_OFICIAL_RE') == 1 and txt.count('HOST_OFICIAL') == 2, 'marcadores do .htaccess'
+    txt = txt.replace('HOST_OFICIAL_RE', re.escape(host)).replace('HOST_OFICIAL', host)
+    open(ht, 'w', encoding='utf-8').write(txt)
 json.dump(limpa(c), open(os.path.join(destino, 'conteudo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 
 proibido = re.compile(r'avalanche|naia\b|denderson|anthropic', re.I)

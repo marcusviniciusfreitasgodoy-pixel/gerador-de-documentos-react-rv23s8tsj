@@ -5,6 +5,8 @@ src, dst, cont = sys.argv[1], sys.argv[2], sys.argv[3]
 s = open(src, encoding='utf-8').read()
 c = json.load(open(cont, encoding='utf-8'))
 seo = c.get('seo', {})
+# endereço oficial da página (canonical, og:url, og:image); trocar só em seo.endereco
+ENDERECO = seo.get('endereco', 'https://sonia.primecircle.app.br/').rstrip('/') + '/'
 
 def sub_script(tipo, fn):
     global s
@@ -35,9 +37,9 @@ def tpl(t):
         '<meta property="og:type" content="website">\n'
         '<meta property="og:title" content="' + html.escape(seo.get('titulo', '')) + '">\n'
         '<meta property="og:description" content="' + html.escape(seo.get('descricao', '')) + '">\n'
-        '<link rel="canonical" href="https://sonia.primecircle.app.br/">\n'
-        '<meta property="og:url" content="https://sonia.primecircle.app.br/">\n'
-        '<meta property="og:image" content="https://sonia.primecircle.app.br/assets/og-sonia.jpg">\n'
+        '<link rel="canonical" href="' + ENDERECO + '">\n'
+        '<meta property="og:url" content="' + ENDERECO + '">\n'
+        '<meta property="og:image" content="' + ENDERECO + 'assets/og-sonia.jpg">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
         '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n')
     assert '<meta name="viewport"' in t

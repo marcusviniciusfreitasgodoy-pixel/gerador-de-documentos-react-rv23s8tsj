@@ -30,6 +30,10 @@ Guia para uma sessão nova continuar de onde a anterior parou (03/11/2026).
 - Auditoria do painel (o que o produto entrega de fato): doc "Prime Circle Agentes: auditoria do painel
   Naia OS", https://claude.ai/artifact/1V43xv5uR1FMASANpBA3iH (Claude Docs).
 - Roteiro de onboarding de 60 min pronto em `operacao/ROTEIRO-ONBOARDING-SONIA.md` (ensaiar antes).
+- **Troca de endereço (decidida em 04/11/2026):** a landing vai sair de `sonia.primecircle.app.br` para
+  `agentes.primecircle.app.br`, que hoje é a plataforma (painel e checkout, no servidor do fornecedor). Nada
+  foi trocado: primeiro a plataforma ganha outro endereço. Passo a passo e mensagem para o fornecedor em
+  `pendencias/MUDAR-LANDING-PARA-AGENTES.md`. No código, o endereço mora em `seo.endereco`.
 - **Seção "A Sônia responde"** (03/11/2026, completa em 04/11), logo depois de "Por onde começar": os 8 vídeos
   da Série da Sônia (ordem R1, R5, R6, R7, R4, R2, R3, R8) em `landing-sonia/assets/video/serie/` (720x1280,
   ~2 MB cada, capa .webp e legenda .vtt corrigida à mão), dados em `videos` do `conteudo.json`. A casca da seção

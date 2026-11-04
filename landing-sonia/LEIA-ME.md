@@ -94,6 +94,11 @@ Ou mande o `conteudo.json` novo para quem mantém o site publicar.
 checkout). Apontar esse domínio para a landing derruba o acesso dos clientes. Use outro
 subdomínio (por exemplo `sonia.primecircle.app.br`) ou combine com o fornecedor antes.
 
+**Decisão de 04/11/2026:** a landing vai para `agentes.primecircle.app.br`, depois que a plataforma
+ganhar outro endereço. O passo a passo está em `pendencias/MUDAR-LANDING-PARA-AGENTES.md`. O endereço
+oficial da página fica num campo só, `seo.endereco` do `conteudo.json`: ele vai para o canonical e para a
+imagem de compartilhamento, e o `.htaccess` do pacote redireciona qualquer outro nome para ele.
+
 ## Visual do Claude Design (desde 01/11/2026)
 
 - `index.html` é o export do Claude Design **adaptado** por `ferramentas/adaptar-design.py`:

@@ -4,6 +4,12 @@
 # A pasta .well-known fica de fora para não atrapalhar a renovação do certificado.
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  # Endereço único: quem chega por outro nome (por exemplo o antigo, depois de uma troca de
+  # domínio) vai para o oficial. O nome vem de seo.endereco do conteudo.json e é preenchido
+  # pelo montar-publicacao.py; não edite os marcadores aqui.
+  RewriteCond %{HTTP_HOST} !^HOST_OFICIAL_RE$ [NC]
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^ https://HOST_OFICIAL%{REQUEST_URI} [L,R=301]
   RewriteCond %{HTTPS} !=on
   RewriteCond %{REQUEST_URI} !^/\.well-known/
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]

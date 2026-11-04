@@ -12,7 +12,8 @@
   "seo": {
     "titulo": "SONIA · até 21 especialistas de IA na sua equipe, nenhum na folha",
     "descricao": "A Sônia coordena até 21 especialistas de IA: conteúdo, anúncios, atendimento no WhatsApp, financeiro, notas fiscais, contratos e RH. Você pede em português e recebe pronto.",
-    "imagem_compartilhamento": "assets/og-sonia.jpg"
+    "imagem_compartilhamento": "assets/og-sonia.jpg",
+    "endereco": "https://sonia.primecircle.app.br/"
   },
   "topo": {
     "menu": [
