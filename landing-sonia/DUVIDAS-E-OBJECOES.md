@@ -87,3 +87,19 @@ Legenda da coluna "A página responde?": **Sim** (resolve), **Em parte** (toca n
 - **C5. Contagem que confunde.** "Até 21 especialistas", "a Sônia e os 21 especialistas", "14 funções", "21 pessoas na folha", "5 agentes" no Starter (contando a Sônia). Dá para entender, mas exige conta.
 - **C6. Zona verde e Zona amarela no atendimento ao cliente.** Responder dúvida está na verde, disparar mensagem está na amarela. Não fica claro se o WhatsApp do cliente final é respondido com ou sem o OK do dono.
 - **C7. "Assinar agora" não assinava.** Resolvido em 05/11/2026: o botão abre o checkout da plataforma.
+
+## 4. Para onde foi cada dúvida sem resposta (05/11/2026)
+
+**Já estavam na pauta da Avalanche** (doc "SONIA: pauta e entendimentos para confirmar com a Avalanche", https://claude.ai/artifact/Kd8VqfM4KTLnfyguEoxrbF): renovação e cancelamento (3.2), instalação da Evolution API e bloqueio do número (3.7), cota do ChatGPT de US$ 20 (3.8), outros custos para o cliente (3.9), suporte quando a plataforma falha (3.13), LGPD (3.14), plataforma encerrar (3.18), Claude e ChatGPT por assinatura (2.5).
+
+**Entraram na pauta como perguntas 3.19 a 3.36:** checkout dentro da página, "Cérebro Claude" no checkout, plano mensal, troca de plano no meio do ano, o que conta como rotina e limite de tarefas, tempo até a primeira entrega, clone do dono (aprovação, passar para humano, se diz que é IA, como aprende o tom), hospedagem das páginas, verba de anúncios, CRM, outras redes, troca de modelo quando um cai, GLM e Kimi fora do Brasil, quem vê os dados, exportação e exclusão, casos de clientes da plataforma. A regra de dados entrou também na Parte 4 (por escrito).
+
+**Ficaram com você, não são para a Avalanche:**
+- Depoimentos de clientes da Prime Circle (os 5 primeiros com condição especial).
+- Custo mensal total estimado para mostrar na página: dá para montar depois das respostas 3.8, 3.9 e 3.23.
+- Orientação de usar um número separado no WhatsApp, depois da resposta 3.7.
+- Oferecer ou não plano mensal, depois da resposta 3.21.
+- Termos de uso e contrato do cliente com a Prime Circle (advogado).
+- Como responder "por que um corretor vende IA" e "qual a diferença para outra revendedora".
+- Resultado esperado e ramos atendidos: exemplos fora do mercado de conteúdo digital.
+- Plataforma por trás: o que dizer se o cliente perguntar se a tecnologia é sua.
