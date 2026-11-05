@@ -118,6 +118,24 @@ def tpl(t):
     # no celular a grade mostra 6 especialistas e um botão abre o resto (pedido de 02/11/2026)
     t = troca(t, '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">\n<sc-for list="{{ agents }}"',
               '<div class="pc-esp-grade" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">\n<sc-for list="{{ agents }}"', 'grade-especialistas')
+    # 05/11/2026: cartão compacto (avatar redondo, nome e cargo em linha). O resumo e o resto
+    # continuam no currículo, que abre no clique da linha inteira, como antes.
+    t = troca(t, '<div class="pc-esp-grade" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:16px">',
+              '<div class="pc-esp-grade" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px">', 'grade-especialistas-colunas')
+    ini = t.index('<sc-for list="{{ agents }}" as="a" hint-placeholder-count="12">\n<article ')
+    fim = t.index('</article>\n</sc-for>', ini) + len('</article>')
+    t = t[:ini] + ('<sc-for list="{{ agents }}" as="a" hint-placeholder-count="12">\n'
+      '<article class="pc-esp-item" sc-camel-on-click="{{ a.open }}" style="display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:14px;min-width:0;padding:12px 16px 12px 12px;background:var(--pc-surface-2);border:1px solid rgba(245,241,230,0.10);border-radius:10px;cursor:pointer;transition:background 200ms cubic-bezier(.22,.61,.36,1)" style-hover="background:var(--pc-surface-3)">\n'
+      '<div style="width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--pc-surface-3);border:1px solid rgba(245,241,230,0.14)">\n'
+      '<img srcset="{{ a.imagem }}" alt="{{ a.nome }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">\n'
+      '</div>\n'
+      '<div style="display:grid;gap:4px;min-width:0">\n'
+      '<span style="font-family:var(--pc-font-mono);font-size:9px;letter-spacing:0.24em;text-transform:uppercase;color:#C9A84C">{{ a.area }}</span>\n'
+      '<h3 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:22px;line-height:1;letter-spacing:-0.01em">{{ a.nome }}</h3>\n'
+      '<span style="font-size:13px;font-weight:600;line-height:1.35;color:#E8E0CC;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ a.cargo }}</span>\n'
+      '<span class="pc-esp-cv" style="margin-top:4px;font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#C9A84C">{{ c.time.botao_curriculo }} ↗</span>\n'
+      '</div>\n'
+      '</article>') + t[fim:]
     # tabela de economia no celular: só função e custo por mês, sem rolar para o lado (02/11/2026)
     t = troca(t, '<div style="overflow-x:auto">\n<sc-raw-table style="width:100%;min-width:880px;',
               '<div class="pc-eco" style="overflow-x:auto">\n<sc-raw-table style="width:100%;min-width:880px;', 'tabela-economia')
@@ -365,6 +383,8 @@ def tpl(t):
   .pc-esp-mais{display:flex;justify-content:center;align-items:center;width:100%;min-height:52px;padding:0 24px;border-radius:999px;border:1px solid rgba(245,241,230,.35);background:transparent;color:#F5F1E6;font:600 15px/1 var(--pc-font-sans,system-ui);cursor:pointer}
   .pc-esp-mais[hidden],html.pc-esp-todos .pc-esp-mais{display:none}
   .pc-esp-mais:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+  .pc-esp-item{grid-template-columns:56px minmax(0,1fr)!important;gap:12px!important}
+  .pc-esp-item>div:first-child{width:56px!important;height:56px!important}
 }
 /* 04/11/2026: zonas, aparecer ao rolar, contadores e calculadora */
 .pc-zona-verde{border-top-color:#3E7C59!important}.pc-zona-verde .pc-zona-pt{background:#3E7C59!important}
