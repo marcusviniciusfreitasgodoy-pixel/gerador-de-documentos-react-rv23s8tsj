@@ -155,7 +155,7 @@
     ]
   },
   "videos": {
-    "_aviso": "Série da Sônia, os 8 vídeos (R1 a R8). R1, R3 e R8 entraram em 04/11/2026, refeitos sem \"24 horas\", sem sessão semanal e sem \"conexão oficial do WhatsApp\". R2 exige a nota do plano Magnata; R3 leva a nota do horário do atendimento humano; R8, a nota da conexão não oficial.",
+    "_aviso": "Série da Sônia, os 8 vídeos (R1 a R8). R1, R3 e R8 entraram em 04/11/2026, refeitos sem \"24 horas\", sem sessão semanal e sem \"conexão oficial do WhatsApp\". R2 exige a nota do plano Magnata; R3 leva a nota do horário do atendimento humano; R8, a nota da conexão não oficial. Em 05/11/2026 os 8 trocados pela versão 'bubble' (a Sônia falando no círculo, mesma voz e mesma duração de R2 a R8), recomprimidos para 720p; capas refeitas a 1 s (R4 a 2 s). O R1 novo tem 32 s e não traz o trecho 'Ponto fraco? Eu funciono com uma assinatura de IA que você contrata à parte'; legenda ajustada.",
     "visivel": true,
     "etiqueta": "A Sônia responde",
     "titulo": "Escolha a dúvida e ouça a resposta.",
@@ -165,7 +165,7 @@
         "id": "r1-a-entrevista",
         "titulo": "Quem é a Sônia?",
         "resumo": "Uma entrevista de emprego com a gerente que traz o time.",
-        "duracao": "0:39",
+        "duracao": "0:32",
         "video": "assets/video/serie/r1-a-entrevista.mp4",
         "capa": "assets/video/serie/r1-a-entrevista.webp",
         "legenda": "assets/video/serie/r1-a-entrevista.pt-BR.vtt"

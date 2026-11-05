@@ -357,9 +357,10 @@ def tpl(t):
 .pc-vid-player{margin:0;display:grid;gap:10px;justify-items:center}
 .pc-vid-tela{position:relative;width:100%;max-width:380px;aspect-ratio:9/16;border-radius:12px;overflow:hidden;background:#161513;border:1px solid rgba(245,241,230,.10)}
 .pc-vid-tela video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#161513}
-.pc-vid-leg{position:absolute;left:12px;right:12px;bottom:64px;display:flex;justify-content:center;pointer-events:none;z-index:2}
+/* 05/11/2026: versão bubble, a Sônia fala num círculo entre 69% e 90% da altura; legenda vai para a faixa livre de baixo e o play para o meio da cena */
+.pc-vid-leg{position:absolute;left:12px;right:12px;bottom:2.5%;display:flex;justify-content:center;pointer-events:none;z-index:2}
 .pc-vid-leg span{max-width:100%;padding:6px 12px;border-radius:8px;background:rgba(10,10,9,.8);color:#F5F1E6;font:600 15px/1.35 var(--pc-font-sans,system-ui);text-align:center;text-wrap:balance}
-.pc-vid-play{all:unset;position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18%;box-sizing:border-box;cursor:pointer;z-index:3}
+.pc-vid-play{all:unset;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-bottom:12%;box-sizing:border-box;cursor:pointer;z-index:3}
 .pc-vid-play span{width:72px;height:72px;border-radius:999px;background:rgba(201,168,76,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .pc-vid-play span::before{content:"";margin-left:5px;border-style:solid;border-width:13px 0 13px 21px;border-color:transparent transparent transparent #0E0E0E}
 .pc-vid-play:focus-visible span{outline:2px solid #F5F1E6;outline-offset:3px}
