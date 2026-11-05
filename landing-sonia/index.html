@@ -521,6 +521,24 @@ document.addEventListener("click", function (e) {
   window.addEventListener("load", varrer);
   varrer();
 })();
+// checkout dos planos (05/11/2026): o link de cada plano em conteudo.json aponta para /assinar/<id> na plataforma.
+// A plataforma não deixa ser aberta dentro de outra página (frame-ancestors 'none'), então o checkout abre numa
+// janela por cima da landing, do mesmo tamanho que a própria plataforma usa. Se o navegador bloquear a janela,
+// segue o link normal numa aba nova.
+(function () {
+  var CHECKOUT = /^https:\/\/agentes\.primecircle\.app\.br\/assinar\//;
+  document.addEventListener("click", function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest("a[href]");
+    if (!a || !CHECKOUT.test(a.href)) return;
+    var w = 480, h = 824, sw = window.outerWidth || screen.width, sh = window.outerHeight || screen.height;
+    var x = Math.round((window.screenX || 0) + Math.max(0, (sw - w) / 2)), y = Math.round((window.screenY || 0) + Math.max(0, (sh - h) / 2));
+    var janela = window.open(a.href, "pc-checkout", "popup=yes,width=" + w + ",height=" + h + ",left=" + x + ",top=" + y);
+    if (!janela) return; // bloqueado: o link abre do jeito normal
+    e.preventDefault();
+    try { janela.focus(); } catch (_) {}
+  });
+})();
 document.addEventListener("keydown", function (e) {
   var chk = document.getElementById("pc-menu");
   if (e.key === "Escape" && chk && chk.checked) chk.checked = false;

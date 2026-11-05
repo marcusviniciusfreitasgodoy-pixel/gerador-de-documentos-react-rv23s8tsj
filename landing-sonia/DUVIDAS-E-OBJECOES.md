@@ -18,8 +18,8 @@ Legenda da coluna "A página responde?": **Sim** (resolve), **Em parte** (toca n
 
 ### Preço, pagamento e contrato
 - "Tem plano mensal?" Não há. Quem compara com SaaS mensal estranha. (Não)
-- "O 12x tem juros?" O total no cartão é maior que o Pix (R$ 5.205,36 contra R$ 4.997 no Starter), mas a palavra juros não aparece. (Em parte)
-- "Cliquei em Assinar agora e caiu num formulário. Como eu pago?" Os três botões de assinatura levam ao contato, sem checkout. Quem estava decidido esfria. (Não)
+- "O 12x tem juros?" O total no cartão é maior que o Pix (R$ 5.205,09 contra R$ 4.997 no Starter), mas a palavra juros não aparece. (Em parte)
+- "Cliquei em Assinar agora, como eu pago?" Resolvido em 05/11/2026: cada botão abre o checkout do plano numa janela por cima da página, com Pix ou cartão. (Sim)
 - "Na renovação o preço muda? Renova sozinho?" (Não)
 - "Posso começar no Starter e subir para o Elite no meio do ano pagando a diferença?" (Não)
 - "Cadê o contrato ou os termos de uso?" Só existe link para a política de privacidade. (Não)
@@ -86,4 +86,4 @@ Legenda da coluna "A página responde?": **Sim** (resolve), **Em parte** (toca n
 - **C4. Juliana aparece com dois papéis.** No time ela é "braço direito e sub-gerente de operações". Na seção de economia ela vira "web designer".
 - **C5. Contagem que confunde.** "Até 21 especialistas", "a Sônia e os 21 especialistas", "14 funções", "21 pessoas na folha", "5 agentes" no Starter (contando a Sônia). Dá para entender, mas exige conta.
 - **C6. Zona verde e Zona amarela no atendimento ao cliente.** Responder dúvida está na verde, disparar mensagem está na amarela. Não fica claro se o WhatsApp do cliente final é respondido com ou sem o OK do dono.
-- **C7. "Assinar agora" não assina.** O botão leva a um formulário de contato.
+- **C7. "Assinar agora" não assinava.** Resolvido em 05/11/2026: o botão abre o checkout da plataforma.

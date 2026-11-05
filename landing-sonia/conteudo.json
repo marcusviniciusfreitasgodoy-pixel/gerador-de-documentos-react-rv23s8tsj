@@ -2201,11 +2201,11 @@
     "itens": [
       {
         "titulo": "O acesso chega no seu e-mail",
-        "texto": "Assim que o pagamento é confirmado, você recebe o acesso ao painel e o link para agendar o seu onboarding no horário que preferir."
+        "texto": "Assim que o pagamento é confirmado, o acesso ao painel chega no seu e-mail e você já pode usar na hora. Junto vem o link para agendar o onboarding no horário que preferir."
       },
       {
         "titulo": "Uma sessão de onboarding",
-        "texto": "No onboarding, configuramos a Sônia com o seu negócio. E cada tela do painel traz o manual do que ela faz."
+        "texto": "No onboarding, configuramos a Sônia com o seu negócio. Até lá você não fica parado: cada página da plataforma traz um manual e orientações de como usar."
       },
       {
         "titulo": "Suporte em todos os planos",
@@ -2269,12 +2269,12 @@
     ]
   },
   "planos": {
-    "_aviso": "Links de pagamento: checkout da plataforma na conta Asaas do dono (agentes.primecircle.app.br/assinar/...). Só colar depois que preço e nome no checkout baterem com esta página. Vazio: o botão leva ao formulário.",
+    "_aviso": "Links de pagamento: checkout da plataforma na conta Asaas do dono (agentes.primecircle.app.br/assinar/<id do plano>). Ids tirados de /public/asaas/plans em 05/11/2026, e as parcelas copiadas do próprio checkout no mesmo dia. Se o plano for recriado na plataforma, o id muda: conferir. O checkout abre numa janela por cima da landing (adaptar-design.py), porque a plataforma proíbe ser aberta dentro de outra página. Vazio: o botão leva ao formulário.",
     "_aviso_claude": "Claude retirado dos planos em 31/10/2026: a Avalanche conecta o Claude por assinatura (OAuth), e os termos de consumidor da Anthropic proíbem esse uso em produtos de terceiros. Só volte a citar o Claude se a conexão passar a ser por chave de API.",
     "visivel": true,
     "etiqueta": "Planos",
     "titulo": "Escolha o tamanho do seu time",
-    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes. Escolha o plano e deixe os seus dados: o nosso time te manda o link de pagamento pelo WhatsApp. O acesso chega por e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
+    "texto": "Pague aqui mesmo, sem sair desta página, por Pix à vista ou no cartão em até 12 vezes. O acesso chega no seu e-mail assim que o pagamento é confirmado, e você já pode usar na hora: cada página da plataforma traz um manual e orientações de como usar. Todos os planos têm garantia de 30 dias.",
     "itens": [
       {
         "nome": "SONIA Starter",
@@ -2282,7 +2282,7 @@
         "destaque": false,
         "preco": "R$ 4.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 433,78 no cartão (total R$ 5.205,36)",
+        "parcelamento": "ou 12x de R$ 433,75 no cartão (total R$ 5.205,09)",
         "itens": [
           "5 agentes: Sônia, Juliana, Paulo, Jonathan e o clone do dono",
           "Até 5 rotinas (tarefas que se repetem sozinhas)",
@@ -2293,8 +2293,8 @@
           "Garantia de 30 dias"
         ],
         "botao": {
-          "texto": "Quero este plano",
-          "link": ""
+          "texto": "Assinar agora",
+          "link": "https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc"
         }
       },
       {
@@ -2303,7 +2303,7 @@
         "destaque": true,
         "preco": "R$ 7.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 694,21 no cartão (total R$ 8.330,52)",
+        "parcelamento": "ou 12x de R$ 694,14 no cartão (total R$ 8.329,76)",
         "itens": [
           "16 agentes: os do Starter, mais Rafael, Bianca, Amanda, o estrategista de tráfego, o Davi e 6 vendedores",
           "Até 20 rotinas (tarefas que se repetem sozinhas)",
@@ -2314,8 +2314,8 @@
           "Garantia de 30 dias"
         ],
         "botao": {
-          "texto": "Quero este plano",
-          "link": ""
+          "texto": "Assinar agora",
+          "link": "https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c"
         }
       },
       {
@@ -2324,7 +2324,7 @@
         "destaque": false,
         "preco": "R$ 15.997",
         "periodo": "por ano",
-        "parcelamento": "ou 12x de R$ 1.388,67 no cartão (total R$ 16.664,04)",
+        "parcelamento": "ou 12x de R$ 1.388,52 no cartão (total R$ 16.662,28)",
         "itens": [
           "A Sônia e os 21 especialistas: os do Elite, mais financeiro, tributário, jurídico, RH, prospecção e engenharia de software",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
@@ -2337,8 +2337,8 @@
           "Garantia de 30 dias"
         ],
         "botao": {
-          "texto": "Quero este plano",
-          "link": ""
+          "texto": "Assinar agora",
+          "link": "https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d"
         }
       }
     ],
@@ -2385,8 +2385,8 @@
     "_aviso_endpoint": "URL do app da Web do Google Apps Script (ferramentas/planilha-leads). Se preenchido, o formulário grava na planilha E abre o WhatsApp.",
     "visivel": true,
     "etiqueta": "Fale com o time",
-    "titulo": "Escolheu o plano ou prefere conversar antes?",
-    "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp com o link de pagamento ou mostra a Sônia funcionando.",
+    "titulo": "Prefere conversar antes de assinar?",
+    "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp e mostra a Sônia funcionando.",
     "whatsapp": "5521999012520",
     "endpoint": "https://script.google.com/macros/s/AKfycby2YqnLILR8g_TAchSajMimLHhTkTJ7bK0DVaaoscHBeLN1rKL78PcPkYYXDjyfbi89YQ/exec",
     "rotulo_nome": "Nome completo",
@@ -2427,7 +2427,7 @@
       },
       {
         "pergunta": "Quanto custa?",
-        "resposta": "Os planos são anuais, com Pix à vista ou cartão em até 12 vezes. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle e o Conselho Executivo. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
+        "resposta": "Os planos são anuais. Você paga aqui mesmo, no botão de cada plano, por Pix à vista ou no cartão em até 12 vezes, e o acesso chega no seu e-mail assim que o pagamento é confirmado. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle e o Conselho Executivo. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
       },
       {
         "pergunta": "O que é o Conselho Executivo?",
