@@ -2029,25 +2029,37 @@
         "nome": "Otávio",
         "area": "Operação e equipe",
         "texto": "Mostra onde o trabalho trava e o que você pode parar de fazer.",
-        "imagem": "assets/agentes/otavio-operacoes.webp"
+        "imagem": "assets/agentes/otavio-operacoes.webp",
+        "video": "assets/video/conselho/otavio.mp4",
+        "legenda": "assets/video/conselho/otavio.pt-BR.vtt",
+        "duracao": "0:16"
       },
       {
         "nome": "Lívia",
         "area": "Marketing e vendas",
         "texto": "Decide com você para quem vender e o que dizer.",
-        "imagem": "assets/agentes/livia-marketing-vendas.webp"
+        "imagem": "assets/agentes/livia-marketing-vendas.webp",
+        "video": "assets/video/conselho/livia.mp4",
+        "legenda": "assets/video/conselho/livia.pt-BR.vtt",
+        "duracao": "0:17"
       },
       {
         "nome": "Fernando",
         "area": "Finanças",
         "texto": "Projeta o caixa e mostra se a decisão cabe nele.",
-        "imagem": "assets/agentes/fernando-financas.webp"
+        "imagem": "assets/agentes/fernando-financas.webp",
+        "video": "assets/video/conselho/fernando.mp4",
+        "legenda": "assets/video/conselho/fernando.pt-BR.vtt",
+        "duracao": "0:15"
       },
       {
         "nome": "Nina",
         "area": "Tecnologia e dados",
         "texto": "Escolhe o sistema mais simples e cuida da segurança dos dados dos seus clientes.",
-        "imagem": "assets/agentes/nina-tecnologia.webp"
+        "imagem": "assets/agentes/nina-tecnologia.webp",
+        "video": "assets/video/conselho/nina.mp4",
+        "legenda": "assets/video/conselho/nina.pt-BR.vtt",
+        "duracao": "0:20"
       }
     ],
     "rotulo_passos": "Como funciona",
@@ -2061,7 +2073,9 @@
     "botao": {
       "texto": "Ver o Conselho funcionando",
       "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
-    }
+    },
+    "dica_video": "Toque no retrato e ouça, em menos de 20 segundos, como cada conselheiro ajuda.",
+    "_aviso_videos": "Vídeos de apresentação dos conselheiros (05/11/2026), da galeria conselheiros-gallery no Vercel; recortados do 1920x1080 com faixas pretas para o quadrado central 1080 e comprimidos para 720. A galeria marca as vozes como 'versão de teste, confira o sotaque'. Legendas escritas a partir da transcrição. Se trocar um vídeo, trocar a legenda e a duração."
   },
   "economia": {
     "visivel": true,

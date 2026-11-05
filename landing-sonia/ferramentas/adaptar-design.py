@@ -366,6 +366,28 @@ def tpl(t):
 .pc-vid-play:focus-visible span{outline:2px solid #F5F1E6;outline-offset:3px}
 /* 05/11/2026: o display:flex acima anulava o atributo hidden; o botão ficava por cima do vídeo tocando e bloqueava os controles (pausar) */
 .pc-vid-play[hidden]{display:none!important}
+/* 05/11/2026: Conselho, o retrato de cada conselheiro abre o vídeo de apresentação dele */
+.pc-cons-midia{position:relative;cursor:pointer;overflow:hidden}
+.pc-cons-midia img{transition:transform .45s cubic-bezier(.22,.61,.36,1)}
+.pc-cons-midia:hover img{transform:scale(1.04)}
+.pc-cons-midia:focus-visible{outline:2px solid #C9A84C;outline-offset:-3px}
+.pc-cons-play{position:absolute;left:12px;bottom:12px;width:44px;height:44px;border-radius:999px;background:rgba(201,168,76,.95);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(0,0,0,.35);pointer-events:none;transition:transform .2s}
+.pc-cons-midia:hover .pc-cons-play{transform:scale(1.08)}
+.pc-cons-tri{margin-left:3px;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #0E0E0E}
+.pc-cons-dur{position:absolute;right:10px;bottom:16px;padding:5px 8px;border-radius:999px;background:rgba(14,14,14,.74);color:#F5F1E6;font:500 11px/1 var(--pc-font-mono,monospace);letter-spacing:.08em;pointer-events:none}
+.pc-cons-dica{margin:0;font-size:14px;line-height:1.5;color:#C8C1B0}
+.pc-cons-modal{position:fixed;inset:0;z-index:1000;background:rgba(8,8,8,.88);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box}
+.pc-cons-caixa{position:relative;font-family:var(--pc-font-sans,system-ui),sans-serif;width:min(560px,100%);display:grid;gap:14px;justify-items:center;background:#151412;border:1px solid rgba(245,241,230,.12);border-radius:14px;padding:14px;box-sizing:border-box;color:#F5F1E6;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.pc-cons-video{width:min(100%,calc(100vh - 230px));width:min(100%,calc(100dvh - 230px));aspect-ratio:1/1;border-radius:10px;background:#0E0E0E;display:block}
+.pc-cons-video::cue{font-family:var(--pc-font-sans,system-ui),sans-serif;font-size:17px;line-height:1.35;background:rgba(14,14,14,.8);color:#F5F1E6}
+@media (max-width:600px){.pc-cons-video::cue{font-size:14px}.pc-cons-modal{padding:12px}.pc-cons-caixa{padding:10px}.pc-cons-fechar{top:16px;right:16px}}
+.pc-cons-fechar{all:unset;position:absolute;top:22px;right:22px;z-index:2;width:40px;height:40px;border-radius:999px;background:rgba(14,14,14,.78);color:#F5F1E6;display:flex;align-items:center;justify-content:center;font:400 26px/1 var(--pc-font-sans,system-ui);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.pc-cons-fechar:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+.pc-cons-info{justify-self:stretch;display:grid;gap:4px;padding:0 4px 4px}
+.pc-cons-area{font-family:var(--pc-font-mono,monospace);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:#C9A84C}
+.pc-cons-nome{font-family:var(--pc-font-display,serif);font-weight:500;font-size:26px;line-height:1.05}
+.pc-cons-texto{margin:2px 0 0;font-family:var(--pc-font-sans,system-ui),sans-serif;font-size:14px;line-height:1.55;color:#B5AFA3}
+html.pc-cons-aberto,html.pc-cons-aberto body{overflow:hidden!important}
 .pc-vid-nota{font-size:13px;line-height:1.5;color:#B5AFA3;text-align:center;max-width:380px}
 @media (max-width:900px){
   .pc-vid-grid{grid-template-columns:minmax(0,1fr)}
@@ -640,6 +662,94 @@ document.addEventListener("click", function (e) {
   }
   fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; varrer(); }).catch(function () {});
   new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
+})();
+// 05/11/2026: Conselho. O retrato de cada conselheiro abre o vídeo em que ele diz como ajuda.
+// O design pode redesenhar os cards; por isso o retrato é achado pelo nome (h3) e remarcado.
+(function () {
+  var dados = null, modal = null, origem = null;
+  function el(t, c, txt) { var n = document.createElement(t); if (c) n.className = c; if (txt != null) n.textContent = txt; return n; }
+  function membros() { return (dados && dados.conselho && dados.conselho.conselheiros) || []; }
+  function porNome(nome) { return membros().filter(function (x) { return x.nome === nome && x.video; })[0]; }
+  function marcar() {
+    var sec = document.getElementById("conselho"); if (!sec || !dados) return;
+    var grade = null;
+    sec.querySelectorAll("article").forEach(function (art) {
+      var h = art.querySelector("h3"), img = art.querySelector("img");
+      if (!h || !img) return;
+      var m = porNome(h.textContent.trim()); if (!m) return;
+      var midia = img.parentElement; grade = art.parentElement;
+      if (midia.classList.contains("pc-cons-midia")) return;
+      midia.classList.add("pc-cons-midia");
+      midia.setAttribute("role", "button"); midia.tabIndex = 0;
+      midia.setAttribute("aria-label", "Assistir ao vídeo de " + m.nome);
+      midia.dataset.consNome = m.nome;
+      var b = el("span", "pc-cons-play"); b.setAttribute("aria-hidden", "true"); b.appendChild(el("span", "pc-cons-tri"));
+      midia.appendChild(b);
+      if (m.duracao) { var d = el("span", "pc-cons-dur", m.duracao); d.setAttribute("aria-hidden", "true"); midia.appendChild(d); }
+    });
+    var dica = dados.conselho && dados.conselho.dica_video;
+    if (grade && dica) {
+      var p = grade.previousElementSibling;
+      if (!p || !p.classList.contains("pc-cons-dica")) { p = el("p", "pc-cons-dica"); grade.insertAdjacentElement("beforebegin", p); }
+      if (p.textContent !== dica) p.textContent = dica;
+    }
+  }
+  function pausarOutros() {
+    document.querySelectorAll(".pc-vid-video").forEach(function (v) { if (!v.paused) v.pause(); });
+    var som = document.querySelector('.pc-som[aria-pressed="true"]'); if (som) som.click();
+  }
+  function fechar() {
+    if (!modal) return;
+    var v = modal.querySelector("video"); if (v) { v.pause(); v.removeAttribute("src"); v.load(); }
+    modal.remove(); modal = null;
+    document.documentElement.classList.remove("pc-cons-aberto");
+    if (origem && origem.focus) origem.focus();
+    origem = null;
+  }
+  function abrir(m, de) {
+    fechar(); origem = de; pausarOutros();
+    modal = el("div", "pc-cons-modal");
+    modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "Vídeo de " + m.nome);
+    var caixa = el("div", "pc-cons-caixa");
+    var x = el("button", "pc-cons-fechar", "×"); x.type = "button"; x.setAttribute("aria-label", "Fechar o vídeo");
+    var v = document.createElement("video"); v.className = "pc-cons-video";
+    v.setAttribute("playsinline", ""); v.controls = true; v.preload = "auto";
+    if (m.imagem) v.poster = m.imagem;
+    v.src = m.video;
+    if (m.legenda) { var tr = document.createElement("track"); tr.kind = "subtitles"; tr.srclang = "pt-BR"; tr.label = "Português"; tr.src = m.legenda; tr.default = true; v.appendChild(tr); }
+    var info = el("div", "pc-cons-info");
+    if (m.area) info.appendChild(el("span", "pc-cons-area", m.area));
+    info.appendChild(el("strong", "pc-cons-nome", m.nome));
+    if (m.texto) info.appendChild(el("p", "pc-cons-texto", m.texto));
+    caixa.appendChild(x); caixa.appendChild(v); caixa.appendChild(info);
+    modal.appendChild(caixa); document.body.appendChild(modal);
+    document.documentElement.classList.add("pc-cons-aberto");
+    x.focus();
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  document.addEventListener("click", function (e) {
+    if (modal) {
+      if (e.target === modal || (e.target.closest && e.target.closest(".pc-cons-fechar"))) { fechar(); }
+      return;
+    }
+    var midia = e.target.closest && e.target.closest(".pc-cons-midia");
+    if (midia) { var m = porNome(midia.dataset.consNome); if (m) { e.preventDefault(); abrir(m, midia); } }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (modal) {
+      if (e.key === "Escape") { e.preventDefault(); fechar(); return; }
+      if (e.key === "Tab") {
+        var f = [].slice.call(modal.querySelectorAll("button, video")), i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
+      return;
+    }
+    var midia = e.target.closest && e.target.closest(".pc-cons-midia");
+    if (midia && (e.key === "Enter" || e.key === " ")) { var m = porNome(midia.dataset.consNome); if (m) { e.preventDefault(); abrir(m, midia); } }
+  });
+  fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; marcar(); }).catch(function () {});
+  new MutationObserver(function () { if (dados) marcar(); }).observe(document, { childList: true, subtree: true });
 })();
 // 04/11/2026: aparecer ao rolar, contadores e calculadora da Economia (itens 2 e 3 da análise comparativa).
 (function () {
