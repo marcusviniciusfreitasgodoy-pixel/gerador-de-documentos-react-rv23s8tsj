@@ -234,7 +234,10 @@ def tpl(t):
       '<div style="display:grid;gap:20px;align-content:start;max-width:640px">\n'
       '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.quem.etiqueta }}</span>\n'
       '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.quem.nome }}</h2>\n'
+      '<div style="display:grid;gap:8px">\n'
       '<p style="margin:0;font-family:var(--pc-font-mono);font-size:12px;letter-spacing:0.08em;line-height:1.7;color:#8B7340;text-transform:uppercase">{{ c.quem.cargo }}</p>\n'
+      '<sc-if value="{{ quemTemFormacao }}" hint-placeholder-val="{{ true }}"><p style="margin:0;font-family:var(--pc-font-mono);font-size:12px;letter-spacing:0.08em;line-height:1.7;color:#8B7340;text-transform:uppercase">{{ c.quem.formacao }}</p></sc-if>\n'
+      '</div>\n'
       '<sc-if value="{{ quemTemNumeros }}" hint-placeholder-val="{{ true }}">\n'
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:16px 24px;padding:18px 0;border-top:1px solid rgba(14,14,14,0.22);border-bottom:1px solid rgba(14,14,14,0.22)">\n'
       '<sc-for list="{{ quemNumeros }}" as="nm" hint-placeholder-count="3">\n'
@@ -269,6 +272,7 @@ def tpl(t):
               "      realidadeItens: ((c.realidade && c.realidade.itens) || []),\n"
               "      comandoZonas: ((c.comando && c.comando.zonas) || []).map((z) => ({ ...z, classe: 'pc-zona-' + (z.cor || 'amarela'), lista: (z.itens || []).map((x) => ({ texto: x })) })),\n"
               "      quemTemFoto: !!(c.quem && c.quem.imagem), quemFoto: (c.quem && c.quem.imagem) || '',\n"
+      "      quemTemFormacao: !!(c.quem && c.quem.formacao),\n"
               "      quemParagrafos: String((c.quem && c.quem.texto) || '').split(/\\n\\s*\\n/).filter(Boolean).map((x) => ({ texto: x })),\n"
               "      quemLinks: ((c.quem && c.quem.links) || []).filter((l) => l && l.link), quemTemLinks: ((c.quem && c.quem.links) || []).some((l) => l && l.link),\n"
               "      quemProvas: ((c.quem && c.quem.provas) || []).map((x, i) => ({ ...x, n: pad(i + 1), temLink: !!x.link })),\n"

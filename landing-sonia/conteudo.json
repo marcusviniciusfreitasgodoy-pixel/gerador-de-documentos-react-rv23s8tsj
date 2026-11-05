@@ -2222,6 +2222,7 @@
     "etiqueta": "Quem construiu a Sônia",
     "nome": "Marcus Godoy",
     "cargo": "Fundador da Godoy Prime Realty. Personal Shopper Imobiliário e perito avaliador credenciado pelo TJRJ. CRECI PF 80.199 RJ.",
+    "formacao": "Graduado em Marketing e Administração, com MBA em Gestão do Conhecimento e Inteligência Empresarial pela UFRJ.",
     "imagem": "assets/quem/marcus.jpg",
     "numeros": [
       {
@@ -2237,7 +2238,7 @@
         "rotulo": "escrituras do Rio na base de preços"
       }
     ],
-    "texto": "Graduado em Marketing e Administração, tenho MBA em Gestão do Conhecimento e Inteligência Empresarial pela UFRJ.\n\nPassei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua, treino o time com os seus processos e acompanho a operação com você.",
+    "texto": "Passei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua, treino o time com os seus processos e acompanho a operação com você.",
     "rotulo_provas": "Onde isso já roda",
     "provas": [
       {
