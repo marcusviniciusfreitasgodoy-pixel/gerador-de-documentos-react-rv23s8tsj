@@ -364,6 +364,8 @@ def tpl(t):
 .pc-vid-play span{width:72px;height:72px;border-radius:999px;background:rgba(201,168,76,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .pc-vid-play span::before{content:"";margin-left:5px;border-style:solid;border-width:13px 0 13px 21px;border-color:transparent transparent transparent #0E0E0E}
 .pc-vid-play:focus-visible span{outline:2px solid #F5F1E6;outline-offset:3px}
+/* 05/11/2026: o display:flex acima anulava o atributo hidden; o botão ficava por cima do vídeo tocando e bloqueava os controles (pausar) */
+.pc-vid-play[hidden]{display:none!important}
 .pc-vid-nota{font-size:13px;line-height:1.5;color:#B5AFA3;text-align:center;max-width:380px}
 @media (max-width:900px){
   .pc-vid-grid{grid-template-columns:minmax(0,1fr)}
