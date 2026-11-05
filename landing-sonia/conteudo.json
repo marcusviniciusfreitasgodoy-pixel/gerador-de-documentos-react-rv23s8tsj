@@ -56,7 +56,7 @@
     "etiqueta": "Agentes de IA que entregam trabalho pronto",
     "titulo": "Deixe o operacional com a Sônia",
     "titulo_destaque": "e foque no que você faz de melhor.",
-    "texto": "Publicar, responder no WhatsApp, montar proposta, fechar o caixa, revisar contrato: 21 especialistas de IA assumem isso a qualquer hora, pelo Telegram ou pelo painel. O que você faz com as horas e o dinheiro que sobram é escolha sua: mais margem, sem abrir a próxima vaga, ou a equipe inteira livre para vender e atender. Assistente, redator e SDR custam R$ 14.176 por mês na CLT. O Starter faz as três funções por cerca de R$ 416.",
+    "texto": "Publicar, responder no WhatsApp, montar proposta, fechar o caixa, revisar contrato: 21 especialistas de IA assumem isso a qualquer hora, pelo Telegram ou pelo painel. O que você faz com as horas e o dinheiro que sobram é escolha sua.",
     "botao_principal": {
       "texto": "Quero a minha Sônia",
       "link": "#planos"
@@ -90,7 +90,7 @@
         "texto": "3 carrosséis, 1 proposta comercial e 14 leads qualificados no WhatsApp."
       }
     ],
-    "_aviso_hero": "Hero reescrito em 05/11/2026 com o gancho do dono ('deixe o operacional, foque no que faz de melhor'). O R$ 14.176 e o R$ 416 vêm da seção economia (3 funções CLT x Starter/12); se a tabela ou o preço do Starter mudarem, ajustar aqui. Título da aba do navegador segue com os 21 especialistas."
+    "_aviso_hero": "Hero reescrito em 05/11/2026 com o gancho do dono ('deixe o operacional, foque no que faz de melhor'). O trecho com margem x equipe livre e o número da Economia (R$ 14.176 x R$ 416) saiu do hero a pedido do dono no mesmo dia; o botão 'Ver a conta inteira' leva à tabela."
   },
   "realidade": {
     "_aviso": "Números conferidos em 04/11/2026 nas fontes citadas em cada item (busca na web; o relatório original de cada fonte não foi aberto). Antes de trocar um número, confira na fonte. Nada aqui é número da plataforma.",
