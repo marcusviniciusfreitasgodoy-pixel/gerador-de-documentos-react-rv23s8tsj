@@ -2081,7 +2081,7 @@
     "visivel": true,
     "etiqueta": "Economia",
     "titulo": "Quanto custariam todos esses funcionários?",
-    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só uma assistente, um redator e um SDR custam R$ 14.176 por mês, com os encargos da CLT. O Starter, que já traz essas três funções (Sônia, Jonathan e o clone do dono), custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
+    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só as cinco que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT: uma assistente (Sônia), um web designer (Juliana), um desenvolvedor (Paulo), um redator (Jonathan) e um SDR (o clone do dono). Em um ano, são R$ 369.851. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
     "encargos_percentual": 68,
     "horas_mes": 220,
     "rotulo_total_mes": "Se você contratasse gente para todas as funções, por mês",
@@ -2190,7 +2190,8 @@
       },
       "nota": "Garantia de 30 dias em todos os planos"
     },
-    "_chamada_aviso": "O texto da chamada cita o preço do Magnata (R$ 15.997). Se o preço mudar em planos, ajustar aqui também."
+    "_chamada_aviso": "O texto da chamada cita o preço do Magnata (R$ 15.997). Se o preço mudar em planos, ajustar aqui também.",
+    "_aviso_texto": "Conta do texto refeita em 05/11/2026 com os 5 agentes do Starter (conferidos em planos): Sônia = Assistente executiva, Juliana = Web designer (o currículo dela: landing pages, criativos e layouts), Paulo = Desenvolvedor, Jonathan = Redator publicitário, clone do dono = 1 SDR. Soma dos salários da tabela x 1,68 de encargos = R$ 30.820,88 por mês, R$ 369.850,52 por ano. Se mudar salário, encargos, agentes do Starter ou preço, refazer."
   },
   "diferenciais": {
     "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Manual: o cliente vê o manual de cada tela do painel (não há Manual do Dono para o cliente; esse é do revendedor). Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split. Sem sessões semanais ao vivo (decisão do dono em 02/11/2026): Starter e Elite têm uma sessão de onboarding. Suporte: agente de atendimento a qualquer hora em todos os planos; humano em dias úteis, das 9h às 18h só no Magnata (decisão do dono em 02/11/2026). O agente precisa estar no ar antes da primeira venda.",
