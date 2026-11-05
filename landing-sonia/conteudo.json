@@ -2269,7 +2269,7 @@
     ]
   },
   "planos": {
-    "_aviso": "Links de pagamento: checkout da plataforma na conta Asaas do dono (agentes.primecircle.app.br/assinar/<id do plano>). Ids tirados de /public/asaas/plans em 05/11/2026, e as parcelas copiadas do próprio checkout no mesmo dia. Se o plano for recriado na plataforma, o id muda: conferir. O checkout abre numa janela por cima da landing (adaptar-design.py), porque a plataforma proíbe ser aberta dentro de outra página. Vazio: o botão leva ao formulário.",
+    "_aviso": "Links de pagamento: checkout da plataforma na conta Asaas do dono (agentes.primecircle.app.br/assinar/<id do plano>). Ids tirados de /public/asaas/plans em 05/11/2026, e as parcelas copiadas do próprio checkout no mesmo dia (conferidas de novo à noite, nos links com ?ref=42cfa2c8135d15c8dc que o dono mandou: o ref é o código de indicação, manter). Se o plano for recriado na plataforma, o id muda: conferir. O checkout abre numa janela por cima da landing (adaptar-design.py), porque a plataforma proíbe ser aberta dentro de outra página. Vazio: o botão leva ao formulário.",
     "_aviso_claude": "Claude retirado dos planos em 31/10/2026: a Avalanche conecta o Claude por assinatura (OAuth), e os termos de consumidor da Anthropic proíbem esse uso em produtos de terceiros. Só volte a citar o Claude se a conexão passar a ser por chave de API.",
     "visivel": true,
     "etiqueta": "Planos",
@@ -2294,7 +2294,7 @@
         ],
         "botao": {
           "texto": "Assinar agora",
-          "link": "https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc"
+          "link": "https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc?ref=42cfa2c8135d15c8dc"
         }
       },
       {
@@ -2315,7 +2315,7 @@
         ],
         "botao": {
           "texto": "Assinar agora",
-          "link": "https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c"
+          "link": "https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c?ref=42cfa2c8135d15c8dc"
         }
       },
       {
@@ -2338,7 +2338,7 @@
         ],
         "botao": {
           "texto": "Assinar agora",
-          "link": "https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d"
+          "link": "https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d?ref=42cfa2c8135d15c8dc"
         }
       }
     ],
