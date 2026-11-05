@@ -49,7 +49,7 @@
     "botao_area_cliente": {
       "visivel": true,
       "texto": "Área do cliente",
-      "link": "https://agentes.primecircle.app.br/"
+      "link": "https://agentes.primecircle.app.br/login"
     }
   },
   "hero": {
@@ -2081,7 +2081,7 @@
     "visivel": true,
     "etiqueta": "Economia",
     "titulo": "Quanto custariam todos esses funcionários?",
-    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só as cinco que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT: uma assistente (Sônia), um web designer (Juliana, que cria as páginas e coordena a produção), um desenvolvedor (Paulo), um redator (Jonathan) e um SDR (o clone do dono). Em um ano, são R$ 369.851. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
+    "texto": "A tabela tem 14 funções e 21 pessoas porque o atendimento de vendas, sozinho, ocupa 8 SDRs: o clone do dono, o Davi e os 6 vendedores. Ninguém contrata tudo isso de uma vez. Mas só as cinco que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT: uma assistente (Sônia), um web designer (Juliana, que cria as páginas e coordena a produção), um desenvolvedor (Paulo), um redator (Jonathan) e um SDR (o clone do dono). Em um ano, são R$ 369.851. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
     "encargos_percentual": 68,
     "horas_mes": 220,
     "rotulo_total_mes": "Se você contratasse gente para todas as funções, por mês",
@@ -2191,7 +2191,8 @@
       "nota": "Garantia de 30 dias em todos os planos"
     },
     "_chamada_aviso": "O texto da chamada cita o preço do Magnata (R$ 15.997). Se o preço mudar em planos, ajustar aqui também.",
-    "_aviso_texto": "Conta do texto refeita em 05/11/2026 com os 5 agentes do Starter (conferidos em planos): Sônia = Assistente executiva, Juliana = Web designer (o currículo dela: landing pages, criativos e layouts), Paulo = Desenvolvedor, Jonathan = Redator publicitário, clone do dono = 1 SDR. Soma dos salários da tabela x 1,68 de encargos = R$ 30.820,88 por mês, R$ 369.850,52 por ano. Se mudar salário, encargos, agentes do Starter ou preço, refazer."
+    "_aviso_texto": "Conta do texto refeita em 05/11/2026 com os 5 agentes do Starter (conferidos em planos): Sônia = Assistente executiva, Juliana = Web designer (o currículo dela: landing pages, criativos e layouts), Paulo = Desenvolvedor, Jonathan = Redator publicitário, clone do dono = 1 SDR. Soma dos salários da tabela x 1,68 de encargos = R$ 30.820,88 por mês, R$ 369.850,52 por ano. Se mudar salário, encargos, agentes do Starter ou preço, refazer.",
+    "_aviso_sdr": "05/11/2026: frase dos 8 SDRs no começo do texto explica por que a tabela soma 14 funções e 21 pessoas (clone do dono + Davi + 6 vendedores). Se mudar a coluna pessoas, ajustar a frase."
   },
   "diferenciais": {
     "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Manual: o cliente vê o manual de cada tela do painel (não há Manual do Dono para o cliente; esse é do revendedor). Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split. Sem sessões semanais ao vivo (decisão do dono em 02/11/2026): Starter e Elite têm uma sessão de onboarding. Suporte: agente de atendimento a qualquer hora em todos os planos; humano em dias úteis, das 9h às 18h só no Magnata (decisão do dono em 02/11/2026). O agente precisa estar no ar antes da primeira venda.",
@@ -2248,10 +2249,6 @@
       {
         "valor": "6",
         "rotulo": "anos à frente da Godoy Prime Realty"
-      },
-      {
-        "valor": "330 mil",
-        "rotulo": "escrituras do Rio na base de preços"
       }
     ],
     "texto": "Passei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua com os seus processos na sessão de onboarding e, no Magnata, acompanho a operação com você nas mentorias individuais.",
@@ -2266,7 +2263,8 @@
         "texto": "Godoy Prime Realty",
         "link": ""
       }
-    ]
+    ],
+    "_aviso_numeros": "05/11/2026: saiu \"330 mil escrituras do Rio na base de preços\" (não diz nada a quem é de outro ramo). Se o dono tiver um número dos agentes rodando na imobiliária dele (ex.: atendimentos por mês), entra aqui como terceiro item."
   },
   "planos": {
     "_aviso": "Links de pagamento: checkout da plataforma na conta Asaas do dono (agentes.primecircle.app.br/assinar/<id do plano>). Ids tirados de /public/asaas/plans em 05/11/2026, e as parcelas copiadas do próprio checkout no mesmo dia (conferidas de novo à noite, nos links com ?ref=42cfa2c8135d15c8dc que o dono mandou: o ref é o código de indicação, manter). Se o plano for recriado na plataforma, o id muda: conferir. O checkout abre numa janela por cima da landing (adaptar-design.py), porque a plataforma proíbe ser aberta dentro de outra página. Vazio: o botão leva ao formulário.",
@@ -2274,7 +2272,7 @@
     "visivel": true,
     "etiqueta": "Planos",
     "titulo": "Escolha o tamanho do seu time",
-    "texto": "Pague aqui mesmo, sem sair desta página, por Pix à vista ou no cartão em até 12 vezes. O acesso chega no seu e-mail assim que o pagamento é confirmado, e você já pode usar na hora: cada página da plataforma traz um manual e orientações de como usar. Todos os planos têm garantia de 30 dias.",
+    "texto": "Pague no botão de cada plano, por Pix à vista ou no cartão em até 12 vezes. O acesso chega no seu e-mail assim que o pagamento é confirmado, e você já pode usar na hora: cada página da plataforma traz um manual e orientações de como usar. Todos os planos têm garantia de 30 dias.",
     "itens": [
       {
         "nome": "SONIA Starter",
@@ -2329,7 +2327,7 @@
           "A Sônia e os 21 especialistas: os do Elite, mais financeiro, tributário, jurídico, RH, prospecção e engenharia de software",
           "Até 50 rotinas (tarefas que se repetem sozinhas)",
           "Funciona com o ChatGPT ou com outros modelos de IA, à sua escolha (assinatura ou chave da IA, contratada por você)",
-          "Orquestração com GLM, Kimi, ChatGPT e OpenRouter",
+          "Pode usar mais de um modelo de IA ao mesmo tempo, cada um na tarefa em que rende mais",
           "4 mentorias individuais de 1 hora com a Prime Circle",
           "Suporte pelo WhatsApp e por e-mail: agente de atendimento a qualquer hora e atendimento humano em dias úteis, das 9h às 18h",
           "Tudo do plano Elite, incluindo a sessão de onboarding",
@@ -2342,7 +2340,8 @@
         }
       }
     ],
-    "nota": "Não estão incluídos no preço: a assinatura da IA (no Starter, o ChatGPT, a partir de cerca de US$ 20 por mês; no Elite e no Magnata, o modelo que você escolher), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes."
+    "nota": "Não estão incluídos no preço: a assinatura da IA (no Starter, o ChatGPT, a partir de cerca de US$ 20 por mês; no Elite e no Magnata, o modelo que você escolher), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes.",
+    "_aviso_pagina": "05/11/2026: tirado \"sem sair desta página\" do texto e do FAQ. No computador o checkout abre numa janela por cima da landing, mas no celular costuma abrir numa aba nova. Só volta se a Avalanche liberar o checkout dentro da página (pergunta 3.19 da pauta)."
   },
   "agencia": {
     "_aviso": "Ligue só se o seu contrato permitir sub-revenda.",
@@ -2427,7 +2426,7 @@
       },
       {
         "pergunta": "Quanto custa?",
-        "resposta": "Os planos são anuais. Você paga aqui mesmo, no botão de cada plano, por Pix à vista ou no cartão em até 12 vezes, e o acesso chega no seu e-mail assim que o pagamento é confirmado. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle e o Conselho Executivo. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
+        "resposta": "Os planos são anuais. Você paga no botão de cada plano, por Pix à vista ou no cartão em até 12 vezes, e o acesso chega no seu e-mail assim que o pagamento é confirmado. O que muda entre eles é quantos agentes ficam liberados, quantas rotinas automáticas você pode ter e, no Magnata, a mentoria individual com a Prime Circle e o Conselho Executivo. A assinatura da IA é contratada à parte. Todos têm garantia de 30 dias."
       },
       {
         "pergunta": "O que é o Conselho Executivo?",
