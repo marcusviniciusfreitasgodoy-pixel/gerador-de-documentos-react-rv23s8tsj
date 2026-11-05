@@ -2217,7 +2217,7 @@
     ]
   },
   "quem": {
-    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: assets/quem/marcus.jpg (800 x 800, a mesma do guia de imóveis internacionais, escolhida pelo dono em 04/11/2026); a seção recorta em 4:5. Se trocar, use retrato de 1200 px para cima. A prova 3 cita a base de escrituras: número agregado, sem dado individual. Texto da bio e etiqueta reescritos pelo dono em 05/11/2026 (etiqueta trocada para não repetir o 'Quem está por trás' da landing concorrente).",
+    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: assets/quem/marcus.jpg (800 x 800, a mesma do guia de imóveis internacionais, escolhida pelo dono em 04/11/2026); a seção recorta em 4:5. Se trocar, use retrato de 1200 px para cima. A prova 3 cita a base de escrituras: número agregado, sem dado individual. Texto da bio e etiqueta reescritos pelo dono em 05/11/2026 (etiqueta trocada para não repetir o 'Quem está por trás' da landing concorrente). Bloco 'Onde isso já roda' (3 provas) removido a pedido do dono em 05/11/2026; os textos estão no git (commit anterior a esta data). Lista vazia = bloco não aparece.",
     "visivel": true,
     "etiqueta": "Quem criou a Sônia",
     "nome": "Marcus Godoy",
@@ -2240,26 +2240,7 @@
     ],
     "texto": "Passei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua, treino o time com os seus processos e acompanho a operação com você.",
     "rotulo_provas": "Onde isso já roda",
-    "provas": [
-      {
-        "titulo": "Godoy Prime Realty",
-        "texto": "Imobiliária na Barra da Tijuca. Os agentes de IA trabalham aqui todos os dias: atendimento, conteúdo, vídeo e um conselho interno.",
-        "link": "",
-        "rotulo_link": ""
-      },
-      {
-        "titulo": "Prime Circle Documentos",
-        "texto": "Plataforma em produção, com clientes reais, que gera os documentos da intermediação imobiliária e valida minutas de terceiros com IA.",
-        "link": "https://documentos.primecircle.app.br",
-        "rotulo_link": "Ver a plataforma"
-      },
-      {
-        "titulo": "Índice de preço real",
-        "texto": "Base com mais de 330 mil escrituras do Rio de Janeiro, de fonte oficial, para mostrar quanto de fato se pagou por metro quadrado.",
-        "link": "",
-        "rotulo_link": ""
-      }
-    ],
+    "provas": [],
     "links": [
       {
         "texto": "LinkedIn",

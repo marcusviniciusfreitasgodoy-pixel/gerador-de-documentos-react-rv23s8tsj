@@ -254,6 +254,7 @@ def tpl(t):
       '<a href="{{ lk.link }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid rgba(14,14,14,0.22);color:#0E0E0E;text-decoration:none;font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase">{{ lk.texto }}</a>\n'
       '</sc-for>\n</div>\n</sc-if>\n'
       '</div>\n</div>\n'
+      '<sc-if value="{{ quemTemProvas }}" hint-placeholder-val="{{ true }}">\n'
       '<div style="display:grid;gap:16px">\n'
       '<span style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.32em;text-transform:uppercase;color:#8B7340">{{ c.quem.rotulo_provas }}</span>\n'
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">\n'
@@ -263,7 +264,7 @@ def tpl(t):
       '<span style="font-family:var(--pc-font-display);font-weight:500;font-size:28px;line-height:1.05;text-wrap:balance">{{ pv.titulo }}</span>\n'
       '<span style="font-size:15px;line-height:1.6;color:#2a2722;text-wrap:pretty">{{ pv.texto }}</span>\n'
       '<sc-if value="{{ pv.temLink }}" hint-placeholder-val="{{ false }}"><a href="{{ pv.link }}" target="_blank" rel="noopener" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8B7340;text-decoration:none;padding-top:6px">{{ pv.rotulo_link }} ↗</a></sc-if>\n'
-      '</div>\n</sc-for>\n</div>\n</div>\n'
+      '</div>\n</sc-for>\n</div>\n</div>\n</sc-if>\n'
       '</section>\n</sc-if>\n\n')
     t = troca(t, '<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">', secao_q + '<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">', 'secao-quem')
     t = troca(t, 'conselho: vis(c.conselho),', 'conselho: vis(c.conselho), realidade: vis(c.realidade), comando: vis(c.comando), quem: vis(c.quem),', 'show-novas')
@@ -276,6 +277,7 @@ def tpl(t):
               "      quemParagrafos: String((c.quem && c.quem.texto) || '').split(/\\n\\s*\\n/).filter(Boolean).map((x) => ({ texto: x })),\n"
               "      quemLinks: ((c.quem && c.quem.links) || []).filter((l) => l && l.link), quemTemLinks: ((c.quem && c.quem.links) || []).some((l) => l && l.link),\n"
               "      quemProvas: ((c.quem && c.quem.provas) || []).map((x, i) => ({ ...x, n: pad(i + 1), temLink: !!x.link })),\n"
+      "      quemTemProvas: !!(c.quem && c.quem.provas && c.quem.provas.length),\n"
               "      quemNumeros: ((c.quem && c.quem.numeros) || []), quemTemNumeros: !!(c.quem && c.quem.numeros && c.quem.numeros.length),", 'lista-novas')
     css = """<style>
 .pc-menu-chk{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0;white-space:nowrap}
