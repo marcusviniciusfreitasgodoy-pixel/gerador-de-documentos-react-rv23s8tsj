@@ -80,7 +80,7 @@
         var SECOES = [
           ["marca", "Marca e cores"], ["seo", "Google e redes"], ["topo", "Topo e menu"], ["hero", "Abertura"], ["realidade", "A realidade"], ["gargalos", "Por onde começar"], ["videos", "Vídeos da Sônia"], ["sigla", "Sigla SONIA"],
           ["numeros", "Números"], ["como_funciona", "Como funciona"], ["time", "Time e currículos"], ["comando", "Você no comando"], ["conselho", "Conselho Executivo"], ["economia", "Economia"],
-          ["diferenciais", "Depois que você paga"], ["depoimentos", "Depoimentos"], ["quem", "Quem construiu a Sônia"], ["planos", "Planos"], ["agencia", "Agência"],
+          ["diferenciais", "Depois que você paga"], ["depoimentos", "Depoimentos"], ["quem", "Quem criou a Sônia"], ["planos", "Planos"], ["agencia", "Agência"],
           ["contato", "Formulário"], ["empresa", "Dados da empresa"], ["faq", "Perguntas"], ["final", "Chamada final"], ["rodape", "Rodapé"]
         ];
         var ROTULOS = {
@@ -293,7 +293,7 @@
           if (C.empresa && !String(C.empresa.cnpj || "").replace(/\D/g, "")) p.push("CNPJ não preenchido em Dados da empresa: o rodapé sai sem ele.");
           else if (C.empresa && String(C.empresa.cnpj).replace(/\D/g, "").length !== 14) p.push("CNPJ com número de dígitos errado: um CNPJ tem 14 dígitos.");
           if (C.numeros && C.numeros.visivel !== false) p.push("Números estão visíveis: confirme a autorização por escrito do fornecedor da plataforma.");
-          if (C.quem && C.quem.visivel !== false && !C.quem.imagem) p.push("Quem construiu a Sônia sem foto: suba a imagem para assets/quem/ e preencha o campo imagem, senão a seção sai só com texto.");
+          if (C.quem && C.quem.visivel !== false && !C.quem.imagem) p.push("Quem criou a Sônia sem foto: suba a imagem para assets/quem/ e preencha o campo imagem, senão a seção sai só com texto.");
           if (C.realidade && C.realidade.visivel !== false) p.push("A realidade: confira cada número na fonte citada antes de publicar.");
           if (C.diferenciais && C.diferenciais.visivel !== false) p.push("Confirme que a Prime Circle entrega cada item de \"Depois que você paga\".");
           if (C.depoimentos && C.depoimentos.visivel !== false) p.push("Depoimentos visíveis: use só clientes reais com autorização.");
