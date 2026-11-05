@@ -235,7 +235,20 @@
         "legenda": "assets/video/serie/r8-tres-duvidas.pt-BR.vtt",
         "nota": "A conexão do WhatsApp usa um sistema não oficial. Os detalhes estão nas perguntas frequentes."
       }
-    ]
+    ],
+    "chamada": {
+      "visivel": true,
+      "texto": "Gostou do que viu? Agende uma demonstração e veja a Sônia atender um pedido seu, ao vivo.",
+      "botao": {
+        "texto": "",
+        "link": ""
+      },
+      "botao_secundario": {
+        "texto": "Ver a Sônia funcionando",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      },
+      "nota": ""
+    }
   },
   "sigla": {
     "visivel": false,
@@ -1945,7 +1958,21 @@
         ],
         "visivel": true
       }
-    ]
+    ],
+    "chamada": {
+      "visivel": true,
+      "secao": "especialistas",
+      "texto": "São 21 especialistas prontos. Você escolhe quantos entram no seu time.",
+      "botao": {
+        "texto": "Montar o meu time",
+        "link": "#planos"
+      },
+      "botao_secundario": {
+        "texto": "Ver a Sônia funcionando",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      },
+      "nota": ""
+    }
   },
   "comando": {
     "_aviso": "As três zonas descrevem como a Sônia é configurada na implantação. Não prometa comportamento que a plataforma não tenha: se mudar um item, confira no painel.",
@@ -2134,7 +2161,21 @@
     ],
     "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT. A comparação não inclui o custo da assinatura da IA, que é contratada à parte.",
     "fontes": "Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026, consultados em 10/2026). Tráfego pago: Analista de Marketing (CBO 1423-35), por não haver CBO própria. SDR: Jooble, SDR júnior (06/2026), por não haver CBO própria. Encargos e custos do empregador de 68% sobre o salário, segundo Buk (11/2025) e Contabilizei (12/2025).",
-    "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar."
+    "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar.",
+    "chamada": {
+      "visivel": true,
+      "texto": "Isso é o que custaria com gente. O plano mais completo da Sônia custa R$ 15.997 por ano, menos do que a função mais barata dessa tabela custa em um ano.",
+      "botao": {
+        "texto": "Quero esse time por este preço",
+        "link": "#planos"
+      },
+      "botao_secundario": {
+        "texto": "",
+        "link": ""
+      },
+      "nota": "Garantia de 30 dias em todos os planos"
+    },
+    "_chamada_aviso": "O texto da chamada cita o preço do Magnata (R$ 15.997). Se o preço mudar em planos, ajustar aqui também."
   },
   "diferenciais": {
     "_aviso": "\"Depois que você paga\", aprovado pelo dono em 02/11/2026. Manual: o cliente vê o manual de cada tela do painel (não há Manual do Dono para o cliente; esse é do revendedor). Onboarding pelo Calendly (evento \"SONIA: onboarding do cliente\", link enviado por e-mail ao cliente, não publicar na página). Garantia mantida pelo dono enquanto o Asaas não responde sobre estorno com split. Sem sessões semanais ao vivo (decisão do dono em 02/11/2026): Starter e Elite têm uma sessão de onboarding. Suporte: agente de atendimento a qualquer hora em todos os planos; humano em dias úteis, das 9h às 18h só no Magnata (decisão do dono em 02/11/2026). O agente precisa estar no ar antes da primeira venda.",

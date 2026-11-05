@@ -12,10 +12,15 @@ Uso:  python3 ferramentas/montar-publicacao.py /caminho/da/pasta-publica [hostga
   fornecedor da plataforma e assuntos de contrato).
 - Para com erro se encontrar o nome do fornecedor ou da Anthropic nos arquivos de texto.
 """
-import json, os, re, shutil, sys
+import os, json, os, re, shutil, sys
 
 AQUI = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 destino = sys.argv[1] if len(sys.argv) > 1 else sys.exit('informe a pasta de destino')
+# trava: a pasta de destino é APAGADA antes de montar. Nunca pode ser a pasta da landing nem conter o repositório.
+_fonte = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_dest = os.path.abspath(destino)
+if _dest == _fonte or _fonte.startswith(_dest + os.sep) or os.path.exists(os.path.join(_dest, 'ferramentas', 'montar-publicacao.py')) or _dest == os.path.abspath(os.getcwd()):
+    sys.exit('destino inválido: ' + _dest + ' é a pasta da landing (ou a contém). Use uma pasta nova, por exemplo /tmp/sonia-publica. Em 05/11/2026 passar "." apagou a pasta inteira.')
 if os.path.exists(destino):
     shutil.rmtree(destino)
 os.makedirs(destino)

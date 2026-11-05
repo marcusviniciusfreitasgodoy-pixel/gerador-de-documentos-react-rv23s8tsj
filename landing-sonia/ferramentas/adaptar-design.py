@@ -381,6 +381,14 @@ def tpl(t):
 .pc-calc-acoes button{all:unset;cursor:pointer;font:600 13px/1 var(--pc-font-sans,system-ui);color:#8B7340;text-decoration:underline;text-underline-offset:3px}
 .pc-calc-acoes button:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
 .pc-eco-off{display:none!important}
+.pc-chamada{flex:1 1 100%;width:100%;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;padding-top:28px;border-top:1px solid rgba(128,128,128,.32);border-top-color:color-mix(in srgb,currentColor 16%,transparent)}
+.pc-chamada-texto{margin:0;flex:1 1 280px;max-width:520px;font-size:17px;line-height:1.5;text-wrap:pretty}
+.pc-chamada-btns{display:flex;gap:12px 22px;flex-wrap:wrap;align-items:center}
+.pc-chamada-sec{font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:3px;opacity:.85}
+.pc-chamada-sec:hover{opacity:1}
+.pc-chamada-nota{flex:1 1 100%;font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
+.pc-chamada [hidden]{display:none!important}
+@media (max-width:600px){.pc-chamada{gap:14px}.pc-chamada-btns{flex:1 1 100%;width:100%}.pc-chamada-sec{border-bottom:0;min-height:44px}}
 </style>
 """
     t = troca(t, '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n',
@@ -732,8 +740,43 @@ document.addEventListener("click", function (e) {
     if (e.target.closest && e.target.closest(".pc-calc-todas")) { desligadas = {}; recalcular(); return; }
     if (e.target.closest && e.target.closest(".pc-calc-nenhuma")) { linhasEco().forEach(function (_, i) { desligadas[i] = true; }); recalcular(); }
   });
+  // chamada para ação no fim de qualquer seção: conteudo.json -> <secao>.chamada {secao?, texto, botao, botao_secundario, nota}
+  var MAPA_ID = { como_funciona: "como-funciona", gargalos: "por-onde-comecar", videos: "sonia-responde", numeros: "por-que", diferenciais: "por-que", faq: "duvidas" };
+  function pôr(el, v) { if (el.textContent !== v) el.textContent = v; if (el.hidden !== !v) el.hidden = !v; }
+  function montarChamadas() {
+    if (!dados) return;
+    Object.keys(dados).forEach(function (k) {
+      var secao = dados[k]; if (!secao || typeof secao !== "object" || !secao.chamada || secao.chamada.visivel === false) return;
+      var ch = secao.chamada, b1 = ch.botao || {}, b2 = ch.botao_secundario || {};
+      if (!(b1.texto && b1.link) && !(b2.texto && b2.link)) return;
+      var el = document.getElementById(ch.secao || MAPA_ID[k] || k.replace(/_/g, "-")); if (!el) return; // ch.secao: id da seção, quando a chave tem mais de uma
+      el = el.querySelector(":scope > .pc-vid-in") || el; // seção de vídeos tem um contêiner interno
+      var box = el.querySelector(":scope > .pc-chamada");
+      if (!box) {
+        var modelo = document.querySelector(".pc-hero-btns a[href]"); if (!modelo) return;
+        box = document.createElement("div"); box.className = "pc-chamada";
+        var tx = document.createElement("p"); tx.className = "pc-chamada-texto"; box.appendChild(tx);
+        var bts = document.createElement("div"); bts.className = "pc-hero-btns pc-chamada-btns";
+        var a = modelo.cloneNode(true); a.classList.add("pc-chamada-btn"); a.removeAttribute("id"); bts.appendChild(a);
+        var s = document.createElement("a"); s.className = "pc-chamada-sec"; bts.appendChild(s);
+        box.appendChild(bts);
+        var nt = document.createElement("span"); nt.className = "pc-chamada-nota"; box.appendChild(nt);
+        el.appendChild(box);
+      }
+      pôr(box.querySelector(".pc-chamada-texto"), ch.texto || "");
+      [[box.querySelector(".pc-chamada-btn"), b1], [box.querySelector(".pc-chamada-sec"), b2]].forEach(function (par) {
+        var a = par[0], b = par[1], ok = !!(b.texto && b.link);
+        pôr(a, ok ? b.texto : "");
+        if (ok && a.getAttribute("href") !== b.link) {
+          a.setAttribute("href", b.link);
+          if (/^https?:/.test(b.link)) { a.target = "_blank"; a.rel = "noopener"; } else { a.removeAttribute("target"); a.removeAttribute("rel"); }
+        }
+      });
+      pôr(box.querySelector(".pc-chamada-nota"), ch.nota || "");
+    });
+  }
   var tm = null;
-  function varrer() { clearTimeout(tm); tm = setTimeout(function () { marcar(); marcarNumeros(); montarCalc(); }, 60); }
+  function varrer() { clearTimeout(tm); tm = setTimeout(function () { marcar(); marcarNumeros(); montarCalc(); montarChamadas(); }, 60); }
   fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; varrer(); }).catch(function () {});
   new MutationObserver(varrer).observe(document, { childList: true, subtree: true });
   window.addEventListener("load", varrer);
