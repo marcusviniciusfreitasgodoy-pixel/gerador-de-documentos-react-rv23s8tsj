@@ -1994,8 +1994,8 @@
     "_aviso": "Adicional AGUARDANDO aprovação da Avalanche (proposta enviada em 04/11/2026). A seção fica no ar por decisão do dono, de 04/11. Preço: incluído no Magnata, R$ 1.997 por ano no Starter e no Elite. Sem link de checkout do adicional ainda: o botão leva à demonstração. Material de venda em produtos/conselho-executivo/.",
     "visivel": true,
     "etiqueta": "Conselho Executivo",
-    "titulo": "Para as decisões que você toma sozinho.",
-    "texto": "O time executa o que você pede. Antes de contratar mais alguém ou de dar aquele desconto, conte a decisão para a Sônia. Ela chama os conselheiros que entendem do assunto, junta as opiniões e te devolve uma recomendação só, mostrando onde eles discordam. Se você aprovar, o time recebe as tarefas com prazo.",
+    "titulo": "Precisa tomar uma decisão e está em dúvida?",
+    "texto": "O time executa o que você pede. E antes de mandar para o time? Antes de contratar mais alguém, de dar aquele desconto, ou quando quiser dividir a dúvida sobre um negócio novo, chame a Sônia e peça para ela levar ao Conselho. Ela chama os conselheiros que entendem do assunto, junta as opiniões e te devolve uma recomendação só, mostrando onde eles discordam. Se você aprovar, o time recebe as tarefas com prazo.",
     "conselheiros": [
       {
         "nome": "Otávio",

@@ -32,7 +32,7 @@ AddDefaultCharset utf-8
   <Files "editor.html">
     Header set X-Robots-Tag "noindex, nofollow"
   </Files>
-  <Files "conteudo.json">
+  <FilesMatch "^(index\.html|conteudo\.json)$">
     Header set Cache-Control "no-cache"
-  </Files>
+  </FilesMatch>
 </IfModule>
