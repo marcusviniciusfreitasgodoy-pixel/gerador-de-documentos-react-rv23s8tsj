@@ -2065,7 +2065,7 @@
   "economia": {
     "visivel": true,
     "etiqueta": "Economia",
-    "titulo": "Quanto custaria fazer isso com gente.",
+    "titulo": "Quanto custariam todos esses funcionários?",
     "texto": "Ninguém contrata as 14 funções de uma vez. Mas só uma assistente, um redator e um SDR custam R$ 14.176 por mês, com os encargos da CLT. O Starter, que já traz essas três funções (Sônia, Jonathan e o clone do dono), custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
     "encargos_percentual": 68,
     "horas_mes": 220,
