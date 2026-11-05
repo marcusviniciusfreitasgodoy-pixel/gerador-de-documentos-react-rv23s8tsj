@@ -56,7 +56,7 @@
     "etiqueta": "Agentes de IA que entregam trabalho pronto",
     "titulo": "Deixe o operacional com a Sônia",
     "titulo_destaque": "e foque no que você faz de melhor.",
-    "texto": "Publicar, responder no WhatsApp, montar proposta, fechar o caixa, revisar contrato: 21 especialistas de IA assumem isso a qualquer hora, pelo Telegram ou pelo painel. O que você faz com as horas e o dinheiro que sobram é escolha sua.",
+    "texto": "Publicar, responder no WhatsApp, montar proposta, fechar o caixa, revisar contrato: até 21 especialistas de IA assumem isso a qualquer hora, pelo Telegram ou pelo painel. O tamanho do time depende do plano. O que você faz com as horas e o dinheiro que sobram é escolha sua.",
     "botao_principal": {
       "texto": "Quero a minha Sônia",
       "link": "#planos"
@@ -1989,7 +1989,7 @@
         "itens": [
           "Pesquisar, organizar e resumir",
           "Escrever rascunhos de texto, post e proposta",
-          "Responder dúvidas com base no que foi treinada",
+          "Responder clientes no WhatsApp e no Direct com base no que foi treinada",
           "Acompanhar prazos e avisar o que está parado"
         ]
       },
@@ -1999,7 +1999,7 @@
         "titulo": "Prepara e pede o seu OK",
         "itens": [
           "Enviar proposta ou orçamento a cliente",
-          "Publicar nas redes e disparar mensagens",
+          "Publicar nas redes e disparar mensagens em massa",
           "Agendar compromisso na sua agenda",
           "Contratar, demitir, dar desconto e qualquer gasto"
         ]
@@ -2081,7 +2081,7 @@
     "visivel": true,
     "etiqueta": "Economia",
     "titulo": "Quanto custariam todos esses funcionários?",
-    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só as cinco que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT: uma assistente (Sônia), um web designer (Juliana), um desenvolvedor (Paulo), um redator (Jonathan) e um SDR (o clone do dono). Em um ano, são R$ 369.851. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
+    "texto": "Ninguém contrata as 14 funções de uma vez. Mas só as cinco que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT: uma assistente (Sônia), um web designer (Juliana, que cria as páginas e coordena a produção), um desenvolvedor (Paulo), um redator (Jonathan) e um SDR (o clone do dono). Em um ano, são R$ 369.851. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
     "encargos_percentual": 68,
     "horas_mes": 220,
     "rotulo_total_mes": "Se você contratasse gente para todas as funções, por mês",
@@ -2157,13 +2157,13 @@
       },
       {
         "cargo": "Analista tributário",
-        "tarefa": "Apuração de impostos e rotina fiscal",
+        "tarefa": "Conferir notas e organizar a rotina fiscal para o contador",
         "salario": 4922.89,
         "pessoas": 1
       },
       {
         "cargo": "Advogado",
-        "tarefa": "Contratos e revisão jurídica",
+        "tarefa": "Preparar e revisar contratos para o advogado assinar",
         "salario": 5710.12,
         "pessoas": 1
       },
@@ -2174,7 +2174,7 @@
         "pessoas": 1
       }
     ],
-    "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT. A comparação não inclui o custo da assinatura da IA, que é contratada à parte.",
+    "nota": "Custo por hora calculado sobre 220 horas por mês, a jornada padrão da CLT. A comparação não inclui o custo da assinatura da IA, que é contratada à parte. No fiscal e no jurídico, o agente prepara e confere: o parecer e a assinatura continuam com o seu contador e o seu advogado.",
     "fontes": "Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026, consultados em 10/2026). Tráfego pago: Analista de Marketing (CBO 1423-35), por não haver CBO própria. SDR: Jooble, SDR júnior (06/2026), por não haver CBO própria. Encargos e custos do empregador de 68% sobre o salário, segundo Buk (11/2025) e Contabilizei (12/2025).",
     "_aviso": "Salários do tráfego pago e dos SDRs ajustados no Claude Design em 01/11/2026 a pedido do dono (fontes citadas em 'fontes'). Confira os números na fonte antes de anunciar.",
     "chamada": {
@@ -2254,7 +2254,7 @@
         "rotulo": "escrituras do Rio na base de preços"
       }
     ],
-    "texto": "Passei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua, treino o time com os seus processos e acompanho a operação com você.",
+    "texto": "Passei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua com os seus processos na sessão de onboarding e, no Magnata, acompanho a operação com você nas mentorias individuais.",
     "rotulo_provas": "Onde isso já roda",
     "provas": [],
     "links": [
@@ -2274,7 +2274,7 @@
     "visivel": true,
     "etiqueta": "Planos",
     "titulo": "Escolha o tamanho do seu time",
-    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes. O acesso chega por e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
+    "texto": "Pagamento por Pix à vista ou no cartão em até 12 vezes. Escolha o plano e deixe os seus dados: o nosso time te manda o link de pagamento pelo WhatsApp. O acesso chega por e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
     "itens": [
       {
         "nome": "SONIA Starter",
@@ -2293,7 +2293,7 @@
           "Garantia de 30 dias"
         ],
         "botao": {
-          "texto": "Assinar agora",
+          "texto": "Quero este plano",
           "link": ""
         }
       },
@@ -2314,7 +2314,7 @@
           "Garantia de 30 dias"
         ],
         "botao": {
-          "texto": "Assinar agora",
+          "texto": "Quero este plano",
           "link": ""
         }
       },
@@ -2337,7 +2337,7 @@
           "Garantia de 30 dias"
         ],
         "botao": {
-          "texto": "Assinar agora",
+          "texto": "Quero este plano",
           "link": ""
         }
       }
@@ -2385,8 +2385,8 @@
     "_aviso_endpoint": "URL do app da Web do Google Apps Script (ferramentas/planilha-leads). Se preenchido, o formulário grava na planilha E abre o WhatsApp.",
     "visivel": true,
     "etiqueta": "Fale com o time",
-    "titulo": "Prefere conversar antes de assinar?",
-    "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp e mostra a Sônia funcionando.",
+    "titulo": "Escolheu o plano ou prefere conversar antes?",
+    "texto": "Deixe os seus dados. O nosso time responde pelo WhatsApp com o link de pagamento ou mostra a Sônia funcionando.",
     "whatsapp": "5521999012520",
     "endpoint": "https://script.google.com/macros/s/AKfycby2YqnLILR8g_TAchSajMimLHhTkTJ7bK0DVaaoscHBeLN1rKL78PcPkYYXDjyfbi89YQ/exec",
     "rotulo_nome": "Nome completo",
