@@ -358,7 +358,9 @@ def tpl(t):
 .pc-vid-tela{position:relative;width:100%;max-width:380px;aspect-ratio:9/16;border-radius:12px;overflow:hidden;background:#161513;border:1px solid rgba(245,241,230,.10)}
 .pc-vid-tela video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;background:#161513}
 /* 05/11/2026: versão bubble, a Sônia fala num círculo entre 69% e 90% da altura; legenda vai para a faixa livre de baixo e o play para o meio da cena */
-.pc-vid-leg{position:absolute;left:12px;right:12px;bottom:2.5%;display:flex;justify-content:center;pointer-events:none;z-index:2}
+.pc-vid-leg{position:absolute;left:12px;right:12px;bottom:2.5%;display:flex;justify-content:center;pointer-events:none;z-index:2;transition:bottom .2s ease}
+/* 05/11/2026: com a barra de controles nativa visível, a legenda sobe para não ficar por cima dela */
+.pc-vid-tela.pc-vid-ctl .pc-vid-leg{bottom:64px}
 .pc-vid-leg span{max-width:100%;padding:6px 12px;border-radius:8px;background:rgba(10,10,9,.8);color:#F5F1E6;font:600 15px/1.35 var(--pc-font-sans,system-ui);text-align:center;text-wrap:balance}
 .pc-vid-play{all:unset;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding-bottom:12%;box-sizing:border-box;cursor:pointer;z-index:3}
 .pc-vid-play span{width:72px;height:72px;border-radius:999px;background:rgba(201,168,76,.92);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.4)}
@@ -656,6 +658,24 @@ document.addEventListener("click", function (e) {
     var v = e.target; if (!v.classList || !v.classList.contains("pc-vid-video")) return;
     var box = v.closest("[data-pc-vid]"); v.controls = false; box.querySelector(".pc-vid-play").hidden = false; box.querySelector(".pc-vid-leg").textContent = "";
   }, true);
+  // 05/11/2026: a barra de controles aparece no toque ou com o mouse e some uns 3 s depois com o vídeo
+  // tocando; pausado, ela fica. Enquanto ela aparece, a tela ganha pc-vid-ctl e a legenda sobe.
+  var ctlTempo = null;
+  function ctl(tela, ligar, fixo) {
+    if (!tela) return;
+    clearTimeout(ctlTempo);
+    var v = tela.querySelector(".pc-vid-video");
+    if (!ligar || !v || !v.controls) { tela.classList.remove("pc-vid-ctl"); return; }
+    tela.classList.add("pc-vid-ctl");
+    if (!fixo) ctlTempo = setTimeout(function () { if (!v.paused) tela.classList.remove("pc-vid-ctl"); }, 3000);
+  }
+  ["pointerdown", "pointermove", "touchstart"].forEach(function (ev) {
+    document.addEventListener(ev, function (e) { var t = e.target.closest && e.target.closest(".pc-vid-tela"); if (t) ctl(t, true, false); }, { capture: true, passive: true });
+  });
+  document.addEventListener("mouseleave", function (e) { var t = e.target; if (t.classList && t.classList.contains("pc-vid-tela")) { var v = t.querySelector(".pc-vid-video"); if (v && !v.paused) ctl(t, false); } }, true);
+  document.addEventListener("pause", function (e) { var v = e.target; if (v.classList && v.classList.contains("pc-vid-video") && !v.ended) ctl(v.closest(".pc-vid-tela"), true, true); }, true);
+  document.addEventListener("play", function (e) { var v = e.target; if (v.classList && v.classList.contains("pc-vid-video")) ctl(v.closest(".pc-vid-tela"), true, false); }, true);
+  document.addEventListener("ended", function (e) { var v = e.target; if (v.classList && v.classList.contains("pc-vid-video")) ctl(v.closest(".pc-vid-tela"), false); }, true);
   function varrer() {
     if (!dados) return;
     document.querySelectorAll("[data-pc-vid]").forEach(function (box) { if (!box.dataset.pronto || !box.querySelector(".pc-vid-video")) preencher(box); });
