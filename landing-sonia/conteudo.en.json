@@ -1,0 +1,2463 @@
+{
+  "marca": {
+    "produto": "SONIA",
+    "significado": "Sistema Operacional de Negócios com Inteligência Artificial",
+    "agente": "Sônia",
+    "empresa": "Prime Circle",
+    "cor_destaque": "#c8a24a",
+    "cor_escura": "#13263b",
+    "cor_botao": "#e2574c"
+  },
+  "seo": {
+    "titulo": "SONIA · Hand off the operational work and focus on what you do best",
+    "descricao": "Sônia coordinates up to 21 AI specialists: content, ads, WhatsApp customer service, finance, invoices, contracts and HR. You ask in Portuguese and get the work back finished.",
+    "imagem_compartilhamento": "assets/og-sonia.jpg",
+    "endereco": "https://sonia.primecircle.app.br/"
+  },
+  "topo": {
+    "menu": [
+      {
+        "texto": "Where to start",
+        "link": "#por-onde-comecar"
+      },
+      {
+        "texto": "Team",
+        "link": "#time"
+      },
+      {
+        "texto": "Council",
+        "link": "#conselho"
+      },
+      {
+        "texto": "Savings",
+        "link": "#economia"
+      },
+      {
+        "texto": "Plans",
+        "link": "#planos"
+      },
+      {
+        "texto": "Questions",
+        "link": "#duvidas"
+      }
+    ],
+    "botao": {
+      "texto": "See Sônia in action",
+      "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+    },
+    "botao_area_cliente": {
+      "visivel": true,
+      "texto": "Client area",
+      "link": "https://agentes.primecircle.app.br/login"
+    }
+  },
+  "hero": {
+    "etiqueta": "AI agents that deliver finished work",
+    "titulo": "Leave the operational work to Sônia",
+    "titulo_destaque": "and focus on what you do best.",
+    "texto": "Posting content, answering on WhatsApp, putting together a proposal, closing out the cash, reviewing a contract: up to 21 AI specialists take this on at any hour, through Telegram or the dashboard. Team size depends on the plan. What you do with the hours and the money left over is your call.",
+    "botao_principal": {
+      "texto": "I want my Sônia",
+      "link": "#planos"
+    },
+    "botao_secundario": {
+      "texto": "See the full math",
+      "link": "#economia"
+    },
+    "rotulo_avatares": "Up to 21 specialists on your team",
+    "selos": [
+      "Works at any hour, including nights and weekends",
+      "Each client gets their own agent, their own memory and their own data",
+      "Dashboard in Portuguese, English and Spanish"
+    ],
+    "rotulo_conversa": "Sample conversation on Telegram",
+    "conversa": [
+      {
+        "de": "voce",
+        "texto": "Sônia, put a landing page live for my free class."
+      },
+      {
+        "de": "agente",
+        "texto": "Got it. Jonathan writes the copy, Paulo publishes the page and I'll send you the reviewed link."
+      },
+      {
+        "de": "voce",
+        "texto": "And what did the team deliver today?"
+      },
+      {
+        "de": "agente",
+        "texto": "3 carousels, 1 sales proposal and 14 qualified leads on WhatsApp."
+      }
+    ]
+  },
+  "realidade": {
+    "visivel": true,
+    "etiqueta": "The reality",
+    "titulo": "Hiring is hard. Training is expensive. And the people you train leave.",
+    "texto": "It's not just you. This is what business owners are living with today, in every industry.",
+    "itens": [
+      {
+        "valor": "80%",
+        "titulo": "Can't find people",
+        "texto": "of employers in Brazil have trouble hiring. The global average is 72%.",
+        "fonte": "ManpowerGroup, 2026 Talent Shortage Survey"
+      },
+      {
+        "valor": "33,6%",
+        "titulo": "Turnover",
+        "texto": "was the turnover rate in formal employment in Brazil in 2025.",
+        "fonte": "Novo CAGED, Brazilian Ministry of Labor and Employment"
+      },
+      {
+        "valor": "11.8 million",
+        "titulo": "Need training",
+        "texto": "workers who already have jobs will need reskilling by 2027, in manufacturing alone.",
+        "fonte": "CNI and SENAI, Industrial Labor Map 2025 to 2027"
+      },
+      {
+        "valor": "52%",
+        "titulo": "Already using AI",
+        "texto": "of small businesses used artificial intelligence in the two weeks before the survey. And 60% want to use it more.",
+        "fonte": "Sebrae and Meta, Digital Transformation in Small Businesses, 2026"
+      }
+    ]
+  },
+  "gargalos": {
+    "visivel": true,
+    "etiqueta": "Where to start",
+    "titulo": "Start with what's holding your business back.",
+    "texto": "Nobody needs all 21 on day one. Pick the problem that costs you the most today and see who handles it.",
+    "itens": [
+      {
+        "titulo": "No time for content and ads",
+        "texto": "Jonathan writes, Bianca studies what goes viral in your niche, Paulo puts the page live and the traffic strategist runs the ads. You approve before anything is published.",
+        "quem": "Jonathan and Paulo from Starter up. Bianca and the traffic strategist from Elite up."
+      },
+      {
+        "titulo": "Customers reach out and wait too long for an answer",
+        "texto": "The owner's clone answers in Instagram Direct and on WhatsApp the way you would, qualifies whoever reaches out, and Davi carries the conversation through to a booked meeting. Everything is logged in the CRM.",
+        "quem": "Owner's clone from Starter up. Davi, the squad and Amanda from Elite up."
+      },
+      {
+        "titulo": "Finance, invoices and contracts eat up your day",
+        "texto": "Márcia reconciles the bank statement and projects cash flow, Maria checks the invoices and Aline reviews contracts. They do the prep work; your accountant and your lawyer still sign.",
+        "quem": "Márcia, Maria and Aline, on Magnata only."
+      },
+      {
+        "titulo": "The big decision falls on you, alone",
+        "texto": "Hiring one more person or giving that discount. Before you say yes, the Executive Council checks whether the cash can take it and whether operations can keep up, and gives you back a single recommendation.",
+        "quem": "Executive Council: included in Magnata, an add-on for Starter and Elite."
+      }
+    ]
+  },
+  "videos": {
+    "visivel": true,
+    "etiqueta": "Sônia answers",
+    "titulo": "Pick a question and hear the answer.",
+    "texto": "Videos under a minute long, with captions. Tap a topic to watch.",
+    "itens": [
+      {
+        "id": "r1-a-entrevista",
+        "titulo": "Who is Sônia?",
+        "resumo": "A job interview with the manager who brings her own team.",
+        "duracao": "0:32",
+        "video": "assets/video/serie/r1-a-entrevista.mp4",
+        "capa": "assets/video/serie/r1-a-entrevista.webp",
+        "legenda": "assets/video/serie/r1-a-entrevista.pt-BR.vtt"
+      },
+      {
+        "id": "r5-mais-um-chatbot",
+        "titulo": "Isn't this just another chatbot?",
+        "resumo": "A request on Telegram becomes a live page.",
+        "duracao": "0:34",
+        "video": "assets/video/serie/r5-mais-um-chatbot.mp4",
+        "capa": "assets/video/serie/r5-mais-um-chatbot.webp",
+        "legenda": "assets/video/serie/r5-mais-um-chatbot.pt-BR.vtt"
+      },
+      {
+        "id": "r6-os-crachas",
+        "titulo": "Who's on the team?",
+        "resumo": "One badge at a time. How many you get depends on the plan.",
+        "duracao": "0:38",
+        "video": "assets/video/serie/r6-os-crachas.mp4",
+        "capa": "assets/video/serie/r6-os-crachas.webp",
+        "legenda": "assets/video/serie/r6-os-crachas.pt-BR.vtt"
+      },
+      {
+        "id": "r7-o-ciclo-de-cada-contratacao",
+        "titulo": "Why not hire people?",
+        "resumo": "The cycle of every hire and what changes with Sônia.",
+        "duracao": "0:40",
+        "video": "assets/video/serie/r7-o-ciclo-de-cada-contratacao.mp4",
+        "capa": "assets/video/serie/r7-o-ciclo-de-cada-contratacao.webp",
+        "legenda": "assets/video/serie/r7-o-ciclo-de-cada-contratacao.pt-BR.vtt"
+      },
+      {
+        "id": "r4-a-conta-da-folha",
+        "titulo": "What would it cost to do this with people?",
+        "resumo": "The payroll math compared to the Magnata plan.",
+        "duracao": "0:38",
+        "video": "assets/video/serie/r4-a-conta-da-folha.mp4",
+        "capa": "assets/video/serie/r4-a-conta-da-folha.webp",
+        "legenda": "assets/video/serie/r4-a-conta-da-folha.pt-BR.vtt"
+      },
+      {
+        "id": "r2-depois-do-expediente",
+        "titulo": "And after hours?",
+        "resumo": "The WhatsApp, the post, the bank statement and the contract.",
+        "duracao": "0:36",
+        "video": "assets/video/serie/r2-depois-do-expediente.mp4",
+        "capa": "assets/video/serie/r2-depois-do-expediente.webp",
+        "legenda": "assets/video/serie/r2-depois-do-expediente.pt-BR.vtt",
+        "nota": "Márcia (finance) and Aline (contracts) are on the Magnata plan."
+      },
+      {
+        "id": "r3-tres-tamanhos-de-time",
+        "titulo": "Which plan should I choose?",
+        "resumo": "Starter, Elite and Magnata: what changes between the three.",
+        "duracao": "0:41",
+        "video": "assets/video/serie/r3-tres-tamanhos-de-time.mp4",
+        "capa": "assets/video/serie/r3-tres-tamanhos-de-time.webp",
+        "legenda": "assets/video/serie/r3-tres-tamanhos-de-time.pt-BR.vtt",
+        "nota": "Human support on Magnata is available on business days, 9 a.m. to 6 p.m."
+      },
+      {
+        "id": "r8-tres-duvidas",
+        "titulo": "Do I need to know how to code?",
+        "resumo": "And what's not included in the price.",
+        "duracao": "0:35",
+        "video": "assets/video/serie/r8-tres-duvidas.mp4",
+        "capa": "assets/video/serie/r8-tres-duvidas.webp",
+        "legenda": "assets/video/serie/r8-tres-duvidas.pt-BR.vtt",
+        "nota": "The WhatsApp connection uses an unofficial system. The details are in the frequently asked questions."
+      }
+    ],
+    "chamada": {
+      "visivel": true,
+      "texto": "Like what you saw? Book a demo and watch Sônia handle one of your requests, live.",
+      "botao": {
+        "texto": "",
+        "link": ""
+      },
+      "botao_secundario": {
+        "texto": "See Sônia in action",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      },
+      "nota": ""
+    }
+  },
+  "sigla": {
+    "visivel": false,
+    "titulo": "Behind the name",
+    "letras": [
+      {
+        "letra": "S",
+        "palavra": "System"
+      },
+      {
+        "letra": "O",
+        "palavra": "Operating"
+      },
+      {
+        "letra": "N",
+        "palavra": "Business, with"
+      },
+      {
+        "letra": "I",
+        "palavra": "Intelligence"
+      },
+      {
+        "letra": "A",
+        "palavra": "Artificial"
+      }
+    ],
+    "texto": "SONIA is not a chatbot. It's the system that organizes your company's work: it takes the request, hands it to the right specialist and only delivers when the work is finished."
+  },
+  "numeros": {
+    "visivel": false,
+    "etiqueta": "The technology behind Sônia",
+    "titulo": "Not a promise. An operation that's already running.",
+    "itens": [
+      {
+        "valor": "+7.000",
+        "rotulo": "companies already use the platform"
+      },
+      {
+        "valor": "+253.000",
+        "rotulo": "tasks completed"
+      },
+      {
+        "valor": "+750 billion",
+        "rotulo": "AI tokens processed"
+      },
+      {
+        "valor": "+R$ 32,6 million",
+        "rotulo": "saved in payroll"
+      }
+    ],
+    "nota": "Aggregate figures for the agent platform, not only for Prime Circle clients."
+  },
+  "como_funciona": {
+    "visivel": false,
+    "etiqueta": "How it works",
+    "titulo": "You talk to one agent. The whole team gets to work.",
+    "texto": "No new tool to learn and no people to manage. You send the request the way you would to an employee you trust.",
+    "passos": [
+      {
+        "titulo": "You ask",
+        "texto": "By text or voice message, on Telegram or in the dashboard, in Portuguese."
+      },
+      {
+        "titulo": "Sônia plans",
+        "texto": "She breaks the request into tasks and picks the right specialist for each part."
+      },
+      {
+        "titulo": "The team executes",
+        "texto": "Copy, design, code, ads, customer service: each specialist does their part."
+      },
+      {
+        "titulo": "You get it finished",
+        "texto": "Sônia checks the result and only then delivers it, reviewed."
+      }
+    ]
+  },
+  "time": {
+    "visivel": true,
+    "etiqueta": "Team Sônia",
+    "titulo": "One agent coordinates. The whole team delivers.",
+    "texto": "Sônia is the only one who talks to you. She takes the request, hands it to the right specialist, follows up and only delivers to you when it's finished. Click any agent to see their full résumé.",
+    "rotulo_orquestradora": "Team orchestrator",
+    "rotulo_especialistas": "21 specialists working under Sônia's direction",
+    "botao_curriculo": "See résumé",
+    "rotulo_como_pedir": "Sample requests. Send them on Telegram or in the chat.",
+    "agentes": [
+      {
+        "id": "avatar-sonia",
+        "nome": "Sônia",
+        "cargo": "Orchestrator · manager of the AI operation",
+        "area": "Command and operations",
+        "imagem": "assets/agentes/avatar-sonia.webp",
+        "resumo": "Sônia is the manager of your artificial intelligence operation and the team's command center. She's the only one who talks to you directly: she takes the request in Portuguese, plans, breaks it into tasks, picks the right specialist, delegates, follows up, checks the result and only then delivers it to you finished. She works around the clock, doesn't sleep, doesn't run late and doesn't miss a day.",
+        "o_que_faz": [
+          "Orchestrates the whole team end to end: copy goes to Jonathan, code to Paulo, deadlines to Rafael, viral video to Bianca, CRM to Amanda, paid traffic to the Traffic strategist and prospecting to Davi's squad",
+          "Talks to you on Telegram, by text or voice message, and sends every delivery back to you reviewed",
+          "Handles campaigns, automations, conversations and funnels inside the CRM",
+          "Creates carousels, writes and publishes content, puts together proposals and puts pages live",
+          "Protects privacy and respects your limits in everything she does"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Team orchestration",
+            "texto": "Plans, delegates to the right specialist and checks before delivering."
+          },
+          {
+            "titulo": "Instagram carousels",
+            "texto": "Creates the carousel from script to publication."
+          },
+          {
+            "titulo": "Profile analysis",
+            "texto": "Reads your Instagram profile and points out what to adjust."
+          },
+          {
+            "titulo": "Sales proposals",
+            "texto": "Puts together the proposal and puts the page live."
+          },
+          {
+            "titulo": "Landing pages and slides",
+            "texto": "Produces pages and presentations ready to use."
+          },
+          {
+            "titulo": "Business plan",
+            "texto": "Organizes the business plan based on your information."
+          }
+        ],
+        "plataformas": "Telegram · Dashboard · Instagram · Meta Ads · CRM · Vercel",
+        "como_trabalha": "She's your single point of contact and the brain of the operation. She takes everything in Portuguese, brings in the specialists, connects information across areas and makes sure every delivery comes back reviewed before it reaches you.",
+        "passos": [
+          "Takes your request in Portuguese, by text or voice message on Telegram",
+          "Plans and breaks the request into tasks",
+          "Picks the right specialist and delegates each part",
+          "Follows progress and connects information across areas",
+          "Checks the result and only then delivers it to you finished"
+        ],
+        "turnos": [
+          "Daily: summary of what the team delivered and what's in progress",
+          "Weekly: review of the week's deliveries and each area's open items"
+        ],
+        "resultados": [
+          "Reviewed deliveries from the whole team through a single point of contact",
+          "Instagram carousels and published content",
+          "Sales proposals and live pages",
+          "Profile analysis, slides and business plan",
+          "Campaigns, automations and funnels organized in the CRM"
+        ],
+        "treinamentos": [
+          "Team orchestration: plan, delegate and check before delivering",
+          "More than a dozen proprietary marketing and sales methodologies",
+          "Business sense and direct communication, no fluff",
+          "Privacy and respect for the limits you set"
+        ],
+        "como_pedir": [
+          "Sônia, put together a carousel about next week's launch.",
+          "Sônia, write a proposal for the client from today's call and send me the link.",
+          "Sônia, analyze my Instagram profile and tell me what to change.",
+          "Sônia, put a landing page live for my free class.",
+          "Sônia, what did the team deliver today?"
+        ],
+        "visivel": true
+      },
+      {
+        "id": "juliana-ops",
+        "nome": "Juliana",
+        "cargo": "Right hand and deputy operations manager",
+        "area": "Command and operations",
+        "imagem": "assets/agentes/juliana-ops.webp",
+        "resumo": "Juliana is Sônia's right hand and second in command. When a job is too big for a single specialist, she takes over coordinating the team: she splits up the parts, aligns the visual standard, ensures consistency and hands the finished package back to Sônia to check.",
+        "o_que_faz": [
+          "Coordinates production across Jonathan, Paulo and Bianca when the job is bigger",
+          "Creates landing pages, ad creatives and Instagram layouts",
+          "Sets brand standards and keeps the visuals consistent",
+          "Organizes the production flow and the team's processes"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Team coordination",
+            "texto": "Splits big jobs among the specialists and brings the results together."
+          },
+          {
+            "titulo": "Art direction",
+            "texto": "Sets and maintains the brand's visual standards."
+          },
+          {
+            "titulo": "Landing pages and creatives",
+            "texto": "Directs pages and performance creatives."
+          },
+          {
+            "titulo": "Production processes",
+            "texto": "Organizes the team's workflow."
+          },
+          {
+            "titulo": "Juliana · operations",
+            "texto": "Deputy operations manager, design and team coordination."
+          }
+        ],
+        "plataformas": "CRM · Instagram · Vercel",
+        "como_trabalha": "She's the bridge between Sônia's strategy and the team's execution. She takes the bigger package, splits it among the specialists, enforces the standard and delivers it wrapped up for Sônia to review.",
+        "passos": [
+          "Gets from Sônia the job that's too big for one specialist",
+          "Splits the work among Jonathan, Paulo and Bianca",
+          "Aligns the visual standard and the production process",
+          "Checks the consistency of each part",
+          "Hands the finished package back to Sônia to check"
+        ],
+        "turnos": [
+          "Weekly: review of the production flow and brand standards",
+          "On demand: coordination of the big packages Sônia passes along"
+        ],
+        "resultados": [
+          "Finished landing pages",
+          "Ad creatives",
+          "Instagram layouts",
+          "Documented brand standards and design system",
+          "Coordinated, consistent production packages"
+        ],
+        "treinamentos": [
+          "Operations management and team coordination with a big-picture view",
+          "Design systems, visual standards and art direction",
+          "Direction of landing pages and performance creatives",
+          "Organizing processes and production flows"
+        ],
+        "como_pedir": [
+          "I want Juliana to coordinate the launch package: page, creatives and posts.",
+          "Ask Juliana to create this month's Instagram layouts in the brand standard.",
+          "I want Juliana to check whether the campaign pieces share the same visual identity.",
+          "Ask Juliana to organize the team's content production flow."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "rafael-projetos",
+        "nome": "Rafael",
+        "cargo": "Project manager",
+        "area": "Command and operations",
+        "imagem": "assets/agentes/rafael-projetos.webp",
+        "resumo": "Rafael is the team's project manager. He's the one who turns Sônia's strategy into a schedule: he builds the plan, prioritizes what goes first, breaks it into stages, assigns the tasks and holds everyone to the agreed deadline.",
+        "o_que_faz": [
+          "Builds the delivery plan and prioritizes what comes first",
+          "Breaks the strategy into stages and assigns them across areas",
+          "Tracks the status of each workstream and enforces the deadline",
+          "Spots bottlenecks before they turn into delays"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Project management",
+            "texto": "Turns strategy into an executable plan with deadlines."
+          },
+          {
+            "titulo": "Delivery prioritization",
+            "texto": "Decides what goes first and organizes the queue."
+          },
+          {
+            "titulo": "Deadline control",
+            "texto": "Tracks progress and follows up on every delivery."
+          },
+          {
+            "titulo": "Cross-area coordination",
+            "texto": "Assigns tasks and aligns the workstreams."
+          }
+        ],
+        "plataformas": "CRM · Telegram",
+        "como_trabalha": "Takes the strategy Sônia has approved and turns it into an executable plan with deadlines. Makes sure no delivery gets forgotten and everything arrives on the agreed timeline.",
+        "passos": [
+          "Receives the strategy Sônia has approved",
+          "Builds the delivery plan and sets priorities",
+          "Breaks it into stages and assigns them across areas",
+          "Tracks the status of each workstream and enforces the deadline",
+          "Flags the bottleneck before it turns into a delay"
+        ],
+        "turnos": [
+          "Daily: status of deliveries and the day's deadlines",
+          "Weekly: review of the plan, priorities and open items"
+        ],
+        "resultados": [
+          "Delivery plan with deadlines",
+          "Priority list",
+          "Status of each project workstream",
+          "Bottleneck and delay alerts",
+          "Log of open items"
+        ],
+        "treinamentos": [
+          "Agile project management, without the bureaucracy",
+          "Roadmapping and prioritization",
+          "Deadline tracking and progress control",
+          "Cross-area coordination"
+        ],
+        "como_pedir": [
+          "I want Rafael to put together the schedule for next month's launch.",
+          "Ask Rafael to tell me what's behind schedule in the projects.",
+          "I want Rafael to prioritize this week's deliveries.",
+          "Ask Rafael to break this project into stages with deadlines."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "paulo-dev",
+        "nome": "Paulo",
+        "cargo": "Full-stack developer",
+        "area": "Production",
+        "imagem": "assets/agentes/paulo-dev.webp",
+        "resumo": "Paulo is the team's developer. When code is needed, he steps in: he builds websites, systems and automations, implements new features, solves technical problems and puts everything live. When the team includes Boris, the large systems (ERP, CRM, SaaS) are planned and supervised by him, and Paulo builds the code parts.",
+        "o_que_faz": [
+          "Builds websites, pages, automations and simple systems from scratch",
+          "Implements new features and fixes what broke",
+          "Puts pages and applications live and keeps the code history",
+          "Integrates your tools (for example, your form with the CRM)",
+          "Tests end to end before delivering"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Modern websites and pages",
+            "texto": "Builds and publishes pages and websites."
+          },
+          {
+            "titulo": "Systems and automations",
+            "texto": "Develops custom systems and automates processes."
+          },
+          {
+            "titulo": "Tool integration",
+            "texto": "Connects your tools to each other."
+          },
+          {
+            "titulo": "Programmatic video",
+            "texto": "Generates video from code."
+          },
+          {
+            "titulo": "Three-phase method",
+            "texto": "Plans, executes and checks before delivering."
+          },
+          {
+            "titulo": "Paulo · developer",
+            "texto": "Code for websites, automations, APIs and debugging."
+          }
+        ],
+        "plataformas": "Vercel · Cloudflare · Hostinger · CRM",
+        "como_trabalha": "Sônia or Juliana brings him in whenever a delivery involves code. On a large system, he follows Boris's plan and review when Boris is on the team. He works methodically, tests before delivering and hands it back with everything working, so nothing that's already live breaks.",
+        "passos": [
+          "Gets brought in by Sônia or Juliana when the delivery involves code",
+          "On a large system, gets the plan and his share of the work from Boris, and sends it back for Boris to review",
+          "Plans the solution before writing",
+          "Updates the code and implements the feature",
+          "Tests after each change and checks end to end",
+          "Puts it live and records the code history"
+        ],
+        "turnos": [
+          "On demand: steps in when the delivery involves code",
+          "Weekly: check of the pages and integrations that are already live"
+        ],
+        "resultados": [
+          "Live websites and pages",
+          "Custom automations and simple systems",
+          "Integrations between tools, such as a form and the CRM",
+          "Fixes for what broke",
+          "Programmatic videos"
+        ],
+        "treinamentos": [
+          "Full-stack development with React, Next.js, Node.js, TypeScript and Python",
+          "PostgreSQL databases",
+          "Deployment and code versioning",
+          "Three-phase working method: planning, execution and checks before delivery"
+        ],
+        "como_pedir": [
+          "I want Paulo to connect the website form to the CRM.",
+          "Ask Paulo to fix the button on the sales page that stopped working.",
+          "I want Paulo to build a simple system to track my orders.",
+          "Ask Paulo to put this page live on my domain."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "clone-do-dono",
+        "nome": "Owner's clone",
+        "cargo": "SDR · customer service in Instagram Direct and on WhatsApp",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/clone-do-dono.webp",
+        "resumo": "The owner's customer service clone: answers Instagram DMs and WhatsApp messages talking the way the owner talks, in the tone of voice learned during onboarding, qualifies whoever reaches out and logs everything in the pipeline.",
+        "o_que_faz": [
+          "Handles Instagram DMs and WhatsApp messages",
+          "Qualifies with SPIN Selling and BANT",
+          "Offers the next funnel step defined by the owner",
+          "Books meetings when it makes sense",
+          "Logs every interaction in the pipeline"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Social selling",
+            "texto": "Drives the sale through conversations on social media."
+          },
+          {
+            "titulo": "SPIN and BANT qualification",
+            "texto": "Finds out the need, budget, decision maker and timeline of whoever reaches out."
+          },
+          {
+            "titulo": "Pipeline logging",
+            "texto": "Records every interaction in the pipeline."
+          },
+          {
+            "titulo": "Scheduling",
+            "texto": "Books the meeting when the lead is ready."
+          },
+          {
+            "titulo": "Owner's clone · SDR",
+            "texto": "Lead response, qualification and logging."
+          }
+        ],
+        "plataformas": "Instagram Direct · WhatsApp",
+        "como_trabalha": "Uses the products, prices and links the agent has saved to memory about the owner's business. If something isn't there, it doesn't make it up: it asks the agent to confirm with the owner.",
+        "passos": [
+          "Picks up whoever reaches out in Instagram DMs or on WhatsApp",
+          "Replies in your tone of voice, learned during onboarding",
+          "Qualifies with SPIN Selling and BANT",
+          "Offers the next step of the funnel you defined and books a meeting when it makes sense",
+          "Logs every interaction in the pipeline"
+        ],
+        "turnos": [
+          "Ongoing: handles the conversations that come in on Instagram Direct and WhatsApp"
+        ],
+        "resultados": [
+          "Conversations answered in your tone of voice",
+          "Qualified leads",
+          "Booked meetings",
+          "Pipeline with every interaction logged"
+        ],
+        "treinamentos": [
+          "Social selling",
+          "SPIN Selling and BANT qualification",
+          "The owner's tone of voice, learned during onboarding",
+          "Products, prices and links saved to the business memory"
+        ],
+        "como_pedir": [
+          "I want my clone to handle Instagram DMs and qualify anyone who asks about price.",
+          "I want the clone to offer the free class to anyone who messages on WhatsApp.",
+          "I want the clone to book a call with me when the lead is qualified.",
+          "I want to see in the pipeline the conversations the clone handled this week."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "jonathan-copy",
+        "nome": "Jonathan",
+        "cargo": "Copywriter and researcher",
+        "area": "Production",
+        "imagem": "assets/agentes/jonathan-copy.webp",
+        "resumo": "Jonathan is the team's copywriter and researcher. He writes anything with words meant to sell, and he was trained on the models that convert best. He researches every reference before he writes.",
+        "o_que_faz": [
+          "Writes sales letters and sales pages",
+          "Creates ad scripts and Reels scripts",
+          "Produces Instagram posts, carousel content and email sequences",
+          "Does market and competitor research to back up every piece"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Sales copy",
+            "texto": "Writes letters, pages and ads meant to sell."
+          },
+          {
+            "titulo": "Reels scripts",
+            "texto": "Creates scripts with hooks that grab attention."
+          },
+          {
+            "titulo": "Instagram content",
+            "texto": "Produces posts and carousel copy."
+          },
+          {
+            "titulo": "Email marketing",
+            "texto": "Writes email sequences and automation copy."
+          },
+          {
+            "titulo": "Market research",
+            "texto": "Maps out competitors and references before writing."
+          },
+          {
+            "titulo": "Jonathan · copy",
+            "texto": "Copy, scripts, content and research."
+          }
+        ],
+        "plataformas": "Instagram · Email · CRM",
+        "como_trabalha": "Gets the brief from Sônia or Juliana, researches, writes and delivers the finished piece. Works alongside production and supplies the ads with the right copy.",
+        "passos": [
+          "Gets the brief from Sônia or Juliana",
+          "Checks your tone of voice before writing",
+          "Researches the market, competitors and references",
+          "Writes the piece in the right tone for the audience",
+          "Delivers the finished piece to production and the ads"
+        ],
+        "turnos": [
+          "Weekly: the week's Reels scripts and posts",
+          "Monthly: updated market and competitor research"
+        ],
+        "resultados": [
+          "Sales letters and sales pages",
+          "Ad scripts and Reels scripts",
+          "Instagram posts and carousel content",
+          "Email sequences",
+          "Market and competitor research reports"
+        ],
+        "treinamentos": [
+          "Sales copy trained on the models that convert best",
+          "Direct and indirect copywriting",
+          "Reels scripts in 7 acts: hook, context, conflict, turning point, expansion, CTA and close",
+          "Market, competitor and reference research",
+          "Flawless Portuguese and the right tone for each audience"
+        ],
+        "como_pedir": [
+          "I want Jonathan to write the sales letter for my new course.",
+          "Ask Jonathan for three Reels scripts on this week's topic.",
+          "I want Jonathan to research the competitors before the launch.",
+          "Ask Jonathan for a five-email sequence for people who downloaded the free material."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "bianca-viral",
+        "nome": "Bianca",
+        "cargo": "Viral video analyst",
+        "area": "Production",
+        "imagem": "assets/agentes/bianca-viral.webp",
+        "resumo": "Bianca is the Instagram viral video analyst. She runs a full study of discovery, transcription and two-angle analysis to decode exactly what makes a piece of content go viral.",
+        "o_que_faz": [
+          "Finds benchmark creators in your niche",
+          "Transcribes the videos with the most reach",
+          "Analyzes what makes the content go viral",
+          "Delivers the hook, structure, pacing and patterns for you to replicate"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Creator discovery",
+            "texto": "Finds benchmark creators in your niche."
+          },
+          {
+            "titulo": "Video transcription",
+            "texto": "Transcribes the videos with the most reach."
+          },
+          {
+            "titulo": "Virality analysis",
+            "texto": "Explains from two angles why a video went viral."
+          },
+          {
+            "titulo": "Hook decoding",
+            "texto": "Breaks down the hook, structure and pacing of the biggest videos."
+          },
+          {
+            "titulo": "Script templates",
+            "texto": "Turns the patterns into ready-to-record scripts."
+          }
+        ],
+        "plataformas": "Instagram",
+        "como_trabalha": "Comes in before content production: decodes what goes viral and hands the material to Jonathan to turn into scripts and to Juliana to turn into production.",
+        "passos": [
+          "Gets the Instagram profile or YouTube channel to analyze",
+          "Validates the profile and collects the videos with the most reach",
+          "Transcribes the videos",
+          "Analyzes from two angles what makes the content go viral",
+          "Builds the study page and delivers it to Sônia, who publishes it with your OK"
+        ],
+        "turnos": [
+          "Monthly: study of a benchmark creator in your niche",
+          "On demand: viral analysis of the profile you point to"
+        ],
+        "resultados": [
+          "Viral study page for the analyzed creator",
+          "Dominant hook, structure and pacing patterns",
+          "Anatomy of the comments and the hook and call-to-action combinations that work",
+          "Three finished scripts in your style to replicate",
+          "Material for Jonathan to turn into scripts and for Juliana to turn into production"
+        ],
+        "treinamentos": [
+          "Discovery and study of Instagram and YouTube videos",
+          "Video transcription",
+          "Two-angle virality analysis",
+          "Hook, structure and pacing decoding",
+          "Psychological mechanisms explained in plain language"
+        ],
+        "como_pedir": [
+          "I want Bianca to do the viral analysis of @profile.",
+          "Ask Bianca to analyze this creator's YouTube channel.",
+          "I want Bianca to find the creators who go viral most in my niche.",
+          "Ask Bianca to give me the hooks that work best on this profile."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "amanda-crm",
+        "nome": "Amanda",
+        "cargo": "CRM manager",
+        "area": "Production",
+        "imagem": "assets/agentes/amanda-crm.webp",
+        "resumo": "Amanda is the CRM manager and the go-to expert on the platform. She started as an SDR and was promoted for her performance. Today she handles support and the entire structure of the CRM.",
+        "o_que_faz": [
+          "Provides support and organizes your database inside the CRM",
+          "Manages contacts, tags and notes",
+          "Structures the funnels and moves opportunities through the stages",
+          "Sets up and monitors marketing automations"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Contact management",
+            "texto": "Creates, updates, tags and assigns contacts."
+          },
+          {
+            "titulo": "Funnels and pipelines",
+            "texto": "Structures funnels and moves opportunities through the stages."
+          },
+          {
+            "titulo": "Calendar",
+            "texto": "Checks open time slots and creates or adjusts appointments."
+          },
+          {
+            "titulo": "Marketing automations",
+            "texto": "Monitors the status of active automations."
+          },
+          {
+            "titulo": "Hands-on support",
+            "texto": "Explains every adjustment step by step."
+          }
+        ],
+        "plataformas": "CRM · WhatsApp · Instagram · Email · Calendars",
+        "como_trabalha": "Gets brought in for support and database organization. Keeps the data clean so the sales squad and paid traffic work from reliable information.",
+        "passos": [
+          "Understands the problem or request about the CRM",
+          "Checks contacts, automations and pipelines to find what's wrong",
+          "Fixes it directly in the CRM when possible",
+          "When the adjustment can only be made through the interface, walks you through it step by step",
+          "Logs the support request"
+        ],
+        "turnos": [
+          "Weekly: database cleanup, with contacts, tags and notes organized",
+          "Weekly: review of opportunities stuck in funnel stages",
+          "Monthly: check of active marketing automations"
+        ],
+        "resultados": [
+          "Clean, tagged contact database",
+          "Structured funnels with opportunities in the right stage",
+          "Appointments created, adjusted or canceled",
+          "Marketing automations monitored",
+          "Step-by-step support for how-to questions"
+        ],
+        "treinamentos": [
+          "Mastery of every CRM menu and workflow",
+          "Management of contacts, tags, notes and tasks",
+          "Funnels, pipelines and opportunities",
+          "Calendars, conversations, products and invoices",
+          "Hands-on, step-by-step support"
+        ],
+        "como_pedir": [
+          "I want Amanda to organize my contacts' tags.",
+          "Ask Amanda to move the leads who already had a meeting to the proposal stage.",
+          "I want Amanda to explain how to set up a new funnel in the CRM.",
+          "Ask Amanda to check why this automation didn't fire.",
+          "I want Amanda to show me the open slots on the calendar this week."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "estrategista-trafego",
+        "nome": "Traffic strategist",
+        "cargo": "Paid traffic manager",
+        "area": "Traffic and prospecting",
+        "imagem": "assets/agentes/estrategista-trafego.webp",
+        "resumo": "The Traffic strategist is the digital traffic manager, trained on the method of a senior traffic manager to think and decide the way he does. Handles paid ads end to end, from campaign planning to optimizing results.",
+        "o_que_faz": [
+          "Structures ad campaigns on Facebook and Instagram",
+          "Creates the performance creative and the ad copy",
+          "Builds the audiences (cold, warm and lookalike)",
+          "Tracks the metrics and optimizes cost per result",
+          "Connects paid traffic to the CRM to close the lead loop"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Ad management",
+            "texto": "Handles campaigns on Facebook and Instagram from planning to optimization."
+          },
+          {
+            "titulo": "Direct and evergreen traffic",
+            "texto": "Defines the strategy for continuous or one-off lead generation."
+          },
+          {
+            "titulo": "Performance creative",
+            "texto": "Creates the creative and the ad copy."
+          },
+          {
+            "titulo": "Audience building",
+            "texto": "Builds cold, warm and lookalike audiences."
+          },
+          {
+            "titulo": "Metrics analysis",
+            "texto": "Reads the numbers and optimizes cost per result."
+          }
+        ],
+        "plataformas": "Meta Ads · Facebook · Instagram · CRM",
+        "como_trabalha": "Works on the lead generation front: turns the budget into running campaigns and delivers the lead straight into the CRM for the sales squad to handle.",
+        "passos": [
+          "Gets the campaign's goal and budget",
+          "Plans the campaign structure on Facebook and Instagram",
+          "Creates the performance creative and the ad copy in your tone",
+          "Builds cold, warm and lookalike audiences",
+          "Tracks the metrics, optimizes cost per result and delivers the lead into the CRM"
+        ],
+        "turnos": [
+          "Daily: review of active campaign metrics",
+          "Weekly: optimization of audiences, creatives and budget",
+          "Monthly: results report and plan for the following month"
+        ],
+        "resultados": [
+          "Campaigns structured and running on Facebook and Instagram",
+          "Performance creatives and ad copy",
+          "Cold, warm and lookalike audiences built",
+          "ROAS, CPA, CTR, CPM and frequency reports",
+          "Leads delivered into the CRM for the sales squad"
+        ],
+        "treinamentos": [
+          "The method of a senior traffic manager",
+          "Meta Ads end to end",
+          "Direct and evergreen traffic strategy",
+          "ROAS, CPA, CTR, CPM and frequency metrics",
+          "Sales funnels and automation"
+        ],
+        "como_pedir": [
+          "I want the Traffic strategist to set up a campaign to capture leads for my class.",
+          "Ask the Traffic strategist to analyze why the cost per lead went up.",
+          "I want the Traffic strategist to create three new creatives for the active campaign.",
+          "Ask the Traffic strategist for this month's results report."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "davi-sdr",
+        "nome": "Davi",
+        "cargo": "Sales squad lead · with 6 salespeople",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/davi-sdr.webp",
+        "resumo": "Davi leads the sales squad on WhatsApp. He and 6 more salespeople (Amanda, Bianca, Carolina, Felipe, Lucas and Matheus) carry the conversation from first contact to a booked meeting, all to the same service standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Handles objections and follows up",
+          "Books the meeting with the sales team",
+          "Coordinates the squad and the CRM logging"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad leadership",
+            "texto": "Coordinates the salespeople and keeps the same service standard."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "Gets the leads that come in from paid traffic and prospecting, warms them up on WhatsApp and hands them to sales with a meeting booked. Keeps the whole squad to the same standard.",
+        "passos": [
+          "Gets the leads that come in from paid traffic and prospecting",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Handles objections and follows up",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply",
+          "Weekly: review of the squad's service standard"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Objections handled and follow-ups up to date",
+          "Interactions logged in the CRM",
+          "Squad working to the same standard"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "Squad leadership and standardization"
+        ],
+        "como_pedir": [
+          "I want Davi to message the leads that came in today on WhatsApp.",
+          "Ask Davi to re-engage the leads who stopped replying.",
+          "I want Davi to book this week's meetings with the qualified leads.",
+          "Ask Davi to show me how the squad is doing on bookings."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "amanda-sdr",
+        "nome": "Amanda",
+        "cargo": "Salesperson (SDR)",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/amanda-sdr.webp",
+        "resumo": "Amanda is part of the sales squad led by Davi. She prospects, qualifies and carries the conversation from first contact to a booked meeting, following the squad's standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Does structured follow-up",
+          "Books the meeting with the sales team",
+          "Handles leads on WhatsApp and logs everything in the CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad standard",
+            "texto": "Serves leads to the same standard Davi defined."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "A mirror of the squad, under Davi's lead. Takes the lead, qualifies and books, always to the team's same standard.",
+        "passos": [
+          "Gets the lead assigned by Davi's squad",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Does structured follow-up and handles objections",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Follow-ups up to date",
+          "Interactions logged in the CRM"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "The squad's service standard"
+        ],
+        "como_pedir": [
+          "I want Amanda to message the leads that came in today on WhatsApp.",
+          "Ask Amanda to re-engage the leads who stopped replying.",
+          "I want Amanda to book meetings with this week's qualified leads."
+        ],
+        "visivel": false
+      },
+      {
+        "id": "bianca-sdr",
+        "nome": "Bianca",
+        "cargo": "Salesperson (SDR)",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/bianca-sdr.webp",
+        "resumo": "Bianca is part of the sales squad led by Davi. She prospects, qualifies and carries the conversation from first contact to a booked meeting, following the squad's standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Does structured follow-up",
+          "Books the meeting with the sales team",
+          "Handles leads on WhatsApp and logs everything in the CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad standard",
+            "texto": "Serves leads to the same standard Davi defined."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "A mirror of the squad, under Davi's lead. Takes the lead, qualifies and books, always to the team's same standard.",
+        "passos": [
+          "Gets the lead assigned by Davi's squad",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Does structured follow-up and handles objections",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Follow-ups up to date",
+          "Interactions logged in the CRM"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "The squad's service standard"
+        ],
+        "como_pedir": [
+          "I want Bianca to message the leads that came in today on WhatsApp.",
+          "Ask Bianca to re-engage the leads who stopped replying.",
+          "I want Bianca to book meetings with this week's qualified leads."
+        ],
+        "visivel": false
+      },
+      {
+        "id": "carolina-sdr",
+        "nome": "Carolina",
+        "cargo": "Salesperson (SDR)",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/carolina-sdr.webp",
+        "resumo": "Carolina is part of the sales squad led by Davi. She prospects, qualifies and carries the conversation from first contact to a booked meeting, following the squad's standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Does structured follow-up",
+          "Books the meeting with the sales team",
+          "Handles leads on WhatsApp and logs everything in the CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad standard",
+            "texto": "Serves leads to the same standard Davi defined."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "A mirror of the squad, under Davi's lead. Takes the lead, qualifies and books, always to the team's same standard.",
+        "passos": [
+          "Gets the lead assigned by Davi's squad",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Does structured follow-up and handles objections",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Follow-ups up to date",
+          "Interactions logged in the CRM"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "The squad's service standard"
+        ],
+        "como_pedir": [
+          "I want Carolina to message the leads that came in today on WhatsApp.",
+          "Ask Carolina to re-engage the leads who stopped replying.",
+          "I want Carolina to book meetings with this week's qualified leads."
+        ],
+        "visivel": false
+      },
+      {
+        "id": "felipe-sdr",
+        "nome": "Felipe",
+        "cargo": "Salesperson (SDR)",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/felipe-sdr.webp",
+        "resumo": "Felipe is part of the sales squad led by Davi. He prospects, qualifies and carries the conversation from first contact to a booked meeting, following the squad's standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Does structured follow-up",
+          "Books the meeting with the sales team",
+          "Handles leads on WhatsApp and logs everything in the CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad standard",
+            "texto": "Serves leads to the same standard Davi defined."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "A mirror of the squad, under Davi's lead. Takes the lead, qualifies and books, always to the team's same standard.",
+        "passos": [
+          "Gets the lead assigned by Davi's squad",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Does structured follow-up and handles objections",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Follow-ups up to date",
+          "Interactions logged in the CRM"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "The squad's service standard"
+        ],
+        "como_pedir": [
+          "I want Felipe to message the leads that came in today on WhatsApp.",
+          "Ask Felipe to re-engage the leads who stopped replying.",
+          "I want Felipe to book meetings with this week's qualified leads."
+        ],
+        "visivel": false
+      },
+      {
+        "id": "lucas-sdr",
+        "nome": "Lucas",
+        "cargo": "Salesperson (SDR)",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/lucas-sdr.webp",
+        "resumo": "Lucas is part of the sales squad led by Davi. He prospects, qualifies and carries the conversation from first contact to a booked meeting, following the squad's standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Does structured follow-up",
+          "Books the meeting with the sales team",
+          "Handles leads on WhatsApp and logs everything in the CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad standard",
+            "texto": "Serves leads to the same standard Davi defined."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "A mirror of the squad, under Davi's lead. Takes the lead, qualifies and books, always to the team's same standard.",
+        "passos": [
+          "Gets the lead assigned by Davi's squad",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Does structured follow-up and handles objections",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Follow-ups up to date",
+          "Interactions logged in the CRM"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "The squad's service standard"
+        ],
+        "como_pedir": [
+          "I want Lucas to message the leads that came in today on WhatsApp.",
+          "Ask Lucas to re-engage the leads who stopped replying.",
+          "I want Lucas to book meetings with this week's qualified leads."
+        ],
+        "visivel": false
+      },
+      {
+        "id": "matheus-sdr",
+        "nome": "Matheus",
+        "cargo": "Salesperson (SDR)",
+        "area": "Sales squad",
+        "imagem": "assets/agentes/matheus-sdr.webp",
+        "resumo": "Matheus is part of the sales squad led by Davi. He prospects, qualifies and carries the conversation from first contact to a booked meeting, following the squad's standard.",
+        "o_que_faz": [
+          "Makes first contact with the lead",
+          "Qualifies using a consultative method",
+          "Does structured follow-up",
+          "Books the meeting with the sales team",
+          "Handles leads on WhatsApp and logs everything in the CRM"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Consultative qualification",
+            "texto": "Finds out the lead's need, budget, decision maker and timeline."
+          },
+          {
+            "titulo": "Taking it to the booked meeting",
+            "texto": "Carries the conversation from first contact to a scheduled meeting."
+          },
+          {
+            "titulo": "Objections and follow-up",
+            "texto": "Handles objections and re-engages people who stopped replying."
+          },
+          {
+            "titulo": "Squad standard",
+            "texto": "Serves leads to the same standard Davi defined."
+          }
+        ],
+        "plataformas": "WhatsApp · CRM · Calendars",
+        "como_trabalha": "A mirror of the squad, under Davi's lead. Takes the lead, qualifies and books, always to the team's same standard.",
+        "passos": [
+          "Gets the lead assigned by Davi's squad",
+          "Makes first contact on WhatsApp",
+          "Qualifies using a consultative method and BANT",
+          "Does structured follow-up and handles objections",
+          "Books the meeting with the sales team and logs it in the CRM"
+        ],
+        "turnos": [
+          "Daily: first contact with the day's new leads",
+          "Daily: follow-up with leads who didn't reply"
+        ],
+        "resultados": [
+          "Leads contacted and qualified",
+          "Meetings booked with the sales team",
+          "Follow-ups up to date",
+          "Interactions logged in the CRM"
+        ],
+        "treinamentos": [
+          "Consultative qualification and BANT",
+          "Carrying the conversation from contact to a booked meeting",
+          "Objection handling and structured follow-up",
+          "The squad's service standard"
+        ],
+        "como_pedir": [
+          "I want Matheus to message the leads that came in today on WhatsApp.",
+          "Ask Matheus to re-engage the leads who stopped replying.",
+          "I want Matheus to book meetings with this week's qualified leads."
+        ],
+        "visivel": false
+      },
+      {
+        "id": "marcia-financeiro",
+        "nome": "Márcia",
+        "cargo": "Finance and accounting",
+        "area": "Production",
+        "imagem": "assets/agentes/marcia-financeiro.webp",
+        "resumo": "Márcia handles finance and accounting. She reconciles bank statements, manages accounts payable and receivable, projects cash flow, builds the P&L (DRE), prepares the month-end close and delivers the material to the accountant.",
+        "o_que_faz": [
+          "Reconciles bank statements, OFX files and CNAB return files against the general ledger",
+          "Records and settles bills in the ERPs, with your approval",
+          "Projects cash flow for the next 30 days",
+          "Builds the P&L and comments on the month's variances",
+          "Prepares the month-end close package for the accountant"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Bank reconciliation",
+            "texto": "Matches the statement to the ledger and lists what's left over."
+          },
+          {
+            "titulo": "Accounting, SPED and close",
+            "texto": "Prepares the close and the ECD and ECF material."
+          },
+          {
+            "titulo": "CNAB remittance and return files",
+            "texto": "Reads and generates CNAB 240 and 400 files."
+          },
+          {
+            "titulo": "US accounting connector",
+            "texto": "Customers, invoices, bills and reports in the US online accounting ERP."
+          },
+          {
+            "titulo": "Global accounting connector",
+            "texto": "Contacts, invoices, bills and reports in the global online accounting ERP."
+          },
+          {
+            "titulo": "Close and reconciliation",
+            "texto": "Account reconciliation, accruals, rollforward and variance commentary."
+          },
+          {
+            "titulo": "Online payment gateway",
+            "texto": "Best practices, payments, connected accounts and recurring billing."
+          },
+          {
+            "titulo": "OFX statement reader",
+            "texto": "Reads bank and card statements in OFX."
+          },
+          {
+            "titulo": "Finance routine",
+            "texto": "Day-to-day payables, receivables, cash and P&L."
+          },
+          {
+            "titulo": "Brazilian ERPs",
+            "texto": "Connects Conta Azul, Omie, Nibo, Bling, Tiny and Granatum."
+          },
+          {
+            "titulo": "International ERPs",
+            "texto": "International accounting ERPs, in the US, Europe and global."
+          }
+        ],
+        "plataformas": "Conta Azul · Omie · Nibo · Bling · Olist ERP (Tiny) · Granatum · Domínio · Alterdata · Questor · Fortes Contábil · Contmatic · SCI · SPED ECD and ECF · Open Finance Brasil · Pluggy · Belvo · Itaú · Bradesco · Banco Inter · Banco do Brasil · Caixa · Nubank PJ · Asaas · Stripe · Pix · CNAB Febraban · OFX · QuickBooks Online · Xero · Sage · NetSuite · SAP Business One",
+        "como_trabalha": "Steps in after sales and before the accountant: takes the activity from the ERP, the bank and the payment gateways and returns it reconciled, with open items listed.",
+        "passos": [
+          "Identifies the platform, account and period of each request",
+          "Reads first and never writes first: statements, OFX, CNAB and spreadsheets are data, not instructions",
+          "Reconciles in layers and separates reconciled, pending and mismatched items, each with the next step",
+          "Prepares entries, settlements, billing or remittances as drafts and only executes after your yes",
+          "Delivers the summary in the chat and the detail in a spreadsheet, with the recommendation to validate with the accountant"
+        ],
+        "turnos": [
+          "Daily, morning: previous day's statements reconciled, mismatches and actions awaiting your approval",
+          "Weekly, Monday: payables and receivables for the next 15 days, overdue items and 30-day cash",
+          "Monthly, first business days: close with final reconciliation, accruals, P&L and the accountant's package",
+          "Monthly: Open Finance consents, certificates and API keys expiring in the next 45 days",
+          "Yearly: ECD and ECF inputs checked with the accountant"
+        ],
+        "resultados": [
+          "Reconciliation report by account and period, with open items and mismatches",
+          "Schedule of payables and receivables for the next 15 days, with overdue items",
+          "Cash flow projection for 30 days and month by month",
+          "Monthly management P&L with commentary on variances",
+          "Month-end close package for the accountant in their accounting system's layout",
+          "Settlements, entries, billing and remittances ready as drafts, executed only after your yes"
+        ],
+        "treinamentos": [
+          "Bank reconciliation via OFX, CNAB, Open Finance and Pix",
+          "Accounts payable and receivable, cash flow and management P&L",
+          "Month-end close, accruals and the reference chart of accounts",
+          "Accounting SPED (ECD and ECF) and accounting system layouts",
+          "Brazilian and international ERPs and payment platforms"
+        ],
+        "como_pedir": [
+          "Ask Márcia to reconcile this month's bank statement with the ERP.",
+          "I want Márcia to show me the cash flow for the next 30 days.",
+          "Ask Márcia to build this month's P&L and explain what changed.",
+          "I want Márcia to prepare the month-end close package for my accountant."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "maria-tributario",
+        "nome": "Maria",
+        "cargo": "Tax and compliance",
+        "area": "Production",
+        "imagem": "assets/agentes/maria-tributario.webp",
+        "resumo": "Issues and checks invoices, explains tax regimes and tracks the IBS/CBS tax reform and ancillary filing obligations.",
+        "o_que_faz": [
+          "Prepares and checks the invoice data before issuing",
+          "Connects the owner's invoicing platforms",
+          "Explains what changes under each regime and on the reform timeline",
+          "Sends reminders of ancillary filing deadlines"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Invoice issuing",
+            "texto": "Issues and checks NF-e, NFC-e, NFS-e and CT-e for any company size and regime."
+          },
+          {
+            "titulo": "Tax calculations",
+            "texto": "Tax, personal income tax (IRPF), labor, corporate and more, in Portuguese."
+          },
+          {
+            "titulo": "Tax lookups and documents",
+            "texto": "CNPJ (company tax ID), NF-e, NFS-e, CT-e, SPED, Simples and the reform."
+          },
+          {
+            "titulo": "Invoicing API integration",
+            "texto": "Integrates invoice issuing through an API in PHP."
+          },
+          {
+            "titulo": "SPED Fiscal reader",
+            "texto": "Imports EFD ICMS/IPI into a database and analyzes inventory."
+          },
+          {
+            "titulo": "National NFS-e",
+            "texto": "Issuing and lookups under the national NFS-e standard."
+          },
+          {
+            "titulo": "Invoicing API reference",
+            "texto": "Complete reference for an invoice issuing API."
+          },
+          {
+            "titulo": "Tax document XML",
+            "texto": "Reads and generates NF-e, NFS-e, CT-e and MDF-e XML using the official schema."
+          }
+        ],
+        "plataformas": "ICP-Brasil digital certificate · Emissor Nacional NFS-e · City governments (municipal NFS-e) · SEFAZ (NF-e and NFC-e) · SEFAZ (CT-e and MDF-e) · Portal do Simples Nacional and MEI · Serpro Integra Contador · e-CAC · Official IBS/CBS calculator · SPED · Nota Gateway (eNotas) · Focus NFe · NFE.io · PlugNotas · Nuvem Fiscal · Bling · Omie · Conta Azul · Tiny (Olist ERP)",
+        "como_trabalha": "Gets the invoice request or tax question from the main agent, checks with the owner and delivers the issued invoice or the guidance with its source.",
+        "passos": [
+          "Gets to know the company: CNPJ, regime, what it sells, city and where it issues invoices today",
+          "Points out the right tax document for each operation, with the source",
+          "Prepares the invoice and shows the summary with codes, amounts and taxes for you to check",
+          "Tests first in the test environment and only issues in production after your yes",
+          "Stores the XML and PDF and records the number, access key, protocol and status of each invoice"
+        ],
+        "turnos": [
+          "Daily, morning: rejected, pending or contingency invoices, with the reason for each rejection",
+          "Weekly, Monday: issued and canceled invoices, numbers to void and certificates close to expiring",
+          "Monthly, on the 1st: calendar of your regime's obligations with each date checked against the official source",
+          "Yearly: MEI, Simples and Lucro Presumido or Lucro Real filings and the following year's reform dates"
+        ],
+        "resultados": [
+          "Assessment of which tax document applies to each of the company's operations",
+          "Invoice checked in the test environment and issued in production only after your yes, with XML and PDF stored",
+          "The reason for each SEFAZ or city government rejection and the suggested fix",
+          "Monthly calendar of your regime's ancillary filing obligations",
+          "Alerts for the tax reform dates (IBS, CBS and IS) that affect the company",
+          "Reading and cross-checking of the SPED Fiscal and the XMLs sent by you or your accountant"
+        ],
+        "treinamentos": [
+          "NF-e, NFC-e, national and municipal NFS-e, CT-e and MDF-e",
+          "MEI, Simples Nacional, Lucro Presumido and Lucro Real",
+          "Consumption tax reform (IBS, CBS and IS)",
+          "Ancillary obligations: SPED, EFD-Contribuições, EFD-Reinf, DCTFWeb and DAS",
+          "ICP-Brasil digital certificates and test environments on invoicing platforms"
+        ],
+        "como_pedir": [
+          "Ask Maria to prepare the service invoice for this client so I can check it.",
+          "I want Maria to explain whether it's worth leaving Simples Nacional.",
+          "Ask Maria to find out why SEFAZ rejected this invoice.",
+          "I want Maria to put together my company's tax calendar for this month."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "aline-juridico",
+        "nome": "Aline",
+        "cargo": "Legal specialist",
+        "area": "Production",
+        "imagem": "assets/agentes/aline-juridico.webp",
+        "resumo": "Contracts, LGPD, trademark registration with INPI and lawsuits, with the law as the source.",
+        "o_que_faz": [
+          "Drafts and reviews contracts and flags risky clauses",
+          "Compares contract versions",
+          "Writes terms of use and privacy policies",
+          "Handles trademark registration with INPI",
+          "Monitors lawsuits and official publications"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Brazilian legal base",
+            "texto": "Contracts, LGPD and INPI with the law as the source."
+          },
+          {
+            "titulo": "Contract and DJe analysis",
+            "texto": "Contract analysis, DJe monitoring and a procedural calculator."
+          },
+          {
+            "titulo": "CNJ lookups",
+            "texto": "How to query the CNJ's public APIs."
+          },
+          {
+            "titulo": "Commercial law, privacy and IP",
+            "texto": "Review of commercial contracts, privacy and intellectual property."
+          },
+          {
+            "titulo": "Full LGPD",
+            "texto": "DPIA (RIPD), consent, incidents, DPA, data subject requests and more."
+          },
+          {
+            "titulo": "Lawsuits and deadlines",
+            "texto": "Lawsuits on DataJud, DJe, deadlines and monitoring."
+          },
+          {
+            "titulo": "Contract redline",
+            "texto": "Generates a Word file with tracked changes and a redline PDF."
+          },
+          {
+            "titulo": "Risky clause review",
+            "texto": "Detects risky clauses by category."
+          },
+          {
+            "titulo": "Legal routine for contracts and risk",
+            "texto": "Contract review, NDA triage, risk and legal responses."
+          },
+          {
+            "titulo": "Legal platforms",
+            "texto": "E-signature, lawsuits and the Official Gazette."
+          },
+          {
+            "titulo": "Trademark registration with INPI",
+            "texto": "From the prior-art search to tracking in the RPI."
+          }
+        ],
+        "plataformas": "Clicksign · D4Sign · DocuSign · ZapSign · Autentique · Datajud (CNJ) · PJe and MNI · e-SAJ (TJSP) · DJEN · Domicílio Judicial Eletrônico · Diário Oficial da União (INLABS) · Jusbrasil · Escavador · Judit · JUIT · ADVBOX · Projuris ADV · Astrea · Legal One · INPI (pePI, e-INPI, GRU, e-Marcas, RPI)",
+        "como_trabalha": "Steps in when the team needs a contract, a signature, a trademark or a privacy policy, and returns the opinion with its source for the owner to approve.",
+        "passos": [
+          "Understands the request and sorts the subject: contract, signature, LGPD, trademark, lawsuit or publication",
+          "Reads the law and the official source before stating anything and cites the article for each point",
+          "Reviews the contract with a HIGH, MEDIUM and LOW risk matrix and proposes alternative wording",
+          "Shows each action with external effect and its cost, and only executes after your yes",
+          "Delivers with what's verified, what's inferred and what's pending kept separate, with the recommendation to validate with a lawyer"
+        ],
+        "turnos": [
+          "Daily, morning: the previous day's publications, new case updates and a short list of open deadlines",
+          "Daily, late afternoon: stalled signature envelopes and actions awaiting your approval",
+          "Weekly, Tuesday: check of the INPI gazette for your trademark applications",
+          "Weekly: open LGPD data subject requests and the deadline for each",
+          "Monthly: contracts expiring, renewing or due for adjustment in the next 60 days and trademarks close to renewal"
+        ],
+        "resultados": [
+          "Contract review with a summary, risky clauses, the article of law and alternative wording",
+          "Version comparison as a Word file with tracked changes or a redline PDF",
+          "Terms of use and privacy policy under the LGPD, Marco Civil da Internet and CDC (Consumer Protection Code)",
+          "Trademark feasibility dossier with the class, payment slip and step-by-step filing guide",
+          "Daily report of publications, case updates and deadlines",
+          "Signature envelopes prepared and sent only after your yes"
+        ],
+        "treinamentos": [
+          "Contracts under the Civil Code, the CDC and the Economic Freedom Law",
+          "LGPD, Marco Civil da Internet and ANPD guidance",
+          "Trademark registration with INPI, from application to grant",
+          "Electronic signatures and their legal validity in Brazil",
+          "Case lookups on CNJ, DJEN and the Diário Oficial da União"
+        ],
+        "como_pedir": [
+          "Ask Aline to review this service agreement and flag the risks.",
+          "I want Aline to compare the new version of the contract with the previous one.",
+          "Ask Aline to write my website's privacy policy under the LGPD.",
+          "I want Aline to check whether I can register my trademark with INPI."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "geane-rh",
+        "nome": "Geane",
+        "cargo": "Human Resources specialist",
+        "area": "Production",
+        "imagem": "assets/agentes/geane-rh.webp",
+        "resumo": "Handles the full people cycle: recruiting, onboarding paperwork, payroll, time tracking, development and terminations, all within the CLT.",
+        "o_que_faz": [
+          "Writes job descriptions and interview scripts",
+          "Screens résumés against clear criteria",
+          "Builds hiring checklists and onboarding plans",
+          "Calculates vacation and severance pay with a full calculation breakdown",
+          "Explains eSocial and FGTS Digital deadlines and events",
+          "Tracks people metrics"
+        ],
+        "habilidades": [
+          {
+            "titulo": "HR process library",
+            "texto": "146 HR playbooks, from recruiting to people analytics."
+          },
+          {
+            "titulo": "Labor calculations",
+            "texto": "Net salary, severance, INSS, CLT vs. contractor (PJ) and retirement."
+          },
+          {
+            "titulo": "HR rules: CLT, eSocial and time tracking",
+            "texto": "Labor law, time tracking, FGTS, INSS, IRRF and eSocial with the official source for each fact."
+          },
+          {
+            "titulo": "Organizational assessment",
+            "texto": "Organizational assessment, pulse surveys and change readiness."
+          },
+          {
+            "titulo": "Corporate HR documents",
+            "texto": "Job postings, interviews, onboarding, performance, compensation and workplace climate."
+          },
+          {
+            "titulo": "eSocial event validator",
+            "texto": "Lists and validates eSocial events offline."
+          },
+          {
+            "titulo": "HR methods",
+            "texto": "Templates for job postings, interviews, onboarding, performance, climate and analytics."
+          },
+          {
+            "titulo": "HR platforms",
+            "texto": "What each HR, time tracking and benefits platform does, how to connect it and the step by step."
+          },
+          {
+            "titulo": "HR playbooks across 9 areas",
+            "texto": "HR department map and people analytics."
+          },
+          {
+            "titulo": "Recruiting and screening",
+            "texto": "Screening, scoring, comparison, interviews and offers."
+          }
+        ],
+        "plataformas": "Gupy · Kenoby · Sólides Recrutamento · Pandapé · LinkedIn Recruiter · Indeed · InfoJobs · Workday · Greenhouse · Lever · BambooHR · Convenia · Factorial · Sólides Gestão · Tangerino · Pontomais · Ahgora · Oitchau · Senior · TOTVS RH · ADP · Feedz · Qulture.Rocks · Caju · Flash · VR Benefícios · Alelo · eSocial · FGTS Digital",
+        "como_trabalha": "Steps in when the subject is people: takes the request from the main agent, delivers the job posting, calculation or plan ready to go and hands it back to the owner for approval.",
+        "passos": [
+          "Understands the request and the company's context: employees, collective bargaining agreement and systems in use",
+          "Checks every legal figure (rate, bracket, deadline) against the CLT, eSocial and FGTS Digital rules",
+          "Agrees on the criteria with you before opening any résumés and never uses discriminatory criteria",
+          "Shows every system change as a draft and only executes after your yes",
+          "Delivers calculations with a full breakdown and the article of law for the accountant or payroll department to validate"
+        ],
+        "turnos": [
+          "Daily, morning: missing or inconsistent time records, new candidates and the day's due dates",
+          "Weekly, Monday: hiring funnel, upcoming vacation deadlines, probation periods ending in 15 days and the week's new hires",
+          "Monthly, before close: payroll check, eSocial calendar and the FGTS Digital payment slip",
+          "Every six months: pay transparency report and review of psychosocial risks",
+          "Yearly: harassment training and planning of the performance cycle and the climate survey"
+        ],
+        "resultados": [
+          "Job description, screening criteria and interview kit ready for approval",
+          "Candidate ranking with a score per criterion and an individual rationale",
+          "Payroll check before close, with the calculation breakdown for INSS, IRRF and FGTS",
+          "Vacation, 13th-month salary and severance calculations with the article of law, for the accountant to validate",
+          "The month's eSocial and FGTS Digital calendar and alerts for probation periods, occupational health exams (ASO) and vacations",
+          "30, 60 and 90-day onboarding plan, performance cycle and climate survey"
+        ],
+        "treinamentos": [
+          "CLT, working hours, electronic time tracking (Portaria 671) and vacations",
+          "eSocial, FGTS Digital, INSS and IRRF",
+          "Recruiting, fair screening and structured interviews",
+          "Onboarding, performance, workplace climate and people analytics",
+          "LGPD applied to candidate and employee data"
+        ],
+        "como_pedir": [
+          "Ask Geane to write the inside sales job posting and the interview script.",
+          "I want Geane to screen the résumés for this position.",
+          "Ask Geane to calculate this employee's severance with the full calculation breakdown.",
+          "I want Geane to put together the onboarding plan for the new hire."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "ruth-prospeccao",
+        "nome": "Ruth",
+        "cargo": "Prospecting · finds and warms up new clients",
+        "area": "Traffic and prospecting",
+        "imagem": "assets/agentes/ruth-prospeccao.webp",
+        "resumo": "Ruth prospects new clients. She finds contacts that match your ideal customer profile, organizes the lists and warms up the first contact so the sales team can take over.",
+        "o_que_faz": [
+          "Finds contacts that match your ideal customer profile",
+          "Organizes and qualifies the prospecting lists",
+          "Warms up the first contact and passes the lead to the sales team"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Google prospecting",
+            "texto": "Finds businesses by niche and city on Google Maps."
+          },
+          {
+            "titulo": "Instagram prospecting",
+            "texto": "Captures leads from people who follow or comment on a benchmark profile."
+          },
+          {
+            "titulo": "Facebook prospecting",
+            "texto": "Captures Facebook business pages by keyword."
+          },
+          {
+            "titulo": "Enrichment and verification",
+            "texto": "Fills in and checks each lead's contact details."
+          },
+          {
+            "titulo": "Lead dashboard",
+            "texto": "Publishes the leads to a dashboard with Excel export."
+          },
+          {
+            "titulo": "Approved first contact",
+            "texto": "Prepares the first message and only sends it with your approval."
+          }
+        ],
+        "plataformas": "Google Maps · Instagram · Facebook · LinkedIn Sales Navigator · Apollo · Hunter · Snov.io · Lusha · Econodata · Speedio · Casa dos Dados · CRM · WhatsApp Business · Email",
+        "como_trabalha": "Works at the top of the funnel: finds and qualifies leads, publishes them to the dashboard and the CRM, and passes the first contact, approved by the owner, to the sales team.",
+        "passos": [
+          "Understands the request and settles the ideal customer profile with you",
+          "Picks the right source for that profile",
+          "Runs a small sample and shows the result and the estimated cost before scaling up",
+          "Cleans, verifies and qualifies each lead, with the reason for reaching out",
+          "Publishes to the lead dashboard and the CRM and prepares the first contact for your approval"
+        ],
+        "turnos": [
+          "Daily, morning: lead capture for the active campaign up to the day's target, plus a short report",
+          "Daily, late afternoon: queue of first contacts awaiting your approval",
+          "Weekly, Monday: review of the ideal customer profile with the week's numbers",
+          "Monthly: database cleanup and cost-per-source report"
+        ],
+        "resultados": [
+          "Lead lists that match your ideal customer profile",
+          "Enriched and verified contacts",
+          "Lead dashboard with Excel export",
+          "Contacts created in the CRM with the campaign tag",
+          "Draft first message for each lead, ready to approve"
+        ],
+        "treinamentos": [
+          "Defining the ideal customer profile",
+          "B2B prospecting on Google Maps, Instagram, Facebook and company databases",
+          "Contact enrichment and verification",
+          "Best practices for cold email and first contact on WhatsApp",
+          "LGPD in prospecting"
+        ],
+        "como_pedir": [
+          "I want Ruth to find dental clinics in Curitiba.",
+          "Ask Ruth to capture the people commenting on the @reference profile.",
+          "I want Ruth to put together a list of companies in my niche from Facebook.",
+          "Ask Ruth to prepare the first contact for this week's leads so I can approve it."
+        ],
+        "visivel": true
+      },
+      {
+        "id": "boris-engenharia",
+        "nome": "Boris",
+        "cargo": "Software engineer · plans and builds complex systems",
+        "area": "Production",
+        "imagem": "assets/agentes/boris-engenharia.webp",
+        "resumo": "Boris is the team's software engineer. When the idea is a real system, such as an ERP, a CRM, a multi-client SaaS or a management dashboard, he's the one who plans the whole structure and is responsible for the infrastructure, the database, client isolation, security, deployment and scaling.",
+        "o_que_faz": [
+          "Turns the brief for your app idea into a build plan with stack, architecture, database, isolation and phases",
+          "Builds ERPs, CRMs, multi-client SaaS, dashboards and internal systems",
+          "Designs the database and guarantees that one client's data never shows up for another",
+          "Sets up the server, deployment, backups, monitoring and infrastructure security",
+          "Supervises Paulo on large projects and reviews every delivery before it reaches you"
+        ],
+        "habilidades": [
+          {
+            "titulo": "Systems building",
+            "texto": "Takes the request all the way to a live system, with proof."
+          },
+          {
+            "titulo": "Systems architecture",
+            "texto": "Designs or reviews the architecture with ten principles and a checklist."
+          },
+          {
+            "titulo": "Modular ERP",
+            "texto": "Builds multi-client ERPs with a fixed core and installable modules."
+          },
+          {
+            "titulo": "Client isolation",
+            "texto": "Guarantees that one client's data never shows up for another."
+          },
+          {
+            "titulo": "Deployment and operations",
+            "texto": "Puts it live with backups, monitoring and fast rollback."
+          },
+          {
+            "titulo": "Supervising Paulo",
+            "texto": "Splits up the coding work and reviews every delivery."
+          }
+        ],
+        "plataformas": "PostgreSQL · Redis · Docker · Caddy · Cloudflare · Hostinger · Vercel",
+        "como_trabalha": "Sônia calls Boris when you send in the idea for an app or a large system. He plans the structure, splits the work into phases, puts Paulo on the code parts when the project is large, reviews everything and hands back the system live with proof that it works.",
+        "passos": [
+          "Gets the brief for your app idea from Sônia",
+          "Interviews you until the scope is clear and writes the specification",
+          "Plans the stack, architecture, database, client isolation and phases",
+          "Builds the core and hands the code parts to Paulo on large projects",
+          "Reviews security, isolation and robustness before delivering",
+          "Puts it live with backups, monitoring and proof for each item"
+        ],
+        "turnos": [
+          "On demand: steps in when you send the idea for a new system or ask for a big change to an existing one",
+          "Weekly: health check, backups and updates for the systems he put live",
+          "Monthly: security review and capacity review for growth"
+        ],
+        "resultados": [
+          "Build plan with stack, architecture, database and phases",
+          "Live systems, such as ERPs, CRMs, SaaS and dashboards",
+          "Database with each client isolated from the others",
+          "Deployment with backups, monitoring and fast rollback in case of failure",
+          "Delivery report with proof for each item"
+        ],
+        "treinamentos": [
+          "Complete systems-building method: specification, architecture, build, review and delivery",
+          "Systems architecture in 10 steps",
+          "Building modular ERPs with a fixed core and installable modules",
+          "PostgreSQL databases with per-client isolation",
+          "Infrastructure, deployment, security and scaling"
+        ],
+        "como_pedir": [
+          "I want Boris to plan a management system for my clinic.",
+          "Ask Boris to set up the structure of a SaaS I can sell to multiple clients.",
+          "I want Boris to review the security and isolation of my system.",
+          "Ask Boris to build a dashboard with my company's numbers."
+        ],
+        "visivel": true
+      }
+    ],
+    "chamada": {
+      "visivel": true,
+      "secao": "especialistas",
+      "texto": "21 specialists, ready to go. You choose how many join your team.",
+      "botao": {
+        "texto": "Build my team",
+        "link": "#planos"
+      },
+      "botao_secundario": {
+        "texto": "See Sônia in action",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      },
+      "nota": ""
+    }
+  },
+  "comando": {
+    "visivel": true,
+    "etiqueta": "You're in charge",
+    "titulo": "The AI does the work. You make the calls.",
+    "texto": "Every action Sônia takes follows a rule agreed on during setup. Routine work, she handles. Sensitive work, she prepares and waits for your OK. Dangerous work, she doesn't do.",
+    "zonas": [
+      {
+        "cor": "verde",
+        "nome": "Green zone",
+        "titulo": "Does it on her own",
+        "itens": [
+          "Research, organize and summarize",
+          "Write drafts of copy, posts and proposals",
+          "Answer clients on WhatsApp and in Instagram Direct based on her training",
+          "Track deadlines and flag what's stalled"
+        ]
+      },
+      {
+        "cor": "amarela",
+        "nome": "Yellow zone",
+        "titulo": "Prepares it and asks for your OK",
+        "itens": [
+          "Send a proposal or quote to a client",
+          "Post on social media and send mass messages",
+          "Book an appointment on your calendar",
+          "Hiring, firing, giving discounts and any spending"
+        ]
+      },
+      {
+        "cor": "vermelha",
+        "nome": "Red zone",
+        "titulo": "Never does it",
+        "itens": [
+          "Expose a password or client data",
+          "Delete data or mix one company's information with another's",
+          "Make up a price, deadline or number",
+          "Give tax, contract or investment opinions in place of a licensed professional"
+        ]
+      }
+    ],
+    "nota": "The exact rules for each zone are set with you during setup, and can change later."
+  },
+  "conselho": {
+    "visivel": true,
+    "etiqueta": "Executive Council",
+    "titulo": "Facing a decision and not sure what to do?",
+    "texto": "The team carries out what you ask. But what about before it goes to the team? Before you hire one more person, before you give that discount, or when you want a second opinion on a new venture, call Sônia and ask her to take it to the Council. She brings in the advisors who know the subject, pulls their views together and gives you back a single recommendation, showing where they disagree. If you approve, the team gets the tasks with deadlines.",
+    "conselheiros": [
+      {
+        "nome": "Otávio",
+        "area": "Operations and team",
+        "texto": "Shows where work gets stuck and what you can stop doing.",
+        "imagem": "assets/agentes/otavio-operacoes.webp",
+        "video": "assets/video/conselho/otavio.mp4",
+        "legenda": "assets/video/conselho/otavio.pt-BR.vtt",
+        "duracao": "0:16"
+      },
+      {
+        "nome": "Lívia",
+        "area": "Marketing and sales",
+        "texto": "Decides with you who to sell to and what to say.",
+        "imagem": "assets/agentes/livia-marketing-vendas.webp",
+        "video": "assets/video/conselho/livia.mp4",
+        "legenda": "assets/video/conselho/livia.pt-BR.vtt",
+        "duracao": "0:17"
+      },
+      {
+        "nome": "Fernando",
+        "area": "Finance",
+        "texto": "Projects your cash flow and shows whether the decision fits in it.",
+        "imagem": "assets/agentes/fernando-financas.webp",
+        "video": "assets/video/conselho/fernando.mp4",
+        "legenda": "assets/video/conselho/fernando.pt-BR.vtt",
+        "duracao": "0:15"
+      },
+      {
+        "nome": "Nina",
+        "area": "Technology and data",
+        "texto": "Picks the simplest system and keeps your clients' data secure.",
+        "imagem": "assets/agentes/nina-tecnologia.webp",
+        "video": "assets/video/conselho/nina.mp4",
+        "legenda": "assets/video/conselho/nina.pt-BR.vtt",
+        "duracao": "0:20"
+      }
+    ],
+    "rotulo_passos": "How it works",
+    "passos": [
+      "You share your question or problem with Sônia, by text or voice message, and ask her to take it to the Council for guidance and suggestions.",
+      "She calls in the right advisors and pulls their views into one recommendation.",
+      "You approve, change it or drop it. Once you approve, the team gets the tasks with deadlines and a date to check the result."
+    ],
+    "limite": "Taxes, payroll and contracts stay with your accountant and your lawyer. The Council tells you what to ask them.",
+    "preco": "Included in Magnata. On Starter and Elite, an add-on for R$ 1.997 per year.",
+    "botao": {
+      "texto": "See the Council in action",
+      "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+    },
+    "dica_video": "Tap a portrait to hear, in under 20 seconds, how each advisor helps."
+  },
+  "economia": {
+    "visivel": true,
+    "etiqueta": "Savings",
+    "titulo": "What would all these employees cost?",
+    "texto": "The table has 14 roles and 21 people because sales customer service alone takes 8 SDRs: the owner's clone, Davi and the 6 salespeople. Nobody hires all of that at once. But just the five that already come with Starter would cost R$ 30.821 per month with people, including CLT (Brazilian labor law) payroll charges: an assistant (Sônia), a web designer (Juliana, who builds the pages and coordinates production), a developer (Paulo), a copywriter (Jonathan) and an SDR (the owner's clone). Over a year, that's R$ 369.851. Starter costs R$ 4.997 per year, about R$ 416 per month, plus the AI subscription. The table shows the cost of each role done by people; the full team is on Magnata.",
+    "encargos_percentual": 68,
+    "horas_mes": 220,
+    "rotulo_total_mes": "If you hired people for every role, per month",
+    "rotulo_total_ano": "Per year",
+    "rotulo_agente": "With an agent",
+    "valor_agente": "No payroll charges",
+    "linhas": [
+      {
+        "cargo": "Executive assistant",
+        "tarefa": "Take requests, assign tasks and follow up on deliveries",
+        "salario": 2894.08,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Web designer",
+        "tarefa": "Create landing pages, ads and layouts",
+        "salario": 3846.43,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Project manager",
+        "tarefa": "Plan sprints and meet deadlines",
+        "salario": 14040.08,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Developer",
+        "tarefa": "Build websites, systems and integrations",
+        "salario": 6061.3,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Copywriter",
+        "tarefa": "Write copy, scripts and emails",
+        "salario": 3092.95,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Social media manager",
+        "tarefa": "Analyze viral videos and plan content",
+        "salario": 2885.5,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Customer success analyst",
+        "tarefa": "Run funnels, conversations and automations",
+        "salario": 4131.66,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Paid traffic analyst",
+        "tarefa": "Run and optimize paid campaigns",
+        "salario": 4914.34,
+        "pessoas": 1
+      },
+      {
+        "cargo": "SDR",
+        "tarefa": "Respond to and qualify leads, and book meetings",
+        "salario": 2451,
+        "pessoas": 8
+      },
+      {
+        "cargo": "Prospecting SDR",
+        "tarefa": "Find and warm up new clients",
+        "salario": 2451,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Financial analyst",
+        "tarefa": "Accounts, cash flow and reports",
+        "salario": 4961.11,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Tax analyst",
+        "tarefa": "Check invoices and organize the tax routine for the accountant",
+        "salario": 4922.89,
+        "pessoas": 1
+      },
+      {
+        "cargo": "Lawyer",
+        "tarefa": "Prepare and review contracts for the lawyer to sign",
+        "salario": 5710.12,
+        "pessoas": 1
+      },
+      {
+        "cargo": "HR analyst",
+        "tarefa": "Recruiting, routines and culture",
+        "salario": 4429.41,
+        "pessoas": 1
+      }
+    ],
+    "nota": "Hourly cost calculated on 220 hours per month, the standard CLT workload. The comparison does not include the cost of the AI subscription, which is purchased separately. In tax and legal, the agent prepares and checks: the opinion and the signature stay with your accountant and your lawyer.",
+    "fontes": "Sources: national average salary for each role on Salario.com.br (Novo CAGED data, 09/2025 to 08/2026, accessed 10/2026). Paid traffic: Marketing Analyst (CBO 1423-35), since there is no dedicated CBO code. SDR: Jooble, junior SDR (06/2026), since there is no dedicated CBO code. Employer charges and costs of 68% on top of salary, according to Buk (11/2025) and Contabilizei (12/2025).",
+    "chamada": {
+      "visivel": true,
+      "texto": "That's what it would cost with people. Sônia's most complete plan costs R$ 15.997 per year, less than the cheapest role in this table costs in a year.",
+      "botao": {
+        "texto": "I want this team at this price",
+        "link": "#planos"
+      },
+      "botao_secundario": {
+        "texto": "",
+        "link": ""
+      },
+      "nota": "30-day guarantee on every plan"
+    }
+  },
+  "diferenciais": {
+    "visivel": true,
+    "etiqueta": "After you pay",
+    "titulo": "You're not left alone with the tool.",
+    "itens": [
+      {
+        "titulo": "Access arrives in your inbox",
+        "texto": "As soon as payment is confirmed, your dashboard access arrives by email and you can start using it right away. It comes with a link to book your onboarding at the time that suits you."
+      },
+      {
+        "titulo": "One onboarding session",
+        "texto": "During onboarding, we set Sônia up for your business. You're not stuck waiting until then: every page of the platform has a manual and guidance on how to use it."
+      },
+      {
+        "titulo": "Support on every plan",
+        "texto": "Still have a question? Our support agent answers at any hour on WhatsApp (21) 99901-2520 and by email at atendimento@primecircle.app.br. On Magnata, you also get human support on business days, 9 a.m. to 6 p.m., and 4 one-on-one mentoring sessions of 1 hour each."
+      },
+      {
+        "titulo": "30-day guarantee",
+        "texto": "If within 30 days of payment you decide not to continue, we refund 100% of what you paid. Just ask by email or WhatsApp."
+      }
+    ]
+  },
+  "depoimentos": {
+    "visivel": false,
+    "etiqueta": "Who's using it",
+    "titulo": "See who has already put Sônia to work.",
+    "itens": [
+      {
+        "nome": "Client name",
+        "empresa": "Company",
+        "texto": "What changed in the operation after Sônia.",
+        "imagem": "",
+        "video": ""
+      }
+    ]
+  },
+  "quem": {
+    "visivel": true,
+    "etiqueta": "Who created Sônia",
+    "nome": "Marcus Godoy",
+    "cargo": "Founder of Godoy Prime Realty. Real Estate Personal Shopper and appraiser accredited by the Rio de Janeiro State Court (TJRJ). CRECI PF 80.199 RJ.",
+    "formacao": "Degree in Marketing and Business Administration, with an MBA in Knowledge Management and Business Intelligence from UFRJ.",
+    "imagem": "assets/quem/marcus.jpg",
+    "numeros": [
+      {
+        "valor": "30+",
+        "rotulo": "years in sales and commercial roles"
+      },
+      {
+        "valor": "6",
+        "rotulo": "years leading Godoy Prime Realty"
+      }
+    ],
+    "texto": "I spent more than 30 years in sales and commercial roles before becoming a real estate broker in 2020. Nearly two decades of that were in telecom, at the major carriers, leading sales, channels and key accounts. After that came consulting for new companies and serving as head of sales and marketing.\n\nI built Prime Circle for my own operation, and the AI agents ran first at my real estate agency: customer service, content, video and an internal council for the big decisions. What worked in practice is what I offer with Sônia. I set yours up with your processes in the onboarding session and, on Magnata, I follow the operation with you in the one-on-one mentoring sessions.",
+    "rotulo_provas": "Where this already runs",
+    "provas": [],
+    "links": [
+      {
+        "texto": "LinkedIn",
+        "link": "https://www.linkedin.com/in/marcusgodoy"
+      },
+      {
+        "texto": "Godoy Prime Realty",
+        "link": ""
+      }
+    ]
+  },
+  "planos": {
+    "visivel": true,
+    "etiqueta": "Plans",
+    "titulo": "Choose the size of your team",
+    "texto": "Pay with each plan's button, by Pix (instant payment) in full or by card in up to 12 installments. Access arrives by email as soon as payment is confirmed, and you can start using it right away: every page of the platform has a manual and guidance on how to use it. All plans come with a 30-day guarantee.",
+    "itens": [
+      {
+        "nome": "SONIA Starter",
+        "selo": "",
+        "destaque": false,
+        "preco": "R$ 4.997",
+        "periodo": "per year",
+        "parcelamento": "or 12 payments of R$ 433,75 by card (total R$ 5.205,09)",
+        "itens": [
+          "5 agents: Sônia, Juliana, Paulo, Jonathan and the owner's clone",
+          "Up to 5 routines (tasks that repeat on their own)",
+          "Uses ChatGPT as its brain (paid AI subscription, purchased by you)",
+          "1 live onboarding session, at the time you choose",
+          "Support by WhatsApp and email, with a support agent at any hour",
+          "Executive Council as an add-on: 4 advisors for your decisions, for R$ 1.997 per year",
+          "30-day guarantee"
+        ],
+        "botao": {
+          "texto": "Subscribe now",
+          "link": "https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc?ref=42cfa2c8135d15c8dc"
+        }
+      },
+      {
+        "nome": "SONIA Elite",
+        "selo": "",
+        "destaque": true,
+        "preco": "R$ 7.997",
+        "periodo": "per year",
+        "parcelamento": "or 12 payments of R$ 694,14 by card (total R$ 8.329,76)",
+        "itens": [
+          "16 agents: everyone on Starter, plus Rafael, Bianca, Amanda, the traffic strategist, Davi and 6 salespeople",
+          "Up to 20 routines (tasks that repeat on their own)",
+          "Works with ChatGPT or other AI models, your choice (AI subscription or API key, purchased by you)",
+          "1 live onboarding session, at the time you choose",
+          "Support by WhatsApp and email, with a support agent at any hour",
+          "Executive Council as an add-on: 4 advisors for your decisions, for R$ 1.997 per year",
+          "30-day guarantee"
+        ],
+        "botao": {
+          "texto": "Subscribe now",
+          "link": "https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c?ref=42cfa2c8135d15c8dc"
+        }
+      },
+      {
+        "nome": "SONIA Magnata",
+        "selo": "With mentoring and the Council",
+        "destaque": false,
+        "preco": "R$ 15.997",
+        "periodo": "per year",
+        "parcelamento": "or 12 payments of R$ 1.388,52 by card (total R$ 16.662,28)",
+        "itens": [
+          "Sônia and all 21 specialists: everyone on Elite, plus finance, tax, legal, HR, prospecting and software engineering",
+          "Up to 50 routines (tasks that repeat on their own)",
+          "Works with ChatGPT or other AI models, your choice (AI subscription or API key, purchased by you)",
+          "Can use more than one AI model at the same time, each on the task where it performs best",
+          "4 one-on-one mentoring sessions of 1 hour each with Prime Circle",
+          "Support by WhatsApp and email: a support agent at any hour and human support on business days, 9 a.m. to 6 p.m.",
+          "Everything in the Elite plan, including the onboarding session",
+          "Executive Council included: 4 advisors for decisions on operations, sales, finance and technology (R$ 1.997 per year on the other plans)",
+          "30-day guarantee"
+        ],
+        "botao": {
+          "texto": "Subscribe now",
+          "link": "https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d?ref=42cfa2c8135d15c8dc"
+        }
+      }
+    ],
+    "nota": "Not included in the price: the AI subscription (on Starter, ChatGPT, from about US$ 20 per month; on Elite and Magnata, the model you choose), which you purchase and pay for directly with the provider. For WhatsApp customer service: hosting a server for the Evolution API and two artificial intelligence API keys, paid per use, separate from the ChatGPT subscription. For Instagram: Zernio, free up to 10 thousand messages per month. And any other tool you want to connect to the agents."
+  },
+  "agencia": {
+    "visivel": false,
+    "etiqueta": "Choose your path",
+    "titulo": "Two ways to put AI agents to work making money for you.",
+    "caminhos": [
+      {
+        "etiqueta": "To use in your business",
+        "titulo": "Get your own Sônia",
+        "itens": [
+          "An orchestrator that plans, delegates and checks before delivering",
+          "Copy, design, code, paid traffic and sales on WhatsApp",
+          "Finance, tax, legal and HR",
+          "Memory, password vault and task board that are yours alone"
+        ],
+        "botao": {
+          "texto": "I want my Sônia",
+          "link": "#contato"
+        }
+      },
+      {
+        "etiqueta": "To sell to your clients",
+        "titulo": "Become an agency",
+        "itens": [
+          "Agency dashboard with your clients and your sales",
+          "Each client gets their own agent, isolated from the others",
+          "Option with your brand, your domain and your bot",
+          "Recurring revenue that grows without growing your team"
+        ],
+        "botao": {
+          "texto": "I want to be an agency",
+          "link": "#contato"
+        }
+      }
+    ]
+  },
+  "contato": {
+    "visivel": true,
+    "etiqueta": "Talk to the team",
+    "titulo": "Prefer to talk before you subscribe?",
+    "texto": "Leave your details. Our team will reach out on WhatsApp and show you Sônia in action.",
+    "whatsapp": "5521999012520",
+    "endpoint": "https://script.google.com/macros/s/AKfycby2YqnLILR8g_TAchSajMimLHhTkTJ7bK0DVaaoscHBeLN1rKL78PcPkYYXDjyfbi89YQ/exec",
+    "rotulo_nome": "Full name",
+    "rotulo_email": "Your best email",
+    "rotulo_whatsapp": "WhatsApp with area code",
+    "rotulo_interesse": "What are you looking for?",
+    "interesses": [
+      "Get my own Sônia",
+      "See a demo",
+      "Ask a question"
+    ],
+    "consentimento": "I agree to be contacted by the Prime Circle team about this request, by email and WhatsApp, and to the use of my data for this purpose, under the Privacy Policy and the LGPD (Brazil's data protection law). I can request deletion at any time.",
+    "botao": "Send",
+    "mensagem_sucesso": "Got it. The team will reach out to you on WhatsApp.",
+    "nota": "Your data is used only so our team can talk to you about this request. Nothing is sold.",
+    "link_politica": "politica-de-privacidade.html"
+  },
+  "faq": {
+    "visivel": true,
+    "etiqueta": "Questions",
+    "titulo": "Frequently asked questions",
+    "itens": [
+      {
+        "pergunta": "Do I need to know how to code?",
+        "resposta": "No. You talk to Sônia in Portuguese, in the dashboard or on Telegram, and she coordinates the rest. Every screen in the dashboard has a step-by-step guide."
+      },
+      {
+        "pergunta": "Is Sônia a fit for my type of business?",
+        "resposta": "The team covers the functions almost every business has: marketing, sales and customer service from Starter up, and finance, tax, legal and HR on Magnata. If you want to confirm your case, talk to the team before you subscribe."
+      },
+      {
+        "pergunta": "Is one client's data kept separate from the others?",
+        "resposta": "Yes. Each client has their own agent, their own memory and their own password vault, isolated from the others."
+      },
+      {
+        "pergunta": "Does it work with my WhatsApp?",
+        "resposta": "Yes, for serving your customers: the sales specialists answer on WhatsApp and in Instagram Direct. The WhatsApp connection uses the Evolution API, an unofficial system installed on a server of yours, and the customer service uses two artificial intelligence API keys, paid per use, separate from the ChatGPT subscription. Because it's not the official WhatsApp connection, there is a risk of the number being blocked. To give Sônia tasks, you use Telegram or the dashboard."
+      },
+      {
+        "pergunta": "How much does it cost?",
+        "resposta": "Plans are annual. You pay with each plan's button, by Pix in full or by card in up to 12 installments, and access arrives by email as soon as payment is confirmed. What changes between them is how many agents are unlocked, how many automated routines you can have and, on Magnata, the one-on-one mentoring with Prime Circle and the Executive Council. The AI subscription is purchased separately. All plans come with a 30-day guarantee."
+      },
+      {
+        "pergunta": "What is the Executive Council?",
+        "resposta": "It's four advisors, covering operations and team, marketing and sales, finance, and technology and data, for the decisions that affect your cash and your team. You tell Sônia about the decision, she brings together the ones who know the subject and gives you back a single recommendation. If you approve, the team gets the tasks. It's included in Magnata and costs R$ 1.997 per year as an add-on for Starter and Elite."
+      },
+      {
+        "pergunta": "Does the Council replace my accountant or my lawyer?",
+        "resposta": "No. The Council helps you decide using your company's numbers and information. Taxes, payroll, contracts and data protection applied to your case stay with your accountant and your lawyer. When the matter is theirs, the Council tells you what to ask."
+      },
+      {
+        "pergunta": "What's not included in the price?",
+        "resposta": "The AI subscription (on Starter, ChatGPT, from about US$ 20 per month; on Elite and Magnata, the model you choose), which you purchase and pay for directly with the provider. For WhatsApp customer service: hosting a server for the Evolution API and two artificial intelligence API keys, paid per use, separate from the ChatGPT subscription. For Instagram: Zernio, free up to 10 thousand messages per month. And any other tool you want to connect to the agents."
+      },
+      {
+        "pergunta": "What if the AI goes down?",
+        "resposta": "Sônia depends on AI providers, such as ChatGPT, and on your subscription's quota. If a provider goes down or the quota runs out, she can't respond until the service comes back. That's why we don't promise operation without any interruption."
+      },
+      {
+        "pergunta": "Is there a guarantee?",
+        "resposta": "Yes. If within 30 days of payment you decide not to continue, we refund 100% of what you paid. Just ask by email at atendimento@primecircle.app.br or on WhatsApp."
+      },
+      {
+        "pergunta": "How do I reach the team?",
+        "resposta": "Before subscribing, through the form on this page or by booking a demo. After subscribing, on WhatsApp (21) 99901-2520 or by email at atendimento@primecircle.app.br: our support agent answers at any hour, on every plan, and on Magnata there is also human support on business days, 9 a.m. to 6 p.m."
+      }
+    ]
+  },
+  "final": {
+    "visivel": true,
+    "titulo": "Sônia and the team are ready.",
+    "texto": "All that's left is for you to choose the size of the team.",
+    "botao": {
+      "texto": "See the plans",
+      "link": "#planos"
+    }
+  },
+  "rodape": {
+    "aviso": "Salary and savings figures are public market references. There is no promise of guaranteed revenue: results depend on your operation and your sales.",
+    "copyright": "© 2026 Prime Circle. All rights reserved.",
+    "links": [
+      {
+        "texto": "Privacy Policy",
+        "link": "politica-de-privacidade.html"
+      },
+      {
+        "texto": "WhatsApp (21) 99901-2520",
+        "link": "https://wa.me/5521999012520"
+      }
+    ]
+  },
+  "empresa": {
+    "razao_social": "",
+    "cnpj": "58.409.058/0001-73",
+    "email": "atendimento@primecircle.app.br",
+    "whatsapp_exibicao": "(21) 99901-2520"
+  }
+}

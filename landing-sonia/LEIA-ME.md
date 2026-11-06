@@ -121,3 +121,32 @@ python3 ferramentas/adaptar-design.py "design-original/<export>.html" index.html
 ```
 
 Depois disso, confira se o `conteudo.json` desta pasta é o que você quer no ar, porque é ele que vale, e não a cópia embutida.
+
+## Idiomas: português, espanhol e inglês (desde 06/11/2026)
+
+- O topo tem o seletor **PT · ES · EN**. O endereço de cada versão é `?lang=es` ou `?lang=en`; sem
+  isso, a página usa a última escolha do visitante ou o idioma do navegador (espanhol ou inglês),
+  e cai no português em qualquer outro caso. O link de indicação (`?ref=`) continua funcionando
+  junto.
+- O **português continua sendo a fonte**: o editor e o `conteudo.json` não mudaram. As versões
+  traduzidas são `conteudo.es.json` e `conteudo.en.json`, montadas a partir das traduções
+  guardadas em `ferramentas/i18n/es.json` e `en.json`.
+- As frases fixas do design (botões de som, calculadora, abas do currículo, mensagens do
+  formulário) são traduzidas na própria página pelo dicionário `ui` desses mesmos arquivos.
+- Os vídeos continuam falados em português; as legendas aparecem no idioma escolhido
+  (`*.es.vtt` e `*.en.vtt`, ao lado das `*.pt-BR.vtt`).
+- Preços continuam em reais. O checkout, a área do cliente e a política de privacidade estão só
+  em português.
+
+### Depois de mudar um texto em português
+
+```bash
+python3 ferramentas/i18n/montar.py
+```
+
+O script lista os textos **pendentes**: os que mudaram em português depois da tradução. Eles
+aparecem em português na versão traduzida até alguém traduzir. Para traduzir os pendentes,
+gere a lista com `python3 ferramentas/i18n/extrair.py /tmp/pt.json`, traduza só os pendentes
+no mesmo formato e rode `python3 ferramentas/i18n/montar.py importar es arquivo.json` (idem
+`en`). Depois rode o `montar.py` de novo e publique `conteudo.es.json`, `conteudo.en.json` e as
+legendas que mudaram.

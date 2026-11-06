@@ -41,6 +41,10 @@ def tpl(t):
         '<meta property="og:url" content="' + ENDERECO + '">\n'
         '<meta property="og:image" content="' + ENDERECO + 'assets/og-sonia.jpg">\n'
         '<meta name="twitter:card" content="summary_large_image">\n'
+        '<link rel="alternate" hreflang="pt-BR" href="' + ENDERECO + '">\n'
+        '<link rel="alternate" hreflang="es" href="' + ENDERECO + '?lang=es">\n'
+        '<link rel="alternate" hreflang="en" href="' + ENDERECO + '?lang=en">\n'
+        '<link rel="alternate" hreflang="x-default" href="' + ENDERECO + '">\n'
         '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n')
     assert '<meta name="viewport"' in t
     t = t.replace('<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -96,6 +100,13 @@ def tpl(t):
               '<track kind="captions" srclang="pt-BR" label="Português" src="assets/video/sonia-apresentacao.pt-BR.vtt" default></video>\n'
               '<div class="pc-legenda" aria-hidden="true"></div>\n'
               '<button type="button" class="pc-som" aria-pressed="false"><span class="pc-som-ico" aria-hidden="true"></span><span class="pc-som-txt">Ouvir a Sônia</span></button>\n</div>', 'video-abertura')
+    # 06/11/2026: página em três idiomas; a mensagem do WhatsApp sai no idioma de quem preenche
+    t = troca(t, 'const msg = `Olá! Sou ${dados.nome}.',
+              'const msg = window.pcMsgWhats ? window.pcMsgWhats(dados) : `Olá! Sou ${dados.nome}.', 'msg-whatsapp')
+    t = troca(t, 'const mp = (p.parcelamento || "").match(/(\\d+\\s*x)\\s*de\\s*(R\\$\\s*[\\d.,]+)\\s*(.*)$/i);',
+              'const mp = (p.parcelamento || "").match(/(\\d+\\s*x|\\d+\\s+[A-Za-zÀ-ú]+)\\s+(de|of)\\s+(R\\$\\s*[\\d.,]+)\\s*(.*)$/i);', 'parcelamento-regex')
+    t = troca(t, 'vezes: mp ? mp[1].replace(/\\s/g, "") + " de" : "", parcela: mp ? mp[2] : p.preco,\n          condicao: mp ? mp[3] : p.periodo,',
+              'vezes: mp ? (/x$/i.test(mp[1]) ? mp[1].replace(/\\s/g, "") : mp[1]) + " " + mp[2] : "", parcela: mp ? mp[3] : p.preco,\n          condicao: mp ? mp[4] : p.periodo,', 'parcelamento-campos')
     # formulário: grava na planilha (endpoint) E abre o WhatsApp, em vez de um ou outro (02/11/2026).
     # Envio sem esperar resposta e em text/plain, o formato que o Google Apps Script aceita de outro site.
     t = troca(t, '''    if (ct.endpoint) {
@@ -442,6 +453,14 @@ html.pc-cons-aberto,html.pc-cons-aberto body{overflow:hidden!important}
 .pc-chamada-nota{flex:1 1 100%;font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
 .pc-chamada [hidden]{display:none!important}
 @media (max-width:600px){.pc-chamada{gap:14px}.pc-chamada-btns{flex:1 1 100%;width:100%}.pc-chamada-sec{border-bottom:0;min-height:44px}}
+/* 06/11/2026: seletor de idioma PT · ES · EN no topo (script em IDIOMA) */
+.pc-idioma{display:flex;align-items:center;gap:2px;order:5;font-family:var(--pc-font-mono,"JetBrains Mono",monospace);font-size:11px;letter-spacing:.12em}
+.pc-idioma a{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:44px;padding:0 6px;color:rgba(245,241,230,.62);text-decoration:none;border-radius:6px}
+.pc-idioma a:hover{color:#F5F1E6}
+.pc-idioma a[aria-current]{color:#C9A84C;font-weight:600}
+.pc-idioma a:focus-visible{outline:2px solid #C9A84C;outline-offset:2px}
+@media (max-width:900px){.pc-idioma{order:0;margin-left:auto}.pc-idioma~.pc-burger{margin-left:4px!important}}
+@media (max-width:600px){.pc-idioma{gap:0;letter-spacing:.06em}.pc-idioma a{min-width:28px;padding:0 3px}.pc-hdr{column-gap:10px!important}}
 </style>
 """
     t = troca(t, '<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">\n',
@@ -532,7 +551,7 @@ document.addEventListener("click", function (e) {
   function botao(b) {
     b.setAttribute("aria-pressed", somLigado ? "true" : "false");
     var txt = b.querySelector(".pc-som-txt");
-    if (txt) txt.textContent = somLigado ? "Desligar o som" : "Ouvir a Sônia";
+    if (txt) txt.textContent = window.pcT(somLigado ? "Desligar o som" : "Ouvir a Sônia");
   }
   document.addEventListener("click", function (e) {
     var b = e.target.closest && e.target.closest(".pc-som");
@@ -560,7 +579,7 @@ document.addEventListener("click", function (e) {
       grade.insertAdjacentElement("afterend", b);
     }
     var n = grade.querySelectorAll("article").length;
-    var txt = "Ver o time todo";
+    var txt = window.pcT("Ver o time todo");
     if (b.textContent !== txt) b.textContent = txt;
     var esconder = n <= 6;
     if (b.hidden !== esconder) b.hidden = esconder;
@@ -608,9 +627,9 @@ document.addEventListener("click", function (e) {
     });
     var fig = el("figure", "pc-vid-player"), tela = el("div", "pc-vid-tela");
     var video = el("video", "pc-vid-video"); video.setAttribute("playsinline", ""); video.preload = "none";
-    video.setAttribute("aria-label", "Vídeo da Sônia");
+    video.setAttribute("aria-label", window.pcT("Vídeo da Sônia"));
     var leg = el("div", "pc-vid-leg"); leg.setAttribute("aria-hidden", "true");
-    var play = el("button", "pc-vid-play"); play.type = "button"; play.setAttribute("aria-label", "Assistir"); play.appendChild(el("span"));
+    var play = el("button", "pc-vid-play"); play.type = "button"; play.setAttribute("aria-label", window.pcT("Assistir")); play.appendChild(el("span"));
     tela.appendChild(video); tela.appendChild(leg); tela.appendChild(play);
     fig.appendChild(tela); fig.appendChild(el("figcaption", "pc-vid-nota"));
     grid.appendChild(lista); grid.appendChild(fig);
@@ -701,7 +720,7 @@ document.addEventListener("click", function (e) {
       if (midia.classList.contains("pc-cons-midia")) return;
       midia.classList.add("pc-cons-midia");
       midia.setAttribute("role", "button"); midia.tabIndex = 0;
-      midia.setAttribute("aria-label", "Assistir ao vídeo de " + m.nome);
+      midia.setAttribute("aria-label", window.pcF("Assistir ao vídeo de {nome}", { nome: m.nome }));
       midia.dataset.consNome = m.nome;
       var b = el("span", "pc-cons-play"); b.setAttribute("aria-hidden", "true"); b.appendChild(el("span", "pc-cons-tri"));
       midia.appendChild(b);
@@ -729,9 +748,9 @@ document.addEventListener("click", function (e) {
   function abrir(m, de) {
     fechar(); origem = de; pausarOutros();
     modal = el("div", "pc-cons-modal");
-    modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", "Vídeo de " + m.nome);
+    modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true"); modal.setAttribute("aria-label", window.pcF("Vídeo de {nome}", { nome: m.nome }));
     var caixa = el("div", "pc-cons-caixa");
-    var x = el("button", "pc-cons-fechar", "×"); x.type = "button"; x.setAttribute("aria-label", "Fechar o vídeo");
+    var x = el("button", "pc-cons-fechar", "×"); x.type = "button"; x.setAttribute("aria-label", window.pcT("Fechar o vídeo"));
     var v = document.createElement("video"); v.className = "pc-cons-video";
     v.setAttribute("playsinline", ""); v.controls = true; v.preload = "auto";
     if (m.imagem) v.poster = m.imagem;
@@ -866,18 +885,18 @@ document.addEventListener("click", function (e) {
     if (vals[0]) vals[0].textContent = brl0(mes);
     if (vals[1]) vals[1].textContent = brl0(mes * 12);
     var notas = sec.querySelectorAll("span[style*='clamp(36px'] + span");
-    if (notas[0]) notas[0].textContent = pessoas + (pessoas === 1 ? " pessoa na folha" : " pessoas na folha") + (ligadas < linhasEco().length ? ", " + ligadas + " de " + linhasEco().length + " funções" : "");
+    if (notas[0]) notas[0].textContent = window.pcF((pessoas === 1 ? "{n} pessoa na folha" : "{n} pessoas na folha") + (ligadas < linhasEco().length ? ", {a} de {b} funções" : ""), { n: pessoas, a: ligadas, b: linhasEco().length });
     sec.querySelectorAll("tbody tr").forEach(function (tr, i) { tr.classList.toggle("pc-eco-off", !!desligadas[i]); });
     sec.querySelectorAll(".pc-calc-chip").forEach(function (b) { b.setAttribute("aria-pressed", String(!desligadas[+b.dataset.i])); });
     var res = sec.querySelector(".pc-calc-res");
-    if (res) res.textContent = ligadas === linhasEco().length ? "Todas as funções marcadas." : ligadas + " de " + linhasEco().length + " funções marcadas.";
+    if (res) res.textContent = ligadas === linhasEco().length ? window.pcT("Todas as funções marcadas.") : window.pcF("{a} de {b} funções marcadas.", { a: ligadas, b: linhasEco().length });
   }
   function montarCalc() {
     var sec = document.getElementById("economia"); if (!sec || !dados || !linhasEco().length) return;
     if (sec.querySelector(".pc-calc")) { recalcular(); return; }
     var cab = sec.firstElementChild; if (!cab) return;
     var box = document.createElement("div"); box.className = "pc-calc";
-    var rot = document.createElement("span"); rot.className = "pc-calc-rot"; rot.textContent = "Monte a conta da sua empresa: toque nas funções que você tem ou precisaria contratar"; box.appendChild(rot);
+    var rot = document.createElement("span"); rot.className = "pc-calc-rot"; rot.textContent = window.pcT("Monte a conta da sua empresa: toque nas funções que você tem ou precisaria contratar"); box.appendChild(rot);
     var chips = document.createElement("div"); chips.className = "pc-calc-chips";
     linhasEco().forEach(function (l, i) {
       var b = document.createElement("button"); b.type = "button"; b.className = "pc-calc-chip"; b.dataset.i = i;
@@ -887,8 +906,8 @@ document.addEventListener("click", function (e) {
     box.appendChild(chips);
     var ac = document.createElement("div"); ac.className = "pc-calc-acoes";
     var res = document.createElement("span"); res.className = "pc-calc-res"; ac.appendChild(res);
-    var bt = document.createElement("button"); bt.type = "button"; bt.className = "pc-calc-todas"; bt.textContent = "Marcar todas"; ac.appendChild(bt);
-    var bn = document.createElement("button"); bn.type = "button"; bn.className = "pc-calc-nenhuma"; bn.textContent = "Desmarcar todas"; ac.appendChild(bn);
+    var bt = document.createElement("button"); bt.type = "button"; bt.className = "pc-calc-todas"; bt.textContent = window.pcT("Marcar todas"); ac.appendChild(bt);
+    var bn = document.createElement("button"); bn.type = "button"; bn.className = "pc-calc-nenhuma"; bn.textContent = window.pcT("Desmarcar todas"); ac.appendChild(bn);
     box.appendChild(ac);
     cab.insertAdjacentElement("afterend", box);
     recalcular();
@@ -994,7 +1013,140 @@ previa = r'''<script>
 })();
 </script>
 '''
-s = s.replace('<title>Bundled Page</title>', '<title>' + html.escape(seo.get('titulo', 'SONIA')) + '</title>\n' + previa + FECHA_MENU, 1)
+# 4) idiomas (06/11/2026): português, espanhol e inglês na mesma página.
+# O português continua vindo do conteudo.json; ?lang=es|en (ou a escolha guardada, ou o idioma do
+# navegador) troca o arquivo por conteudo.es.json / conteudo.en.json, as legendas .pt-BR.vtt pelas
+# .es.vtt / .en.vtt, e as frases fixas do design pelo dicionário de ferramentas/i18n/<idioma>.json.
+# Os arquivos traduzidos são montados por ferramentas/i18n/montar.py.
+import os
+_dic = {}
+for _l in ('es', 'en'):
+    _f = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'i18n', _l + '.json')
+    _dic[_l] = json.load(open(_f, encoding='utf-8')).get('ui', {}) if os.path.exists(_f) else {}
+IDIOMA = r"""<script>
+(function () {
+  var NOMES = { pt: "PT", es: "ES", en: "EN" }, HTML_LANG = { pt: "pt-BR", es: "es", en: "en" };
+  var CHAVE = "sonia-idioma", previa = /[?&]previa=1/.test(location.search);
+  var pedido = (location.search.match(/[?&]lang=(pt|es|en)(?:&|$)/) || [])[1], salvo = null;
+  try { salvo = localStorage.getItem(CHAVE); } catch (e) {}
+  if (!NOMES[salvo]) salvo = null;
+  var nav = String((navigator.languages && navigator.languages[0]) || navigator.language || "").slice(0, 2).toLowerCase();
+  var lang = previa ? "pt" : (pedido || salvo || (nav === "es" || nav === "en" ? nav : "pt"));
+  if (pedido && !previa) { try { localStorage.setItem(CHAVE, pedido); } catch (e) {} }
+  window.PC_IDIOMA = lang;
+  document.documentElement.lang = HTML_LANG[lang];
+  if (!previa && lang !== "pt" && !pedido) {
+    try { var u0 = new URL(location.href); u0.searchParams.set("lang", lang); history.replaceState(history.state, "", u0.href); } catch (e) {}
+  }
+  var D = __DIC__[lang] || {};
+  function tem(k) { return Object.prototype.hasOwnProperty.call(D, k); }
+  function t(pt) { return tem(pt) ? D[pt] : pt; }
+  window.pcT = t;
+  window.pcF = function (molde, v) { var r = t(molde); Object.keys(v).forEach(function (k) { r = r.split("{" + k + "}").join(v[k]); }); return r; };
+
+  // seletor PT · ES · EN no topo; o design pode redesenhar o cabeçalho, então ele é recolocado
+  function seletor() {
+    var hdr = document.querySelector("header.pc-hdr");
+    if (!hdr || hdr.querySelector(".pc-idioma")) return;
+    var box = document.createElement("div"); box.className = "pc-idioma"; box.setAttribute("role", "group"); box.setAttribute("aria-label", "Idioma · Language");
+    ["pt", "es", "en"].forEach(function (l) {
+      var a = document.createElement("a"); a.textContent = NOMES[l]; a.lang = HTML_LANG[l]; a.hreflang = HTML_LANG[l];
+      a.title = { pt: "Português", es: "Español", en: "English" }[l];
+      var u = new URL(location.href); u.searchParams.set("lang", l); a.href = u.pathname + u.search + u.hash;
+      if (l === lang) a.setAttribute("aria-current", "true");
+      a.addEventListener("click", function (e) {
+        e.preventDefault(); if (l === lang) return;
+        try { localStorage.setItem(CHAVE, l); } catch (x) {}
+        var v = new URL(location.href); v.searchParams.set("lang", l); location.href = v.href;
+      });
+      box.appendChild(a);
+    });
+    var chk = hdr.querySelector(".pc-menu-chk");
+    hdr.insertBefore(box, chk || null);
+  }
+
+  if (lang !== "pt") {
+    // arquivos do idioma: se faltar algum, cai no português sem quebrar a página
+    var buscar = window.fetch.bind(window);
+    window.fetch = function (u, o) {
+      var s = String(u && u.url || u);
+      var alvo = null;
+      if (/(^|\/)conteudo\.json(\?|$)/.test(s)) alvo = s.replace(/conteudo\.json/, "conteudo." + lang + ".json");
+      else if (/\.pt-BR\.vtt(\?|$)/.test(s)) alvo = s.replace(/\.pt-BR\.vtt/, "." + lang + ".vtt");
+      if (!alvo) return buscar(u, o);
+      return buscar(alvo, o).then(function (r) { return r.ok ? r : buscar(u, o); }, function () { return buscar(u, o); });
+    };
+    // frases fixas do design: tradução exata ou por molde ("{n} pessoas")
+    var PADRAO = { n: "[\\d.,]+", a: "[\\d.,]+", b: "[\\d.,]+", preco: "R\\$.+", nome: "\\S.*", empresa: "[A-Z].*" };
+    var moldes = Object.keys(D).filter(function (k) { return /\{\w+\}/.test(k); }).map(function (k) {
+      var nomes = [], re = "^" + k.replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace(/\\?\{(\w+)\\?\}/g, function (_, n) { nomes.push(n); return "(" + (PADRAO[n] || ".+?") + ")"; }) + "$";
+      return { re: new RegExp(re), nomes: nomes, tr: D[k] };
+    });
+    function traduz(txt) {
+      var k = txt.trim(); if (!k) return null;
+      var r = tem(k) ? D[k] : null;
+      if (r == null) {
+        for (var i = 0; i < moldes.length; i++) {
+          var m = k.match(moldes[i].re); if (!m) continue;
+          r = moldes[i].tr; moldes[i].nomes.forEach(function (n, j) { r = r.split("{" + n + "}").join(m[j + 1]); }); break;
+        }
+      }
+      if (r == null || r === k) return null;
+      return txt.replace(k, r);
+    }
+    var ATRIBS = ["aria-label", "placeholder", "title", "alt"];
+    // trava: se outro script insistir em regravar o mesmo texto, o tradutor desiste daquele nó
+    var vezes = new WeakMap();
+    function pode(n) { var c = (vezes.get(n) || 0) + 1; vezes.set(n, c); return c <= 30; }
+    function noTexto(n) {
+      var p = n.parentNode; if (!p || p.nodeName === "SCRIPT" || p.nodeName === "STYLE") return;
+      var r = traduz(n.nodeValue); if (r != null && pode(n)) n.nodeValue = r;
+    }
+    function elemento(el) {
+      if (el.nodeType !== 1) return;
+      ATRIBS.forEach(function (a) { var v = el.getAttribute(a); if (v) { var r = traduz(v); if (r != null && pode(el)) el.setAttribute(a, r); } });
+    }
+    function varrer(raiz) {
+      if (raiz.nodeType === 3) return noTexto(raiz);
+      if (raiz.nodeType !== 1) return;
+      elemento(raiz);
+      var w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT), n;
+      while ((n = w.nextNode())) { if (n.nodeType === 3) noTexto(n); else elemento(n); }
+    }
+    window.pcMsgWhats = function (d) {
+      return t("Olá! Sou {nome}. E-mail: {email}. WhatsApp: {whatsapp}. Interesse: {interesse}.")
+        .split("{nome}").join(d.nome).split("{email}").join(d.email).split("{whatsapp}").join(d.whatsapp)
+        .split("{interesse}").join(d.interesse || t("não informado"));
+    };
+    buscar("conteudo." + lang + ".json").then(function (r) { return r.ok ? r.json() : null; }).then(function (c) {
+      if (!c || !c.seo) return;
+      if (c.seo.titulo) document.title = c.seo.titulo;
+      var m = document.querySelector('meta[name="description"]'); if (m && c.seo.descricao) m.setAttribute("content", c.seo.descricao);
+    }).catch(function () {});
+  }
+
+  // o carregador do design troca o <body> depois de pronto: observar o documento inteiro, não o body
+  function iniciar() {
+    document.documentElement.lang = HTML_LANG[lang];
+    seletor();
+    if (lang !== "pt" && document.body) varrer(document.body);
+  }
+  new MutationObserver(function (lista) {
+      seletor();
+      if (lang === "pt") return;
+      lista.forEach(function (m) {
+        if (m.type === "characterData") noTexto(m.target);
+        else if (m.type === "attributes") elemento(m.target);
+        else m.addedNodes.forEach(varrer);
+      });
+  }).observe(document, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["aria-label", "placeholder", "title", "alt"] });
+  document.addEventListener("DOMContentLoaded", iniciar);
+  window.addEventListener("load", iniciar);
+  if (document.body) iniciar();
+})();
+</script>
+""".replace("__DIC__", json.dumps(_dic, ensure_ascii=False).replace("</", "<\\/"))
+s = s.replace('<title>Bundled Page</title>', '<title>' + html.escape(seo.get('titulo', 'SONIA')) + '</title>\n' + previa + IDIOMA + FECHA_MENU, 1)
 assert 'sonia-editor-rascunho' in s
 open(dst, 'w', encoding='utf-8').write(s)
 print('ok', len(s), 'conteudo removido:', uuid_conteudo)

@@ -48,6 +48,11 @@ if hostgator:
     txt = txt.replace('HOST_OFICIAL_RE', re.escape(host)).replace('HOST_OFICIAL', host)
     open(ht, 'w', encoding='utf-8').write(txt)
 json.dump(limpa(c), open(os.path.join(destino, 'conteudo.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
+# versões em espanhol e inglês (06/11/2026), montadas por ferramentas/i18n/montar.py
+for _l in ('es', 'en'):
+    _f = os.path.join(AQUI, 'conteudo.' + _l + '.json')
+    if os.path.exists(_f):
+        json.dump(limpa(json.load(open(_f, encoding='utf-8'))), open(os.path.join(destino, 'conteudo.' + _l + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
 
 proibido = re.compile(r'avalanche|naia\b|denderson|anthropic', re.I)
 achados = []
