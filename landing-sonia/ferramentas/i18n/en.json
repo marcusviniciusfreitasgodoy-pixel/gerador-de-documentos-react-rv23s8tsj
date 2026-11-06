@@ -22,7 +22,7 @@
   },
   "seo/descricao": {
    "pt": "A Sônia coordena até 21 especialistas de IA: conteúdo, anúncios, atendimento no WhatsApp, financeiro, notas fiscais, contratos e RH. Você pede em português e recebe pronto.",
-   "tr": "Sônia coordinates up to 21 AI specialists: content, ads, WhatsApp customer service, finance, invoices, contracts and HR. You ask in Portuguese and get the work back finished."
+   "tr": "Sônia coordinates up to 21 AI specialists: content, ads, WhatsApp customer service, finance, invoices, contracts and HR. You ask in English and get the work back finished."
   },
   "topo/menu/0/texto": {
    "pt": "Por onde começar",
@@ -418,7 +418,7 @@
   },
   "como_funciona/passos/0/texto": {
    "pt": "Por texto ou áudio, no Telegram ou no painel, em português.",
-   "tr": "By text or voice message, on Telegram or in the dashboard, in Portuguese."
+   "tr": "By text or voice message, on Telegram or in the dashboard, in English."
   },
   "como_funciona/passos/1/titulo": {
    "pt": "A Sônia planeja",
@@ -486,7 +486,7 @@
   },
   "time/agentes/0/resumo": {
    "pt": "A Sônia é a gerente da sua operação de inteligência artificial e o centro de comando da equipe. É a única que fala direto com você: recebe o pedido em português, planeja, quebra em tarefas, escolhe o especialista certo, delega, acompanha, valida o resultado e só então te entrega pronto. Trabalha o tempo todo, não dorme, não atrasa e não falta.",
-   "tr": "Sônia is the manager of your artificial intelligence operation and the team's command center. She's the only one who talks to you directly: she takes the request in Portuguese, plans, breaks it into tasks, picks the right specialist, delegates, follows up, checks the result and only then delivers it to you finished. She works around the clock, doesn't sleep, doesn't run late and doesn't miss a day."
+   "tr": "Sônia is the manager of your artificial intelligence operation and the team's command center. She's the only one who talks to you directly: she takes the request in English, plans, breaks it into tasks, picks the right specialist, delegates, follows up, checks the result and only then delivers it to you finished. She works around the clock, doesn't sleep, doesn't run late and doesn't miss a day."
   },
   "time/agentes/0/o_que_faz/0": {
    "pt": "Orquestra a equipe inteira de ponta a ponta: distribui copy pro Jonathan, código pro Paulo, prazos pro Rafael, vídeo viral pra Bianca, CRM pra Amanda, tráfego pro Estrategista de tráfego e prospecção pro squad do Davi",
@@ -562,11 +562,11 @@
   },
   "time/agentes/0/como_trabalha": {
    "pt": "É o seu ponto único de contato e o cérebro da operação. Recebe tudo em português, aciona os especialistas, cruza informação entre as áreas e garante que cada entrega volte revisada antes de chegar nas suas mãos.",
-   "tr": "She's your single point of contact and the brain of the operation. She takes everything in Portuguese, brings in the specialists, connects information across areas and makes sure every delivery comes back reviewed before it reaches you."
+   "tr": "She's your single point of contact and the brain of the operation. She takes everything in English, brings in the specialists, connects information across areas and makes sure every delivery comes back reviewed before it reaches you."
   },
   "time/agentes/0/passos/0": {
    "pt": "Recebe o seu pedido em português, por texto ou áudio no Telegram",
-   "tr": "Takes your request in Portuguese, by text or voice message on Telegram"
+   "tr": "Takes your request in English, by text or voice message on Telegram"
   },
   "time/agentes/0/passos/1": {
    "pt": "Planeja e quebra o pedido em tarefas",
@@ -5018,7 +5018,7 @@
   },
   "faq/itens/0/resposta": {
    "pt": "Não. Você conversa com a Sônia em português, pelo painel ou pelo Telegram, e ela coordena o resto. Cada tela do painel tem um passo a passo.",
-   "tr": "No. You talk to Sônia in Portuguese, in the dashboard or on Telegram, and she coordinates the rest. Every screen in the dashboard has a step-by-step guide."
+   "tr": "No. You talk to Sônia in English, in the dashboard or on Telegram, and she coordinates the rest. Every screen in the dashboard has a step-by-step guide."
   },
   "faq/itens/1/pergunta": {
    "pt": "A Sônia serve para o meu tipo de empresa?",

@@ -10,7 +10,7 @@
   },
   "seo": {
     "titulo": "SONIA · Delega lo operativo y enfócate en lo que mejor haces",
-    "descricao": "Sônia coordina hasta 21 especialistas de IA: contenido, anuncios, atención por WhatsApp, finanzas, facturas, contratos y RR. HH. Pides en portugués y lo recibes listo.",
+    "descricao": "Sônia coordina hasta 21 especialistas de IA: contenido, anuncios, atención por WhatsApp, finanzas, facturas, contratos y RR. HH. Pides en español y lo recibes listo.",
     "imagem_compartilhamento": "assets/og-sonia.jpg",
     "endereco": "https://sonia.primecircle.app.br/"
   },
@@ -305,7 +305,7 @@
     "passos": [
       {
         "titulo": "Tú pides",
-        "texto": "Por texto o audio, en Telegram o en el panel, en portugués."
+        "texto": "Por texto o audio, en Telegram o en el panel, en español."
       },
       {
         "titulo": "Sônia planifica",
@@ -337,7 +337,7 @@
         "cargo": "Orquestadora · gerente de la operación de IA",
         "area": "Mando y operación",
         "imagem": "assets/agentes/avatar-sonia.webp",
-        "resumo": "Sônia es la gerente de tu operación de inteligencia artificial y el centro de mando del equipo. Es la única que habla directamente contigo: recibe el pedido en portugués, planifica, lo divide en tareas, elige al especialista correcto, delega, da seguimiento, valida el resultado y solo entonces te lo entrega listo. Trabaja todo el tiempo, no duerme, no se retrasa y no falta.",
+        "resumo": "Sônia es la gerente de tu operación de inteligencia artificial y el centro de mando del equipo. Es la única que habla directamente contigo: recibe el pedido en español, planifica, lo divide en tareas, elige al especialista correcto, delega, da seguimiento, valida el resultado y solo entonces te lo entrega listo. Trabaja todo el tiempo, no duerme, no se retrasa y no falta.",
         "o_que_faz": [
           "Orquesta a todo el equipo de principio a fin: reparte el copy a Jonathan, el código a Paulo, los plazos a Rafael, el video viral a Bianca, el CRM a Amanda, el tráfico al Estratega de tráfico y la prospección al squad de Davi",
           "Conversa contigo por Telegram, por texto o audio, y te devuelve cada entrega revisada",
@@ -372,9 +372,9 @@
           }
         ],
         "plataformas": "Telegram · Panel · Instagram · Meta Ads · CRM · Vercel",
-        "como_trabalha": "Es tu único punto de contacto y el cerebro de la operación. Recibe todo en portugués, activa a los especialistas, cruza información entre las áreas y se asegura de que cada entrega vuelva revisada antes de llegar a tus manos.",
+        "como_trabalha": "Es tu único punto de contacto y el cerebro de la operación. Recibe todo en español, activa a los especialistas, cruza información entre las áreas y se asegura de que cada entrega vuelva revisada antes de llegar a tus manos.",
         "passos": [
-          "Recibe tu pedido en portugués, por texto o audio en Telegram",
+          "Recibe tu pedido en español, por texto o audio en Telegram",
           "Planifica y divide el pedido en tareas",
           "Elige al especialista correcto y delega cada parte",
           "Da seguimiento al avance y cruza información entre las áreas",
@@ -2387,7 +2387,7 @@
     "itens": [
       {
         "pergunta": "¿Necesito saber programar?",
-        "resposta": "No. Conversas con Sônia en portugués, desde el panel o por Telegram, y ella coordina el resto. Cada pantalla del panel tiene un paso a paso."
+        "resposta": "No. Conversas con Sônia en español, desde el panel o por Telegram, y ella coordina el resto. Cada pantalla del panel tiene un paso a paso."
       },
       {
         "pergunta": "¿Sônia sirve para mi tipo de empresa?",

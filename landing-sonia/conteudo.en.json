@@ -10,7 +10,7 @@
   },
   "seo": {
     "titulo": "SONIA · Hand off the operational work and focus on what you do best",
-    "descricao": "Sônia coordinates up to 21 AI specialists: content, ads, WhatsApp customer service, finance, invoices, contracts and HR. You ask in Portuguese and get the work back finished.",
+    "descricao": "Sônia coordinates up to 21 AI specialists: content, ads, WhatsApp customer service, finance, invoices, contracts and HR. You ask in English and get the work back finished.",
     "imagem_compartilhamento": "assets/og-sonia.jpg",
     "endereco": "https://sonia.primecircle.app.br/"
   },
@@ -305,7 +305,7 @@
     "passos": [
       {
         "titulo": "You ask",
-        "texto": "By text or voice message, on Telegram or in the dashboard, in Portuguese."
+        "texto": "By text or voice message, on Telegram or in the dashboard, in English."
       },
       {
         "titulo": "Sônia plans",
@@ -337,7 +337,7 @@
         "cargo": "Orchestrator · manager of the AI operation",
         "area": "Command and operations",
         "imagem": "assets/agentes/avatar-sonia.webp",
-        "resumo": "Sônia is the manager of your artificial intelligence operation and the team's command center. She's the only one who talks to you directly: she takes the request in Portuguese, plans, breaks it into tasks, picks the right specialist, delegates, follows up, checks the result and only then delivers it to you finished. She works around the clock, doesn't sleep, doesn't run late and doesn't miss a day.",
+        "resumo": "Sônia is the manager of your artificial intelligence operation and the team's command center. She's the only one who talks to you directly: she takes the request in English, plans, breaks it into tasks, picks the right specialist, delegates, follows up, checks the result and only then delivers it to you finished. She works around the clock, doesn't sleep, doesn't run late and doesn't miss a day.",
         "o_que_faz": [
           "Orchestrates the whole team end to end: copy goes to Jonathan, code to Paulo, deadlines to Rafael, viral video to Bianca, CRM to Amanda, paid traffic to the Traffic strategist and prospecting to Davi's squad",
           "Talks to you on Telegram, by text or voice message, and sends every delivery back to you reviewed",
@@ -372,9 +372,9 @@
           }
         ],
         "plataformas": "Telegram · Dashboard · Instagram · Meta Ads · CRM · Vercel",
-        "como_trabalha": "She's your single point of contact and the brain of the operation. She takes everything in Portuguese, brings in the specialists, connects information across areas and makes sure every delivery comes back reviewed before it reaches you.",
+        "como_trabalha": "She's your single point of contact and the brain of the operation. She takes everything in English, brings in the specialists, connects information across areas and makes sure every delivery comes back reviewed before it reaches you.",
         "passos": [
-          "Takes your request in Portuguese, by text or voice message on Telegram",
+          "Takes your request in English, by text or voice message on Telegram",
           "Plans and breaks the request into tasks",
           "Picks the right specialist and delegates each part",
           "Follows progress and connects information across areas",
@@ -2387,7 +2387,7 @@
     "itens": [
       {
         "pergunta": "Do I need to know how to code?",
-        "resposta": "No. You talk to Sônia in Portuguese, in the dashboard or on Telegram, and she coordinates the rest. Every screen in the dashboard has a step-by-step guide."
+        "resposta": "No. You talk to Sônia in English, in the dashboard or on Telegram, and she coordinates the rest. Every screen in the dashboard has a step-by-step guide."
       },
       {
         "pergunta": "Is Sônia a fit for my type of business?",
