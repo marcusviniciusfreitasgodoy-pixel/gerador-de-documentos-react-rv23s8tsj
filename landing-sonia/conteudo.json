@@ -2234,13 +2234,13 @@
     ]
   },
   "quem": {
-    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: assets/quem/marcus.jpg (800 x 800, a mesma do guia de imóveis internacionais, escolhida pelo dono em 04/11/2026); a seção recorta em 4:5. Se trocar, use retrato de 1200 px para cima. A prova 3 cita a base de escrituras: número agregado, sem dado individual. Texto da bio e etiqueta reescritos pelo dono em 05/11/2026 (etiqueta trocada para não repetir o 'Quem está por trás' da landing concorrente). Bloco 'Onde isso já roda' (3 provas) removido a pedido do dono em 05/11/2026; os textos estão no git (commit anterior a esta data). Lista vazia = bloco não aparece.",
+    "_aviso": "Fatos da bio conferidos no perfil do LinkedIn do dono em 04/11/2026 (linkedin.com/in/marcusgodoy): Godoy Prime Realty desde dez/2020, perito avaliador TJRJ, CRECI PF 80.199 RJ e PJ 11.841 RJ, 19 anos em telecom (Nextel e outras, 1995 a 2015), consultoria (2015 a 2018), diretor comercial e marketing (2018 a 2020), MBA UFRJ 2003 a 2004. Foto: assets/quem/marcus-sorriso.jpg (1000 x 1250, já em 4:5, sorriso de óculos com fundo do estúdio), trocada em 06/11/2026 entre quatro fotos de estúdio que o dono mandou; testadas com e sem fundo, ficou a com fundo. A anterior (assets/quem/marcus.jpg, 800 x 800) continua na pasta. Se trocar, use retrato de 1200 px para cima. A prova 3 cita a base de escrituras: número agregado, sem dado individual. Texto da bio e etiqueta reescritos pelo dono em 05/11/2026 (etiqueta trocada para não repetir o 'Quem está por trás' da landing concorrente). Bloco 'Onde isso já roda' (3 provas) removido a pedido do dono em 05/11/2026; os textos estão no git (commit anterior a esta data). Lista vazia = bloco não aparece.",
     "visivel": true,
     "etiqueta": "Quem criou a Sônia",
     "nome": "Marcus Godoy",
     "cargo": "Fundador da Godoy Prime Realty. Personal Shopper Imobiliário e perito avaliador credenciado pelo TJRJ. CRECI PF 80.199 RJ.",
     "formacao": "Graduado em Marketing e Administração, com MBA em Gestão do Conhecimento e Inteligência Empresarial pela UFRJ.",
-    "imagem": "assets/quem/marcus.jpg",
+    "imagem": "assets/quem/marcus-sorriso.jpg",
     "numeros": [
       {
         "valor": "30+",
