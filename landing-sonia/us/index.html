@@ -224,6 +224,25 @@ p{margin:0}
 .vframe{aspect-ratio:9/16;max-width:360px}
 .c1{top:24%}.c3{top:50%}.c5{top:70%}
 @media (max-width:900px){.vframe{max-width:320px}}
+.plan li.pick{display:grid;grid-template-columns:20px 1fr;padding:12px 12px 12px 10px;margin:0 -6px 4px;border-radius:10px;background:rgba(201,168,76,.10);border:1px solid rgba(201,168,76,.35)}
+.plan li.pick b{display:block;font-size:15px;color:var(--ivory)}
+.plan li.pick span{display:block;font-size:13px;color:var(--text-soft);margin-top:2px}
+.plan li.pick>*{grid-column:2}
+.monte{margin-top:28px;padding:28px;border-radius:14px;border:1px solid rgba(201,168,76,.28);background:var(--ink-2);display:grid;grid-template-columns:.9fr 2.1fr;gap:28px;align-items:start}
+.monte h3{font-size:clamp(24px,2.4vw,32px);line-height:1.1;margin:10px 0}
+.monte p{font-size:15px;line-height:1.6;color:var(--text-soft)}
+.monte-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+@media (max-width:1200px){.monte-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){.monte-grid{grid-template-columns:1fr 1fr}}
+.mg{display:grid;gap:8px;align-content:start}
+.mg b{font-family:var(--mono);font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.mg span{font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid rgba(245,241,230,.18);color:#E8E0CC;justify-self:start}
+.monte-n{grid-column:1/-1;margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)!important;text-align:center}
+@media (max-width:900px){.monte{grid-template-columns:1fr;padding:22px}}
+.monte-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+@media (max-width:1200px){.monte-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:700px){.monte-grid{grid-template-columns:1fr 1fr}}
+.mg span{font-size:13px}
 </style>
 </head>
 <body>
@@ -331,7 +350,7 @@ p{margin:0}
         <span class="pn">SONIA Starter</span>
         <span class="pp">$997<small>/month</small></span>
         <ul>
-          <li>5 agents: Sônia, Juliana, Paulo, Jonathan and the owner's clone</li>
+          <li class="pick"><b>Sônia + 4 specialists of your choice</b><span>Pick any 4 of the 21 specialties, in any combination</span></li>
           <li>Up to 5 routines (tasks that repeat on their own)</li>
           <li>Runs on ChatGPT (AI subscription purchased by you)</li>
           <li>1 live onboarding session</li>
@@ -340,11 +359,11 @@ p{margin:0}
         <a class="btn btn-line btn-sm" href="#book">Let's talk</a>
       </article>
       <article class="plan top">
-        <span class="badge">Full sales squad</span>
+        <span class="badge">16 agents on your team</span>
         <span class="pn">SONIA Elite</span>
         <span class="pp">$1,497<small>/month</small></span>
         <ul>
-          <li>16 agents: everyone on Starter plus Rafael, Bianca, Amanda, the traffic strategist, Davi and 6 SDRs</li>
+          <li class="pick"><b>Sônia + 15 specialists of your choice</b><span>16 agents in total, picked from the 21 specialties</span></li>
           <li>Up to 20 routines</li>
           <li>ChatGPT or another AI model of your choice (purchased by you)</li>
           <li>1 live onboarding session</li>
@@ -357,7 +376,7 @@ p{margin:0}
         <span class="pn">SONIA Magnata</span>
         <span class="pp">$2,997<small>/month</small></span>
         <ul>
-          <li>Sônia and all 21 specialists: everyone on Elite plus finance, tax, legal, HR, prospecting and software engineering</li>
+          <li class="pick"><b>Sônia + all 21 specialists</b><span>The full team, every specialty included</span></li>
           <li>Up to 50 routines</li>
           <li>More than one AI model at the same time, each on the task it does best</li>
           <li>4 one-on-one mentoring sessions of 1 hour</li>
@@ -366,6 +385,7 @@ p{margin:0}
         <a class="btn btn-line btn-sm" href="#book">Learn more</a>
       </article>
     </div>
+    <div class="monte"><div class="monte-txt"><span class="tag">Build your team</span><h3>Pick the specialties your business needs</h3><p>None is required. A sales rep, a contracts specialist and a copywriter on Starter, for example. Sônia coordinates whoever you choose.</p></div><div class="monte-grid"><div class="mg"><b>Command and operations</b><span>Operations lead</span><span>Project manager</span></div><div class="mg"><b>Content and production</b><span>Copywriter</span><span>Web developer</span><span>Viral video analyst</span><span>Software engineer</span></div><div class="mg"><b>Sales and customer service</b><span>Owner's clone</span><span>Sales lead</span><span>Sales rep (SDR) × 6</span><span>CRM manager</span><span>Prospecting</span></div><div class="mg"><b>Ads</b><span>Paid ads manager</span></div><div class="mg"><b>Finance, tax, legal and HR</b><span>Bookkeeping and finance</span><span>Sales tax and compliance</span><span>Contracts and legal</span><span>Human resources</span></div></div><p class="monte-n">21 specialties available</p></div>
     <p class="fine">Not included: the AI model subscription (ChatGPT starts at about US$ 20 a month), paid directly to the provider, and any other tool you connect. The Executive Council is available as an add-on on Starter and Elite.</p>
     <div class="cta-row"><a class="btn btn-gold" href="#book">Book a call</a></div>
   </div>
@@ -375,16 +395,16 @@ p{margin:0}
 <section class="sec dark" id="cost" style="background:#000;padding-top:0">
   <div class="wrap">
     <h2 class="h2">What this team would cost with people</h2>
-    <p class="lead" style="margin-top:14px">The same roles, hired in the US at the national median wage, plus employer costs.</p>
+    <p class="lead" style="margin-top:14px">An example team for each plan, hired in the US at the national median wage, plus employer costs.</p>
     <div class="cost">
-      <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="14" r="6"/><path d="M9 33c1.5-6.5 6-9.5 11-9.5s9.5 3 11 9.5"/></svg><h3>Starter roles</h3></header>
+      <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="14" r="6"/><path d="M9 33c1.5-6.5 6-9.5 11-9.5s9.5 3 11 9.5"/></svg><h3>Team of 5</h3></header>
         <dl><div><dt>People</dt><dd>5</dd></div><div><dt>Cost with people, per month</dt><dd>$55,192</dd></div><div><dt>SONIA Starter, per month</dt><dd>$997</dd></div></dl></article>
-      <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="14" cy="15" r="5"/><circle cx="27" cy="15" r="5"/><path d="M4 33c1-5.5 5-8 10-8s9 2.5 10 8M20 33c1-5.5 3-8 7-8s8 2.5 9 8"/></svg><h3>Elite roles</h3></header>
+      <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="14" cy="15" r="5"/><circle cx="27" cy="15" r="5"/><path d="M4 33c1-5.5 5-8 10-8s9 2.5 10 8M20 33c1-5.5 3-8 7-8s8 2.5 9 8"/></svg><h3>Team of 16</h3></header>
         <dl><div><dt>People</dt><dd>16</dd></div><div><dt>Cost with people, per month</dt><dd>$149,808</dd></div><div><dt>SONIA Elite, per month</dt><dd>$1,497</dd></div></dl></article>
-      <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="11" r="5"/><circle cx="9" cy="19" r="4"/><circle cx="31" cy="19" r="4"/><path d="M11 34c1.2-5.5 4.5-8 9-8s7.8 2.5 9 8"/></svg><h3>Magnata roles</h3></header>
+      <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="11" r="5"/><circle cx="9" cy="19" r="4"/><circle cx="31" cy="19" r="4"/><path d="M11 34c1.2-5.5 4.5-8 9-8s7.8 2.5 9 8"/></svg><h3>Team of 21</h3></header>
         <dl><div><dt>People</dt><dd>21</dd></div><div><dt>Cost with people, per month</dt><dd>$187,249</dd></div><div><dt>SONIA Magnata, per month</dt><dd>$2,997</dd></div></dl></article>
     </div>
-    <p class="fine">Sources: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics, national median annual wage, May 2025 (executive assistant, web designer, project management specialist, software developer, writer, marketing specialist, customer service representative, services sales representative, bookkeeping clerk, tax preparer, paralegal and HR specialist). Employer costs of 42.9% on top of wages: BLS Employer Costs for Employee Compensation, private industry, June 2026. The comparison does not include the AI subscription. These are reference figures, not a promise of savings or revenue: results depend on your operation.</p>
+    <p class="fine">Sources: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics, national median annual wage, May 2025 (executive assistant, web designer, project management specialist, software developer, writer, marketing specialist, customer service representative, services sales representative, bookkeeping clerk, tax preparer, paralegal and HR specialist). Employer costs of 42.9% on top of wages: BLS Employer Costs for Employee Compensation, private industry, June 2026. Example teams: 5 = executive assistant, web designer, developer, writer and sales rep; 16 = those plus project manager, social media, customer success, paid ads and 7 sales reps; 21 = every role. The cost changes with the specialties you pick. The comparison does not include the AI subscription. These are reference figures, not a promise of savings or revenue: results depend on your operation.</p>
     <div class="cta-row"><a class="btn btn-gold" href="#book">I want this team</a></div>
   </div>
 </section>
@@ -445,7 +465,7 @@ p{margin:0}
     <h2 class="h2">Questions owners ask</h2>
     <div class="faq">
       <details><summary>Do I need to know how to code?</summary><p>No. You talk to Sônia in English, in the dashboard or on Telegram, and she coordinates the rest. Every screen in the dashboard has a step-by-step guide.</p></details>
-      <details><summary>Does Sônia do things without asking me?</summary><p>Only routine work. Proposals, posts, bulk messages, bookings and any spending wait for your OK. The rules are agreed with you during setup and can change later.</p></details>
+      <details><summary>Can I choose which specialists are on my plan?</summary><p>Yes. On Starter, Sônia plus 4; on Elite, Sônia plus 15; on Magnata, all 21. You pick the specialties in any combination: a sales rep, a contracts specialist and a copywriter, for example. None is required.</p></details><details><summary>Does Sônia do things without asking me?</summary><p>Only routine work. Proposals, posts, bulk messages, bookings and any spending wait for your OK. The rules are agreed with you during setup and can change later.</p></details>
       <details><summary>Is it a fit for my type of business?</summary><p>The team covers what almost every business needs: marketing, sales, customer service, operations, finance, tax, legal and HR. If you want to confirm your case, book a call before you subscribe.</p></details>
       <details><summary>What's not included in the price?</summary><p>The AI model subscription, paid directly to the provider (ChatGPT starts at about US$ 20 a month), and any other tool you choose to connect.</p></details>
       <details><summary>What if the AI provider goes down?</summary><p>Sônia depends on AI providers such as ChatGPT and on your subscription's quota. If a provider is down or the quota runs out, she can't respond until the service is back. That's why we don't promise uninterrupted operation.</p></details>
