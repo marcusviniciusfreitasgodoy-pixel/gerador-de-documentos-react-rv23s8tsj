@@ -118,3 +118,11 @@ Nada de conteúdo se perde de vez: o que sai do corpo da página vai para o FAQ,
 ## Próximo passo
 
 Com as decisões acima, monto a versão nova numa cópia local, com as três línguas, e mostro as duas lado a lado (computador e celular) antes de publicar.
+
+## Montada em 06/11/2026 (branch claude/landing-enxuta, não publicada)
+
+Medição real da versão montada, no celular: **17 telas** (eram 29), **1.600 palavras** (eram 2.950), planos na **10ª tela** (era a 24ª). No computador: 10 telas (eram 18). A estimativa de 14 telas ficou otimista porque os planos e a economia continuam sendo os blocos mais altos.
+
+O que foi feito: realidade, vídeos, "Você no comando", Conselho, formulário e chamada final desligados (`visivel: false`, conteúdo guardado); 2 números da realidade numa faixa dos gargalos; "Quem" virou o diagnóstico, depois dos planos; "Depois que você paga" virou faixa compacta abaixo dos planos; tabela da economia recolhida; planos com 5 itens à vista e a nota do que não está incluído recolhida; FAQ de 11 para 8 (as 4 que saíram estão em `faq._fora_da_versao_enxuta`); dois botões iguais em toda a página e barra fixa no celular. As três línguas foram atualizadas.
+
+Decisões tomadas por padrão, para revisar: diagnóstico usa o mesmo link do Calendly de hoje; formulário fora; números da realidade = 80% e 33,6%; vídeos fora (só o da abertura).

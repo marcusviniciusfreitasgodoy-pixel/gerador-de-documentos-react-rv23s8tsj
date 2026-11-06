@@ -59,6 +59,9 @@ def montar():
             print(lang, ': sem tradução, pulei'); continue
         t = json.load(open(arq(lang), encoding='utf-8'))
         ok = {k: v['tr'] for k, v in t['conteudo'].items() if k in pt and pt[k] == v['pt']}
+        # texto que só mudou de lugar (pergunta reordenada, item de menu movido): mesma tradução
+        por_texto = {v['pt']: v['tr'] for v in t['conteudo'].values()}
+        ok.update({k: por_texto[v] for k, v in pt.items() if k not in ok and v in por_texto})
         pendentes = [k for k in pt if k not in ok]
         json.dump(trocar(c, (), ok), open(os.path.join(AQUI, 'conteudo.' + lang + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
         sem_leg = []

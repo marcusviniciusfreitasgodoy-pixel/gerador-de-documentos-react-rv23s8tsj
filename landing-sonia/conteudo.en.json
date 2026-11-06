@@ -25,10 +25,6 @@
         "link": "#time"
       },
       {
-        "texto": "Council",
-        "link": "#conselho"
-      },
-      {
         "texto": "Savings",
         "link": "#economia"
       },
@@ -37,18 +33,33 @@
         "link": "#planos"
       },
       {
+        "texto": "Assessment",
+        "link": "#quem"
+      },
+      {
         "texto": "Questions",
         "link": "#duvidas"
       }
     ],
     "botao": {
-      "texto": "See Sônia in action",
+      "texto": "Book an assessment",
       "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
     },
     "botao_area_cliente": {
       "visivel": true,
       "texto": "Client area",
       "link": "https://agentes.primecircle.app.br/login"
+    },
+    "barra": {
+      "visivel": true,
+      "assinar": {
+        "texto": "Subscribe",
+        "link": "#planos"
+      },
+      "diagnostico": {
+        "texto": "Book an assessment",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      }
     }
   },
   "hero": {
@@ -57,12 +68,12 @@
     "titulo_destaque": "and focus on what you do best.",
     "texto": "Posting content, answering on WhatsApp, putting together a proposal, closing out the cash, reviewing a contract: up to 21 AI specialists take this on at any hour, through Telegram or the dashboard. Team size depends on the plan. What you do with the hours and the money left over is your call.",
     "botao_principal": {
-      "texto": "I want my Sônia",
+      "texto": "See plans and subscribe",
       "link": "#planos"
     },
     "botao_secundario": {
-      "texto": "See the full math",
-      "link": "#economia"
+      "texto": "Book an assessment",
+      "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
     },
     "rotulo_avatares": "Up to 21 specialists on your team",
     "selos": [
@@ -91,7 +102,7 @@
     ]
   },
   "realidade": {
-    "visivel": true,
+    "visivel": false,
     "etiqueta": "The reality",
     "titulo": "Hiring is hard. Training is expensive. And the people you train leave.",
     "texto": "It's not just you. This is what business owners are living with today, in every industry.",
@@ -100,13 +111,15 @@
         "valor": "80%",
         "titulo": "Can't find people",
         "texto": "of employers in Brazil have trouble hiring. The global average is 72%.",
-        "fonte": "ManpowerGroup, 2026 Talent Shortage Survey"
+        "fonte": "ManpowerGroup, 2026 Talent Shortage Survey",
+        "faixa": true
       },
       {
         "valor": "33,6%",
         "titulo": "Turnover",
         "texto": "was the turnover rate in formal employment in Brazil in 2025.",
-        "fonte": "Novo CAGED, Brazilian Ministry of Labor and Employment"
+        "fonte": "Novo CAGED, Brazilian Ministry of Labor and Employment",
+        "faixa": true
       },
       {
         "valor": "11.8 million",
@@ -124,34 +137,34 @@
   },
   "gargalos": {
     "visivel": true,
-    "etiqueta": "Where to start",
-    "titulo": "Start with what's holding your business back.",
+    "etiqueta": "The reality",
+    "titulo": "Hiring is hard. Start with what slows your business down the most.",
     "texto": "Nobody needs all 21 on day one. Pick the problem that costs you the most today and see who handles it.",
     "itens": [
       {
         "titulo": "No time for content and ads",
-        "texto": "Jonathan writes, Bianca studies what goes viral in your niche, Paulo puts the page live and the traffic strategist runs the ads. You approve before anything is published.",
+        "texto": "Jonathan writes, Paulo puts the page live and the traffic strategist runs the ads. You approve before anything goes out.",
         "quem": "Jonathan and Paulo from Starter up. Bianca and the traffic strategist from Elite up."
       },
       {
         "titulo": "Customers reach out and wait too long for an answer",
-        "texto": "The owner's clone answers in Instagram Direct and on WhatsApp the way you would, qualifies whoever reaches out, and Davi carries the conversation through to a booked meeting. Everything is logged in the CRM.",
+        "texto": "The owner's clone answers on Direct and WhatsApp the way you would, and Davi takes the conversation all the way to a booked meeting.",
         "quem": "Owner's clone from Starter up. Davi, the squad and Amanda from Elite up."
       },
       {
         "titulo": "Finance, invoices and contracts eat up your day",
-        "texto": "Márcia reconciles the bank statement and projects cash flow, Maria checks the invoices and Aline reviews contracts. They do the prep work; your accountant and your lawyer still sign.",
+        "texto": "Márcia handles cash flow, Maria checks the invoices and Aline reviews contracts. Your accountant and your lawyer still sign off.",
         "quem": "Márcia, Maria and Aline, on Magnata only."
       },
       {
         "titulo": "The big decision falls on you, alone",
-        "texto": "Hiring one more person or giving that discount. Before you say yes, the Executive Council checks whether the cash can take it and whether operations can keep up, and gives you back a single recommendation.",
+        "texto": "Before you say yes, the Executive Council checks whether your cash and your operation can take it and gives you a single recommendation.",
         "quem": "Executive Council: included in Magnata, an add-on for Starter and Elite."
       }
     ]
   },
   "videos": {
-    "visivel": true,
+    "visivel": false,
     "etiqueta": "Sônia answers",
     "titulo": "Pick a question and hear the answer.",
     "texto": "Videos under a minute long, with captions. Tap a topic to watch.",
@@ -325,7 +338,7 @@
     "visivel": true,
     "etiqueta": "Team Sônia",
     "titulo": "One agent coordinates. The whole team delivers.",
-    "texto": "Sônia is the only one who talks to you. She takes the request, hands it to the right specialist, follows up and only delivers to you when it's finished. Click any agent to see their full résumé.",
+    "texto": "Sônia is the only one who talks to you: she takes the request, hands it to the right specialist and only delivers when it's ready. Proposals, posts and any spending wait for your OK.",
     "rotulo_orquestradora": "Team orchestrator",
     "rotulo_especialistas": "21 specialists working under Sônia's direction",
     "botao_curriculo": "See résumé",
@@ -1959,18 +1972,18 @@
       "secao": "especialistas",
       "texto": "21 specialists, ready to go. You choose how many join your team.",
       "botao": {
-        "texto": "Build my team",
+        "texto": "Subscribe",
         "link": "#planos"
       },
       "botao_secundario": {
-        "texto": "See Sônia in action",
+        "texto": "Book an assessment",
         "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
       },
       "nota": ""
     }
   },
   "comando": {
-    "visivel": true,
+    "visivel": false,
     "etiqueta": "You're in charge",
     "titulo": "The AI does the work. You make the calls.",
     "texto": "Every action Sônia takes follows a rule agreed on during setup. Routine work, she handles. Sensitive work, she prepares and waits for your OK. Dangerous work, she doesn't do.",
@@ -2012,7 +2025,7 @@
     "nota": "The exact rules for each zone are set with you during setup, and can change later."
   },
   "conselho": {
-    "visivel": true,
+    "visivel": false,
     "etiqueta": "Executive Council",
     "titulo": "Facing a decision and not sure what to do?",
     "texto": "The team carries out what you ask. But what about before it goes to the team? Before you hire one more person, before you give that discount, or when you want a second opinion on a new venture, call Sônia and ask her to take it to the Council. She brings in the advisors who know the subject, pulls their views together and gives you back a single recommendation, showing where they disagree. If you approve, the team gets the tasks with deadlines.",
@@ -2072,7 +2085,7 @@
     "visivel": true,
     "etiqueta": "Savings",
     "titulo": "What would all these employees cost?",
-    "texto": "The table has 14 roles and 21 people because sales customer service alone takes 8 SDRs: the owner's clone, Davi and the 6 salespeople. Nobody hires all of that at once. But just the five that already come with Starter would cost R$ 30.821 per month with people, including CLT (Brazilian labor law) payroll charges: an assistant (Sônia), a web designer (Juliana, who builds the pages and coordinates production), a developer (Paulo), a copywriter (Jonathan) and an SDR (the owner's clone). Over a year, that's R$ 369.851. Starter costs R$ 4.997 per year, about R$ 416 per month, plus the AI subscription. The table shows the cost of each role done by people; the full team is on Magnata.",
+    "texto": "Just the five roles that already come with Starter would cost R$ 30.821 per month with people, including CLT (Brazilian labor law) payroll charges. In a year, R$ 369.851. Starter costs R$ 4.997 per year, plus the AI subscription.",
     "encargos_percentual": 68,
     "horas_mes": 220,
     "rotulo_total_mes": "If you hired people for every role, per month",
@@ -2171,12 +2184,12 @@
       "visivel": true,
       "texto": "That's what it would cost with people. Sônia's most complete plan costs R$ 15.997 per year, less than the cheapest role in this table costs in a year.",
       "botao": {
-        "texto": "I want this team at this price",
+        "texto": "Subscribe",
         "link": "#planos"
       },
       "botao_secundario": {
-        "texto": "",
-        "link": ""
+        "texto": "Book an assessment",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
       },
       "nota": "30-day guarantee on every plan"
     }
@@ -2187,20 +2200,20 @@
     "titulo": "You're not left alone with the tool.",
     "itens": [
       {
-        "titulo": "Access arrives in your inbox",
-        "texto": "As soon as payment is confirmed, your dashboard access arrives by email and you can start using it right away. It comes with a link to book your onboarding at the time that suits you."
+        "titulo": "Instant access",
+        "texto": "Dashboard access arrives in your email as soon as payment is confirmed."
       },
       {
-        "titulo": "One onboarding session",
-        "texto": "During onboarding, we set Sônia up for your business. You're not stuck waiting until then: every page of the platform has a manual and guidance on how to use it."
+        "titulo": "Onboarding",
+        "texto": "A session to set Sônia up for your business, at a time you choose."
       },
       {
         "titulo": "Support on every plan",
-        "texto": "Still have a question? Our support agent answers at any hour on WhatsApp (21) 99901-2520 and by email at atendimento@primecircle.app.br. On Magnata, you also get human support on business days, 9 a.m. to 6 p.m., and 4 one-on-one mentoring sessions of 1 hour each."
+        "texto": "Support agent at any hour, on WhatsApp and email. On Magnata, also human support and 4 mentoring sessions."
       },
       {
         "titulo": "30-day guarantee",
-        "texto": "If within 30 days of payment you decide not to continue, we refund 100% of what you paid. Just ask by email or WhatsApp."
+        "texto": "Changed your mind within 30 days? We refund 100% of what you paid."
       }
     ]
   },
@@ -2220,10 +2233,10 @@
   },
   "quem": {
     "visivel": true,
-    "etiqueta": "Who created Sônia",
+    "etiqueta": "Before you subscribe, talk to the person who created Sônia",
     "nome": "Marcus Godoy",
     "cargo": "Founder of Godoy Prime Realty. Real Estate Personal Shopper and appraiser accredited by the Rio de Janeiro State Court (TJRJ). CRECI PF 80.199 RJ.",
-    "formacao": "Degree in Marketing and Business Administration, with an MBA in Knowledge Management and Business Intelligence from UFRJ.",
+    "formacao": "",
     "imagem": "assets/quem/marcus-sorriso.jpg",
     "numeros": [
       {
@@ -2235,7 +2248,7 @@
         "rotulo": "years leading Godoy Prime Realty"
       }
     ],
-    "texto": "I spent more than 30 years in sales and commercial roles before becoming a real estate broker in 2020. Nearly two decades of that were in telecom, at the major carriers, leading sales, channels and key accounts. After that came consulting for new companies and serving as head of sales and marketing.\n\nI built Prime Circle for my own operation, and the AI agents ran first at my real estate agency: customer service, content, video and an internal council for the big decisions. What worked in practice is what I offer with Sônia. I set yours up with your processes in the onboarding session and, on Magnata, I follow the operation with you in the one-on-one mentoring sessions.",
+    "texto": "I spent more than 30 years in sales and commercial roles, almost two decades of them in telecom, before becoming a real estate broker in 2020. Sônia's agents ran first at my own agency.\n\nIn the assessment, you tell me what slows your business down the most and I show you which specialists handle it and which plan makes sense for you.",
     "rotulo_provas": "Where this already runs",
     "provas": [],
     "links": [
@@ -2247,13 +2260,26 @@
         "texto": "Godoy Prime Realty",
         "link": ""
       }
-    ]
+    ],
+    "chamada": {
+      "visivel": true,
+      "texto": "",
+      "botao": {
+        "texto": "Book an assessment",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      },
+      "botao_secundario": {
+        "texto": "I'd rather talk on WhatsApp",
+        "link": "https://wa.me/5521999012520"
+      },
+      "nota": ""
+    }
   },
   "planos": {
     "visivel": true,
     "etiqueta": "Plans",
     "titulo": "Choose the size of your team",
-    "texto": "Pay with each plan's button, by Pix (instant payment) in full or by card in up to 12 installments. Access arrives by email as soon as payment is confirmed, and you can start using it right away: every page of the platform has a manual and guidance on how to use it. All plans come with a 30-day guarantee.",
+    "texto": "Pix (instant payment) in full or card in up to 12 installments. Access arrives in your email as soon as payment is confirmed. All plans come with a 30-day guarantee.",
     "itens": [
       {
         "nome": "SONIA Starter",
@@ -2359,7 +2385,7 @@
     ]
   },
   "contato": {
-    "visivel": true,
+    "visivel": false,
     "etiqueta": "Talk to the team",
     "titulo": "Prefer to talk before you subscribe?",
     "texto": "Leave your details. Our team will reach out on WhatsApp and show you Sônia in action.",
@@ -2391,31 +2417,23 @@
       },
       {
         "pergunta": "Is Sônia a fit for my type of business?",
-        "resposta": "The team covers the functions almost every business has: marketing, sales and customer service from Starter up, and finance, tax, legal and HR on Magnata. If you want to confirm your case, talk to the team before you subscribe."
+        "resposta": "The team covers the functions almost every business has: marketing, sales and customer service from Starter up, and finance, tax, legal and HR on Magnata. If you want to confirm your case, book an assessment before you subscribe."
       },
       {
-        "pergunta": "Is one client's data kept separate from the others?",
-        "resposta": "Yes. Each client has their own agent, their own memory and their own password vault, isolated from the others."
+        "pergunta": "Does Sônia do things without asking me?",
+        "resposta": "Only routine work: research, organizing, writing drafts and answering customers based on what she was trained on. Sending a proposal, posting, mass messaging, scheduling and any spending she prepares and waits for your OK. Exposing customer data, making up prices or giving an opinion in place of a licensed professional she doesn't do. The rules are agreed with you during setup."
       },
       {
         "pergunta": "Does it work with my WhatsApp?",
         "resposta": "Yes, for serving your customers: the sales specialists answer on WhatsApp and in Instagram Direct. The WhatsApp connection uses the Evolution API, an unofficial system installed on a server of yours, and the customer service uses two artificial intelligence API keys, paid per use, separate from the ChatGPT subscription. Because it's not the official WhatsApp connection, there is a risk of the number being blocked. To give Sônia tasks, you use Telegram or the dashboard."
       },
       {
-        "pergunta": "How much does it cost?",
-        "resposta": "Plans are annual. You pay with each plan's button, by Pix in full or by card in up to 12 installments, and access arrives by email as soon as payment is confirmed. What changes between them is how many agents are unlocked, how many automated routines you can have and, on Magnata, the one-on-one mentoring with Prime Circle and the Executive Council. The AI subscription is purchased separately. All plans come with a 30-day guarantee."
+        "pergunta": "What's not included in the price?",
+        "resposta": "The AI subscription (on Starter, ChatGPT, from about US$ 20 per month; on Elite and Magnata, the model you choose), which you purchase and pay for directly with the provider. For WhatsApp customer service: hosting a server for the Evolution API and two artificial intelligence API keys, paid per use, separate from the ChatGPT subscription. For Instagram: Zernio, free up to 10 thousand messages per month. And any other tool you want to connect to the agents."
       },
       {
         "pergunta": "What is the Executive Council?",
-        "resposta": "It's four advisors, covering operations and team, marketing and sales, finance, and technology and data, for the decisions that affect your cash and your team. You tell Sônia about the decision, she brings together the ones who know the subject and gives you back a single recommendation. If you approve, the team gets the tasks. It's included in Magnata and costs R$ 1.997 per year as an add-on for Starter and Elite."
-      },
-      {
-        "pergunta": "Does the Council replace my accountant or my lawyer?",
-        "resposta": "No. The Council helps you decide using your company's numbers and information. Taxes, payroll, contracts and data protection applied to your case stay with your accountant and your lawyer. When the matter is theirs, the Council tells you what to ask."
-      },
-      {
-        "pergunta": "What's not included in the price?",
-        "resposta": "The AI subscription (on Starter, ChatGPT, from about US$ 20 per month; on Elite and Magnata, the model you choose), which you purchase and pay for directly with the provider. For WhatsApp customer service: hosting a server for the Evolution API and two artificial intelligence API keys, paid per use, separate from the ChatGPT subscription. For Instagram: Zernio, free up to 10 thousand messages per month. And any other tool you want to connect to the agents."
+        "resposta": "It's four advisors, covering operations and team, marketing and sales, finance, and technology and data, for the decisions that affect your cash and your team. You tell Sônia about the decision, she brings together the ones who know the subject and gives you back a single recommendation. If you approve, the team gets the tasks. It's included in Magnata and costs R$ 1.997 per year as an add-on for Starter and Elite. It doesn't replace your accountant or your lawyer: taxes, payroll, contracts and data protection applied to your case stay with them."
       },
       {
         "pergunta": "What if the AI goes down?",
@@ -2424,15 +2442,24 @@
       {
         "pergunta": "Is there a guarantee?",
         "resposta": "Yes. If within 30 days of payment you decide not to continue, we refund 100% of what you paid. Just ask by email at atendimento@primecircle.app.br or on WhatsApp."
-      },
-      {
-        "pergunta": "How do I reach the team?",
-        "resposta": "Before subscribing, through the form on this page or by booking a demo. After subscribing, on WhatsApp (21) 99901-2520 or by email at atendimento@primecircle.app.br: our support agent answers at any hour, on every plan, and on Magnata there is also human support on business days, 9 a.m. to 6 p.m."
       }
-    ]
+    ],
+    "chamada": {
+      "visivel": true,
+      "texto": "Sônia and the team are ready.",
+      "botao": {
+        "texto": "Subscribe",
+        "link": "#planos"
+      },
+      "botao_secundario": {
+        "texto": "Book an assessment",
+        "link": "https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando"
+      },
+      "nota": ""
+    }
   },
   "final": {
-    "visivel": true,
+    "visivel": false,
     "titulo": "Sônia and the team are ready.",
     "texto": "All that's left is for you to choose the size of the team.",
     "botao": {

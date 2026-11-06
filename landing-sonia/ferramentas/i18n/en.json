@@ -41,16 +41,16 @@
    "tr": "Savings"
   },
   "topo/menu/4/texto": {
-   "pt": "Planos",
-   "tr": "Plans"
+   "pt": "Diagnóstico",
+   "tr": "Assessment"
   },
   "topo/menu/5/texto": {
    "pt": "Dúvidas",
    "tr": "Questions"
   },
   "topo/botao/texto": {
-   "pt": "Ver a Sônia funcionando",
-   "tr": "See Sônia in action"
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
   },
   "topo/botao_area_cliente/texto": {
    "pt": "Área do cliente",
@@ -73,12 +73,12 @@
    "tr": "Posting content, answering on WhatsApp, putting together a proposal, closing out the cash, reviewing a contract: up to 21 AI specialists take this on at any hour, through Telegram or the dashboard. Team size depends on the plan. What you do with the hours and the money left over is your call."
   },
   "hero/botao_principal/texto": {
-   "pt": "Quero a minha Sônia",
-   "tr": "I want my Sônia"
+   "pt": "Ver os planos e assinar",
+   "tr": "See plans and subscribe"
   },
   "hero/botao_secundario/texto": {
-   "pt": "Ver a conta inteira",
-   "tr": "See the full math"
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
   },
   "hero/rotulo_avatares": {
    "pt": "Até 21 especialistas no seu time",
@@ -185,8 +185,8 @@
    "tr": "Where to start"
   },
   "gargalos/titulo": {
-   "pt": "Comece pelo que trava a sua empresa.",
-   "tr": "Start with what's holding your business back."
+   "pt": "Contratar está difícil. Comece pelo que mais trava a sua empresa.",
+   "tr": "Hiring is hard. Start with what slows your business down the most."
   },
   "gargalos/texto": {
    "pt": "Ninguém precisa dos 21 no primeiro dia. Escolha o problema que mais custa hoje e veja quem cuida dele.",
@@ -197,8 +197,8 @@
    "tr": "No time for content and ads"
   },
   "gargalos/itens/0/texto": {
-   "pt": "O Jonathan escreve, a Bianca estuda o que viraliza no seu nicho, o Paulo coloca a página no ar e o estrategista de tráfego cuida dos anúncios. Você aprova antes de publicar.",
-   "tr": "Jonathan writes, Bianca studies what goes viral in your niche, Paulo puts the page live and the traffic strategist runs the ads. You approve before anything is published."
+   "pt": "O Jonathan escreve, o Paulo coloca a página no ar e o estrategista de tráfego cuida dos anúncios. Você aprova antes de publicar.",
+   "tr": "Jonathan writes, Paulo puts the page live and the traffic strategist runs the ads. You approve before anything goes out."
   },
   "gargalos/itens/0/quem": {
    "pt": "Jonathan e Paulo desde o Starter. Bianca e o estrategista de tráfego a partir do Elite.",
@@ -209,8 +209,8 @@
    "tr": "Customers reach out and wait too long for an answer"
   },
   "gargalos/itens/1/texto": {
-   "pt": "O clone do dono responde no Direct e no WhatsApp do seu jeito, qualifica quem chama, e o Davi conduz a conversa até o agendamento. Tudo fica registrado no CRM.",
-   "tr": "The owner's clone answers in Instagram Direct and on WhatsApp the way you would, qualifies whoever reaches out, and Davi carries the conversation through to a booked meeting. Everything is logged in the CRM."
+   "pt": "O clone do dono responde no Direct e no WhatsApp do seu jeito, e o Davi leva a conversa até o agendamento.",
+   "tr": "The owner's clone answers on Direct and WhatsApp the way you would, and Davi takes the conversation all the way to a booked meeting."
   },
   "gargalos/itens/1/quem": {
    "pt": "Clone do dono desde o Starter. Davi, o squad e a Amanda a partir do Elite.",
@@ -221,8 +221,8 @@
    "tr": "Finance, invoices and contracts eat up your day"
   },
   "gargalos/itens/2/texto": {
-   "pt": "A Márcia concilia o extrato e projeta o caixa, a Maria confere as notas fiscais e a Aline revisa contratos. Eles preparam; o seu contador e o seu advogado continuam assinando.",
-   "tr": "Márcia reconciles the bank statement and projects cash flow, Maria checks the invoices and Aline reviews contracts. They do the prep work; your accountant and your lawyer still sign."
+   "pt": "A Márcia cuida do caixa, a Maria confere as notas e a Aline revisa contratos. O seu contador e o seu advogado continuam assinando.",
+   "tr": "Márcia handles cash flow, Maria checks the invoices and Aline reviews contracts. Your accountant and your lawyer still sign off."
   },
   "gargalos/itens/2/quem": {
    "pt": "Márcia, Maria e Aline, só no Magnata.",
@@ -233,8 +233,8 @@
    "tr": "The big decision falls on you, alone"
   },
   "gargalos/itens/3/texto": {
-   "pt": "Contratar mais alguém ou dar aquele desconto. Antes do sim, o Conselho Executivo confere se o caixa aguenta e se a operação dá conta, e te devolve uma recomendação só.",
-   "tr": "Hiring one more person or giving that discount. Before you say yes, the Executive Council checks whether the cash can take it and whether operations can keep up, and gives you back a single recommendation."
+   "pt": "Antes do sim, o Conselho Executivo confere se o caixa e a operação aguentam e te devolve uma recomendação só.",
+   "tr": "Before you say yes, the Executive Council checks whether your cash and your operation can take it and gives you a single recommendation."
   },
   "gargalos/itens/3/quem": {
    "pt": "Conselho Executivo: incluído no Magnata, adicional no Starter e no Elite.",
@@ -453,8 +453,8 @@
    "tr": "One agent coordinates. The whole team delivers."
   },
   "time/texto": {
-   "pt": "A Sônia é a única que fala com você. Ela recebe o pedido, distribui para o especialista certo, acompanha e só te entrega quando está pronto. Clique em qualquer agente para ver o currículo completo.",
-   "tr": "Sônia is the only one who talks to you. She takes the request, hands it to the right specialist, follows up and only delivers to you when it's finished. Click any agent to see their full résumé."
+   "pt": "A Sônia é a única que fala com você: recebe o pedido, distribui para o especialista certo e só entrega quando está pronto. Proposta, publicação e qualquer gasto esperam o seu OK.",
+   "tr": "Sônia is the only one who talks to you: she takes the request, hands it to the right specialist and only delivers when it's ready. Proposals, posts and any spending wait for your OK."
   },
   "time/rotulo_orquestradora": {
    "pt": "Orquestradora do time",
@@ -4277,12 +4277,12 @@
    "tr": "21 specialists, ready to go. You choose how many join your team."
   },
   "time/chamada/botao/texto": {
-   "pt": "Montar o meu time",
-   "tr": "Build my team"
+   "pt": "Assinar",
+   "tr": "Subscribe"
   },
   "time/chamada/botao_secundario/texto": {
-   "pt": "Ver a Sônia funcionando",
-   "tr": "See Sônia in action"
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
   },
   "comando/etiqueta": {
    "pt": "Você no comando",
@@ -4473,8 +4473,8 @@
    "tr": "What would all these employees cost?"
   },
   "economia/texto": {
-   "pt": "A tabela tem 14 funções e 21 pessoas porque o atendimento de vendas, sozinho, ocupa 8 SDRs: o clone do dono, o Davi e os 6 vendedores. Ninguém contrata tudo isso de uma vez. Mas só as cinco que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT: uma assistente (Sônia), um web designer (Juliana, que cria as páginas e coordena a produção), um desenvolvedor (Paulo), um redator (Jonathan) e um SDR (o clone do dono). Em um ano, são R$ 369.851. O Starter custa R$ 4.997 por ano, cerca de R$ 416 por mês, mais a assinatura da IA. A tabela mostra o custo de cada função feita por gente; o time completo está no Magnata.",
-   "tr": "The table has 14 roles and 21 people because sales customer service alone takes 8 SDRs: the owner's clone, Davi and the 6 salespeople. Nobody hires all of that at once. But just the five that already come with Starter would cost R$ 30.821 per month with people, including CLT (Brazilian labor law) payroll charges: an assistant (Sônia), a web designer (Juliana, who builds the pages and coordinates production), a developer (Paulo), a copywriter (Jonathan) and an SDR (the owner's clone). Over a year, that's R$ 369.851. Starter costs R$ 4.997 per year, about R$ 416 per month, plus the AI subscription. The table shows the cost of each role done by people; the full team is on Magnata."
+   "pt": "Só as cinco funções que já vêm no Starter custariam R$ 30.821 por mês com gente, já com os encargos da CLT. Em um ano, R$ 369.851. O Starter custa R$ 4.997 por ano, mais a assinatura da IA.",
+   "tr": "Just the five roles that already come with Starter would cost R$ 30.821 per month with people, including CLT (Brazilian labor law) payroll charges. In a year, R$ 369.851. Starter costs R$ 4.997 per year, plus the AI subscription."
   },
   "economia/rotulo_total_mes": {
    "pt": "Se você contratasse gente para todas as funções, por mês",
@@ -4617,8 +4617,8 @@
    "tr": "That's what it would cost with people. Sônia's most complete plan costs R$ 15.997 per year, less than the cheapest role in this table costs in a year."
   },
   "economia/chamada/botao/texto": {
-   "pt": "Quero esse time por este preço",
-   "tr": "I want this team at this price"
+   "pt": "Assinar",
+   "tr": "Subscribe"
   },
   "economia/chamada/nota": {
    "pt": "Garantia de 30 dias em todos os planos",
@@ -4633,36 +4633,36 @@
    "tr": "You're not left alone with the tool."
   },
   "diferenciais/itens/0/titulo": {
-   "pt": "O acesso chega no seu e-mail",
-   "tr": "Access arrives in your inbox"
+   "pt": "Acesso na hora",
+   "tr": "Instant access"
   },
   "diferenciais/itens/0/texto": {
-   "pt": "Assim que o pagamento é confirmado, o acesso ao painel chega no seu e-mail e você já pode usar na hora. Junto vem o link para agendar o onboarding no horário que preferir.",
-   "tr": "As soon as payment is confirmed, your dashboard access arrives by email and you can start using it right away. It comes with a link to book your onboarding at the time that suits you."
+   "pt": "O acesso ao painel chega no seu e-mail assim que o pagamento é confirmado.",
+   "tr": "Dashboard access arrives in your email as soon as payment is confirmed."
   },
   "diferenciais/itens/1/titulo": {
-   "pt": "Uma sessão de onboarding",
-   "tr": "One onboarding session"
+   "pt": "Onboarding",
+   "tr": "Onboarding"
   },
   "diferenciais/itens/1/texto": {
-   "pt": "No onboarding, configuramos a Sônia com o seu negócio. Até lá você não fica parado: cada página da plataforma traz um manual e orientações de como usar.",
-   "tr": "During onboarding, we set Sônia up for your business. You're not stuck waiting until then: every page of the platform has a manual and guidance on how to use it."
+   "pt": "Uma sessão para configurar a Sônia com o seu negócio, no horário que você escolher.",
+   "tr": "A session to set Sônia up for your business, at a time you choose."
   },
   "diferenciais/itens/2/titulo": {
    "pt": "Suporte em todos os planos",
    "tr": "Support on every plan"
   },
   "diferenciais/itens/2/texto": {
-   "pt": "Ficou alguma dúvida? O nosso agente de atendimento responde a qualquer hora pelo WhatsApp (21) 99901-2520 e pelo e-mail atendimento@primecircle.app.br. No Magnata, também atendimento humano em dias úteis, das 9h às 18h, e 4 mentorias individuais de 1 hora.",
-   "tr": "Still have a question? Our support agent answers at any hour on WhatsApp (21) 99901-2520 and by email at atendimento@primecircle.app.br. On Magnata, you also get human support on business days, 9 a.m. to 6 p.m., and 4 one-on-one mentoring sessions of 1 hour each."
+   "pt": "Agente de atendimento a qualquer hora, no WhatsApp e no e-mail. No Magnata, também atendimento humano e 4 mentorias.",
+   "tr": "Support agent at any hour, on WhatsApp and email. On Magnata, also human support and 4 mentoring sessions."
   },
   "diferenciais/itens/3/titulo": {
    "pt": "Garantia de 30 dias",
    "tr": "30-day guarantee"
   },
   "diferenciais/itens/3/texto": {
-   "pt": "Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir por e-mail ou WhatsApp.",
-   "tr": "If within 30 days of payment you decide not to continue, we refund 100% of what you paid. Just ask by email or WhatsApp."
+   "pt": "Desistiu em até 30 dias? Devolvemos 100% do valor pago.",
+   "tr": "Changed your mind within 30 days? We refund 100% of what you paid."
   },
   "depoimentos/etiqueta": {
    "pt": "Quem já usa",
@@ -4685,8 +4685,8 @@
    "tr": "What changed in the operation after Sônia."
   },
   "quem/etiqueta": {
-   "pt": "Quem criou a Sônia",
-   "tr": "Who created Sônia"
+   "pt": "Antes de assinar, converse com quem criou a Sônia",
+   "tr": "Before you subscribe, talk to the person who created Sônia"
   },
   "quem/nome": {
    "pt": "Marcus Godoy",
@@ -4709,8 +4709,8 @@
    "tr": "years leading Godoy Prime Realty"
   },
   "quem/texto": {
-   "pt": "Passei mais de 30 anos em áreas comerciais antes de me tornar corretor, em 2020. Foram quase duas décadas em telecomunicações, com passagem pelas principais operadoras, liderando vendas, canais e grandes contas. Depois vieram a consultoria para empresas novas e a direção comercial e de marketing.\n\nCriei a Prime Circle para a minha própria operação, e os agentes de IA rodaram primeiro na minha imobiliária: atendimento, conteúdo, vídeo e um conselho interno para as decisões grandes. O que funcionou na prática é o que ofereço na Sônia. Eu configuro a sua com os seus processos na sessão de onboarding e, no Magnata, acompanho a operação com você nas mentorias individuais.",
-   "tr": "I spent more than 30 years in sales and commercial roles before becoming a real estate broker in 2020. Nearly two decades of that were in telecom, at the major carriers, leading sales, channels and key accounts. After that came consulting for new companies and serving as head of sales and marketing.\n\nI built Prime Circle for my own operation, and the AI agents ran first at my real estate agency: customer service, content, video and an internal council for the big decisions. What worked in practice is what I offer with Sônia. I set yours up with your processes in the onboarding session and, on Magnata, I follow the operation with you in the one-on-one mentoring sessions."
+   "pt": "Passei mais de 30 anos em áreas comerciais, quase duas décadas em telecomunicações, antes de me tornar corretor em 2020. Os agentes da Sônia rodaram primeiro na minha imobiliária.\n\nNo diagnóstico, você me conta o que mais trava a sua empresa e eu mostro quais especialistas cuidam disso e qual plano faz sentido para o seu caso.",
+   "tr": "I spent more than 30 years in sales and commercial roles, almost two decades of them in telecom, before becoming a real estate broker in 2020. Sônia's agents ran first at my own agency.\n\nIn the assessment, you tell me what slows your business down the most and I show you which specialists handle it and which plan makes sense for you."
   },
   "quem/rotulo_provas": {
    "pt": "Onde isso já roda",
@@ -4733,8 +4733,8 @@
    "tr": "Choose the size of your team"
   },
   "planos/texto": {
-   "pt": "Pague no botão de cada plano, por Pix à vista ou no cartão em até 12 vezes. O acesso chega no seu e-mail assim que o pagamento é confirmado, e você já pode usar na hora: cada página da plataforma traz um manual e orientações de como usar. Todos os planos têm garantia de 30 dias.",
-   "tr": "Pay with each plan's button, by Pix (instant payment) in full or by card in up to 12 installments. Access arrives by email as soon as payment is confirmed, and you can start using it right away: every page of the platform has a manual and guidance on how to use it. All plans come with a 30-day guarantee."
+   "pt": "Pix à vista ou cartão em até 12 vezes. O acesso chega no seu e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.",
+   "tr": "Pix (instant payment) in full or card in up to 12 installments. Access arrives in your email as soon as payment is confirmed. All plans come with a 30-day guarantee."
   },
   "planos/itens/0/nome": {
    "pt": "SONIA Starter",
@@ -5025,16 +5025,16 @@
    "tr": "Is Sônia a fit for my type of business?"
   },
   "faq/itens/1/resposta": {
-   "pt": "O time cobre as funções que quase toda empresa tem: marketing, vendas e atendimento desde o Starter, e financeiro, tributário, jurídico e RH no Magnata. Se quiser confirmar o seu caso, fale com o time antes de assinar.",
-   "tr": "The team covers the functions almost every business has: marketing, sales and customer service from Starter up, and finance, tax, legal and HR on Magnata. If you want to confirm your case, talk to the team before you subscribe."
+   "pt": "O time cobre as funções que quase toda empresa tem: marketing, vendas e atendimento desde o Starter, e financeiro, tributário, jurídico e RH no Magnata. Se quiser confirmar o seu caso, agende um diagnóstico antes de assinar.",
+   "tr": "The team covers the functions almost every business has: marketing, sales and customer service from Starter up, and finance, tax, legal and HR on Magnata. If you want to confirm your case, book an assessment before you subscribe."
   },
   "faq/itens/2/pergunta": {
-   "pt": "Os dados de um cliente ficam separados dos outros?",
-   "tr": "Is one client's data kept separate from the others?"
+   "pt": "A Sônia faz coisas sem me perguntar?",
+   "tr": "Does Sônia do things without asking me?"
   },
   "faq/itens/2/resposta": {
-   "pt": "Sim. Cada cliente tem a própria agente, a própria memória e o próprio cofre de senhas, isolados dos demais.",
-   "tr": "Yes. Each client has their own agent, their own memory and their own password vault, isolated from the others."
+   "pt": "Só o que é rotina: pesquisar, organizar, escrever rascunhos e responder clientes com base no que foi treinada. Enviar proposta, publicar, disparar mensagens, agendar e qualquer gasto ela prepara e espera o seu OK. Expor dado de cliente, inventar preço ou dar parecer no lugar do profissional habilitado ela não faz. As regras são combinadas com você na implantação.",
+   "tr": "Only routine work: research, organizing, writing drafts and answering customers based on what she was trained on. Sending a proposal, posting, mass messaging, scheduling and any spending she prepares and waits for your OK. Exposing customer data, making up prices or giving an opinion in place of a licensed professional she doesn't do. The rules are agreed with you during setup."
   },
   "faq/itens/3/pergunta": {
    "pt": "Funciona com o meu WhatsApp?",
@@ -5057,8 +5057,8 @@
    "tr": "What is the Executive Council?"
   },
   "faq/itens/5/resposta": {
-   "pt": "São quatro conselheiros, de operação e equipe, marketing e vendas, finanças, tecnologia e dados, para as decisões que mexem no caixa e na equipe. Você conta a decisão para a Sônia, ela reúne quem entende do assunto e te devolve uma recomendação só. Se você aprovar, o time recebe as tarefas. Está incluído no Magnata e custa R$ 1.997 por ano como adicional no Starter e no Elite.",
-   "tr": "It's four advisors, covering operations and team, marketing and sales, finance, and technology and data, for the decisions that affect your cash and your team. You tell Sônia about the decision, she brings together the ones who know the subject and gives you back a single recommendation. If you approve, the team gets the tasks. It's included in Magnata and costs R$ 1.997 per year as an add-on for Starter and Elite."
+   "pt": "São quatro conselheiros, de operação e equipe, marketing e vendas, finanças, tecnologia e dados, para as decisões que mexem no caixa e na equipe. Você conta a decisão para a Sônia, ela reúne quem entende do assunto e te devolve uma recomendação só. Se você aprovar, o time recebe as tarefas. Está incluído no Magnata e custa R$ 1.997 por ano como adicional no Starter e no Elite. Ele não substitui o contador nem o advogado: imposto, folha, contrato e proteção de dados aplicada ao seu caso continuam com eles.",
+   "tr": "It's four advisors, covering operations and team, marketing and sales, finance, and technology and data, for the decisions that affect your cash and your team. You tell Sônia about the decision, she brings together the ones who know the subject and gives you back a single recommendation. If you approve, the team gets the tasks. It's included in Magnata and costs R$ 1.997 per year as an add-on for Starter and Elite. It doesn't replace your accountant or your lawyer: taxes, payroll, contracts and data protection applied to your case stay with them."
   },
   "faq/itens/6/pergunta": {
    "pt": "O Conselho substitui o meu contador ou o meu advogado?",
@@ -5127,6 +5127,34 @@
   "rodape/links/1/texto": {
    "pt": "WhatsApp (21) 99901-2520",
    "tr": "WhatsApp (21) 99901-2520"
+  },
+  "topo/barra/assinar/texto": {
+   "pt": "Assinar",
+   "tr": "Subscribe"
+  },
+  "topo/barra/diagnostico/texto": {
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
+  },
+  "economia/chamada/botao_secundario/texto": {
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
+  },
+  "quem/chamada/botao/texto": {
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
+  },
+  "quem/chamada/botao_secundario/texto": {
+   "pt": "Prefiro falar no WhatsApp",
+   "tr": "I'd rather talk on WhatsApp"
+  },
+  "faq/chamada/botao/texto": {
+   "pt": "Assinar",
+   "tr": "Subscribe"
+  },
+  "faq/chamada/botao_secundario/texto": {
+   "pt": "Agendar diagnóstico",
+   "tr": "Book an assessment"
   }
  },
  "legendas": {
@@ -5747,6 +5775,12 @@
   "por {empresa}": "by {empresa}",
   "Idioma": "Language",
   "Olá! Sou {nome}. E-mail: {email}. WhatsApp: {whatsapp}. Interesse: {interesse}.": "Hi! I'm {nome}. Email: {email}. WhatsApp: {whatsapp}. Interest: {interesse}.",
-  "não informado": "not provided"
+  "não informado": "not provided",
+  "Ver a tabela completa": "See the full table",
+  "Fechar a tabela": "Close the table",
+  "Ver tudo o que inclui (+{n})": "See everything included (+{n})",
+  "Ver menos": "See less",
+  "Assinar ou agendar": "Subscribe or book",
+  "O que não está incluído no preço": "What's not included in the price"
  }
 }

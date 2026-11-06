@@ -158,6 +158,15 @@ def tpl(t):
       '<h2 style="margin:0;font-family:var(--pc-font-display);font-weight:500;font-size:var(--pc-fs-h1);line-height:1;letter-spacing:-0.01em;text-wrap:balance">{{ c.gargalos.titulo }}</h2>\n'
       '<p style="margin:0;font-size:17px;line-height:1.6;color:#2a2722;max-width:640px;text-wrap:pretty">{{ c.gargalos.texto }}</p>\n'
       '</div>\n'
+      # 06/11/2026: dois números da "A realidade" (itens marcados com "faixa": true) numa faixa fina
+      '<sc-if value="{{ temRealidadeFaixa }}" hint-placeholder-val="{{ true }}">\n'
+      '<div class="pc-faixa" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 40px;padding:18px 0;border-top:1px solid rgba(14,14,14,0.22);border-bottom:1px solid rgba(14,14,14,0.22)">\n'
+      '<sc-for list="{{ realidadeFaixa }}" as="r" hint-placeholder-count="2">\n'
+      '<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 16px;align-items:baseline">'
+      '<span class="pc-num" style="grid-row:span 2;font-family:var(--pc-font-mono);font-variant-numeric:tabular-nums;font-size:clamp(34px,4vw,52px);line-height:1;letter-spacing:-0.02em;color:#8B7340">{{ r.valor }}</span>'
+      '<span style="font-size:15px;line-height:1.5;color:#2a2722;text-wrap:pretty">{{ r.texto }}</span>'
+      '<span style="font-family:var(--pc-font-mono);font-size:10px;letter-spacing:0.14em;line-height:1.6;color:#6f6a60;text-transform:uppercase">{{ r.fonte }}</span></div>\n'
+      '</sc-for>\n</div>\n</sc-if>\n'
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px">\n'
       '<sc-for list="{{ gargalos }}" as="g" hint-placeholder-count="3">\n'
       '<div style="display:grid;grid-template-rows:auto auto 1fr auto;gap:14px;padding:28px 24px;background:#FFFFFF;border:1px solid rgba(14,14,14,0.14);border-radius:10px">\n'
@@ -295,11 +304,20 @@ def tpl(t):
       '<sc-if value="{{ pv.temLink }}" hint-placeholder-val="{{ false }}"><a href="{{ pv.link }}" target="_blank" rel="noopener" style="font-family:var(--pc-font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#8B7340;text-decoration:none;padding-top:6px">{{ pv.rotulo_link }} ↗</a></sc-if>\n'
       '</div>\n</sc-for>\n</div>\n</div>\n</sc-if>\n'
       '</section>\n</sc-if>\n\n')
-    t = troca(t, '<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">', secao_q + '<sc-if value="{{ show.planos }}" hint-placeholder-val="{{ true }}">', 'secao-quem')
+    # 06/11/2026 (versão enxuta): o "Quem" vira o bloco do diagnóstico e vai para depois dos planos;
+    # o "Depois que você paga" sai de antes do Quem e entra como faixa logo abaixo dos planos
+    _i = t.index('<sc-if value="{{ show.diferenciais }}"'); _j = t.index('</sc-if>\n', _i) + len('</sc-if>\n')
+    secao_d = t[_i:_j]; t = t[:_i] + t[_j:]
+    assert secao_d.count('<sc-if') == 1, 'bloco dos diferenciais mudou'
+    secao_d = secao_d.replace('<section id="por-que" class="{{ grainClass }}"', '<section id="por-que" class="pc-dif {{ grainClass }}"', 1)
+    assert 'pc-dif' in secao_d
+    t = troca(t, '<sc-if value="{{ show.contato }}"', secao_d + '\n' + secao_q + '<sc-if value="{{ show.contato }}"', 'secao-quem')
     t = troca(t, 'conselho: vis(c.conselho),', 'conselho: vis(c.conselho), realidade: vis(c.realidade), comando: vis(c.comando), quem: vis(c.quem),', 'show-novas')
     t = troca(t, "      conselhoPassos: ((c.conselho && c.conselho.passos) || []).map((x, i) => ({ texto: x, n: pad(i + 1) })),",
               "      conselhoPassos: ((c.conselho && c.conselho.passos) || []).map((x, i) => ({ texto: x, n: pad(i + 1) })),\n"
               "      realidadeItens: ((c.realidade && c.realidade.itens) || []),\n"
+              "      realidadeFaixa: ((c.realidade && c.realidade.itens) || []).filter((r) => r.faixa),\n"
+              "      temRealidadeFaixa: ((c.realidade && c.realidade.itens) || []).some((r) => r.faixa),\n"
               "      comandoZonas: ((c.comando && c.comando.zonas) || []).map((z) => ({ ...z, classe: 'pc-zona-' + (z.cor || 'amarela'), lista: (z.itens || []).map((x) => ({ texto: x })) })),\n"
               "      quemTemFoto: !!(c.quem && c.quem.imagem), quemFoto: (c.quem && c.quem.imagem) || '',\n"
       "      quemTemFormacao: !!(c.quem && c.quem.formacao),\n"
@@ -453,6 +471,30 @@ html.pc-cons-aberto,html.pc-cons-aberto body{overflow:hidden!important}
 .pc-chamada-nota{flex:1 1 100%;font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.7}
 .pc-chamada [hidden]{display:none!important}
 @media (max-width:600px){.pc-chamada{gap:14px}.pc-chamada-btns{flex:1 1 100%;width:100%}.pc-chamada-sec{border-bottom:0;min-height:44px}}
+/* 06/11/2026: versão enxuta (script em ENXUTA) */
+.pc-eco-fechada{display:none!important}
+.pc-eco-abrir,.pc-pl-mais{justify-self:start;align-self:start;min-height:44px;padding:0 18px;border:1px solid rgba(14,14,14,.3);border-radius:999px;background:transparent;color:inherit;font-family:var(--pc-font-mono,monospace);font-size:11px;letter-spacing:.16em;text-transform:uppercase;cursor:pointer}
+.pc-eco-abrir:hover,.pc-pl-mais:hover{border-color:currentColor}
+.pc-pl-mais{margin-top:10px;border-color:currentColor;opacity:.8}
+.pc-pl-corte>li:nth-child(n+6){display:none!important}
+.pc-dif{padding-top:clamp(32px,4vw,56px)!important;padding-bottom:clamp(32px,4vw,56px)!important;gap:24px!important}
+.pc-dif h2{font-size:clamp(26px,3vw,36px)!important}
+.pc-dif>div:last-child{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:12px!important}
+.pc-dif>div:last-child>div{padding:18px 18px 20px!important;gap:8px!important}
+.pc-dif>div:last-child>div>span:nth-child(1){display:none}
+.pc-dif>div:last-child>div>span:nth-child(2){font-size:22px!important}
+.pc-dif>div:last-child>div>span:nth-child(3){font-size:14px!important;line-height:1.5!important}
+.pc-barra{display:none}
+@media (max-width:600px){#por-onde-comecar>div:last-child>div>span:nth-child(3){display:none}}
+@media (max-width:900px){
+  .pc-barra{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(14,14,14,.96);border-top:1px solid rgba(245,241,230,.12);transform:translateY(110%);transition:transform .25s}
+  .pc-barra.pc-barra-on{transform:none}
+  .pc-barra a{font-family:var(--pc-font-sans,system-ui,sans-serif);flex:1 1 0;display:flex;align-items:center;justify-content:center;min-height:48px;border-radius:999px;font-size:15px;font-weight:600;text-decoration:none;text-align:center;line-height:1.15;padding:0 10px}
+  .pc-barra-a{background:#C9A84C;color:#0E0E0E}
+  .pc-barra-b{border:1px solid rgba(245,241,230,.4);color:#F5F1E6}
+  footer{padding-bottom:84px!important}
+}
+@media (prefers-reduced-motion:reduce){.pc-barra{transition:none}}
 /* 06/11/2026: seletor de idioma PT · ES · EN no topo (script em IDIOMA) */
 .pc-idioma{display:flex;align-items:center;gap:2px;order:5;font-family:var(--pc-font-mono,"JetBrains Mono",monospace);font-size:11px;letter-spacing:.12em}
 .pc-idioma a{display:inline-flex;align-items:center;justify-content:center;min-width:34px;min-height:44px;padding:0 6px;color:rgba(245,241,230,.62);text-decoration:none;border-radius:6px}
@@ -1013,6 +1055,74 @@ previa = r'''<script>
 })();
 </script>
 '''
+# 5) versão enxuta (06/11/2026, landing-sonia/PROPOSTA-ENXUGAR.md): tabela da economia recolhida,
+# planos com 6 itens à vista e barra fixa no celular com "Assinar" e "Agendar diagnóstico" (topo.barra).
+ENXUTA = r"""<script>
+(function () {
+  function T(x) { return window.pcT ? window.pcT(x) : x; }
+  function F(m, v) { return window.pcF ? window.pcF(m, v) : m.replace(/\{(\w+)\}/g, function (_, k) { return v[k]; }); }
+  var dados = null;
+  function tabela() {
+    var eco = document.querySelector("#economia .pc-eco"); if (!eco || eco.getAttribute("data-pc-fecha")) return;
+    eco.setAttribute("data-pc-fecha", "1"); eco.classList.add("pc-eco-fechada"); eco.id = eco.id || "pc-eco-tabela";
+    var b = document.createElement("button"); b.type = "button"; b.className = "pc-eco-abrir";
+    b.setAttribute("aria-controls", eco.id); b.setAttribute("aria-expanded", "false"); b.textContent = T("Ver a tabela completa");
+    b.addEventListener("click", function () {
+      var fechada = eco.classList.toggle("pc-eco-fechada");
+      b.setAttribute("aria-expanded", String(!fechada)); b.textContent = T(fechada ? "Ver a tabela completa" : "Fechar a tabela");
+    });
+    eco.parentNode.insertBefore(b, eco);
+  }
+  function planos() {
+    document.querySelectorAll("#planos ul").forEach(function (ul) {
+      var lis = ul.querySelectorAll(":scope > li"); if (lis.length <= 5 || ul.getAttribute("data-pc-corte")) return;
+      ul.setAttribute("data-pc-corte", "1"); ul.classList.add("pc-pl-corte");
+      var prox = ul.nextElementSibling; if (prox && prox.classList.contains("pc-pl-mais")) prox.remove();
+      var b = document.createElement("button"); b.type = "button"; b.className = "pc-pl-mais"; b.setAttribute("aria-expanded", "false");
+      var rot = function () { b.textContent = ul.classList.contains("pc-pl-corte") ? F("Ver tudo o que inclui (+{n})", { n: lis.length - 5 }) : T("Ver menos"); };
+      rot();
+      b.addEventListener("click", function () { ul.classList.toggle("pc-pl-corte"); b.setAttribute("aria-expanded", String(!ul.classList.contains("pc-pl-corte"))); rot(); });
+      ul.parentNode.insertBefore(b, ul.nextSibling);
+    });
+  }
+  function barra() {
+    var cfg = dados && dados.topo && dados.topo.barra; if (!cfg || cfg.visivel === false) return;
+    if (document.querySelector(".pc-barra")) return;
+    var box = document.createElement("nav"); box.className = "pc-barra"; box.setAttribute("aria-label", T("Assinar ou agendar"));
+    [["pc-barra-a", cfg.assinar], ["pc-barra-b", cfg.diagnostico]].forEach(function (par) {
+      var b = par[1]; if (!b || !b.texto || !b.link) return;
+      var a = document.createElement("a"); a.className = par[0]; a.textContent = b.texto; a.href = b.link;
+      if (/^https?:/.test(b.link)) { a.target = "_blank"; a.rel = "noopener"; }
+      box.appendChild(a);
+    });
+    document.body.appendChild(box);
+    var alvo = document.scrollingElement || document.documentElement;
+    function ver() {
+      var y = Math.max(document.body.scrollTop, alvo.scrollTop, window.scrollY || 0);
+      var hero = document.querySelector(".pc-hero-btns"), r = hero ? hero.getBoundingClientRect() : null;
+      box.classList.toggle("pc-barra-on", y > 500 && !(r && r.bottom > 0 && r.top < innerHeight));
+    }
+    document.body.addEventListener("scroll", ver, { passive: true }); window.addEventListener("scroll", ver, { passive: true }); ver();
+  }
+  function nota() {
+    var cfg = dados && dados.planos; if (!cfg || !cfg.nota) return;
+    var p = [...document.querySelectorAll("#planos p")].find(function (x) { return x.textContent.trim() === String(cfg.nota).trim(); });
+    if (!p || p.getAttribute("data-pc-nota")) return;
+    p.setAttribute("data-pc-nota", "1"); p.hidden = true; p.id = p.id || "pc-pl-nota";
+    var b = document.createElement("button"); b.type = "button"; b.className = "pc-eco-abrir"; b.setAttribute("aria-controls", p.id); b.setAttribute("aria-expanded", "false");
+    b.textContent = T("O que não está incluído no preço");
+    b.addEventListener("click", function () { p.hidden = !p.hidden; b.setAttribute("aria-expanded", String(!p.hidden)); });
+    p.parentNode.insertBefore(b, p);
+  }
+  var tm = null;
+  // a página muda o tempo todo (legenda do vídeo, contadores): espera curta com teto, nunca adiada para sempre
+  function tudo() { if (tm) return; tm = setTimeout(function () { tm = null; tabela(); planos(); nota(); barra(); }, 150); }
+  fetch("conteudo.json").then(function (x) { return x.json(); }).then(function (c) { dados = c; tudo(); }).catch(function () {});
+  new MutationObserver(tudo).observe(document, { childList: true, subtree: true });
+  window.addEventListener("load", tudo);
+})();
+</script>
+"""
 # 4) idiomas (06/11/2026): português, espanhol e inglês na mesma página.
 # O português continua vindo do conteudo.json; ?lang=es|en (ou a escolha guardada, ou o idioma do
 # navegador) troca o arquivo por conteudo.es.json / conteudo.en.json, as legendas .pt-BR.vtt pelas
@@ -1146,7 +1256,7 @@ IDIOMA = r"""<script>
 })();
 </script>
 """.replace("__DIC__", json.dumps(_dic, ensure_ascii=False).replace("</", "<\\/"))
-s = s.replace('<title>Bundled Page</title>', '<title>' + html.escape(seo.get('titulo', 'SONIA')) + '</title>\n' + previa + IDIOMA + FECHA_MENU, 1)
+s = s.replace('<title>Bundled Page</title>', '<title>' + html.escape(seo.get('titulo', 'SONIA')) + '</title>\n' + previa + IDIOMA + FECHA_MENU + ENXUTA, 1)
 assert 'sonia-editor-rascunho' in s
 open(dst, 'w', encoding='utf-8').write(s)
 print('ok', len(s), 'conteudo removido:', uuid_conteudo)
