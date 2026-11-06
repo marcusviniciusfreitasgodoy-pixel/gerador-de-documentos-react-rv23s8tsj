@@ -1,5 +1,7 @@
 # Pendências antes de vender a SONIA
 
+> Venda nos EUA: perguntas próprias em `PERGUNTAS-VENDA-EUA.md` (06/11/2026).
+
 Atualizado em 01/11/2026. Cada bloco está pronto para copiar e colar no WhatsApp ou no e-mail
 de quem responde. ⚠️ marca o que **trava a venda** até ter resposta. Peça as respostas **por
 escrito**: em caso de disputa por reembolso, "eles me disseram" não vale.
