@@ -150,3 +150,16 @@ gere a lista com `python3 ferramentas/i18n/extrair.py /tmp/pt.json`, traduza só
 no mesmo formato e rode `python3 ferramentas/i18n/montar.py importar es arquivo.json` (idem
 `en`). Depois rode o `montar.py` de novo e publique `conteudo.es.json`, `conteudo.en.json` e as
 legendas que mudaram.
+
+## Página no ar desde 06/11/2026: versão na estrutura do modelo (br-modelo/)
+
+- O site oficial passou a ser `br-modelo/index.html`, um HTML próprio (não é mais o export do
+  Claude Design). Para gerar o arquivo do ar: `python3 ferramentas/br-modelo-publicar.py saida.html`
+  (tira o noindex, põe endereço oficial e imagem de compartilhamento, corrige os caminhos).
+- **O editor e o conteudo.json não mudam mais a página no ar.** Texto, preço e planos se editam
+  direto em `br-modelo/index.html`.
+- A agenda pede o horário pelo WhatsApp (os dias são sempre os próximos 10 dias úteis), porque o
+  evento do Calendly não existe mais.
+- A versão anterior (Claude Design, com PT/ES/EN e editor) ficou de **reserva**: no servidor, em
+  `/home2/marcu362/backups-sonia/*.reserva-2026-11-06-versao-enxuta`, e no git (commit 024d056).
+  Para voltar: restaurar esses 4 arquivos na pasta do site.

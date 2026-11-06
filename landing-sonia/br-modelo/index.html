@@ -241,6 +241,15 @@ p{margin:0}
 .mg span{font-size:13px;padding:7px 12px;border-radius:999px;border:1px solid rgba(245,241,230,.18);color:#E8E0CC;justify-self:start}
 .monte-n{grid-column:1/-1;margin:0;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)!important;text-align:center}
 @media (max-width:900px){.monte{grid-template-columns:1fr;padding:22px}}
+.sim-dias{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.sim-dias button{display:grid;justify-items:center;gap:2px;padding:10px 4px;border-radius:10px;border:1px solid rgba(139,115,64,.35);background:rgba(201,168,76,.10);font:700 18px var(--sans);color:var(--ink);cursor:pointer}
+.sim-dias button small{font:500 10px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#6f6a60}
+.sim-dias button.sel{background:var(--ink);color:var(--gold);border-color:var(--ink)}
+.sim-dias button.sel small{color:#C8C1B0}
+.sim-hl{display:grid;gap:10px}
+.sim-hrs button.sel{background:var(--gold)}
+.sim-pedir{margin-top:6px;width:100%}
+.sim-aviso{color:#6f6a60!important;font-weight:500!important}
 </style>
 </head>
 <body>
@@ -443,24 +452,22 @@ p{margin:0}
 
 <section class="sec book" id="agenda">
   <div class="wrap">
-    <p class="lead">Escolha um horário para o seu diagnóstico com o Marcus.</p>
-    <div class="cal sim" aria-label="Prévia do agendamento">
+    <p class="lead">Escolha o dia e o horário de preferência para o seu diagnóstico com o Marcus.</p>
+    <div class="cal sim" aria-label="Agendar diagnóstico">
       <div class="sim-ev">
         <b class="sim-logo">SON<span>IA</span></b>
         <small>Marcus Godoy</small>
         <h3>Diagnóstico</h3>
-        <ul><li>30 min</li><li>Videochamada</li><li>Horário de Brasília</li></ul>
+        <ul><li>Videochamada</li><li>Horário de Brasília</li><li>Confirmação pelo WhatsApp</li></ul>
         <p>Você me conta o que mais trava a sua empresa e eu mostro quais especialistas cuidam disso e qual plano faz sentido.</p>
       </div>
       <div class="sim-cal">
-        <h4>Escolha a data e o horário</h4>
-        <div class="sim-mes"><span aria-hidden="true">‹</span><b>Novembro de 2026</b><span aria-hidden="true">›</span></div>
-        <div class="sim-dow"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
-        <div class="sim-grid"><button type="button" disabled>1</button><button type="button" disabled>2</button><button type="button" disabled>3</button><button type="button" disabled>4</button><button type="button" disabled>5</button><button type="button" disabled>6</button><button type="button" disabled>7</button><button type="button" disabled>8</button><button type="button" class="free">9</button><button type="button" class="sel">10</button><button type="button" class="free">11</button><button type="button" class="free">12</button><button type="button" class="free">13</button><button type="button" disabled>14</button><button type="button" disabled>15</button><button type="button" class="free">16</button><button type="button" class="free">17</button><button type="button" class="free">18</button><button type="button" class="free">19</button><button type="button" class="free">20</button><button type="button" disabled>21</button><button type="button" disabled>22</button><button type="button" class="free">23</button><button type="button" class="free">24</button><button type="button" class="free">25</button><button type="button" class="free">26</button><button type="button" class="free">27</button><button type="button" disabled>28</button><button type="button" disabled>29</button><button type="button" class="free">30</button><span></span><span></span><span></span><span></span><span></span></div>
+        <h4>Escolha o dia de preferência</h4>
+        <div class="sim-dias" data-dias></div>
       </div>
-      <div class="sim-hrs"><h4>Terça, 10 de novembro</h4><button type="button">9h00</button><button type="button">10h30</button><button type="button">12h00</button><button type="button">14h00</button><button type="button">15h30</button><button type="button">17h00</button></div>
+      <div class="sim-hrs"><h4 data-dia-rotulo>Escolha o horário</h4><div class="sim-hl" data-horas></div><a class="btn btn-gold btn-sm sim-pedir" data-pedir href="https://wa.me/5521999012520" target="_blank" rel="noopener">Pedir no WhatsApp</a></div>
     </div>
-    <p class="sim-aviso" role="status" hidden>Prévia: o agendamento ainda não está ativo nesta página.</p>
+    <p class="sim-aviso">A confirmação do horário chega pelo WhatsApp.</p>
     <p class="alt">Prefere falar agora? <a href="https://wa.me/5521999012520" target="_blank" rel="noopener">Chame no WhatsApp (21) 99901-2520</a></p>
   </div>
 </section>
@@ -472,8 +479,8 @@ p{margin:0}
     <div><a class="logo" href="#topo"><b style="color:var(--ivory)">SON<span>IA</span></b><small>Sistema Operacional de Negócios com Inteligência Artificial</small></a></div>
     <div><h4>Navegação</h4><a href="#servicos">Serviços</a><a href="#planos">Planos</a><a href="#conta">A conta</a><a href="#duvidas">Dúvidas</a></div>
     <div><h4>Planos</h4><a href="#planos">Starter</a><a href="#planos">Elite</a><a href="#planos">Magnata</a></div>
-    <div><h4>Contato</h4><a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a><a href="https://wa.me/5521999012520" target="_blank" rel="noopener">WhatsApp (21) 99901-2520</a><a href="#">Política de privacidade</a></div>
-    <p class="disc">Os valores de salário e economia são referências públicas de mercado. Não há promessa de faturamento garantido: o resultado depende da sua operação e das suas vendas. CNPJ 58.409.058/0001-73. Versão de comparação. © 2026 Prime Circle. Todos os direitos reservados.</p>
+    <div><h4>Contato</h4><a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a><a href="https://wa.me/5521999012520" target="_blank" rel="noopener">WhatsApp (21) 99901-2520</a><a href="../politica-de-privacidade.html">Política de privacidade</a></div>
+    <p class="disc">Os valores de salário e economia são referências públicas de mercado. Não há promessa de faturamento garantido: o resultado depende da sua operação e das suas vendas. CNPJ 58.409.058/0001-73. © 2026 Prime Circle. Todos os direitos reservados.</p>
   </div>
 </footer>
 
@@ -485,10 +492,38 @@ p{margin:0}
     var on = v.muted; v.muted = !on; if (on) { v.currentTime = 0; v.play(); }
     b.setAttribute("aria-pressed", String(on)); t.textContent = on ? "Desligar o som" : "Ouvir a Sônia";
   });
-  var av = document.querySelector(".sim-aviso");
-  document.querySelectorAll(".sim button:not([disabled])").forEach(function (x) {
-    x.addEventListener("click", function () { if (av) { av.hidden = false; clearTimeout(av._t); av._t = setTimeout(function () { av.hidden = true; }, 3500); } });
-  });
+  var bd = document.querySelector("[data-dias]"), bh = document.querySelector("[data-horas]"), rot = document.querySelector("[data-dia-rotulo]"), ped = document.querySelector("[data-pedir]");
+  if (bd && bh && ped) {
+    var SEM = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"], CUR = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+    var MES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+    var HORAS = ["9h00", "10h30", "12h00", "14h00", "15h30", "17h00"], dia = null, hora = null, d = new Date();
+    function msg() {
+      var t = "Olá! Quero agendar um diagnóstico da Sônia";
+      if (dia) t += " para " + SEM[dia.getDay()] + ", " + dia.getDate() + " de " + MES[dia.getMonth()] + (hora ? ", às " + hora : "");
+      ped.href = "https://wa.me/5521999012520?text=" + encodeURIComponent(t + ".");
+    }
+    var n = 0; d.setDate(d.getDate() + 1);
+    while (n < 10) {
+      if (d.getDay() !== 0 && d.getDay() !== 6) {
+        (function (x) {
+          var b = document.createElement("button"); b.type = "button";
+          b.innerHTML = "<small>" + CUR[x.getDay()] + "</small>" + x.getDate() + "<small>" + MES[x.getMonth()].slice(0, 3) + "</small>";
+          b.addEventListener("click", function () {
+            dia = x; bd.querySelectorAll("button").forEach(function (y) { y.classList.toggle("sel", y === b); });
+            rot.textContent = SEM[x.getDay()].charAt(0).toUpperCase() + SEM[x.getDay()].slice(1) + ", " + x.getDate() + " de " + MES[x.getMonth()]; msg();
+          });
+          bd.appendChild(b); if (n === 0) b.click();
+        })(new Date(d)); n++;
+      }
+      d.setDate(d.getDate() + 1);
+    }
+    HORAS.forEach(function (h) {
+      var b = document.createElement("button"); b.type = "button"; b.textContent = h;
+      b.addEventListener("click", function () { hora = h; bh.querySelectorAll("button").forEach(function (y) { y.classList.toggle("sel", y === b); }); msg(); });
+      bh.appendChild(b);
+    });
+    msg();
+  }
   var bar = document.querySelector(".bar"), hero = document.querySelector(".hero");
   function ver() { var r = hero.getBoundingClientRect(); bar.classList.toggle("on", r.bottom < 0); }
   window.addEventListener("scroll", ver, { passive: true }); ver();
