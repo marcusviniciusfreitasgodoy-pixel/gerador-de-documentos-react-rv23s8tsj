@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SONIA · An AI operations team for your business</title>
-<meta name="description" content="Sônia coordinates 17 AI specialists for marketing, sales, customer service and operations. You approve what matters. From US$ 997 per year.">
+<meta name="description" content="Sônia coordinates 17 AI specialists for marketing, sales, customer service and operations. You approve what matters. From US$ 79 per month.">
 <!-- Draft for the US market (06/11/2026). Keep out of search until pricing in USD and the reseller terms are confirmed. -->
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
@@ -179,7 +179,28 @@ p{margin:0}
 .ready h2{font-size:clamp(30px,3.4vw,44px)}
 .book .lead{margin-bottom:28px}
 .cal{max-width:1040px;margin:0 auto;border-radius:14px;overflow:hidden;border:1px solid rgba(14,14,14,.12);background:#fff}
-.cal iframe{display:block;width:100%;height:720px;border:0}
+.sim{display:grid;grid-template-columns:1fr 1.3fr .8fr;color:var(--ink)}
+.sim>div{padding:28px 26px}
+.sim-ev{border-right:1px solid rgba(14,14,14,.1);display:grid;align-content:start;gap:10px}
+.sim-logo{font-family:var(--sans);font-weight:800;font-size:22px;letter-spacing:.14em}.sim-logo span{color:var(--gold)}
+.sim-ev small{font-size:13px;color:#6f6a60}
+.sim-ev h3{font-size:30px;line-height:1.05}
+.sim-ev ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:14px;color:var(--text-dark)}
+.sim-ev li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--gold);margin-right:10px;vertical-align:middle}
+.sim-ev p{font-size:14px;line-height:1.6;color:#4a463f}
+.sim h4{margin:0 0 16px;font-family:var(--sans);font-size:15px;font-weight:700}
+.sim-mes{display:flex;justify-content:center;align-items:center;gap:28px;margin-bottom:14px;font-size:14px}
+.sim-mes span{color:var(--gold-deep);font-size:20px}
+.sim-dow,.sim-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.sim-dow span{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#6f6a60;padding-bottom:6px}
+.sim-grid button{aspect-ratio:1;border:0;border-radius:50%;background:transparent;font:500 14px var(--sans);color:#b5afa3;cursor:default}
+.sim-grid button.free{background:rgba(201,168,76,.16);color:var(--ink);font-weight:700;cursor:pointer}
+.sim-grid button.sel{background:var(--ink);color:var(--gold);font-weight:700;cursor:pointer}
+.sim-hrs{border-left:1px solid rgba(14,14,14,.1);display:grid;align-content:start;gap:10px}
+.sim-hrs button{min-height:46px;border:1px solid var(--gold-deep);border-radius:8px;background:#fff;color:var(--ink);font:700 14px var(--sans);cursor:pointer}
+.sim-hrs button:hover{background:var(--gold)}
+.sim-aviso{margin-top:14px;text-align:center;font-size:14px;color:var(--gold-deep);font-weight:600}
+@media (max-width:900px){.sim{grid-template-columns:1fr}.sim-ev,.sim-hrs{border:0}.sim-hrs{grid-template-columns:1fr 1fr;border-top:1px solid rgba(14,14,14,.1)}.sim-hrs h4{grid-column:1/-1;margin:0}.sim-cal{border-top:1px solid rgba(14,14,14,.1)}}
 .book .alt{margin-top:18px;text-align:center;font-size:14px;color:var(--text-dark)}
 
 /* footer */
@@ -228,7 +249,7 @@ p{margin:0}
         <a class="btn btn-gold" href="#book">Book a call</a>
         <a class="btn btn-line" href="#pricing">See pricing</a>
       </div>
-      <p class="note">From US$ 997 per year · 30-day money-back guarantee</p>
+      <p class="note">From US$ 79 per month · 30-day money-back guarantee</p>
     </div>
     <div class="vis">
       <div class="vframe">
@@ -296,12 +317,12 @@ p{margin:0}
 <section class="sec dark" id="pricing">
   <div class="wrap">
     <h2 class="h2">Pricing</h2>
-    <p class="lead" style="margin-top:14px">Billed annually in US dollars. Every plan has a 30-day money-back guarantee.</p>
+    <p class="lead" style="margin-top:14px">Monthly plans in US dollars. Every plan has a 30-day money-back guarantee.</p>
     <div class="plans">
       <article class="plan">
         <span class="pn">SONIA Starter</span>
-        <span class="pp">$997<small>/year</small></span>
-        <span class="pm">About $83 a month</span>
+        <span class="pp">$79<small>/month</small></span>
+        <span class="pm">For the owner who wants to start with content and sales</span>
         <ul>
           <li>5 agents: Sônia, Juliana, Paulo, Jonathan and the owner's clone</li>
           <li>Up to 5 routines (tasks that repeat on their own)</li>
@@ -314,8 +335,8 @@ p{margin:0}
       <article class="plan top">
         <span class="badge">Full sales squad</span>
         <span class="pn">SONIA Elite</span>
-        <span class="pp">$1,497<small>/year</small></span>
-        <span class="pm">About $125 a month</span>
+        <span class="pp">$129<small>/month</small></span>
+        <span class="pm">The full sales squad working for you</span>
         <ul>
           <li>16 agents: everyone on Starter plus Rafael, Bianca, Amanda, the traffic strategist, Davi and 6 SDRs</li>
           <li>Up to 20 routines</li>
@@ -328,8 +349,8 @@ p{margin:0}
       <article class="plan">
         <span class="badge">With mentoring and the Council</span>
         <span class="pn">SONIA Magnata</span>
-        <span class="pp">$2,997<small>/year</small></span>
-        <span class="pm">About $250 a month</span>
+        <span class="pp">$249<small>/month</small></span>
+        <span class="pm">The whole team, mentoring and the Council</span>
         <ul>
           <li>Sônia and all 17 specialists: everyone on Elite plus prospecting and software engineering</li>
           <li>Up to 50 routines</li>
@@ -340,7 +361,7 @@ p{margin:0}
         <a class="btn btn-line btn-sm" href="#book">Learn more</a>
       </article>
     </div>
-    <p class="fine">Not included: the AI model subscription (ChatGPT starts at about US$ 20 a month), paid directly to the provider, and any other tool you connect. The Executive Council is available as an add-on on Starter and Elite.</p>
+    <p class="fine">Not included: the AI model subscription (ChatGPT starts at about US$ 20 a month), paid directly to the provider, and any other tool you connect. The Executive Council is available as an add-on on Starter and Elite for US$ 29 a month.</p>
     <div class="cta-row"><a class="btn btn-gold" href="#book">Book a call</a></div>
   </div>
 </section>
@@ -352,11 +373,11 @@ p{margin:0}
     <p class="lead" style="margin-top:14px">The same roles, hired in the US at the national median wage, plus employer costs.</p>
     <div class="cost">
       <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="14" r="6"/><path d="M9 33c1.5-6.5 6-9.5 11-9.5s9.5 3 11 9.5"/></svg><h3>Starter roles</h3></header>
-        <dl><div><dt>People</dt><dd>5</dd></div><div><dt>Cost with people, per year</dt><dd>$662,299</dd></div><div><dt>SONIA Starter, per year</dt><dd>$997</dd></div></dl></article>
+        <dl><div><dt>People</dt><dd>5</dd></div><div><dt>Cost with people, per month</dt><dd>$55,192</dd></div><div><dt>SONIA Starter, per month</dt><dd>$79</dd></div></dl></article>
       <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="14" cy="15" r="5"/><circle cx="27" cy="15" r="5"/><path d="M4 33c1-5.5 5-8 10-8s9 2.5 10 8M20 33c1-5.5 3-8 7-8s8 2.5 9 8"/></svg><h3>Elite roles</h3></header>
-        <dl><div><dt>People</dt><dd>16</dd></div><div><dt>Cost with people, per year</dt><dd>$1,797,696</dd></div><div><dt>SONIA Elite, per year</dt><dd>$1,497</dd></div></dl></article>
+        <dl><div><dt>People</dt><dd>16</dd></div><div><dt>Cost with people, per month</dt><dd>$149,808</dd></div><div><dt>SONIA Elite, per month</dt><dd>$129</dd></div></dl></article>
       <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="11" r="5"/><circle cx="9" cy="19" r="4"/><circle cx="31" cy="19" r="4"/><path d="M11 34c1.2-5.5 4.5-8 9-8s7.8 2.5 9 8"/></svg><h3>Magnata roles</h3></header>
-        <dl><div><dt>People</dt><dd>17</dd></div><div><dt>Cost with people, per year</dt><dd>$1,897,712</dd></div><div><dt>SONIA Magnata, per year</dt><dd>$2,997</dd></div></dl></article>
+        <dl><div><dt>People</dt><dd>17</dd></div><div><dt>Cost with people, per month</dt><dd>$158,143</dd></div><div><dt>SONIA Magnata, per month</dt><dd>$249</dd></div></dl></article>
     </div>
     <p class="fine">Sources: U.S. Bureau of Labor Statistics, Occupational Employment and Wage Statistics, national median annual wage, May 2025 (executive assistant, web designer, project management specialist, software developer, writer, marketing specialist, customer service representative, services sales representative). Employer costs of 42.9% on top of wages: BLS Employer Costs for Employee Compensation, private industry, June 2026. The comparison does not include the AI subscription. These are reference figures, not a promise of savings or revenue: results depend on your operation.</p>
     <div class="cta-row"><a class="btn btn-gold" href="#book">I want this team</a></div>
@@ -406,7 +427,7 @@ p{margin:0}
   <div class="wrap">
     <h2 class="h2">Three reasons owners choose SONIA</h2>
     <div class="pillars">
-      <div class="pl"><svg viewBox="0 0 48 48" fill="none" stroke-width="1.8"><rect x="8" y="12" width="32" height="22" rx="3"/><path d="M4 38h40M18 23l4 4 8-8"/></svg><h3>No payroll overhead</h3><p>A fixed annual price instead of salaries, benefits, hiring and turnover.</p></div>
+      <div class="pl"><svg viewBox="0 0 48 48" fill="none" stroke-width="1.8"><rect x="8" y="12" width="32" height="22" rx="3"/><path d="M4 38h40M18 23l4 4 8-8"/></svg><h3>No payroll overhead</h3><p>One fixed monthly price instead of salaries, benefits, hiring and turnover.</p></div>
       <div class="pl"><svg viewBox="0 0 48 48" fill="none" stroke-width="1.8"><path d="M24 6c8 4 12 12 12 20l-6 6H18l-6-6c0-8 4-16 12-20z"/><circle cx="24" cy="20" r="4"/><path d="M18 32l-4 10 8-4M30 32l4 10-8-4"/></svg><h3>Capacity on demand</h3><p>Take on more work without hiring. The team picks up the next request at any hour.</p></div>
       <div class="pl"><svg viewBox="0 0 48 48" fill="none" stroke-width="1.8"><rect x="10" y="6" width="28" height="36" rx="3"/><path d="M17 16h14M17 23h14M17 30h8"/><path d="M30 34l3 3 6-7"/></svg><h3>Ready from day one</h3><p>Access arrives by email once payment clears, with a live onboarding session to set Sônia up for your business.</p></div>
     </div>
@@ -434,10 +455,24 @@ p{margin:0}
 <!-- 12. BOOKING -->
 <section class="sec book" id="book">
   <div class="wrap">
-    <p class="lead">Pick a time below to book a call with Marcus.</p>
-    <div class="cal">
-      <iframe title="Book a call with Marcus Godoy" loading="lazy" src="https://calendly.com/marcus-godoyprime/sonia-ver-a-sonia-funcionando?hide_gdpr_banner=1&amp;background_color=ffffff&amp;text_color=0e0e0e&amp;primary_color=c9a84c"></iframe>
+    <p class="lead">Please choose a time below to schedule your call with Marcus.</p>
+    <div class="cal sim" aria-label="Scheduling preview">
+      <div class="sim-ev">
+        <b class="sim-logo">SON<span>IA</span></b>
+        <small>Marcus Godoy</small>
+        <h3>Discovery call</h3>
+        <ul><li>30 min</li><li>Video call</li><li>Eastern Time (ET)</li></ul>
+        <p>Tell me what slows your business down. I'll show you which specialists handle it and which plan fits.</p>
+      </div>
+      <div class="sim-cal">
+        <h4>Select a date and time</h4>
+        <div class="sim-mes"><span aria-hidden="true">‹</span><b>November 2026</b><span aria-hidden="true">›</span></div>
+        <div class="sim-dow"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div>
+        <div class="sim-grid"><button type="button" disabled>1</button><button type="button" disabled>2</button><button type="button" disabled>3</button><button type="button" disabled>4</button><button type="button" disabled>5</button><button type="button" disabled>6</button><button type="button" disabled>7</button><button type="button" disabled>8</button><button type="button" class="free">9</button><button type="button" class="sel">10</button><button type="button" class="free">11</button><button type="button" class="free">12</button><button type="button" class="free">13</button><button type="button" disabled>14</button><button type="button" disabled>15</button><button type="button" class="free">16</button><button type="button" class="free">17</button><button type="button" class="free">18</button><button type="button" class="free">19</button><button type="button" class="free">20</button><button type="button" disabled>21</button><button type="button" disabled>22</button><button type="button" class="free">23</button><button type="button" class="free">24</button><button type="button" class="free">25</button><button type="button" class="free">26</button><button type="button" class="free">27</button><button type="button" disabled>28</button><button type="button" disabled>29</button><button type="button" class="free">30</button><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="sim-hrs"><h4>Tuesday, November 10</h4><button type="button">9:00 AM</button><button type="button">10:30 AM</button><button type="button">12:00 PM</button><button type="button">2:00 PM</button><button type="button">3:30 PM</button><button type="button">5:00 PM</button></div>
     </div>
+    <p class="sim-aviso" role="status" hidden>Preview only: booking is not active on this page yet.</p>
     <p class="alt">Prefer email? Write to <a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a></p>
   </div>
 </section>
@@ -451,7 +486,7 @@ p{margin:0}
     <div><h4>Navigation</h4><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#cost">The math</a><a href="#faq">FAQ</a></div>
     <div><h4>Plans</h4><a href="#pricing">Starter</a><a href="#pricing">Elite</a><a href="#pricing">Magnata</a></div>
     <div><h4>Contact</h4><a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a><a href="#book">Book a call</a><a href="../politica-de-privacidade.html">Privacy policy</a></div>
-    <p class="disc">Wage and savings figures are public reference data, not a promise of savings or revenue. Results depend on your operation. Sônia and the specialists are AI agents, not people. © 2026 Prime Circle. All rights reserved.</p>
+    <p class="disc">Wage and savings figures are public reference data, not a promise of savings or revenue. Results depend on your operation. Sônia and the specialists are AI agents, not people. Preview version for presentation. © 2026 Prime Circle. All rights reserved.</p>
   </div>
 </footer>
 
@@ -463,6 +498,10 @@ p{margin:0}
   if (b && v) b.addEventListener("click", function () {
     var on = v.muted; v.muted = !on; if (on) { v.currentTime = 0; v.play(); }
     b.setAttribute("aria-pressed", String(on)); t.textContent = on ? "Mute" : "Listen to Sônia";
+  });
+  var av = document.querySelector(".sim-aviso");
+  document.querySelectorAll(".sim button:not([disabled])").forEach(function (x) {
+    x.addEventListener("click", function () { if (av) { av.hidden = false; clearTimeout(av._t); av._t = setTimeout(function () { av.hidden = true; }, 3500); } });
   });
   var bar = document.querySelector(".bar"), hero = document.querySelector(".hero");
   function ver() { var r = hero.getBoundingClientRect(); bar.classList.toggle("on", r.bottom < 0); }
