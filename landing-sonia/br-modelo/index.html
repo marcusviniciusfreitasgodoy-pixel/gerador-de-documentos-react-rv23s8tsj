@@ -250,6 +250,10 @@ p{margin:0}
 .sim-hrs button.sel{background:var(--gold)}
 .sim-pedir{margin-top:6px;width:100%}
 .sim-aviso{color:#6f6a60!important;font-weight:500!important}
+.vplay{position:absolute;inset:0;margin:auto;z-index:3;width:84px;height:84px;border-radius:50%;border:2px solid rgba(245,241,230,.85);background:rgba(14,14,14,.55);cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.vplay[hidden]{display:none}
+.vplay span{width:0;height:0;margin-left:6px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent #F5F1E6}
+.vframe video{cursor:pointer}
 </style>
 </head>
 <body>
@@ -284,6 +288,7 @@ p{margin:0}
           <source src="../assets/video/anuncio-time-sonia.mp4" type="video/mp4">
           <track kind="captions" srclang="pt-BR" label="Português" src="../assets/video/anuncio-time-sonia.pt-BR.vtt" default>
         </video>
+        <button class="vplay" type="button" aria-label="Assistir ao vídeo" hidden><span aria-hidden="true"></span></button>
       </div>
       <div class="chip c1"><img src="../assets/agentes/juliana-ops.webp" alt=""><span><b>Juliana</b><small>Operações</small></span></div>
       <div class="chip c2"><img src="../assets/agentes/jonathan-copy.webp" alt=""><span><b>Jonathan</b><small>Redator</small></span></div>
@@ -523,6 +528,15 @@ p{margin:0}
       bh.appendChild(b);
     });
     msg();
+  }
+  var vp = document.querySelector(".vplay");
+  if (v && vp) {
+    function mostra() { vp.hidden = !v.paused; }
+    function toca() { var p = v.play(); if (p && p.catch) p.catch(function () { vp.hidden = false; }); }
+    v.addEventListener("play", mostra); v.addEventListener("playing", mostra); v.addEventListener("pause", mostra);
+    vp.addEventListener("click", function () { toca(); });
+    v.addEventListener("click", function () { if (v.paused) toca(); else v.pause(); });
+    setTimeout(function () { if (v.paused) { toca(); setTimeout(mostra, 600); } }, 1200);
   }
   var bar = document.querySelector(".bar"), hero = document.querySelector(".hero");
   function ver() { var r = hero.getBoundingClientRect(); bar.classList.toggle("on", r.bottom < 0); }
