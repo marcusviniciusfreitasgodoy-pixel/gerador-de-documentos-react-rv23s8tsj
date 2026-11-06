@@ -221,13 +221,6 @@ p{margin:0}
   .foot{padding-bottom:96px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-.vframe{aspect-ratio:1/1;max-width:400px;border-radius:50%;border:2px solid rgba(201,168,76,.55);box-shadow:0 0 0 10px rgba(201,168,76,.08),0 30px 80px rgba(0,0,0,.5)}
-.vframe video::cue{opacity:0}
-.vctl{display:grid;justify-items:center;gap:14px;margin-top:22px;min-height:96px}
-.vctl .som{position:static}
-.leg{margin:0;max-width:420px;text-align:center;font-size:17px;line-height:1.45;color:var(--ivory);min-height:50px}
-.c1{top:8%;left:-2%}.c2{top:4%;right:-2%}.c3{top:40%;left:-10%}.c4{top:44%;right:-10%}.c5{top:62%;left:-4%}
-@media (max-width:900px){.vframe{max-width:300px}.c1{top:2%;left:0}.c2{top:0;right:0}.c5{top:50%;left:0}}
 </style>
 </head>
 <body>
@@ -259,12 +252,12 @@ p{margin:0}
     </div>
     <div class="vis">
       <div class="vframe">
-                <video id="v" autoplay muted loop playsinline preload="metadata" poster="../assets/video/anuncio-time-sonia-en.jpg" aria-label="Video: meet Sônia's team">
-          <source src="../assets/video/anuncio-time-sonia-en.mp4" type="video/mp4">
-          <track kind="captions" srclang="en" label="English" src="../assets/video/anuncio-time-sonia-en.en.vtt" default>
+                <video id="v" autoplay muted loop playsinline preload="metadata" poster="../assets/video/sonia-apresentacao.webp" aria-label="Sônia introduction video">
+          <source src="../assets/video/sonia-apresentacao.webm" type="video/webm">
+          <source src="../assets/video/sonia-apresentacao.mp4" type="video/mp4">
+          <track kind="captions" srclang="en" label="English" src="../assets/video/sonia-apresentacao.en-us.vtt" default>
         </video>
       </div>
-      <div class="vctl"><button class="som" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="som-t">Listen to Sônia</span></button><p class="leg" aria-hidden="true"></p></div>
       <div class="chip c1"><img src="../assets/agentes/juliana-ops.webp" alt=""><span><b>Juliana</b><small>Operations</small></span></div>
       <div class="chip c2"><img src="../assets/agentes/jonathan-copy.webp" alt=""><span><b>Jonathan</b><small>Copywriter</small></span></div>
       <div class="chip c3"><img src="../assets/agentes/paulo-dev.webp" alt=""><span><b>Paulo</b><small>Developer</small></span></div>
@@ -506,11 +499,6 @@ p{margin:0}
   document.querySelectorAll(".sim button:not([disabled])").forEach(function (x) {
     x.addEventListener("click", function () { if (av) { av.hidden = false; clearTimeout(av._t); av._t = setTimeout(function () { av.hidden = true; }, 3500); } });
   });
-  var leg = document.querySelector(".leg");
-  if (v && leg && v.textTracks && v.textTracks[0]) {
-    var tr = v.textTracks[0]; tr.mode = "hidden";
-    tr.addEventListener("cuechange", function () { var c = tr.activeCues && tr.activeCues[0]; leg.textContent = c ? c.text : ""; });
-  }
   var bar = document.querySelector(".bar"), hero = document.querySelector(".hero");
   function ver() { var r = hero.getBoundingClientRect(); bar.classList.toggle("on", r.bottom < 0); }
   window.addEventListener("scroll", ver, { passive: true }); ver();
