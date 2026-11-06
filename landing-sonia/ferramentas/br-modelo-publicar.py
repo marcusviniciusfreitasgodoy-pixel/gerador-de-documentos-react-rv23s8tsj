@@ -11,7 +11,7 @@ AQUI = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 s = open(os.path.join(AQUI, 'br-modelo', 'index.html'), encoding='utf-8').read()
 seo = json.load(open(os.path.join(AQUI, 'conteudo.json'), encoding='utf-8'))['seo']
 url = seo['endereco'].rstrip('/') + '/'
-s = s.replace('"../assets/', '"assets/').replace('"../politica-de-privacidade.html"', '"politica-de-privacidade.html"')
+s = s.replace('"../assets/', '"assets/').replace('"../politica-de-privacidade.html', '"politica-de-privacidade.html')
 robots = '<meta name="robots" content="noindex, nofollow">\n'
 assert s.count(robots) == 1
 tags = ('<link rel="canonical" href="' + url + '">\n'

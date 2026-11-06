@@ -254,6 +254,13 @@ p{margin:0}
 .vplay[hidden]{display:none}
 .vplay span{width:0;height:0;margin-left:6px;border-style:solid;border-width:16px 0 16px 26px;border-color:transparent transparent transparent #F5F1E6}
 .vframe video{cursor:pointer}
+.ck{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;max-width:720px;margin:0 auto;display:flex;gap:16px;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:12px;background:#1C1C1C;color:var(--ivory);border:1px solid rgba(201,168,76,.35);box-shadow:0 20px 50px rgba(0,0,0,.45)}
+.ck[hidden]{display:none}
+.ck p{font-size:14px;line-height:1.5;color:#E8E0CC}
+.ck a{color:var(--gold)}
+.ck div{display:flex;gap:8px;flex:none}
+.ck .btn-line{color:var(--ivory)}
+@media (max-width:700px){.ck{flex-direction:column;align-items:stretch;bottom:84px}.ck div .btn{flex:1}}
 </style>
 </head>
 <body>
@@ -358,7 +365,7 @@ p{margin:0}
         <span class="pp"><small>12x de</small> R$ 433,75</span>
         <span class="pm">ou R$ 4.997 por ano</span>
         <ul><li class="pick"><b>A Sônia + 4 especialistas à sua escolha</b><span>Você escolhe as 4 entre as 21 especialidades, na combinação que precisar</span></li><li>Até 5 rotinas (tarefas que se repetem sozinhas)</li><li>Usa o ChatGPT como cérebro (assinatura paga da IA, contratada por você)</li><li>1 sessão de onboarding ao vivo, no horário que você escolher</li><li>Suporte pelo WhatsApp e por e-mail, com agente de atendimento a qualquer hora</li><li>Conselho Executivo como adicional: 4 conselheiros para as suas decisões, por R$ 1.997 por ano</li></ul>
-        <a class="btn btn-line btn-sm" href="https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc?ref=42cfa2c8135d15c8dc" target="_blank" rel="noopener">Assinar agora</a>
+        <a data-plano="Starter" data-valor="4997" class="btn btn-line btn-sm" href="https://agentes.primecircle.app.br/assinar/65fbf197-7461-4011-bd64-69942de593fc?ref=42cfa2c8135d15c8dc" target="_blank" rel="noopener">Assinar agora</a>
       </article>
       <article class="plan top">
         <span class="badge">16 agentes no seu time</span>
@@ -366,7 +373,7 @@ p{margin:0}
         <span class="pp"><small>12x de</small> R$ 694,14</span>
         <span class="pm">ou R$ 7.997 por ano</span>
         <ul><li class="pick"><b>A Sônia + 15 especialistas à sua escolha</b><span>16 agentes no total, escolhidos entre as 21 especialidades</span></li><li>Até 20 rotinas (tarefas que se repetem sozinhas)</li><li>Funciona com o ChatGPT ou com outros modelos de IA, à sua escolha (assinatura ou chave da IA, contratada por você)</li><li>1 sessão de onboarding ao vivo, no horário que você escolher</li><li>Suporte pelo WhatsApp e por e-mail, com agente de atendimento a qualquer hora</li><li>Conselho Executivo como adicional: 4 conselheiros para as suas decisões, por R$ 1.997 por ano</li></ul>
-        <a class="btn btn-gold btn-sm" href="https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c?ref=42cfa2c8135d15c8dc" target="_blank" rel="noopener">Assinar agora</a>
+        <a data-plano="Elite" data-valor="7997" class="btn btn-gold btn-sm" href="https://agentes.primecircle.app.br/assinar/d287c36b-fd68-4f45-878c-a84fdc510c9c?ref=42cfa2c8135d15c8dc" target="_blank" rel="noopener">Assinar agora</a>
       </article>
       <article class="plan">
         <span class="badge">Com mentoria e Conselho</span>
@@ -374,7 +381,7 @@ p{margin:0}
         <span class="pp"><small>12x de</small> R$ 1.388,52</span>
         <span class="pm">ou R$ 15.997 por ano</span>
         <ul><li class="pick"><b>A Sônia + os 21 especialistas</b><span>O time completo, todas as especialidades liberadas</span></li><li>Até 50 rotinas (tarefas que se repetem sozinhas)</li><li>4 mentorias individuais de 1 hora com a Prime Circle</li><li>Suporte pelo WhatsApp e por e-mail: agente de atendimento a qualquer hora e atendimento humano em dias úteis, das 9h às 18h</li><li>Conselho Executivo incluído: 4 conselheiros para decidir operação, vendas, finanças e tecnologia (R$ 1.997 por ano nos outros planos)</li><li>Garantia de 30 dias</li></ul>
-        <a class="btn btn-line btn-sm" href="https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d?ref=42cfa2c8135d15c8dc" target="_blank" rel="noopener">Assinar agora</a>
+        <a data-plano="Magnata" data-valor="15997" class="btn btn-line btn-sm" href="https://agentes.primecircle.app.br/assinar/d3a3f33b-c69b-485c-8787-067e5f9b247d?ref=42cfa2c8135d15c8dc" target="_blank" rel="noopener">Assinar agora</a>
       </article>
     </div>
     <div class="monte"><div class="monte-txt"><span class="tag">Você monta o time</span><h3>Escolha as especialidades que a sua empresa precisa</h3><p>Nenhuma vem obrigatória. Um vendedor, uma jurídica e um redator no Starter, por exemplo. A Sônia coordena quem você escolher.</p></div><div class="monte-grid"><div class="mg"><b>Comando e operação</b><span>Braço direito e operações</span><span>Gestor de projetos</span></div><div class="mg"><b>Conteúdo e produção</b><span>Redator</span><span>Desenvolvedor de sites</span><span>Analista de vídeos virais</span><span>Engenheiro de software</span></div><div class="mg"><b>Vendas e atendimento</b><span>Atendimento do dono (clone)</span><span>Líder de vendas</span><span>Vendedor (SDR) × 6</span><span>Gerente de CRM</span><span>Prospecção</span></div><div class="mg"><b>Anúncios</b><span>Gestor de tráfego pago</span></div><div class="mg"><b>Financeiro, fiscal, jurídico e RH</b><span>Financeiro</span><span>Tributário e fiscal</span><span>Jurídico</span><span>Recursos Humanos</span></div></div><p class="monte-n">21 especialidades disponíveis</p></div>
@@ -484,11 +491,16 @@ p{margin:0}
     <div><a class="logo" href="#topo"><b style="color:var(--ivory)">SON<span>IA</span></b><small>Sistema Operacional de Negócios com Inteligência Artificial</small></a></div>
     <div><h4>Navegação</h4><a href="#servicos">Serviços</a><a href="#planos">Planos</a><a href="#conta">A conta</a><a href="#duvidas">Dúvidas</a></div>
     <div><h4>Planos</h4><a href="#planos">Starter</a><a href="#planos">Elite</a><a href="#planos">Magnata</a></div>
-    <div><h4>Contato</h4><a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a><a href="https://wa.me/5521999012520" target="_blank" rel="noopener">WhatsApp (21) 99901-2520</a><a href="../politica-de-privacidade.html">Política de privacidade</a></div>
+    <div><h4>Contato</h4><a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a><a href="https://wa.me/5521999012520" target="_blank" rel="noopener">WhatsApp (21) 99901-2520</a><a href="../politica-de-privacidade.html">Política de privacidade</a><a href="#" data-cookies-abrir>Preferências de cookies</a></div>
     <p class="disc">Os valores de salário e economia são referências públicas de mercado. Não há promessa de faturamento garantido: o resultado depende da sua operação e das suas vendas. CNPJ 58.409.058/0001-73. © 2026 Prime Circle. Todos os direitos reservados.</p>
   </div>
 </footer>
 
+
+<div class="ck" role="dialog" aria-live="polite" aria-label="Cookies" hidden>
+  <p>Usamos cookies para medir as visitas e melhorar os nossos anúncios (Google Analytics e Meta). Só ativamos se você aceitar. <a href="../politica-de-privacidade.html#cookies">Saiba mais</a></p>
+  <div><button type="button" class="btn btn-line btn-sm" data-ck="nao">Recusar</button><button type="button" class="btn btn-gold btn-sm" data-ck="sim">Aceitar</button></div>
+</div>
 <nav class="bar" aria-label="Agendar ou ver os planos"><a class="btn btn-gold" href="#agenda">Agendar diagnóstico</a><a class="btn btn-line" style="color:var(--ivory)" href="#planos">Planos</a></nav>
 <script>
 (function () {
@@ -541,6 +553,64 @@ p{margin:0}
   var bar = document.querySelector(".bar"), hero = document.querySelector(".hero");
   function ver() { var r = hero.getBoundingClientRect(); bar.classList.toggle("on", r.bottom < 0); }
   window.addEventListener("scroll", ver, { passive: true }); ver();
+})();
+</script>
+
+<script>
+/* Rastreamento (06/11/2026). Preencha os identificadores; vazio = nada carrega.
+   Nada é ativado antes do "Aceitar" no aviso de cookies (LGPD). */
+(function () {
+  var RASTREIO = { ga4: "", metaPixel: "" };
+  var CHAVE = "sonia-cookies", ligado = false;
+  var temId = !!(RASTREIO.ga4 || RASTREIO.metaPixel);
+  var ck = document.querySelector(".ck");
+  function carregar() {
+    if (ligado || !temId) return; ligado = true;
+    if (RASTREIO.ga4) {
+      var g = document.createElement("script"); g.async = true; g.src = "https://www.googletagmanager.com/gtag/js?id=" + RASTREIO.ga4; document.head.appendChild(g);
+      window.dataLayer = window.dataLayer || []; window.gtag = function () { dataLayer.push(arguments); };
+      gtag("js", new Date()); gtag("config", RASTREIO.ga4);
+    }
+    if (RASTREIO.metaPixel) {
+      !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = "2.0"; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
+      fbq("init", RASTREIO.metaPixel); fbq("track", "PageView");
+    }
+  }
+  // evento nos dois: nome do GA4 e, quando houver, o evento padrão da Meta
+  function ev(ga, meta, p) {
+    if (!ligado) return; p = p || {};
+    if (window.gtag && RASTREIO.ga4) gtag("event", ga, p);
+    if (window.fbq && RASTREIO.metaPixel) { if (meta) fbq("track", meta, p); else fbq("trackCustom", ga, p); }
+  }
+  window.soniaEvento = ev;
+  var esc = null; try { esc = localStorage.getItem(CHAVE); } catch (e) {}
+  if (temId && ck) { if (esc === "sim") carregar(); else if (esc !== "nao") ck.hidden = false; }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-ck]");
+    if (b) { var v = b.getAttribute("data-ck"); try { localStorage.setItem(CHAVE, v); } catch (x) {} ck.hidden = true; if (v === "sim") carregar(); return; }
+    if (e.target.closest("[data-cookies-abrir]")) { e.preventDefault(); if (ck && temId) ck.hidden = false; return; }
+    var a = e.target.closest("a"); if (!a) return;
+    var h = a.getAttribute("href") || "", txt = (a.textContent || "").trim();
+    if (a.hasAttribute("data-plano")) { var val = Number(a.getAttribute("data-valor")); ev("begin_checkout", "InitiateCheckout", { currency: "BRL", value: val, plano: a.getAttribute("data-plano"), items: [{ item_name: "SONIA " + a.getAttribute("data-plano"), price: val }] }); }
+    else if (a.hasAttribute("data-pedir")) ev("generate_lead", "Lead", { canal: "whatsapp", origem: "agenda" });
+    else if (/wa\.me/.test(h)) ev("contact", "Contact", { canal: "whatsapp", origem: txt.slice(0, 40) });
+    else if (h === "#agenda") ev("cta_agendar", null, { origem: txt.slice(0, 40) });
+    else if (h === "#planos") ev("cta_planos", null, { origem: txt.slice(0, 40) });
+  });
+  // seções vistas, perguntas abertas, vídeo e rolagem
+  var visto = {};
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (ent) { ent.forEach(function (x) { if (x.isIntersecting && !visto[x.target.id]) { visto[x.target.id] = 1; if (x.target.id === "planos") ev("view_item_list", "ViewContent", { content_name: "planos" }); else ev("secao_vista", null, { secao: x.target.id }); } }); }, { threshold: .35 });
+    ["servicos", "planos", "conta", "fundador", "duvidas", "agenda"].forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+  }
+  document.querySelectorAll(".faq details").forEach(function (d) { d.addEventListener("toggle", function () { if (d.open) ev("faq_aberta", null, { pergunta: d.querySelector("summary").textContent.trim().slice(0, 90) }); }); });
+  var v = document.getElementById("v"), marcos = {};
+  if (v) {
+    v.addEventListener("volumechange", function () { if (!v.muted && !marcos.som) { marcos.som = 1; ev("video_som", null, {}); } });
+    v.addEventListener("timeupdate", function () { if (!v.duration) return; var pc = v.currentTime / v.duration; [.5, .9].forEach(function (m) { if (pc >= m && !marcos[m] && !v.muted) { marcos[m] = 1; ev(m === .9 ? "video_complete" : "video_progress", null, { percentual: m * 100 }); } }); });
+  }
+  var rol = {};
+  window.addEventListener("scroll", function () { var h = document.documentElement, pc = (window.scrollY + innerHeight) / h.scrollHeight; [25, 50, 75, 90].forEach(function (m) { if (pc * 100 >= m && !rol[m]) { rol[m] = 1; ev("rolagem", null, { percentual: m }); } }); }, { passive: true });
 })();
 </script>
 </body>
