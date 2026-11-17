@@ -261,7 +261,25 @@ p{margin:0}
 .ck div{display:flex;gap:8px;flex:none}
 .ck .btn-line{color:var(--ivory)}
 @media (max-width:700px){.ck{flex-direction:column;align-items:stretch;bottom:84px}.ck div .btn{flex:1}}
+/* Black Friday (17/11/2026). Fora do prazo, html.bf-fim esconde o que é da promoção. */
+html:not(.bf-fim) .cheio-so,html.bf-fim .bf-so{display:none!important}
+.plan .preco{display:flex;flex-direction:column;align-items:center;gap:6px}
+.plan .preco .pm{margin-top:0}
+.plan .bf-tag{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:5px 12px;border-radius:999px;background:var(--gold);color:var(--ink);font-weight:700;text-align:center}
+.plan .pde{font-size:14px;color:var(--text-soft)}
+.plan .pde s{text-decoration-thickness:1.5px;text-decoration-color:rgba(245,241,230,.55)}
+.plan .psave{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.bf-faixa{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 18px;margin:36px auto -20px;padding:14px 20px;max-width:900px;border-radius:12px;border:1px solid var(--gold);background:rgba(201,168,76,.10);text-align:center}
+.bf-faixa p{margin:0;font-size:14px;color:var(--ivory)}
+.bf-faixa-t{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink);background:var(--gold);padding:4px 10px;border-radius:999px;font-weight:700}
+.bf-cont{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--gold)}
+.bf-cont:empty{display:none}
+@media (max-width:700px){.bf-faixa{margin-top:28px;padding:12px 14px}}
 </style>
+<script>
+/* Antes de desenhar a página: se a Black Friday já acabou, entra o preço cheio. */
+(function(){try{if(Date.now()>Date.parse("2026-12-06T23:59:59-03:00"))document.documentElement.classList.add("bf-fim")}catch(e){}})();
+</script>
 </head>
 <body>
 
@@ -286,7 +304,7 @@ p{margin:0}
         <a class="btn btn-gold" href="#agenda">Agendar diagnóstico</a>
         <a class="btn btn-line" href="#planos">Ver os planos</a>
       </div>
-      <p class="note">A partir de 12x de R$ 433,75 · garantia de 30 dias</p>
+      <p class="note"><span class="bf-so">Black Friday até 06/12: a partir de 12x de R$ 152,11</span><span class="cheio-so">A partir de 12x de R$ 507,72</span> · garantia de 30 dias</p>
     </div>
     <div class="vis">
       <div class="vframe">
@@ -358,34 +376,62 @@ p{margin:0}
   <div class="wrap">
     <h2 class="h2">Planos</h2>
     <p class="lead" style="margin-top:14px">Pix à vista ou cartão em até 12 vezes. O acesso chega no seu e-mail assim que o pagamento é confirmado. Todos os planos têm garantia de 30 dias.</p>
+    <div class="bf-faixa bf-so" role="note"><span class="bf-faixa-t">Black Friday</span><p>Preços promocionais até 06/12, às 23h59 (horário de Brasília).</p><span class="bf-cont" data-bf-cont aria-live="off"></span></div>
     <div class="plans">
       <article class="plan">
         <span class="badge" style="visibility:hidden" aria-hidden="true">.</span>
-        <span class="pn">Imob Starter</span>
-        <span class="pp"><small>12x de</small> R$ 433,75</span>
-        <span class="pm">ou R$ 4.997 por ano</span>
+        <span class="pn">Sônia Starter</span>
+        <div class="preco bf-so">
+          <span class="bf-tag">Black Friday · 70% de desconto</span>
+          <span class="pde">De <s>R$ 4.997 por ano</s></span>
+          <span class="pp"><small>12x de</small> R$ 152,11</span>
+          <span class="pm">ou R$ 1.497 à vista</span>
+          <span class="psave">Você economiza R$ 3.500</span>
+        </div>
+        <div class="preco cheio-so">
+          <span class="pp"><small>12x de</small> R$ 507,72</span>
+          <span class="pm">ou R$ 4.997 por ano</span>
+        </div>
         <ul><li class="pick"><b>A Sônia + 4 especialistas à sua escolha</b><span>Você escolhe as 4 entre as 21 especialidades, na combinação que precisar</span></li><li>Até 5 rotinas (tarefas que se repetem sozinhas)</li><li>Usa o ChatGPT como cérebro (assinatura paga da IA, contratada por você)</li><li>1 sessão de onboarding ao vivo, no horário que você escolher</li><li>Suporte pelo WhatsApp e por e-mail, com agente de atendimento a qualquer hora</li><li>Conselho Executivo como adicional: 4 conselheiros para as suas decisões, por R$ 1.997 por ano</li></ul>
-        <a data-plano="Imob Starter" data-valor="4997" class="btn btn-line btn-sm" href="https://pay.hub.la/ooPN2nRsCxrPkDhsEbr1/upsell" target="_blank" rel="noopener">Assinar agora</a>
+        <a data-plano="Sônia Starter" data-valor="1497" data-valor-cheio="4997" data-link-cheio="https://pay.hub.la/ooPN2nRsCxrPkDhsEbr1" class="btn btn-line btn-sm" href="https://pay.hub.la/n1DTk4BdCEinCv8pe88F" target="_blank" rel="noopener">Assinar agora</a>
       </article>
       <article class="plan top">
         <span class="badge">16 agentes no seu time</span>
-        <span class="pn">Imob Prime</span>
-        <span class="pp"><small>12x de</small> R$ 694,14</span>
-        <span class="pm">ou R$ 7.997 por ano</span>
+        <span class="pn">Sônia Prime</span>
+        <div class="preco bf-so">
+          <span class="bf-tag">Black Friday · 68% de desconto</span>
+          <span class="pde">De <s>R$ 7.997 por ano</s></span>
+          <span class="pp"><small>12x de</small> R$ 253,71</span>
+          <span class="pm">ou R$ 2.497 à vista</span>
+          <span class="psave">Você economiza R$ 5.500</span>
+        </div>
+        <div class="preco cheio-so">
+          <span class="pp"><small>12x de</small> R$ 812,54</span>
+          <span class="pm">ou R$ 7.997 por ano</span>
+        </div>
         <ul><li class="pick"><b>A Sônia + 15 especialistas à sua escolha</b><span>16 agentes no total, escolhidos entre as 21 especialidades</span></li><li>Até 20 rotinas (tarefas que se repetem sozinhas)</li><li>Funciona com o ChatGPT ou com outros modelos de IA, à sua escolha (assinatura ou chave da IA, contratada por você)</li><li>1 sessão de onboarding ao vivo, no horário que você escolher</li><li>Suporte pelo WhatsApp e por e-mail, com agente de atendimento a qualquer hora</li><li>Conselho Executivo como adicional: 4 conselheiros para as suas decisões, por R$ 1.997 por ano</li></ul>
-        <a data-plano="Imob Prime" data-valor="7997" class="btn btn-gold btn-sm" href="https://pay.hub.la/gRXGcT030hZM05n0sWz8/upsell" target="_blank" rel="noopener">Assinar agora</a>
+        <a data-plano="Sônia Prime" data-valor="2497" data-valor-cheio="7997" data-link-cheio="https://pay.hub.la/gRXGcT030hZM05n0sWz8" class="btn btn-gold btn-sm" href="https://pay.hub.la/chaMAVPLRRH1wKK9UHjZ" target="_blank" rel="noopener">Assinar agora</a>
       </article>
       <article class="plan">
         <span class="badge">Com mentoria e Conselho</span>
-        <span class="pn">Imob Premium</span>
-        <span class="pp"><small>12x de</small> R$ 1.388,52</span>
-        <span class="pm">ou R$ 15.997 por ano</span>
+        <span class="pn">Sônia Premium</span>
+        <div class="preco bf-so">
+          <span class="bf-tag">Black Friday · 37% de desconto</span>
+          <span class="pde">De <s>R$ 15.997 por ano</s></span>
+          <span class="pp"><small>12x de</small> R$ 1.015,75</span>
+          <span class="pm">ou R$ 9.997 à vista</span>
+          <span class="psave">Você economiza R$ 6.000</span>
+        </div>
+        <div class="preco cheio-so">
+          <span class="pp"><small>12x de</small> R$ 1.625,38</span>
+          <span class="pm">ou R$ 15.997 por ano</span>
+        </div>
         <ul><li class="pick"><b>A Sônia + os 21 especialistas</b><span>O time completo, todas as especialidades liberadas</span></li><li>Até 50 rotinas (tarefas que se repetem sozinhas)</li><li>4 mentorias individuais de 1 hora com a Prime Circle</li><li>Suporte pelo WhatsApp e por e-mail: agente de atendimento a qualquer hora e atendimento humano em dias úteis, das 9h às 18h</li><li>Conselho Executivo incluído: 4 conselheiros para decidir operação, vendas, finanças e tecnologia (R$ 1.997 por ano nos outros planos)</li><li>Garantia de 30 dias</li></ul>
-        <a data-plano="Imob Premium" data-valor="15997" class="btn btn-line btn-sm" href="https://pay.hub.la/nEJ7589Bp9cu04ybHzIm/upsell" target="_blank" rel="noopener">Assinar agora</a>
+        <a data-plano="Sônia Premium" data-valor="9997" data-valor-cheio="15997" data-link-cheio="https://pay.hub.la/nEJ7589Bp9cu04ybHzIm" class="btn btn-line btn-sm" href="https://pay.hub.la/BvBqMV2bpV5wIfHnO2U5" target="_blank" rel="noopener">Assinar agora</a>
       </article>
     </div>
-    <div class="monte"><div class="monte-txt"><span class="tag">Você monta o time</span><h3>Escolha as especialidades que a sua empresa precisa</h3><p>Nenhuma vem obrigatória. Um vendedor, uma jurídica e um redator no Imob Starter, por exemplo. A Sônia coordena quem você escolher.</p></div><div class="monte-grid"><div class="mg"><b>Comando e operação</b><span>Braço direito e operações</span><span>Gestor de projetos</span></div><div class="mg"><b>Conteúdo e produção</b><span>Redator</span><span>Desenvolvedor de sites</span><span>Analista de vídeos virais</span><span>Engenheiro de software</span></div><div class="mg"><b>Vendas e atendimento</b><span>Atendimento do dono (clone)</span><span>Líder de vendas</span><span>Vendedor (SDR) × 6</span><span>Gerente de CRM</span><span>Prospecção</span></div><div class="mg"><b>Anúncios</b><span>Gestor de tráfego pago</span></div><div class="mg"><b>Financeiro, fiscal, jurídico e RH</b><span>Financeiro</span><span>Tributário e fiscal</span><span>Jurídico</span><span>Recursos Humanos</span></div></div><p class="monte-n">21 especialidades disponíveis</p></div>
-    <p class="fine">Não estão incluídos no preço: a assinatura da IA (no Imob Starter, o ChatGPT, a partir de cerca de US$ 20 por mês), paga direto ao fornecedor; para o atendimento no WhatsApp, o servidor da Evolution API e duas chaves de API de IA pagas por uso; e qualquer outra ferramenta que você conecte.</p>
+    <div class="monte"><div class="monte-txt"><span class="tag">Você monta o time</span><h3>Escolha as especialidades que a sua empresa precisa</h3><p>Nenhuma vem obrigatória. Um vendedor, uma jurídica e um redator no Starter, por exemplo. A Sônia coordena quem você escolher.</p></div><div class="monte-grid"><div class="mg"><b>Comando e operação</b><span>Braço direito e operações</span><span>Gestor de projetos</span></div><div class="mg"><b>Conteúdo e produção</b><span>Redator</span><span>Desenvolvedor de sites</span><span>Analista de vídeos virais</span><span>Engenheiro de software</span></div><div class="mg"><b>Vendas e atendimento</b><span>Atendimento do dono (clone)</span><span>Líder de vendas</span><span>Vendedor (SDR) × 6</span><span>Gerente de CRM</span><span>Prospecção</span></div><div class="mg"><b>Anúncios</b><span>Gestor de tráfego pago</span></div><div class="mg"><b>Financeiro, fiscal, jurídico e RH</b><span>Financeiro</span><span>Tributário e fiscal</span><span>Jurídico</span><span>Recursos Humanos</span></div></div><p class="monte-n">21 especialidades disponíveis</p></div>
+    <p class="fine">Não estão incluídos no preço: a assinatura da IA (no Starter, o ChatGPT, a partir de cerca de US$ 20 por mês), paga direto ao fornecedor; para o atendimento no WhatsApp, o servidor da Evolution API e duas chaves de API de IA pagas por uso; e qualquer outra ferramenta que você conecte.</p>
     <div class="cta-row"><a class="btn btn-gold" href="#agenda">Agendar diagnóstico</a></div>
   </div>
 </section>
@@ -396,11 +442,11 @@ p{margin:0}
     <p class="lead" style="margin-top:14px">Um exemplo de time em cada plano, contratado pelo salário médio nacional, já com os encargos da CLT.</p>
     <div class="cost">
       <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="14" r="6"/><path d="M9 33c1.5-6.5 6-9.5 11-9.5s9.5 3 11 9.5"/></svg><h3>Time de 5</h3></header>
-        <dl><div><dt>Pessoas</dt><dd>5</dd></div><div><dt>Custo com gente, por mês</dt><dd>R$ 30.821</dd></div><div><dt>Imob Starter, por mês</dt><dd>R$ 433,75</dd></div></dl></article>
+        <dl><div><dt>Pessoas</dt><dd>5</dd></div><div><dt>Custo com gente, por mês</dt><dd>R$ 30.821</dd></div><div><dt>Sônia Starter, por mês</dt><dd><span class="bf-so">R$ 152,11</span><span class="cheio-so">R$ 507,72</span></dd></div></dl></article>
       <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="14" cy="15" r="5"/><circle cx="27" cy="15" r="5"/><path d="M4 33c1-5.5 5-8 10-8s9 2.5 10 8M20 33c1-5.5 3-8 7-8s8 2.5 9 8"/></svg><h3>Time de 16</h3></header>
-        <dl><div><dt>Pessoas</dt><dd>16</dd></div><div><dt>Custo com gente, por mês</dt><dd>R$ 103.277</dd></div><div><dt>Imob Prime, por mês</dt><dd>R$ 694,14</dd></div></dl></article>
+        <dl><div><dt>Pessoas</dt><dd>16</dd></div><div><dt>Custo com gente, por mês</dt><dd>R$ 103.277</dd></div><div><dt>Sônia Prime, por mês</dt><dd><span class="bf-so">R$ 253,71</span><span class="cheio-so">R$ 812,54</span></dd></div></dl></article>
       <article class="cc"><header><svg viewBox="0 0 40 40" fill="none" stroke-width="1.6"><circle cx="20" cy="11" r="5"/><circle cx="9" cy="19" r="4"/><circle cx="31" cy="19" r="4"/><path d="M11 34c1.2-5.5 4.5-8 9-8s7.8 2.5 9 8"/></svg><h3>Time de 21</h3></header>
-        <dl><div><dt>Pessoas</dt><dd>21</dd></div><div><dt>Custo com gente, por mês</dt><dd>R$ 141.034</dd></div><div><dt>Imob Premium, por mês</dt><dd>R$ 1.388,52</dd></div></dl></article>
+        <dl><div><dt>Pessoas</dt><dd>21</dd></div><div><dt>Custo com gente, por mês</dt><dd>R$ 141.034</dd></div><div><dt>Sônia Premium, por mês</dt><dd><span class="bf-so">R$ 1.015,75</span><span class="cheio-so">R$ 1.625,38</span></dd></div></dl></article>
     </div>
     <p class="fine">Fontes: salário médio nacional de cada função no Salario.com.br (dados do Novo CAGED, 09/2025 a 08/2026). Encargos e custos do empregador de 68% sobre o salário, segundo Buk e Contabilizei. Exemplos: no time de 5, assistente, web designer, desenvolvedor, redator e vendedor; no de 16, os do time de 5 mais gestor de projetos, social media, sucesso do cliente, tráfego pago e 7 vendedores; no de 21, todas as funções. O custo muda conforme as especialidades que você escolher. O valor da Sônia é a parcela de 12x no cartão e não inclui a assinatura da IA. São referências públicas de mercado, não promessa de economia ou de faturamento.</p>
     <div class="cta-row"><a class="btn btn-gold" href="#planos">Quero esse time por este preço</a></div>
@@ -456,7 +502,7 @@ p{margin:0}
 <section class="sec dark" id="duvidas">
   <div class="wrap">
     <h2 class="h2">Perguntas frequentes</h2>
-    <div class="faq"><details><summary>Preciso saber programar?</summary><p>Não. Você conversa com a Sônia em português, pelo painel ou pelo Telegram, e ela coordena o resto. Cada tela do painel tem um passo a passo.</p></details><details><summary>A Sônia serve para o meu tipo de empresa?</summary><p>O time cobre as funções que quase toda empresa tem: marketing, vendas, atendimento, financeiro, tributário, jurídico e RH. Em qualquer plano você escolhe as especialidades que a sua empresa precisa. Se quiser confirmar o seu caso, agende um diagnóstico antes de assinar.</p></details><details><summary>Posso escolher quais especialistas entram no meu plano?</summary><p>Sim. No Imob Starter, a Sônia e mais 4; no Imob Prime, a Sônia e mais 15; no Imob Premium, todos os 21. Você escolhe as especialidades em qualquer combinação: um vendedor, uma jurídica e um redator, por exemplo. Nenhuma é obrigatória.</p></details><details><summary>A Sônia faz coisas sem me perguntar?</summary><p>Só o que é rotina: pesquisar, organizar, escrever rascunhos e responder clientes com base no que foi treinada. Enviar proposta, publicar, disparar mensagens, agendar e qualquer gasto ela prepara e espera o seu OK. Expor dado de cliente, inventar preço ou dar parecer no lugar do profissional habilitado ela não faz. As regras são combinadas com você na implantação.</p></details><details><summary>Funciona com o meu WhatsApp?</summary><p>Sim, para atender os seus clientes: os especialistas de vendas respondem no WhatsApp e no Direct do Instagram. A conexão do WhatsApp usa a Evolution API, um sistema não oficial instalado num servidor seu, e o atendimento usa duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Por não ser a conexão oficial do WhatsApp, existe risco de bloqueio do número. Para pedir tarefas à Sônia, você usa o Telegram ou o painel.</p></details><details><summary>O que não está incluído no preço?</summary><p>A assinatura da IA (no Imob Starter, o ChatGPT, a partir de cerca de US$ 20 por mês; no Imob Prime e no Imob Premium, o modelo que você escolher), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes.</p></details><details><summary>O que é o Conselho Executivo?</summary><p>São quatro conselheiros, de operação e equipe, marketing e vendas, finanças, tecnologia e dados, para as decisões que mexem no caixa e na equipe. Você conta a decisão para a Sônia, ela reúne quem entende do assunto e te devolve uma recomendação só. Se você aprovar, o time recebe as tarefas. Está incluído no Imob Premium e custa R$ 1.997 por ano como adicional no Imob Starter e no Imob Prime. Ele não substitui o contador nem o advogado: imposto, folha, contrato e proteção de dados aplicada ao seu caso continuam com eles.</p></details><details><summary>E se a IA sair do ar?</summary><p>A Sônia depende dos provedores de IA, como o ChatGPT, e da cota da sua assinatura. Se um provedor ficar fora do ar ou a cota acabar, ela fica sem responder até o serviço voltar. Por isso não prometemos funcionamento sem nenhuma interrupção.</p></details><details><summary>Tem garantia?</summary><p>Sim. Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir pelo e-mail atendimento@primecircle.app.br ou pelo WhatsApp.</p></details></div>
+    <div class="faq"><details><summary>Preciso saber programar?</summary><p>Não. Você conversa com a Sônia em português, pelo painel ou pelo Telegram, e ela coordena o resto. Cada tela do painel tem um passo a passo.</p></details><details><summary>A Sônia serve para o meu tipo de empresa?</summary><p>O time cobre as funções que quase toda empresa tem: marketing, vendas, atendimento, financeiro, tributário, jurídico e RH. Em qualquer plano você escolhe as especialidades que a sua empresa precisa. Se quiser confirmar o seu caso, agende um diagnóstico antes de assinar.</p></details><details><summary>Posso escolher quais especialistas entram no meu plano?</summary><p>Sim. No Starter, a Sônia e mais 4; no Prime, a Sônia e mais 15; no Premium, todos os 21. Você escolhe as especialidades em qualquer combinação: um vendedor, uma jurídica e um redator, por exemplo. Nenhuma é obrigatória.</p></details><details><summary>A Sônia faz coisas sem me perguntar?</summary><p>Só o que é rotina: pesquisar, organizar, escrever rascunhos e responder clientes com base no que foi treinada. Enviar proposta, publicar, disparar mensagens, agendar e qualquer gasto ela prepara e espera o seu OK. Expor dado de cliente, inventar preço ou dar parecer no lugar do profissional habilitado ela não faz. As regras são combinadas com você na implantação.</p></details><details><summary>Funciona com o meu WhatsApp?</summary><p>Sim, para atender os seus clientes: os especialistas de vendas respondem no WhatsApp e no Direct do Instagram. A conexão do WhatsApp usa a Evolution API, um sistema não oficial instalado num servidor seu, e o atendimento usa duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Por não ser a conexão oficial do WhatsApp, existe risco de bloqueio do número. Para pedir tarefas à Sônia, você usa o Telegram ou o painel.</p></details><details><summary>O que não está incluído no preço?</summary><p>A assinatura da IA (no Starter, o ChatGPT, a partir de cerca de US$ 20 por mês; no Prime e no Premium, o modelo que você escolher), que você contrata e paga direto ao fornecedor. Para o atendimento no WhatsApp: hospedagem de um servidor para a Evolution API e duas chaves de API de inteligência artificial, pagas por uso, à parte da assinatura do ChatGPT. Para o Instagram: o Zernio, grátis até 10 mil mensagens por mês. E qualquer outra ferramenta que você queira conectar aos agentes.</p></details><details><summary>O que é o Conselho Executivo?</summary><p>São quatro conselheiros, de operação e equipe, marketing e vendas, finanças, tecnologia e dados, para as decisões que mexem no caixa e na equipe. Você conta a decisão para a Sônia, ela reúne quem entende do assunto e te devolve uma recomendação só. Se você aprovar, o time recebe as tarefas. Está incluído no Premium e custa R$ 1.997 por ano como adicional no Starter e no Prime. Ele não substitui o contador nem o advogado: imposto, folha, contrato e proteção de dados aplicada ao seu caso continuam com eles.</p></details><details><summary>E se a IA sair do ar?</summary><p>A Sônia depende dos provedores de IA, como o ChatGPT, e da cota da sua assinatura. Se um provedor ficar fora do ar ou a cota acabar, ela fica sem responder até o serviço voltar. Por isso não prometemos funcionamento sem nenhuma interrupção.</p></details><details><summary>Tem garantia?</summary><p>Sim. Se em até 30 dias depois do pagamento você decidir não continuar, devolvemos 100% do valor pago. Basta pedir pelo e-mail atendimento@primecircle.app.br ou pelo WhatsApp.</p></details></div>
   </div>
 </section>
 
@@ -490,7 +536,7 @@ p{margin:0}
   <div class="wrap">
     <div><a class="logo" href="#topo"><b style="color:var(--ivory)">SON<span>IA</span></b><small>Sistema Operacional de Negócios com Inteligência Artificial</small></a></div>
     <div><h4>Navegação</h4><a href="#servicos">Serviços</a><a href="#planos">Planos</a><a href="#conta">A conta</a><a href="#duvidas">Dúvidas</a></div>
-    <div><h4>Planos</h4><a href="#planos">Imob Starter</a><a href="#planos">Imob Prime</a><a href="#planos">Imob Premium</a></div>
+    <div><h4>Planos</h4><a href="#planos">Sônia Starter</a><a href="#planos">Sônia Prime</a><a href="#planos">Sônia Premium</a></div>
     <div><h4>Contato</h4><a href="mailto:atendimento@primecircle.app.br">atendimento@primecircle.app.br</a><a href="https://wa.me/5521999012520" target="_blank" rel="noopener">WhatsApp (21) 99901-2520</a><a href="../politica-de-privacidade.html">Política de privacidade</a><a href="#" data-cookies-abrir>Preferências de cookies</a></div>
     <p class="disc">Os valores de salário e economia são referências públicas de mercado. Não há promessa de faturamento garantido: o resultado depende da sua operação e das suas vendas. CNPJ 58.409.058/0001-73. © 2026 Prime Circle. Todos os direitos reservados.</p>
   </div>
@@ -502,6 +548,30 @@ p{margin:0}
   <div><button type="button" class="btn btn-line btn-sm" data-ck="nao">Recusar</button><button type="button" class="btn btn-gold btn-sm" data-ck="sim">Aceitar</button></div>
 </div>
 <nav class="bar" aria-label="Agendar ou ver os planos"><a class="btn btn-gold" href="#agenda">Agendar diagnóstico</a><a class="btn btn-line" style="color:var(--ivory)" href="#planos">Planos</a></nav>
+<script>
+/* Black Friday: fim em 2026-12-06T23:59:59-03:00. Depois disso os botões voltam aos links e valores cheios. */
+(function () {
+  var FIM = Date.parse("2026-12-06T23:59:59-03:00"), html = document.documentElement, cont = document.querySelector("[data-bf-cont]");
+  function encerra() {
+    html.classList.add("bf-fim");
+    var as = document.querySelectorAll("a[data-link-cheio]");
+    for (var i = 0; i < as.length; i++) {
+      as[i].setAttribute("href", as[i].getAttribute("data-link-cheio"));
+      as[i].setAttribute("data-valor", as[i].getAttribute("data-valor-cheio"));
+    }
+  }
+  function tick() {
+    var falta = FIM - Date.now();
+    if (!(falta > 0)) { encerra(); return false; }
+    if (cont) {
+      var m = Math.floor(falta / 60000), d = Math.floor(m / 1440), h = Math.floor(m % 1440 / 60), mi = m % 60;
+      cont.textContent = "Faltam " + (d ? d + (d > 1 ? " dias, " : " dia, ") : "") + h + "h" + (mi < 10 ? "0" : "") + mi;
+    }
+    return true;
+  }
+  if (tick()) var t = setInterval(function () { if (!tick()) clearInterval(t); }, 30000);
+})();
+</script>
 <script>
 (function () {
   var v = document.getElementById("v"), b = document.querySelector(".som"), t = document.querySelector(".som-t");
