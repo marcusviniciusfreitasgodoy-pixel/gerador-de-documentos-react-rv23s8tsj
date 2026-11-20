@@ -3,7 +3,7 @@
 // No PocketBase o usuário tem update do próprio registro em `users`. Sem esta
 // guarda, qualquer corretor se dá o plano que quiser, empurra a data de
 // renovação para 2040 e zera o próprio contador, tudo com um PATCH que o app
-// nem precisa oferecer: basta a API. Os cinco campos voltam ao valor que já
+// nem precisa oferecer: basta a API. Os campos protegidos voltam ao valor que já
 // estava no banco em qualquer update que não venha de admin.
 //
 // É irmão do `trial_carimbo.js` e existe separado dele de propósito: aquele
@@ -49,6 +49,9 @@ onRecordUpdateRequest((e) => {
     'consultas_no_mes',
     'ia_mes_ref',
     'avulso_validacoes',
+    // Imóveis do passe avulso, carimbados pela plataforma (migração 1900000040). Sem proteger, o próprio usuário
+    // apagaria a lista e o avulso deixaria de valer só para o imóvel pago.
+    'avulso_imoveis',
   ]
 
   // Quais deles são número. A lista existe porque a restauração precisa saber

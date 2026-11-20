@@ -50,6 +50,9 @@ routerAdd(
           negocios_no_mes: u.getInt('negocios_no_mes'),
           contador_mes: u.getString('contador_mes'),
           plano_limite_negocios: u.getInt('plano_limite_negocios'),
+          // Imóveis do passe avulso (texto JSON; vazio fora do avulso). A plataforma lê para saber se o carimbo
+          // que já está aqui é o mesmo que ela ia mandar, e não recarimbar à toa.
+          avulso_imoveis: u.getString('avulso_imoveis'),
         })
       }
       return e.json(200, { usuarios: lista })
@@ -128,6 +131,10 @@ routerAdd(
       imobiliaria: 30,
     }
     var MESES_VALIDOS = { 1: true, 12: true }
+    // Avulso da plataforma (pedido 1133, item C): validade EXATA em vez de mês de calendário. O passe vale 30 dias do
+    // pagamento; a plataforma manda o instante de fim e o Docs só confere que é plausível (no futuro, até 31 dias).
+    var AVULSO_MAX_MS = 31 * 24 * 60 * 60 * 1000
+    var AVULSO_MAX_IMOVEIS = 10
 
     try {
       var body = e.requestInfo().body || {}
@@ -143,6 +150,7 @@ routerAdd(
         user.set('plano', '')
         user.set('plano_renova_em', '')
         user.set('plano_limite_negocios', 0)
+        user.set('avulso_imoveis', '')
         $app.save(user)
         return e.json(200, { ok: true, plano: '' })
       }
@@ -168,11 +176,59 @@ routerAdd(
       // público em que não se pode errar. Virou visível quando o anual passou a
       // ser o preço em destaque na página de planos.
       var dataRenova = new Date()
-      dataRenova.setMonth(dataRenova.getMonth() + meses)
+      var avulsoImoveis = ''
+      if (plano === 'avulso' && body.renova_em) {
+        // Validade exata do passe (30 dias do pagamento), e os imóveis a que ele vale. Sem `renova_em` o avulso segue
+        // como sempre foi (mês de calendário, sem restrição de endereço): é o carimbo manual do admin.
+        var fim = new Date(String(body.renova_em))
+        var fimMs = fim.getTime()
+        if (!Number.isFinite(fimMs) || fimMs <= Date.now() || fimMs > Date.now() + AVULSO_MAX_MS) {
+          return e.json(400, {
+            error: 'renova_em precisa ser uma data futura, de até 31 dias, para o avulso.',
+          })
+        }
+        dataRenova = fim
+        var lista = Array.isArray(body.imoveis) ? body.imoveis : []
+        if (lista.length > AVULSO_MAX_IMOVEIS) {
+          return e.json(400, { error: 'O avulso aceita até ' + AVULSO_MAX_IMOVEIS + ' imóveis.' })
+        }
+        var limpos = []
+        for (var li = 0; li < lista.length; li++) {
+          var im = lista[li] || {}
+          var logradouro = String(im.logradouro || '')
+            .trim()
+            .slice(0, 120)
+          // Sem rua o item não identifica nada: descarta, em vez de gravar uma entrada que nunca casa.
+          if (!logradouro) continue
+          limpos.push({
+            ref: String(im.ref || '').slice(0, 60),
+            titulo: String(im.titulo || '').slice(0, 120),
+            logradouro: logradouro,
+            numero: String(im.numero || '')
+              .replace(/\D/g, '')
+              .slice(0, 12),
+            bairro: String(im.bairro || '')
+              .trim()
+              .slice(0, 80),
+            cidade: String(im.cidade || '')
+              .trim()
+              .slice(0, 80),
+            cep: String(im.cep || '')
+              .replace(/\D/g, '')
+              .slice(0, 8),
+            ate: String(im.ate || fim.toISOString()).slice(0, 40),
+          })
+        }
+        avulsoImoveis = limpos.length ? JSON.stringify(limpos) : ''
+      } else {
+        dataRenova.setMonth(dataRenova.getMonth() + meses)
+      }
       var renova = dataRenova.toISOString().replace('T', ' ')
       user.set('plano', plano)
       user.set('plano_renova_em', renova)
       user.set('plano_limite_negocios', LIMITES[plano])
+      // Fora do avulso da plataforma a lista é sempre limpa: trocar de plano solta a restrição de endereço.
+      user.set('avulso_imoveis', avulsoImoveis)
 
       // Zera o contador de validação do avulso a cada carimbo. Ele NÃO pode ser
       // o contador mensal: o avulso dura 30 dias e atravessa a virada de mês, e

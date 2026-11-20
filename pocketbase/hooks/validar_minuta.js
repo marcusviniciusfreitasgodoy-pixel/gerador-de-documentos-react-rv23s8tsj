@@ -99,24 +99,9 @@ routerAdd(
         })
       }
 
-      // O avulso inclui UMA validação de minuta, e esta é a única trava dele.
-      // A operação não trava (o documento sai no navegador antes de o negócio
-      // existir, e quem passa do teto pagou a mais, não a menos); a validação
-      // trava porque é a única parte com custo real, que é a chamada de IA.
-      //
-      // O contador é o `avulso_validacoes`, e não o mensal: o avulso dura 30
-      // dias e atravessa a virada de mês, onde o contador mensal zeraria e daria
-      // uma segunda validação de graça.
-      if (
-        planoAtivo &&
-        planoStr === 'avulso' &&
-        (guardAuth.getInt('avulso_validacoes') || 0) >= 1
-      ) {
-        return e.json(402, {
-          error:
-            'Seu avulso inclui uma validação de minuta, e ela já foi usada. Veja os planos para validar mais.',
-        })
-      }
+      // A trava do avulso (uma validação por passe) mora mais abaixo, depois de perguntar ao Prime Circle: passe
+      // vinculado à plataforma gasta das 5 análises do passe lá, e só a conta sem esse vínculo (ou com o Prime
+      // Circle fora do ar) cai na regra local de uma validação.
 
       if (!planoAtivo) {
         var trialStr = String(guardAuth.getString('trial_expira_em') || '').trim()
@@ -593,6 +578,173 @@ routerAdd(
       return parsed
     }
 
+    // ── Cota única de análise de documento com o Prime Circle (pedido 1133, item A) ──────
+    //
+    // A validação de minuta gasta da MESMA cota que a análise de documento da plataforma (a do plano, ou as 5 do passe
+    // avulso). Antes de chamar a IA o Docs pergunta ao Prime Circle e já desconta 1 (`reservar`); depois confirma, ou
+    // devolve o 1 se a IA falhar (`estornar`). A mesma validação não desconta duas vezes: a chave abaixo é igual para o
+    // mesmo usuário, o mesmo documento e a mesma janela de 10 minutos, e o Prime Circle devolve a reserva que já tem.
+    //
+    // QUEM ENTRA: só conta com plano carimbado e em dia (a plataforma carimba o plano de quem tem direito ao Docs). Teste
+    // de 15 dias e admin não chamam ninguém. O Prime Circle responde `vinculado:false` quando a conta do Docs não é uma
+    // conta da plataforma, ou quando o plano foi comprado direto no Docs: nesses casos vale a regra de sempre do Docs.
+    //
+    // PRIME CIRCLE FORA DO AR: NÃO bloqueia o corretor. Ele está com o cliente na frente, o custo de uma validação é
+    // pequeno e a cota é do Prime Circle, não dele; falha de rede virar "erro ao validar" é o pior desfecho para quem
+    // paga. A validação sai, e a falha fica em `prime_cota_pendencias` (`sem_reserva`) para o admin conciliar. Erros de
+    // confirmar e estornar também ficam lá e são repetidos na próxima validação do mesmo usuário.
+    //
+    // Segredos (Skip): PRIME_CIRCLE_COTA_SECRET (assina a chamada) e, opcional, PRIME_CIRCLE_COTA_URL.
+    var cotaAtiva = !!userId && !!guardAuth && !guardAuth.getBool('isAdmin') && planoAtivo === true
+    var chaveCota = ''
+    var cotaReservada = false
+    var vinculadoPrime = false
+
+    function cotaChamar(acao, chave, timeoutSeg) {
+      try {
+        var segredo = String($secrets.get('PRIME_CIRCLE_COTA_SECRET') || '').trim()
+        if (!segredo) return { ok: false, motivo: 'sem_segredo' }
+        var base =
+          String($secrets.get('PRIME_CIRCLE_COTA_URL') || '').trim() ||
+          'https://api.primecircle.app.br'
+        var email = String(guardAuth.email() || '')
+          .trim()
+          .toLowerCase()
+        var ts = String(Math.floor(Date.now() / 1000))
+        var assinatura = $security.hs256(ts + '.' + acao + '.' + chave + '.' + email, segredo)
+        var res = $http.send({
+          url: base.replace(/\/+$/, '') + '/api/v1/integracoes/docs/analises/' + acao,
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            'x-docs-timestamp': ts,
+            'x-docs-assinatura': assinatura,
+          },
+          body: JSON.stringify({ email: email, chave: chave, docs_user_id: userId }),
+          timeout: timeoutSeg,
+        })
+        if (res.statusCode !== 200) return { ok: false, motivo: 'http_' + res.statusCode }
+        return { ok: true, json: res.json }
+      } catch (cotaErr) {
+        return { ok: false, motivo: 'rede' }
+      }
+    }
+
+    function cotaPendencia(acao, chave, detalhe) {
+      try {
+        var achadas = $app.findRecordsByFilter(
+          'prime_cota_pendencias',
+          'chave = {:c} && acao = {:a}',
+          '',
+          1,
+          0,
+          { c: chave, a: acao },
+        )
+        if (achadas && achadas.length > 0) return
+        var colPend = $app.findCollectionByNameOrId('prime_cota_pendencias')
+        var pend = new Record(colPend)
+        pend.set('user', userId)
+        pend.set('chave', chave)
+        pend.set('acao', acao)
+        pend.set('tentativas', 0)
+        pend.set('resolvida', false)
+        pend.set('detalhe', String(detalhe || '').slice(0, 500))
+        $app.saveNoValidate(pend)
+      } catch (pendErr) {
+        $app.logger().error('prime_cota: pendencia nao gravada', 'error', String(pendErr))
+      }
+    }
+
+    // Confirmar e estornar que não chegaram na validação anterior, até 5 por vez e 5 tentativas cada.
+    function cotaRepetirPendencias() {
+      try {
+        var abertas = $app.findRecordsByFilter(
+          'prime_cota_pendencias',
+          "user = {:u} && resolvida = false && acao != 'sem_reserva' && tentativas < 5",
+          'created',
+          5,
+          0,
+          { u: userId },
+        )
+        for (var pi = 0; pi < abertas.length; pi++) {
+          var rep = cotaChamar(abertas[pi].getString('acao'), abertas[pi].getString('chave'), 5)
+          if (rep.ok) abertas[pi].set('resolvida', true)
+          else abertas[pi].set('tentativas', (abertas[pi].getInt('tentativas') || 0) + 1)
+          $app.saveNoValidate(abertas[pi])
+        }
+      } catch (repErr) {
+        $app.logger().error('prime_cota: repeticao de pendencias falhou', 'error', String(repErr))
+      }
+    }
+
+    function cotaEstornar() {
+      if (!cotaReservada) return
+      cotaReservada = false
+      var est = cotaChamar('estornar', chaveCota, 5)
+      if (!est.ok) cotaPendencia('estornar', chaveCota, est.motivo)
+    }
+
+    if (cotaAtiva) {
+      cotaRepetirPendencias()
+      chaveCota =
+        'val:' +
+        userId +
+        ':' +
+        $security.sha256(documentType + '\n' + documentText).slice(0, 32) +
+        ':' +
+        Math.floor(Date.now() / 600000)
+      var reservaPrime = cotaChamar('reservar', chaveCota, 8)
+      if (reservaPrime.ok && reservaPrime.json && reservaPrime.json.vinculado === true) {
+        vinculadoPrime = true
+        if (reservaPrime.json.permitido === true) {
+          cotaReservada = true
+        } else {
+          createAuditLog(
+            'fail',
+            null,
+            '',
+            'Sem saldo na cota única do Prime Circle',
+            'QUOTA_EXHAUSTED',
+          )
+          return e.json(402, {
+            error:
+              String(reservaPrime.json.mensagem || '') ||
+              'Você usou todas as análises de documento do seu plano. Veja os planos no Prime Circle.',
+            code: 'QUOTA_EXHAUSTED',
+            planos_url: String(reservaPrime.json.planos_url || ''),
+          })
+        }
+      } else if (reservaPrime.ok && reservaPrime.json && reservaPrime.json.vinculado === false) {
+        // Conta do Docs sem vínculo com a plataforma, ou plano comprado direto no Docs: vale a regra do Docs.
+      } else {
+        $app
+          .logger()
+          .error(
+            'prime_cota: reservar falhou (validacao segue sem contar)',
+            'motivo',
+            String(reservaPrime.motivo),
+          )
+        cotaPendencia('sem_reserva', chaveCota, reservaPrime.motivo)
+      }
+    }
+
+    // O avulso inclui UMA validação de minuta quando NÃO está vinculado à cota do Prime Circle (carimbo manual do admin,
+    // ou Prime Circle fora do ar). Vinculado, as 5 análises do passe são contadas lá, e esta trava não vale.
+    // O contador é o `avulso_validacoes`, e não o mensal: o avulso dura 30 dias e atravessa a virada de mês.
+    if (
+      guardAuth &&
+      !guardAuth.getBool('isAdmin') &&
+      planoAtivo === true &&
+      planoStr === 'avulso' &&
+      !vinculadoPrime &&
+      (guardAuth.getInt('avulso_validacoes') || 0) >= 1
+    ) {
+      return e.json(402, {
+        error:
+          'Seu avulso inclui uma validação de minuta, e ela já foi usada. Veja os planos para validar mais.',
+      })
+    }
+
     // ── Integrated retry loop: AI call + JSON parsing ──────────────────
 
     var MAX_ATTEMPTS = 3
@@ -704,6 +856,7 @@ routerAdd(
 
         if (err instanceof SkipAiConfigError) {
           createAuditLog('fail', null, '', 'Serviço de IA indisponível', 'AI_CONFIG_ERROR')
+          cotaEstornar()
           return e.json(503, {
             error: 'Serviço de IA temporariamente indisponível.',
             code: 'AI_CONFIG_ERROR',
@@ -742,6 +895,7 @@ routerAdd(
         lastFailureErrorMessage,
         lastFailureErrorCode,
       )
+      cotaEstornar()
       return e.json(lastFailureStatus, lastFailureBody)
     }
 
@@ -778,6 +932,12 @@ routerAdd(
     parsed.conformidade = dedupedConformidade
 
     createAuditLog('success', parsed, rawContent, '', '')
+
+    // A IA entregou: a reserva da cota única vira definitiva. Se o aviso não chegar, fica pendente e é repetido.
+    if (cotaReservada) {
+      var confirmacao = cotaChamar('confirmar', chaveCota, 5)
+      if (!confirmacao.ok) cotaPendencia('confirmar', chaveCota, confirmacao.motivo)
+    }
 
     return e.json(200, parsed)
   },
